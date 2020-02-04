@@ -1,5 +1,5 @@
 {
-  "name": "Todorant",
+  "name": "todorant",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,9 +10,18 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.6",
+    "mobx": "^5.15.4",
     "native-base": "^2.13.8",
     "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react-native": "0.61.5",
+    "react-native-gesture-handler": "^1.5.6",
+    "react-native-reanimated": "^1.7.0",
+    "react-native-safe-area-context": "^0.6.4",
+    "react-native-screens": "^2.0.0-alpha.34",
+    "react-navigation": "^4.1.0",
+    "react-navigation-tabs": "^2.7.0",
+    "styled-components": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
