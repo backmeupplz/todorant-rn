@@ -8,3 +8,7 @@ export class Todo {
   date?: string
   time?: string
 }
+
+export const fakeTodo = new Todo()
+fakeTodo.text = 'Some todo text'
+fakeTodo.monthAndYear = '2020-02'

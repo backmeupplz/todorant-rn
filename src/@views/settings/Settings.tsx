@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-export class Settings extends Component {
+const Stack = createStackNavigator()
+
+export class SettingsContent extends Component {
   render() {
-    return <Text>Settings</Text>
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text>Settings</Text>
+      </View>
+    )
   }
+}
+export function Settings() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Settings" component={SettingsContent} />
+    </Stack.Navigator>
+  )
 }
