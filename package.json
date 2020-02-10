@@ -18,6 +18,7 @@
     "native-base": "^2.13.8",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-action-button": "^2.8.5",
     "react-native-gesture-handler": "^1.5.6",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.4",
