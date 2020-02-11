@@ -1,14 +1,17 @@
 export class Todo {
-  text = ''
+  text: string
   completed = false
   frog = false
   frogFails = 0
   skipped = false
-  monthAndYear: string = '' // Todo: replace with today's date
+  monthAndYear: string
   date?: string
   time?: string
+
+  constructor(text: string, monthAndYear: string) {
+    this.text = text
+    this.monthAndYear = monthAndYear
+  }
 }
 
-export const fakeTodo = new Todo()
-fakeTodo.text = 'Some todo text'
-fakeTodo.monthAndYear = '2020-02'
+export const fakeTodo = new Todo('Some todo text', '2020-02')
