@@ -1,17 +1,33 @@
-export class Todo {
-  text: string
-  completed = false
-  frog = false
-  frogFails = 0
-  skipped = false
-  monthAndYear: string
-  date?: string
-  time?: string
+import { persist } from 'mobx-persist'
+import { observable } from 'mobx'
 
-  constructor(text: string, monthAndYear: string) {
+export class Todo {
+  @persist @observable text: string
+  @persist @observable completed: boolean
+  @persist @observable frog: boolean
+  @persist @observable frogFails: number
+  @persist @observable skipped: boolean
+  @persist @observable monthAndYear: string
+  @persist @observable date?: string
+  @persist @observable time?: string
+
+  constructor(
+    text: string,
+    completed: boolean,
+    frog: boolean,
+    frogFails: number,
+    skipped: boolean,
+    monthAndYear: string,
+    date?: string,
+    time?: string
+  ) {
     this.text = text
+    this.completed = completed
+    this.frog = frog
+    this.frogFails = frogFails
+    this.skipped = skipped
     this.monthAndYear = monthAndYear
+    this.date = date
+    this.time = time
   }
 }
-
-export const fakeTodo = new Todo('Some todo text', '2020-02')

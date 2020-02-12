@@ -9,7 +9,7 @@ import {
   Switch,
   Button,
 } from 'native-base'
-import { goBack } from '../../@utils/navigation'
+import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
 import { Calendar } from 'react-native-calendars'
@@ -18,8 +18,12 @@ import {
   getDateMonthAndYearString,
   getDateDateString,
   getDateString,
-  getDateFromFullString,
-} from '../../@utils/time'
+} from '@utils/time'
+import MonthPicker from 'react-native-month-picker'
+import moment, { Moment } from 'moment'
+import { colors } from '@utils/colors'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { Todo } from '@models/Todo'
 
 class TodoVM {
   @observable text = ''
@@ -50,12 +54,48 @@ class TodoVM {
   }
 
   @computed
+  get monthAndYearPickerValue() {
+    return this.monthAndYear
+      ? getDateFromString(this.monthAndYear, this.date)
+      : undefined
+  }
+  set monthAndYearPickerValue(value: Date | undefined) {
+    if (!value) {
+      this.monthAndYear = undefined
+      this.date = undefined
+      return
+    }
+    if (this.showMonthAndYearPicker) {
+      this.monthAndYear = getDateMonthAndYearString(value)
+      this.date = undefined
+    }
+  }
+
+  @computed
   get markedDate() {
     const result = {} as { [index: string]: { selected: boolean } }
     if (this.datePickerValue) {
       result[this.datePickerValue] = { selected: true }
     }
     return result
+  }
+
+  @computed
+  get isValid() {
+    return !!this.text && !!this.monthAndYear
+  }
+
+  constructTodo() {
+    return new Todo(
+      this.text,
+      this.completed,
+      this.frog,
+      0,
+      false,
+      this.monthAndYear!,
+      this.date,
+      undefined
+    )
   }
 }
 
@@ -80,20 +120,30 @@ export class AddTodo extends Component {
             <Item
               onPress={() => {
                 this.vm.showDatePicker = !this.vm.showDatePicker
-                if (this.vm.showDatePicker) {
-                  this.vm.showMonthAndYearPicker = false
+                if (!this.vm.date) {
+                  this.vm.monthAndYear = undefined
+                  this.vm.date = undefined
                 }
+                this.vm.showMonthAndYearPicker = false
               }}
               style={{ paddingVertical: 16 }}
             >
-              <Text>
-                {this.vm.datePickerValue
+              <Text
+                style={{
+                  color:
+                    this.vm.datePickerValue && !!this.vm.date
+                      ? colors.text
+                      : colors.placeholder,
+                }}
+              >
+                {this.vm.datePickerValue && !!this.vm.date
                   ? this.vm.datePickerValue
-                  : 'Exact day'}
+                  : 'Select exact day'}
               </Text>
             </Item>
             {this.vm.showDatePicker && (
               <Calendar
+                minDate={getDateString(new Date())}
                 current={this.vm.datePickerValue || new Date()}
                 markedDates={this.vm.markedDate}
                 onDayPress={day => {
@@ -102,15 +152,40 @@ export class AddTodo extends Component {
                 }}
               />
             )}
-            <Item>
-              <Input
-                placeholder="Or month"
-                value={this.vm.text}
-                onChangeText={text => {
-                  this.vm.text = text
+            <Item
+              onPress={() => {
+                this.vm.showMonthAndYearPicker = !this.vm.showMonthAndYearPicker
+                if (!!this.vm.date) {
+                  this.vm.monthAndYear = undefined
+                  this.vm.date = undefined
+                }
+                this.vm.showDatePicker = false
+              }}
+              style={{ paddingVertical: 16 }}
+            >
+              <Text
+                style={{
+                  color:
+                    this.vm.datePickerValue && !this.vm.date
+                      ? colors.text
+                      : colors.placeholder,
                 }}
-              />
+              >
+                {this.vm.datePickerValue && !this.vm.date
+                  ? this.vm.datePickerValue
+                  : 'Or month'}
+              </Text>
             </Item>
+            {this.vm.showMonthAndYearPicker && (
+              <MonthPicker
+                selectedDate={this.vm.monthAndYearPickerValue}
+                onMonthChange={(date: Moment) => {
+                  this.vm.monthAndYearPickerValue = date.toDate()
+                }}
+                minDate={moment()}
+                maxDate={moment().add(100, 'years')}
+              />
+            )}
             <Item
               style={{ justifyContent: 'space-between', paddingVertical: 16 }}
             >
@@ -138,8 +213,10 @@ export class AddTodo extends Component {
             block
             style={{ marginHorizontal: 10, marginTop: 10 }}
             onPress={() => {
+              sharedTodoStore.addTodo(this.vm.constructTodo())
               goBack()
             }}
+            disabled={!this.vm.isValid}
           >
             <Text>Add todo!</Text>
           </Button>

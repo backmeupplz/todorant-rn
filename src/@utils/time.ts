@@ -1,11 +1,17 @@
 import moment from 'moment'
 
 export function getDateMonthAndYearString(date: Date | string) {
-  return (date instanceof Date ? getDateString(date) : date).substr(0, 7)
+  if (date instanceof Date) {
+    return getDateString(date)
+  }
+  return date.substr(0, 7)
 }
 
 export function getDateDateString(date: Date | string) {
-  return (date instanceof Date ? getDateString(date) : date).substr(8, 2)
+  if (date instanceof Date) {
+    return getDateString(date)
+  }
+  return date.substr(8, 2)
 }
 
 export function getDateString(date: Date) {
@@ -25,4 +31,26 @@ export function getDateFromString(
 
 export function getDateFromFullString(fullString: string) {
   return moment(fullString, 'YYYY-MM-DD').toDate()
+}
+
+export function isDateTooOld(date: string, today: string) {
+  const todayDay = today.substr(8)
+  const todayMonthAndYear = today.substr(0, 7)
+
+  if (date.length === 7) {
+    // month and year
+    if (date <= todayMonthAndYear) {
+      return true
+    }
+  } else {
+    const day = date.substr(8)
+    const monthAndYear = date.substr(0, 7)
+    if (monthAndYear < todayMonthAndYear) {
+      return true
+    }
+    if (monthAndYear === todayMonthAndYear && day < todayDay) {
+      return true
+    }
+  }
+  return false
 }
