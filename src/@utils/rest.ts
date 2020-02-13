@@ -8,3 +8,9 @@ export function loginGoogle(accessToken: string) {
     accessToken,
   })
 }
+
+export function loginFacebook(accessToken: string) {
+  return axios.post<User>(`${base}/login/facebook`, {
+    accessToken,
+  })
+}

@@ -3,7 +3,8 @@ import { Settings } from './settings/Settings'
 import { Planning } from './planning/Planning'
 import { Current } from './current/Current'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon } from 'native-base'
+import { Icon, View } from 'native-base'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 const Tab = createBottomTabNavigator()
 
@@ -20,14 +21,29 @@ export default function BottomTabNavigator() {
               name = 'settings'
             }
             return (
-              <Icon
-                type="MaterialIcons"
-                name={name}
-                fontSize={size}
-                style={{
-                  color,
-                }}
-              />
+              <View>
+                <Icon
+                  type="MaterialIcons"
+                  name={name}
+                  fontSize={size}
+                  style={{
+                    color,
+                  }}
+                />
+                {route.name === 'Settings' && !sharedSessionStore.user && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      width: 6,
+                      height: 6,
+                      backgroundColor: 'red',
+                      top: 0,
+                      right: 0,
+                      borderRadius: 3,
+                    }}
+                  />
+                )}
+              </View>
             )
           },
         })}
