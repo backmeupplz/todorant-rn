@@ -1,7 +1,9 @@
 import { Alert } from 'react-native'
 
 export function alertError(error: Error) {
-  Alert.alert('Error', error.message, [{ text: 'OK' }])
+  setTimeout(() => {
+    Alert.alert('Error', error.message, [{ text: 'OK' }])
+  }, 500)
 }
 
 export function alertConfirm(
@@ -9,11 +11,13 @@ export function alertConfirm(
   confirmButtonText: string,
   confirm: () => void
 ) {
-  Alert.alert('Please confirm', message, [
-    {
-      text: 'Cancel',
-      style: 'cancel',
-    },
-    { text: confirmButtonText, onPress: confirm },
-  ])
+  setTimeout(() => {
+    Alert.alert('Please confirm', message, [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      { text: confirmButtonText, onPress: confirm },
+    ])
+  }, 500)
 }

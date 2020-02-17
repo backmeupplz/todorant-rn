@@ -1,3 +1,4 @@
+import { sockets } from './../@utils/sockets'
 import { User } from '@models/User'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
@@ -12,10 +13,12 @@ class SessionStore {
 
   login(user: User) {
     this.user = user
+    sockets.authorize()
   }
 
   logout() {
     this.user = undefined
+    sockets.logout()
   }
 }
 

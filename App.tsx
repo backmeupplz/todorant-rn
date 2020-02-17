@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from './src/@views/BottomTabNavigator'
 import { navigationRef } from './src/@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
+import '@utils/network'
 
 GoogleSignin.configure({
   webClientId:

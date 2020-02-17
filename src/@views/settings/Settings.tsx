@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content, List, ListItem, Text, Button } from 'native-base'
+import { Container, Content, List, ListItem, Text } from 'native-base'
 import { TermsOfUse } from './TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from './PrivacyPolicy'
 import { Login } from './Login'
 import { LoginLogoutButtons } from './LoginLogoutButtons'
 import { AccountInfo } from './AccountInfo'
+import { Sockets } from './Sockets'
+import { observer } from 'mobx-react'
+import { sharedSocketStore } from '@stores/SocketStore'
+import { CheckOrCross } from '@components/CheckOrCross'
 
 const Stack = createStackNavigator()
 
+@observer
 export class SettingsContent extends Component {
   render() {
     return (
@@ -21,6 +26,19 @@ export class SettingsContent extends Component {
             </ListItem>
             <AccountInfo />
             <LoginLogoutButtons />
+            <ListItem itemHeader>
+              <Text>General</Text>
+            </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                navigate('Sockets')
+              }}
+              style={{ justifyContent: 'space-between' }}
+            >
+              <Text>Sockets info</Text>
+              <CheckOrCross ok={sharedSocketStore.connected} />
+            </ListItem>
             <ListItem itemHeader>
               <Text>Info</Text>
             </ListItem>
@@ -65,6 +83,11 @@ export function Settings() {
         name="Login"
         component={Login}
         options={{ title: 'Login' }}
+      />
+      <Stack.Screen
+        name="Sockets"
+        component={Sockets}
+        options={{ title: 'Sockets info' }}
       />
     </Stack.Navigator>
   )

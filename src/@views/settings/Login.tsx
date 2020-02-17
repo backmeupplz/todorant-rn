@@ -4,7 +4,7 @@ import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { goBack } from '@utils/navigation'
+import { goBack, navigate } from '@utils/navigation'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
@@ -81,6 +81,7 @@ export class Login extends Component {
             style={{
               justifyContent: 'center',
               backgroundColor: 'cornflowerblue',
+              marginBottom: 10,
             }}
             onPress={this.vm.loginWithFacebook}
             disabled={this.vm.loading}
