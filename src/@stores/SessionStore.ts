@@ -1,4 +1,5 @@
-import { sockets } from './../@utils/sockets'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sockets } from '@utils/sockets'
 import { User } from '@models/User'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
@@ -18,9 +19,12 @@ class SessionStore {
 
   logout() {
     this.user = undefined
+    sharedTodoStore.logout()
     sockets.logout()
   }
 }
 
 export const sharedSessionStore = new SessionStore()
-hydrate('SessionStore', sharedSessionStore)
+hydrate('SessionStore', sharedSessionStore).then(() => {
+  sockets.authorize()
+})

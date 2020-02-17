@@ -82,19 +82,19 @@ class PlanningContent extends Component {
   render() {
     return (
       <Container>
-        <Content>
-          <List>
-            {this.vm.todosWithSections.map((v, i) =>
-              v.title ? (
-                <Text style={{ marginHorizontal: 10, marginTop: 16 }} key={i}>
-                  {v.title}
-                </Text>
-              ) : (
-                <TodoCard todo={v.item!} key={i} />
-              )
-            )}
-          </List>
-        </Content>
+        <List
+          dataArray={this.vm.todosWithSections}
+          renderItem={({ item, index }) =>
+            item.title ? (
+              <Text style={{ marginHorizontal: 10, marginTop: 16 }} key={index}>
+                {item.title}
+              </Text>
+            ) : (
+              <TodoCard todo={item.item!} key={index} />
+            )
+          }
+          keyExtractor={(_, index) => `${index}`}
+        ></List>
         <ActionButton
           buttonColor="tomato"
           onPress={() => {

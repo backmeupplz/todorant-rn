@@ -1,10 +1,16 @@
+import { alertError } from '@utils/alert'
+import { Todo } from '@models/Todo'
+import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSocketStore } from './../@stores/SocketStore'
 import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
+import uuid from 'uuid'
 
 const socketIO = SocketIO('http://localhost:3000')
 
 class SocketManager {
+  pendingPushes = {} as { [index: string]: { res: Function; rej: Function } }
+
   constructor() {
     this.connect()
 
@@ -16,6 +22,9 @@ class SocketManager {
     socketIO.on('error', this.onError)
 
     socketIO.on('authorized', this.onAuthorized)
+    socketIO.on('todos', this.onTodos)
+    socketIO.on('todos_pushed', this.onTodosPushed)
+    socketIO.on('todos_pushed_error', this.onTodosPushedError)
   }
 
   connect = () => {
@@ -25,7 +34,11 @@ class SocketManager {
     socketIO.connect()
   }
   authorize = () => {
-    if (!sharedSessionStore.user?.token || !socketIO.connected) {
+    if (
+      !sharedSessionStore.user?.token ||
+      !socketIO.connected ||
+      sharedSocketStore.authorized
+    ) {
       return
     }
     socketIO.emit('authorize', sharedSessionStore.user.token)
@@ -60,6 +73,37 @@ class SocketManager {
 
   onAuthorized = () => {
     sharedSocketStore.authorized = true
+    this.sync()
+  }
+  onTodos = async (todos: Todo[]) => {
+    try {
+      await sharedTodoStore.onTodos(todos)
+    } catch (err) {
+      alertError(err)
+    }
+  }
+
+  sync = () => {
+    if (!sharedSessionStore.user?.token || !socketIO.connected) {
+      return
+    }
+    socketIO.emit('sync', sharedTodoStore.lastSyncDate)
+  }
+
+  pushTodos = (todos: Todo[]): Promise<Todo[]> => {
+    return new Promise<Todo[]>((res, rej) => {
+      const pushId = uuid()
+      this.pendingPushes[pushId] = { res, rej }
+      socketIO.emit('push', pushId, todos)
+    })
+  }
+
+  onTodosPushed = (pushId: string, todos: Todo[]) => {
+    this.pendingPushes[pushId]?.res(todos)
+  }
+
+  onTodosPushedError = (pushId: string, error: Error) => {
+    this.pendingPushes[pushId]?.rej(error)
   }
 }
 

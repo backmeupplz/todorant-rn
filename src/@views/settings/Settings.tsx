@@ -11,6 +11,7 @@ import { Sockets } from './Sockets'
 import { observer } from 'mobx-react'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { CheckOrCross } from '@components/CheckOrCross'
+import { Data } from './Data'
 
 const Stack = createStackNavigator()
 
@@ -38,6 +39,14 @@ export class SettingsContent extends Component {
             >
               <Text>Sockets info</Text>
               <CheckOrCross ok={sharedSocketStore.connected} />
+            </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                navigate('Data')
+              }}
+            >
+              <Text>Data info</Text>
             </ListItem>
             <ListItem itemHeader>
               <Text>Info</Text>
@@ -88,6 +97,11 @@ export function Settings() {
         name="Sockets"
         component={Sockets}
         options={{ title: 'Sockets info' }}
+      />
+      <Stack.Screen
+        name="Data"
+        component={Data}
+        options={{ title: 'Data info' }}
       />
     </Stack.Navigator>
   )

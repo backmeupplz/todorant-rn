@@ -87,11 +87,14 @@ class TodoVM {
 
   constructTodo() {
     return new Todo(
+      new Date(),
+      new Date(),
       this.text,
       this.completed,
       this.frog,
       0,
       false,
+      0,
       this.monthAndYear!,
       this.date,
       undefined
