@@ -1,5 +1,5 @@
 import { sockets } from '@utils/sockets'
-import { observable } from 'mobx'
+import { observable, computed } from 'mobx'
 import { Todo } from '@models/Todo'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
@@ -15,9 +15,8 @@ class TodoStore {
   @persist('list', Todo) @observable todos: Todo[] = []
   @persist('date' as any) @observable lastSyncDate?: Date
 
-  addTodo(todo: Todo) {
-    this.todos.unshift(todo)
-    sockets.sync()
+  @computed get undeletedTodos() {
+    return this.todos.filter(t => !t.deleted)
   }
 
   getCurrent() {
@@ -33,7 +32,6 @@ class TodoStore {
     if (!hydrated) {
       return
     }
-    console.log('Todos received', todosChangedOnServer.length)
     // Create resulting array
     const result: Todo[] = [...this.todos]
     // Get variables
@@ -52,13 +50,6 @@ class TodoStore {
     const todosChangedLocally = result.filter(
       todo => !this.lastSyncDate || todo.updatedAt > this.lastSyncDate
     )
-    console.log(
-      'Got variables',
-      result.length,
-      Object.keys(localTodosMap).length,
-      Object.keys(serverTodosMap).length,
-      todosChangedLocally.length
-    )
     // Pull
     for (const serverTodo of todosChangedOnServer) {
       let localTodo = serverTodo._id ? localTodosMap[serverTodo._id] : undefined
@@ -70,7 +61,6 @@ class TodoStore {
         result.unshift(serverTodo)
       }
     }
-    console.log('Pulled', result.length)
     // Push
     const todosToPush = todosChangedLocally.filter(todo => {
       if (!todo._id) {
@@ -88,16 +78,13 @@ class TodoStore {
       todo._tempSyncId = uuid()
       todosToPushMap[todo._tempSyncId] = todo
     })
-    console.log('Pushing', result.length)
     const savedPushedTodos = await sockets.pushTodos(todosToPush)
-    console.log('Pushed', result.length)
     for (const todo of savedPushedTodos) {
       if (!todo._tempSyncId) {
         continue
       }
       Object.assign(todosToPushMap[todo._tempSyncId], todo)
     }
-
     // Set result
     this.todos = result
     // Finish

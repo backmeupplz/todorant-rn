@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { List, ListItem, Container, Content, Text } from 'native-base'
+import { List, Container, Text, Segment, Button } from 'native-base'
 import { computed } from 'mobx'
 import { Todo } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateString, isDateTooOld } from '@utils/time'
-import { TodoCard } from '@components/TodoCard'
+import { TodoCard, CardType } from '@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { navigate } from '@utils/navigation'
 import { AddTodo } from '@views/add/AddTodo'
+import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 
 const Stack = createStackNavigator()
 
@@ -21,24 +22,30 @@ interface SectionHeaderOrTodo {
 class PlanningVM {
   @computed
   get todosWithSections() {
-    const mappedTodos = sharedTodoStore.todos.reduce((prev, cur) => {
-      if (cur.date) {
-        const date = `${cur.monthAndYear}-${cur.date}`
-        if (prev[date]) {
-          prev[date].push(cur)
+    const mappedTodos = sharedTodoStore.undeletedTodos
+      .filter(todo =>
+        sharedAppStateStore.todoSection === TodoSectionType.planning
+          ? !todo.completed
+          : todo.completed
+      )
+      .reduce((prev, cur) => {
+        if (cur.date) {
+          const date = `${cur.monthAndYear}-${cur.date}`
+          if (prev[date]) {
+            prev[date].push(cur)
+          } else {
+            prev[date] = [cur]
+          }
         } else {
-          prev[date] = [cur]
+          const month = cur.monthAndYear
+          if (prev[month]) {
+            prev[month].push(cur)
+          } else {
+            prev[month] = [cur]
+          }
         }
-      } else {
-        const month = cur.monthAndYear
-        if (prev[month]) {
-          prev[month].push(cur)
-        } else {
-          prev[month] = [cur]
-        }
-      }
-      return prev
-    }, {} as { [index: string]: Todo[] })
+        return prev
+      }, {} as { [index: string]: Todo[] })
     const gatheredTodos = [] as {
       title: string
       todos: Todo[]
@@ -52,14 +59,24 @@ class PlanningVM {
     const today = getDateString(new Date())
     gatheredTodos.sort((a, b) => {
       if (isDateTooOld(a.title, today) && !isDateTooOld(b.title, today)) {
-        return -1
+        return sharedAppStateStore.todoSection === TodoSectionType.planning
+          ? -1
+          : 1
       } else if (
         !isDateTooOld(a.title, today) &&
         isDateTooOld(b.title, today)
       ) {
-        return 1
+        return sharedAppStateStore.todoSection === TodoSectionType.planning
+          ? 1
+          : -1
       }
-      return new Date(a.title) > new Date(b.title) ? 1 : -1
+      return sharedAppStateStore.todoSection === TodoSectionType.planning
+        ? new Date(a.title) > new Date(b.title)
+          ? 1
+          : -1
+        : new Date(a.title) < new Date(b.title)
+        ? 1
+        : -1
     })
     let result: SectionHeaderOrTodo[] = []
     for (const todoSection of gatheredTodos) {
@@ -90,11 +107,19 @@ class PlanningContent extends Component {
                 {item.title}
               </Text>
             ) : (
-              <TodoCard todo={item.item!} key={index} />
+              <TodoCard
+                todo={item.item!}
+                key={index}
+                type={
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? CardType.planning
+                    : CardType.done
+                }
+              />
             )
           }
           keyExtractor={(_, index) => `${index}`}
-        ></List>
+        />
         <ActionButton
           buttonColor="tomato"
           onPress={() => {
@@ -106,10 +131,46 @@ class PlanningContent extends Component {
   }
 }
 
+@observer
+class PlanningHeader extends Component {
+  render() {
+    return (
+      <Segment>
+        <Button
+          first
+          active={sharedAppStateStore.todoSection === TodoSectionType.planning}
+          onPress={() => {
+            sharedAppStateStore.todoSection = TodoSectionType.planning
+          }}
+        >
+          <Text>Planning</Text>
+        </Button>
+        <Button
+          last
+          active={sharedAppStateStore.todoSection === TodoSectionType.completed}
+          onPress={() => {
+            sharedAppStateStore.todoSection = TodoSectionType.completed
+          }}
+        >
+          <Text>Completed</Text>
+        </Button>
+      </Segment>
+    )
+  }
+}
+
 export function Planning() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Planning" component={PlanningContent} />
+      <Stack.Screen
+        name="Planning"
+        component={PlanningContent}
+        options={{
+          headerTitle: () => {
+            return <PlanningHeader />
+          },
+        }}
+      />
       <Stack.Screen
         name="AddTodo"
         component={AddTodo}

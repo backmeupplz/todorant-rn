@@ -12,6 +12,7 @@ export class Todo {
   @persist @observable skipped: boolean
   @persist @observable order: number
   @persist @observable monthAndYear: string
+  @persist @observable deleted: boolean
   @persist @observable date?: string
   @persist @observable time?: string
 
@@ -28,6 +29,7 @@ export class Todo {
     skipped: boolean,
     order: number,
     monthAndYear: string,
+    deleted: boolean,
     date?: string,
     time?: string
   ) {
@@ -40,6 +42,7 @@ export class Todo {
     this.skipped = skipped
     this.order = order
     this.monthAndYear = monthAndYear
+    this.deleted = deleted
     this.date = date
     this.time = time
   }

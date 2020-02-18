@@ -24,6 +24,7 @@ import moment, { Moment } from 'moment'
 import { colors } from '@utils/colors'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Todo } from '@models/Todo'
+import { sockets } from '@utils/sockets'
 
 class TodoVM {
   @observable text = ''
@@ -96,6 +97,7 @@ class TodoVM {
       false,
       0,
       this.monthAndYear!,
+      false,
       this.date,
       undefined
     )
@@ -216,7 +218,8 @@ export class AddTodo extends Component {
             block
             style={{ marginHorizontal: 10, marginTop: 10 }}
             onPress={() => {
-              sharedTodoStore.addTodo(this.vm.constructTodo())
+              sharedTodoStore.todos.unshift(this.vm.constructTodo())
+              sockets.sync()
               goBack()
             }}
             disabled={!this.vm.isValid}

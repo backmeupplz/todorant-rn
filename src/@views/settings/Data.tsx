@@ -24,7 +24,9 @@ export class Data extends Component {
           <List>
             <Row
               title="Todos count"
-              subtitle={`${sharedTodoStore.todos.length}`}
+              subtitle={`${
+                sharedTodoStore.todos.filter(v => !v.deleted).length
+              }`}
             />
             <Row
               title="Last synced"

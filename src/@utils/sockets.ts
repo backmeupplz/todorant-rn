@@ -25,6 +25,7 @@ class SocketManager {
     socketIO.on('todos', this.onTodos)
     socketIO.on('todos_pushed', this.onTodosPushed)
     socketIO.on('todos_pushed_error', this.onTodosPushedError)
+    socketIO.on('sync_request', this.onSyncRequest)
   }
 
   connect = () => {
@@ -104,6 +105,9 @@ class SocketManager {
 
   onTodosPushedError = (pushId: string, error: Error) => {
     this.pendingPushes[pushId]?.rej(error)
+  }
+  onSyncRequest = () => {
+    this.sync()
   }
 }
 

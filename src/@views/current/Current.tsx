@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Container, Content } from 'native-base'
-import { TodoCard } from '../../@components/TodoCard'
+import { TodoCard, CardType } from '../../@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { navigate } from '../../@utils/navigation'
 import { AddTodo } from '../add/AddTodo'
@@ -25,7 +25,9 @@ class CurrentContent extends Component {
     return (
       <Container>
         <Content>
-          {!!this.vm.currentTodo && <TodoCard todo={this.vm.currentTodo} />}
+          {!!this.vm.currentTodo && (
+            <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+          )}
         </Content>
         <ActionButton
           buttonColor="tomato"
