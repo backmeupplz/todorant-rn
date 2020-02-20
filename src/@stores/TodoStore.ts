@@ -1,9 +1,10 @@
 import { sockets } from '@utils/sockets'
 import { observable, computed } from 'mobx'
-import { Todo } from '@models/Todo'
+import { Todo, compareTodos } from '@models/Todo'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
 import uuid from 'uuid'
+import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 
 const hydrate = create({
   storage: AsyncStorage,
@@ -19,8 +20,24 @@ class TodoStore {
     return this.todos.filter(t => !t.deleted)
   }
 
-  getCurrent() {
-    return this.todos.length ? this.todos[0] : undefined
+  @computed get todayTodos() {
+    const today = new Date()
+    return this.todosForDate(today)
+  }
+
+  todosForDate(date: Date) {
+    return this.undeletedTodos
+      .filter(
+        todo =>
+          todo.date &&
+          todo.date === getDateDateString(date) &&
+          todo.monthAndYear === getDateMonthAndYearString(date)
+      )
+      .sort(compareTodos(false))
+  }
+
+  @computed get currentTodo() {
+    return this.todayTodos.length ? this.todayTodos[0] : undefined
   }
 
   logout() {
@@ -89,6 +106,22 @@ class TodoStore {
     this.todos = result
     // Finish
     this.lastSyncDate = new Date()
+  }
+
+  modify(...todos: Todo[]) {
+    for (const todo of todos) {
+      const t = this.getTodoById(todo._id)
+      if (!t) {
+        return
+      }
+      Object.assign(t, todo)
+      t.updatedAt = new Date()
+    }
+    sockets.sync()
+  }
+
+  private getTodoById(id?: string) {
+    return !id ? undefined : this.todos.find(todo => todo._id === id)
   }
 }
 

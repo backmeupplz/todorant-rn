@@ -1,3 +1,4 @@
+import { getDateString, getDateStringFromTodo } from '@utils/time'
 import { persist } from 'mobx-persist'
 import { observable } from 'mobx'
 
@@ -45,5 +46,44 @@ export class Todo {
     this.deleted = deleted
     this.date = date
     this.time = time
+  }
+}
+
+export function isTodoToday(todo: Todo) {
+  return getDateString(new Date()) === getDateStringFromTodo(todo)
+}
+
+export function compareTodos(completed: Boolean) {
+  return (a: Todo, b: Todo) => {
+    if (a.date === b.date && a.monthAndYear === b.monthAndYear) {
+      if (a.frog && b.frog) {
+        return a.order < b.order ? -1 : 1
+      }
+      if (a.frog) {
+        return -1
+      }
+      if (b.frog) {
+        return 1
+      }
+      return a.order < b.order ? -1 : 1
+    } else {
+      if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
+        return -1
+      } else if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
+        return 1
+      } else if (!a.date || !b.date) {
+        if (a.monthAndYear < b.monthAndYear) {
+          return completed ? 1 : -1
+        } else {
+          return completed ? -1 : 1
+        }
+      } else {
+        if (`${a.monthAndYear}-${a.date}` < `${b.monthAndYear}-${b.date}`) {
+          return completed ? 1 : -1
+        } else {
+          return completed ? -1 : 1
+        }
+      }
+    }
   }
 }

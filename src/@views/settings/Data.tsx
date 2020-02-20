@@ -3,6 +3,7 @@ import { Container, Content, List, ListItem, Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import moment from 'moment'
+import { sockets } from '@utils/sockets'
 
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
@@ -38,6 +39,14 @@ export class Data extends Component {
                   : 'Not synced yet'
               }`}
             />
+            <ListItem
+              button
+              onPress={() => {
+                sockets.sync()
+              }}
+            >
+              <Text>Sync data</Text>
+            </ListItem>
           </List>
         </Content>
       </Container>

@@ -13,7 +13,7 @@ const Stack = createStackNavigator()
 
 class CurrentVM {
   @computed get currentTodo() {
-    return sharedTodoStore.getCurrent()
+    return sharedTodoStore.currentTodo
   }
 }
 

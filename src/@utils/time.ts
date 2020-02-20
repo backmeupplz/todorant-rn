@@ -1,15 +1,16 @@
+import { Todo } from '@models/Todo'
 import moment from 'moment'
 
 export function getDateMonthAndYearString(date: Date | string) {
   if (date instanceof Date) {
-    return getDateString(date)
+    return getDateString(date).substr(0, 7)
   }
   return date.substr(0, 7)
 }
 
 export function getDateDateString(date: Date | string) {
   if (date instanceof Date) {
-    return getDateString(date)
+    return getDateString(date).substr(8, 2)
   }
   return date.substr(8, 2)
 }
@@ -53,4 +54,8 @@ export function isDateTooOld(date: string, today: string) {
     }
   }
   return false
+}
+
+export function getDateStringFromTodo(todo: Todo) {
+  return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`
 }

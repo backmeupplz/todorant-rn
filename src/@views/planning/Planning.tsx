@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { List, Container, Text, Segment, Button } from 'native-base'
 import { computed } from 'mobx'
-import { Todo } from '@models/Todo'
+import { Todo, compareTodos } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateString, isDateTooOld } from '@utils/time'
@@ -20,8 +20,7 @@ interface SectionHeaderOrTodo {
 }
 
 class PlanningVM {
-  @computed
-  get todosWithSections() {
+  @computed get todosWithSections() {
     const mappedTodos = sharedTodoStore.undeletedTodos
       .filter(todo =>
         sharedAppStateStore.todoSection === TodoSectionType.planning
@@ -85,7 +84,13 @@ class PlanningVM {
         {
           title: todoSection.title,
         },
-        ...todoSection.todos.map(v => ({ item: v })),
+        ...todoSection.todos
+          .sort(
+            compareTodos(
+              sharedAppStateStore.todoSection === TodoSectionType.completed
+            )
+          )
+          .map(v => ({ item: v })),
       ]
     }
     return result
