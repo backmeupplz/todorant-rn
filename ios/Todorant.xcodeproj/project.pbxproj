@@ -749,7 +749,7 @@
 			baseConfigurationReference = 12605D19CFB4B8625CE9AE4F /* Pods-Todorant.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
@@ -771,7 +771,7 @@
 			baseConfigurationReference = 084D3A4A3ECAAED80B4D187B /* Pods-Todorant.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
