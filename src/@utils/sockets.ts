@@ -6,7 +6,9 @@ import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
 
-const socketIO = SocketIO('http://localhost:3000')
+const socketIO = SocketIO(
+  __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
+)
 
 class SocketManager {
   pendingPushes = {} as { [index: string]: { res: Function; rej: Function } }
