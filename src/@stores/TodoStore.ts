@@ -117,7 +117,6 @@ class TodoStore {
       Object.assign(t, todo)
       t.updatedAt = new Date()
     }
-    sockets.sync()
   }
 
   private getTodoById(id?: string) {

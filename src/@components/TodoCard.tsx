@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Todo, isTodoToday } from '../@models/Todo'
+import { Todo, isTodoToday, getTitle } from '../@models/Todo'
 import { Card, CardItem, Body, Text, Button, Icon, View } from 'native-base'
 import { sharedTodoStore } from '@stores/TodoStore'
 import {
@@ -8,6 +8,8 @@ import {
   getDateMonthAndYearString,
 } from '@utils/time'
 import { observer } from 'mobx-react'
+import { fixOrder } from '@utils/fixOrder'
+import { sockets } from '@utils/sockets'
 
 export enum CardType {
   done = 'done',
@@ -38,7 +40,10 @@ class TodoCardVM {
     }
     todo.order += offset
     todo.skipped = true
-    todo.updatedAt = new Date()
+    // Save
+    sharedTodoStore.modify(todo)
+    fixOrder([getTitle(todo)])
+    sockets.sync()
   }
 
   isLast(todo: Todo) {
@@ -46,6 +51,40 @@ class TodoCardVM {
       .todosForDate(getDateFromString(todo.monthAndYear, todo.date))
       .filter(t => t.completed === todo.completed)
     return neighbours.length <= 1
+  }
+
+  moveToToday(todo: Todo) {
+    const oldTitle = getTitle(todo)
+    todo.date = getDateDateString(new Date())
+    todo.monthAndYear = getDateMonthAndYearString(new Date())
+    // Save
+    sharedTodoStore.modify(todo)
+    fixOrder([oldTitle, getTitle(todo)])
+    sockets.sync()
+  }
+
+  delete(todo: Todo) {
+    todo.deleted = true
+    // Save
+    sharedTodoStore.modify(todo)
+    fixOrder([getTitle(todo)])
+    sockets.sync()
+  }
+
+  uncomplete(todo: Todo) {
+    todo.completed = false
+    // Save
+    sharedTodoStore.modify(todo)
+    fixOrder([getTitle(todo)])
+    sockets.sync()
+  }
+
+  complete(todo: Todo) {
+    todo.completed = true
+    // Save
+    sharedTodoStore.modify(todo)
+    fixOrder([getTitle(todo)])
+    sockets.sync()
   }
 }
 
@@ -85,11 +124,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   transparent
                   small
                   onPress={() => {
-                    this.props.todo.date = getDateDateString(new Date())
-                    this.props.todo.monthAndYear = getDateMonthAndYearString(
-                      new Date()
-                    )
-                    sharedTodoStore.modify(this.props.todo)
+                    this.vm.moveToToday(this.props.todo)
                   }}
                 >
                   <Icon type="MaterialIcons" name="arrow-upward" />
@@ -100,8 +135,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 type="MaterialIcons"
                 name="delete"
                 onPress={() => {
-                  this.props.todo.deleted = true
-                  sharedTodoStore.modify(this.props.todo)
+                  this.vm.delete(this.props.todo)
                 }}
               />
             </Button>
@@ -135,8 +169,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   type="MaterialIcons"
                   name="repeat"
                   onPress={() => {
-                    this.props.todo.completed = false
-                    sharedTodoStore.modify(this.props.todo)
+                    this.vm.uncomplete(this.props.todo)
                   }}
                 />
               </Button>
@@ -146,8 +179,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   type="MaterialIcons"
                   name="done"
                   onPress={() => {
-                    this.props.todo.completed = true
-                    sharedTodoStore.modify(this.props.todo)
+                    this.vm.complete(this.props.todo)
                   }}
                 />
               </Button>
