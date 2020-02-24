@@ -21,8 +21,6 @@ export class Todo {
   _tempSyncId?: string
 
   constructor(
-    createdAt: Date,
-    updatedAt: Date,
     text: string,
     completed: boolean,
     frog: boolean,
@@ -34,8 +32,6 @@ export class Todo {
     date?: string,
     time?: string
   ) {
-    this.createdAt = createdAt
-    this.updatedAt = updatedAt
     this.text = text
     this.completed = completed
     this.frog = frog
@@ -86,4 +82,8 @@ export function compareTodos(completed: Boolean) {
       }
     }
   }
+}
+
+export function getTitle(todo: { monthAndYear: string; date?: string }) {
+  return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`
 }

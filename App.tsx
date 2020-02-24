@@ -5,6 +5,7 @@ import { navigationRef } from './src/@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/network'
 import '@utils/ignoreWarnings'
+import { Root } from 'native-base'
 
 GoogleSignin.configure({
   webClientId:
@@ -15,9 +16,11 @@ GoogleSignin.configure({
 
 const App = () => {
   return (
-    <NavigationContainer ref={navigationRef}>
-      <BottomTabNavigator />
-    </NavigationContainer>
+    <Root>
+      <NavigationContainer ref={navigationRef}>
+        <BottomTabNavigator />
+      </NavigationContainer>
+    </Root>
   )
 }
 

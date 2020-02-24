@@ -333,6 +333,8 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCMaskedView (0.1.6):
     - React
+  - RNDeviceInfo (5.5.3):
+    - React
   - RNFBApp (6.3.2):
     - Firebase/Core (~> 6.13.0)
     - React
@@ -380,6 +382,7 @@ DEPENDENCIES:
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
@@ -468,6 +471,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNGestureHandler:
@@ -530,6 +535,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
+  RNDeviceInfo: 310c1f43d418d950a193c7650de2f9559c906048
   RNFBApp: fc62d1e8adbc871fc7c27314c8e0842aebb44514
   RNGestureHandler: 911d3b110a7a233a34c4f800e7188a84b75319c6
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
@@ -537,6 +543,6 @@ SPEC CHECKSUMS:
   RNScreens: 5e4758109c6d35f9a009ce72af873df907548020
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 485203effe9986c9a81133f60149bf1d9d160cb3
+PODFILE CHECKSUM: e3c196cdcbcd215d39b2572a5b610d1815947ca8
 
 COCOAPODS: 1.8.4

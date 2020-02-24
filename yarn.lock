@@ -5724,6 +5724,11 @@ react-native-calendars@^1.261.0:
     prop-types "^15.5.10"
     xdate "^0.8.0"
 
+react-native-device-info@^5.5.3:
+  version "5.5.3"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.5.3.tgz#6652fb46c4602a1dd3a5d6a18d2266ecdf97fec7"
+  integrity sha512-bzUVTPHca+FfNco1qaOM1+idoeII8zdpGRsR+RK+DWhwp9utHZWfbkonZZ9XFm/U+i3mirNxt6oaKV+vUMjMzg==
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"

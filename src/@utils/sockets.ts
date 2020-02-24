@@ -5,6 +5,7 @@ import { sharedSocketStore } from './../@stores/SocketStore'
 import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
+import { Toast } from 'native-base'
 
 const socketIO = SocketIO(
   __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
@@ -79,6 +80,7 @@ class SocketManager {
     this.sync()
   }
   onTodos = async (todos: Todo[]) => {
+    Toast.show({ text: `Todos received ${todos.length}` })
     try {
       await sharedTodoStore.onTodos(todos)
     } catch (err) {
@@ -90,6 +92,10 @@ class SocketManager {
     if (!sharedSessionStore.user?.token || !socketIO.connected) {
       return
     }
+    Toast.show({
+      text: `Sync requested ${sharedTodoStore.lastSyncDate}`,
+      buttonText: 'Okay',
+    })
     socketIO.emit('sync', sharedTodoStore.lastSyncDate)
   }
 

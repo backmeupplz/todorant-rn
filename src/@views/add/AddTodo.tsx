@@ -23,8 +23,10 @@ import MonthPicker from 'react-native-month-picker'
 import moment, { Moment } from 'moment'
 import { colors } from '@utils/colors'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { sockets } from '@utils/sockets'
+import { fixOrder } from '@utils/fixOrder'
+import uuid from 'uuid'
 
 class TodoVM {
   @observable text = ''
@@ -87,9 +89,7 @@ class TodoVM {
   }
 
   constructTodo() {
-    return new Todo(
-      new Date(),
-      new Date(),
+    const todo = new Todo(
       this.text,
       this.completed,
       this.frog,
@@ -101,6 +101,9 @@ class TodoVM {
       this.date,
       undefined
     )
+    todo.createdAt = new Date()
+    todo.updatedAt = new Date()
+    return todo
   }
 }
 
@@ -218,7 +221,11 @@ export class AddTodo extends Component {
             block
             style={{ marginHorizontal: 10, marginTop: 10 }}
             onPress={() => {
-              sharedTodoStore.todos.unshift(this.vm.constructTodo())
+              const todo = this.vm.constructTodo()
+              todo._tempSyncId = uuid()
+              console.log('create', todo)
+              sharedTodoStore.todos.unshift(todo)
+              fixOrder([getTitle(todo)], [todo])
               sockets.sync()
               goBack()
             }}

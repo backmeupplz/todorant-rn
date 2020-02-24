@@ -12,6 +12,7 @@ import { observer } from 'mobx-react'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { Data } from './Data'
+import DeviceInfo from 'react-native-device-info'
 
 const Stack = createStackNavigator()
 
@@ -66,6 +67,9 @@ export class SettingsContent extends Component {
               }}
             >
               <Text>Privacy policy</Text>
+            </ListItem>
+            <ListItem>
+              <Text>v{DeviceInfo.getVersion()}</Text>
             </ListItem>
           </List>
         </Content>
