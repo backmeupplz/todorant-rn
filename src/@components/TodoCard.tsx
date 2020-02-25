@@ -10,6 +10,7 @@ import {
 import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
 import { sockets } from '@utils/sockets'
+import { navigate } from '@utils/navigation'
 
 export enum CardType {
   done = 'done',
@@ -140,7 +141,14 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
               />
             </Button>
             {this.props.type !== CardType.current && (
-              <Button icon transparent small>
+              <Button
+                icon
+                transparent
+                small
+                onPress={() => {
+                  navigate('EditTodo', { editedTodo: { ...this.props.todo } })
+                }}
+              >
                 <Icon type="MaterialIcons" name="edit" />
               </Button>
             )}

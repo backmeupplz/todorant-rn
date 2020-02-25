@@ -267,13 +267,13 @@ export default {
   },
 
   // Segment
-  segmentBackgroundColor: platform === PLATFORM.IOS ? '#F8F8F8' : 'transparent',
-  segmentActiveBackgroundColor:
-    platform === PLATFORM.IOS ? '#007aff' : 'tomato',
-  segmentTextColor: platform === PLATFORM.IOS ? '#007aff' : '#tomato',
+  segmentBackgroundColor:
+    platform === PLATFORM.IOS ? 'transparent' : 'transparent',
+  segmentActiveBackgroundColor: platform === PLATFORM.IOS ? 'tomato' : 'tomato',
+  segmentTextColor: platform === PLATFORM.IOS ? 'tomato' : 'tomato',
   segmentActiveTextColor: platform === PLATFORM.IOS ? '#fff' : '#fff',
-  segmentBorderColor: platform === PLATFORM.IOS ? '#007aff' : 'tomato',
-  segmentBorderColorMain: platform === PLATFORM.IOS ? '#a7a6ab' : '#tomato',
+  segmentBorderColor: platform === PLATFORM.IOS ? 'tomato' : 'tomato',
+  segmentBorderColorMain: platform === PLATFORM.IOS ? 'tomato' : 'tomato',
 
   // Spinner
   defaultSpinnerColor: '#45D56E',

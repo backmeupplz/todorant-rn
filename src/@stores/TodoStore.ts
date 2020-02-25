@@ -110,7 +110,7 @@ class TodoStore {
 
   modify(...todos: Todo[]) {
     for (const todo of todos) {
-      const t = this.getTodoById(todo._id)
+      const t = this.getTodoById(todo._id || todo._tempSyncId)
       if (!t) {
         return
       }
@@ -120,7 +120,9 @@ class TodoStore {
   }
 
   private getTodoById(id?: string) {
-    return !id ? undefined : this.todos.find(todo => todo._id === id)
+    return !id
+      ? undefined
+      : this.todos.find(todo => todo._id === id || todo._tempSyncId === id)
   }
 }
 

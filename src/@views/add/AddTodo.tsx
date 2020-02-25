@@ -27,8 +27,16 @@ import { Todo, getTitle } from '@models/Todo'
 import { sockets } from '@utils/sockets'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
+import { useRoute, RouteProp } from '@react-navigation/native'
+
+enum AddTodoScreenType {
+  add = 'add',
+  edit = 'edit',
+}
 
 class TodoVM {
+  @observable screenType = AddTodoScreenType.add
+
   @observable text = ''
   @observable completed = false
   @observable frog = false
@@ -37,6 +45,8 @@ class TodoVM {
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false
+
+  editedTodo?: Todo
 
   @computed
   get datePickerValue() {
@@ -105,11 +115,53 @@ class TodoVM {
     todo.updatedAt = new Date()
     return todo
   }
+
+  setEditedTodo(todo: Todo) {
+    this.editedTodo = todo
+
+    this.text = todo.text
+    this.completed = todo.completed
+    this.frog = todo.frog
+    this.monthAndYear = todo.monthAndYear
+    this.date = todo.date
+
+    this.screenType = AddTodoScreenType.edit
+  }
+
+  saveTodo() {
+    const todo = this.constructTodo()
+    if (this.screenType === AddTodoScreenType.add) {
+      todo._tempSyncId = uuid()
+      sharedTodoStore.todos.unshift(todo)
+      fixOrder([getTitle(todo)], [todo])
+    } else if (this.editedTodo) {
+      const oldTitle = getTitle(this.editedTodo)
+
+      this.editedTodo.text = todo.text
+      this.editedTodo.completed = todo.completed
+      this.editedTodo.frog = todo.frog
+      this.editedTodo.monthAndYear = todo.monthAndYear
+      this.editedTodo.date = todo.date
+
+      sharedTodoStore.modify(this.editedTodo)
+      fixOrder([oldTitle, getTitle(this.editedTodo)])
+    }
+    sockets.sync()
+    goBack()
+  }
 }
 
 @observer
-export class AddTodo extends Component {
+class AddTodoContent extends Component<{
+  route: RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
+}> {
   vm = new TodoVM()
+
+  componentDidMount() {
+    if (this.props.route.params?.editedTodo) {
+      this.vm.setEditedTodo(this.props.route.params.editedTodo)
+    }
+  }
 
   render() {
     return (
@@ -221,20 +273,25 @@ export class AddTodo extends Component {
             block
             style={{ marginHorizontal: 10, marginTop: 10 }}
             onPress={() => {
-              const todo = this.vm.constructTodo()
-              todo._tempSyncId = uuid()
-              console.log('create', todo)
-              sharedTodoStore.todos.unshift(todo)
-              fixOrder([getTitle(todo)], [todo])
-              sockets.sync()
-              goBack()
+              this.vm.saveTodo()
             }}
             disabled={!this.vm.isValid}
           >
-            <Text>Add todo!</Text>
+            <Text>
+              {this.vm.screenType === AddTodoScreenType.add
+                ? 'Add todo!'
+                : 'Save todo!'}
+            </Text>
           </Button>
         </Content>
       </Container>
     )
   }
+}
+
+export const AddTodo = () => {
+  const route = useRoute<
+    RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
+  >()
+  return <AddTodoContent route={route}></AddTodoContent>
 }

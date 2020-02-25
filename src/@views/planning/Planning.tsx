@@ -215,6 +215,11 @@ export function Planning() {
         component={AddTodo}
         options={{ title: 'Add todo' }}
       />
+      <Stack.Screen
+        name="EditTodo"
+        component={AddTodo}
+        options={{ title: 'Edit todo' }}
+      />
     </Stack.Navigator>
   )
 }
