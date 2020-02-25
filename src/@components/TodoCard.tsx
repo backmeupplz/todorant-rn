@@ -139,11 +139,11 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 }}
               />
             </Button>
-            {/* {this.props.type !== CardType.current && (
-            <Button icon transparent small>
-              <Icon type="MaterialIcons" name="edit" />
-            </Button>
-          )} */}
+            {this.props.type !== CardType.current && (
+              <Button icon transparent small>
+                <Icon type="MaterialIcons" name="edit" />
+              </Button>
+            )}
             {this.props.type === CardType.current &&
               !this.props.todo.frog &&
               !this.vm.isLast(this.props.todo) && (
