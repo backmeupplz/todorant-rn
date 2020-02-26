@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content, View, Text } from 'native-base'
+import { Container, Content, View, Text, H1 } from 'native-base'
 import { TodoCard, CardType } from '../../@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { navigate } from '../../@utils/navigation'
@@ -60,6 +60,41 @@ class CurrentContent extends Component {
           </View>
           {!!this.vm.currentTodo && (
             <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+          )}
+          {!!sharedTodoStore.propress.count &&
+            sharedTodoStore.propress.count ===
+              sharedTodoStore.propress.completed && (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <H1>🎉</H1>
+                <H1>Congratulations!</H1>
+                <Text style={{ textAlign: 'center' }}>
+                  🥳 You did it! All the tasks for today are done, go get rest
+                  or maybe dance a little 💃
+                </Text>
+              </View>
+            )}
+          {!sharedTodoStore.propress.count && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: 12,
+              }}
+            >
+              <H1>🐝</H1>
+              <H1>To infinity!</H1>
+              <Text style={{ textAlign: 'center' }}>
+                You don't have any todos for today. If you want to work — add a
+                new todo for today or take the todos from future days.
+              </Text>
+            </View>
           )}
         </Content>
         <ActionButton
