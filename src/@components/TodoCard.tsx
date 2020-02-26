@@ -11,6 +11,9 @@ import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
 import { sockets } from '@utils/sockets'
 import { navigate } from '@utils/navigation'
+import { l } from '@utils/linkify'
+import { Linking } from 'react-native'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 export enum CardType {
   done = 'done',
@@ -89,6 +92,34 @@ class TodoCardVM {
   }
 }
 
+class TodoText extends Component<{ text: string }> {
+  get linkifiedText() {
+    return l(this.props.text)
+  }
+
+  render() {
+    return (
+      <Text>
+        {this.linkifiedText.map((p, i) => (
+          <Text
+            key={i}
+            style={{ color: p.type !== 'text' ? 'dodgerblue' : undefined }}
+            onPress={() => {
+              if (p.type === 'link' && p.url) {
+                Linking.openURL(p.url)
+              } else if (p.type === 'hash') {
+                sharedAppStateStore.hash = p.value
+              }
+            }}
+          >
+            {p.value}
+          </Text>
+        ))}
+      </Text>
+    )
+  }
+}
+
 @observer
 export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
   vm = new TodoCardVM()
@@ -99,9 +130,11 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
         <CardItem>
           <Body>
             <Text>
-              {__DEV__ && `(${this.props.todo.order}) `}
-              {this.props.todo.frog ? '🐸 ' : ''}
-              {this.props.todo.text}
+              <Text>
+                {__DEV__ && `(${this.props.todo.order}) `}
+                {this.props.todo.frog ? '🐸 ' : ''}
+              </Text>
+              <TodoText text={this.props.todo.text}></TodoText>
             </Text>
           </Body>
         </CardItem>

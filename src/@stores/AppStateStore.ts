@@ -7,6 +7,7 @@ export enum TodoSectionType {
 
 class AppStateStore {
   @observable todoSection: TodoSectionType = TodoSectionType.planning
+  @observable hash = ''
 }
 
 export const sharedAppStateStore = new AppStateStore()

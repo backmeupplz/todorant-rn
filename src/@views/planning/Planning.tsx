@@ -7,6 +7,7 @@ import {
   Segment,
   Button,
   StyleProvider,
+  Icon,
 } from 'native-base'
 import { computed } from 'mobx'
 import { Todo, compareTodos } from '@models/Todo'
@@ -31,9 +32,15 @@ class PlanningVM {
   @computed get todosWithSections() {
     const mappedTodos = sharedTodoStore.undeletedTodos
       .filter(todo =>
-        sharedAppStateStore.todoSection === TodoSectionType.planning
+        sharedAppStateStore.todoSection === TodoSectionType.planning ||
+        !!sharedAppStateStore.hash
           ? !todo.completed
           : todo.completed
+      )
+      .filter(todo =>
+        sharedAppStateStore.hash
+          ? todo.text.indexOf(sharedAppStateStore.hash) > -1
+          : true
       )
       .reduce((prev, cur) => {
         if (cur.date) {
@@ -147,7 +154,9 @@ class PlanningContent extends Component {
 @observer
 class PlanningHeader extends Component {
   render() {
-    return (
+    return sharedAppStateStore.hash ? (
+      <Text>{sharedAppStateStore.hash}</Text>
+    ) : (
       <StyleProvider style={getTheme()}>
         <Segment>
           <Button
@@ -197,6 +206,24 @@ class PlanningHeader extends Component {
   }
 }
 
+@observer
+class PlanningHeaderRight extends Component {
+  render() {
+    return sharedAppStateStore.hash ? (
+      <Button
+        icon
+        transparent
+        small
+        onPress={() => {
+          sharedAppStateStore.hash = ''
+        }}
+      >
+        <Icon type="MaterialIcons" name="close" />
+      </Button>
+    ) : null
+  }
+}
+
 export function Planning() {
   return (
     <Stack.Navigator>
@@ -206,6 +233,9 @@ export function Planning() {
         options={{
           headerTitle: () => {
             return <PlanningHeader />
+          },
+          headerRight: () => {
+            return <PlanningHeaderRight />
           },
           headerTitleAlign: 'center',
         }}
