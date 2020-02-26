@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content } from 'native-base'
+import { Container, Content, View, Text } from 'native-base'
 import { TodoCard, CardType } from '../../@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { navigate } from '../../@utils/navigation'
@@ -8,6 +8,7 @@ import { AddTodo } from '../add/AddTodo'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
 import { computed } from 'mobx'
+import { Platform, ProgressViewIOS, ProgressBarAndroid } from 'react-native'
 
 const Stack = createStackNavigator()
 
@@ -17,14 +18,46 @@ class CurrentVM {
   }
 }
 
+class ProgressBar extends Component<{ progress: number }> {
+  render() {
+    return Platform.OS === 'ios' ? (
+      <ProgressViewIOS
+        progress={this.props.progress}
+        style={{ flex: 1, marginEnd: 12 }}
+      />
+    ) : (
+      <ProgressBarAndroid
+        progress={this.props.progress}
+        style={{ flex: 1, marginEnd: 12 }}
+      />
+    )
+  }
+}
+
 @observer
 class CurrentContent extends Component {
   vm = new CurrentVM()
 
   render() {
+    const progress = sharedTodoStore.propress.count
+      ? sharedTodoStore.propress.completed / sharedTodoStore.propress.count
+      : 1
     return (
       <Container>
         <Content>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              margin: 12,
+            }}
+          >
+            <ProgressBar progress={progress} />
+            <Text>
+              {`${sharedTodoStore.propress.completed}/${sharedTodoStore.propress.count}`}
+            </Text>
+          </View>
           {!!this.vm.currentTodo && (
             <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
           )}

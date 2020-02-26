@@ -37,7 +37,16 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    return this.todayTodos.length ? this.todayTodos[0] : undefined
+    return this.todayTodos.filter(t => !t.completed).length
+      ? this.todayTodos[0]
+      : undefined
+  }
+
+  @computed get propress() {
+    return {
+      count: this.todayTodos.length,
+      completed: this.todayTodos.filter(t => t.completed).length,
+    }
   }
 
   logout() {
