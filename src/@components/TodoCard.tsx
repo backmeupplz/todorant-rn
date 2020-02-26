@@ -14,6 +14,7 @@ import { navigate } from '@utils/navigation'
 import { l } from '@utils/linkify'
 import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { alertConfirm } from '@utils/alert'
 
 export enum CardType {
   done = 'done',
@@ -68,11 +69,19 @@ class TodoCardVM {
   }
 
   delete(todo: Todo) {
-    todo.deleted = true
-    // Save
-    sharedTodoStore.modify(todo)
-    fixOrder([getTitle(todo)])
-    sockets.sync()
+    alertConfirm(
+      `Would you really like to delete "${
+        todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
+      }"?`,
+      'Delete',
+      () => {
+        todo.deleted = true
+        // Save
+        sharedTodoStore.modify(todo)
+        fixOrder([getTitle(todo)])
+        sockets.sync()
+      }
+    )
   }
 
   uncomplete(todo: Todo) {
