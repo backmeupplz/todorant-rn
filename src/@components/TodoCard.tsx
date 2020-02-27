@@ -142,6 +142,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
               <Text>
                 {__DEV__ && `(${this.props.todo.order}) `}
                 {this.props.todo.frog ? '🐸 ' : ''}
+                {this.props.todo.time ? `${this.props.todo.time} ` : ''}
               </Text>
               <TodoText text={this.props.todo.text}></TodoText>
             </Text>

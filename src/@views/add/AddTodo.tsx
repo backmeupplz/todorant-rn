@@ -8,6 +8,7 @@ import {
   Text,
   Switch,
   Button,
+  Icon,
 } from 'native-base'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
@@ -28,6 +29,7 @@ import { sockets } from '@utils/sockets'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -42,11 +44,14 @@ class TodoVM {
   @observable frog = false
   @observable monthAndYear?: string
   @observable date?: string
+  @observable time?: string
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false
+  @observable showTimePicker = false
 
   editedTodo?: Todo
+  @observable showMore = false
 
   @computed
   get datePickerValue() {
@@ -85,6 +90,14 @@ class TodoVM {
   }
 
   @computed
+  get timePickerValue() {
+    return this.time ? moment(this.time, 'HH:mm').toDate() : new Date()
+  }
+  set timePickerValue(value: Date) {
+    this.time = moment(value).format('HH:mm')
+  }
+
+  @computed
   get markedDate() {
     const result = {} as { [index: string]: { selected: boolean } }
     if (this.datePickerValue) {
@@ -109,7 +122,7 @@ class TodoVM {
       this.monthAndYear!,
       false,
       this.date,
-      undefined
+      this.time
     )
     todo.createdAt = new Date()
     todo.updatedAt = new Date()
@@ -124,8 +137,10 @@ class TodoVM {
     this.frog = todo.frog
     this.monthAndYear = todo.monthAndYear
     this.date = todo.date
+    this.time = todo.time
 
     this.screenType = AddTodoScreenType.edit
+    this.showMore = true
   }
 
   saveTodo() {
@@ -142,6 +157,7 @@ class TodoVM {
       this.editedTodo.frog = todo.frog
       this.editedTodo.monthAndYear = todo.monthAndYear
       this.editedTodo.date = todo.date
+      this.editedTodo.time = todo.time
 
       sharedTodoStore.modify(this.editedTodo)
       fixOrder([oldTitle, getTitle(this.editedTodo)])
@@ -246,6 +262,49 @@ class AddTodoContent extends Component<{
                 maxDate={moment().add(100, 'years')}
               />
             )}
+            {this.vm.showMore && (
+              <Item
+                onPress={() => {
+                  if (!this.vm.time) {
+                    this.vm.timePickerValue = new Date()
+                  }
+                  this.vm.showTimePicker = !this.vm.showTimePicker
+                }}
+                style={{
+                  paddingVertical: this.vm.time ? 11 : 16,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text
+                  style={{
+                    color: this.vm.time ? colors.text : colors.placeholder,
+                  }}
+                >
+                  {this.vm.time ? this.vm.time : 'Exact time'}
+                </Text>
+                {!!this.vm.time && (
+                  <Button
+                    icon
+                    transparent
+                    small
+                    onPress={() => {
+                      this.vm.time = undefined
+                    }}
+                  >
+                    <Icon type="MaterialIcons" name="close" />
+                  </Button>
+                )}
+              </Item>
+            )}
+            {this.vm.showTimePicker && (
+              <DateTimePicker
+                value={this.vm.timePickerValue}
+                mode="time"
+                onChange={(_, date) => {
+                  this.vm.timePickerValue = date
+                }}
+              />
+            )}
             <Item
               style={{ justifyContent: 'space-between', paddingVertical: 16 }}
             >
@@ -283,6 +342,17 @@ class AddTodoContent extends Component<{
                 : 'Save todo!'}
             </Text>
           </Button>
+          {!this.vm.showMore && (
+            <Button
+              block
+              transparent
+              onPress={() => {
+                this.vm.showMore = true
+              }}
+            >
+              <Text>More...</Text>
+            </Button>
+          )}
         </Content>
       </Container>
     )
