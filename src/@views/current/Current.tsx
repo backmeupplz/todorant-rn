@@ -27,6 +27,8 @@ class ProgressBar extends Component<{ progress: number }> {
       />
     ) : (
       <ProgressBarAndroid
+        styleAttr="Horizontal"
+        indeterminate={false}
         progress={this.props.progress}
         style={{ flex: 1, marginEnd: 12 }}
       />

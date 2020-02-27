@@ -264,12 +264,6 @@ class AddTodoContent extends Component<{
             )}
             {this.vm.showMore && (
               <Item
-                onPress={() => {
-                  if (!this.vm.time) {
-                    this.vm.timePickerValue = new Date()
-                  }
-                  this.vm.showTimePicker = !this.vm.showTimePicker
-                }}
                 style={{
                   paddingVertical: this.vm.time ? 11 : 16,
                   justifyContent: 'space-between',
@@ -278,6 +272,13 @@ class AddTodoContent extends Component<{
                 <Text
                   style={{
                     color: this.vm.time ? colors.text : colors.placeholder,
+                    flex: 1,
+                  }}
+                  onPress={() => {
+                    if (!this.vm.time) {
+                      this.vm.timePickerValue = new Date()
+                    }
+                    this.vm.showTimePicker = !this.vm.showTimePicker
                   }}
                 >
                   {this.vm.time ? this.vm.time : 'Exact time'}
@@ -300,8 +301,11 @@ class AddTodoContent extends Component<{
               <DateTimePicker
                 value={this.vm.timePickerValue}
                 mode="time"
-                onChange={(_, date) => {
-                  this.vm.timePickerValue = date
+                onChange={(event, date) => {
+                  this.vm.showTimePicker = false
+                  if (event.type === 'set') {
+                    this.vm.timePickerValue = date
+                  }
                 }}
               />
             )}
