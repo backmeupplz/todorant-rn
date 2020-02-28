@@ -9,6 +9,7 @@ import {
   Switch,
   Button,
   Icon,
+  View,
 } from 'native-base'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
@@ -37,8 +38,6 @@ enum AddTodoScreenType {
 }
 
 class TodoVM {
-  @observable screenType = AddTodoScreenType.add
-
   @observable text = ''
   @observable completed = false
   @observable frog = false
@@ -52,6 +51,8 @@ class TodoVM {
 
   editedTodo?: Todo
   @observable showMore = false
+
+  @observable order = 0
 
   @computed
   get datePickerValue() {
@@ -93,8 +94,8 @@ class TodoVM {
   get timePickerValue() {
     return this.time ? moment(this.time, 'HH:mm').toDate() : new Date()
   }
-  set timePickerValue(value: Date) {
-    this.time = moment(value).format('HH:mm')
+  set timePickerValue(value: Date | undefined) {
+    this.time = value ? moment(value).format('HH:mm') : undefined
   }
 
   @computed
@@ -118,7 +119,7 @@ class TodoVM {
       this.frog,
       0,
       false,
-      0,
+      this.order,
       this.monthAndYear!,
       false,
       this.date,
@@ -139,31 +140,181 @@ class TodoVM {
     this.date = todo.date
     this.time = todo.time
 
-    this.screenType = AddTodoScreenType.edit
     this.showMore = true
   }
+}
 
-  saveTodo() {
-    const todo = this.constructTodo()
-    if (this.screenType === AddTodoScreenType.add) {
-      todo._tempSyncId = uuid()
-      sharedTodoStore.todos.unshift(todo)
-      fixOrder([getTitle(todo)], [todo])
-    } else if (this.editedTodo) {
-      const oldTitle = getTitle(this.editedTodo)
-
-      this.editedTodo.text = todo.text
-      this.editedTodo.completed = todo.completed
-      this.editedTodo.frog = todo.frog
-      this.editedTodo.monthAndYear = todo.monthAndYear
-      this.editedTodo.date = todo.date
-      this.editedTodo.time = todo.time
-
-      sharedTodoStore.modify(this.editedTodo)
-      fixOrder([oldTitle, getTitle(this.editedTodo)])
-    }
-    sockets.sync()
-    goBack()
+@observer
+class AddTodoForm extends Component<{ vm: TodoVM }> {
+  render() {
+    return (
+      <>
+        <Form>
+          <Item>
+            <Input
+              placeholder="Text"
+              value={this.props.vm.text}
+              onChangeText={text => {
+                this.props.vm.text = text
+              }}
+            />
+          </Item>
+          <Item
+            onPress={() => {
+              this.props.vm.showDatePicker = !this.props.vm.showDatePicker
+              if (!this.props.vm.date) {
+                this.props.vm.monthAndYear = undefined
+                this.props.vm.date = undefined
+              }
+              this.props.vm.showMonthAndYearPicker = false
+            }}
+            style={{ paddingVertical: 16 }}
+          >
+            <Text
+              style={{
+                color:
+                  this.props.vm.datePickerValue && !!this.props.vm.date
+                    ? colors.text
+                    : colors.placeholder,
+              }}
+            >
+              {this.props.vm.datePickerValue && !!this.props.vm.date
+                ? this.props.vm.datePickerValue
+                : 'Select exact day'}
+            </Text>
+          </Item>
+          {this.props.vm.showDatePicker && (
+            <Calendar
+              minDate={getDateString(new Date())}
+              current={this.props.vm.datePickerValue || new Date()}
+              markedDates={this.props.vm.markedDate}
+              onDayPress={day => {
+                this.props.vm.datePickerValue = day.dateString
+                this.props.vm.showDatePicker = false
+              }}
+            />
+          )}
+          <Item
+            onPress={() => {
+              this.props.vm.showMonthAndYearPicker = !this.props.vm
+                .showMonthAndYearPicker
+              if (!!this.props.vm.date) {
+                this.props.vm.monthAndYear = undefined
+                this.props.vm.date = undefined
+              }
+              this.props.vm.showDatePicker = false
+            }}
+            style={{ paddingVertical: 16 }}
+          >
+            <Text
+              style={{
+                color:
+                  this.props.vm.datePickerValue && !this.props.vm.date
+                    ? colors.text
+                    : colors.placeholder,
+              }}
+            >
+              {this.props.vm.datePickerValue && !this.props.vm.date
+                ? this.props.vm.datePickerValue
+                : 'Or month'}
+            </Text>
+          </Item>
+          {this.props.vm.showMonthAndYearPicker && (
+            <MonthPicker
+              selectedDate={this.props.vm.monthAndYearPickerValue}
+              onMonthChange={(date: Moment) => {
+                this.props.vm.monthAndYearPickerValue = date.toDate()
+              }}
+              minDate={moment()}
+              maxDate={moment().add(100, 'years')}
+            />
+          )}
+          {this.props.vm.showMore && (
+            <Item
+              style={{
+                paddingVertical: this.props.vm.time ? 11 : 16,
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text
+                style={{
+                  color: this.props.vm.time ? colors.text : colors.placeholder,
+                  flex: 1,
+                }}
+                onPress={() => {
+                  if (!this.props.vm.time) {
+                    this.props.vm.timePickerValue = new Date()
+                  }
+                  this.props.vm.showTimePicker = !this.props.vm.showTimePicker
+                }}
+              >
+                {this.props.vm.time ? this.props.vm.time : 'Exact time'}
+              </Text>
+              {!!this.props.vm.time && (
+                <Button
+                  icon
+                  transparent
+                  small
+                  onPress={() => {
+                    this.props.vm.time = undefined
+                  }}
+                >
+                  <Icon type="MaterialIcons" name="close" />
+                </Button>
+              )}
+            </Item>
+          )}
+          {this.props.vm.showTimePicker && (
+            <DateTimePicker
+              value={this.props.vm.timePickerValue || new Date()}
+              mode="time"
+              onChange={(event, date) => {
+                this.props.vm.showTimePicker = false
+                if (event.type === 'set') {
+                  this.props.vm.timePickerValue = date
+                }
+              }}
+            />
+          )}
+          <Item
+            style={{ justifyContent: 'space-between', paddingVertical: 16 }}
+          >
+            <Text>It's a frog!</Text>
+            <Switch
+              value={this.props.vm.frog}
+              onValueChange={value => {
+                this.props.vm.frog = value
+              }}
+            />
+          </Item>
+          <Item
+            style={{ justifyContent: 'space-between', paddingVertical: 16 }}
+          >
+            <Text>Completed</Text>
+            <Switch
+              value={this.props.vm.completed}
+              onValueChange={value => {
+                this.props.vm.completed = value
+              }}
+            />
+          </Item>
+          {!this.props.vm.showMore && (
+            <Item>
+              <Button
+                block
+                transparent
+                onPress={() => {
+                  this.props.vm.showMore = true
+                }}
+                style={{ flex: 1 }}
+              >
+                <Text>More...</Text>
+              </Button>
+            </Item>
+          )}
+        </Form>
+      </>
+    )
   }
 }
 
@@ -171,11 +322,52 @@ class TodoVM {
 class AddTodoContent extends Component<{
   route: RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
 }> {
-  vm = new TodoVM()
+  @observable screenType = AddTodoScreenType.add
+  @observable vms = [new TodoVM()]
+
+  saveTodo() {
+    const titlesToFixOrder = [] as string[]
+    const addTodosOnTop = [] as Todo[]
+    const addTodosToBottom = [] as Todo[]
+    this.vms.forEach((vm, i) => {
+      vm.order = i
+    })
+    for (const vm of this.vms) {
+      const todo = vm.constructTodo()
+      if (this.screenType === AddTodoScreenType.add) {
+        todo._tempSyncId = uuid()
+        sharedTodoStore.todos.unshift(todo)
+        titlesToFixOrder.push(getTitle(todo))
+        addTodosOnTop.push(todo)
+      } else if (vm.editedTodo) {
+        const oldTitle = getTitle(vm.editedTodo)
+
+        vm.editedTodo.text = todo.text
+        vm.editedTodo.completed = todo.completed
+        vm.editedTodo.frog = todo.frog
+        vm.editedTodo.monthAndYear = todo.monthAndYear
+        vm.editedTodo.date = todo.date
+        vm.editedTodo.time = todo.time
+
+        sharedTodoStore.modify(vm.editedTodo)
+        titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
+      }
+    }
+    fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom)
+    sockets.sync()
+    goBack()
+  }
+
+  @computed get isValid() {
+    return this.vms.reduce((prev, cur) => {
+      return !cur.isValid ? false : prev
+    }, true)
+  }
 
   componentDidMount() {
     if (this.props.route.params?.editedTodo) {
-      this.vm.setEditedTodo(this.props.route.params.editedTodo)
+      this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
+      this.screenType = AddTodoScreenType.edit
     }
   }
 
@@ -183,178 +375,64 @@ class AddTodoContent extends Component<{
     return (
       <Container>
         <Content>
-          <Form>
-            <Item>
-              <Input
-                placeholder="Text"
-                value={this.vm.text}
-                onChangeText={text => {
-                  this.vm.text = text
-                }}
-              />
-            </Item>
-            <Item
-              onPress={() => {
-                this.vm.showDatePicker = !this.vm.showDatePicker
-                if (!this.vm.date) {
-                  this.vm.monthAndYear = undefined
-                  this.vm.date = undefined
-                }
-                this.vm.showMonthAndYearPicker = false
-              }}
-              style={{ paddingVertical: 16 }}
-            >
-              <Text
-                style={{
-                  color:
-                    this.vm.datePickerValue && !!this.vm.date
-                      ? colors.text
-                      : colors.placeholder,
-                }}
-              >
-                {this.vm.datePickerValue && !!this.vm.date
-                  ? this.vm.datePickerValue
-                  : 'Select exact day'}
-              </Text>
-            </Item>
-            {this.vm.showDatePicker && (
-              <Calendar
-                minDate={getDateString(new Date())}
-                current={this.vm.datePickerValue || new Date()}
-                markedDates={this.vm.markedDate}
-                onDayPress={day => {
-                  this.vm.datePickerValue = day.dateString
-                  this.vm.showDatePicker = false
-                }}
-              />
-            )}
-            <Item
-              onPress={() => {
-                this.vm.showMonthAndYearPicker = !this.vm.showMonthAndYearPicker
-                if (!!this.vm.date) {
-                  this.vm.monthAndYear = undefined
-                  this.vm.date = undefined
-                }
-                this.vm.showDatePicker = false
-              }}
-              style={{ paddingVertical: 16 }}
-            >
-              <Text
-                style={{
-                  color:
-                    this.vm.datePickerValue && !this.vm.date
-                      ? colors.text
-                      : colors.placeholder,
-                }}
-              >
-                {this.vm.datePickerValue && !this.vm.date
-                  ? this.vm.datePickerValue
-                  : 'Or month'}
-              </Text>
-            </Item>
-            {this.vm.showMonthAndYearPicker && (
-              <MonthPicker
-                selectedDate={this.vm.monthAndYearPickerValue}
-                onMonthChange={(date: Moment) => {
-                  this.vm.monthAndYearPickerValue = date.toDate()
-                }}
-                minDate={moment()}
-                maxDate={moment().add(100, 'years')}
-              />
-            )}
-            {this.vm.showMore && (
-              <Item
-                style={{
-                  paddingVertical: this.vm.time ? 11 : 16,
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text
-                  style={{
-                    color: this.vm.time ? colors.text : colors.placeholder,
-                    flex: 1,
-                  }}
-                  onPress={() => {
-                    if (!this.vm.time) {
-                      this.vm.timePickerValue = new Date()
-                    }
-                    this.vm.showTimePicker = !this.vm.showTimePicker
-                  }}
-                >
-                  {this.vm.time ? this.vm.time : 'Exact time'}
-                </Text>
-                {!!this.vm.time && (
+          {this.vms.map((vm, i, a) => (
+            <View key={i}>
+              <AddTodoForm vm={vm} />
+              {a.length > 1 && (
+                <>
                   <Button
-                    icon
                     transparent
-                    small
+                    style={{
+                      marginHorizontal: 10,
+                      justifyContent: 'center',
+                    }}
                     onPress={() => {
-                      this.vm.time = undefined
+                      this.vms.splice(i, 1)
                     }}
                   >
-                    <Icon type="MaterialIcons" name="close" />
+                    <Text style={{ color: 'tomato' }}>Delete</Text>
                   </Button>
-                )}
-              </Item>
-            )}
-            {this.vm.showTimePicker && (
-              <DateTimePicker
-                value={this.vm.timePickerValue}
-                mode="time"
-                onChange={(event, date) => {
-                  this.vm.showTimePicker = false
-                  if (event.type === 'set') {
-                    this.vm.timePickerValue = date
-                  }
-                }}
-              />
-            )}
-            <Item
-              style={{ justifyContent: 'space-between', paddingVertical: 16 }}
-            >
-              <Text>It's a frog!</Text>
-              <Switch
-                value={this.vm.frog}
-                onValueChange={value => {
-                  this.vm.frog = value
-                }}
-              />
-            </Item>
-            <Item
-              style={{ justifyContent: 'space-between', paddingVertical: 16 }}
-            >
-              <Text>Completed</Text>
-              <Switch
-                value={this.vm.completed}
-                onValueChange={value => {
-                  this.vm.completed = value
-                }}
-              />
-            </Item>
-          </Form>
+                  <View
+                    style={{
+                      flex: 1,
+                      height: 2,
+                      backgroundColor: 'lightsteelblue',
+                    }}
+                  />
+                </>
+              )}
+            </View>
+          ))}
           <Button
             block
             style={{ marginHorizontal: 10, marginTop: 10 }}
             onPress={() => {
-              this.vm.saveTodo()
+              this.saveTodo()
             }}
-            disabled={!this.vm.isValid}
+            disabled={!this.isValid}
           >
             <Text>
-              {this.vm.screenType === AddTodoScreenType.add
-                ? 'Add todo!'
+              {this.screenType === AddTodoScreenType.add
+                ? this.vms.length > 1
+                  ? 'Add todos!'
+                  : 'Add todo!'
                 : 'Save todo!'}
             </Text>
           </Button>
-          {!this.vm.showMore && (
+          {this.screenType === AddTodoScreenType.add && (
             <Button
-              block
               transparent
+              style={{
+                marginHorizontal: 10,
+                marginTop: 10,
+                flex: 1,
+                justifyContent: 'center',
+              }}
               onPress={() => {
-                this.vm.showMore = true
+                this.vms.push(new TodoVM())
               }}
             >
-              <Text>More...</Text>
+              <Text>+</Text>
             </Button>
           )}
         </Content>
@@ -367,5 +445,5 @@ export const AddTodo = () => {
   const route = useRoute<
     RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
   >()
-  return <AddTodoContent route={route}></AddTodoContent>
+  return <AddTodoContent route={route} />
 }
