@@ -320,10 +320,14 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
 
 @observer
 class AddTodoContent extends Component<{
-  route: RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
+  route: RouteProp<
+    Record<string, { editedTodo: Todo; breakdownTodo: Todo } | undefined>,
+    string
+  >
 }> {
   @observable screenType = AddTodoScreenType.add
   @observable vms = [new TodoVM()]
+  breakdownTodo?: Todo
 
   saveTodo() {
     const titlesToFixOrder = [] as string[]
@@ -353,6 +357,11 @@ class AddTodoContent extends Component<{
         titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
       }
     }
+    if (this.breakdownTodo) {
+      this.breakdownTodo.completed = true
+      sharedTodoStore.modify(this.breakdownTodo)
+      titlesToFixOrder.push(getTitle(this.breakdownTodo))
+    }
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom)
     sockets.sync()
     goBack()
@@ -368,6 +377,9 @@ class AddTodoContent extends Component<{
     if (this.props.route.params?.editedTodo) {
       this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
       this.screenType = AddTodoScreenType.edit
+    }
+    if (this.props.route.params?.breakdownTodo) {
+      this.breakdownTodo = this.props.route.params?.breakdownTodo
     }
   }
 
@@ -443,7 +455,10 @@ class AddTodoContent extends Component<{
 
 export const AddTodo = () => {
   const route = useRoute<
-    RouteProp<Record<string, { editedTodo: Todo } | undefined>, string>
+    RouteProp<
+      Record<string, { editedTodo: Todo; breakdownTodo: Todo } | undefined>,
+      string
+    >
   >()
   return <AddTodoContent route={route} />
 }

@@ -209,9 +209,18 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                     />
                   </Button>
 
-                  {/* <Button icon transparent small>
-                <Icon type="MaterialIcons" name="list" />
-              </Button> */}
+                  <Button
+                    icon
+                    transparent
+                    small
+                    onPress={() => {
+                      navigate('BreakdownTodo', {
+                        breakdownTodo: { ...this.props.todo },
+                      })
+                    }}
+                  >
+                    <Icon type="MaterialIcons" name="list" />
+                  </Button>
                 </>
               )}
             {this.props.type === CardType.done ? (

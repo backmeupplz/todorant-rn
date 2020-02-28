@@ -119,6 +119,11 @@ export function Current() {
         component={AddTodo}
         options={{ title: 'Add todo' }}
       />
+      <Stack.Screen
+        name="BreakdownTodo"
+        component={AddTodo}
+        options={{ title: 'Breakdown todo' }}
+      />
     </Stack.Navigator>
   )
 }
