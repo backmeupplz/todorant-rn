@@ -6,10 +6,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { observer } from 'mobx-react'
 
 const Tab = createBottomTabNavigator()
 
-export default function BottomTabNavigator() {
+export default observer(function BottomTabNavigator() {
   return (
     <>
       <Tab.Navigator
@@ -61,4 +62,4 @@ export default function BottomTabNavigator() {
       </Tab.Navigator>
     </>
   )
-}
+})
