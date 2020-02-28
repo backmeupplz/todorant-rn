@@ -1,6 +1,6 @@
 import { sockets } from '@utils/sockets'
 import { observable, computed } from 'mobx'
-import { Todo, compareTodos } from '@models/Todo'
+import { Todo, compareTodos, isTodoOld } from '@models/Todo'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
 import uuid from 'uuid'
@@ -47,6 +47,14 @@ class TodoStore {
       count: this.todayTodos.length,
       completed: this.todayTodos.filter(t => t.completed).length,
     }
+  }
+
+  @computed get isPlanningRequired() {
+    return this.undeletedTodos
+      .filter(t => !t.completed)
+      .reduce((prev, cur) => {
+        return isTodoOld(cur) ? true : prev
+      }, false)
   }
 
   logout() {

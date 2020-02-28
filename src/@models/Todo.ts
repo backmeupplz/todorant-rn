@@ -1,4 +1,9 @@
-import { getDateString, getDateStringFromTodo } from '@utils/time'
+import {
+  getDateString,
+  getDateStringFromTodo,
+  getDateDateString,
+  getDateMonthAndYearString,
+} from '@utils/time'
 import { persist } from 'mobx-persist'
 import { observable } from 'mobx'
 
@@ -47,6 +52,26 @@ export class Todo {
 
 export function isTodoToday(todo: Todo) {
   return getDateString(new Date()) === getDateStringFromTodo(todo)
+}
+
+export function isTodoOld(todo: Todo) {
+  const day = getDateDateString(new Date())
+  const monthAndYear = getDateMonthAndYearString(new Date())
+
+  // Exact date exists or not
+  if (todo.date) {
+    if (todo.monthAndYear < monthAndYear) {
+      return true
+    }
+    if (todo.monthAndYear === monthAndYear && todo.date < day) {
+      return true
+    }
+  } else {
+    if (todo.monthAndYear <= monthAndYear) {
+      return true
+    }
+  }
+  return false
 }
 
 export function compareTodos(completed: Boolean) {

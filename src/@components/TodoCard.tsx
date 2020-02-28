@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Todo, isTodoToday, getTitle } from '../@models/Todo'
+import { Todo, isTodoToday, getTitle, isTodoOld } from '../@models/Todo'
 import { Card, CardItem, Body, Text, Button, Icon, View } from 'native-base'
 import { sharedTodoStore } from '@stores/TodoStore'
 import {
@@ -15,6 +15,7 @@ import { l } from '@utils/linkify'
 import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
+import { computed } from 'mobx'
 
 export enum CardType {
   done = 'done',
@@ -101,7 +102,7 @@ class TodoCardVM {
   }
 }
 
-class TodoText extends Component<{ text: string }> {
+class TodoText extends Component<{ text: string; isOld: boolean }> {
   get linkifiedText() {
     return l(this.props.text)
   }
@@ -133,18 +134,28 @@ class TodoText extends Component<{ text: string }> {
 export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
   vm = new TodoCardVM()
 
+  @computed get isOld() {
+    return this.props.type !== CardType.done && isTodoOld(this.props.todo)
+  }
+
   render() {
     return (
       <Card>
-        <CardItem>
+        <CardItem
+          style={{ backgroundColor: this.isOld ? 'lavenderblush' : undefined }}
+        >
           <Body>
             <Text>
               <Text>
+                {this.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
                 {__DEV__ && `(${this.props.todo.order}) `}
                 {this.props.todo.frog ? '🐸 ' : ''}
                 {this.props.todo.time ? `${this.props.todo.time} ` : ''}
               </Text>
-              <TodoText text={this.props.todo.text}></TodoText>
+              <TodoText
+                text={this.props.todo.text}
+                isOld={this.isOld}
+              ></TodoText>
             </Text>
           </Body>
         </CardItem>

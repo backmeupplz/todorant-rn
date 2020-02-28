@@ -5,6 +5,7 @@ import { Current } from './current/Current'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 const Tab = createBottomTabNavigator()
 
@@ -52,7 +53,9 @@ export default function BottomTabNavigator() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Current" component={Current} />
+        {!sharedTodoStore.isPlanningRequired && (
+          <Tab.Screen name="Current" component={Current} />
+        )}
         <Tab.Screen name="Planning" component={Planning} />
         <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>

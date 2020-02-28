@@ -119,6 +119,19 @@ class PlanningContent extends Component {
   render() {
     return (
       <Container>
+        {sharedTodoStore.isPlanningRequired && (
+          <Text
+            style={{
+              backgroundColor: 'dodgerblue',
+              color: 'white',
+              padding: 12,
+            }}
+          >
+            Looks like you have some planning to do! Please, redistribute the
+            outstanding tasks below to unlock the "Current" tab and to keep
+            being productive. Cheers!
+          </Text>
+        )}
         <List
           dataArray={this.vm.todosWithSections}
           renderItem={({ item, index }) =>
