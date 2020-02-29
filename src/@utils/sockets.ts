@@ -8,7 +8,7 @@ import uuid from 'uuid'
 import { Toast } from 'native-base'
 
 const socketIO = SocketIO(
-  __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
+  __DEV__ ? 'http://10.0.2.2:3000' : 'https://ws.todorant.com'
 )
 
 class SocketManager {

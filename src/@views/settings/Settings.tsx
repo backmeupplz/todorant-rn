@@ -69,7 +69,10 @@ export class SettingsContent extends Component {
               <Text>Privacy policy</Text>
             </ListItem>
             <ListItem>
-              <Text>v{DeviceInfo.getVersion()}</Text>
+              <Text>
+                v{DeviceInfo.getVersion()}
+                {__DEV__ ? '.dev' : ''}
+              </Text>
             </ListItem>
           </List>
         </Content>
