@@ -14,6 +14,7 @@ export default observer(function BottomTabNavigator() {
   return (
     <>
       <Tab.Navigator
+        backBehavior="none"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
             let name = 'event-available'
