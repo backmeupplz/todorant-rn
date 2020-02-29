@@ -80,7 +80,9 @@ class SocketManager {
     this.sync()
   }
   onTodos = async (todos: Todo[]) => {
-    Toast.show({ text: `Todos received ${todos.length}` })
+    if (__DEV__) {
+      Toast.show({ text: `Todos received ${todos.length}` })
+    }
     try {
       await sharedTodoStore.onTodos(todos)
     } catch (err) {
@@ -92,10 +94,12 @@ class SocketManager {
     if (!sharedSessionStore.user?.token || !socketIO.connected) {
       return
     }
-    Toast.show({
-      text: `Sync requested ${sharedTodoStore.lastSyncDate}`,
-      buttonText: 'Okay',
-    })
+    if (__DEV__) {
+      Toast.show({
+        text: `Sync requested ${sharedTodoStore.lastSyncDate}`,
+        buttonText: 'Okay',
+      })
+    }
     socketIO.emit('sync', sharedTodoStore.lastSyncDate)
   }
 
