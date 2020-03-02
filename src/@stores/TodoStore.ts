@@ -62,7 +62,10 @@ class TodoStore {
     this.lastSyncDate = undefined
   }
 
-  onTodos = async (todosChangedOnServer: Todo[]) => {
+  onObjectsFromServer = async (
+    todosChangedOnServer: Todo[],
+    pushBack: (objects: Todo[]) => Promise<Todo[]>
+  ) => {
     if (!hydrated) {
       return
     }
@@ -112,7 +115,7 @@ class TodoStore {
       todo._tempSyncId = uuid()
       todosToPushMap[todo._tempSyncId] = todo
     })
-    const savedPushedTodos = await sockets.pushTodos(todosToPush)
+    const savedPushedTodos = await pushBack(todosToPush)
     for (const todo of savedPushedTodos) {
       if (!todo._tempSyncId) {
         continue
@@ -121,8 +124,6 @@ class TodoStore {
     }
     // Set result
     this.todos = result
-    // Finish
-    this.lastSyncDate = new Date()
   }
 
   modify(...todos: Todo[]) {

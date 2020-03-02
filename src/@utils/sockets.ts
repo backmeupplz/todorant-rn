@@ -1,18 +1,95 @@
 import { alertError } from '@utils/alert'
 import { Todo } from '@models/Todo'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedSocketStore } from './../@stores/SocketStore'
+import { sharedSocketStore } from '@stores/SocketStore'
 import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
 import { Toast } from 'native-base'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const socketIO = SocketIO(
   __DEV__ ? 'http://10.0.2.2:3000' : 'https://ws.todorant.com'
 )
 
+type PromiseMap = { [index: string]: { res: Function; rej: Function } }
+
+class SyncManager<T> {
+  name: string
+  pendingPushes: PromiseMap
+  latestSyncDate: () => Date | undefined
+  onObjectsFromServer: (
+    objects: T,
+    pushBack: (objects: T) => Promise<T>
+  ) => Promise<void>
+
+  // 0
+  constructor(
+    name: string,
+    pendingPushes: PromiseMap,
+    latestSyncDate: () => Date | undefined,
+    onObjectsFromServer: (
+      objects: T,
+      pushBack: (objects: T) => Promise<T>
+    ) => Promise<void>,
+    setLastSyncDate: (latestSyncDate: Date) => void
+  ) {
+    this.name = name
+    this.pendingPushes = pendingPushes
+    this.latestSyncDate = latestSyncDate
+    this.onObjectsFromServer = onObjectsFromServer
+
+    // -1
+    socketIO.on(`${name}_sync_request`, this.sync)
+
+    // 2
+    socketIO.on(name, async (response: T) => {
+      console.warn(`${this.name}: onObjectsFromServer`, response)
+      try {
+        await onObjectsFromServer(response, this.pushObjects)
+      } catch (err) {
+        alertError(err)
+      }
+    })
+    // 4
+    socketIO.on(`${name}_pushed`, (pushId: string, objects: T) => {
+      console.warn(`${this.name}: pushed`, pushId, objects)
+      this.pendingPushes[pushId]?.res(objects)
+      delete this.pendingPushes[pushId]
+      setLastSyncDate(new Date())
+    })
+    // 4
+    socketIO.on(`${name}_pushed_error`, (pushId: string, error: Error) => {
+      console.warn(`${this.name}: pushed_error`, pushId, error)
+      this.pendingPushes[pushId]?.rej(error)
+      delete this.pendingPushes[pushId]
+    })
+  }
+
+  // 1
+  sync = async () => {
+    if (!sharedSessionStore.user?.token || !socketIO.connected) {
+      return
+    }
+    console.warn(`${this.name}: sync`, sharedTodoStore.lastSyncDate)
+    socketIO.emit(`sync_${this.name}`, this.latestSyncDate())
+  }
+
+  // 3
+  private pushObjects = (objects: T): Promise<T> => {
+    return new Promise<T>((res, rej) => {
+      const pushId = uuid()
+      this.pendingPushes[pushId] = { res, rej }
+      console.warn(`${this.name}: pushObjects`, pushId, objects)
+      socketIO.emit(`push_${this.name}`, pushId, objects)
+    })
+  }
+}
+
 class SocketManager {
-  pendingPushes = {} as { [index: string]: { res: Function; rej: Function } }
+  pendingPushes = {} as PromiseMap
+
+  todoSyncManager: SyncManager<Todo[]>
 
   constructor() {
     this.connect()
@@ -25,10 +102,16 @@ class SocketManager {
     socketIO.on('error', this.onError)
 
     socketIO.on('authorized', this.onAuthorized)
-    socketIO.on('todos', this.onTodos)
-    socketIO.on('todos_pushed', this.onTodosPushed)
-    socketIO.on('todos_pushed_error', this.onTodosPushedError)
-    socketIO.on('sync_request', this.onSyncRequest)
+
+    this.todoSyncManager = new SyncManager<Todo[]>(
+      'todos',
+      this.pendingPushes,
+      () => sharedTodoStore.lastSyncDate,
+      sharedTodoStore.onObjectsFromServer,
+      lastSyncDate => {
+        sharedTodoStore.lastSyncDate = lastSyncDate
+      }
+    )
   }
 
   connect = () => {
@@ -77,49 +160,11 @@ class SocketManager {
 
   onAuthorized = () => {
     sharedSocketStore.authorized = true
-    this.sync()
-  }
-  onTodos = async (todos: Todo[]) => {
-    if (__DEV__) {
-      Toast.show({ text: `Todos received ${todos.length}` })
-    }
-    try {
-      await sharedTodoStore.onTodos(todos)
-    } catch (err) {
-      alertError(err)
-    }
+    this.globalSync()
   }
 
-  sync = () => {
-    if (!sharedSessionStore.user?.token || !socketIO.connected) {
-      return
-    }
-    if (__DEV__) {
-      Toast.show({
-        text: `Sync requested ${sharedTodoStore.lastSyncDate}`,
-        buttonText: 'Okay',
-      })
-    }
-    socketIO.emit('sync', sharedTodoStore.lastSyncDate)
-  }
-
-  pushTodos = (todos: Todo[]): Promise<Todo[]> => {
-    return new Promise<Todo[]>((res, rej) => {
-      const pushId = uuid()
-      this.pendingPushes[pushId] = { res, rej }
-      socketIO.emit('push', pushId, todos)
-    })
-  }
-
-  onTodosPushed = (pushId: string, todos: Todo[]) => {
-    this.pendingPushes[pushId]?.res(todos)
-  }
-
-  onTodosPushedError = (pushId: string, error: Error) => {
-    this.pendingPushes[pushId]?.rej(error)
-  }
-  onSyncRequest = () => {
-    this.sync()
+  globalSync = () => {
+    this.todoSyncManager.sync()
   }
 }
 
