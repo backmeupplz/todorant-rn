@@ -363,7 +363,7 @@ class AddTodoContent extends Component<{
       titlesToFixOrder.push(getTitle(this.breakdownTodo))
     }
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom)
-    sockets.sync()
+    sockets.todoSyncManager.sync()
     goBack()
   }
 

@@ -49,7 +49,7 @@ class TodoCardVM {
     // Save
     sharedTodoStore.modify(todo)
     fixOrder([getTitle(todo)])
-    sockets.sync()
+    sockets.todoSyncManager.sync()
   }
 
   isLast(todo: Todo) {
@@ -66,7 +66,7 @@ class TodoCardVM {
     // Save
     sharedTodoStore.modify(todo)
     fixOrder([oldTitle, getTitle(todo)])
-    sockets.sync()
+    sockets.todoSyncManager.sync()
   }
 
   delete(todo: Todo) {
@@ -80,7 +80,7 @@ class TodoCardVM {
         // Save
         sharedTodoStore.modify(todo)
         fixOrder([getTitle(todo)])
-        sockets.sync()
+        sockets.todoSyncManager.sync()
       }
     )
   }
@@ -90,7 +90,7 @@ class TodoCardVM {
     // Save
     sharedTodoStore.modify(todo)
     fixOrder([getTitle(todo)])
-    sockets.sync()
+    sockets.todoSyncManager.sync()
   }
 
   complete(todo: Todo) {
@@ -98,7 +98,7 @@ class TodoCardVM {
     // Save
     sharedTodoStore.modify(todo)
     fixOrder([getTitle(todo)])
-    sockets.sync()
+    sockets.todoSyncManager.sync()
   }
 }
 

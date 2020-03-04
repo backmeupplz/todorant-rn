@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { alertError } from '@utils/alert'
 import { Todo } from '@models/Todo'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -5,11 +6,13 @@ import { sharedSocketStore } from '@stores/SocketStore'
 import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
-import { Toast } from 'native-base'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const socketIO = SocketIO(
-  __DEV__ ? 'http://10.0.2.2:3000' : 'https://ws.todorant.com'
+  __DEV__
+    ? Platform.OS === 'android'
+      ? 'http://10.0.2.2:3000'
+      : 'http://localhost:3000'
+    : 'https://ws.todorant.com'
 )
 
 type PromiseMap = { [index: string]: { res: Function; rej: Function } }
@@ -44,7 +47,7 @@ class SyncManager<T> {
 
     // 2
     socketIO.on(name, async (response: T) => {
-      console.warn(`${this.name}: onObjectsFromServer`, response)
+      // console.warn(`${this.name}: onObjectsFromServer`, response)
       try {
         await onObjectsFromServer(response, this.pushObjects)
       } catch (err) {
@@ -53,14 +56,14 @@ class SyncManager<T> {
     })
     // 4
     socketIO.on(`${name}_pushed`, (pushId: string, objects: T) => {
-      console.warn(`${this.name}: pushed`, pushId, objects)
+      // console.warn(`${this.name}: pushed`, pushId, objects)
       this.pendingPushes[pushId]?.res(objects)
       delete this.pendingPushes[pushId]
       setLastSyncDate(new Date())
     })
     // 4
     socketIO.on(`${name}_pushed_error`, (pushId: string, error: Error) => {
-      console.warn(`${this.name}: pushed_error`, pushId, error)
+      // console.warn(`${this.name}: pushed_error`, pushId, error)
       this.pendingPushes[pushId]?.rej(error)
       delete this.pendingPushes[pushId]
     })
@@ -71,7 +74,7 @@ class SyncManager<T> {
     if (!sharedSessionStore.user?.token || !socketIO.connected) {
       return
     }
-    console.warn(`${this.name}: sync`, sharedTodoStore.lastSyncDate)
+    // console.warn(`${this.name}: sync`, sharedTodoStore.lastSyncDate)
     socketIO.emit(`sync_${this.name}`, this.latestSyncDate())
   }
 
@@ -80,7 +83,7 @@ class SyncManager<T> {
     return new Promise<T>((res, rej) => {
       const pushId = uuid()
       this.pendingPushes[pushId] = { res, rej }
-      console.warn(`${this.name}: pushObjects`, pushId, objects)
+      // console.warn(`${this.name}: pushObjects`, pushId, objects)
       socketIO.emit(`push_${this.name}`, pushId, objects)
     })
   }
@@ -107,7 +110,9 @@ class SocketManager {
       'todos',
       this.pendingPushes,
       () => sharedTodoStore.lastSyncDate,
-      sharedTodoStore.onObjectsFromServer,
+      (objects, pushBack) => {
+        return sharedTodoStore.onObjectsFromServer(objects, pushBack)
+      },
       lastSyncDate => {
         sharedTodoStore.lastSyncDate = lastSyncDate
       }

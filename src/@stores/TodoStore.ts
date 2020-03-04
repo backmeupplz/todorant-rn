@@ -1,20 +1,20 @@
-import { sockets } from '@utils/sockets'
 import { observable, computed } from 'mobx'
 import { Todo, compareTodos, isTodoOld } from '@models/Todo'
 import { create, persist } from 'mobx-persist'
 import { AsyncStorage } from 'react-native'
 import uuid from 'uuid'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import { hydrateStore } from '@utils/hydrated'
 
 const hydrate = create({
   storage: AsyncStorage,
 })
 
-let hydrated = false
-
 class TodoStore {
   @persist('list', Todo) @observable todos: Todo[] = []
   @persist('date' as any) @observable lastSyncDate?: Date
+
+  hydrated = false
 
   @computed get undeletedTodos() {
     return this.todos.filter(t => !t.deleted)
@@ -25,7 +25,7 @@ class TodoStore {
     return this.todosForDate(today)
   }
 
-  todosForDate(date: Date) {
+  todosForDate = (date: Date) => {
     return this.undeletedTodos
       .filter(
         todo =>
@@ -57,7 +57,7 @@ class TodoStore {
       }, false)
   }
 
-  logout() {
+  logout = () => {
     this.todos = []
     this.lastSyncDate = undefined
   }
@@ -66,7 +66,7 @@ class TodoStore {
     todosChangedOnServer: Todo[],
     pushBack: (objects: Todo[]) => Promise<Todo[]>
   ) => {
-    if (!hydrated) {
+    if (!this.hydrated) {
       return
     }
     // Create resulting array
@@ -126,7 +126,7 @@ class TodoStore {
     this.todos = result
   }
 
-  modify(...todos: Todo[]) {
+  modify = (...todos: Todo[]) => {
     for (const todo of todos) {
       const t = this.getTodoById(todo._id || todo._tempSyncId)
       if (!t) {
@@ -137,7 +137,7 @@ class TodoStore {
     }
   }
 
-  private getTodoById(id?: string) {
+  private getTodoById = (id?: string) => {
     return !id
       ? undefined
       : this.todos.find(todo => todo._id === id || todo._tempSyncId === id)
@@ -146,6 +146,6 @@ class TodoStore {
 
 export const sharedTodoStore = new TodoStore()
 hydrate('TodoStore', sharedTodoStore).then(() => {
-  hydrated = true
-  sockets.sync()
+  sharedTodoStore.hydrated = true
+  hydrateStore('TodoStore')
 })

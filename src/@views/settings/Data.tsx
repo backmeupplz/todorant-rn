@@ -42,7 +42,7 @@ export class Data extends Component {
             <ListItem
               button
               onPress={() => {
-                sockets.sync()
+                sockets.globalSync
               }}
             >
               <Text>Sync data</Text>
