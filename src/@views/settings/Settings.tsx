@@ -15,6 +15,7 @@ import { Data } from './Data'
 import DeviceInfo from 'react-native-device-info'
 import { TodoSettings } from './TodoSettings'
 import { Rules } from './Rules'
+import { Alert, Linking } from 'react-native'
 
 const Stack = createStackNavigator()
 
@@ -81,6 +82,37 @@ export class SettingsContent extends Component {
               }}
             >
               <Text>Privacy policy</Text>
+            </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                setTimeout(() => {
+                  Alert.alert(
+                    'Support',
+                    'Got questions or feedback? Send me an email or contact me on Telegram!',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'n@borodutch.com',
+                        onPress: () => {
+                          Linking.openURL('mailto:n@borodutch.com')
+                        },
+                      },
+                      {
+                        text: '@borodutch',
+                        onPress: () => {
+                          Linking.openURL('https://t.me/borodutch')
+                        },
+                      },
+                    ]
+                  )
+                }, 500)
+              }}
+            >
+              <Text>Support</Text>
             </ListItem>
             <ListItem>
               <Text>
