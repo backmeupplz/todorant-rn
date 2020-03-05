@@ -34,7 +34,7 @@ class TodoStore {
 
   @computed get currentTodo() {
     return this.todayTodos.filter(t => !t.completed).length
-      ? this.todayTodos[0]
+      ? this.todayTodos.filter(t => !t.completed)[0]
       : undefined
   }
 
