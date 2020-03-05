@@ -14,6 +14,7 @@ import { CheckOrCross } from '@components/CheckOrCross'
 import { Data } from './Data'
 import DeviceInfo from 'react-native-device-info'
 import { TodoSettings } from './TodoSettings'
+import { Rules } from './Rules'
 
 const Stack = createStackNavigator()
 
@@ -56,6 +57,14 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem itemHeader>
               <Text>Info</Text>
+            </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                navigate('Rules')
+              }}
+            >
+              <Text>How to use Todorant</Text>
             </ListItem>
             <ListItem
               button
@@ -114,6 +123,11 @@ export function Settings() {
         name="Data"
         component={Data}
         options={{ title: 'Data info' }}
+      />
+      <Stack.Screen
+        name="Rules"
+        component={Rules}
+        options={{ title: 'How to' }}
       />
     </Stack.Navigator>
   )
