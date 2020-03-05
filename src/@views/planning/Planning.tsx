@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import {
-  List,
-  Container,
-  Text,
-  Segment,
-  Button,
-  StyleProvider,
-  Icon,
-} from 'native-base'
+import { List, Container, Text, Segment, Button, Icon } from 'native-base'
 import { computed } from 'mobx'
 import { Todo, compareTodos } from '@models/Todo'
 import { observer } from 'mobx-react'
@@ -19,7 +11,6 @@ import ActionButton from 'react-native-action-button'
 import { navigate } from '@utils/navigation'
 import { AddTodo } from '@views/add/AddTodo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import getTheme from '../../../native-base-theme/components'
 
 const Stack = createStackNavigator()
 
@@ -170,51 +161,45 @@ class PlanningHeader extends Component {
     return sharedAppStateStore.hash ? (
       <Text>{sharedAppStateStore.hash}</Text>
     ) : (
-      <StyleProvider style={getTheme()}>
-        <Segment>
-          <Button
-            first
-            active={
-              sharedAppStateStore.todoSection === TodoSectionType.planning
-            }
-            onPress={() => {
-              sharedAppStateStore.todoSection = TodoSectionType.planning
+      <Segment>
+        <Button
+          first
+          active={sharedAppStateStore.todoSection === TodoSectionType.planning}
+          onPress={() => {
+            sharedAppStateStore.todoSection = TodoSectionType.planning
+          }}
+        >
+          <Text
+            style={{
+              color:
+                sharedAppStateStore.todoSection === TodoSectionType.planning
+                  ? 'white'
+                  : 'tomato',
             }}
           >
-            <Text
-              style={{
-                color:
-                  sharedAppStateStore.todoSection === TodoSectionType.planning
-                    ? 'white'
-                    : 'tomato',
-              }}
-            >
-              Planning
-            </Text>
-          </Button>
-          <Button
-            transparent
-            last
-            active={
-              sharedAppStateStore.todoSection === TodoSectionType.completed
-            }
-            onPress={() => {
-              sharedAppStateStore.todoSection = TodoSectionType.completed
+            Planning
+          </Text>
+        </Button>
+        <Button
+          transparent
+          last
+          active={sharedAppStateStore.todoSection === TodoSectionType.completed}
+          onPress={() => {
+            sharedAppStateStore.todoSection = TodoSectionType.completed
+          }}
+        >
+          <Text
+            style={{
+              color:
+                sharedAppStateStore.todoSection === TodoSectionType.completed
+                  ? 'white'
+                  : 'tomato',
             }}
           >
-            <Text
-              style={{
-                color:
-                  sharedAppStateStore.todoSection === TodoSectionType.completed
-                    ? 'white'
-                    : 'tomato',
-              }}
-            >
-              Completed
-            </Text>
-          </Button>
-        </Segment>
-      </StyleProvider>
+            Completed
+          </Text>
+        </Button>
+      </Segment>
     )
   }
 }

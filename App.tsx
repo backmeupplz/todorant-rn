@@ -5,7 +5,8 @@ import { navigationRef } from './src/@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/network'
 import '@utils/ignoreWarnings'
-import { Root } from 'native-base'
+import { Root, StyleProvider } from 'native-base'
+import getTheme from './native-base-theme/components'
 
 GoogleSignin.configure({
   webClientId:
@@ -17,9 +18,11 @@ GoogleSignin.configure({
 const App = () => {
   return (
     <Root>
-      <NavigationContainer ref={navigationRef}>
-        <BottomTabNavigator />
-      </NavigationContainer>
+      <StyleProvider style={getTheme()}>
+        <NavigationContainer ref={navigationRef}>
+          <BottomTabNavigator />
+        </NavigationContainer>
+      </StyleProvider>
     </Root>
   )
 }

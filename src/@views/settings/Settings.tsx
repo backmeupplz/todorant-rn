@@ -26,7 +26,7 @@ export class SettingsContent extends Component {
       <Container>
         <Content>
           <List>
-            <ListItem itemHeader>
+            <ListItem itemHeader first>
               <Text>Account</Text>
             </ListItem>
             <AccountInfo />
