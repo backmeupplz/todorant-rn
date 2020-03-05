@@ -340,7 +340,7 @@ PODS:
   - RNFBApp (6.3.2):
     - Firebase/Core (~> 6.13.0)
     - React
-  - RNGestureHandler (1.5.6):
+  - RNGestureHandler (1.6.0):
     - React
   - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
@@ -543,12 +543,12 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 65eadfa62b069b415a6ac1d20a81cacfa26cb37a
   RNDeviceInfo: 310c1f43d418d950a193c7650de2f9559c906048
   RNFBApp: fc62d1e8adbc871fc7c27314c8e0842aebb44514
-  RNGestureHandler: 911d3b110a7a233a34c4f800e7188a84b75319c6
+  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 5e4758109c6d35f9a009ce72af873df907548020
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: e3c196cdcbcd215d39b2572a5b610d1815947ca8
+PODFILE CHECKSUM: bac73e249a209010ac2618ed019818a3a59eb61d
 
 COCOAPODS: 1.8.4

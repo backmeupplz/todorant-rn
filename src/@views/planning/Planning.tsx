@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { List, Container, Text, Segment, Button, Icon } from 'native-base'
+import { Container, Text, Segment, Button, Icon } from 'native-base'
 import { computed } from 'mobx'
-import { Todo, compareTodos } from '@models/Todo'
+import { Todo, compareTodos, getTitle } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateString, isDateTooOld } from '@utils/time'
@@ -11,6 +11,9 @@ import ActionButton from 'react-native-action-button'
 import { navigate } from '@utils/navigation'
 import { AddTodo } from '@views/add/AddTodo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
+import DraggableFlatList from 'react-native-draggable-flatlist'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { sockets } from '@utils/sockets'
 
 const Stack = createStackNavigator()
 
@@ -101,6 +104,134 @@ class PlanningVM {
     }
     return result
   }
+
+  onDragEnd = ({
+    data,
+    from,
+    to,
+  }: {
+    data: SectionHeaderOrTodo[]
+    from: number
+    to: number
+  }) => {
+    const titleToIndexes = [] as [string, number, number][] // title, startIndex, endIndex
+
+    this.todosWithSections.forEach((item, i) => {
+      if (item.title) {
+        titleToIndexes.push([item.title, i, i])
+        if (titleToIndexes.length > 1) {
+          titleToIndexes[titleToIndexes.length - 2][2] = i - 1
+        }
+      }
+    })
+
+    const affectedTitles = [] as string[]
+
+    const draggedItem = this.todosWithSections[from]
+    if (draggedItem.item) {
+      const titleFrom = getTitle(draggedItem.item)
+      let titleTo: string | undefined
+      if (to === 0) {
+        titleTo = titleToIndexes[0][0]
+      } else {
+        for (const titleToIndex of [...titleToIndexes].reverse()) {
+          if (to > from ? to >= titleToIndex[1] : to > titleToIndex[1]) {
+            titleTo = titleToIndex[0]
+            break
+          }
+        }
+      }
+      if (titleTo) {
+        if (titleFrom === titleTo) {
+          affectedTitles.push(titleFrom)
+        } else {
+          affectedTitles.push(titleFrom, titleTo)
+        }
+      }
+    } else if (draggedItem.title) {
+      // Add the title
+      affectedTitles.push(draggedItem.title)
+      // Add old neighbours
+      titleToIndexes.forEach((titleToIndex, i) => {
+        if (titleToIndex[0] === draggedItem.title) {
+          if (i - 1 > -1) {
+            affectedTitles.push(titleToIndexes[i - 1][0])
+          }
+          if (i + 1 < titleToIndexes.length) {
+            affectedTitles.push(titleToIndexes[i + 1][0])
+          }
+        }
+      })
+      // Add new neighbours
+      for (const titleToIndex of titleToIndexes) {
+        if (to > titleToIndex[1] && to <= titleToIndex[2]) {
+          if (affectedTitles.indexOf(titleToIndex[0]) < 0) {
+            affectedTitles.push(titleToIndex[0])
+          }
+        }
+      }
+    }
+
+    const editedTodos = [] as Todo[]
+    let currentTitle = ''
+    let currentMonthAndYear = ''
+    let currentDate: string | undefined
+    for (const sectionHeaderOrTodo of data) {
+      if (sectionHeaderOrTodo.title) {
+        currentTitle = sectionHeaderOrTodo.title
+        currentMonthAndYear = currentTitle.substr(0, 7)
+        currentDate =
+          currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
+        break
+      }
+    }
+
+    let titleCounter = ''
+    const affectedSectionHeadersOrTodo = [] as SectionHeaderOrTodo[]
+    for (const sectionHeaderOrTodo of data) {
+      if (sectionHeaderOrTodo.title) {
+        const prevIndex = affectedTitles.indexOf(titleCounter)
+        if (prevIndex > -1) {
+          affectedTitles.splice(prevIndex, 1)
+          if (!affectedTitles.length) {
+            break
+          }
+        }
+        titleCounter = sectionHeaderOrTodo.title
+      }
+      if (!titleCounter || affectedTitles.indexOf(titleCounter) > -1) {
+        affectedSectionHeadersOrTodo.push(sectionHeaderOrTodo)
+      }
+    }
+
+    let orderCounter = 0
+    affectedSectionHeadersOrTodo.forEach(sectionHeaderOrTodo => {
+      if (sectionHeaderOrTodo.title) {
+        if (sectionHeaderOrTodo.title !== currentTitle) {
+          orderCounter = 0
+        }
+        currentTitle = sectionHeaderOrTodo.title
+        currentMonthAndYear = currentTitle.substr(0, 7)
+        currentDate =
+          currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
+      } else if (sectionHeaderOrTodo.item) {
+        const todo = sectionHeaderOrTodo.item
+        if (
+          todo.order !== orderCounter ||
+          todo.monthAndYear !== currentMonthAndYear ||
+          todo.date !== currentDate
+        ) {
+          todo.order = orderCounter
+          todo.monthAndYear = currentMonthAndYear
+          todo.date = currentDate
+          editedTodos.push(todo)
+        }
+        orderCounter++
+      }
+    })
+    sharedTodoStore.modify(...editedTodos)
+    sockets.todoSyncManager.sync()
+  }
 }
 
 @observer
@@ -123,26 +254,41 @@ class PlanningContent extends Component {
             being productive. Cheers!
           </Text>
         )}
-        <List
-          dataArray={this.vm.todosWithSections}
-          renderItem={({ item, index }) =>
+        <DraggableFlatList
+          data={this.vm.todosWithSections}
+          renderItem={({ item, index, drag, isActive }) =>
             item.title ? (
-              <Text style={{ marginHorizontal: 10, marginTop: 16 }} key={index}>
-                {item.title}
-              </Text>
-            ) : (
-              <TodoCard
-                todo={item.item!}
+              <TouchableWithoutFeedback
                 key={index}
-                type={
-                  sharedAppStateStore.todoSection === TodoSectionType.planning
-                    ? CardType.planning
-                    : CardType.done
-                }
-              />
+                onLongPress={drag}
+                style={{ paddingHorizontal: isActive ? 10 : 0 }}
+              >
+                <Text
+                  style={{ marginHorizontal: 10, marginTop: 16 }}
+                  key={index}
+                >
+                  {item.title}
+                </Text>
+              </TouchableWithoutFeedback>
+            ) : (
+              <TouchableWithoutFeedback
+                key={index}
+                onLongPress={drag}
+                style={{ padding: isActive ? 10 : 0 }}
+              >
+                <TodoCard
+                  todo={item.item!}
+                  type={
+                    sharedAppStateStore.todoSection === TodoSectionType.planning
+                      ? CardType.planning
+                      : CardType.done
+                  }
+                />
+              </TouchableWithoutFeedback>
             )
           }
           keyExtractor={(_, index) => `${index}`}
+          onDragEnd={this.vm.onDragEnd}
         />
         <ActionButton
           buttonColor="tomato"
