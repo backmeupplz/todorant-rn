@@ -31,6 +31,7 @@ import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -53,6 +54,8 @@ class TodoVM {
   @observable showMore = false
 
   @observable order = 0
+
+  @observable addOnTop = false
 
   @computed
   get datePickerValue() {
@@ -110,6 +113,16 @@ class TodoVM {
   @computed
   get isValid() {
     return !!this.text && !!this.monthAndYear
+  }
+
+  constructor() {
+    if (sharedSettingsStore.showTodayOnAddTodo) {
+      this.date = getDateDateString(new Date())
+      this.monthAndYear = getDateMonthAndYearString(new Date())
+    }
+    if (sharedSettingsStore.newTodosGoFirst) {
+      this.addOnTop = true
+    }
   }
 
   constructTodo() {
@@ -277,7 +290,11 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
             />
           )}
           <Item
-            style={{ justifyContent: 'space-between', paddingVertical: 16 }}
+            style={{
+              justifyContent: 'space-between',
+              paddingVertical: 16,
+              paddingRight: 12,
+            }}
           >
             <Text>It's a frog!</Text>
             <Switch
@@ -288,7 +305,11 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
             />
           </Item>
           <Item
-            style={{ justifyContent: 'space-between', paddingVertical: 16 }}
+            style={{
+              justifyContent: 'space-between',
+              paddingVertical: 16,
+              paddingRight: 12,
+            }}
           >
             <Text>Completed</Text>
             <Switch
@@ -298,6 +319,23 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               }}
             />
           </Item>
+          {this.props.vm.showMore && (
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                paddingVertical: 16,
+                paddingRight: 12,
+              }}
+            >
+              <Text>Add on the top</Text>
+              <Switch
+                value={this.props.vm.addOnTop}
+                onValueChange={value => {
+                  this.props.vm.addOnTop = value
+                }}
+              />
+            </Item>
+          )}
           {!this.props.vm.showMore && (
             <Item>
               <Button
@@ -342,7 +380,11 @@ class AddTodoContent extends Component<{
         todo._tempSyncId = uuid()
         sharedTodoStore.todos.unshift(todo)
         titlesToFixOrder.push(getTitle(todo))
-        addTodosOnTop.push(todo)
+        if (vm.addOnTop) {
+          addTodosOnTop.push(todo)
+        } else {
+          addTodosToBottom.push(todo)
+        }
       } else if (vm.editedTodo) {
         const oldTitle = getTitle(vm.editedTodo)
 

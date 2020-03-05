@@ -43,8 +43,8 @@ export class Data extends Component {
             <Row
               title="Settings last synced"
               subtitle={`${
-                sharedSettingsStore.lastSyncDate
-                  ? moment(sharedSettingsStore.lastSyncDate).format(
+                sharedSettingsStore.updatedAt
+                  ? moment(sharedSettingsStore.updatedAt).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
                   : 'Not synced yet'

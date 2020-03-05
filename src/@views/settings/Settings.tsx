@@ -13,6 +13,7 @@ import { sharedSocketStore } from '@stores/SocketStore'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { Data } from './Data'
 import DeviceInfo from 'react-native-device-info'
+import { TodoSettings } from './TodoSettings'
 
 const Stack = createStackNavigator()
 
@@ -28,6 +29,10 @@ export class SettingsContent extends Component {
             </ListItem>
             <AccountInfo />
             <LoginLogoutButtons />
+            <ListItem itemHeader>
+              <Text>Todos</Text>
+            </ListItem>
+            <TodoSettings />
             <ListItem itemHeader>
               <Text>General</Text>
             </ListItem>

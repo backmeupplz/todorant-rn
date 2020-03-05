@@ -7,11 +7,11 @@ import { hydrate } from '@utils/hydrate'
 class SettingsStore {
   hydrated = false
 
-  @persist('date') @observable lastSyncDate?: Date
+  @persist('date') @observable updatedAt?: Date
 
-  @persist showTodayOnAddTodo?: boolean
-  @persist firstDayOfWeek?: number
-  @persist newTodosGoFirst?: boolean
+  @persist @observable showTodayOnAddTodo?: boolean
+  @persist @observable firstDayOfWeek?: number
+  @persist @observable newTodosGoFirst?: boolean
 
   onObjectsFromServer = async (
     settings: Settings,
@@ -20,13 +20,17 @@ class SettingsStore {
     if (!this.hydrated) {
       return
     }
+    // Modify settings
+    settings.updatedAt = settings.updatedAt
+      ? new Date(settings.updatedAt)
+      : undefined
     // First pull
-    if (!this.lastSyncDate) {
+    if (!this.updatedAt) {
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
       if (settings.updatedAt) {
-        this.lastSyncDate = new Date(settings.updatedAt)
+        this.updatedAt = new Date(settings.updatedAt)
       } else {
         const pushedSettings = await pushBack({
           showTodayOnAddTodo: this.showTodayOnAddTodo,
@@ -36,7 +40,9 @@ class SettingsStore {
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
         this.firstDayOfWeek = pushedSettings.firstDayOfWeek
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
-        this.lastSyncDate = pushedSettings.updatedAt ? new Date(pushedSettings.updatedAt) : undefined
+        this.updatedAt = pushedSettings.updatedAt
+          ? new Date(pushedSettings.updatedAt)
+          : undefined
       }
     }
     // First push
@@ -49,17 +55,19 @@ class SettingsStore {
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
-      this.lastSyncDate = pushedSettings.updatedAt ? new Date(pushedSettings.updatedAt) : undefined
+      this.updatedAt = pushedSettings.updatedAt
+        ? new Date(pushedSettings.updatedAt)
+        : undefined
     }
     // Consequent pull
-    else if (this.lastSyncDate < settings.updatedAt) {
+    else if (this.updatedAt < settings.updatedAt) {
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
-      this.lastSyncDate = new Date(settings.updatedAt)
+      this.updatedAt = new Date(settings.updatedAt)
     }
     // Consequent push
-    else if (this.lastSyncDate > settings.updatedAt) {
+    else if (this.updatedAt > settings.updatedAt) {
       const pushedSettings = await pushBack({
         showTodayOnAddTodo: this.showTodayOnAddTodo,
         firstDayOfWeek: this.firstDayOfWeek,
@@ -68,7 +76,9 @@ class SettingsStore {
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
-      this.lastSyncDate = pushedSettings.updatedAt ? new Date(pushedSettings.updatedAt) : undefined
+      this.updatedAt = pushedSettings.updatedAt
+        ? new Date(pushedSettings.updatedAt)
+        : undefined
     }
   }
 
@@ -76,7 +86,7 @@ class SettingsStore {
     this.showTodayOnAddTodo = undefined
     this.firstDayOfWeek = undefined
     this.newTodosGoFirst = undefined
-    this.lastSyncDate = undefined
+    this.updatedAt = undefined
   }
 }
 
