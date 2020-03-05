@@ -1,3 +1,4 @@
+import { Settings } from '@models/Settings'
 import { Platform } from 'react-native'
 import { alertError } from '@utils/alert'
 import { Todo } from '@models/Todo'
@@ -6,6 +7,8 @@ import { sharedSocketStore } from '@stores/SocketStore'
 import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { isHydrated } from './hydrated'
 
 const socketIO = SocketIO(
   __DEV__
@@ -74,7 +77,7 @@ class SyncManager<T> {
     if (!sharedSessionStore.user?.token || !socketIO.connected) {
       return
     }
-    // console.warn(`${this.name}: sync`, sharedTodoStore.lastSyncDate)
+    // console.warn(`${this.name}: sync`, this.latestSyncDate())
     socketIO.emit(`sync_${this.name}`, this.latestSyncDate())
   }
 
@@ -93,6 +96,7 @@ class SocketManager {
   pendingPushes = {} as PromiseMap
 
   todoSyncManager: SyncManager<Todo[]>
+  settingsSyncManager: SyncManager<Settings>
 
   constructor() {
     this.connect()
@@ -114,7 +118,18 @@ class SocketManager {
         return sharedTodoStore.onObjectsFromServer(objects, pushBack)
       },
       lastSyncDate => {
-        sharedTodoStore.lastSyncDate = lastSyncDate
+        sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
+      }
+    )
+    this.settingsSyncManager = new SyncManager<Settings>(
+      'settings',
+      this.pendingPushes,
+      () => sharedSettingsStore.lastSyncDate,
+      (objects, pushBack) => {
+        return sharedSettingsStore.onObjectsFromServer(objects, pushBack)
+      },
+      lastSyncDate => {
+        sharedSettingsStore.lastSyncDate = new Date(lastSyncDate)
       }
     )
   }
@@ -169,7 +184,11 @@ class SocketManager {
   }
 
   globalSync = () => {
+    if (!isHydrated()) {
+      return
+    }
     this.todoSyncManager.sync()
+    this.settingsSyncManager.sync()
   }
 }
 

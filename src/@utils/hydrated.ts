@@ -4,12 +4,16 @@ const hydratedStores = {
   SettingsStore: false,
 } as { [index: string]: boolean }
 
-export function hydrateStore(name: string) {
-  hydratedStores[name] = true
-  const needsSync = Object.keys(hydratedStores).reduce(
-    (prev, cur) => (!cur ? false : prev),
+export function isHydrated() {
+  return Object.keys(hydratedStores).reduce(
+    (prev, cur) => (!hydratedStores[cur] ? false : prev),
     true
   )
+}
+
+export function hydrateStore(name: string) {
+  hydratedStores[name] = true
+  const needsSync = isHydrated()
   if (needsSync) {
     sockets.globalSync()
   }

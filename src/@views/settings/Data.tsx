@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import moment from 'moment'
 import { sockets } from '@utils/sockets'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
@@ -30,7 +31,7 @@ export class Data extends Component {
               }`}
             />
             <Row
-              title="Last synced"
+              title="Todos last synced"
               subtitle={`${
                 sharedTodoStore.lastSyncDate
                   ? moment(sharedTodoStore.lastSyncDate).format(
@@ -39,10 +40,20 @@ export class Data extends Component {
                   : 'Not synced yet'
               }`}
             />
+            <Row
+              title="Settings last synced"
+              subtitle={`${
+                sharedSettingsStore.lastSyncDate
+                  ? moment(sharedSettingsStore.lastSyncDate).format(
+                      'YYYY-MM-DD hh:mm:ss'
+                    )
+                  : 'Not synced yet'
+              }`}
+            />
             <ListItem
               button
               onPress={() => {
-                sockets.globalSync
+                sockets.globalSync()
               }}
             >
               <Text>Sync data</Text>

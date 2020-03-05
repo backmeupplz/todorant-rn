@@ -9,8 +9,8 @@ import { observable } from 'mobx'
 
 export class Todo {
   @persist @observable _id?: string
-  @persist('date' as any) @observable createdAt = new Date()
-  @persist('date' as any) @observable updatedAt = new Date()
+  @persist('date') @observable createdAt = new Date()
+  @persist('date') @observable updatedAt = new Date()
   @persist @observable text: string
   @persist @observable completed: boolean
   @persist @observable frog: boolean

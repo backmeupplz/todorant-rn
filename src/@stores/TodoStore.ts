@@ -1,18 +1,14 @@
 import { observable, computed } from 'mobx'
 import { Todo, compareTodos, isTodoOld } from '@models/Todo'
-import { create, persist } from 'mobx-persist'
-import { AsyncStorage } from 'react-native'
+import { persist } from 'mobx-persist'
 import uuid from 'uuid'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { hydrateStore } from '@utils/hydrated'
-
-const hydrate = create({
-  storage: AsyncStorage,
-})
+import { hydrate } from '@utils/hydrate'
 
 class TodoStore {
   @persist('list', Todo) @observable todos: Todo[] = []
-  @persist('date' as any) @observable lastSyncDate?: Date
+  @persist('date') @observable lastSyncDate?: Date
 
   hydrated = false
 
@@ -69,6 +65,11 @@ class TodoStore {
     if (!this.hydrated) {
       return
     }
+    // Modify dates
+    todosChangedOnServer.forEach(todo => {
+      todo.updatedAt = new Date(todo.updatedAt)
+      todo.createdAt = new Date(todo.createdAt)
+    })
     // Create resulting array
     const result: Todo[] = [...this.todos]
     // Get variables
@@ -116,6 +117,11 @@ class TodoStore {
       todosToPushMap[todo._tempSyncId] = todo
     })
     const savedPushedTodos = await pushBack(todosToPush)
+    // Modify dates
+    savedPushedTodos.forEach(todo => {
+      todo.updatedAt = new Date(todo.updatedAt)
+      todo.createdAt = new Date(todo.createdAt)
+    })
     for (const todo of savedPushedTodos) {
       if (!todo._tempSyncId) {
         continue

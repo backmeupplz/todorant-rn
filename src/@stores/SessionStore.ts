@@ -1,13 +1,10 @@
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sockets } from '@utils/sockets'
 import { User } from '@models/User'
-import { create, persist } from 'mobx-persist'
-import { AsyncStorage } from 'react-native'
+import { persist } from 'mobx-persist'
 import { observable } from 'mobx'
-
-const hydrate = create({
-  storage: AsyncStorage,
-})
+import { hydrate } from '@utils/hydrate'
+import { sharedSettingsStore } from './SettingsStore'
 
 class SessionStore {
   @persist('object', User) @observable user?: User
@@ -20,6 +17,7 @@ class SessionStore {
   logout() {
     this.user = undefined
     sharedTodoStore.logout()
+    sharedSettingsStore.logout()
     sockets.logout()
   }
 }
