@@ -3,7 +3,7 @@ import { Alert } from 'react-native'
 export function alertError(error: Error) {
   setTimeout(() => {
     Alert.alert('Error', error.message, [{ text: 'OK' }])
-  }, 500)
+  }, 100)
 }
 
 export function alertConfirm(
@@ -19,5 +19,5 @@ export function alertConfirm(
       },
       { text: confirmButtonText, onPress: confirm },
     ])
-  }, 500)
+  }, 100)
 }

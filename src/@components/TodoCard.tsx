@@ -16,6 +16,7 @@ import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
+import moment from 'moment'
 
 export enum CardType {
   done = 'done',
@@ -131,6 +132,48 @@ class TodoText extends Component<{ text: string; isOld: boolean }> {
 }
 
 @observer
+class DebugTodoInfo extends Component<{ todo: Todo }> {
+  render() {
+    return (
+      <>
+        <Text>{this.props.todo._id || 'no id'}</Text>
+        <Text>{this.props.todo._tempSyncId || 'no sync id'}</Text>
+        <Text>
+          {this.props.todo.createdAt
+            ? moment(this.props.todo.createdAt).format('YYYY-MM-DD hh:mm:ss')
+            : 'no created at'}
+        </Text>
+        <Text>
+          {this.props.todo.updatedAt
+            ? moment(this.props.todo.updatedAt).format('YYYY-MM-DD hh:mm:ss')
+            : 'no updated at'}
+        </Text>
+      </>
+    )
+  }
+}
+
+@observer
+class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
+  render() {
+    return (
+      <Text>
+        <Text>
+          {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
+          {__DEV__ && `(${this.props.todo.order}) `}
+          {this.props.todo.frog ? '🐸 ' : ''}
+          {this.props.todo.time ? `${this.props.todo.time} ` : ''}
+        </Text>
+        <TodoText
+          text={this.props.todo.text}
+          isOld={this.props.isOld}
+        ></TodoText>
+      </Text>
+    )
+  }
+}
+
+@observer
 export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
   vm = new TodoCardVM()
 
@@ -145,18 +188,8 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
           style={{ backgroundColor: this.isOld ? 'lavenderblush' : undefined }}
         >
           <Body>
-            <Text>
-              <Text>
-                {this.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
-                {__DEV__ && `(${this.props.todo.order}) `}
-                {this.props.todo.frog ? '🐸 ' : ''}
-                {this.props.todo.time ? `${this.props.todo.time} ` : ''}
-              </Text>
-              <TodoText
-                text={this.props.todo.text}
-                isOld={this.isOld}
-              ></TodoText>
-            </Text>
+            {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
+            <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
           </Body>
         </CardItem>
         <CardItem footer style={{ justifyContent: 'space-between' }}>
@@ -172,12 +205,11 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
               justifyContent: 'flex-end',
             }}
           >
-            {this.props.type !== CardType.current &&
+            {this.props.type === CardType.planning &&
               !isTodoToday(this.props.todo) && (
                 <Button
                   icon
                   transparent
-                  small
                   onPress={() => {
                     this.vm.moveToToday(this.props.todo)
                   }}
@@ -185,7 +217,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   <Icon type="MaterialIcons" name="arrow-upward" />
                 </Button>
               )}
-            <Button icon transparent small>
+            <Button icon transparent>
               <Icon
                 type="MaterialIcons"
                 name="delete"
@@ -198,7 +230,6 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
               <Button
                 icon
                 transparent
-                small
                 onPress={() => {
                   navigate('EditTodo', { editedTodo: { ...this.props.todo } })
                 }}
@@ -210,7 +241,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
               !this.props.todo.frog &&
               !this.vm.isLast(this.props.todo) && (
                 <>
-                  <Button icon transparent small>
+                  <Button icon transparent>
                     <Icon
                       type="MaterialIcons"
                       name="arrow-forward"
@@ -223,7 +254,6 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   <Button
                     icon
                     transparent
-                    small
                     onPress={() => {
                       navigate('BreakdownTodo', {
                         breakdownTodo: { ...this.props.todo },
@@ -235,7 +265,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 </>
               )}
             {this.props.type === CardType.done ? (
-              <Button icon transparent small>
+              <Button icon transparent>
                 <Icon
                   type="MaterialIcons"
                   name="repeat"
@@ -245,7 +275,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 />
               </Button>
             ) : (
-              <Button icon transparent small>
+              <Button icon transparent>
                 <Icon
                   type="MaterialIcons"
                   name="done"

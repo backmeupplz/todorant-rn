@@ -260,7 +260,11 @@ class PlanningContent extends Component {
             item.title ? (
               <TouchableWithoutFeedback
                 key={index}
-                onLongPress={drag}
+                onLongPress={
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? drag
+                    : undefined
+                }
                 style={{ paddingHorizontal: isActive ? 10 : 0 }}
               >
                 <Text
@@ -273,7 +277,11 @@ class PlanningContent extends Component {
             ) : (
               <TouchableWithoutFeedback
                 key={index}
-                onLongPress={drag}
+                onLongPress={
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? drag
+                    : undefined
+                }
                 style={{ padding: isActive ? 10 : 0 }}
               >
                 <TodoCard
