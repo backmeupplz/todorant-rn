@@ -1,20 +1,19 @@
+import { realm } from './../@utils/realm'
 import { observable, computed } from 'mobx'
-import { Todo, compareTodos, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import { getDateString } from '@utils/time'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
+import moment from 'moment'
 
 class TodoStore {
-  @persist('list', Todo) @observable todos: Todo[] = []
   @persist('date') @observable lastSyncDate?: Date
 
   hydrated = false
 
-  @computed get undeletedTodos() {
-    return this.todos.filter(t => !t.deleted)
-  }
+  @observable allTodos = realm.objects<Todo>(Todo)
 
   @computed get todayTodos() {
     const today = new Date()
@@ -22,39 +21,48 @@ class TodoStore {
   }
 
   todosForDate = (date: Date) => {
-    return this.undeletedTodos
-      .filter(
-        todo =>
-          todo.date &&
-          todo.date === getDateDateString(date) &&
-          todo.monthAndYear === getDateMonthAndYearString(date)
-      )
-      .sort(compareTodos(false))
+    const title = getDateString(date)
+    // Todo: sort
+    return this.allTodos.filtered(
+      title.length === 10
+        ? `deleted = false && monthAndYear = "${title.substr(
+            0,
+            7
+          )}" && date = "${title.substr(8, 2)}"`
+        : `deleted = false && monthAndYear = "${title.substr(0, 7)}" && !date`
+    )
   }
 
   @computed get currentTodo() {
-    return this.todayTodos.filter(t => !t.completed).length
-      ? this.todayTodos.filter(t => !t.completed)[0]
-      : undefined
+    const todayTodos = this.todayTodos.filtered('completed = false')
+    return todayTodos.length ? todayTodos[0] : undefined
   }
 
-  @computed get propress() {
+  @computed get progress() {
     return {
       count: this.todayTodos.length,
-      completed: this.todayTodos.filter(t => t.completed).length,
+      completed: this.todayTodos.filtered('completed = true').length,
     }
   }
 
   @computed get isPlanningRequired() {
-    return this.undeletedTodos
-      .filter(t => !t.completed)
-      .reduce((prev, cur) => {
-        return isTodoOld(cur) ? true : prev
-      }, false)
+    const todayString = `T${(Math.floor(new Date().getTime() / 1000) %
+      (24 * 60 * 60)) -
+      1}:000`
+    const todos = this.allTodos.filtered(
+      `deleted = false && completed = false && _exactDate < ${todayString}`
+    )
+    return !!todos.length
+  }
+
+  constructor() {
+    this.refreshTodos()
   }
 
   logout = () => {
-    this.todos = []
+    realm.write(() => {
+      realm.deleteAll()
+    })
     this.lastSyncDate = undefined
   }
 
@@ -70,33 +78,41 @@ class TodoStore {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
-    // Create resulting array
-    const result: Todo[] = [...this.todos]
     // Get variables
-    const localTodosMap = result.reduce((p, c) => {
-      if (c._id) {
-        p[c._id] = c
-      }
-      return p
-    }, {} as { [index: string]: Todo })
     const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
       if (c._id) {
         p[c._id] = c
       }
       return p
     }, {} as { [index: string]: Todo })
-    const todosChangedLocally = result.filter(
-      todo => !this.lastSyncDate || todo.updatedAt > this.lastSyncDate
-    )
+    const todosChangedLocally = (this.lastSyncDate
+      ? this.allTodos.filtered(
+          `updatedAt > ${moment(this.lastSyncDate)
+            .utc()
+            .format('YYYY-MM-DDTHH:mm:ss')}`
+        )
+      : this.allTodos
+    ).map(v => ({ ...v }))
     // Pull
     for (const serverTodo of todosChangedOnServer) {
-      let localTodo = serverTodo._id ? localTodosMap[serverTodo._id] : undefined
+      if (!serverTodo._id) {
+        continue
+      }
+      let localTodo = this.getTodoById(serverTodo._id)
       if (localTodo) {
         if (localTodo.updatedAt < serverTodo.updatedAt) {
-          Object.assign(localTodo, serverTodo)
+          realm.write(() => {
+            Object.assign(localTodo, serverTodo)
+          })
         }
       } else {
-        result.unshift(serverTodo)
+        const newTodo = {
+          ...serverTodo,
+          _exactDate: new Date(getTitle(serverTodo)),
+        }
+        realm.write(() => {
+          realm.create(Todo, newTodo)
+        })
       }
     }
     // Push
@@ -122,31 +138,28 @@ class TodoStore {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
-    for (const todo of savedPushedTodos) {
-      if (!todo._tempSyncId) {
-        continue
+    realm.write(() => {
+      for (const todo of savedPushedTodos) {
+        if (!todo._tempSyncId) {
+          continue
+        }
+        Object.assign(todosToPushMap[todo._tempSyncId], todo)
       }
-      Object.assign(todosToPushMap[todo._tempSyncId], todo)
-    }
-    // Set result
-    this.todos = result
+    })
   }
 
-  modify = (...todos: Todo[]) => {
-    for (const todo of todos) {
-      const t = this.getTodoById(todo._id || todo._tempSyncId)
-      if (!t) {
-        return
-      }
-      Object.assign(t, todo)
-      t.updatedAt = new Date()
-    }
+  refreshTodos = () => {
+    this.allTodos = realm.objects<Todo>(Todo)
   }
 
   private getTodoById = (id?: string) => {
-    return !id
-      ? undefined
-      : this.todos.find(todo => todo._id === id || todo._tempSyncId === id)
+    if (!id) {
+      return undefined
+    }
+    const todos = this.allTodos.filtered(
+      `_id = "${id}" || _tempSyncId = "${id}"`
+    )
+    return todos.length ? todos[0] : undefined
   }
 }
 

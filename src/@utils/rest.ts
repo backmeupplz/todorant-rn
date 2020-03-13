@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const base = __DEV__
   ? Platform.OS === 'android'
-    ? 'http://192.168.31.27:1337'
+    ? 'http://10.0.2.2:1337'
     : 'http://localhost:1337'
   : 'https://backend.todorant.com'
 

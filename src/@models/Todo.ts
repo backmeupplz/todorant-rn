@@ -4,50 +4,48 @@ import {
   getDateDateString,
   getDateMonthAndYearString,
 } from '@utils/time'
-import { persist } from 'mobx-persist'
 import { observable } from 'mobx'
 
 export class Todo {
-  @persist @observable _id?: string
-  @persist('date') @observable createdAt = new Date()
-  @persist('date') @observable updatedAt = new Date()
-  @persist @observable text: string
-  @persist @observable completed: boolean
-  @persist @observable frog: boolean
-  @persist @observable frogFails: number
-  @persist @observable skipped: boolean
-  @persist @observable order: number
-  @persist @observable monthAndYear: string
-  @persist @observable deleted: boolean
-  @persist @observable date?: string
-  @persist @observable time?: string
+  static schema = {
+    name: 'Todo',
+    properties: {
+      _tempSyncId: { type: 'string?', indexed: true },
+      _exactDate: { type: 'date', indexed: true },
 
-  // Temp value
-  @persist _tempSyncId?: string
-
-  constructor(
-    text: string,
-    completed: boolean,
-    frog: boolean,
-    frogFails: number,
-    skipped: boolean,
-    order: number,
-    monthAndYear: string,
-    deleted: boolean,
-    date?: string,
-    time?: string
-  ) {
-    this.text = text
-    this.completed = completed
-    this.frog = frog
-    this.frogFails = frogFails
-    this.skipped = skipped
-    this.order = order
-    this.monthAndYear = monthAndYear
-    this.deleted = deleted
-    this.date = date
-    this.time = time
+      _id: { type: 'string?', indexed: true },
+      createdAt: { type: 'date', indexed: true },
+      updatedAt: { type: 'date', indexed: true },
+      text: 'string',
+      completed: { type: 'bool', indexed: true },
+      frog: 'bool',
+      frogFails: 'int',
+      skipped: { type: 'bool', indexed: true },
+      order: 'int',
+      monthAndYear: { type: 'string', indexed: true },
+      deleted: { type: 'bool', indexed: true },
+      date: { type: 'string?', indexed: true },
+      time: 'string?',
+    },
   }
+
+  @observable _id?: string
+  @observable createdAt = new Date()
+  @observable updatedAt = new Date()
+  @observable text!: string
+  @observable completed!: boolean
+  @observable frog!: boolean
+  @observable frogFails!: number
+  @observable skipped!: boolean
+  @observable order!: number
+  @observable monthAndYear!: string
+  @observable deleted!: boolean
+  @observable date?: string
+  @observable time?: string
+
+  // Local values
+  @observable _tempSyncId?: string
+  _exactDate!: Date
 }
 
 export function isTodoToday(todo: Todo) {

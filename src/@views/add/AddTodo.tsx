@@ -13,7 +13,7 @@ import {
 } from 'native-base'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { observable, computed } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import { Calendar } from 'react-native-calendars'
 import {
   getDateFromString,
@@ -32,6 +32,7 @@ import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { realm } from '@utils/realm'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -123,24 +124,6 @@ class TodoVM {
     if (sharedSettingsStore.newTodosGoFirst) {
       this.addOnTop = true
     }
-  }
-
-  constructTodo() {
-    const todo = new Todo(
-      this.text,
-      this.completed,
-      this.frog,
-      0,
-      false,
-      this.order,
-      this.monthAndYear!,
-      false,
-      this.date,
-      this.time
-    )
-    todo.createdAt = new Date()
-    todo.updatedAt = new Date()
-    return todo
   }
 
   setEditedTodo(todo: Todo) {
@@ -375,10 +358,30 @@ class AddTodoContent extends Component<{
       vm.order = i
     })
     for (const vm of this.vms) {
-      const todo = vm.constructTodo()
       if (this.screenType === AddTodoScreenType.add) {
-        todo._tempSyncId = uuid()
-        sharedTodoStore.todos.unshift(todo)
+        const todo = {
+          updatedAt: new Date(),
+          createdAt: new Date(),
+          text: vm.text,
+          completed: vm.completed,
+          frog: vm.frog,
+          frogFails: 0,
+          skipped: false,
+          order: vm.order,
+          monthAndYear:
+            vm.monthAndYear || getDateMonthAndYearString(new Date()),
+          deleted: false,
+          date: vm.date,
+          time: vm.time,
+
+          _tempSyncId: uuid(),
+        } as Todo
+        todo._exactDate = new Date(getTitle(todo))
+
+        realm.write(() => {
+          realm.create(Todo, todo)
+        })
+
         titlesToFixOrder.push(getTitle(todo))
         if (vm.addOnTop) {
           addTodosOnTop.push(todo)
@@ -388,24 +391,36 @@ class AddTodoContent extends Component<{
       } else if (vm.editedTodo) {
         const oldTitle = getTitle(vm.editedTodo)
 
-        vm.editedTodo.text = todo.text
-        vm.editedTodo.completed = todo.completed
-        vm.editedTodo.frog = todo.frog
-        vm.editedTodo.monthAndYear = todo.monthAndYear
-        vm.editedTodo.date = todo.date
-        vm.editedTodo.time = todo.time
+        realm.write(() => {
+          if (!vm.editedTodo) {
+            return
+          }
+          vm.editedTodo.text = vm.text
+          vm.editedTodo.completed = vm.completed
+          vm.editedTodo.frog = vm.frog
+          vm.editedTodo.monthAndYear =
+            vm.monthAndYear || getDateMonthAndYearString(new Date())
+          vm.editedTodo.date = vm.date
+          vm.editedTodo.time = vm.time
+          vm.editedTodo.updatedAt = new Date()
+          vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
+        })
 
-        sharedTodoStore.modify(vm.editedTodo)
         titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
       }
     }
     if (this.breakdownTodo) {
-      this.breakdownTodo.completed = true
-      sharedTodoStore.modify(this.breakdownTodo)
-      titlesToFixOrder.push(getTitle(this.breakdownTodo))
+      const breakdownTodoTitle = getTitle(this.breakdownTodo)
+      realm.write(() => {
+        if (!this.breakdownTodo) {
+          return
+        }
+        this.breakdownTodo.completed = true
+        this.breakdownTodo.updatedAt = new Date()
+      })
+      titlesToFixOrder.push(breakdownTodoTitle)
     }
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom)
-    sockets.todoSyncManager.sync()
     goBack()
   }
 

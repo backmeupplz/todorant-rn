@@ -41,8 +41,8 @@ class CurrentContent extends Component {
   vm = new CurrentVM()
 
   render() {
-    const progress = sharedTodoStore.propress.count
-      ? sharedTodoStore.propress.completed / sharedTodoStore.propress.count
+    const progress = sharedTodoStore.progress.count
+      ? sharedTodoStore.progress.completed / sharedTodoStore.progress.count
       : 1
     return (
       <Container>
@@ -57,15 +57,15 @@ class CurrentContent extends Component {
           >
             <ProgressBar progress={progress} />
             <Text>
-              {`${sharedTodoStore.propress.completed}/${sharedTodoStore.propress.count}`}
+              {`${sharedTodoStore.progress.completed}/${sharedTodoStore.progress.count}`}
             </Text>
           </View>
           {!!this.vm.currentTodo && (
             <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
           )}
-          {!!sharedTodoStore.propress.count &&
-            sharedTodoStore.propress.count ===
-              sharedTodoStore.propress.completed && (
+          {!!sharedTodoStore.progress.count &&
+            sharedTodoStore.progress.count ===
+              sharedTodoStore.progress.completed && (
               <View
                 style={{
                   flex: 1,
@@ -81,7 +81,7 @@ class CurrentContent extends Component {
                 </Text>
               </View>
             )}
-          {!sharedTodoStore.propress.count && (
+          {!sharedTodoStore.progress.count && (
             <View
               style={{
                 flex: 1,

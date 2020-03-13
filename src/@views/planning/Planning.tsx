@@ -5,7 +5,7 @@ import { computed } from 'mobx'
 import { Todo, compareTodos, getTitle } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { getDateString, isDateTooOld } from '@utils/time'
+import { isDateTooOld, getDateString } from '@utils/time'
 import { TodoCard, CardType } from '@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { navigate } from '@utils/navigation'
@@ -14,6 +14,7 @@ import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { sockets } from '@utils/sockets'
+import { realm } from '@utils/realm'
 
 const Stack = createStackNavigator()
 
@@ -23,37 +24,44 @@ interface SectionHeaderOrTodo {
 }
 
 class PlanningVM {
+  @computed get allTodosFiltered() {
+    return sharedTodoStore.allTodos
+      .filtered('deleted = false')
+      .filtered(
+        `completed = ${!(
+          sharedAppStateStore.todoSection === TodoSectionType.planning ||
+          !!sharedAppStateStore.hash
+        )}`
+      )
+  }
+
+  @computed get allTodosAndHash() {
+    return sharedAppStateStore.hash
+      ? this.allTodosFiltered.filtered(
+          `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
+        )
+      : this.allTodosFiltered
+  }
+
   @computed get todosWithSections() {
-    const mappedTodos = sharedTodoStore.undeletedTodos
-      .filter(todo =>
-        sharedAppStateStore.todoSection === TodoSectionType.planning ||
-        !!sharedAppStateStore.hash
-          ? !todo.completed
-          : todo.completed
-      )
-      .filter(todo =>
-        sharedAppStateStore.hash
-          ? todo.text.indexOf(sharedAppStateStore.hash) > -1
-          : true
-      )
-      .reduce((prev, cur) => {
-        if (cur.date) {
-          const date = `${cur.monthAndYear}-${cur.date}`
-          if (prev[date]) {
-            prev[date].push(cur)
-          } else {
-            prev[date] = [cur]
-          }
+    const mappedTodos = this.allTodosAndHash.reduce((prev, cur) => {
+      if (cur.date) {
+        const date = `${cur.monthAndYear}-${cur.date}`
+        if (prev[date]) {
+          prev[date].push(cur)
         } else {
-          const month = cur.monthAndYear
-          if (prev[month]) {
-            prev[month].push(cur)
-          } else {
-            prev[month] = [cur]
-          }
+          prev[date] = [cur]
         }
-        return prev
-      }, {} as { [index: string]: Todo[] })
+      } else {
+        const month = cur.monthAndYear
+        if (prev[month]) {
+          prev[month].push(cur)
+        } else {
+          prev[month] = [cur]
+        }
+      }
+      return prev
+    }, {} as { [index: string]: Todo[] })
     const gatheredTodos = [] as {
       title: string
       todos: Todo[]
@@ -114,123 +122,119 @@ class PlanningVM {
     from: number
     to: number
   }) => {
-    const titleToIndexes = [] as [string, number, number][] // title, startIndex, endIndex
-
-    this.todosWithSections.forEach((item, i) => {
-      if (item.title) {
-        titleToIndexes.push([item.title, i, i])
-        if (titleToIndexes.length > 1) {
-          titleToIndexes[titleToIndexes.length - 2][2] = i - 1
-        }
-      }
-    })
-
-    const affectedTitles = [] as string[]
-
-    const draggedItem = this.todosWithSections[from]
-    if (draggedItem.item) {
-      const titleFrom = getTitle(draggedItem.item)
-      let titleTo: string | undefined
-      if (to === 0) {
-        titleTo = titleToIndexes[0][0]
-      } else {
-        for (const titleToIndex of [...titleToIndexes].reverse()) {
-          if (to > from ? to >= titleToIndex[1] : to > titleToIndex[1]) {
-            titleTo = titleToIndex[0]
-            break
-          }
-        }
-      }
-      if (titleTo) {
-        if (titleFrom === titleTo) {
-          affectedTitles.push(titleFrom)
-        } else {
-          affectedTitles.push(titleFrom, titleTo)
-        }
-      }
-    } else if (draggedItem.title) {
-      // Add the title
-      affectedTitles.push(draggedItem.title)
-      // Add old neighbours
-      titleToIndexes.forEach((titleToIndex, i) => {
-        if (titleToIndex[0] === draggedItem.title) {
-          if (i - 1 > -1) {
-            affectedTitles.push(titleToIndexes[i - 1][0])
-          }
-          if (i + 1 < titleToIndexes.length) {
-            affectedTitles.push(titleToIndexes[i + 1][0])
-          }
-        }
-      })
-      // Add new neighbours
-      for (const titleToIndex of titleToIndexes) {
-        if (to > titleToIndex[1] && to <= titleToIndex[2]) {
-          if (affectedTitles.indexOf(titleToIndex[0]) < 0) {
-            affectedTitles.push(titleToIndex[0])
-          }
-        }
-      }
-    }
-
-    const editedTodos = [] as Todo[]
-    let currentTitle = ''
-    let currentMonthAndYear = ''
-    let currentDate: string | undefined
-    for (const sectionHeaderOrTodo of data) {
-      if (sectionHeaderOrTodo.title) {
-        currentTitle = sectionHeaderOrTodo.title
-        currentMonthAndYear = currentTitle.substr(0, 7)
-        currentDate =
-          currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
-        break
-      }
-    }
-
-    let titleCounter = ''
-    const affectedSectionHeadersOrTodo = [] as SectionHeaderOrTodo[]
-    for (const sectionHeaderOrTodo of data) {
-      if (sectionHeaderOrTodo.title) {
-        const prevIndex = affectedTitles.indexOf(titleCounter)
-        if (prevIndex > -1) {
-          affectedTitles.splice(prevIndex, 1)
-          if (!affectedTitles.length) {
-            break
-          }
-        }
-        titleCounter = sectionHeaderOrTodo.title
-      }
-      if (!titleCounter || affectedTitles.indexOf(titleCounter) > -1) {
-        affectedSectionHeadersOrTodo.push(sectionHeaderOrTodo)
-      }
-    }
-
-    let orderCounter = 0
-    affectedSectionHeadersOrTodo.forEach(sectionHeaderOrTodo => {
-      if (sectionHeaderOrTodo.title) {
-        if (sectionHeaderOrTodo.title !== currentTitle) {
-          orderCounter = 0
-        }
-        currentTitle = sectionHeaderOrTodo.title
-        currentMonthAndYear = currentTitle.substr(0, 7)
-        currentDate =
-          currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
-      } else if (sectionHeaderOrTodo.item) {
-        const todo = sectionHeaderOrTodo.item
-        if (
-          todo.order !== orderCounter ||
-          todo.monthAndYear !== currentMonthAndYear ||
-          todo.date !== currentDate
-        ) {
-          todo.order = orderCounter
-          todo.monthAndYear = currentMonthAndYear
-          todo.date = currentDate
-          editedTodos.push(todo)
-        }
-        orderCounter++
-      }
-    })
-    sharedTodoStore.modify(...editedTodos)
-    sockets.todoSyncManager.sync()
+    // TODO: implement
+    // const titleToIndexes = [] as [string, number, number][] // title, startIndex, endIndex
+    // this.todosWithSections.forEach((item, i) => {
+    //   if (item.title) {
+    //     titleToIndexes.push([item.title, i, i])
+    //     if (titleToIndexes.length > 1) {
+    //       titleToIndexes[titleToIndexes.length - 2][2] = i - 1
+    //     }
+    //   }
+    // })
+    // const affectedTitles = [] as string[]
+    // const draggedItem = this.todosWithSections[from]
+    // if (draggedItem.item) {
+    //   const titleFrom = getTitle(draggedItem.item)
+    //   let titleTo: string | undefined
+    //   if (to === 0) {
+    //     titleTo = titleToIndexes[0][0]
+    //   } else {
+    //     for (const titleToIndex of [...titleToIndexes].reverse()) {
+    //       if (to > from ? to >= titleToIndex[1] : to > titleToIndex[1]) {
+    //         titleTo = titleToIndex[0]
+    //         break
+    //       }
+    //     }
+    //   }
+    //   if (titleTo) {
+    //     if (titleFrom === titleTo) {
+    //       affectedTitles.push(titleFrom)
+    //     } else {
+    //       affectedTitles.push(titleFrom, titleTo)
+    //     }
+    //   }
+    // } else if (draggedItem.title) {
+    //   // Add the title
+    //   affectedTitles.push(draggedItem.title)
+    //   // Add old neighbours
+    //   titleToIndexes.forEach((titleToIndex, i) => {
+    //     if (titleToIndex[0] === draggedItem.title) {
+    //       if (i - 1 > -1) {
+    //         affectedTitles.push(titleToIndexes[i - 1][0])
+    //       }
+    //       if (i + 1 < titleToIndexes.length) {
+    //         affectedTitles.push(titleToIndexes[i + 1][0])
+    //       }
+    //     }
+    //   })
+    //   // Add new neighbours
+    //   for (const titleToIndex of titleToIndexes) {
+    //     if (to > titleToIndex[1] && to <= titleToIndex[2]) {
+    //       if (affectedTitles.indexOf(titleToIndex[0]) < 0) {
+    //         affectedTitles.push(titleToIndex[0])
+    //       }
+    //     }
+    //   }
+    // }
+    // const editedTodos = [] as Array<[Todo, string]>
+    // let currentTitle = ''
+    // let currentMonthAndYear = ''
+    // let currentDate: string | undefined
+    // for (const sectionHeaderOrTodo of data) {
+    //   if (sectionHeaderOrTodo.title) {
+    //     currentTitle = sectionHeaderOrTodo.title
+    //     currentMonthAndYear = currentTitle.substr(0, 7)
+    //     currentDate =
+    //       currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
+    //     break
+    //   }
+    // }
+    // let titleCounter = ''
+    // const affectedSectionHeadersOrTodo = [] as SectionHeaderOrTodo[]
+    // for (const sectionHeaderOrTodo of data) {
+    //   if (sectionHeaderOrTodo.title) {
+    //     const prevIndex = affectedTitles.indexOf(titleCounter)
+    //     if (prevIndex > -1) {
+    //       affectedTitles.splice(prevIndex, 1)
+    //       if (!affectedTitles.length) {
+    //         break
+    //       }
+    //     }
+    //     titleCounter = sectionHeaderOrTodo.title
+    //   }
+    //   if (!titleCounter || affectedTitles.indexOf(titleCounter) > -1) {
+    //     affectedSectionHeadersOrTodo.push(sectionHeaderOrTodo)
+    //   }
+    // }
+    // let orderCounter = 0
+    // affectedSectionHeadersOrTodo.forEach(sectionHeaderOrTodo => {
+    //   if (sectionHeaderOrTodo.title) {
+    //     if (sectionHeaderOrTodo.title !== currentTitle) {
+    //       orderCounter = 0
+    //     }
+    //     currentTitle = sectionHeaderOrTodo.title
+    //     currentMonthAndYear = currentTitle.substr(0, 7)
+    //     currentDate =
+    //       currentTitle.length > 7 ? currentTitle.substr(8, 2) : undefined
+    //   } else if (sectionHeaderOrTodo.item) {
+    //     const todo = sectionHeaderOrTodo.item
+    //     if (
+    //       todo.order !== orderCounter ||
+    //       todo.monthAndYear !== currentMonthAndYear ||
+    //       todo.date !== currentDate
+    //     ) {
+    //       const oldTitle = getTitle(todo)
+    //       todo.order = orderCounter
+    //       todo.monthAndYear = currentMonthAndYear
+    //       todo.date = currentDate
+    //       editedTodos.push([todo, oldTitle])
+    //     }
+    //     orderCounter++
+    //   }
+    // })
+    // sharedTodoStore.modify(...editedTodos)
+    // sockets.todoSyncManager.sync()
   }
 }
 

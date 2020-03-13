@@ -5,6 +5,8 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import moment from 'moment'
 import { sockets } from '@utils/sockets'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { realm } from '@utils/realm'
+import { Todo } from '@models/Todo'
 
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
@@ -27,7 +29,7 @@ export class Data extends Component {
             <Row
               title="Todos count"
               subtitle={`${
-                sharedTodoStore.todos.filter(v => !v.deleted).length
+                realm.objects<Todo>(Todo).filtered('deleted = false').length
               }`}
             />
             <Row

@@ -1,60 +1,53 @@
+import { sockets } from '@utils/sockets'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Todo, getTitle } from '@models/Todo'
 
 export async function fixOrder(
   titlesInvolved: string[],
   addTodosOnTop = [] as Todo[],
-  addTodosToBottom = [] as Todo[]
+  addTodosToBottom = [] as Todo[],
+  sync = true
 ) {
-  const allTodos = sharedTodoStore.undeletedTodos
-  const completedTodos = allTodos.filter(t => t.completed)
-  const uncompletedTodos = allTodos.filter(t => !t.completed)
-  const completedTodosMap = completedTodos.reduce(mapTodos, {})
-  const uncompletedTodosMap = uncompletedTodos.reduce(mapTodos, {})
-  const addTodosOnTopIds = (addTodosOnTop
-    ? addTodosOnTop.map(t => t._id || t._tempSyncId)
-    : []
-  ).filter(v => !!v) as string[]
-  const addTodosToBottomIds = (addTodosToBottom
-    ? addTodosToBottom.map(t => t._id || t._tempSyncId)
-    : []
-  ).filter(v => !!v) as string[]
-  const todosToSave = [] as Todo[]
-  for (const titleInvolved of titlesInvolved) {
-    // Go over completed
-    const orderedCompleted = (completedTodosMap[titleInvolved] || []).sort(
-      sortTodos(addTodosOnTopIds, addTodosToBottomIds)
-    )
-    orderedCompleted.forEach((todo, i) => {
-      if (todo.order !== i) {
-        todo.order = i
-        todosToSave.push(todo)
-      }
-    })
-    // Go over uncompleted
-    const orderedUncompleted = (uncompletedTodosMap[titleInvolved] || []).sort(
-      sortTodos(addTodosOnTopIds, addTodosToBottomIds)
-    )
-    orderedUncompleted.forEach((todo, i) => {
-      if (todo.order !== i) {
-        todo.order = i
-        todosToSave.push(todo)
-      }
-    })
-  }
-  // Save todos
-  todosToSave.forEach(todo => {
-    todo.updatedAt = new Date()
-  })
-}
-
-function mapTodos(prev: { [index: string]: Todo[] }, cur: Todo) {
-  if (prev[getTitle(cur)]) {
-    prev[getTitle(cur)].push(cur)
-  } else {
-    prev[getTitle(cur)] = [cur]
-  }
-  return prev
+  // Todo: implement
+  // const addTodosOnTopIds = addTodosOnTop
+  //   .map(t => t._id || t._tempSyncId)
+  //   .filter(v => !!v) as string[]
+  // const addTodosToBottomIds = addTodosToBottom
+  //   .map(t => t._id || t._tempSyncId)
+  //   .filter(v => !!v) as string[]
+  // const todosToSave = [] as Todo[]
+  // for (const titleInvolved of titlesInvolved) {
+  //   const todos = sharedTodoStore.todosMap.get(titleInvolved) || []
+  //   // Go over completed
+  //   const orderedCompleted = todos
+  //     .filter(t => t.completed)
+  //     .sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+  //   orderedCompleted.forEach((todo, i) => {
+  //     if (todo.order !== i) {
+  //       todo.order = i
+  //       todosToSave.push(todo)
+  //     }
+  //   })
+  //   // Go over uncompleted
+  //   const orderedUncompleted = todos
+  //     .filter(t => !t.completed)
+  //     .sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+  //   orderedUncompleted.forEach((todo, i) => {
+  //     if (todo.order !== i) {
+  //       todo.order = i
+  //       todosToSave.push(todo)
+  //     }
+  //   })
+  // }
+  // // Save todos
+  // todosToSave.forEach(todo => {
+  //   todo.updatedAt = new Date()
+  // })
+  // // Sync
+  // if (sync) {
+  //   sockets.todoSyncManager.sync()
+  // }
+  sharedTodoStore.refreshTodos()
 }
 
 function sortTodos(todosOnTopIds: string[], todosOnBottomIds: string[]) {

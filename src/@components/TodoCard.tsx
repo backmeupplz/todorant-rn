@@ -9,7 +9,6 @@ import {
 } from '@utils/time'
 import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
-import { sockets } from '@utils/sockets'
 import { navigate } from '@utils/navigation'
 import { l } from '@utils/linkify'
 import { Linking } from 'react-native'
@@ -17,6 +16,7 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
 import moment from 'moment'
+import { realm } from '@utils/realm'
 
 export enum CardType {
   done = 'done',
@@ -28,46 +28,49 @@ class TodoCardVM {
   skip(todo: Todo) {
     const neighbours = sharedTodoStore
       .todosForDate(getDateFromString(todo.monthAndYear, todo.date))
-      .filter(t => t.completed === todo.completed)
+      .filtered(`completed = ${todo.completed}`)
     let startOffseting = false
     let offset = 0
-    for (const t of neighbours) {
-      if (t._id === todo._id) {
-        startOffseting = true
-        continue
-      }
-      if (startOffseting) {
-        offset++
-        if (!t.skipped) {
-          t.order -= offset
-          t.updatedAt = new Date()
-          break
+    realm.write(() => {
+      for (const t of neighbours) {
+        if (t._id === todo._id) {
+          startOffseting = true
+          continue
+        }
+        if (startOffseting) {
+          offset++
+          if (!t.skipped) {
+            t.order -= offset
+            t.updatedAt = new Date()
+            break
+          }
         }
       }
-    }
-    todo.order += offset
-    todo.skipped = true
-    // Save
-    sharedTodoStore.modify(todo)
+      todo.order += offset
+      todo.skipped = true
+      todo.updatedAt = new Date()
+    })
+
     fixOrder([getTitle(todo)])
-    sockets.todoSyncManager.sync()
   }
 
   isLast(todo: Todo) {
     const neighbours = sharedTodoStore
       .todosForDate(getDateFromString(todo.monthAndYear, todo.date))
-      .filter(t => t.completed === todo.completed)
+      .filtered(`completed = ${todo.completed}`)
     return neighbours.length <= 1
   }
 
   moveToToday(todo: Todo) {
     const oldTitle = getTitle(todo)
-    todo.date = getDateDateString(new Date())
-    todo.monthAndYear = getDateMonthAndYearString(new Date())
-    // Save
-    sharedTodoStore.modify(todo)
+    realm.write(() => {
+      todo.date = getDateDateString(new Date())
+      todo.monthAndYear = getDateMonthAndYearString(new Date())
+      todo._exactDate = new Date(getTitle(todo))
+      todo.updatedAt = new Date()
+    })
+
     fixOrder([oldTitle, getTitle(todo)])
-    sockets.todoSyncManager.sync()
   }
 
   delete(todo: Todo) {
@@ -77,29 +80,32 @@ class TodoCardVM {
       }"?`,
       'Delete',
       () => {
-        todo.deleted = true
-        // Save
-        sharedTodoStore.modify(todo)
+        realm.write(() => {
+          todo.deleted = true
+          todo.updatedAt = new Date()
+        })
+
         fixOrder([getTitle(todo)])
-        sockets.todoSyncManager.sync()
       }
     )
   }
 
   uncomplete(todo: Todo) {
-    todo.completed = false
-    // Save
-    sharedTodoStore.modify(todo)
+    realm.write(() => {
+      todo.completed = false
+      todo.updatedAt = new Date()
+    })
+
     fixOrder([getTitle(todo)])
-    sockets.todoSyncManager.sync()
   }
 
   complete(todo: Todo) {
-    todo.completed = true
-    // Save
-    sharedTodoStore.modify(todo)
+    realm.write(() => {
+      todo.completed = true
+      todo.updatedAt = new Date()
+    })
+
     fixOrder([getTitle(todo)])
-    sockets.todoSyncManager.sync()
   }
 }
 
@@ -231,7 +237,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 icon
                 transparent
                 onPress={() => {
-                  navigate('EditTodo', { editedTodo: { ...this.props.todo } })
+                  navigate('EditTodo', { editedTodo: this.props.todo })
                 }}
               >
                 <Icon type="MaterialIcons" name="edit" />
@@ -256,7 +262,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                     transparent
                     onPress={() => {
                       navigate('BreakdownTodo', {
-                        breakdownTodo: { ...this.props.todo },
+                        breakdownTodo: this.props.todo,
                       })
                     }}
                   >
