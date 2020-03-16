@@ -13,7 +13,7 @@ import { isHydrated } from './hydrated'
 const socketIO = SocketIO(
   __DEV__
     ? Platform.OS === 'android'
-      ? 'http://10.0.2.2:3000'
+      ? 'http://192.168.31.27:3000'
       : 'http://localhost:3000'
     : 'https://ws.todorant.com'
 )

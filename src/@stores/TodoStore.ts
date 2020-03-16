@@ -22,15 +22,16 @@ class TodoStore {
 
   todosForDate = (date: Date) => {
     const title = getDateString(date)
-    // Todo: sort
-    return this.allTodos.filtered(
-      title.length === 10
-        ? `deleted = false && monthAndYear = "${title.substr(
-            0,
-            7
-          )}" && date = "${title.substr(8, 2)}"`
-        : `deleted = false && monthAndYear = "${title.substr(0, 7)}" && !date`
-    )
+    return this.allTodos
+      .filtered(
+        title.length === 10
+          ? `deleted = false && monthAndYear = "${title.substr(
+              0,
+              7
+            )}" && date = "${title.substr(8, 2)}"`
+          : `deleted = false && monthAndYear = "${title.substr(0, 7)}" && !date`
+      )
+      .sorted('order')
   }
 
   @computed get currentTodo() {
@@ -85,14 +86,13 @@ class TodoStore {
       }
       return p
     }, {} as { [index: string]: Todo })
-    const todosChangedLocally = (this.lastSyncDate
+    const todosChangedLocally = this.lastSyncDate
       ? this.allTodos.filtered(
-          `updatedAt > ${moment(this.lastSyncDate)
-            .utc()
-            .format('YYYY-MM-DDTHH:mm:ss')}`
+          `updatedAt > ${moment(this.lastSyncDate).format(
+            'YYYY-MM-DDTHH:mm:ss'
+          )}`
         )
       : this.allTodos
-    ).map(v => ({ ...v }))
     // Pull
     for (const serverTodo of todosChangedOnServer) {
       if (!serverTodo._id) {
@@ -127,12 +127,12 @@ class TodoStore {
         return true
       }
     })
-    const todosToPushMap = {} as { [index: string]: Todo }
-    todosToPush.forEach(todo => {
-      todo._tempSyncId = uuid()
-      todosToPushMap[todo._tempSyncId] = todo
+    realm.write(() => {
+      for (const todoToPush of todosToPush) {
+        todoToPush._tempSyncId = uuid()
+      }
     })
-    const savedPushedTodos = await pushBack(todosToPush)
+    const savedPushedTodos = await pushBack(todosToPush.map(v => ({ ...v })))
     // Modify dates
     savedPushedTodos.forEach(todo => {
       todo.updatedAt = new Date(todo.updatedAt)
@@ -143,9 +143,11 @@ class TodoStore {
         if (!todo._tempSyncId) {
           continue
         }
-        Object.assign(todosToPushMap[todo._tempSyncId], todo)
+        Object.assign(this.getTodoById(todo._tempSyncId), todo)
       }
     })
+    // Refresh
+    this.refreshTodos()
   }
 
   refreshTodos = () => {

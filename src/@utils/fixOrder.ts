@@ -1,3 +1,4 @@
+import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Todo, getTitle } from '@models/Todo'
@@ -8,46 +9,49 @@ export async function fixOrder(
   addTodosToBottom = [] as Todo[],
   sync = true
 ) {
-  // Todo: implement
-  // const addTodosOnTopIds = addTodosOnTop
-  //   .map(t => t._id || t._tempSyncId)
-  //   .filter(v => !!v) as string[]
-  // const addTodosToBottomIds = addTodosToBottom
-  //   .map(t => t._id || t._tempSyncId)
-  //   .filter(v => !!v) as string[]
-  // const todosToSave = [] as Todo[]
-  // for (const titleInvolved of titlesInvolved) {
-  //   const todos = sharedTodoStore.todosMap.get(titleInvolved) || []
-  //   // Go over completed
-  //   const orderedCompleted = todos
-  //     .filter(t => t.completed)
-  //     .sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-  //   orderedCompleted.forEach((todo, i) => {
-  //     if (todo.order !== i) {
-  //       todo.order = i
-  //       todosToSave.push(todo)
-  //     }
-  //   })
-  //   // Go over uncompleted
-  //   const orderedUncompleted = todos
-  //     .filter(t => !t.completed)
-  //     .sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-  //   orderedUncompleted.forEach((todo, i) => {
-  //     if (todo.order !== i) {
-  //       todo.order = i
-  //       todosToSave.push(todo)
-  //     }
-  //   })
-  // }
-  // // Save todos
-  // todosToSave.forEach(todo => {
-  //   todo.updatedAt = new Date()
-  // })
-  // // Sync
-  // if (sync) {
-  //   sockets.todoSyncManager.sync()
-  // }
+  // Deduplicate
+  const titlesInvolvedSet = new Set(titlesInvolved)
+  // Get ids
+  const addTodosOnTopIds = addTodosOnTop
+    .map(t => t._id || t._tempSyncId)
+    .filter(v => !!v) as string[]
+  const addTodosToBottomIds = addTodosToBottom
+    .map(t => t._id || t._tempSyncId)
+    .filter(v => !!v) as string[]
+  // Fix every title
+  for (const titleInvolved of titlesInvolvedSet) {
+    const todos = sharedTodoStore.todosForDate(new Date(titleInvolved))
+    // Go over completed
+    const orderedCompleted = Array.from(
+      todos.filtered(`completed = true`)
+    ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+    realm.write(() => {
+      orderedCompleted.forEach((todo, i) => {
+        if (todo.order !== i) {
+          todo.order = i
+          todo.updatedAt = new Date()
+        }
+      })
+    })
+    // Go over uncompleted
+    const orderedUncompleted = Array.from(
+      todos.filtered(`completed = false`)
+    ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+    realm.write(() => {
+      orderedUncompleted.forEach((todo, i) => {
+        if (todo.order !== i) {
+          todo.order = i
+          todo.updatedAt = new Date()
+        }
+      })
+    })
+  }
+  // Refresh
   sharedTodoStore.refreshTodos()
+  // Sync
+  if (sync) {
+    sockets.todoSyncManager.sync()
+  }
 }
 
 function sortTodos(todosOnTopIds: string[], todosOnBottomIds: string[]) {
