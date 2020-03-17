@@ -9,6 +9,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { isHydrated } from './hydrated'
+import { User } from '@models/User'
 
 const socketIO = SocketIO(
   __DEV__
@@ -40,7 +41,7 @@ class SyncManager<T> {
       objects: T,
       pushBack: (objects: T) => Promise<T>
     ) => Promise<void>,
-    setLastSyncDate: (latestSyncDate: Date) => void
+    setLastSyncDate?: (latestSyncDate: Date) => void
   ) {
     this.name = name
     this.pendingPushes = pendingPushes
@@ -68,7 +69,9 @@ class SyncManager<T> {
       }
       this.pendingPushes[pushId]?.res(objects)
       delete this.pendingPushes[pushId]
-      setLastSyncDate(new Date())
+      if (setLastSyncDate) {
+        setLastSyncDate(new Date())
+      }
     })
     // 4
     socketIO.on(`${name}_pushed_error`, (pushId: string, error: Error) => {
@@ -109,6 +112,7 @@ class SocketManager {
 
   todoSyncManager: SyncManager<Todo[]>
   settingsSyncManager: SyncManager<Settings>
+  userSyncManager: SyncManager<User>
 
   constructor() {
     this.connect()
@@ -139,9 +143,14 @@ class SocketManager {
       () => sharedSettingsStore.updatedAt,
       (objects, pushBack) => {
         return sharedSettingsStore.onObjectsFromServer(objects, pushBack)
-      },
-      lastSyncDate => {
-        sharedSettingsStore.updatedAt = new Date(lastSyncDate)
+      }
+    )
+    this.userSyncManager = new SyncManager<User>(
+      'user',
+      this.pendingPushes,
+      () => sharedSessionStore.user?.updatedAt,
+      (objects, pushBack) => {
+        return sharedSessionStore.onObjectsFromServer(objects, pushBack)
       }
     )
   }

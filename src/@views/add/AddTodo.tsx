@@ -13,7 +13,7 @@ import {
 } from 'native-base'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { observable, computed, action } from 'mobx'
+import { observable, computed } from 'mobx'
 import { Calendar } from 'react-native-calendars'
 import {
   getDateFromString,
@@ -24,9 +24,7 @@ import {
 import MonthPicker from 'react-native-month-picker'
 import moment, { Moment } from 'moment'
 import { colors } from '@utils/colors'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { Todo, getTitle } from '@models/Todo'
-import { sockets } from '@utils/sockets'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -57,6 +55,8 @@ class TodoVM {
   @observable order = 0
 
   @observable addOnTop = false
+
+  @observable collapsed = false
 
   @computed
   get datePickerValue() {
@@ -141,168 +141,215 @@ class TodoVM {
 }
 
 @observer
+class CollapseButton extends Component<{ vm: TodoVM }> {
+  render() {
+    return (
+      <Button
+        icon
+        transparent
+        small
+        onPress={() => {
+          this.props.vm.collapsed = !this.props.vm.collapsed
+        }}
+      >
+        <Icon
+          type="MaterialIcons"
+          name={
+            this.props.vm.collapsed
+              ? 'keyboard-arrow-down'
+              : 'keyboard-arrow-up'
+          }
+          style={{
+            color:
+              !this.props.vm.collapsed || this.props.vm.isValid
+                ? undefined
+                : 'tomato',
+          }}
+        />
+      </Button>
+    )
+  }
+}
+
+@observer
 class AddTodoForm extends Component<{ vm: TodoVM }> {
   render() {
     return (
       <>
-        <Form>
-          <Item>
-            <Input
-              placeholder="Text"
-              value={this.props.vm.text}
-              onChangeText={text => {
-                this.props.vm.text = text
-              }}
-            />
-          </Item>
-          <Item
-            onPress={() => {
-              this.props.vm.showDatePicker = !this.props.vm.showDatePicker
-              if (!this.props.vm.date) {
-                this.props.vm.monthAndYear = undefined
-                this.props.vm.date = undefined
-              }
-              this.props.vm.showMonthAndYearPicker = false
-            }}
-            style={{ paddingVertical: 16 }}
-          >
-            <Text
-              style={{
-                color:
-                  this.props.vm.datePickerValue && !!this.props.vm.date
-                    ? colors.text
-                    : colors.placeholder,
-              }}
-            >
-              {this.props.vm.datePickerValue && !!this.props.vm.date
-                ? this.props.vm.datePickerValue
-                : 'Select exact day'}
-            </Text>
-          </Item>
-          {this.props.vm.showDatePicker && (
-            <Calendar
-              minDate={getDateString(new Date())}
-              current={this.props.vm.datePickerValue || new Date()}
-              markedDates={this.props.vm.markedDate}
-              onDayPress={day => {
-                this.props.vm.datePickerValue = day.dateString
-                this.props.vm.showDatePicker = false
-              }}
-            />
-          )}
-          <Item
-            onPress={() => {
-              this.props.vm.showMonthAndYearPicker = !this.props.vm
-                .showMonthAndYearPicker
-              if (!!this.props.vm.date) {
-                this.props.vm.monthAndYear = undefined
-                this.props.vm.date = undefined
-              }
-              this.props.vm.showDatePicker = false
-            }}
-            style={{ paddingVertical: 16 }}
-          >
-            <Text
-              style={{
-                color:
-                  this.props.vm.datePickerValue && !this.props.vm.date
-                    ? colors.text
-                    : colors.placeholder,
-              }}
-            >
-              {this.props.vm.datePickerValue && !this.props.vm.date
-                ? this.props.vm.datePickerValue
-                : 'Or month'}
-            </Text>
-          </Item>
-          {this.props.vm.showMonthAndYearPicker && (
-            <MonthPicker
-              selectedDate={this.props.vm.monthAndYearPickerValue}
-              onMonthChange={(date: Moment) => {
-                this.props.vm.monthAndYearPickerValue = date.toDate()
-              }}
-              minDate={moment()}
-              maxDate={moment().add(100, 'years')}
-            />
-          )}
-          {this.props.vm.showMore && (
+        {this.props.vm.collapsed ? (
+          <Form>
             <Item
               style={{
-                paddingVertical: this.props.vm.time ? 11 : 16,
-                justifyContent: 'space-between',
+                paddingTop: 10,
+                paddingBottom: 10,
               }}
+              onPress={() => {
+                this.props.vm.collapsed = false
+              }}
+            >
+              <View
+                style={{
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  flex: 1,
+                }}
+              >
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Text>
+                    {this.props.vm.frog && <Text>🐸 </Text>}
+                    {this.props.vm.time && <Text>{this.props.vm.time} </Text>}
+                    <Text>
+                      {this.props.vm.text ? this.props.vm.text : 'Todo'}
+                    </Text>
+                  </Text>
+                  {!!this.props.vm.monthAndYear && (
+                    <Text style={{ color: 'grey', fontSize: 12 }}>{`${
+                      this.props.vm.monthAndYear
+                    }${
+                      this.props.vm.date ? `-${this.props.vm.date}` : ''
+                    }`}</Text>
+                  )}
+                </View>
+                <CollapseButton vm={this.props.vm} />
+              </View>
+            </Item>
+          </Form>
+        ) : (
+          <Form>
+            <Item style={{ justifyContent: 'space-between' }}>
+              <Input
+                placeholder="Text"
+                value={this.props.vm.text}
+                onChangeText={text => {
+                  this.props.vm.text = text
+                }}
+              />
+              <CollapseButton vm={this.props.vm} />
+            </Item>
+            <Item
+              onPress={() => {
+                this.props.vm.showDatePicker = !this.props.vm.showDatePicker
+                if (!this.props.vm.date) {
+                  this.props.vm.monthAndYear = undefined
+                  this.props.vm.date = undefined
+                }
+                this.props.vm.showMonthAndYearPicker = false
+              }}
+              style={{ paddingVertical: 16 }}
             >
               <Text
                 style={{
-                  color: this.props.vm.time ? colors.text : colors.placeholder,
-                  flex: 1,
-                }}
-                onPress={() => {
-                  if (!this.props.vm.time) {
-                    this.props.vm.timePickerValue = new Date()
-                  }
-                  this.props.vm.showTimePicker = !this.props.vm.showTimePicker
+                  color:
+                    this.props.vm.datePickerValue && !!this.props.vm.date
+                      ? colors.text
+                      : colors.placeholder,
                 }}
               >
-                {this.props.vm.time ? this.props.vm.time : 'Exact time'}
+                {this.props.vm.datePickerValue && !!this.props.vm.date
+                  ? this.props.vm.datePickerValue
+                  : 'Select exact day'}
               </Text>
-              {!!this.props.vm.time && (
-                <Button
-                  icon
-                  transparent
-                  small
+            </Item>
+            {this.props.vm.showDatePicker && (
+              <Calendar
+                minDate={getDateString(new Date())}
+                current={this.props.vm.datePickerValue || new Date()}
+                markedDates={this.props.vm.markedDate}
+                onDayPress={day => {
+                  this.props.vm.datePickerValue = day.dateString
+                  this.props.vm.showDatePicker = false
+                }}
+              />
+            )}
+            <Item
+              onPress={() => {
+                this.props.vm.showMonthAndYearPicker = !this.props.vm
+                  .showMonthAndYearPicker
+                if (!!this.props.vm.date) {
+                  this.props.vm.monthAndYear = undefined
+                  this.props.vm.date = undefined
+                }
+                this.props.vm.showDatePicker = false
+              }}
+              style={{ paddingVertical: 16 }}
+            >
+              <Text
+                style={{
+                  color:
+                    this.props.vm.datePickerValue && !this.props.vm.date
+                      ? colors.text
+                      : colors.placeholder,
+                }}
+              >
+                {this.props.vm.datePickerValue && !this.props.vm.date
+                  ? this.props.vm.datePickerValue
+                  : 'Or month'}
+              </Text>
+            </Item>
+            {this.props.vm.showMonthAndYearPicker && (
+              <MonthPicker
+                selectedDate={this.props.vm.monthAndYearPickerValue}
+                onMonthChange={(date: Moment) => {
+                  this.props.vm.monthAndYearPickerValue = date.toDate()
+                }}
+                minDate={moment()}
+                maxDate={moment().add(100, 'years')}
+              />
+            )}
+            {this.props.vm.showMore && (
+              <Item
+                style={{
+                  paddingVertical: this.props.vm.time ? 11 : 16,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text
+                  style={{
+                    color: this.props.vm.time
+                      ? colors.text
+                      : colors.placeholder,
+                    flex: 1,
+                  }}
                   onPress={() => {
-                    this.props.vm.time = undefined
+                    if (!this.props.vm.time) {
+                      this.props.vm.timePickerValue = new Date()
+                    }
+                    this.props.vm.showTimePicker = !this.props.vm.showTimePicker
                   }}
                 >
-                  <Icon type="MaterialIcons" name="close" />
-                </Button>
-              )}
-            </Item>
-          )}
-          {this.props.vm.showTimePicker && (
-            <DateTimePicker
-              value={this.props.vm.timePickerValue || new Date()}
-              mode="time"
-              onChange={(event, date) => {
-                this.props.vm.showTimePicker = false
-                if (event.type === 'set') {
-                  this.props.vm.timePickerValue = date
-                }
-              }}
-            />
-          )}
-          <Item
-            style={{
-              justifyContent: 'space-between',
-              paddingVertical: 16,
-              paddingRight: 12,
-            }}
-          >
-            <Text>It's a frog!</Text>
-            <Switch
-              value={this.props.vm.frog}
-              onValueChange={value => {
-                this.props.vm.frog = value
-              }}
-            />
-          </Item>
-          <Item
-            style={{
-              justifyContent: 'space-between',
-              paddingVertical: 16,
-              paddingRight: 12,
-            }}
-          >
-            <Text>Completed</Text>
-            <Switch
-              value={this.props.vm.completed}
-              onValueChange={value => {
-                this.props.vm.completed = value
-              }}
-            />
-          </Item>
-          {this.props.vm.showMore && (
+                  {this.props.vm.time ? this.props.vm.time : 'Exact time'}
+                </Text>
+                {!!this.props.vm.time && (
+                  <Button
+                    icon
+                    transparent
+                    small
+                    onPress={() => {
+                      this.props.vm.time = undefined
+                    }}
+                  >
+                    <Icon type="MaterialIcons" name="close" />
+                  </Button>
+                )}
+              </Item>
+            )}
+            {this.props.vm.showTimePicker && (
+              <DateTimePicker
+                value={this.props.vm.timePickerValue || new Date()}
+                mode="time"
+                onChange={(event, date) => {
+                  this.props.vm.showTimePicker = false
+                  if (event.type === 'set') {
+                    this.props.vm.timePickerValue = date
+                  }
+                }}
+              />
+            )}
             <Item
               style={{
                 justifyContent: 'space-between',
@@ -310,30 +357,62 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 paddingRight: 12,
               }}
             >
-              <Text>Add on the top</Text>
+              <Text>It's a frog!</Text>
               <Switch
-                value={this.props.vm.addOnTop}
+                value={this.props.vm.frog}
                 onValueChange={value => {
-                  this.props.vm.addOnTop = value
+                  this.props.vm.frog = value
                 }}
               />
             </Item>
-          )}
-          {!this.props.vm.showMore && (
-            <Item>
-              <Button
-                block
-                transparent
-                onPress={() => {
-                  this.props.vm.showMore = true
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                paddingVertical: 16,
+                paddingRight: 12,
+              }}
+            >
+              <Text>Completed</Text>
+              <Switch
+                value={this.props.vm.completed}
+                onValueChange={value => {
+                  this.props.vm.completed = value
                 }}
-                style={{ flex: 1 }}
-              >
-                <Text>More...</Text>
-              </Button>
+              />
             </Item>
-          )}
-        </Form>
+            {this.props.vm.showMore && (
+              <Item
+                style={{
+                  justifyContent: 'space-between',
+                  paddingVertical: 16,
+                  paddingRight: 12,
+                }}
+              >
+                <Text>Add on the top</Text>
+                <Switch
+                  value={this.props.vm.addOnTop}
+                  onValueChange={value => {
+                    this.props.vm.addOnTop = value
+                  }}
+                />
+              </Item>
+            )}
+            {!this.props.vm.showMore && (
+              <Item>
+                <Button
+                  block
+                  transparent
+                  onPress={() => {
+                    this.props.vm.showMore = true
+                  }}
+                  style={{ flex: 1 }}
+                >
+                  <Text>More...</Text>
+                </Button>
+              </Item>
+            )}
+          </Form>
+        )}
       </>
     )
   }
@@ -498,6 +577,9 @@ class AddTodoContent extends Component<{
                 justifyContent: 'center',
               }}
               onPress={() => {
+                this.vms.forEach(vm => {
+                  vm.collapsed = true
+                })
                 this.vms.push(new TodoVM())
               }}
             >
