@@ -16,6 +16,7 @@ import DeviceInfo from 'react-native-device-info'
 import { TodoSettings } from './TodoSettings'
 import { Rules } from './Rules'
 import { Alert, Linking } from 'react-native'
+import { Paywall } from './Paywall'
 
 const Stack = createStackNavigator()
 
@@ -160,6 +161,11 @@ export function Settings() {
         name="Rules"
         component={Rules}
         options={{ title: 'How to' }}
+      />
+      <Stack.Screen
+        name="Paywall"
+        component={Paywall}
+        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
       />
     </Stack.Navigator>
   )

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ListItem, Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
@@ -43,6 +44,7 @@ export class AccountInfo extends Component {
             value={sharedSessionStore.user.telegramId}
           />
         )}
+        <SubscriptionSection />
       </>
     )
   }

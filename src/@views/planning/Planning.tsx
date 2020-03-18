@@ -15,6 +15,9 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { sockets } from '@utils/sockets'
 import { realm } from '@utils/realm'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { Login } from '@views/settings/Login'
+import { Paywall } from '@views/settings/Paywall'
 
 const Stack = createStackNavigator()
 
@@ -302,7 +305,19 @@ class PlanningContent extends Component {
         <ActionButton
           buttonColor="tomato"
           onPress={() => {
-            navigate('AddTodo')
+            if (
+              !sharedSessionStore.user?.token &&
+              sharedSessionStore.appInstalledMonthAgo
+            ) {
+              navigate('Login', { loginWall: true })
+            } else if (
+              !sharedSessionStore.user?.token ||
+              sharedSessionStore.user?.isSubscriptionActive
+            ) {
+              navigate('AddTodo')
+            } else {
+              navigate('Paywall')
+            }
           }}
         />
       </Container>
@@ -402,6 +417,17 @@ export function Planning() {
         name="EditTodo"
         component={AddTodo}
         options={{ title: 'Edit todo' }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ title: 'Please, login', headerTitleAlign: 'center' }}
+      />
+
+      <Stack.Screen
+        name="Paywall"
+        component={Paywall}
+        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
       />
     </Stack.Navigator>
   )

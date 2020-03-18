@@ -7,6 +7,7 @@ import { sockets } from '@utils/sockets'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
@@ -47,6 +48,16 @@ export class Data extends Component {
               subtitle={`${
                 sharedSettingsStore.updatedAt
                   ? moment(sharedSettingsStore.updatedAt).format(
+                      'YYYY-MM-DD hh:mm:ss'
+                    )
+                  : 'Not synced yet'
+              }`}
+            />
+            <Row
+              title="Account last synced"
+              subtitle={`${
+                sharedSessionStore.user?.updatedAt
+                  ? moment(sharedSessionStore.user.updatedAt).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
                   : 'Not synced yet'

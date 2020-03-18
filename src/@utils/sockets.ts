@@ -210,6 +210,7 @@ class SocketManager {
     }
     this.todoSyncManager.sync()
     this.settingsSyncManager.sync()
+    this.userSyncManager.sync()
   }
 }
 

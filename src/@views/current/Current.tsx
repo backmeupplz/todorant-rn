@@ -9,6 +9,9 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
 import { computed } from 'mobx'
 import { Platform, ProgressViewIOS, ProgressBarAndroid } from 'react-native'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { Login } from '@views/settings/Login'
+import { Paywall } from '@views/settings/Paywall'
 
 const Stack = createStackNavigator()
 
@@ -102,7 +105,19 @@ class CurrentContent extends Component {
         <ActionButton
           buttonColor="tomato"
           onPress={() => {
-            navigate('AddTodo')
+            if (
+              !sharedSessionStore.user?.token &&
+              sharedSessionStore.appInstalledMonthAgo
+            ) {
+              navigate('Login', { loginWall: true })
+            } else if (
+              !sharedSessionStore.user?.token ||
+              sharedSessionStore.user?.isSubscriptionActive
+            ) {
+              navigate('AddTodo')
+            } else {
+              navigate('Paywall')
+            }
           }}
         />
       </Container>
@@ -123,6 +138,16 @@ export function Current() {
         name="BreakdownTodo"
         component={AddTodo}
         options={{ title: 'Breakdown todo' }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ title: 'Please, login', headerTitleAlign: 'center' }}
+      />
+      <Stack.Screen
+        name="Paywall"
+        component={Paywall}
+        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
       />
     </Stack.Navigator>
   )

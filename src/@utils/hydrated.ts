@@ -2,6 +2,7 @@ import { sockets } from '@utils/sockets'
 const hydratedStores = {
   TodoStore: false,
   SettingsStore: false,
+  SessionStore: false,
 } as { [index: string]: boolean }
 
 export function isHydrated() {

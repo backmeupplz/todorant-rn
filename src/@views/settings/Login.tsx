@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Button, Spinner } from 'native-base'
+import { Container, Content, Text, Button, Spinner, View } from 'native-base'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'
@@ -8,6 +8,7 @@ import { goBack } from '@utils/navigation'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
+import { RouteProp, useRoute } from '@react-navigation/native'
 
 class LoginVM {
   @observable loading = false
@@ -22,6 +23,8 @@ class LoginVM {
       }
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
         .data
+      todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
+      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
       sharedSessionStore.login(todorantUserInfo)
       goBack()
     } catch (error) {
@@ -47,6 +50,8 @@ class LoginVM {
       }
       const todorantUserInfo = (await rest.loginFacebook(token.accessToken))
         .data
+      todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
+      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
       sharedSessionStore.login(todorantUserInfo)
       goBack()
     } catch (error) {
@@ -58,13 +63,34 @@ class LoginVM {
 }
 
 @observer
-export class Login extends Component {
+export class LoginContent extends Component<{
+  route: RouteProp<
+    Record<string, { loginWall: boolean | undefined } | undefined>,
+    string
+  >
+}> {
   vm = new LoginVM()
 
   render() {
     return (
       <Container>
         <Content style={{ padding: 10 }}>
+          {this.props.route.params?.loginWall && (
+            <View
+              style={{
+                justifyContent: 'center',
+                flex: 1,
+                alignItems: 'center',
+                marginBottom: 16,
+              }}
+            >
+              <Text style={{}}>
+                Looks like you used Todorant for over a month and still haven't
+                logged in! Keep your todos safe from getting lost — log in now
+                and enjoy Todorant safely!
+              </Text>
+            </View>
+          )}
           {this.vm.loading && <Spinner />}
           <Button
             style={{
@@ -92,4 +118,14 @@ export class Login extends Component {
       </Container>
     )
   }
+}
+
+export const Login = () => {
+  const route = useRoute<
+    RouteProp<
+      Record<string, { loginWall: boolean | undefined } | undefined>,
+      string
+    >
+  >()
+  return <LoginContent route={route} />
 }

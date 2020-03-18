@@ -1,4 +1,7 @@
 import { persist } from 'mobx-persist'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { daysBetween } from '@utils/daysBetween'
+import { computed, observable } from 'mobx'
 
 class Settings {
   @persist showTodayOnAddTodo?: boolean
@@ -11,33 +14,72 @@ enum TelegramLanguage {
   ru = 'ru',
 }
 
-enum SubscriptionStatus {
+export enum SubscriptionStatus {
   earlyAdopter = 'earlyAdopter',
   active = 'active',
   trial = 'trial',
   inactive = 'inactive',
 }
 
+export function subscriptionStatusName(
+  subscriptionStatus?: SubscriptionStatus
+) {
+  switch (subscriptionStatus) {
+    case SubscriptionStatus.earlyAdopter:
+      return 'Early adopter 🦄'
+    case SubscriptionStatus.active:
+      return 'Active'
+    case SubscriptionStatus.trial:
+      if (sharedSessionStore.user?.isTrialOver) {
+        return 'Inactive'
+      } else {
+        return 'Trial'
+      }
+    case SubscriptionStatus.inactive:
+      return 'Inactive'
+    default:
+      return ''
+  }
+}
+
 export class User {
-  @persist('date') createdAt: Date
-  @persist('date') updatedAt: Date
+  @persist('date') @observable createdAt: Date
+  @persist('date') @observable updatedAt: Date
 
-  @persist email?: string
-  @persist facebookId?: string
-  @persist telegramId?: string
-  @persist appleSubId?: string
-  @persist name: string
-  @persist('object', Settings) settings: Settings
+  @persist @observable email?: string
+  @persist @observable facebookId?: string
+  @persist @observable telegramId?: string
+  @persist @observable appleSubId?: string
+  @persist @observable name: string
+  @persist('object', Settings) @observable settings: Settings
 
-  @persist token: string
+  @persist @observable token: string
 
-  @persist timezone: number
-  @persist telegramZen: boolean
-  @persist telegramLanguage?: TelegramLanguage
+  @persist @observable timezone: number
+  @persist @observable telegramZen: boolean
+  @persist @observable telegramLanguage?: TelegramLanguage
 
-  @persist subscriptionStatus: SubscriptionStatus
-  @persist subscriptionId?: string
-  @persist appleReceipt?: string
+  @persist @observable subscriptionStatus: SubscriptionStatus
+  @persist @observable subscriptionId?: string
+  @persist @observable appleReceipt?: string
+
+  @computed get isSubscriptionActive() {
+    return (
+      this.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
+      this.subscriptionStatus === SubscriptionStatus.active ||
+      (this.subscriptionStatus === SubscriptionStatus.trial &&
+        !this.isTrialOver)
+    )
+  }
+
+  @computed get isTrialOver() {
+    console.log(this.daysLeftOfTrial)
+    return this.daysLeftOfTrial < 0
+  }
+
+  @computed get daysLeftOfTrial() {
+    return 30 - daysBetween(this.createdAt, new Date())
+  }
 
   constructor(
     createdAt: Date,
@@ -73,23 +115,16 @@ export class User {
     this.subscriptionId = subscriptionId
     this.appleReceipt = appleReceipt
   }
+}
 
-  isEqual(anotherUser: User) {
-    return (
-      this.createdAt === anotherUser.createdAt &&
-      this.updatedAt === anotherUser.updatedAt &&
-      this.email === anotherUser.email &&
-      this.facebookId === anotherUser.facebookId &&
-      this.telegramId === anotherUser.telegramId &&
-      this.appleSubId === anotherUser.appleSubId &&
-      this.name === anotherUser.name &&
-      this.token === anotherUser.token &&
-      this.timezone === anotherUser.timezone &&
-      this.telegramZen === anotherUser.telegramZen &&
-      this.telegramLanguage === anotherUser.telegramLanguage &&
-      this.subscriptionStatus === anotherUser.subscriptionStatus &&
-      this.subscriptionId === anotherUser.subscriptionId &&
-      this.appleReceipt === anotherUser.appleReceipt
-    )
-  }
+export function areUsersPartiallyEqual(user: User, anotherUser: User) {
+  return (
+    user.email === anotherUser.email &&
+    user.facebookId === anotherUser.facebookId &&
+    user.telegramId === anotherUser.telegramId &&
+    user.name === anotherUser.name &&
+    user.timezone === anotherUser.timezone &&
+    user.subscriptionStatus === anotherUser.subscriptionStatus &&
+    user.subscriptionId === anotherUser.subscriptionId
+  )
 }
