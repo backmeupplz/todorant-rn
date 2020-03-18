@@ -73,7 +73,6 @@ export class User {
   }
 
   @computed get isTrialOver() {
-    console.log(this.daysLeftOfTrial)
     return this.daysLeftOfTrial < 0
   }
 
