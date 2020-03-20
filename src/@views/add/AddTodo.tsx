@@ -31,6 +31,7 @@ import { useRoute, RouteProp } from '@react-navigation/native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
+import { translate } from '@utils/i18n'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -204,7 +205,9 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                     {this.props.vm.frog && <Text>🐸 </Text>}
                     {this.props.vm.time && <Text>{this.props.vm.time} </Text>}
                     <Text>
-                      {this.props.vm.text ? this.props.vm.text : 'Todo'}
+                      {this.props.vm.text
+                        ? this.props.vm.text
+                        : translate('todo')}
                     </Text>
                   </Text>
                   {!!this.props.vm.monthAndYear && (
@@ -223,7 +226,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
           <Form>
             <Item style={{ justifyContent: 'space-between' }}>
               <Input
-                placeholder="Text"
+                placeholder={translate('text')}
                 value={this.props.vm.text}
                 onChangeText={text => {
                   this.props.vm.text = text
@@ -252,7 +255,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               >
                 {this.props.vm.datePickerValue && !!this.props.vm.date
                   ? this.props.vm.datePickerValue
-                  : 'Select exact day'}
+                  : translate('addTodoDay')}
               </Text>
             </Item>
             {this.props.vm.showDatePicker && (
@@ -288,7 +291,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               >
                 {this.props.vm.datePickerValue && !this.props.vm.date
                   ? this.props.vm.datePickerValue
-                  : 'Or month'}
+                  : translate('addTodoMonth')}
               </Text>
             </Item>
             {this.props.vm.showMonthAndYearPicker && (
@@ -322,7 +325,9 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                     this.props.vm.showTimePicker = !this.props.vm.showTimePicker
                   }}
                 >
-                  {this.props.vm.time ? this.props.vm.time : 'Exact time'}
+                  {this.props.vm.time
+                    ? this.props.vm.time
+                    : translate('addTodoTime')}
                 </Text>
                 {!!this.props.vm.time && (
                   <Button
@@ -357,7 +362,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 paddingRight: 12,
               }}
             >
-              <Text>It's a frog!</Text>
+              <Text>{translate('addTodoFrog')}</Text>
               <Switch
                 value={this.props.vm.frog}
                 onValueChange={value => {
@@ -372,7 +377,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 paddingRight: 12,
               }}
             >
-              <Text>Completed</Text>
+              <Text>{translate('completed')}</Text>
               <Switch
                 value={this.props.vm.completed}
                 onValueChange={value => {
@@ -388,7 +393,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   paddingRight: 12,
                 }}
               >
-                <Text>Add on the top</Text>
+                <Text>{translate('addTodoOnTop')}</Text>
                 <Switch
                   value={this.props.vm.addOnTop}
                   onValueChange={value => {
@@ -407,7 +412,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   }}
                   style={{ flex: 1 }}
                 >
-                  <Text>More...</Text>
+                  <Text>{translate('addTodoMore')}</Text>
                 </Button>
               </Item>
             )}
@@ -562,9 +567,9 @@ class AddTodoContent extends Component<{
             <Text>
               {this.screenType === AddTodoScreenType.add
                 ? this.vms.length > 1
-                  ? 'Add todos!'
-                  : 'Add todo!'
-                : 'Save todo!'}
+                  ? translate('addTodoPlural')
+                  : translate('addTodoSingular')
+                : translate('saveTodo')}
             </Text>
           </Button>
           {this.screenType === AddTodoScreenType.add && (

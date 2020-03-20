@@ -52,7 +52,12 @@ class SessionStore {
 
         userFromServer.updatedAt = new Date(userFromServer.updatedAt)
         userFromServer.createdAt = new Date(userFromServer.createdAt)
-        Object.assign(this.user, userFromServer)
+        Object.assign(this.user, {
+          subscriptionId: undefined,
+          appleReceipt: undefined,
+          appleSubId: undefined,
+          ...userFromServer,
+        })
       } else {
         this.user.updatedAt = user.updatedAt
       }

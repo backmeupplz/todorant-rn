@@ -5,8 +5,12 @@ import { navigationRef } from './src/@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/network'
 import '@utils/ignoreWarnings'
+import '@utils/purchases'
 import { Root, StyleProvider } from 'native-base'
 import getTheme from './native-base-theme/components'
+import { setI18nConfig } from '@utils/i18n'
+
+setI18nConfig()
 
 GoogleSignin.configure({
   webClientId:

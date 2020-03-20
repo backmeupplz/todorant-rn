@@ -1,3 +1,4 @@
+import { translate } from '@utils/i18n'
 import { persist } from 'mobx-persist'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { daysBetween } from '@utils/daysBetween'
@@ -26,42 +27,43 @@ export function subscriptionStatusName(
 ) {
   switch (subscriptionStatus) {
     case SubscriptionStatus.earlyAdopter:
-      return 'Early adopter 🦄'
+      return () => translate('earlyAdopter')
     case SubscriptionStatus.active:
-      return 'Active'
+      return () => translate('active')
     case SubscriptionStatus.trial:
       if (sharedSessionStore.user?.isTrialOver) {
-        return 'Inactive'
+        return () => translate('inactive')
       } else {
-        return 'Trial'
+        return () => translate('trial')
       }
     case SubscriptionStatus.inactive:
-      return 'Inactive'
+      return () => translate('inactive')
     default:
-      return ''
+      return () => ''
   }
 }
 
 export class User {
-  @persist('date') @observable createdAt: Date
-  @persist('date') @observable updatedAt: Date
+  @persist('date') @observable createdAt!: Date
+  @persist('date') @observable updatedAt!: Date
 
   @persist @observable email?: string
   @persist @observable facebookId?: string
   @persist @observable telegramId?: string
   @persist @observable appleSubId?: string
-  @persist @observable name: string
-  @persist('object', Settings) @observable settings: Settings
+  @persist @observable name!: string
+  @persist('object', Settings) @observable settings!: Settings
 
-  @persist @observable token: string
+  @persist @observable token!: string
 
-  @persist @observable timezone: number
-  @persist @observable telegramZen: boolean
+  @persist @observable timezone!: number
+  @persist @observable telegramZen!: boolean
   @persist @observable telegramLanguage?: TelegramLanguage
 
-  @persist @observable subscriptionStatus: SubscriptionStatus
+  @persist @observable subscriptionStatus!: SubscriptionStatus
   @persist @observable subscriptionId?: string
   @persist @observable appleReceipt?: string
+  @persist @observable googleReceipt?: string
 
   @computed get isSubscriptionActive() {
     return (
@@ -80,39 +82,8 @@ export class User {
     return 30 - daysBetween(this.createdAt, new Date())
   }
 
-  constructor(
-    createdAt: Date,
-    updatedAt: Date,
-    name: string,
-    settings: Settings,
-    token: string,
-    timezone: number,
-    telegramZen: boolean,
-    subscriptionStatus: SubscriptionStatus,
-    email?: string,
-    facebookId?: string,
-    telegramId?: string,
-    appleSubId?: string,
-    telegramLanguage?: TelegramLanguage,
-    subscriptionId?: string,
-    appleReceipt?: string
-  ) {
-    this.createdAt = createdAt
-    this.updatedAt = updatedAt
-
-    this.email = email
-    this.facebookId = facebookId
-    this.telegramId = telegramId
-    this.appleSubId = appleSubId
-    this.name = name
-    this.settings = settings
-    this.token = token
-    this.timezone = timezone
-    this.telegramZen = telegramZen
-    this.telegramLanguage = telegramLanguage
-    this.subscriptionStatus = subscriptionStatus
-    this.subscriptionId = subscriptionId
-    this.appleReceipt = appleReceipt
+  @computed get hasPurchased() {
+    return !!this.subscriptionId || !!this.appleSubId
   }
 }
 

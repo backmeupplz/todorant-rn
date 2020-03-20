@@ -12,6 +12,7 @@ import { Platform, ProgressViewIOS, ProgressBarAndroid } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
+import { translate } from '@utils/i18n'
 
 const Stack = createStackNavigator()
 
@@ -77,10 +78,9 @@ class CurrentContent extends Component {
                 }}
               >
                 <H1>🎉</H1>
-                <H1>Congratulations!</H1>
+                <H1>{translate('allDoneTitle')}</H1>
                 <Text style={{ textAlign: 'center' }}>
-                  🥳 You did it! All the tasks for today are done, go get rest
-                  or maybe dance a little 💃
+                  {translate('allDoneText')}
                 </Text>
               </View>
             )}
@@ -94,10 +94,9 @@ class CurrentContent extends Component {
               }}
             >
               <H1>🐝</H1>
-              <H1>To infinity!</H1>
+              <H1>{translate('noTodosTitle')}</H1>
               <Text style={{ textAlign: 'center' }}>
-                You don't have any todos for today. If you want to work — add a
-                new todo for today or take the todos from future days.
+                {translate('noTodosText')}
               </Text>
             </View>
           )}
@@ -128,26 +127,36 @@ class CurrentContent extends Component {
 export function Current() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Current" component={CurrentContent} />
+      <Stack.Screen
+        name="Current"
+        component={CurrentContent}
+        options={{ title: translate('current') }}
+      />
       <Stack.Screen
         name="AddTodo"
         component={AddTodo}
-        options={{ title: 'Add todo' }}
+        options={{ title: translate('addTodo') }}
       />
       <Stack.Screen
         name="BreakdownTodo"
         component={AddTodo}
-        options={{ title: 'Breakdown todo' }}
+        options={{ title: translate('breakdownTodo') }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{ title: 'Please, login', headerTitleAlign: 'center' }}
+        options={{
+          title: translate('pleaseLogin'),
+          headerTitleAlign: 'center',
+        }}
       />
       <Stack.Screen
         name="Paywall"
         component={Paywall}
-        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
+        options={{
+          title: translate('subscription'),
+          headerTitleAlign: 'center',
+        }}
       />
     </Stack.Navigator>
   )

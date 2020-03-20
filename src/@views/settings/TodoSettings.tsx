@@ -4,6 +4,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sockets } from '@utils/sockets'
 import { observer } from 'mobx-react'
 import { Switch } from 'react-native-gesture-handler'
+import { translate } from '@utils/i18n'
 
 @observer
 export class TodoSettings extends Component {
@@ -11,7 +12,7 @@ export class TodoSettings extends Component {
     return (
       <>
         <ListItem style={{ justifyContent: 'space-between' }}>
-          <Text>Default to today</Text>
+          <Text>{translate('defaultToToday')}</Text>
           <Switch
             value={sharedSettingsStore.showTodayOnAddTodo}
             onValueChange={value => {
@@ -22,7 +23,7 @@ export class TodoSettings extends Component {
           />
         </ListItem>
         <ListItem style={{ justifyContent: 'space-between' }}>
-          <Text>New todos go on top</Text>
+          <Text>{translate('newTodosGoOnTop')}</Text>
           <Switch
             value={sharedSettingsStore.newTodosGoFirst}
             onValueChange={value => {

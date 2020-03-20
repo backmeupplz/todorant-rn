@@ -7,6 +7,7 @@ import { Icon, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
+import { translate } from '@utils/i18n'
 
 const Tab = createBottomTabNavigator()
 
@@ -56,10 +57,22 @@ export default observer(function BottomTabNavigator() {
         }}
       >
         {!sharedTodoStore.isPlanningRequired && (
-          <Tab.Screen name="Current" component={Current} />
+          <Tab.Screen
+            name="Current"
+            component={Current}
+            options={{ title: translate('current') }}
+          />
         )}
-        <Tab.Screen name="Planning" component={Planning} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen
+          name="Planning"
+          component={Planning}
+          options={{ title: translate('planning') }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{ title: translate('settings') }}
+        />
       </Tab.Navigator>
     </>
   )

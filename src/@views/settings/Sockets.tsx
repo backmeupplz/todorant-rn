@@ -3,6 +3,7 @@ import { Container, Content, List, ListItem, Text } from 'native-base'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { observer } from 'mobx-react'
+import { translate } from '@utils/i18n'
 
 class Row extends Component<{ title: string; ok: boolean }> {
   render() {
@@ -22,11 +23,17 @@ export class Sockets extends Component {
       <Container>
         <Content>
           <List>
-            <Row title="Connected" ok={sharedSocketStore.connected} />
-            <Row title="Authorized" ok={sharedSocketStore.authorized} />
+            <Row
+              title={translate('connected')}
+              ok={sharedSocketStore.connected}
+            />
+            <Row
+              title={translate('authorized')}
+              ok={sharedSocketStore.authorized}
+            />
             {sharedSocketStore.connectionError && (
               <ListItem>
-                <Text>Connection error: </Text>
+                <Text>{translate('socketError')}</Text>
                 <Text>{sharedSocketStore.connectionError.message}</Text>
               </ListItem>
             )}

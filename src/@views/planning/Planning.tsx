@@ -18,6 +18,7 @@ import { realm } from '@utils/realm'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
+import { translate } from '@utils/i18n'
 
 const Stack = createStackNavigator()
 
@@ -253,9 +254,7 @@ class PlanningContent extends Component {
               padding: 12,
             }}
           >
-            Looks like you have some planning to do! Please, redistribute the
-            outstanding tasks below to unlock the "Current" tab and to keep
-            being productive. Cheers!
+            {translate('planningText')}
           </Text>
         )}
         <DraggableFlatList
@@ -347,7 +346,7 @@ class PlanningHeader extends Component {
                   : 'tomato',
             }}
           >
-            Planning
+            {translate('planning')}
           </Text>
         </Button>
         <Button
@@ -366,7 +365,7 @@ class PlanningHeader extends Component {
                   : 'tomato',
             }}
           >
-            Completed
+            {translate('completed')}
           </Text>
         </Button>
       </Segment>
@@ -411,23 +410,29 @@ export function Planning() {
       <Stack.Screen
         name="AddTodo"
         component={AddTodo}
-        options={{ title: 'Add todo' }}
+        options={{ title: translate('addTodo') }}
       />
       <Stack.Screen
         name="EditTodo"
         component={AddTodo}
-        options={{ title: 'Edit todo' }}
+        options={{ title: translate('editTodo') }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{ title: 'Please, login', headerTitleAlign: 'center' }}
+        options={{
+          title: translate('pleaseLogin'),
+          headerTitleAlign: 'center',
+        }}
       />
 
       <Stack.Screen
         name="Paywall"
         component={Paywall}
-        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
+        options={{
+          title: translate('subscription'),
+          headerTitleAlign: 'center',
+        }}
       />
     </Stack.Navigator>
   )

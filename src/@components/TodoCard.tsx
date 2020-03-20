@@ -17,6 +17,7 @@ import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
 import moment from 'moment'
 import { realm } from '@utils/realm'
+import { translate } from '@utils/i18n'
 
 export enum CardType {
   done = 'done',
@@ -75,10 +76,10 @@ class TodoCardVM {
 
   delete(todo: Todo) {
     alertConfirm(
-      `Would you really like to delete "${
+      `${translate('deleteTodo')} "${
         todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
       }"?`,
-      'Delete',
+      translate('delete'),
       () => {
         realm.write(() => {
           todo.deleted = true
@@ -201,7 +202,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
         <CardItem footer style={{ justifyContent: 'space-between' }}>
           {this.props.todo.skipped && (
             <View>
-              <Text>(Skipped)</Text>
+              <Text>({translate('skipped')})</Text>
             </View>
           )}
           <View

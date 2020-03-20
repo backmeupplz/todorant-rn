@@ -17,6 +17,8 @@ import { TodoSettings } from './TodoSettings'
 import { Rules } from './Rules'
 import { Alert, Linking } from 'react-native'
 import { Paywall } from './Paywall'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
 
 const Stack = createStackNavigator()
 
@@ -28,16 +30,16 @@ export class SettingsContent extends Component {
         <Content>
           <List>
             <ListItem itemHeader first>
-              <Text>Account</Text>
+              <Text>{translate('account')}</Text>
             </ListItem>
             <AccountInfo />
             <LoginLogoutButtons />
             <ListItem itemHeader>
-              <Text>Todos</Text>
+              <Text>{translate('todos')}</Text>
             </ListItem>
             <TodoSettings />
             <ListItem itemHeader>
-              <Text>General</Text>
+              <Text>{translate('general')}</Text>
             </ListItem>
             <ListItem
               button
@@ -46,7 +48,7 @@ export class SettingsContent extends Component {
               }}
               style={{ justifyContent: 'space-between' }}
             >
-              <Text>Sockets info</Text>
+              <Text>{translate('socketsInfo')}</Text>
               <CheckOrCross ok={sharedSocketStore.connected} />
             </ListItem>
             <ListItem
@@ -55,10 +57,10 @@ export class SettingsContent extends Component {
                 navigate('Data')
               }}
             >
-              <Text>Data info</Text>
+              <Text>{translate('dataInfo')}</Text>
             </ListItem>
             <ListItem itemHeader>
-              <Text>Info</Text>
+              <Text>{translate('info')}</Text>
             </ListItem>
             <ListItem
               button
@@ -66,7 +68,7 @@ export class SettingsContent extends Component {
                 navigate('Rules')
               }}
             >
-              <Text>How to use Todorant</Text>
+              <Text>{translate('howToUse')}</Text>
             </ListItem>
             <ListItem
               button
@@ -74,7 +76,7 @@ export class SettingsContent extends Component {
                 navigate('Terms')
               }}
             >
-              <Text>Terms of use</Text>
+              <Text>{translate('termsOfUse')}</Text>
             </ListItem>
             <ListItem
               button
@@ -82,38 +84,34 @@ export class SettingsContent extends Component {
                 navigate('Privacy')
               }}
             >
-              <Text>Privacy policy</Text>
+              <Text>{translate('privacyPolicy')}</Text>
             </ListItem>
             <ListItem
               button
               onPress={() => {
                 setTimeout(() => {
-                  Alert.alert(
-                    'Support',
-                    'Got questions or feedback? Send me an email or contact me on Telegram!',
-                    [
-                      {
-                        text: 'Cancel',
-                        style: 'cancel',
+                  Alert.alert(translate('support'), translate('supportText'), [
+                    {
+                      text: translate('cancel'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'n@borodutch.com',
+                      onPress: () => {
+                        Linking.openURL('mailto:n@borodutch.com')
                       },
-                      {
-                        text: 'n@borodutch.com',
-                        onPress: () => {
-                          Linking.openURL('mailto:n@borodutch.com')
-                        },
+                    },
+                    {
+                      text: '@borodutch',
+                      onPress: () => {
+                        Linking.openURL('https://t.me/borodutch')
                       },
-                      {
-                        text: '@borodutch',
-                        onPress: () => {
-                          Linking.openURL('https://t.me/borodutch')
-                        },
-                      },
-                    ]
-                  )
+                    },
+                  ])
                 }, 500)
               }}
             >
-              <Text>Support</Text>
+              <Text>{translate('support')}</Text>
             </ListItem>
             <ListItem>
               <Text>
@@ -121,6 +119,18 @@ export class SettingsContent extends Component {
                 {__DEV__ ? '.dev' : ''}
               </Text>
             </ListItem>
+            {__DEV__ && (
+              <>
+                <ListItem itemHeader>
+                  <Text>Debug</Text>
+                </ListItem>
+                <ListItem>
+                  <Text>
+                    {JSON.stringify(sharedSessionStore.user, undefined, 2)}
+                  </Text>
+                </ListItem>
+              </>
+            )}
           </List>
         </Content>
       </Container>
@@ -131,41 +141,48 @@ export class SettingsContent extends Component {
 export function Settings() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Settings" component={SettingsContent} />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsContent}
+        options={{ title: translate('settings') }}
+      />
       <Stack.Screen
         name="Terms"
         component={TermsOfUse}
-        options={{ title: 'Terms of use' }}
+        options={{ title: translate('termsOfUse') }}
       />
       <Stack.Screen
         name="Privacy"
         component={PrivacyPolicy}
-        options={{ title: 'Privacy policy' }}
+        options={{ title: translate('privacyPolicy') }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{ title: 'Login' }}
+        options={{ title: 'login' }}
       />
       <Stack.Screen
         name="Sockets"
         component={Sockets}
-        options={{ title: 'Sockets info' }}
+        options={{ title: translate('socketsInfo') }}
       />
       <Stack.Screen
         name="Data"
         component={Data}
-        options={{ title: 'Data info' }}
+        options={{ title: translate('dataInfo') }}
       />
       <Stack.Screen
         name="Rules"
         component={Rules}
-        options={{ title: 'How to' }}
+        options={{ title: translate('howTo') }}
       />
       <Stack.Screen
         name="Paywall"
         component={Paywall}
-        options={{ title: 'Subscription', headerTitleAlign: 'center' }}
+        options={{
+          title: translate('subscription'),
+          headerTitleAlign: 'center',
+        }}
       />
     </Stack.Navigator>
   )

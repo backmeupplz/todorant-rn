@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { subscriptionStatusName, SubscriptionStatus } from '@models/User'
+import { translate } from '@utils/i18n'
 
 @observer
 export class SubscriptionSection extends Component {
@@ -16,18 +17,19 @@ export class SubscriptionSection extends Component {
             navigate('Paywall')
           }}
         >
-          <Text>Subscription</Text>
+          <Text>{translate('subscription')}</Text>
           <View style={{ alignItems: 'flex-end' }}>
             <Text>
               {subscriptionStatusName(
                 sharedSessionStore.user?.subscriptionStatus
-              )}
+              )()}
             </Text>
             {sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
               !sharedSessionStore.user?.isTrialOver && (
                 <Text style={{ color: 'grey', fontSize: 12 }}>
-                  Days left: {sharedSessionStore.user?.daysLeftOfTrial}
+                  {translate('daysLeft')}
+                  {sharedSessionStore.user?.daysLeftOfTrial}
                 </Text>
               )}
           </View>
@@ -45,7 +47,7 @@ export class SubscriptionSection extends Component {
                   navigate('Paywall')
                 }}
               >
-                <Text>Buy subscription</Text>
+                <Text>{translate('buySubscription')}</Text>
               </Button>
             </ListItem>
           )}

@@ -8,6 +8,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
 
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
@@ -28,39 +29,39 @@ export class Data extends Component {
         <Content>
           <List>
             <Row
-              title="Todos count"
+              title={translate('todosCount')}
               subtitle={`${
                 realm.objects<Todo>(Todo).filtered('deleted = false').length
               }`}
             />
             <Row
-              title="Todos last synced"
+              title={translate('todosLastSync')}
               subtitle={`${
                 sharedTodoStore.lastSyncDate
                   ? moment(sharedTodoStore.lastSyncDate).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
-                  : 'Not synced yet'
+                  : translate('notSyncedYet')
               }`}
             />
             <Row
-              title="Settings last synced"
+              title={translate('settingsLastSync')}
               subtitle={`${
                 sharedSettingsStore.updatedAt
                   ? moment(sharedSettingsStore.updatedAt).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
-                  : 'Not synced yet'
+                  : translate('notSyncedYet')
               }`}
             />
             <Row
-              title="Account last synced"
+              title={translate('accountLastSync')}
               subtitle={`${
                 sharedSessionStore.user?.updatedAt
                   ? moment(sharedSessionStore.user.updatedAt).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
-                  : 'Not synced yet'
+                  : translate('notSyncedYet')
               }`}
             />
             <ListItem
@@ -69,7 +70,7 @@ export class Data extends Component {
                 sockets.globalSync()
               }}
             >
-              <Text>Sync data</Text>
+              <Text>{translate('syncData')}</Text>
             </ListItem>
           </List>
         </Content>

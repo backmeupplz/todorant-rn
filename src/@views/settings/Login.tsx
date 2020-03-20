@@ -9,6 +9,7 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { translate } from '@utils/i18n'
 
 class LoginVM {
   @observable loading = false
@@ -19,7 +20,7 @@ class LoginVM {
       await GoogleSignin.hasPlayServices()
       const googleUserInfo = await GoogleSignin.signIn()
       if (!googleUserInfo.idToken) {
-        throw new Error('No access token returned from Google')
+        throw new Error(translate('googleTokenError'))
       }
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
         .data
@@ -42,11 +43,11 @@ class LoginVM {
         'email',
       ])
       if (!facebookUserInfo.grantedPermissions) {
-        throw new Error('Facebook permissions not granted')
+        throw new Error(translate('facebookPermissionsError'))
       }
       const token = await AccessToken.getCurrentAccessToken()
       if (!token) {
-        throw new Error('Facebook access token cannot be obtained')
+        throw new Error(translate('facebookTokenError'))
       }
       const todorantUserInfo = (await rest.loginFacebook(token.accessToken))
         .data
@@ -84,11 +85,7 @@ export class LoginContent extends Component<{
                 marginBottom: 16,
               }}
             >
-              <Text style={{}}>
-                Looks like you used Todorant for over a month and still haven't
-                logged in! Keep your todos safe from getting lost — log in now
-                and enjoy Todorant safely!
-              </Text>
+              <Text style={{}}>{translate('loginWall')}</Text>
             </View>
           )}
           {this.vm.loading && <Spinner />}
@@ -101,7 +98,7 @@ export class LoginContent extends Component<{
             onPress={this.vm.loginWithGoogle}
             disabled={this.vm.loading}
           >
-            <Text>Login with Google</Text>
+            <Text>{translate('loginGoogle')}</Text>
           </Button>
           <Button
             style={{
@@ -112,7 +109,7 @@ export class LoginContent extends Component<{
             onPress={this.vm.loginWithFacebook}
             disabled={this.vm.loading}
           >
-            <Text>Login with Facebook</Text>
+            <Text>{translate('loginFacebook')}</Text>
           </Button>
         </Content>
       </Container>

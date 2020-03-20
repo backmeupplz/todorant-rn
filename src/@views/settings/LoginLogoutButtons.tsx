@@ -4,6 +4,7 @@ import { Button, Text, ListItem } from 'native-base'
 import { navigate } from '@utils/navigation'
 import { alertConfirm } from '@utils/alert'
 import { observer } from 'mobx-react'
+import { translate } from '@utils/i18n'
 
 @observer
 export class LoginLogoutButtons extends Component {
@@ -14,12 +15,12 @@ export class LoginLogoutButtons extends Component {
           <Button
             block
             onPress={() => {
-              alertConfirm('Would you like to logout?', 'Logout', () => {
+              alertConfirm(translate('logoutText'), translate('logout'), () => {
                 sharedSessionStore.logout()
               })
             }}
           >
-            <Text>Logout</Text>
+            <Text>{translate('logout')}</Text>
           </Button>
         ) : (
           <>
@@ -29,9 +30,11 @@ export class LoginLogoutButtons extends Component {
                 navigate('Login')
               }}
             >
-              <Text>Login</Text>
+              <Text>{translate('login')}</Text>
             </Button>
-            <Text style={{ marginTop: 5 }}>(You are already registered)</Text>
+            <Text style={{ marginTop: 5 }}>
+              {translate('alreadyRegistered')}
+            </Text>
           </>
         )}
       </ListItem>
