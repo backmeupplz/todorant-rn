@@ -11,6 +11,12 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Platform } from 'react-native'
+import appleAuth, {
+  AppleAuthRequestOperation,
+  AppleAuthRequestScope,
+  AppleAuthCredentialState,
+} from '@invertase/react-native-apple-authentication'
 
 class LoginVM {
   @observable loading = false
@@ -58,6 +64,40 @@ class LoginVM {
       goBack()
     } catch (error) {
       alertError(error)
+    } finally {
+      this.loading = false
+    }
+  }
+
+  loginWithApple = async () => {
+    this.loading = true
+    try {
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: AppleAuthRequestOperation.LOGIN,
+        requestedScopes: [
+          AppleAuthRequestScope.EMAIL,
+          AppleAuthRequestScope.FULL_NAME,
+        ],
+      })
+
+      if (appleAuthRequestResponse.authorizationCode) {
+        const todorantUserInfo = (
+          await rest.loginApple(
+            appleAuthRequestResponse.authorizationCode,
+            typeof appleAuthRequestResponse.user === 'string'
+              ? undefined
+              : appleAuthRequestResponse.user
+          )
+        ).data
+        todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        sharedSessionStore.login(todorantUserInfo)
+        goBack()
+      } else {
+        throw new Error()
+      }
+    } catch (error) {
+      alertError(translate('appleSigninError'))
     } finally {
       this.loading = false
     }
@@ -116,6 +156,21 @@ export class LoginContent extends Component<{
           >
             <Text>{translate('loginFacebook')}</Text>
           </Button>
+          {Platform.OS === 'ios' && (
+            <Button
+              style={{
+                justifyContent: 'center',
+                backgroundColor: 'black',
+                marginBottom: 10,
+              }}
+              onPress={this.vm.loginWithApple}
+              disabled={this.vm.loading}
+            >
+              <Text style={{ color: '#f9f9f9' }}>
+                {translate('loginApple')}
+              </Text>
+            </Button>
+          )}
         </Content>
       </Container>
     )

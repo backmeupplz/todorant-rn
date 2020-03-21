@@ -41,6 +41,7 @@
   "loginWall": "Looks like you used Todorant for over a month and still haven't logged in! Keep your todos safe from getting lost — log in now and enjoy Todorant safely!",
   "loginGoogle": "Login with Google",
   "loginFacebook": "Login with Facebook",
+  "loginApple": "Login with Apple",
   "logoutText": "Would you like to logout?",
   "logout": "Logout",
   "login": "Login",
@@ -104,5 +105,6 @@
   "noTodosExistTitle": "No todos yet",
   "noTodosExistText": "Go on — create a few todos by clicking the plus button below!",
   "restorePurchases": "Restore purchases",
-  "noPurchasesError": "Sorry, you don't have any purchases yet"
+  "noPurchasesError": "Sorry, you don't have any purchases yet",
+  "appleSigninError": "Could not sign in with Apple"
 }

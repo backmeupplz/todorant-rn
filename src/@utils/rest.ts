@@ -18,6 +18,14 @@ export function loginFacebook(accessToken: string) {
   })
 }
 
+export function loginApple(code: string, user?: any) {
+  return axios.post<User>(`${base}/login/apple`, {
+    client: 'ios',
+    code,
+    user,
+  })
+}
+
 export function verifyPurchaseGoogle(payload: {
   packageName: string
   productId: string
