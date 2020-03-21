@@ -11,7 +11,7 @@ import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
 import { navigate } from '@utils/navigation'
 import { l } from '@utils/linkify'
-import { Linking } from 'react-native'
+import { Linking, Platform } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
@@ -19,6 +19,7 @@ import moment from 'moment'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { TouchableHighlight } from 'react-native-gesture-handler'
 
 export enum CardType {
   done = 'done',
@@ -189,7 +190,11 @@ class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
 }
 
 @observer
-export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
+export class TodoCard extends Component<{
+  todo: Todo
+  type: CardType
+  drag?: () => void
+}> {
   vm = new TodoCardVM()
 
   @computed get isOld() {
@@ -204,14 +209,40 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
           borderColor: sharedColors.borderColor,
         }}
       >
-        <CardItem
-          style={{ backgroundColor: this.isOld ? 'lavenderblush' : undefined }}
-        >
-          <Body>
-            {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
-            <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
-          </Body>
-        </CardItem>
+        {Platform.OS === 'android' ? (
+          <CardItem
+            style={{
+              backgroundColor: this.isOld
+                ? sharedColors.oldTodoBackground
+                : undefined,
+            }}
+          >
+            <Body>
+              {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
+              <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
+            </Body>
+          </CardItem>
+        ) : (
+          <TouchableHighlight
+            onLongPress={this.props.drag}
+            onPress={() => {
+              navigate('EditTodo', { editedTodo: this.props.todo })
+            }}
+          >
+            <CardItem
+              style={{
+                backgroundColor: this.isOld
+                  ? sharedColors.oldTodoBackground
+                  : undefined,
+              }}
+            >
+              <Body>
+                {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
+                <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
+              </Body>
+            </CardItem>
+          </TouchableHighlight>
+        )}
         <CardItem
           footer
           style={{

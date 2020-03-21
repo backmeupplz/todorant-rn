@@ -1,12 +1,9 @@
-import { Platform } from 'react-native'
 import { User } from '@models/User'
 import axios from 'axios'
 import { sharedSessionStore } from '@stores/SessionStore'
 
 const base = __DEV__
-  ? Platform.OS === 'android'
-    ? 'http://192.168.31.27:1337'
-    : 'http://localhost:1337'
+  ? 'http://192.168.31.27:1337'
   : 'https://backend.todorant.com'
 
 export function loginGoogle(accessToken: string) {
@@ -31,4 +28,16 @@ export function verifyPurchaseGoogle(payload: {
       token: sharedSessionStore.user?.token,
     },
   })
+}
+
+export function verifyPurchaseApple(receipt: string) {
+  return axios.post<void>(
+    `${base}/apple/subscription`,
+    { receipt },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
 }

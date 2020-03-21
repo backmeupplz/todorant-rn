@@ -1,5 +1,5 @@
 import { Settings } from '@models/Settings'
-import { Platform } from 'react-native'
+
 import { alertError } from '@utils/alert'
 import { Todo } from '@models/Todo'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -12,11 +12,7 @@ import { isHydrated } from './hydrated'
 import { User } from '@models/User'
 
 const socketIO = SocketIO(
-  __DEV__
-    ? Platform.OS === 'android'
-      ? 'http://192.168.31.27:3000'
-      : 'http://localhost:3000'
-    : 'https://ws.todorant.com'
+  __DEV__ ? 'http://192.168.31.27:3000' : 'https://ws.todorant.com'
 )
 
 type PromiseMap = { [index: string]: { res: Function; rej: Function } }

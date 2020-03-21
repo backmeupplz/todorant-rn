@@ -8,6 +8,7 @@ import RNIap, {
 import { observable } from 'mobx'
 import * as rest from '@utils/rest'
 import { alertError } from './alert'
+import { Platform } from 'react-native'
 
 class PurchaseListener {
   @observable isPurchasing = false
@@ -19,19 +20,27 @@ class PurchaseListener {
 export const purchaseListener = new PurchaseListener()
 
 export function getProducts() {
-  return RNIap.getSubscriptions(['todorant.monthly', 'todorant.yearly'])
+  return RNIap.getSubscriptions(
+    Platform.OS === 'android'
+      ? ['todorant.monthly', 'todorant.yearly']
+      : ['monthly', 'yearly']
+  )
 }
 
 async function tryPurchase(purchase: SubscriptionPurchase) {
   try {
     const receipt = purchase.transactionReceipt
 
-    if (receipt && purchase.purchaseToken) {
-      await rest.verifyPurchaseGoogle({
-        packageName: 'com.todorant',
-        productId: purchase.productId,
-        purchaseToken: purchase.purchaseToken,
-      })
+    if (receipt && (purchase.purchaseToken || purchase.transactionReceipt)) {
+      if (Platform.OS === 'android' && purchase.purchaseToken) {
+        await rest.verifyPurchaseGoogle({
+          packageName: 'com.todorant',
+          productId: purchase.productId,
+          purchaseToken: purchase.purchaseToken,
+        })
+      } else {
+        await rest.verifyPurchaseApple(purchase.transactionReceipt)
+      }
       await RNIap.finishTransaction(purchase, false)
     } else {
       throw new Error(translate('purchaseReceiptError'))
@@ -65,7 +74,7 @@ export const purchaseErrorSubscription = purchaseErrorListener(
 
 export function purchase(sku: string) {
   purchaseListener.isPurchasing = true
-  return RNIap.requestSubscription(sku)
+  return RNIap.requestSubscription(sku, false)
 }
 
 export async function restorePurchases() {

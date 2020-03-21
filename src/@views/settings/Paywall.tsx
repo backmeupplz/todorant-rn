@@ -16,6 +16,7 @@ import { sockets } from '@utils/sockets'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import RNRestart from 'react-native-restart'
+import { Platform } from 'react-native'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -119,13 +120,18 @@ export class Paywall extends Component {
                 key={i}
               >
                 <Text>
-                  {product.title.toLowerCase().replace(' (todorant x)', '')}
+                  {Platform.OS === 'android'
+                    ? product.title.toLowerCase().replace(' (todorant x)', '')
+                    : product.title}
                 </Text>
                 <Text>
                   {product.localizedPrice}/
-                  {product.productId === 'monthly699'
+                  {product.productId ===
+                  (Platform.OS === 'android' ? 'monthly699' : 'monthly')
                     ? 'month'
-                    : 'year (16.6% discount)'}
+                    : Platform.OS === 'android'
+                    ? 'year (16.6% discount)'
+                    : 'year (~15% discount)'}
                 </Text>
               </Button>
             ))}

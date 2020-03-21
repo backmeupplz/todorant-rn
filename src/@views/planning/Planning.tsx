@@ -12,7 +12,7 @@ import { navigate } from '@utils/navigation'
 import { AddTodo } from '@views/add/AddTodo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { TouchableHighlight } from 'react-native-gesture-handler'
 import { sockets } from '@utils/sockets'
 import { realm } from '@utils/realm'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -20,6 +20,7 @@ import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Platform } from 'react-native'
 
 const Stack = createStackNavigator()
 
@@ -263,7 +264,7 @@ class PlanningContent extends Component {
             data={this.vm.todosWithSections}
             renderItem={({ item, index, drag, isActive }) =>
               item.title ? (
-                <TouchableWithoutFeedback
+                <TouchableHighlight
                   key={index}
                   onLongPress={
                     sharedAppStateStore.todoSection === TodoSectionType.planning
@@ -282,15 +283,18 @@ class PlanningContent extends Component {
                   >
                     {item.title}
                   </Text>
-                </TouchableWithoutFeedback>
-              ) : (
-                <TouchableWithoutFeedback
+                </TouchableHighlight>
+              ) : Platform.OS === 'android' ? (
+                <TouchableHighlight
                   key={index}
                   onLongPress={
                     sharedAppStateStore.todoSection === TodoSectionType.planning
                       ? drag
                       : undefined
                   }
+                  onPress={() => {
+                    navigate('EditTodo', { editedTodo: item.item })
+                  }}
                   style={{ padding: isActive ? 10 : 0 }}
                 >
                   <TodoCard
@@ -301,8 +305,32 @@ class PlanningContent extends Component {
                         ? CardType.planning
                         : CardType.done
                     }
+                    drag={
+                      sharedAppStateStore.todoSection ===
+                      TodoSectionType.planning
+                        ? drag
+                        : undefined
+                    }
                   />
-                </TouchableWithoutFeedback>
+                </TouchableHighlight>
+              ) : (
+                <View style={{ padding: isActive ? 10 : 0 }}>
+                  <TodoCard
+                    todo={item.item!}
+                    type={
+                      sharedAppStateStore.todoSection ===
+                      TodoSectionType.planning
+                        ? CardType.planning
+                        : CardType.done
+                    }
+                    drag={
+                      sharedAppStateStore.todoSection ===
+                      TodoSectionType.planning
+                        ? drag
+                        : undefined
+                    }
+                  />
+                </View>
               )
             }
             keyExtractor={(_, index) => `${index}`}

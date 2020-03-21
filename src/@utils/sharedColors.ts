@@ -59,6 +59,9 @@ class ColorModeManager {
   @computed get specialSeparatorColor() {
     return this.isDark ? 'steelblue' : 'lightsteelblue'
   }
+  @computed get oldTodoBackground() {
+    return this.isDark ? 'maroon' : 'lavenderblush'
+  }
 }
 
 export const sharedColors = new ColorModeManager()

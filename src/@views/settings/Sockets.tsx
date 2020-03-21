@@ -35,8 +35,12 @@ export class Sockets extends Component {
             />
             {sharedSocketStore.connectionError && (
               <ListItem>
-                <Text>{translate('socketError')}</Text>
-                <Text>{sharedSocketStore.connectionError.message}</Text>
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('socketError')}
+                </Text>
+                <Text {...sharedColors.textExtraStyle}>
+                  {sharedSocketStore.connectionError.message}
+                </Text>
               </ListItem>
             )}
           </List>
