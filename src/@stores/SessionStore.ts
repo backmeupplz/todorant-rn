@@ -6,6 +6,7 @@ import { persist } from 'mobx-persist'
 import { observable, computed } from 'mobx'
 import { hydrate } from '@utils/hydrate'
 import { sharedSettingsStore } from './SettingsStore'
+import { setToken, removeToken } from '@utils/keychain'
 
 class SessionStore {
   @persist('date') @observable appInstalled = new Date()
@@ -22,6 +23,7 @@ class SessionStore {
   login(user: User) {
     this.user = user
     sockets.authorize()
+    setToken(user.token)
   }
 
   logout() {
@@ -29,6 +31,7 @@ class SessionStore {
     sharedTodoStore.logout()
     sharedSettingsStore.logout()
     sockets.logout()
+    removeToken()
   }
 
   onObjectsFromServer = async (
@@ -70,4 +73,9 @@ hydrate('SessionStore', sharedSessionStore).then(() => {
   sharedSessionStore.hydrated = true
   sockets.authorize()
   hydrateStore('SessionStore')
+  if (sharedSessionStore.user?.token) {
+    setToken(sharedSessionStore.user.token)
+  } else {
+    removeToken()
+  }
 })

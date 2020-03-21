@@ -27,6 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>todorant</string>
 				<string>fb640750769753434</string>
 				<string>com.googleusercontent.apps.989382323327-nqfooll87gngh616aoq6cf0k6sna9v0l</string>
 			</array>
@@ -102,7 +103,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
-	<true/>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

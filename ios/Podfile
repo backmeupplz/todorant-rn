@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 inhibit_all_warnings!
@@ -41,4 +41,9 @@ target 'Todorant' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+end
+
+target 'TodorantToday' do
+  pod 'Alamofire', '~> 5.0'
+  pod 'SwiftKeychainWrapper'
 end
