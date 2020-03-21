@@ -14,6 +14,8 @@ import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { TermsOfUse } from '@views/settings/TermsOfUse'
+import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 
 const Stack = createStackNavigator()
 
@@ -179,6 +181,22 @@ export function Current() {
             options={{
               title: translate('subscription'),
               headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Terms"
+            component={TermsOfUse}
+            options={{
+              title: translate('termsOfUse'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Privacy"
+            component={PrivacyPolicy}
+            options={{
+              title: translate('privacyPolicy'),
               ...sharedColors.headerExtraStyle,
             }}
           />

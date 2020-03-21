@@ -17,6 +17,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
+import { navigate } from '@utils/navigation'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -105,36 +106,68 @@ export class Paywall extends Component {
             {translate('signature')}
           </Text>
           {(this.vm.loading || purchaseListener.isPurchasing) && <Spinner />}
-          {!sharedSessionStore.user?.hasPurchased &&
-            this.vm.products.map((product, i) => (
+          {!sharedSessionStore.user?.hasPurchased && (
+            <>
+              {this.vm.products.map((product, i) => (
+                <Button
+                  style={{
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    marginTop: 16,
+                  }}
+                  onPress={() => {
+                    purchase(product.productId)
+                  }}
+                  disabled={purchaseListener.isPurchasing}
+                  key={i}
+                >
+                  <Text>
+                    {Platform.OS === 'android'
+                      ? product.title.toLowerCase().replace(' (todorant x)', '')
+                      : product.title}
+                  </Text>
+                  <Text>
+                    {product.localizedPrice}/
+                    {product.productId ===
+                    (Platform.OS === 'android' ? 'monthly699' : 'monthly')
+                      ? 'month'
+                      : Platform.OS === 'android'
+                      ? 'year (16.6% discount)'
+                      : 'year (~15% discount)'}
+                  </Text>
+                </Button>
+              ))}
               <Button
                 style={{
                   justifyContent: 'center',
-                  flexDirection: 'column',
-                  marginTop: 16,
+                  marginTop: 8,
                 }}
+                small
+                transparent
                 onPress={() => {
-                  purchase(product.productId)
+                  navigate('Terms')
                 }}
-                disabled={purchaseListener.isPurchasing}
-                key={i}
               >
-                <Text>
-                  {Platform.OS === 'android'
-                    ? product.title.toLowerCase().replace(' (todorant x)', '')
-                    : product.title}
-                </Text>
-                <Text>
-                  {product.localizedPrice}/
-                  {product.productId ===
-                  (Platform.OS === 'android' ? 'monthly699' : 'monthly')
-                    ? 'month'
-                    : Platform.OS === 'android'
-                    ? 'year (16.6% discount)'
-                    : 'year (~15% discount)'}
+                <Text style={{ color: sharedColors.placeholderColor }}>
+                  {translate('termsOfUse')}
                 </Text>
               </Button>
-            ))}
+              <Button
+                style={{
+                  justifyContent: 'center',
+                }}
+                small
+                transparent
+                onPress={() => {
+                  navigate('Privacy')
+                }}
+              >
+                <Text style={{ color: sharedColors.placeholderColor }}>
+                  {translate('privacyPolicy')}
+                </Text>
+              </Button>
+            </>
+          )}
           <Button
             style={{
               justifyContent: 'center',
