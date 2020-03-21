@@ -1,0 +1,3 @@
+- Please, click "Login later" on the main screen to proceed without login
+- Please, find the Terms of Use and Privacy Policy on *both* the Settings screen and on the Upgrade page right below the in-app purchase buttons
+- Please, find the requested subscription description below the in-app purchase buttons on the Upgrade page

@@ -21,6 +21,8 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { TouchableHighlight } from 'react-native-gesture-handler'
 
+const showDebugInfo = false
+
 export enum CardType {
   done = 'done',
   planning = 'planning',
@@ -176,7 +178,7 @@ class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
       <Text>
         <Text {...sharedColors.textExtraStyle}>
           {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
-          {__DEV__ && `(${this.props.todo.order}) `}
+          {__DEV__ && showDebugInfo && `(${this.props.todo.order}) `}
           {this.props.todo.frog ? '🐸 ' : ''}
           {this.props.todo.time ? `${this.props.todo.time} ` : ''}
         </Text>
@@ -218,7 +220,9 @@ export class TodoCard extends Component<{
             }}
           >
             <Body>
-              {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
+              {__DEV__ && showDebugInfo && (
+                <DebugTodoInfo todo={this.props.todo} />
+              )}
               <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
             </Body>
           </CardItem>
@@ -237,7 +241,9 @@ export class TodoCard extends Component<{
               }}
             >
               <Body>
-                {__DEV__ && <DebugTodoInfo todo={this.props.todo} />}
+                {__DEV__ && showDebugInfo && (
+                  <DebugTodoInfo todo={this.props.todo} />
+                )}
                 <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
               </Body>
             </CardItem>

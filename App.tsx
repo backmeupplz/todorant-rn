@@ -19,6 +19,8 @@ GoogleSignin.configure({
   forceConsentPrompt: true,
 })
 
+console.disableYellowBox = true
+
 const App = () => {
   return (
     <Root>

@@ -47,6 +47,8 @@
 		BB3A79EA2425B6850014DE92 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */; };
 		BB3A79ED2425B71F0014DE92 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */; };
 		BB3A79F12425B9530014DE92 /* KeychainManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */; };
+		BB3A79F92426933F0014DE92 /* TodorantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F82426933F0014DE92 /* TodorantUITests.swift */; };
+		BB3A7A03242694A70014DE92 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		CF3E6CD6D6B6474EBD791451 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 726ADF191BCC4DABA2BDD39F /* FontAwesome.ttf */; };
 		D60E3EF2395E4EDDBB5FF961 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8011F29EDD71472C976D89F7 /* Zocial.ttf */; };
@@ -62,6 +64,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = BB3A79B32425AF000014DE92;
 			remoteInfo = TodorantToday;
+		};
+		BB3A79FB2426933F0014DE92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = Todorant;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -139,6 +148,10 @@
 		BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Pods/SwiftKeychainWrapper/SwiftKeychainWrapper/KeychainWrapper.swift; sourceTree = "<group>"; };
 		BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainManagerBridge.m; sourceTree = "<group>"; };
+		BB3A79F62426933F0014DE92 /* TodorantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodorantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB3A79F82426933F0014DE92 /* TodorantUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodorantUITests.swift; sourceTree = "<group>"; };
+		BB3A79FA2426933F0014DE92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C72AEC71CCC0426695FAC0E7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		C994668131DC345D4AAF61E4 /* Pods-Todorant-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOS/Pods-Todorant-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +179,13 @@
 			files = (
 				BB3A79B62425AF000014DE92 /* NotificationCenter.framework in Frameworks */,
 				A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB3A79F32426933F0014DE92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +266,7 @@
 				13B07FAE1A68108700A75B9A /* Todorant */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				BB3A79B72425AF000014DE92 /* TodorantToday */,
+				BB3A79F72426933F0014DE92 /* TodorantUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C62ED693B06A801A76FE692D /* Pods */,
@@ -261,6 +282,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Todorant.app */,
 				BB3A79B42425AF000014DE92 /* TodorantToday.appex */,
+				BB3A79F62426933F0014DE92 /* TodorantUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -295,6 +317,16 @@
 				BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */,
 			);
 			name = KeychainWrapper;
+			sourceTree = "<group>";
+		};
+		BB3A79F72426933F0014DE92 /* TodorantUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */,
+				BB3A79F82426933F0014DE92 /* TodorantUITests.swift */,
+				BB3A79FA2426933F0014DE92 /* Info.plist */,
+			);
+			path = TodorantUITests;
 			sourceTree = "<group>";
 		};
 		C62ED693B06A801A76FE692D /* Pods */ = {
@@ -359,6 +391,24 @@
 			productReference = BB3A79B42425AF000014DE92 /* TodorantToday.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		BB3A79F52426933F0014DE92 /* TodorantUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB3A79FF2426933F0014DE92 /* Build configuration list for PBXNativeTarget "TodorantUITests" */;
+			buildPhases = (
+				BB3A79F22426933F0014DE92 /* Sources */,
+				BB3A79F32426933F0014DE92 /* Frameworks */,
+				BB3A79F42426933F0014DE92 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB3A79FC2426933F0014DE92 /* PBXTargetDependency */,
+			);
+			name = TodorantUITests;
+			productName = TodorantUITests;
+			productReference = BB3A79F62426933F0014DE92 /* TodorantUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -379,6 +429,12 @@
 						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
+					BB3A79F52426933F0014DE92 = {
+						CreatedOnToolsVersion = 11.3.1;
+						DevelopmentTeam = 29KKQYWZ97;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Todorant" */;
@@ -396,6 +452,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* Todorant */,
 				BB3A79B32425AF000014DE92 /* TodorantToday */,
+				BB3A79F52426933F0014DE92 /* TodorantUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -436,6 +493,13 @@
 			files = (
 				BB3A79D92425B0470014DE92 /* Localizable.strings in Resources */,
 				BB3A79DD2425B0470014DE92 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB3A79F42426933F0014DE92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +648,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB3A79F22426933F0014DE92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB3A79F92426933F0014DE92 /* TodorantUITests.swift in Sources */,
+				BB3A7A03242694A70014DE92 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -591,6 +664,11 @@
 			isa = PBXTargetDependency;
 			target = BB3A79B32425AF000014DE92 /* TodorantToday */;
 			targetProxy = BB3A79BE2425AF000014DE92 /* PBXContainerItemProxy */;
+		};
+		BB3A79FC2426933F0014DE92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* Todorant */;
+			targetProxy = BB3A79FB2426933F0014DE92 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -825,6 +903,61 @@
 			};
 			name = Release;
 		};
+		BB3A79FD2426933F0014DE92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 29KKQYWZ97;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TodorantUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = NKL.TodorantUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Todorant;
+			};
+			name = Debug;
+		};
+		BB3A79FE2426933F0014DE92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 29KKQYWZ97;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TodorantUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = NKL.TodorantUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Todorant;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -851,6 +984,15 @@
 			buildConfigurations = (
 				BB3A79C22425AF000014DE92 /* Debug */,
 				BB3A79C32425AF000014DE92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB3A79FF2426933F0014DE92 /* Build configuration list for PBXNativeTarget "TodorantUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB3A79FD2426933F0014DE92 /* Debug */,
+				BB3A79FE2426933F0014DE92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

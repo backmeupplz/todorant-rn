@@ -26,7 +26,7 @@ export default observer(() => {
               name = 'settings'
             }
             return (
-              <View>
+              <View accessibilityLabel={name}>
                 <Icon
                   type="MaterialIcons"
                   name={name}

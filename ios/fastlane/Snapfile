@@ -1,0 +1,31 @@
+devices([
+  "iPhone SE",
+  "iPhone 7",
+  "iPhone 7 Plus",
+  "iPhone X",
+  "iPhone Xs Max",
+  "iPhone Xʀ",
+  "iPad Pro (9.7-inch)",
+  "iPad Pro (10.5-inch)",
+  "iPad Pro (12.9-inch) (2nd generation)",
+  "iPad Pro (12.9-inch) (3rd generation)",
+  "iPad Pro (11-inch)",
+])
+
+languages([
+  "en-US",
+  "ru",
+])
+
+launch_arguments(["FASTLANE_SNAPSHOT"])
+
+scheme "TodorantUITests"
+output_directory "./fastlane/screenshots"
+clear_previous_screenshots true
+workspace "./Todorant.xcworkspace"
+ios_version "13.3"
+launch_arguments 
+reinstall_app true
+stop_after_first_error true
+concurrent_simulators false
+derived_data_path "./derived"

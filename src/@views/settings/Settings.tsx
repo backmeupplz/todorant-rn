@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content, List, ListItem, Text } from 'native-base'
+import {
+  Container,
+  Content,
+  List,
+  ListItem,
+  Text,
+  Button,
+  View,
+} from 'native-base'
 import { TermsOfUse } from './TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from './PrivacyPolicy'
@@ -20,6 +28,7 @@ import { Paywall } from './Paywall'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { deleteAllTodos, addTodosEn, addTodosRu } from '@utils/debug'
 
 const Stack = createStackNavigator()
 
@@ -30,6 +39,34 @@ export class SettingsContent extends Component {
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
+            {__DEV__ && (
+              <>
+                <Button
+                  onPress={() => {
+                    deleteAllTodos()
+                  }}
+                  accessibilityLabel="delete"
+                >
+                  <Text {...sharedColors.textExtraStyle}>delete all todos</Text>
+                </Button>
+                <Button
+                  onPress={() => {
+                    addTodosRu()
+                  }}
+                  testID="add_ru"
+                >
+                  <Text {...sharedColors.textExtraStyle}>add ru todos</Text>
+                </Button>
+                <Button
+                  onPress={() => {
+                    addTodosEn()
+                  }}
+                  testID="add_en"
+                >
+                  <Text {...sharedColors.textExtraStyle}>add en todos</Text>
+                </Button>
+              </>
+            )}
             <ListItem itemHeader first>
               <Text style={{ color: sharedColors.placeholderColor }}>
                 {translate('account')}
