@@ -65,6 +65,7 @@ class TodoStore {
       realm.deleteAll()
     })
     this.lastSyncDate = undefined
+    this.refreshTodos()
   }
 
   onObjectsFromServer = async (
