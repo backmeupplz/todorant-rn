@@ -32,6 +32,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -163,7 +164,7 @@ class CollapseButton extends Component<{ vm: TodoVM }> {
           style={{
             color:
               !this.props.vm.collapsed || this.props.vm.isValid
-                ? undefined
+                ? sharedColors.textColor
                 : 'tomato',
           }}
         />
@@ -183,6 +184,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               style={{
                 paddingTop: 10,
                 paddingBottom: 10,
+                borderColor: sharedColors.placeholderColor,
               }}
               onPress={() => {
                 this.props.vm.collapsed = false
@@ -202,18 +204,27 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   }}
                 >
                   <Text>
-                    {this.props.vm.frog && <Text>🐸 </Text>}
-                    {this.props.vm.time && <Text>{this.props.vm.time} </Text>}
-                    <Text>
+                    {this.props.vm.frog && (
+                      <Text {...sharedColors.textExtraStyle}>🐸 </Text>
+                    )}
+                    {this.props.vm.time && (
+                      <Text {...sharedColors.textExtraStyle}>
+                        {this.props.vm.time}{' '}
+                      </Text>
+                    )}
+                    <Text {...sharedColors.textExtraStyle}>
                       {this.props.vm.text
                         ? this.props.vm.text
                         : translate('todo')}
                     </Text>
                   </Text>
                   {!!this.props.vm.monthAndYear && (
-                    <Text style={{ color: 'grey', fontSize: 12 }}>{`${
-                      this.props.vm.monthAndYear
-                    }${
+                    <Text
+                      style={{
+                        color: sharedColors.placeholderColor,
+                        fontSize: 12,
+                      }}
+                    >{`${this.props.vm.monthAndYear}${
                       this.props.vm.date ? `-${this.props.vm.date}` : ''
                     }`}</Text>
                   )}
@@ -224,13 +235,20 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
           </Form>
         ) : (
           <Form>
-            <Item style={{ justifyContent: 'space-between' }}>
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
               <Input
                 placeholder={translate('text')}
                 value={this.props.vm.text}
                 onChangeText={text => {
                   this.props.vm.text = text
                 }}
+                placeholderTextColor={sharedColors.placeholderColor}
+                style={{ color: sharedColors.textColor }}
               />
               <CollapseButton vm={this.props.vm} />
             </Item>
@@ -243,14 +261,17 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }
                 this.props.vm.showMonthAndYearPicker = false
               }}
-              style={{ paddingVertical: 16 }}
+              style={{
+                paddingVertical: 16,
+                borderColor: sharedColors.placeholderColor,
+              }}
             >
               <Text
                 style={{
                   color:
                     this.props.vm.datePickerValue && !!this.props.vm.date
-                      ? colors.text
-                      : colors.placeholder,
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
                 }}
               >
                 {this.props.vm.datePickerValue && !!this.props.vm.date
@@ -279,14 +300,17 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }
                 this.props.vm.showDatePicker = false
               }}
-              style={{ paddingVertical: 16 }}
+              style={{
+                paddingVertical: 16,
+                borderColor: sharedColors.placeholderColor,
+              }}
             >
               <Text
                 style={{
                   color:
                     this.props.vm.datePickerValue && !this.props.vm.date
-                      ? colors.text
-                      : colors.placeholder,
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
                 }}
               >
                 {this.props.vm.datePickerValue && !this.props.vm.date
@@ -309,13 +333,14 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 style={{
                   paddingVertical: this.props.vm.time ? 11 : 16,
                   justifyContent: 'space-between',
+                  borderColor: sharedColors.placeholderColor,
                 }}
               >
                 <Text
                   style={{
                     color: this.props.vm.time
-                      ? colors.text
-                      : colors.placeholder,
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
                     flex: 1,
                   }}
                   onPress={() => {
@@ -360,9 +385,12 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 justifyContent: 'space-between',
                 paddingVertical: 16,
                 paddingRight: 12,
+                borderColor: sharedColors.placeholderColor,
               }}
             >
-              <Text>{translate('addTodoFrog')}</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('addTodoFrog')}
+              </Text>
               <Switch
                 value={this.props.vm.frog}
                 onValueChange={value => {
@@ -375,9 +403,12 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 justifyContent: 'space-between',
                 paddingVertical: 16,
                 paddingRight: 12,
+                borderColor: sharedColors.placeholderColor,
               }}
             >
-              <Text>{translate('completed')}</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('completed')}
+              </Text>
               <Switch
                 value={this.props.vm.completed}
                 onValueChange={value => {
@@ -391,9 +422,12 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   justifyContent: 'space-between',
                   paddingVertical: 16,
                   paddingRight: 12,
+                  borderColor: sharedColors.placeholderColor,
                 }}
               >
-                <Text>{translate('addTodoOnTop')}</Text>
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('addTodoOnTop')}
+                </Text>
                 <Switch
                   value={this.props.vm.addOnTop}
                   onValueChange={value => {
@@ -403,7 +437,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               </Item>
             )}
             {!this.props.vm.showMore && (
-              <Item>
+              <Item style={{ borderColor: sharedColors.placeholderColor }}>
                 <Button
                   block
                   transparent
@@ -412,7 +446,9 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   }}
                   style={{ flex: 1 }}
                 >
-                  <Text>{translate('addTodoMore')}</Text>
+                  <Text style={{ color: sharedColors.primaryColor }}>
+                    {translate('addTodoMore')}
+                  </Text>
                 </Button>
               </Item>
             )}
@@ -527,7 +563,7 @@ class AddTodoContent extends Component<{
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           {this.vms.map((vm, i, a) => (
             <View key={i}>
               <AddTodoForm vm={vm} />
@@ -549,7 +585,7 @@ class AddTodoContent extends Component<{
                     style={{
                       flex: 1,
                       height: 2,
-                      backgroundColor: 'lightsteelblue',
+                      backgroundColor: sharedColors.specialSeparatorColor,
                     }}
                   />
                 </>
@@ -588,7 +624,7 @@ class AddTodoContent extends Component<{
                 this.vms.push(new TodoVM())
               }}
             >
-              <Text>+</Text>
+              <Text style={{ color: sharedColors.primaryColor }}>+</Text>
             </Button>
           )}
         </Content>

@@ -10,6 +10,8 @@ import { alertError, alertMessage } from '@utils/alert'
 import { goBack } from '@utils/navigation'
 import { sockets } from '@utils/sockets'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
+import RNRestart from 'react-native-restart'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -31,7 +33,7 @@ export class Paywall extends Component {
         translate('purchaseThankYou'),
         translate('purchaseThankYouText'),
         () => {
-          goBack()
+          RNRestart.Restart()
         }
       )
     }
@@ -39,7 +41,6 @@ export class Paywall extends Component {
     this.vm.loading = true
     try {
       this.vm.products = await getProducts()
-      console.log(this.vm.products)
     } catch (err) {
       alertError(err)
     } finally {
@@ -50,35 +51,50 @@ export class Paywall extends Component {
   render() {
     return (
       <Container>
-        <Content style={{ padding: 16 }}>
+        <Content
+          style={{ padding: 16, backgroundColor: sharedColors.backgroundColor }}
+        >
           {sharedSessionStore.user?.subscriptionStatus ===
-            SubscriptionStatus.active && <Text>{translate('activeText')}</Text>}
+            SubscriptionStatus.active && (
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('activeText')}
+            </Text>
+          )}
           {(sharedSessionStore.user?.subscriptionStatus ===
             SubscriptionStatus.inactive ||
             (sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
               sharedSessionStore.user?.isTrialOver)) && (
-            <Text>{translate('endTrialText')}</Text>
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('endTrialText')}
+            </Text>
           )}
           {sharedSessionStore.user?.subscriptionStatus ===
             SubscriptionStatus.earlyAdopter && (
-            <Text>
-              <Text>{translate('earlyAdopterText')}</Text>
+            <Text {...sharedColors.textExtraStyle}>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('earlyAdopterText')}
+              </Text>
               {sharedSessionStore.user?.hasPurchased && (
-                <Text>{translate('earlyAdopterTextBonus')}</Text>
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('earlyAdopterTextBonus')}
+                </Text>
               )}
             </Text>
           )}
           {sharedSessionStore.user?.subscriptionStatus ===
             SubscriptionStatus.trial &&
             !sharedSessionStore.user.isTrialOver && (
-              <Text>{translate('trialText')}</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('trialText')}
+              </Text>
             )}
           <Text
             style={{
               flex: 1,
               paddingVertical: 16,
               textAlign: 'right',
+              ...sharedColors.textExtraStyle.style,
             }}
           >
             {translate('signature')}

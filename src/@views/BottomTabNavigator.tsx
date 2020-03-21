@@ -8,10 +8,11 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 const Tab = createBottomTabNavigator()
 
-export default observer(function BottomTabNavigator() {
+export default observer(() => {
   return (
     <>
       <Tab.Navigator
@@ -52,8 +53,11 @@ export default observer(function BottomTabNavigator() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: sharedColors.primaryColor,
           inactiveTintColor: 'gray',
+          style: {
+            backgroundColor: sharedColors.backgroundColor,
+          },
         }}
       >
         {!sharedTodoStore.isPlanningRequired && (

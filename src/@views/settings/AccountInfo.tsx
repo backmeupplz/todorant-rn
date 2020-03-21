@@ -4,14 +4,20 @@ import { observer } from 'mobx-react'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
   render() {
     return (
-      <ListItem style={{ justifyContent: 'space-between' }}>
-        <Text>{this.props.title}</Text>
-        <Text>{this.props.value}</Text>
+      <ListItem
+        style={{
+          justifyContent: 'space-between',
+          borderColor: sharedColors.placeholderColor,
+        }}
+      >
+        <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
+        <Text {...sharedColors.textExtraStyle}>{this.props.value}</Text>
       </ListItem>
     )
   }
@@ -21,8 +27,10 @@ class InfoRow extends Component<{ title: string; value: string }> {
 export class AccountInfo extends Component {
   render() {
     return !sharedSessionStore.user ? (
-      <ListItem>
-        <Text>{translate('anonymousText')}</Text>
+      <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+        <Text {...sharedColors.textExtraStyle}>
+          {translate('anonymousText')}
+        </Text>
       </ListItem>
     ) : (
       <>

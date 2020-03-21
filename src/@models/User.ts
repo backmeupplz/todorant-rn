@@ -83,7 +83,7 @@ export class User {
   }
 
   @computed get hasPurchased() {
-    return !!this.subscriptionId || !!this.appleSubId
+    return !!this.subscriptionId || !!this.appleSubId || !!this.googleReceipt
   }
 }
 

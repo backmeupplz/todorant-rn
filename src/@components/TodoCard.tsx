@@ -18,6 +18,7 @@ import { computed } from 'mobx'
 import moment from 'moment'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 export enum CardType {
   done = 'done',
@@ -110,6 +111,7 @@ class TodoCardVM {
   }
 }
 
+@observer
 class TodoText extends Component<{ text: string; isOld: boolean }> {
   get linkifiedText() {
     return l(this.props.text)
@@ -121,7 +123,9 @@ class TodoText extends Component<{ text: string; isOld: boolean }> {
         {this.linkifiedText.map((p, i) => (
           <Text
             key={i}
-            style={{ color: p.type !== 'text' ? 'dodgerblue' : undefined }}
+            style={{
+              color: p.type !== 'text' ? 'dodgerblue' : sharedColors.textColor,
+            }}
             onPress={() => {
               if (p.type === 'link' && p.url) {
                 Linking.openURL(p.url)
@@ -143,14 +147,18 @@ class DebugTodoInfo extends Component<{ todo: Todo }> {
   render() {
     return (
       <>
-        <Text>{this.props.todo._id || 'no id'}</Text>
-        <Text>{this.props.todo._tempSyncId || 'no sync id'}</Text>
-        <Text>
+        <Text {...sharedColors.textExtraStyle}>
+          {this.props.todo._id || 'no id'}
+        </Text>
+        <Text {...sharedColors.textExtraStyle}>
+          {this.props.todo._tempSyncId || 'no sync id'}
+        </Text>
+        <Text {...sharedColors.textExtraStyle}>
           {this.props.todo.createdAt
             ? moment(this.props.todo.createdAt).format('YYYY-MM-DD hh:mm:ss')
             : 'no created at'}
         </Text>
-        <Text>
+        <Text {...sharedColors.textExtraStyle}>
           {this.props.todo.updatedAt
             ? moment(this.props.todo.updatedAt).format('YYYY-MM-DD hh:mm:ss')
             : 'no updated at'}
@@ -165,7 +173,7 @@ class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
   render() {
     return (
       <Text>
-        <Text>
+        <Text {...sharedColors.textExtraStyle}>
           {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
           {__DEV__ && `(${this.props.todo.order}) `}
           {this.props.todo.frog ? '🐸 ' : ''}
@@ -190,7 +198,12 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
 
   render() {
     return (
-      <Card>
+      <Card
+        style={{
+          backgroundColor: sharedColors.backgroundColor,
+          borderColor: sharedColors.borderColor,
+        }}
+      >
         <CardItem
           style={{ backgroundColor: this.isOld ? 'lavenderblush' : undefined }}
         >
@@ -199,10 +212,18 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
             <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
           </Body>
         </CardItem>
-        <CardItem footer style={{ justifyContent: 'space-between' }}>
+        <CardItem
+          footer
+          style={{
+            justifyContent: 'space-between',
+            backgroundColor: 'transparrent',
+          }}
+        >
           {this.props.todo.skipped && (
             <View>
-              <Text>({translate('skipped')})</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                ({translate('skipped')})
+              </Text>
             </View>
           )}
           <View
@@ -221,7 +242,12 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                     this.vm.moveToToday(this.props.todo)
                   }}
                 >
-                  <Icon type="MaterialIcons" name="arrow-upward" />
+                  <Icon
+                    type="MaterialIcons"
+                    name="arrow-upward"
+                    {...sharedColors.iconExtraStyle}
+                    {...sharedColors.iconExtraStyle}
+                  />
                 </Button>
               )}
             <Button icon transparent>
@@ -231,6 +257,8 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                 onPress={() => {
                   this.vm.delete(this.props.todo)
                 }}
+                style={{ color: sharedColors.primaryColor }}
+                {...sharedColors.iconExtraStyle}
               />
             </Button>
             {this.props.type !== CardType.current && (
@@ -241,7 +269,11 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   navigate('EditTodo', { editedTodo: this.props.todo })
                 }}
               >
-                <Icon type="MaterialIcons" name="edit" />
+                <Icon
+                  type="MaterialIcons"
+                  name="edit"
+                  {...sharedColors.iconExtraStyle}
+                />
               </Button>
             )}
             {this.props.type === CardType.current &&
@@ -255,6 +287,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                       onPress={() => {
                         this.vm.skip(this.props.todo)
                       }}
+                      {...sharedColors.iconExtraStyle}
                     />
                   </Button>
 
@@ -267,7 +300,11 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                       })
                     }}
                   >
-                    <Icon type="MaterialIcons" name="list" />
+                    <Icon
+                      type="MaterialIcons"
+                      name="list"
+                      {...sharedColors.iconExtraStyle}
+                    />
                   </Button>
                 </>
               )}
@@ -279,6 +316,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   onPress={() => {
                     this.vm.uncomplete(this.props.todo)
                   }}
+                  {...sharedColors.iconExtraStyle}
                 />
               </Button>
             ) : (
@@ -289,6 +327,7 @@ export class TodoCard extends Component<{ todo: Todo; type: CardType }> {
                   onPress={() => {
                     this.vm.complete(this.props.todo)
                   }}
+                  {...sharedColors.iconExtraStyle}
                 />
               </Button>
             )}

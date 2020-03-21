@@ -13,6 +13,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 const Stack = createStackNavigator()
 
@@ -35,6 +36,7 @@ class ProgressBar extends Component<{ progress: number }> {
         indeterminate={false}
         progress={this.props.progress}
         style={{ flex: 1, marginEnd: 12 }}
+        color={sharedColors.primaryColor}
       />
     )
   }
@@ -50,7 +52,7 @@ class CurrentContent extends Component {
       : 1
     return (
       <Container>
-        <Content>
+        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <View
             style={{
               flex: 1,
@@ -60,7 +62,7 @@ class CurrentContent extends Component {
             }}
           >
             <ProgressBar progress={progress} />
-            <Text>
+            <Text {...sharedColors.textExtraStyle}>
               {`${sharedTodoStore.progress.completed}/${sharedTodoStore.progress.count}`}
             </Text>
           </View>
@@ -77,9 +79,13 @@ class CurrentContent extends Component {
                   alignItems: 'center',
                 }}
               >
-                <H1>🎉</H1>
-                <H1>{translate('allDoneTitle')}</H1>
-                <Text style={{ textAlign: 'center' }}>
+                <H1 {...sharedColors.textExtraStyle}>🎉</H1>
+                <H1 {...sharedColors.textExtraStyle}>
+                  {translate('allDoneTitle')}
+                </H1>
+                <Text
+                  style={{ textAlign: 'center', color: sharedColors.textColor }}
+                >
                   {translate('allDoneText')}
                 </Text>
               </View>
@@ -93,16 +99,21 @@ class CurrentContent extends Component {
                 margin: 12,
               }}
             >
-              <H1>🐝</H1>
-              <H1>{translate('noTodosTitle')}</H1>
-              <Text style={{ textAlign: 'center' }}>
+              <H1 {...sharedColors.textExtraStyle}>🐝</H1>
+              <H1 {...sharedColors.textExtraStyle}>
+                {translate('noTodosTitle')}
+              </H1>
+              <Text
+                style={{ textAlign: 'center', color: sharedColors.textColor }}
+              >
                 {translate('noTodosText')}
               </Text>
             </View>
           )}
         </Content>
         <ActionButton
-          buttonColor="tomato"
+          buttonColor={sharedColors.primaryColor}
+          buttonTextStyle={{ color: sharedColors.invertedTextColor }}
           onPress={() => {
             if (
               !sharedSessionStore.user?.token &&
@@ -130,17 +141,26 @@ export function Current() {
       <Stack.Screen
         name="Current"
         component={CurrentContent}
-        options={{ title: translate('current') }}
+        options={{
+          title: translate('current'),
+          ...sharedColors.headerExtraStyle,
+        }}
       />
       <Stack.Screen
         name="AddTodo"
         component={AddTodo}
-        options={{ title: translate('addTodo') }}
+        options={{
+          title: translate('addTodo'),
+          ...sharedColors.headerExtraStyle,
+        }}
       />
       <Stack.Screen
         name="BreakdownTodo"
         component={AddTodo}
-        options={{ title: translate('breakdownTodo') }}
+        options={{
+          title: translate('breakdownTodo'),
+          ...sharedColors.headerExtraStyle,
+        }}
       />
       <Stack.Screen
         name="Login"
@@ -148,6 +168,7 @@ export function Current() {
         options={{
           title: translate('pleaseLogin'),
           headerTitleAlign: 'center',
+          ...sharedColors.headerExtraStyle,
         }}
       />
       <Stack.Screen
@@ -156,6 +177,7 @@ export function Current() {
         options={{
           title: translate('subscription'),
           headerTitleAlign: 'center',
+          ...sharedColors.headerExtraStyle,
         }}
       />
     </Stack.Navigator>

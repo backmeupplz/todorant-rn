@@ -100,5 +100,7 @@
   "error": "Error",
   "ok": "OK",
   "pleaseConfirm": "Please confirm",
-  "purchaseReceiptError": "No purchase receipt found"
+  "purchaseReceiptError": "No purchase receipt found",
+  "noTodosExistTitle": "No todos yet",
+  "noTodosExistText": "Go on — create a few todos by clicking the plus button below!"
 }

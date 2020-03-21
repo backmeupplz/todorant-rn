@@ -4,12 +4,14 @@ import { CheckOrCross } from '@components/CheckOrCross'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
+@observer
 class Row extends Component<{ title: string; ok: boolean }> {
   render() {
     return (
       <ListItem style={{ justifyContent: 'space-between' }}>
-        <Text>{this.props.title}</Text>
+        <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
         <CheckOrCross ok={this.props.ok} />
       </ListItem>
     )
@@ -21,7 +23,7 @@ export class Sockets extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
             <Row
               title={translate('connected')}

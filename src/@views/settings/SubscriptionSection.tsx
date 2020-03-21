@@ -5,6 +5,7 @@ import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { subscriptionStatusName, SubscriptionStatus } from '@models/User'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 @observer
 export class SubscriptionSection extends Component {
@@ -12,14 +13,19 @@ export class SubscriptionSection extends Component {
     return (
       <>
         <ListItem
-          style={{ justifyContent: 'space-between' }}
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+          }}
           onPress={() => {
             navigate('Paywall')
           }}
         >
-          <Text>{translate('subscription')}</Text>
+          <Text {...sharedColors.textExtraStyle}>
+            {translate('subscription')}
+          </Text>
           <View style={{ alignItems: 'flex-end' }}>
-            <Text>
+            <Text {...sharedColors.textExtraStyle}>
               {subscriptionStatusName(
                 sharedSessionStore.user?.subscriptionStatus
               )()}
@@ -27,7 +33,9 @@ export class SubscriptionSection extends Component {
             {sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
               !sharedSessionStore.user?.isTrialOver && (
-                <Text style={{ color: 'grey', fontSize: 12 }}>
+                <Text
+                  style={{ color: sharedColors.placeholderColor, fontSize: 12 }}
+                >
                   {translate('daysLeft')}
                   {sharedSessionStore.user?.daysLeftOfTrial}
                 </Text>
@@ -38,7 +46,7 @@ export class SubscriptionSection extends Component {
           (!sharedSessionStore.user?.isSubscriptionActive ||
             sharedSessionStore.user.subscriptionStatus ===
               SubscriptionStatus.trial) && (
-            <ListItem>
+            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
               <Button
                 danger
                 style={{ flex: 1 }}

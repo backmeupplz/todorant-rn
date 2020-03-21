@@ -5,12 +5,18 @@ import { navigate } from '@utils/navigation'
 import { alertConfirm } from '@utils/alert'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 @observer
 export class LoginLogoutButtons extends Component {
   render() {
     return (
-      <ListItem style={{ flexDirection: 'column' }}>
+      <ListItem
+        style={{
+          flexDirection: 'column',
+          borderColor: sharedColors.placeholderColor,
+        }}
+      >
         {!!sharedSessionStore.user ? (
           <Button
             block
@@ -32,7 +38,7 @@ export class LoginLogoutButtons extends Component {
             >
               <Text>{translate('login')}</Text>
             </Button>
-            <Text style={{ marginTop: 5 }}>
+            <Text style={{ marginTop: 5, color: sharedColors.textColor }}>
               {translate('alreadyRegistered')}
             </Text>
           </>

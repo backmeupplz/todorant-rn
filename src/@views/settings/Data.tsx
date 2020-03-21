@@ -9,13 +9,15 @@ import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
+@observer
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
     return (
       <ListItem style={{ justifyContent: 'space-between' }}>
-        <Text>{this.props.title}</Text>
-        <Text>{this.props.subtitle}</Text>
+        <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
+        <Text {...sharedColors.textExtraStyle}>{this.props.subtitle}</Text>
       </ListItem>
     )
   }
@@ -26,7 +28,7 @@ export class Data extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
             <Row
               title={translate('todosCount')}
@@ -70,7 +72,9 @@ export class Data extends Component {
                 sockets.globalSync()
               }}
             >
-              <Text>{translate('syncData')}</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('syncData')}
+              </Text>
             </ListItem>
           </List>
         </Content>

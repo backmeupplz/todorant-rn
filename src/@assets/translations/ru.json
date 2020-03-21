@@ -101,5 +101,7 @@
   "error": "Ошибка",
   "ok": "ОК",
   "pleaseConfirm": "Пожалуйста, подтвердите",
-  "purchaseReceiptError": "Не найден чек покупки"
+  "purchaseReceiptError": "Не найден чек покупки",
+  "noTodosExistTitle": "Еще нет задач",
+  "noTodosExistText": "Давайте — добавьте задачи, нажав на кнопку с плюсом ниже!"
 }

@@ -10,6 +10,7 @@ import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { translate } from '@utils/i18n'
+import { sharedColors } from '@utils/sharedColors'
 
 class LoginVM {
   @observable loading = false
@@ -75,7 +76,9 @@ export class LoginContent extends Component<{
   render() {
     return (
       <Container>
-        <Content style={{ padding: 10 }}>
+        <Content
+          style={{ padding: 10, backgroundColor: sharedColors.backgroundColor }}
+        >
           {this.props.route.params?.loginWall && (
             <View
               style={{
@@ -85,7 +88,9 @@ export class LoginContent extends Component<{
                 marginBottom: 16,
               }}
             >
-              <Text style={{}}>{translate('loginWall')}</Text>
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('loginWall')}
+              </Text>
             </View>
           )}
           {this.vm.loading && <Spinner />}
