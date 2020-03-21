@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Container, Text, Segment, Button, Icon, H1, View } from 'native-base'
 import { computed } from 'mobx'
 import { Todo, compareTodos, getTitle } from '@models/Todo'
-import { observer } from 'mobx-react'
+import { observer, Observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { isDateTooOld, getDateString } from '@utils/time'
 import { TodoCard, CardType } from '@components/TodoCard'
@@ -439,56 +439,60 @@ class PlanningHeaderRight extends Component {
 
 export function Planning() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Planning"
-        component={PlanningContent}
-        options={{
-          headerTitle: () => {
-            return <PlanningHeader />
-          },
-          headerRight: () => {
-            return <PlanningHeaderRight />
-          },
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="AddTodo"
-        component={AddTodo}
-        options={{
-          title: translate('addTodo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="EditTodo"
-        component={AddTodo}
-        options={{
-          title: translate('editTodo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          title: translate('pleaseLogin'),
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
+    <Observer>
+      {() => (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Planning"
+            component={PlanningContent}
+            options={{
+              headerTitle: () => {
+                return <PlanningHeader />
+              },
+              headerRight: () => {
+                return <PlanningHeaderRight />
+              },
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="AddTodo"
+            component={AddTodo}
+            options={{
+              title: translate('addTodo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="EditTodo"
+            component={AddTodo}
+            options={{
+              title: translate('editTodo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: translate('pleaseLogin'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
 
-      <Stack.Screen
-        name="Paywall"
-        component={Paywall}
-        options={{
-          title: translate('subscription'),
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-    </Stack.Navigator>
+          <Stack.Screen
+            name="Paywall"
+            component={Paywall}
+            options={{
+              title: translate('subscription'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+        </Stack.Navigator>
+      )}
+    </Observer>
   )
 }

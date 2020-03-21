@@ -6,7 +6,7 @@ import ActionButton from 'react-native-action-button'
 import { navigate } from '../../@utils/navigation'
 import { AddTodo } from '../add/AddTodo'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { observer } from 'mobx-react'
+import { observer, Observer } from 'mobx-react'
 import { computed } from 'mobx'
 import { Platform, ProgressViewIOS, ProgressBarAndroid } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -137,49 +137,53 @@ class CurrentContent extends Component {
 
 export function Current() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Current"
-        component={CurrentContent}
-        options={{
-          title: translate('current'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="AddTodo"
-        component={AddTodo}
-        options={{
-          title: translate('addTodo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="BreakdownTodo"
-        component={AddTodo}
-        options={{
-          title: translate('breakdownTodo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          title: translate('pleaseLogin'),
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Paywall"
-        component={Paywall}
-        options={{
-          title: translate('subscription'),
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-    </Stack.Navigator>
+    <Observer>
+      {() => (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Current"
+            component={CurrentContent}
+            options={{
+              title: translate('current'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="AddTodo"
+            component={AddTodo}
+            options={{
+              title: translate('addTodo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="BreakdownTodo"
+            component={AddTodo}
+            options={{
+              title: translate('breakdownTodo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: translate('pleaseLogin'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Paywall"
+            component={Paywall}
+            options={{
+              title: translate('subscription'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+        </Stack.Navigator>
+      )}
+    </Observer>
   )
 }

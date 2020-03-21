@@ -8,7 +8,7 @@ import { Login } from './Login'
 import { LoginLogoutButtons } from './LoginLogoutButtons'
 import { AccountInfo } from './AccountInfo'
 import { Sockets } from './Sockets'
-import { observer } from 'mobx-react'
+import { observer, Observer } from 'mobx-react'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { Data } from './Data'
@@ -31,16 +31,22 @@ export class SettingsContent extends Component {
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
             <ListItem itemHeader first>
-              <Text>{translate('account')}</Text>
+              <Text style={{ color: sharedColors.placeholderColor }}>
+                {translate('account')}
+              </Text>
             </ListItem>
             <AccountInfo />
             <LoginLogoutButtons />
             <ListItem itemHeader>
-              <Text>{translate('todos')}</Text>
+              <Text style={{ color: sharedColors.placeholderColor }}>
+                {translate('todos')}
+              </Text>
             </ListItem>
             <TodoSettings />
             <ListItem itemHeader>
-              <Text>{translate('general')}</Text>
+              <Text style={{ color: sharedColors.placeholderColor }}>
+                {translate('general')}
+              </Text>
             </ListItem>
             <ListItem
               button
@@ -69,7 +75,9 @@ export class SettingsContent extends Component {
               </Text>
             </ListItem>
             <ListItem itemHeader>
-              <Text>{translate('info')}</Text>
+              <Text style={{ color: sharedColors.placeholderColor }}>
+                {translate('info')}
+              </Text>
             </ListItem>
             <ListItem
               button
@@ -142,10 +150,17 @@ export class SettingsContent extends Component {
             </ListItem>
             {__DEV__ && (
               <>
-                <ListItem itemHeader>
-                  <Text>Debug</Text>
+                <ListItem
+                  itemHeader
+                  style={{ borderColor: sharedColors.placeholderColor }}
+                >
+                  <Text style={{ color: sharedColors.placeholderColor }}>
+                    Debug
+                  </Text>
                 </ListItem>
-                <ListItem>
+                <ListItem
+                  style={{ borderColor: sharedColors.placeholderColor }}
+                >
                   <Text {...sharedColors.textExtraStyle}>
                     {JSON.stringify(sharedSessionStore.user, undefined, 2)}
                   </Text>
@@ -161,69 +176,73 @@ export class SettingsContent extends Component {
 
 export function Settings() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Settings"
-        component={SettingsContent}
-        options={{
-          title: translate('settings'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Terms"
-        component={TermsOfUse}
-        options={{
-          title: translate('termsOfUse'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Privacy"
-        component={PrivacyPolicy}
-        options={{
-          title: translate('privacyPolicy'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ title: 'login', ...sharedColors.headerExtraStyle }}
-      />
-      <Stack.Screen
-        name="Sockets"
-        component={Sockets}
-        options={{
-          title: translate('socketsInfo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Data"
-        component={Data}
-        options={{
-          title: translate('dataInfo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Rules"
-        component={Rules}
-        options={{
-          title: translate('howTo'),
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-      <Stack.Screen
-        name="Paywall"
-        component={Paywall}
-        options={{
-          title: translate('subscription'),
-          headerTitleAlign: 'center',
-          ...sharedColors.headerExtraStyle,
-        }}
-      />
-    </Stack.Navigator>
+    <Observer>
+      {() => (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Settings"
+            component={SettingsContent}
+            options={{
+              title: translate('settings'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Terms"
+            component={TermsOfUse}
+            options={{
+              title: translate('termsOfUse'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Privacy"
+            component={PrivacyPolicy}
+            options={{
+              title: translate('privacyPolicy'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ title: 'login', ...sharedColors.headerExtraStyle }}
+          />
+          <Stack.Screen
+            name="Sockets"
+            component={Sockets}
+            options={{
+              title: translate('socketsInfo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Data"
+            component={Data}
+            options={{
+              title: translate('dataInfo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Rules"
+            component={Rules}
+            options={{
+              title: translate('howTo'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Paywall"
+            component={Paywall}
+            options={{
+              title: translate('subscription'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+        </Stack.Navigator>
+      )}
+    </Observer>
   )
 }
