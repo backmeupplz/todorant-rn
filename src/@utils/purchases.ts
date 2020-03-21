@@ -7,6 +7,7 @@ import RNIap, {
 } from 'react-native-iap'
 import { observable } from 'mobx'
 import * as rest from '@utils/rest'
+import { alertError } from './alert'
 
 class PurchaseListener {
   @observable isPurchasing = false
@@ -21,34 +22,34 @@ export function getProducts() {
   return RNIap.getSubscriptions(['todorant.monthly', 'todorant.yearly'])
 }
 
-export const purchaseUpdateSubscription = purchaseUpdatedListener(
-  async (purchase: SubscriptionPurchase) => {
-    try {
-      const receipt = purchase.transactionReceipt
+async function tryPurchase(purchase: SubscriptionPurchase) {
+  try {
+    const receipt = purchase.transactionReceipt
 
-      if (receipt && purchase.purchaseToken) {
-        await rest.verifyPurchaseGoogle({
-          packageName: 'com.todorant',
-          productId: purchase.productId,
-          purchaseToken: purchase.purchaseToken,
-        })
-        await RNIap.finishTransaction(purchase, false)
-      } else {
-        throw new Error(translate('purchaseReceiptError'))
-      }
-
-      if (purchaseListener.success) {
-        purchaseListener.success()
-      }
-    } catch (err) {
-      if (purchaseListener.fail) {
-        purchaseListener.fail(err)
-      }
-    } finally {
-      purchaseListener.isPurchasing = false
+    if (receipt && purchase.purchaseToken) {
+      await rest.verifyPurchaseGoogle({
+        packageName: 'com.todorant',
+        productId: purchase.productId,
+        purchaseToken: purchase.purchaseToken,
+      })
+      await RNIap.finishTransaction(purchase, false)
+    } else {
+      throw new Error(translate('purchaseReceiptError'))
     }
+
+    if (purchaseListener.success) {
+      purchaseListener.success()
+    }
+  } catch (err) {
+    if (purchaseListener.fail) {
+      purchaseListener.fail(err)
+    }
+  } finally {
+    purchaseListener.isPurchasing = false
   }
-)
+}
+
+export const purchaseUpdateSubscription = purchaseUpdatedListener(tryPurchase)
 
 export const purchaseErrorSubscription = purchaseErrorListener(
   (error: PurchaseError) => {
@@ -65,4 +66,23 @@ export const purchaseErrorSubscription = purchaseErrorListener(
 export function purchase(sku: string) {
   purchaseListener.isPurchasing = true
   return RNIap.requestSubscription(sku)
+}
+
+export async function restorePurchases() {
+  purchaseListener.isPurchasing = true
+  try {
+    const purchases = await RNIap.getAvailablePurchases()
+    for (const purchase of purchases) {
+      tryPurchase(purchase)
+    }
+    if (!purchases.length) {
+      alertError(translate('noPurchasesError'))
+    }
+  } catch (err) {
+    if (purchaseListener.fail) {
+      purchaseListener.fail(err)
+    }
+  } finally {
+    purchaseListener.isPurchasing = false
+  }
 }

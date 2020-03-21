@@ -103,5 +103,7 @@
   "pleaseConfirm": "Пожалуйста, подтвердите",
   "purchaseReceiptError": "Не найден чек покупки",
   "noTodosExistTitle": "Еще нет задач",
-  "noTodosExistText": "Давайте — добавьте задачи, нажав на кнопку с плюсом ниже!"
+  "noTodosExistText": "Давайте — добавьте задачи, нажав на кнопку с плюсом ниже!",
+  "restorePurchases": "Восстановить покупки",
+  "noPurchasesError": "Простите, но у вас пока нет покупок"
 }

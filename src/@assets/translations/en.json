@@ -102,5 +102,7 @@
   "pleaseConfirm": "Please confirm",
   "purchaseReceiptError": "No purchase receipt found",
   "noTodosExistTitle": "No todos yet",
-  "noTodosExistText": "Go on — create a few todos by clicking the plus button below!"
+  "noTodosExistText": "Go on — create a few todos by clicking the plus button below!",
+  "restorePurchases": "Restore purchases",
+  "noPurchasesError": "Sorry, you don't have any purchases yet"
 }

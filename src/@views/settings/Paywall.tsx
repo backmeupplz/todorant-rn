@@ -5,9 +5,13 @@ import { SubscriptionStatus } from '@models/User'
 import { observer } from 'mobx-react'
 import { observable } from 'mobx'
 import { Subscription } from 'react-native-iap'
-import { getProducts, purchase, purchaseListener } from '@utils/purchases'
+import {
+  getProducts,
+  purchase,
+  purchaseListener,
+  restorePurchases,
+} from '@utils/purchases'
 import { alertError, alertMessage } from '@utils/alert'
-import { goBack } from '@utils/navigation'
 import { sockets } from '@utils/sockets'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -125,6 +129,22 @@ export class Paywall extends Component {
                 </Text>
               </Button>
             ))}
+          <Button
+            style={{
+              justifyContent: 'center',
+              flexDirection: 'column',
+              marginTop: 16,
+            }}
+            transparent
+            onPress={() => {
+              restorePurchases()
+            }}
+            disabled={purchaseListener.isPurchasing}
+          >
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('restorePurchases')}
+            </Text>
+          </Button>
         </Content>
       </Container>
     )
