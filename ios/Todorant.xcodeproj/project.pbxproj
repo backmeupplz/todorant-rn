@@ -43,7 +43,10 @@
 		BB3A79DE2425B0470014DE92 /* TodoRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79D22425B0470014DE92 /* TodoRoute.swift */; };
 		BB3A79E12425B0660014DE92 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */; };
 		BB3A79E22425B0660014DE92 /* String+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E02425B0660014DE92 /* String+Today.swift */; };
-		BB3A79E52425B2B90014DE92 /* KeychainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E42425B2B90014DE92 /* KeychainManager.m */; };
+		BB3A79E92425B6850014DE92 /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E72425B6850014DE92 /* KeychainItemAccessibility.swift */; };
+		BB3A79EA2425B6850014DE92 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */; };
+		BB3A79ED2425B71F0014DE92 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */; };
+		BB3A79F12425B9530014DE92 /* KeychainManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		CF3E6CD6D6B6474EBD791451 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 726ADF191BCC4DABA2BDD39F /* FontAwesome.ttf */; };
 		D60E3EF2395E4EDDBB5FF961 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8011F29EDD71472C976D89F7 /* Zocial.ttf */; };
@@ -131,8 +134,11 @@
 		BB3A79D22425B0470014DE92 /* TodoRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoRoute.swift; sourceTree = "<group>"; };
 		BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+AppFormat.swift"; sourceTree = "<group>"; };
 		BB3A79E02425B0660014DE92 /* String+Today.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Today.swift"; sourceTree = "<group>"; };
-		BB3A79E32425B2B90014DE92 /* KeychainManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainManager.h; sourceTree = "<group>"; };
-		BB3A79E42425B2B90014DE92 /* KeychainManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainManager.m; sourceTree = "<group>"; };
+		BB3A79E62425B6850014DE92 /* Todorant-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Todorant-Bridging-Header.h"; sourceTree = "<group>"; };
+		BB3A79E72425B6850014DE92 /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainItemAccessibility.swift; path = Pods/SwiftKeychainWrapper/SwiftKeychainWrapper/KeychainItemAccessibility.swift; sourceTree = "<group>"; };
+		BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Pods/SwiftKeychainWrapper/SwiftKeychainWrapper/KeychainWrapper.swift; sourceTree = "<group>"; };
+		BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainManagerBridge.m; sourceTree = "<group>"; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C72AEC71CCC0426695FAC0E7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		C994668131DC345D4AAF61E4 /* Pods-Todorant-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOS/Pods-Todorant-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,6 +175,7 @@
 		13B07FAE1A68108700A75B9A /* Todorant */ = {
 			isa = PBXGroup;
 			children = (
+				BB3A79EB2425B69B0014DE92 /* KeychainWrapper */,
 				BB3A79C62425B0240014DE92 /* Todorant.entitlements */,
 				BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -178,8 +185,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				BB3A79E32425B2B90014DE92 /* KeychainManager.h */,
-				BB3A79E42425B2B90014DE92 /* KeychainManager.m */,
+				BB3A79E62425B6850014DE92 /* Todorant-Bridging-Header.h */,
+				BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */,
+				BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */,
 			);
 			name = Todorant;
 			sourceTree = "<group>";
@@ -280,6 +288,15 @@
 			path = TodorantToday;
 			sourceTree = "<group>";
 		};
+		BB3A79EB2425B69B0014DE92 /* KeychainWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				BB3A79E72425B6850014DE92 /* KeychainItemAccessibility.swift */,
+				BB3A79E82425B6850014DE92 /* KeychainWrapper.swift */,
+			);
+			name = KeychainWrapper;
+			sourceTree = "<group>";
+		};
 		C62ED693B06A801A76FE692D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -354,6 +371,7 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = ACWP4F58HZ;
+						LastSwiftMigration = 1130;
 					};
 					BB3A79B32425AF000014DE92 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -538,9 +556,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3A79F12425B9530014DE92 /* KeychainManagerBridge.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				BB3A79ED2425B71F0014DE92 /* KeychainManager.swift in Sources */,
+				BB3A79E92425B6850014DE92 /* KeychainItemAccessibility.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				BB3A79E52425B2B90014DE92 /* KeychainManager.m in Sources */,
+				BB3A79EA2425B6850014DE92 /* KeychainWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,6 +613,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
@@ -605,6 +627,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app;
 				PRODUCT_NAME = Todorant;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todorant-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -616,6 +641,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
@@ -628,6 +654,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app;
 				PRODUCT_NAME = Todorant;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todorant-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
