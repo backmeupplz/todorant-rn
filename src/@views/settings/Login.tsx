@@ -13,9 +13,9 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Platform } from 'react-native'
 import appleAuth, {
+  AppleButton,
   AppleAuthRequestOperation,
   AppleAuthRequestScope,
-  AppleAuthCredentialState,
 } from '@invertase/react-native-apple-authentication'
 
 class LoginVM {
@@ -157,19 +157,16 @@ export class LoginContent extends Component<{
             <Text>{translate('loginFacebook')}</Text>
           </Button>
           {Platform.OS === 'ios' && (
-            <Button
+            <AppleButton
+              cornerRadius={5}
               style={{
-                justifyContent: 'center',
-                backgroundColor: 'black',
-                marginBottom: 10,
+                height: 50,
+                flex: 1,
               }}
+              buttonStyle={AppleButton.Style.BLACK}
+              buttonType={AppleButton.Type.SIGN_IN}
               onPress={this.vm.loginWithApple}
-              disabled={this.vm.loading}
-            >
-              <Text style={{ color: '#f9f9f9' }}>
-                {translate('loginApple')}
-              </Text>
-            </Button>
+            />
           )}
         </Content>
       </Container>
