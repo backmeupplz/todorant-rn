@@ -106,5 +106,6 @@
   "noTodosExistText": "Go on — create a few todos by clicking the plus button below!",
   "restorePurchases": "Restore purchases",
   "noPurchasesError": "Sorry, you don't have any purchases yet",
-  "appleSigninError": "Could not sign in with Apple"
+  "appleSigninError": "Could not sign in with Apple",
+  "syncDataHard": "Hard sync"
 }

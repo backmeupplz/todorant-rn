@@ -76,6 +76,16 @@ export class Data extends Component {
                 {translate('syncData')}
               </Text>
             </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                sockets.hardSync()
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('syncDataHard')}
+              </Text>
+            </ListItem>
           </List>
         </Content>
       </Container>

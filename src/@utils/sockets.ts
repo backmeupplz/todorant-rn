@@ -200,6 +200,14 @@ class SocketManager {
     this.globalSync()
   }
 
+  hardSync = () => {
+    if (!isHydrated()) {
+      return
+    }
+    sharedTodoStore.lastSyncDate = undefined
+    this.globalSync()
+  }
+
   globalSync = () => {
     if (!isHydrated()) {
       return
