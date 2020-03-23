@@ -25,6 +25,9 @@ class LoginVM {
     this.loading = true
     try {
       await GoogleSignin.hasPlayServices()
+      if (await GoogleSignin.isSignedIn()) {
+        await GoogleSignin.signOut()
+      }
       const googleUserInfo = await GoogleSignin.signIn()
       if (!googleUserInfo.idToken) {
         throw new Error(translate('googleTokenError'))

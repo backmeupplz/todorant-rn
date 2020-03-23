@@ -243,7 +243,10 @@ export function Settings() {
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{ title: 'login', ...sharedColors.headerExtraStyle }}
+            options={{
+              title: translate('pleaseLogin'),
+              ...sharedColors.headerExtraStyle,
+            }}
           />
           <Stack.Screen
             name="Sockets"

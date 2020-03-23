@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "989382323327-goj8ka1ncebajn0b07jtc3deq6grvtfv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todorant",
+            "certificate_hash": "e344b03d138077dce8efac3531489c5b5ca5560e"
+          }
+        },
+        {
+          "client_id": "989382323327-19g9e6uc24h9piseikmkvdtuuhpifsbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todorant",
+            "certificate_hash": "fbfca6df9d6ddfcf7d899c1654a7ae5bfd8df3fd"
+          }
+        },
+        {
           "client_id": "989382323327-jndhijr5u3nsredv4cemtlc9g8c1rdj1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
