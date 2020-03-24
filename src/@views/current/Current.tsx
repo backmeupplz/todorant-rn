@@ -16,6 +16,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
+import { LoginTelegram } from '@views/settings/LoginTelegram'
 
 const Stack = createStackNavigator()
 
@@ -197,6 +198,15 @@ export function Current() {
             component={PrivacyPolicy}
             options={{
               title: translate('privacyPolicy'),
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="LoginTelegram"
+            component={LoginTelegram}
+            options={{
+              title: translate('loginTelegram'),
+              headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
             }}
           />

@@ -29,6 +29,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { deleteAllTodos, addTodosEn, addTodosRu } from '@utils/debug'
+import { LoginTelegram } from './LoginTelegram'
 
 const Stack = createStackNavigator()
 
@@ -277,6 +278,15 @@ export function Settings() {
             component={Paywall}
             options={{
               title: translate('subscription'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="LoginTelegram"
+            component={LoginTelegram}
+            options={{
+              title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
             }}

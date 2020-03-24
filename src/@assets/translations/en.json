@@ -42,6 +42,7 @@
   "loginGoogle": "Login with Google",
   "loginFacebook": "Login with Facebook",
   "loginApple": "Login with Apple",
+  "loginTelegram": "Login with Telegram",
   "logoutText": "Would you like to logout?",
   "logout": "Logout",
   "login": "Login",

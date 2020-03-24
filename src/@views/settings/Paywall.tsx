@@ -129,7 +129,7 @@ export class Paywall extends Component {
                   <Text>
                     {product.localizedPrice}/
                     {product.productId ===
-                    (Platform.OS === 'android' ? 'monthly699' : 'monthly')
+                    (Platform.OS === 'android' ? 'todorant.monthly' : 'monthly')
                       ? 'month'
                       : Platform.OS === 'android'
                       ? 'year (16.6% discount)'

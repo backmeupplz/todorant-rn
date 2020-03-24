@@ -4,7 +4,7 @@ import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { goBack } from '@utils/navigation'
+import { goBack, navigate } from '@utils/navigation'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
@@ -171,6 +171,19 @@ export class LoginContent extends Component<{
               onPress={this.vm.loginWithApple}
             />
           )}
+          <Button
+            style={{
+              justifyContent: 'center',
+              backgroundColor: 'dodgerblue',
+              marginBottom: 10,
+            }}
+            onPress={() => {
+              navigate('LoginTelegram')
+            }}
+            disabled={this.vm.loading}
+          >
+            <Text>{translate('loginTelegram')}</Text>
+          </Button>
         </Content>
       </Container>
     )
