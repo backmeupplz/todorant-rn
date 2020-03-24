@@ -17,12 +17,34 @@ import { sharedColors } from '@utils/sharedColors'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
+import { SubscriptionStatus } from '@models/User'
 
 const Stack = createStackNavigator()
 
 class CurrentVM {
   @computed get currentTodo() {
     return sharedTodoStore.currentTodo
+  }
+}
+
+export function subscriptionStatusName(
+  subscriptionStatus?: SubscriptionStatus
+) {
+  switch (subscriptionStatus) {
+    case SubscriptionStatus.earlyAdopter:
+      return () => translate('earlyAdopter')
+    case SubscriptionStatus.active:
+      return () => translate('active')
+    case SubscriptionStatus.trial:
+      if (sharedSessionStore.isTrialOver) {
+        return () => translate('inactive')
+      } else {
+        return () => translate('trial')
+      }
+    case SubscriptionStatus.inactive:
+      return () => translate('inactive')
+    default:
+      return () => ''
   }
 }
 
@@ -125,7 +147,7 @@ class CurrentContent extends Component {
               navigate('Login', { loginWall: true })
             } else if (
               !sharedSessionStore.user?.token ||
-              sharedSessionStore.user?.isSubscriptionActive
+              sharedSessionStore.isSubscriptionActive
             ) {
               navigate('AddTodo')
             } else {

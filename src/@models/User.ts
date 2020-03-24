@@ -1,8 +1,5 @@
-import { translate } from '@utils/i18n'
 import { persist } from 'mobx-persist'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { daysBetween } from '@utils/daysBetween'
-import { computed, observable } from 'mobx'
+import { observable } from 'mobx'
 
 class Settings {
   @persist showTodayOnAddTodo?: boolean
@@ -20,27 +17,6 @@ export enum SubscriptionStatus {
   active = 'active',
   trial = 'trial',
   inactive = 'inactive',
-}
-
-export function subscriptionStatusName(
-  subscriptionStatus?: SubscriptionStatus
-) {
-  switch (subscriptionStatus) {
-    case SubscriptionStatus.earlyAdopter:
-      return () => translate('earlyAdopter')
-    case SubscriptionStatus.active:
-      return () => translate('active')
-    case SubscriptionStatus.trial:
-      if (sharedSessionStore.user?.isTrialOver) {
-        return () => translate('inactive')
-      } else {
-        return () => translate('trial')
-      }
-    case SubscriptionStatus.inactive:
-      return () => translate('inactive')
-    default:
-      return () => ''
-  }
 }
 
 export class User {
@@ -64,32 +40,6 @@ export class User {
   @persist @observable subscriptionId?: string
   @persist @observable appleReceipt?: string
   @persist @observable googleReceipt?: string
-
-  @computed get isSubscriptionActive() {
-    return (
-      this.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
-      this.subscriptionStatus === SubscriptionStatus.active ||
-      (this.subscriptionStatus === SubscriptionStatus.trial &&
-        !this.isTrialOver)
-    )
-  }
-
-  @computed get isTrialOver() {
-    return this.daysLeftOfTrial < 0
-  }
-
-  @computed get daysLeftOfTrial() {
-    return 30 - daysBetween(this.createdAt, new Date())
-  }
-
-  @computed get hasPurchased() {
-    return (
-      !!this.subscriptionId ||
-      !!this.appleSubId ||
-      !!this.appleReceipt ||
-      !!this.googleReceipt
-    )
-  }
 }
 
 export function areUsersPartiallyEqual(user: User, anotherUser: User) {

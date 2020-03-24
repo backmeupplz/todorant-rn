@@ -1,7 +1,8 @@
+import { daysBetween } from '@utils/daysBetween'
 import { hydrateStore } from '@utils/hydrated'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sockets } from '@utils/sockets'
-import { User, areUsersPartiallyEqual } from '@models/User'
+import { User, areUsersPartiallyEqual, SubscriptionStatus } from '@models/User'
 import { persist } from 'mobx-persist'
 import { observable, computed } from 'mobx'
 import { hydrate } from '@utils/hydrate'
@@ -16,6 +17,32 @@ class SessionStore {
     const monthAgo = new Date()
     monthAgo.setMonth(monthAgo.getMonth() - 1)
     return !this.appInstalled || this.appInstalled < monthAgo
+  }
+
+  @computed get isSubscriptionActive() {
+    return (
+      this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
+      this.user?.subscriptionStatus === SubscriptionStatus.active ||
+      (this.user?.subscriptionStatus === SubscriptionStatus.trial &&
+        !this.isTrialOver)
+    )
+  }
+
+  @computed get isTrialOver() {
+    return this.daysLeftOfTrial < 0
+  }
+
+  @computed get daysLeftOfTrial() {
+    return 30 - daysBetween(this.user?.createdAt || new Date(), new Date())
+  }
+
+  @computed get hasPurchased() {
+    return (
+      !!this.user?.subscriptionId ||
+      !!this.user?.appleSubId ||
+      !!this.user?.appleReceipt ||
+      !!this.user?.googleReceipt
+    )
   }
 
   hydrated = false

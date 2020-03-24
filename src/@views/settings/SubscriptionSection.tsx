@@ -3,9 +3,10 @@ import { Button, Text, ListItem, View } from 'native-base'
 import { observer } from 'mobx-react'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { subscriptionStatusName, SubscriptionStatus } from '@models/User'
+import { SubscriptionStatus } from '@models/User'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { subscriptionStatusName } from '@views/current/Current'
 
 @observer
 export class SubscriptionSection extends Component {
@@ -32,18 +33,18 @@ export class SubscriptionSection extends Component {
             </Text>
             {sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
-              !sharedSessionStore.user?.isTrialOver && (
+              !sharedSessionStore.isTrialOver && (
                 <Text
                   style={{ color: sharedColors.placeholderColor, fontSize: 12 }}
                 >
                   {translate('daysLeft')}
-                  {sharedSessionStore.user?.daysLeftOfTrial}
+                  {sharedSessionStore.daysLeftOfTrial}
                 </Text>
               )}
           </View>
         </ListItem>
         {sharedSessionStore.user?.token &&
-          (!sharedSessionStore.user?.isSubscriptionActive ||
+          (!sharedSessionStore.isSubscriptionActive ||
             sharedSessionStore.user.subscriptionStatus ===
               SubscriptionStatus.trial) && (
             <ListItem style={{ borderColor: sharedColors.placeholderColor }}>

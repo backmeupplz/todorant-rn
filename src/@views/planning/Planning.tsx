@@ -12,7 +12,7 @@ import { navigate } from '@utils/navigation'
 import { AddTodo } from '@views/add/AddTodo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { sockets } from '@utils/sockets'
 import { realm } from '@utils/realm'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -267,7 +267,7 @@ class PlanningContent extends Component {
             data={this.vm.todosWithSections}
             renderItem={({ item, index, drag, isActive }) =>
               item.title ? (
-                <TouchableHighlight
+                <TouchableWithoutFeedback
                   key={index}
                   onLongPress={
                     sharedAppStateStore.todoSection === TodoSectionType.planning
@@ -286,18 +286,15 @@ class PlanningContent extends Component {
                   >
                     {item.title}
                   </Text>
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
               ) : Platform.OS === 'android' ? (
-                <TouchableHighlight
+                <TouchableWithoutFeedback
                   key={index}
                   onLongPress={
                     sharedAppStateStore.todoSection === TodoSectionType.planning
                       ? drag
                       : undefined
                   }
-                  onPress={() => {
-                    navigate('EditTodo', { editedTodo: item.item })
-                  }}
                   style={{ padding: isActive ? 10 : 0 }}
                 >
                   <TodoCard
@@ -315,7 +312,7 @@ class PlanningContent extends Component {
                         : undefined
                     }
                   />
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
               ) : (
                 <View style={{ padding: isActive ? 10 : 0 }}>
                   <TodoCard
@@ -370,7 +367,7 @@ class PlanningContent extends Component {
               navigate('Login', { loginWall: true })
             } else if (
               !sharedSessionStore.user?.token ||
-              sharedSessionStore.user?.isSubscriptionActive
+              sharedSessionStore.isSubscriptionActive
             ) {
               navigate('AddTodo')
             } else {

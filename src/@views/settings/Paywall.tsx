@@ -70,7 +70,7 @@ export class Paywall extends Component {
             SubscriptionStatus.inactive ||
             (sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
-              sharedSessionStore.user?.isTrialOver)) && (
+              sharedSessionStore.isTrialOver)) && (
             <Text {...sharedColors.textExtraStyle}>
               {translate('endTrialText')}
             </Text>
@@ -81,7 +81,7 @@ export class Paywall extends Component {
               <Text {...sharedColors.textExtraStyle}>
                 {translate('earlyAdopterText')}
               </Text>
-              {sharedSessionStore.user?.hasPurchased && (
+              {sharedSessionStore.hasPurchased && (
                 <Text {...sharedColors.textExtraStyle}>
                   {translate('earlyAdopterTextBonus')}
                 </Text>
@@ -90,7 +90,7 @@ export class Paywall extends Component {
           )}
           {sharedSessionStore.user?.subscriptionStatus ===
             SubscriptionStatus.trial &&
-            !sharedSessionStore.user.isTrialOver && (
+            !sharedSessionStore.isTrialOver && (
               <Text {...sharedColors.textExtraStyle}>
                 {translate('trialText')}
               </Text>
@@ -106,7 +106,7 @@ export class Paywall extends Component {
             {translate('signature')}
           </Text>
           {(this.vm.loading || purchaseListener.isPurchasing) && <Spinner />}
-          {!sharedSessionStore.user?.hasPurchased && (
+          {!sharedSessionStore.hasPurchased && (
             <>
               {this.vm.products.map((product, i) => (
                 <Button

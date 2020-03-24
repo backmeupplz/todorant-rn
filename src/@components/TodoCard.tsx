@@ -19,7 +19,7 @@ import moment from 'moment'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const showDebugInfo = false
 
@@ -227,12 +227,7 @@ export class TodoCard extends Component<{
             </Body>
           </CardItem>
         ) : (
-          <TouchableHighlight
-            onLongPress={this.props.drag}
-            onPress={() => {
-              navigate('EditTodo', { editedTodo: this.props.todo })
-            }}
-          >
+          <TouchableWithoutFeedback onLongPress={this.props.drag}>
             <CardItem
               style={{
                 backgroundColor: this.isOld
@@ -247,7 +242,7 @@ export class TodoCard extends Component<{
                 <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
               </Body>
             </CardItem>
-          </TouchableHighlight>
+          </TouchableWithoutFeedback>
         )}
         <CardItem
           footer
