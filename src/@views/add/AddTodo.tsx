@@ -33,6 +33,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Platform } from 'react-native'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -373,8 +374,10 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 value={this.props.vm.timePickerValue || new Date()}
                 mode="time"
                 onChange={(event, date) => {
-                  this.props.vm.showTimePicker = false
-                  if (event.type === 'set') {
+                  if (Platform.OS === 'android') {
+                    this.props.vm.showTimePicker = false
+                  }
+                  if (event.type === 'set' || Platform.OS === 'ios') {
                     this.props.vm.timePickerValue = date
                   }
                 }}
