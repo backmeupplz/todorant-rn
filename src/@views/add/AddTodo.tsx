@@ -23,7 +23,6 @@ import {
 } from '@utils/time'
 import MonthPicker from 'react-native-month-picker'
 import moment, { Moment } from 'moment'
-import { colors } from '@utils/colors'
 import { Todo, getTitle } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
@@ -289,6 +288,15 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   this.props.vm.datePickerValue = day.dateString
                   this.props.vm.showDatePicker = false
                 }}
+                theme={{
+                  backgroundColor: sharedColors.backgroundColor,
+                  calendarBackground: sharedColors.backgroundColor,
+                  selectedDayBackgroundColor: 'dodgerblue',
+                  textDisabledColor: sharedColors.placeholderColor,
+                  dayTextColor: sharedColors.textColor,
+                  textSectionTitleColor: sharedColors.textColor,
+                  monthTextColor: sharedColors.textColor,
+                }}
               />
             )}
             <Item
@@ -327,6 +335,35 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }}
                 minDate={moment()}
                 maxDate={moment().add(100, 'years')}
+                containerStyle={{
+                  backgroundColor: sharedColors.backgroundColor,
+                }}
+                monthTextStyle={sharedColors.textExtraStyle.style}
+                yearTextStyle={sharedColors.textExtraStyle.style}
+                selectedBackgroundColor={sharedColors.primaryColor}
+                selectedMonthTextStyle={{
+                  color: sharedColors.invertedTextColor,
+                }}
+                monthDisabledStyle={{ color: sharedColors.placeholderColor }}
+                seperatorColor={sharedColors.placeholderColor}
+                nextIcon={
+                  <Icon
+                    type="MaterialIcons"
+                    name="keyboard-arrow-right"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                }
+                prevIcon={
+                  <Icon
+                    type="MaterialIcons"
+                    name="keyboard-arrow-left"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                }
               />
             )}
             {this.props.vm.showMore && (
