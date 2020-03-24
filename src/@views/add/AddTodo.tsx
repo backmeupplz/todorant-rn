@@ -308,6 +308,16 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   this.props.vm.date = undefined
                 }
                 this.props.vm.showDatePicker = false
+                if (
+                  !this.props.vm.monthAndYear &&
+                  this.props.vm.showMonthAndYearPicker
+                ) {
+                  this.props.vm.monthAndYear = getDateMonthAndYearString(
+                    moment()
+                      .add(1, 'month')
+                      .toDate()
+                  )
+                }
               }}
               style={{
                 paddingVertical: 16,
@@ -333,7 +343,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 onMonthChange={(date: Moment) => {
                   this.props.vm.monthAndYearPickerValue = date.toDate()
                 }}
-                minDate={moment()}
+                minDate={moment().add(1, 'month')}
                 maxDate={moment().add(100, 'years')}
                 containerStyle={{
                   backgroundColor: sharedColors.backgroundColor,
