@@ -160,16 +160,18 @@ export class LoginContent extends Component<{
             <Text>{translate('loginFacebook')}</Text>
           </Button>
           {Platform.OS === 'ios' && (
-            <AppleButton
-              cornerRadius={5}
-              style={{
-                height: 50,
-                flex: 1,
-              }}
-              buttonStyle={AppleButton.Style.BLACK}
-              buttonType={AppleButton.Type.SIGN_IN}
-              onPress={this.vm.loginWithApple}
-            />
+            <View style={{ paddingBottom: 10 }}>
+              <AppleButton
+                cornerRadius={5}
+                style={{
+                  height: 50,
+                  flex: 1,
+                }}
+                buttonStyle={AppleButton.Style.BLACK}
+                buttonType={AppleButton.Type.SIGN_IN}
+                onPress={this.vm.loginWithApple}
+              />
+            </View>
           )}
           <Button
             style={{

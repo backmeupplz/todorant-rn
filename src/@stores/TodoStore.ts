@@ -89,9 +89,7 @@ class TodoStore {
     }, {} as { [index: string]: Todo })
     const todosChangedLocally = this.lastSyncDate
       ? this.allTodos.filtered(
-          `updatedAt > ${moment(this.lastSyncDate).format(
-            'YYYY-MM-DDTHH:mm:ss'
-          )}`
+          `updatedAt > ${realmTimestampFromDate(this.lastSyncDate)}`
         )
       : this.allTodos
     // Pull
@@ -164,6 +162,10 @@ class TodoStore {
     )
     return todos.length ? todos[0] : undefined
   }
+}
+
+function realmTimestampFromDate(date: Date) {
+  return `T${Math.floor(date.getTime() / 1000)}:000`
 }
 
 export const sharedTodoStore = new TodoStore()
