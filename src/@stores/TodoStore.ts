@@ -131,6 +131,11 @@ class TodoStore {
         todoToPush._tempSyncId = uuid()
       }
     })
+    if (!todosToPush.length) {
+      // Refresh
+      this.refreshTodos()
+      return
+    }
     const savedPushedTodos = await pushBack(todosToPush.map(v => ({ ...v })))
     // Modify dates
     savedPushedTodos.forEach(todo => {
