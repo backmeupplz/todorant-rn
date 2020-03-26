@@ -12,11 +12,16 @@ export const translate = memoize(
   (key, config?) => (config ? key + JSON.stringify(config) : key)
 )
 
-export function setI18nConfig() {
+export function getLanguageTag() {
   const fallback = { languageTag: 'en' }
   const { languageTag } =
     RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
     fallback
+  return languageTag
+}
+
+export function setI18nConfig() {
+  const languageTag = getLanguageTag()
 
   if (translate.cache.clear) {
     translate.cache.clear()

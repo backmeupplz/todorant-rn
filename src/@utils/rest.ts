@@ -1,29 +1,51 @@
 import { User } from '@models/User'
 import axios from 'axios'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { Platform } from 'react-native'
 
 const base = __DEV__
   ? 'http://192.168.31.27:1337'
   : 'https://backend.todorant.com'
 
+const extraParams =
+  Platform.OS === 'ios'
+    ? {
+        fromApple: true,
+        appleReceipt: sharedSessionStore.localAppleReceipt,
+      }
+    : {}
+
+function cleanLocalAppleReceipt() {
+  sharedSessionStore.localAppleReceipt = undefined
+}
+
 export function loginGoogle(accessToken: string) {
-  return axios.post<User>(`${base}/login/google`, {
-    accessToken,
-  })
+  return axios
+    .post<User>(`${base}/login/google`, {
+      accessToken,
+      ...extraParams,
+    })
+    .then(cleanLocalAppleReceipt)
 }
 
 export function loginFacebook(accessToken: string) {
-  return axios.post<User>(`${base}/login/facebook`, {
-    accessToken,
-  })
+  return axios
+    .post<User>(`${base}/login/facebook`, {
+      accessToken,
+      ...extraParams,
+    })
+    .then(cleanLocalAppleReceipt)
 }
 
 export function loginApple(code: string, user?: any) {
-  return axios.post<User>(`${base}/login/apple`, {
-    client: 'ios',
-    code,
-    user,
-  })
+  return axios
+    .post<User>(`${base}/login/apple`, {
+      client: 'ios',
+      code,
+      user,
+      ...extraParams,
+    })
+    .then(cleanLocalAppleReceipt)
 }
 
 export function verifyPurchaseGoogle(payload: {

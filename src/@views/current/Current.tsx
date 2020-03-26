@@ -18,6 +18,7 @@ import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { SubscriptionStatus } from '@models/User'
+import { plusButtonAction } from '@utils/plusButtonAction'
 
 const Stack = createStackNavigator()
 
@@ -36,7 +37,10 @@ export function subscriptionStatusName(
     case SubscriptionStatus.active:
       return () => translate('active')
     case SubscriptionStatus.trial:
-      if (sharedSessionStore.isTrialOver) {
+      if (
+        sharedSessionStore.isTrialOver ||
+        sharedSessionStore.user?.createdOnApple
+      ) {
         return () => translate('inactive')
       } else {
         return () => translate('trial')
@@ -139,21 +143,7 @@ class CurrentContent extends Component {
         <ActionButton
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}
-          onPress={() => {
-            if (
-              !sharedSessionStore.user?.token &&
-              sharedSessionStore.appInstalledMonthAgo
-            ) {
-              navigate('Login', { loginWall: true })
-            } else if (
-              !sharedSessionStore.user?.token ||
-              sharedSessionStore.isSubscriptionActive
-            ) {
-              navigate('AddTodo')
-            } else {
-              navigate('Paywall')
-            }
-          }}
+          onPress={plusButtonAction}
         />
       </Container>
     )

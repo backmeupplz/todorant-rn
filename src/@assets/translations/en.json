@@ -108,5 +108,17 @@
   "restorePurchases": "Restore purchases",
   "noPurchasesError": "Sorry, you don't have any purchases yet",
   "appleSigninError": "Could not sign in with Apple",
-  "syncDataHard": "Hard sync"
+  "syncDataHard": "Hard sync",
+  "firstDayOfWeek": "First day of a week",
+  "weekday1": "Monday",
+  "weekday2": "Tuesday",
+  "weekday3": "Wednesday",
+  "weekday4": "Thursday",
+  "weekday5": "Friday",
+  "weekday6": "Saturday",
+  "weekday0": "Sunday",
+
+  "appleUnauthorizedText": "I have to ask you to start the trial by selecting an option below because Apple requires all trial periods to be managed by Apple in-app purchases when the account is created on an Apple device. If you already have an active subscription, please, login to you account in Settings. I am sorry for the inconvenience, but Apple did not want to approve Todorant otherwise.",
+  "appleUnauthorizedTextGoodNews": "Good news though: you will not be charged until the 30 days trial is finished.",
+  "appleUnauthorizedButtonExtra": "30 days free trial, then"
 }

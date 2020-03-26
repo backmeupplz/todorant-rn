@@ -33,6 +33,7 @@ export class SubscriptionSection extends Component {
             </Text>
             {sharedSessionStore.user?.subscriptionStatus ===
               SubscriptionStatus.trial &&
+              !sharedSessionStore.user.createdOnApple &&
               !sharedSessionStore.isTrialOver && (
                 <Text
                   style={{ color: sharedColors.placeholderColor, fontSize: 12 }}

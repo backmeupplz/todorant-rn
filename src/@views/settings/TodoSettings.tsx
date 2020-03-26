@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListItem, Text } from 'native-base'
+import { ListItem, Text, ActionSheet } from 'native-base'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sockets } from '@utils/sockets'
 import { observer } from 'mobx-react'
@@ -47,6 +47,38 @@ export class TodoSettings extends Component {
               sockets.settingsSyncManager.sync()
             }}
           />
+        </ListItem>
+        <ListItem
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+          }}
+          onPress={() => {
+            ActionSheet.show(
+              {
+                options: [0, 1, 2, 3, 4, 5, 6]
+                  .map(v => translate(`weekday${v}`))
+                  .concat([translate('cancel')]),
+                cancelButtonIndex: 7,
+                destructiveButtonIndex: 7,
+                title: '',
+              },
+              i => {
+                if (i < 7) {
+                  sharedSettingsStore.firstDayOfWeek = i
+                  sharedSettingsStore.updatedAt = new Date()
+                  sockets.settingsSyncManager.sync()
+                }
+              }
+            )
+          }}
+        >
+          <Text {...sharedColors.textExtraStyle}>
+            {translate('firstDayOfWeek')}
+          </Text>
+          <Text {...sharedColors.textExtraStyle}>
+            {translate(`weekday${sharedSettingsStore.firstDayOfWeekSafe}`)}
+          </Text>
         </ListItem>
       </>
     )

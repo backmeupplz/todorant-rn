@@ -135,6 +135,7 @@ android {
         versionCode 20
         versionName "1.0.17"
         multiDexEnabled true
+        testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -203,6 +204,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    androidTestImplementation 'tools.fastlane:screengrab:1.0.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
+    androidTestImplementation 'androidx.test:rules:1.2.0-beta01'
 }
 
 // Run this once to be able to run the application with BUCK

@@ -1,8 +1,9 @@
 import { Settings } from '@models/Settings'
 import { persist } from 'mobx-persist'
-import { observable } from 'mobx'
+import { observable, computed } from 'mobx'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
+import { getLanguageTag } from '@utils/i18n'
 
 class SettingsStore {
   hydrated = false
@@ -12,6 +13,14 @@ class SettingsStore {
   @persist @observable showTodayOnAddTodo?: boolean
   @persist @observable firstDayOfWeek?: number
   @persist @observable newTodosGoFirst?: boolean
+
+  @computed get firstDayOfWeekSafe() {
+    return this.firstDayOfWeek === undefined
+      ? getLanguageTag() === 'en'
+        ? 0
+        : 1
+      : this.firstDayOfWeek
+  }
 
   onObjectsFromServer = async (
     settings: Settings,

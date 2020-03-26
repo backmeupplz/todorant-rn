@@ -109,5 +109,13 @@
   "restorePurchases": "Восстановить покупки",
   "noPurchasesError": "Простите, но у вас пока нет покупок",
   "appleSigninError": "Не получилось зайти через Эппл",
-  "syncDataHard": "Принудительная синхронизация"
+  "syncDataHard": "Принудительная синхронизация",
+  "firstDayOfWeek": "Первый день недели",
+  "weekday1": "Понедельник",
+  "weekday2": "Вторник",
+  "weekday3": "Среда",
+  "weekday4": "Четверг",
+  "weekday5": "Пятница",
+  "weekday6": "Суббота",
+  "weekday0": "Воскресенье"
 }

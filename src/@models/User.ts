@@ -40,6 +40,8 @@ export class User {
   @persist @observable subscriptionId?: string
   @persist @observable appleReceipt?: string
   @persist @observable googleReceipt?: string
+
+  @persist @observable createdOnApple?: boolean
 }
 
 export function areUsersPartiallyEqual(user: User, anotherUser: User) {

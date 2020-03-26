@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Container, Text, Segment, Button, Icon, H1, View } from 'native-base'
 import { computed } from 'mobx'
-import { Todo, compareTodos, getTitle } from '@models/Todo'
+import { Todo, compareTodos, getTitle, isTodoOld } from '@models/Todo'
 import { observer, Observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { isDateTooOld, getDateString } from '@utils/time'
@@ -24,6 +24,7 @@ import { Platform } from 'react-native'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
+import { plusButtonAction } from '@utils/plusButtonAction'
 
 const Stack = createStackNavigator()
 
@@ -231,10 +232,17 @@ class PlanningVM {
           todo.monthAndYear !== currentMonthAndYear ||
           todo.date !== currentDate
         ) {
+          const failed = isTodoOld(todo)
           realm.write(() => {
             todo.order = orderCounter
             todo.monthAndYear = currentMonthAndYear
             todo.date = currentDate
+            if (failed) {
+              todo.frogFails++
+              if (todo.frogFails > 1) {
+                todo.frog = true
+              }
+            }
           })
         }
         orderCounter++
@@ -359,21 +367,7 @@ class PlanningContent extends Component {
         <ActionButton
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}
-          onPress={() => {
-            if (
-              !sharedSessionStore.user?.token &&
-              sharedSessionStore.appInstalledMonthAgo
-            ) {
-              navigate('Login', { loginWall: true })
-            } else if (
-              !sharedSessionStore.user?.token ||
-              sharedSessionStore.isSubscriptionActive
-            ) {
-              navigate('AddTodo')
-            } else {
-              navigate('Paywall')
-            }
-          }}
+          onPress={plusButtonAction}
         />
       </Container>
     )

@@ -9,6 +9,7 @@ import { observable } from 'mobx'
 import * as rest from '@utils/rest'
 import { alertError } from './alert'
 import { Platform } from 'react-native'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 class PurchaseListener {
   @observable isPurchasing = false
@@ -19,11 +20,12 @@ class PurchaseListener {
 
 export const purchaseListener = new PurchaseListener()
 
-export function getProducts() {
+export function getProducts(skus?: string[]) {
   return RNIap.getSubscriptions(
-    Platform.OS === 'android'
-      ? ['todorant.monthly', 'todorant.yearly']
-      : ['monthly', 'yearly']
+    skus ||
+      (Platform.OS === 'android'
+        ? ['todorant.monthly', 'todorant.yearly']
+        : ['monthly', 'yearly'])
   )
 }
 
@@ -39,7 +41,11 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
           purchaseToken: purchase.purchaseToken,
         })
       } else {
-        await rest.verifyPurchaseApple(purchase.transactionReceipt)
+        if (sharedSessionStore.user) {
+          await rest.verifyPurchaseApple(purchase.transactionReceipt)
+        } else {
+          sharedSessionStore.localAppleReceipt = purchase.transactionReceipt
+        }
       }
       await RNIap.finishTransaction(purchase, false)
     } else {

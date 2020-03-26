@@ -12,6 +12,7 @@ import { setToken, removeToken } from '@utils/keychain'
 class SessionStore {
   @persist('date') @observable appInstalled = new Date()
   @persist('object', User) @observable user?: User
+  @persist @observable localAppleReceipt?: string
 
   @computed get appInstalledMonthAgo() {
     const monthAgo = new Date()
@@ -24,6 +25,7 @@ class SessionStore {
       this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
       this.user?.subscriptionStatus === SubscriptionStatus.active ||
       (this.user?.subscriptionStatus === SubscriptionStatus.trial &&
+        !this.user?.createdOnApple &&
         !this.isTrialOver)
     )
   }

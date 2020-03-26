@@ -23,7 +23,7 @@ import {
 } from '@utils/time'
 import MonthPicker from 'react-native-month-picker'
 import moment, { Moment } from 'moment'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo, getTitle, isTodoOld } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -297,6 +297,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   textSectionTitleColor: sharedColors.textColor,
                   monthTextColor: sharedColors.textColor,
                 }}
+                firstDay={sharedSettingsStore.firstDayOfWeekSafe}
               />
             )}
             <Item
@@ -560,6 +561,7 @@ class AddTodoContent extends Component<{
         }
       } else if (vm.editedTodo) {
         const oldTitle = getTitle(vm.editedTodo)
+        const failed = isTodoOld(vm.editedTodo)
 
         realm.write(() => {
           if (!vm.editedTodo) {
@@ -574,6 +576,12 @@ class AddTodoContent extends Component<{
           vm.editedTodo.time = vm.time
           vm.editedTodo.updatedAt = new Date()
           vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
+          if (failed) {
+            vm.editedTodo.frogFails++
+            if (vm.editedTodo.frogFails > 1) {
+              vm.editedTodo.frog = true
+            }
+          }
         })
 
         titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))

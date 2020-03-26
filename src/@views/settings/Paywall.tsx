@@ -18,6 +18,7 @@ import { sharedColors } from '@utils/sharedColors'
 import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
 import { navigate } from '@utils/navigation'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -26,7 +27,12 @@ class PaywallVM {
 }
 
 @observer
-export class Paywall extends Component {
+class PaywallContent extends Component<{
+  route: RouteProp<
+    Record<string, { type: string | undefined } | undefined>,
+    string
+  >
+}> {
   vm = new PaywallVM()
 
   async componentDidMount() {
@@ -46,7 +52,12 @@ export class Paywall extends Component {
 
     this.vm.loading = true
     try {
-      this.vm.products = await getProducts()
+      this.vm.products = await getProducts(
+        Platform.OS === 'ios' &&
+          this.props.route.params?.type === 'appleUnauthorized'
+          ? ['monthly.with.trial', 'yearly.with.trial']
+          : undefined
+      )
     } catch (err) {
       alertError(err)
     } finally {
@@ -60,52 +71,77 @@ export class Paywall extends Component {
         <Content
           style={{ padding: 16, backgroundColor: sharedColors.backgroundColor }}
         >
-          {sharedSessionStore.user?.subscriptionStatus ===
-            SubscriptionStatus.active && (
-            <Text {...sharedColors.textExtraStyle}>
-              {translate('activeText')}
-            </Text>
-          )}
-          {(sharedSessionStore.user?.subscriptionStatus ===
-            SubscriptionStatus.inactive ||
-            (sharedSessionStore.user?.subscriptionStatus ===
-              SubscriptionStatus.trial &&
-              sharedSessionStore.isTrialOver)) && (
-            <Text {...sharedColors.textExtraStyle}>
-              {translate('endTrialText')}
-            </Text>
-          )}
-          {sharedSessionStore.user?.subscriptionStatus ===
-            SubscriptionStatus.earlyAdopter && (
-            <Text {...sharedColors.textExtraStyle}>
+          {this.props.route.params?.type === 'appleUnauthorized' ? (
+            <>
               <Text {...sharedColors.textExtraStyle}>
-                {translate('earlyAdopterText')}
+                {translate('appleUnauthorizedText')}
               </Text>
-              {sharedSessionStore.hasPurchased && (
+              <Text style={{ color: sharedColors.textColor, marginTop: 10 }}>
+                {translate('appleUnauthorizedTextGoodNews')}
+              </Text>
+              <Text
+                style={{
+                  flex: 1,
+                  paddingVertical: 16,
+                  textAlign: 'right',
+                  ...sharedColors.textExtraStyle.style,
+                }}
+              >
+                {translate('signature')}
+              </Text>
+            </>
+          ) : (
+            <>
+              {sharedSessionStore.user?.subscriptionStatus ===
+                SubscriptionStatus.active && (
                 <Text {...sharedColors.textExtraStyle}>
-                  {translate('earlyAdopterTextBonus')}
+                  {translate('activeText')}
                 </Text>
               )}
-            </Text>
-          )}
-          {sharedSessionStore.user?.subscriptionStatus ===
-            SubscriptionStatus.trial &&
-            !sharedSessionStore.isTrialOver && (
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('trialText')}
+              {(sharedSessionStore.user?.subscriptionStatus ===
+                SubscriptionStatus.inactive ||
+                (sharedSessionStore.user?.subscriptionStatus ===
+                  SubscriptionStatus.trial &&
+                  sharedSessionStore.isTrialOver)) && (
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('endTrialText')}
+                </Text>
+              )}
+              {sharedSessionStore.user?.subscriptionStatus ===
+                SubscriptionStatus.earlyAdopter && (
+                <Text {...sharedColors.textExtraStyle}>
+                  <Text {...sharedColors.textExtraStyle}>
+                    {translate('earlyAdopterText')}
+                  </Text>
+                  {sharedSessionStore.hasPurchased && (
+                    <Text {...sharedColors.textExtraStyle}>
+                      {translate('earlyAdopterTextBonus')}
+                    </Text>
+                  )}
+                </Text>
+              )}
+              {sharedSessionStore.user?.subscriptionStatus ===
+                SubscriptionStatus.trial &&
+                !sharedSessionStore.isTrialOver && (
+                  <Text {...sharedColors.textExtraStyle}>
+                    {translate('trialText')}
+                  </Text>
+                )}
+              <Text
+                style={{
+                  flex: 1,
+                  paddingVertical: 16,
+                  textAlign: 'right',
+                  ...sharedColors.textExtraStyle.style,
+                }}
+              >
+                {translate('signature')}
               </Text>
-            )}
-          <Text
-            style={{
-              flex: 1,
-              paddingVertical: 16,
-              textAlign: 'right',
-              ...sharedColors.textExtraStyle.style,
-            }}
-          >
-            {translate('signature')}
-          </Text>
-          {(this.vm.loading || purchaseListener.isPurchasing) && <Spinner />}
+              {(this.vm.loading || purchaseListener.isPurchasing) && (
+                <Spinner />
+              )}
+            </>
+          )}
           {!sharedSessionStore.hasPurchased && (
             <>
               {this.vm.products.map((product, i) => (
@@ -114,6 +150,10 @@ export class Paywall extends Component {
                     justifyContent: 'center',
                     flexDirection: 'column',
                     marginTop: 16,
+                    height:
+                      this.props.route.params?.type === 'appleUnauthorized'
+                        ? 75
+                        : undefined,
                   }}
                   onPress={() => {
                     purchase(product.productId)
@@ -121,6 +161,9 @@ export class Paywall extends Component {
                   disabled={purchaseListener.isPurchasing}
                   key={i}
                 >
+                  {this.props.route.params?.type === 'appleUnauthorized' && (
+                    <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
+                  )}
                   <Text>
                     {Platform.OS === 'android'
                       ? product.title.toLowerCase().replace(' (todorant x)', '')
@@ -128,8 +171,7 @@ export class Paywall extends Component {
                   </Text>
                   <Text>
                     {product.localizedPrice}/
-                    {product.productId ===
-                    (Platform.OS === 'android' ? 'todorant.monthly' : 'monthly')
+                    {product.productId.includes('monthly')
                       ? 'month'
                       : Platform.OS === 'android'
                       ? 'year (16.6% discount)'
@@ -188,4 +230,11 @@ export class Paywall extends Component {
       </Container>
     )
   }
+}
+
+export const Paywall = () => {
+  const route = useRoute<
+    RouteProp<Record<string, { type: string | undefined } | undefined>, string>
+  >()
+  return <PaywallContent route={route} />
 }
