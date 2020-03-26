@@ -21,6 +21,18 @@ export function plusButtonAction() {
   ) {
     navigate('AddTodo')
   } else {
-    navigate('Paywall')
+    navigate(
+      'Paywall',
+      sharedSessionStore.user.createdOnApple &&
+        sharedSessionStore.user.createdAt >= daysAgo(14)
+        ? { type: 'appleUnauthorized' }
+        : undefined
+    )
   }
+}
+
+function daysAgo(count: number) {
+  const date = new Date()
+  date.setDate(date.getDate() - count)
+  return date
 }

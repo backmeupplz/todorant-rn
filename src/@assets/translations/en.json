@@ -49,7 +49,7 @@
   "alreadyRegistered": "(You are already registered)",
   "purchaseError": "Error purchasing",
   "purchaseThankYou": "Thank you",
-  "purchaseThankYouText": "Thahk you for purchasing the subscription!",
+  "purchaseThankYouText": "Thank you for purchasing the subscription!",
   "activeText": "🎉 Thank you a lot for supporting Todorant! I personally hope that Todorant has improved your life already and will keep making it better in future! You support allows me to work on Todorant daily and to add new features simplifying the work and freeing your time and your cognitive resources. Thank you a lot, again!",
   "endTrialText": "🐝 It looks like your Todorant trial has come to the end. This is the awkward moment when you have to decide — whether Todorant has improved your life enough to spend money on it — and I have to navigate you towards the right decision. I am at the peak of my happines when I am able to bring value to the people; and if Todorant was able to make your life better, I will be more than thankful if you buy the subscription. It is just $5/month for the unlimited productivity and free mind. Every cent I earn on Todorant will be spent on improving the service. By supporting Todorant — you allow me, independent developer, to keep improving the product that benefits us all from day to day. Thank you a lot in advance!",
   "earlyAdopterText": "👏👏 — this is me applauding you; you — the crazy ones who agreed to try out the instrument of ever increasing productivity, Todorant, among the first. One can say that you are the golden thousand, feedback of whom was shaping the Todorant from the very beginning. You have all the rights to use Todorant as much as you wish — you will never experience any limits, you have earned it. However, if you noticed that Todorant has drastically improved your life — you can still buy the subscription thus saying the best kind of \"Thank you\". You will never loose the \"Early adopter 🦄\" status — but will always be able to cancel the subscription. Thank you a lot for still using Todorant — and I will keep adding new features improving the product that positively affects all of us. Good luck!",
@@ -117,7 +117,6 @@
   "weekday5": "Friday",
   "weekday6": "Saturday",
   "weekday0": "Sunday",
-
   "appleUnauthorizedText": "I have to ask you to start the trial by selecting an option below because Apple requires all trial periods to be managed by Apple in-app purchases when the account is created on an Apple device. If you already have an active subscription, please, login to you account in Settings. I am sorry for the inconvenience, but Apple did not want to approve Todorant otherwise.",
   "appleUnauthorizedTextGoodNews": "Good news though: you will not be charged until the 30 days trial is finished.",
   "appleUnauthorizedButtonExtra": "30 days free trial, then"
