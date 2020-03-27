@@ -102,7 +102,8 @@ class PaywallContent extends Component<{
                 SubscriptionStatus.inactive ||
                 (sharedSessionStore.user?.subscriptionStatus ===
                   SubscriptionStatus.trial &&
-                  sharedSessionStore.isTrialOver)) && (
+                  (sharedSessionStore.isTrialOver ||
+                    sharedSessionStore.user.createdOnApple))) && (
                 <Text {...sharedColors.textExtraStyle}>
                   {translate('endTrialText')}
                 </Text>
@@ -122,7 +123,8 @@ class PaywallContent extends Component<{
               )}
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.trial &&
-                !sharedSessionStore.isTrialOver && (
+                !sharedSessionStore.isTrialOver &&
+                  !sharedSessionStore.user.createdOnApple && (
                   <Text {...sharedColors.textExtraStyle}>
                     {translate('trialText')}
                   </Text>

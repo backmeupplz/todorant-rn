@@ -7,6 +7,7 @@ import { SubscriptionStatus } from '@models/User'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { subscriptionStatusName } from '@views/current/Current'
+import { daysAgo } from '@utils/plusButtonAction'
 
 @observer
 export class SubscriptionSection extends Component {
@@ -19,7 +20,13 @@ export class SubscriptionSection extends Component {
             borderColor: sharedColors.placeholderColor,
           }}
           onPress={() => {
-            navigate('Paywall')
+            navigate(
+              'Paywall',
+              sharedSessionStore.user?.createdOnApple &&
+                sharedSessionStore.user.createdAt >= daysAgo(14)
+                ? { type: 'appleUnauthorized' }
+                : undefined
+            )
           }}
         >
           <Text {...sharedColors.textExtraStyle}>
@@ -54,7 +61,13 @@ export class SubscriptionSection extends Component {
                 style={{ flex: 1 }}
                 block
                 onPress={() => {
-                  navigate('Paywall')
+                  navigate(
+                    'Paywall',
+                    sharedSessionStore.user?.createdOnApple &&
+                      sharedSessionStore.user.createdAt >= daysAgo(14)
+                      ? { type: 'appleUnauthorized' }
+                      : undefined
+                  )
                 }}
               >
                 <Text>{translate('buySubscription')}</Text>

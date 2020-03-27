@@ -31,7 +31,7 @@ export function plusButtonAction() {
   }
 }
 
-function daysAgo(count: number) {
+export function daysAgo(count: number) {
   const date = new Date()
   date.setDate(date.getDate() - count)
   return date
