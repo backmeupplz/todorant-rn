@@ -46,7 +46,9 @@ export class SettingsContent extends Component {
                   onPress={() => {
                     deleteAllTodos()
                   }}
+                  accessible
                   accessibilityLabel="delete"
+                  testID="delete"
                 >
                   <Text {...sharedColors.textExtraStyle}>delete all todos</Text>
                 </Button>
@@ -54,6 +56,8 @@ export class SettingsContent extends Component {
                   onPress={() => {
                     addTodosRu()
                   }}
+                  accessible
+                  accessibilityLabel="add_ru"
                   testID="add_ru"
                 >
                   <Text {...sharedColors.textExtraStyle}>add ru todos</Text>
@@ -62,6 +66,8 @@ export class SettingsContent extends Component {
                   onPress={() => {
                     addTodosEn()
                   }}
+                  accessible
+                  accessibilityLabel="add_en"
                   testID="add_en"
                 >
                   <Text {...sharedColors.textExtraStyle}>add en todos</Text>

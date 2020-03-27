@@ -1,5 +1,5 @@
 import { User } from '@models/User'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Platform } from 'react-native'
 
@@ -15,8 +15,9 @@ const extraParams =
       }
     : {}
 
-function cleanLocalAppleReceipt() {
+function cleanLocalAppleReceipt(user: AxiosResponse<User>) {
   sharedSessionStore.localAppleReceipt = undefined
+  return user
 }
 
 export function loginGoogle(accessToken: string) {

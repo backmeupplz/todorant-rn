@@ -26,28 +26,30 @@ export default observer(() => {
               name = 'settings'
             }
             return (
-              <View accessibilityLabel={name}>
-                <Icon
-                  type="MaterialIcons"
-                  name={name}
-                  fontSize={size}
-                  style={{
-                    color,
-                  }}
-                />
-                {route.name === 'Settings' && !sharedSessionStore.user && (
-                  <View
+              <View accessibilityLabel={name} testID={name} accessible>
+                <View accessible={false}>
+                  <Icon
+                    type="MaterialIcons"
+                    name={name}
+                    fontSize={size}
                     style={{
-                      position: 'absolute',
-                      width: 6,
-                      height: 6,
-                      backgroundColor: 'red',
-                      top: 0,
-                      right: 0,
-                      borderRadius: 3,
+                      color,
                     }}
                   />
-                )}
+                  {route.name === 'Settings' && !sharedSessionStore.user && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        width: 6,
+                        height: 6,
+                        backgroundColor: 'red',
+                        top: 0,
+                        right: 0,
+                        borderRadius: 3,
+                      }}
+                    />
+                  )}
+                </View>
               </View>
             )
           },

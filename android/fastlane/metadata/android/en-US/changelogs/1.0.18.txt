@@ -1,2 +1,0 @@
-+ Added the first day of the week setting
-+ Todos that are failed twice become frogs now

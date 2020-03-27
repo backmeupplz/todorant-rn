@@ -1,38 +1,48 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+  desc "Build debug and test APK for screenshots"
+  lane :build_for_screengrab do
+    gradle(
+      task: 'clean'
+    )
+    build_android_app(
+      task: 'app:assembleDebug',
+    )
+    build_android_app(
+      task: 'app:assembleAndroidTest',
+      flags: '-DtestBuildType=debug'
+    )
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  lane :take_screenshots do
+    capture_android_screenshots
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :upload_screenshots do
+    supply(
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true
+    )
+  end
+
+  lane :screenshots do
+    build_for_screengrab
+    take_screenshots
+    upload_screenshots
+  end
+
+  lane :release do
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    supply(
+      skip_upload_apk: true,
+      aab: './app/build/outputs/bundle/release/app.aab'
+    )
   end
 end
