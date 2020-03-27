@@ -27,7 +27,7 @@ export function alertConfirm(
   }, 100)
 }
 
-export function alertMessage(title: string, message: string, ok: () => void) {
+export function alertMessage(title: string, message: string, ok?: () => void) {
   setTimeout(() => {
     Alert.alert(title, message, [{ text: translate('ok'), onPress: ok }])
   }, 100)

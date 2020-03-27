@@ -25,6 +25,7 @@ import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { plusButtonAction } from '@utils/plusButtonAction'
+import { InfoButton } from '@views/settings/InfoButton'
 
 const Stack = createStackNavigator()
 
@@ -455,7 +456,9 @@ class PlanningHeaderRight extends Component {
           {...sharedColors.iconExtraStyle}
         />
       </Button>
-    ) : null
+    ) : (
+      InfoButton('infoPlanning')()
+    )
   }
 }
 
@@ -484,6 +487,7 @@ export function Planning() {
             options={{
               title: translate('addTodo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoAdd'),
             }}
           />
           <Stack.Screen
@@ -492,6 +496,7 @@ export function Planning() {
             options={{
               title: translate('editTodo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoEdit'),
             }}
           />
           <Stack.Screen

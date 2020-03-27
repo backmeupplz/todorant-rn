@@ -14,6 +14,8 @@ class SessionStore {
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 
+  @persist @observable introMessageShown = false
+
   @computed get appInstalledMonthAgo() {
     const monthAgo = new Date()
     monthAgo.setMonth(monthAgo.getMonth() - 1)

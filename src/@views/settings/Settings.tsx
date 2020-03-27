@@ -30,6 +30,8 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { deleteAllTodos, addTodosEn, addTodosRu } from '@utils/debug'
 import { LoginTelegram } from './LoginTelegram'
+import { IntroMessage } from './IntroMessage'
+import { InfoButton } from './InfoButton'
 
 const Stack = createStackNavigator()
 
@@ -138,6 +140,17 @@ export class SettingsContent extends Component {
               button
               style={{ borderColor: sharedColors.placeholderColor }}
               onPress={() => {
+                navigate('Intro')
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('introButton')}
+              </Text>
+            </ListItem>
+            <ListItem
+              button
+              style={{ borderColor: sharedColors.placeholderColor }}
+              onPress={() => {
                 navigate('Terms')
               }}
             >
@@ -229,6 +242,7 @@ export function Settings() {
             options={{
               title: translate('settings'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoSettings'),
             }}
           />
           <Stack.Screen
@@ -261,6 +275,7 @@ export function Settings() {
             options={{
               title: translate('socketsInfo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoSockets'),
             }}
           />
           <Stack.Screen
@@ -269,6 +284,7 @@ export function Settings() {
             options={{
               title: translate('dataInfo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoData'),
             }}
           />
           <Stack.Screen
@@ -277,6 +293,7 @@ export function Settings() {
             options={{
               title: translate('howTo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoRules'),
             }}
           />
           <Stack.Screen
@@ -295,6 +312,16 @@ export function Settings() {
               title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Intro"
+            component={IntroMessage}
+            options={{
+              title: translate('introTitle'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoIntro'),
             }}
           />
         </Stack.Navigator>

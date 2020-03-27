@@ -19,6 +19,8 @@ import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { SubscriptionStatus } from '@models/User'
 import { plusButtonAction } from '@utils/plusButtonAction'
+import { IntroMessage } from '@views/settings/IntroMessage'
+import { InfoButton } from '@views/settings/InfoButton'
 
 const Stack = createStackNavigator()
 
@@ -74,6 +76,14 @@ class ProgressBar extends Component<{ progress: number }> {
 @observer
 class CurrentContent extends Component {
   vm = new CurrentVM()
+
+  componentDidMount() {
+    setTimeout(() => {
+      if (!sharedSessionStore.introMessageShown) {
+        navigate('Intro')
+      }
+    }, 2 * 1000)
+  }
 
   render() {
     const progress = sharedTodoStore.progress.count
@@ -161,6 +171,7 @@ export function Current() {
             options={{
               title: translate('current'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoCurrent'),
             }}
           />
           <Stack.Screen
@@ -169,6 +180,7 @@ export function Current() {
             options={{
               title: translate('addTodo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoAdd'),
             }}
           />
           <Stack.Screen
@@ -177,6 +189,7 @@ export function Current() {
             options={{
               title: translate('breakdownTodo'),
               ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoBreakdown'),
             }}
           />
           <Stack.Screen
@@ -220,6 +233,16 @@ export function Current() {
               title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
+            }}
+          />
+          <Stack.Screen
+            name="Intro"
+            component={IntroMessage}
+            options={{
+              title: translate('introTitle'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoIntro'),
             }}
           />
         </Stack.Navigator>
