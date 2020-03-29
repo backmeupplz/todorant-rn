@@ -311,35 +311,34 @@ export class TodoCard extends Component<{
             {this.props.type === CardType.current &&
               !this.props.todo.frog &&
               !this.vm.isLast(this.props.todo) && (
-                <>
-                  <Button icon transparent>
-                    <Icon
-                      type="MaterialIcons"
-                      name="arrow-forward"
-                      onPress={() => {
-                        this.vm.skip(this.props.todo)
-                      }}
-                      {...sharedColors.iconExtraStyle}
-                    />
-                  </Button>
-
-                  <Button
-                    icon
-                    transparent
+                <Button icon transparent>
+                  <Icon
+                    type="MaterialIcons"
+                    name="arrow-forward"
                     onPress={() => {
-                      navigate('BreakdownTodo', {
-                        breakdownTodo: this.props.todo,
-                      })
+                      this.vm.skip(this.props.todo)
                     }}
-                  >
-                    <Icon
-                      type="MaterialIcons"
-                      name="list"
-                      {...sharedColors.iconExtraStyle}
-                    />
-                  </Button>
-                </>
+                    {...sharedColors.iconExtraStyle}
+                  />
+                </Button>
               )}
+            {this.props.type === CardType.current && (
+              <Button
+                icon
+                transparent
+                onPress={() => {
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: this.props.todo,
+                  })
+                }}
+              >
+                <Icon
+                  type="MaterialIcons"
+                  name="list"
+                  {...sharedColors.iconExtraStyle}
+                />
+              </Button>
+            )}
             {this.props.type === CardType.done ? (
               <Button icon transparent>
                 <Icon
