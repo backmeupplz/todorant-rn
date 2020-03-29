@@ -1,12 +1,14 @@
 import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo } from '@models/Todo'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 export async function fixOrder(
   titlesInvolved: string[],
   addTodosOnTop = [] as Todo[],
   addTodosToBottom = [] as Todo[],
+  timeTodosToYield = [] as Todo[],
   sync = true
 ) {
   // Deduplicate
@@ -20,7 +22,8 @@ export async function fixOrder(
     .filter(v => !!v) as string[]
   // Fix every title
   for (const titleInvolved of titlesInvolvedSet) {
-    const todos = sharedTodoStore.todosForDate(new Date(titleInvolved))
+    const todos = sharedTodoStore.todosForDate(titleInvolved)
+    console.log('todos', todos.length)
     // Go over completed
     const orderedCompleted = Array.from(
       todos.filtered(`completed = true`)
@@ -33,10 +36,18 @@ export async function fixOrder(
         }
       })
     })
+    console.log(orderedCompleted.length)
     // Go over uncompleted
     const orderedUncompleted = Array.from(
       todos.filtered(`completed = false`)
     ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+    // Fix exact times
+    if (sharedSettingsStore.preserveOrderByTime) {
+      while (!isTimeSorted(orderedUncompleted)) {
+        fixOneTodoTime(orderedUncompleted, timeTodosToYield)
+      }
+    }
+    // Save order
     realm.write(() => {
       orderedUncompleted.forEach((todo, i) => {
         if (todo.order !== i) {
@@ -52,6 +63,73 @@ export async function fixOrder(
   if (sync) {
     sockets.todoSyncManager.sync()
   }
+}
+
+function isTimeSorted(todos: (Todo & Realm.Object)[]) {
+  let result = true
+  let time: number | undefined
+  for (const todo of todos) {
+    if (todo.time) {
+      if (time !== undefined) {
+        const todoTime = minutesFromTime(todo.time)
+        if (todoTime < time) {
+          return false
+        } else {
+          time = todoTime
+        }
+      } else {
+        time = minutesFromTime(todo.time)
+      }
+    }
+  }
+  return result
+}
+
+function fixOneTodoTime(
+  todos: (Todo & Realm.Object)[],
+  timeTodosToYield: Todo[]
+) {
+  const timeTodosToYieldIds = timeTodosToYield.map(t => t._id || t._tempSyncId)
+  let time: number | undefined
+  let prevTodoWithTimeIndex: number | undefined
+  let i = 0
+  for (const todo of todos) {
+    if (todo.time) {
+      if (time !== undefined && prevTodoWithTimeIndex != undefined) {
+        const todoTime = minutesFromTime(todo.time)
+        if (todoTime < time) {
+          const prevTodo = todos[prevTodoWithTimeIndex]
+          const curTodo = todo
+          // Fix
+          if (
+            timeTodosToYieldIds.indexOf(curTodo._id || curTodo._tempSyncId) > -1
+          ) {
+            // Current should be moved
+            todos.splice(i, 1)
+            todos.splice(prevTodoWithTimeIndex, 0, curTodo)
+          } else {
+            // Prev todo should be moved
+            todos.splice(prevTodoWithTimeIndex, 1)
+            todos.splice(i, 0, prevTodo)
+          }
+          // Halt this function
+          return
+        } else {
+          time = todoTime
+          prevTodoWithTimeIndex = i
+        }
+      } else {
+        time = minutesFromTime(todo.time)
+        prevTodoWithTimeIndex = i
+      }
+    }
+    i++
+  }
+}
+
+function minutesFromTime(time: string) {
+  const components = time.split(':').map(c => parseInt(c, 10))
+  return components[0] * 60 + components[1]
 }
 
 function sortTodos(todosOnTopIds: string[], todosOnBottomIds: string[]) {

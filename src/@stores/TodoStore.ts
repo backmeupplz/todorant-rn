@@ -6,7 +6,6 @@ import uuid from 'uuid'
 import { getDateString } from '@utils/time'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
-import moment from 'moment'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -17,19 +16,19 @@ class TodoStore {
 
   @computed get todayTodos() {
     const today = new Date()
-    return this.todosForDate(today)
+    return this.todosForDate(getDateString(today))
   }
 
-  todosForDate = (date: Date) => {
-    const title = getDateString(date)
+  todosForDate = (title: string) => {
     return this.allTodos
+      .filtered('deleted = false')
       .filtered(
         title.length === 10
-          ? `deleted = false && monthAndYear = "${title.substr(
-              0,
-              7
-            )}" && date = "${title.substr(8, 2)}"`
-          : `deleted = false && monthAndYear = "${title.substr(0, 7)}" && !date`
+          ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
+              8,
+              2
+            )}"`
+          : `monthAndYear = "${title.substr(0, 7)}" && !date`
       )
       .sorted('order')
   }

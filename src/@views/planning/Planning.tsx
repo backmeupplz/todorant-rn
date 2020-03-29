@@ -26,6 +26,7 @@ import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import { InfoButton } from '@views/settings/InfoButton'
+import { fixOrder } from '@utils/fixOrder'
 
 const Stack = createStackNavigator()
 
@@ -187,6 +188,7 @@ class PlanningVM {
         }
       }
     }
+    const affectedTitlesCopy = [...affectedTitles]
     let currentTitle = ''
     let currentMonthAndYear = ''
     let currentDate: string | undefined
@@ -249,7 +251,12 @@ class PlanningVM {
         orderCounter++
       }
     })
-    sockets.todoSyncManager.sync()
+    fixOrder(
+      affectedTitles,
+      undefined,
+      undefined,
+      draggedItem.item ? [draggedItem.item] : undefined
+    )
   }
 }
 

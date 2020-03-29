@@ -13,6 +13,7 @@ class SettingsStore {
   @persist @observable showTodayOnAddTodo?: boolean
   @persist @observable firstDayOfWeek?: number
   @persist @observable newTodosGoFirst?: boolean
+  @persist @observable preserveOrderByTime?: boolean
 
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined
@@ -38,6 +39,7 @@ class SettingsStore {
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
+      this.preserveOrderByTime = settings.preserveOrderByTime
       if (settings.updatedAt) {
         this.updatedAt = new Date(settings.updatedAt)
       } else {
@@ -45,10 +47,12 @@ class SettingsStore {
           showTodayOnAddTodo: this.showTodayOnAddTodo,
           firstDayOfWeek: this.firstDayOfWeek,
           newTodosGoFirst: this.newTodosGoFirst,
+          preserveOrderByTime: this.preserveOrderByTime,
         })
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
         this.firstDayOfWeek = pushedSettings.firstDayOfWeek
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
+        this.preserveOrderByTime = pushedSettings.preserveOrderByTime
         this.updatedAt = pushedSettings.updatedAt
           ? new Date(pushedSettings.updatedAt)
           : undefined
@@ -60,10 +64,12 @@ class SettingsStore {
         showTodayOnAddTodo: this.showTodayOnAddTodo,
         firstDayOfWeek: this.firstDayOfWeek,
         newTodosGoFirst: this.newTodosGoFirst,
+        preserveOrderByTime: this.preserveOrderByTime,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
+      this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
         : undefined
@@ -73,6 +79,7 @@ class SettingsStore {
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
+      this.preserveOrderByTime = settings.preserveOrderByTime
       this.updatedAt = new Date(settings.updatedAt)
     }
     // Consequent push
@@ -81,10 +88,12 @@ class SettingsStore {
         showTodayOnAddTodo: this.showTodayOnAddTodo,
         firstDayOfWeek: this.firstDayOfWeek,
         newTodosGoFirst: this.newTodosGoFirst,
+        preserveOrderByTime: this.preserveOrderByTime,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
+      this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
         : undefined
@@ -95,6 +104,7 @@ class SettingsStore {
     this.showTodayOnAddTodo = undefined
     this.firstDayOfWeek = undefined
     this.newTodosGoFirst = undefined
+    this.preserveOrderByTime = undefined
     this.updatedAt = undefined
   }
 }

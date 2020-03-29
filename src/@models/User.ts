@@ -5,6 +5,7 @@ class Settings {
   @persist showTodayOnAddTodo?: boolean
   @persist firstDayOfWeek?: number
   @persist newTodosGoFirst?: boolean
+  @persist preserveOrderByTime?: boolean
 }
 
 enum TelegramLanguage {

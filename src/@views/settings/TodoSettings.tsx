@@ -18,7 +18,7 @@ export class TodoSettings extends Component {
             borderColor: sharedColors.placeholderColor,
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
             {translate('defaultToToday')}
           </Text>
           <Switch
@@ -36,13 +36,31 @@ export class TodoSettings extends Component {
             borderColor: sharedColors.placeholderColor,
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
             {translate('newTodosGoOnTop')}
           </Text>
           <Switch
             value={sharedSettingsStore.newTodosGoFirst}
             onValueChange={value => {
               sharedSettingsStore.newTodosGoFirst = value
+              sharedSettingsStore.updatedAt = new Date()
+              sockets.settingsSyncManager.sync()
+            }}
+          />
+        </ListItem>
+        <ListItem
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('preserveOrderByTime')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.preserveOrderByTime}
+            onValueChange={value => {
+              sharedSettingsStore.preserveOrderByTime = value
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
@@ -73,7 +91,7 @@ export class TodoSettings extends Component {
             )
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
             {translate('firstDayOfWeek')}
           </Text>
           <Text {...sharedColors.textExtraStyle}>

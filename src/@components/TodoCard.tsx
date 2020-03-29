@@ -6,6 +6,7 @@ import {
   getDateFromString,
   getDateDateString,
   getDateMonthAndYearString,
+  getDateStringFromTodo,
 } from '@utils/time'
 import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
@@ -21,7 +22,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
-const showDebugInfo = false
+const showDebugInfo = true
 
 export enum CardType {
   done = 'done',
@@ -32,7 +33,7 @@ export enum CardType {
 class TodoCardVM {
   skip(todo: Todo) {
     const neighbours = sharedTodoStore
-      .todosForDate(getDateFromString(todo.monthAndYear, todo.date))
+      .todosForDate(getDateStringFromTodo(todo))
       .filtered(`completed = ${todo.completed}`)
     let startOffseting = false
     let offset = 0
@@ -56,12 +57,12 @@ class TodoCardVM {
       todo.updatedAt = new Date()
     })
 
-    fixOrder([getTitle(todo)])
+    fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
   isLast(todo: Todo) {
     const neighbours = sharedTodoStore
-      .todosForDate(getDateFromString(todo.monthAndYear, todo.date))
+      .todosForDate(getDateStringFromTodo(todo))
       .filtered(`completed = ${todo.completed}`)
     return neighbours.length <= 1
   }
@@ -75,7 +76,7 @@ class TodoCardVM {
       todo.updatedAt = new Date()
     })
 
-    fixOrder([oldTitle, getTitle(todo)])
+    fixOrder([oldTitle, getTitle(todo)], undefined, undefined, [todo])
   }
 
   delete(todo: Todo) {
@@ -101,7 +102,7 @@ class TodoCardVM {
       todo.updatedAt = new Date()
     })
 
-    fixOrder([getTitle(todo)])
+    fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
   complete(todo: Todo) {

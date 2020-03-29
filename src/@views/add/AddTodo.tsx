@@ -412,7 +412,13 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                       this.props.vm.time = undefined
                     }}
                   >
-                    <Icon type="MaterialIcons" name="close" />
+                    <Icon
+                      type="MaterialIcons"
+                      name="close"
+                      style={{
+                        color: sharedColors.textColor,
+                      }}
+                    />
                   </Button>
                 )}
               </Item>
@@ -525,6 +531,7 @@ class AddTodoContent extends Component<{
     const titlesToFixOrder = [] as string[]
     const addTodosOnTop = [] as Todo[]
     const addTodosToBottom = [] as Todo[]
+    const involvedTodos = [] as Todo[]
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
@@ -550,7 +557,8 @@ class AddTodoContent extends Component<{
         todo._exactDate = new Date(getTitle(todo))
 
         realm.write(() => {
-          realm.create(Todo, todo)
+          const dbtodo = realm.create(Todo, todo)
+          involvedTodos.push(dbtodo)
         })
 
         titlesToFixOrder.push(getTitle(todo))
@@ -583,7 +591,7 @@ class AddTodoContent extends Component<{
             }
           }
         })
-
+        involvedTodos.push(vm.editedTodo)
         titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
       }
     }
@@ -598,7 +606,7 @@ class AddTodoContent extends Component<{
       })
       titlesToFixOrder.push(breakdownTodoTitle)
     }
-    fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom)
+    fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
   }
 
