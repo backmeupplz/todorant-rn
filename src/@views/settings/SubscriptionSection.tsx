@@ -23,7 +23,8 @@ export class SubscriptionSection extends Component {
             navigate(
               'Paywall',
               sharedSessionStore.user?.createdOnApple &&
-                sharedSessionStore.user.createdAt >= daysAgo(14)
+                sharedSessionStore.user.createdAt >= daysAgo(14) &&
+                !sharedSessionStore.isSubscriptionActive
                 ? { type: 'appleUnauthorized' }
                 : undefined
             )
