@@ -23,7 +23,6 @@ export async function fixOrder(
   // Fix every title
   for (const titleInvolved of titlesInvolvedSet) {
     const todos = sharedTodoStore.todosForDate(titleInvolved)
-    console.log('todos', todos.length)
     // Go over completed
     const orderedCompleted = Array.from(
       todos.filtered(`completed = true`)
@@ -36,7 +35,6 @@ export async function fixOrder(
         }
       })
     })
-    console.log(orderedCompleted.length)
     // Go over uncompleted
     const orderedUncompleted = Array.from(
       todos.filtered(`completed = false`)
