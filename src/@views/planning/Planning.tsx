@@ -24,6 +24,8 @@ import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import { InfoButton } from '@views/settings/InfoButton'
 import { fixOrder } from '@utils/fixOrder'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sockets } from '@utils/sockets'
 
 const Stack = createStackNavigator()
 
@@ -248,12 +250,16 @@ class PlanningVM {
         orderCounter++
       }
     })
-    fixOrder(
-      affectedTitles,
-      undefined,
-      undefined,
-      draggedItem.item ? [draggedItem.item] : undefined
-    )
+    if (sharedSettingsStore.preserveOrderByTime) {
+      fixOrder(
+        affectedTitles,
+        undefined,
+        undefined,
+        draggedItem.item ? [draggedItem.item] : undefined
+      )
+    } else {
+      sockets.todoSyncManager.sync()
+    }
   }
 }
 
