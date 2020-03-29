@@ -128,7 +128,9 @@ class TodoStore {
     })
     realm.write(() => {
       for (const todoToPush of todosToPush) {
-        todoToPush._tempSyncId = uuid()
+        if (!todoToPush._tempSyncId) {
+          todoToPush._tempSyncId = uuid()
+        }
       }
     })
     if (!todosToPush.length) {
@@ -147,7 +149,10 @@ class TodoStore {
         if (!todo._tempSyncId) {
           continue
         }
-        Object.assign(this.getTodoById(todo._tempSyncId), todo)
+        const localTodo = this.getTodoById(todo._tempSyncId)
+        if (localTodo) {
+          Object.assign(localTodo, todo)
+        }
       }
     })
     // Refresh
