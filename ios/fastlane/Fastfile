@@ -8,7 +8,8 @@ platform :ios do
   lane :commit_and_push_ios_release do
     git_add
     git_commit(
-      message: "ios release"
+      message: "ios release",
+      path: "."
     )
     push_to_git_remote
   end
