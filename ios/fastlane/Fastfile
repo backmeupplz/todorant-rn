@@ -22,7 +22,9 @@ platform :ios do
       silent: true
     )
     upload_to_app_store(
-      submit_for_review: true
+      submit_for_review: true,
+      skip_metadata: true,
+      skip_screenshots: true
     )
     commit_and_push_ios_release
   end

@@ -16,6 +16,11 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
+### ios commit_and_push_ios_release
+```
+fastlane ios commit_and_push_ios_release
+```
+
 ### ios release
 ```
 fastlane ios release
