@@ -27,11 +27,11 @@ platform :ios do
       automatic_release: true,
       submission_information: {
         export_compliance_available_on_french_store: "",
-        export_compliance_contains_proprietary_cryptography = "",
-        export_compliance_contains_third_party_cryptography = "",
-        export_compliance_uses_encryption = "false",
-        export_compliance_is_exempt = "",
-        export_compliance_encryption_updated = "false"
+        export_compliance_contains_proprietary_cryptography: "",
+        export_compliance_contains_third_party_cryptography: "",
+        export_compliance_uses_encryption: "false",
+        export_compliance_is_exempt: "",
+        export_compliance_encryption_updated: "false"
       }
     )
     commit_and_push_ios_release
