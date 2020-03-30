@@ -64,3 +64,5 @@ buck-out/
 ios/Pods/
 
 ios/derived
+
+*.dSYM.zip
