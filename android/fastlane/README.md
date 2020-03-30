@@ -36,6 +36,11 @@ fastlane android upload_screenshots
 fastlane android screenshots
 ```
 
+### android increment_android_versions
+```
+fastlane android increment_android_versions
+```
+
 ### android release
 ```
 fastlane android release

@@ -35,7 +35,17 @@ platform :android do
     upload_screenshots
   end
 
+  lane :increment_android_versions do
+    increment_version_code
+    version = android_get_version_name()
+    components = version.split('.')
+    android_set_version_name(
+      version_name: "#{components[0].to_s}.#{components[1].to_s}.#{(components[2].to_i + 1).to_s}",
+    )
+  end
+
   lane :release do
+    increment_android_versions
     gradle(
       task: 'bundle',
       build_type: 'Release'
