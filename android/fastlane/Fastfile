@@ -44,6 +44,14 @@ platform :android do
     )
   end
 
+  lane :commit_and_push_android_release do
+    git_add
+    git_commit(
+      message: "android release"
+    )
+    push_to_git_remote
+  end
+
   lane :release do
     increment_android_versions
     gradle(
@@ -54,5 +62,6 @@ platform :android do
       skip_upload_apk: true,
       aab: './app/build/outputs/bundle/release/app.aab'
     )
+    commit_and_push_android_release
   end
 end
