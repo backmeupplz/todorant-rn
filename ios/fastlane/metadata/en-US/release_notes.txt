@@ -1,1 +1,11 @@
-
++ Added an option to perform hard sync
++ Added login with Telegram
++ Fixed sync mechanism in the timezones to the east from GMT
++ Fixed subscription detection after purchase and login
++ Fixed the bug when current month could be set for a task
++ Fixed colors on the date and month pickers in dark mode
++ Fixed exact time picker
++ Added the first day of the week setting
++ Todos that are failed twice become frogs now
++ Fixed the bug causing infinite sync loop when the app is used on multiple devices simultaneously
++ Added tooltips and intro message
