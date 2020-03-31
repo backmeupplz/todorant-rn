@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Container, Text, Segment, Button, Icon, H1, View } from 'native-base'
-import { computed } from 'mobx'
+import { computed, observe } from 'mobx'
 import { Todo, compareTodos, getTitle, isTodoOld } from '@models/Todo'
 import { observer, Observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -9,9 +9,16 @@ import { isDateTooOld, getDateString } from '@utils/time'
 import { TodoCard, CardType } from '@components/TodoCard'
 import ActionButton from 'react-native-action-button'
 import { AddTodo } from '@views/add/AddTodo'
-import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
+import {
+  sharedAppStateStore,
+  TodoSectionType,
+  PlanningMode,
+} from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import {
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native-gesture-handler'
 import { realm } from '@utils/realm'
 import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
@@ -264,6 +271,36 @@ class PlanningVM {
 }
 
 @observer
+class TodoCardPlanningVariable extends Component<{
+  item: Todo
+  drag: () => void
+}> {
+  render() {
+    return sharedAppStateStore.planningMode === PlanningMode.default ? (
+      <TodoCard
+        todo={this.props.item}
+        type={
+          sharedAppStateStore.todoSection === TodoSectionType.planning
+            ? CardType.planning
+            : CardType.done
+        }
+      />
+    ) : (
+      <TouchableOpacity onPressIn={this.props.drag}>
+        <TodoCard
+          todo={this.props.item}
+          type={
+            sharedAppStateStore.todoSection === TodoSectionType.planning
+              ? CardType.planning
+              : CardType.done
+          }
+        />
+      </TouchableOpacity>
+    )
+  }
+}
+
+@observer
 class PlanningContent extends Component {
   vm = new PlanningVM()
 
@@ -306,49 +343,9 @@ class PlanningContent extends Component {
                     {item.title}
                   </Text>
                 </TouchableWithoutFeedback>
-              ) : Platform.OS === 'android' ? (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onLongPress={
-                    sharedAppStateStore.todoSection === TodoSectionType.planning
-                      ? drag
-                      : undefined
-                  }
-                  style={{ padding: isActive ? 10 : 0 }}
-                >
-                  <TodoCard
-                    todo={item.item!}
-                    type={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? CardType.planning
-                        : CardType.done
-                    }
-                    drag={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? drag
-                        : undefined
-                    }
-                  />
-                </TouchableWithoutFeedback>
               ) : (
                 <View style={{ padding: isActive ? 10 : 0 }}>
-                  <TodoCard
-                    todo={item.item!}
-                    type={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? CardType.planning
-                        : CardType.done
-                    }
-                    drag={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? drag
-                        : undefined
-                    }
-                  />
+                  <TodoCardPlanningVariable item={item.item!} drag={drag} />
                 </View>
               )
             }
@@ -390,6 +387,8 @@ class PlanningHeader extends Component {
   render() {
     return sharedAppStateStore.hash ? (
       <Text {...sharedColors.textExtraStyle}>{sharedAppStateStore.hash}</Text>
+    ) : sharedAppStateStore.planningMode === PlanningMode.rearrange ? (
+      <Text {...sharedColors.textExtraStyle}>{translate('rearrange')}</Text>
     ) : (
       <Segment>
         <Button
@@ -472,6 +471,38 @@ class PlanningHeaderRight extends Component {
   }
 }
 
+@observer
+class PlanningHeaderLeft extends Component {
+  render() {
+    return (
+      !sharedAppStateStore.hash &&
+      sharedAppStateStore.todoSection === TodoSectionType.planning && (
+        <Button
+          icon
+          transparent
+          small
+          onPress={() => {
+            sharedAppStateStore.planningMode =
+              sharedAppStateStore.planningMode === PlanningMode.default
+                ? PlanningMode.rearrange
+                : PlanningMode.default
+          }}
+        >
+          <Icon
+            type="MaterialIcons"
+            name={
+              sharedAppStateStore.planningMode === PlanningMode.default
+                ? 'format-list-numbered'
+                : 'close'
+            }
+            {...sharedColors.iconExtraStyle}
+          />
+        </Button>
+      )
+    )
+  }
+}
+
 export function Planning() {
   return (
     <Observer>
@@ -486,6 +517,9 @@ export function Planning() {
               },
               headerRight: () => {
                 return <PlanningHeaderRight />
+              },
+              headerLeft: () => {
+                return <PlanningHeaderLeft />
               },
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,

@@ -3,7 +3,6 @@ import { Todo, isTodoToday, getTitle, isTodoOld } from '../@models/Todo'
 import { Card, CardItem, Body, Text, Button, Icon, View } from 'native-base'
 import { sharedTodoStore } from '@stores/TodoStore'
 import {
-  getDateFromString,
   getDateDateString,
   getDateMonthAndYearString,
   getDateStringFromTodo,
@@ -12,17 +11,16 @@ import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
 import { navigate } from '@utils/navigation'
 import { l } from '@utils/linkify'
-import { Linking, Platform } from 'react-native'
-import { sharedAppStateStore } from '@stores/AppStateStore'
+import { Linking } from 'react-native'
+import { sharedAppStateStore, PlanningMode } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
 import moment from 'moment'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
-const showDebugInfo = true
+const showDebugInfo = false
 
 export enum CardType {
   done = 'done',
@@ -196,7 +194,6 @@ class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
 export class TodoCard extends Component<{
   todo: Todo
   type: CardType
-  drag?: () => void
 }> {
   vm = new TodoCardVM()
 
@@ -212,159 +209,163 @@ export class TodoCard extends Component<{
           borderColor: sharedColors.borderColor,
         }}
       >
-        {Platform.OS === 'android' ? (
-          <CardItem
-            style={{
-              backgroundColor: this.isOld
-                ? sharedColors.oldTodoBackground
-                : undefined,
-            }}
-          >
-            <Body>
-              {__DEV__ && showDebugInfo && (
-                <DebugTodoInfo todo={this.props.todo} />
-              )}
-              <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
-            </Body>
-          </CardItem>
-        ) : (
-          <TouchableWithoutFeedback onLongPress={this.props.drag}>
-            <CardItem
-              style={{
-                backgroundColor: this.isOld
-                  ? sharedColors.oldTodoBackground
-                  : undefined,
-              }}
-            >
-              <Body>
-                {__DEV__ && showDebugInfo && (
-                  <DebugTodoInfo todo={this.props.todo} />
-                )}
-                <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
-              </Body>
-            </CardItem>
-          </TouchableWithoutFeedback>
-        )}
         <CardItem
-          footer
           style={{
-            justifyContent: 'space-between',
-            backgroundColor: 'transparrent',
+            backgroundColor: this.isOld
+              ? sharedColors.oldTodoBackground
+              : undefined,
           }}
         >
-          {this.props.todo.skipped && (
-            <View>
-              <Text {...sharedColors.textExtraStyle}>
-                ({translate('skipped')})
-              </Text>
+          <Body>
+            {__DEV__ && showDebugInfo && (
+              <DebugTodoInfo todo={this.props.todo} />
+            )}
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+              {sharedAppStateStore.planningMode === PlanningMode.rearrange && (
+                <Icon
+                  type="MaterialIcons"
+                  name="menu"
+                  style={{
+                    marginRight: 5,
+                    ...sharedColors.iconExtraStyle.style,
+                  }}
+                />
+              )}
+              <View
+                style={{
+                  paddingTop:
+                    sharedAppStateStore.planningMode === PlanningMode.rearrange
+                      ? 5
+                      : 0,
+                }}
+              >
+                <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
+              </View>
             </View>
-          )}
-          <View
+          </Body>
+        </CardItem>
+        {sharedAppStateStore.planningMode === PlanningMode.default && (
+          <CardItem
+            footer
             style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
+              backgroundColor: 'transparrent',
             }}
           >
-            {this.props.type === CardType.planning &&
-              !isTodoToday(this.props.todo) && (
+            {this.props.todo.skipped && (
+              <View>
+                <Text {...sharedColors.textExtraStyle}>
+                  ({translate('skipped')})
+                </Text>
+              </View>
+            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              {this.props.type === CardType.planning &&
+                !isTodoToday(this.props.todo) && (
+                  <Button
+                    icon
+                    transparent
+                    onPress={() => {
+                      this.vm.moveToToday(this.props.todo)
+                    }}
+                  >
+                    <Icon
+                      type="MaterialIcons"
+                      name="arrow-upward"
+                      {...sharedColors.iconExtraStyle}
+                      {...sharedColors.iconExtraStyle}
+                    />
+                  </Button>
+                )}
+              <Button icon transparent>
+                <Icon
+                  type="MaterialIcons"
+                  name="delete"
+                  onPress={() => {
+                    this.vm.delete(this.props.todo)
+                  }}
+                  style={{ color: sharedColors.primaryColor }}
+                  {...sharedColors.iconExtraStyle}
+                />
+              </Button>
+              {this.props.type !== CardType.current && (
                 <Button
                   icon
                   transparent
                   onPress={() => {
-                    this.vm.moveToToday(this.props.todo)
+                    navigate('EditTodo', { editedTodo: this.props.todo })
                   }}
                 >
                   <Icon
                     type="MaterialIcons"
-                    name="arrow-upward"
-                    {...sharedColors.iconExtraStyle}
+                    name="edit"
                     {...sharedColors.iconExtraStyle}
                   />
                 </Button>
               )}
-            <Button icon transparent>
-              <Icon
-                type="MaterialIcons"
-                name="delete"
-                onPress={() => {
-                  this.vm.delete(this.props.todo)
-                }}
-                style={{ color: sharedColors.primaryColor }}
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
-            {this.props.type !== CardType.current && (
-              <Button
-                icon
-                transparent
-                onPress={() => {
-                  navigate('EditTodo', { editedTodo: this.props.todo })
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name="edit"
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            )}
-            {this.props.type === CardType.current &&
-              !this.props.todo.frog &&
-              !this.vm.isLast(this.props.todo) && (
+              {this.props.type === CardType.current &&
+                !this.props.todo.frog &&
+                !this.vm.isLast(this.props.todo) && (
+                  <Button icon transparent>
+                    <Icon
+                      type="MaterialIcons"
+                      name="arrow-forward"
+                      onPress={() => {
+                        this.vm.skip(this.props.todo)
+                      }}
+                      {...sharedColors.iconExtraStyle}
+                    />
+                  </Button>
+                )}
+              {this.props.type === CardType.current && (
+                <Button
+                  icon
+                  transparent
+                  onPress={() => {
+                    navigate('BreakdownTodo', {
+                      breakdownTodo: this.props.todo,
+                    })
+                  }}
+                >
+                  <Icon
+                    type="MaterialIcons"
+                    name="list"
+                    {...sharedColors.iconExtraStyle}
+                  />
+                </Button>
+              )}
+              {this.props.type === CardType.done ? (
                 <Button icon transparent>
                   <Icon
                     type="MaterialIcons"
-                    name="arrow-forward"
+                    name="repeat"
                     onPress={() => {
-                      this.vm.skip(this.props.todo)
+                      this.vm.uncomplete(this.props.todo)
+                    }}
+                    {...sharedColors.iconExtraStyle}
+                  />
+                </Button>
+              ) : (
+                <Button icon transparent>
+                  <Icon
+                    type="MaterialIcons"
+                    name="done"
+                    onPress={() => {
+                      this.vm.complete(this.props.todo)
                     }}
                     {...sharedColors.iconExtraStyle}
                   />
                 </Button>
               )}
-            {this.props.type === CardType.current && (
-              <Button
-                icon
-                transparent
-                onPress={() => {
-                  navigate('BreakdownTodo', {
-                    breakdownTodo: this.props.todo,
-                  })
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name="list"
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            )}
-            {this.props.type === CardType.done ? (
-              <Button icon transparent>
-                <Icon
-                  type="MaterialIcons"
-                  name="repeat"
-                  onPress={() => {
-                    this.vm.uncomplete(this.props.todo)
-                  }}
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            ) : (
-              <Button icon transparent>
-                <Icon
-                  type="MaterialIcons"
-                  name="done"
-                  onPress={() => {
-                    this.vm.complete(this.props.todo)
-                  }}
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            )}
-          </View>
-        </CardItem>
+            </View>
+          </CardItem>
+        )}
       </Card>
     )
   }

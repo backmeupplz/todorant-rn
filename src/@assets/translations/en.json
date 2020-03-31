@@ -138,5 +138,6 @@
   "infoSockets": "Todorant uses sockets to sync it's data with server. It works like magic as soon as both checkmarks are in place.",
   "infoData": "Here you can see the most recent info about you local data storage and sync stats.",
   "infoRules": "Please, read the rules thoroughly to get the most out of Todorant.",
-  "preserveOrderByTime": "Preserve exact time order"
+  "preserveOrderByTime": "Preserve exact time order",
+  "rearrange": "Rearrange"
 }

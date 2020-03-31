@@ -5,9 +5,16 @@ export enum TodoSectionType {
   completed = 'completed',
 }
 
+export enum PlanningMode {
+  default = 'default',
+  rearrange = 'rearrange',
+}
+
 class AppStateStore {
   @observable todoSection: TodoSectionType = TodoSectionType.planning
   @observable hash = ''
+
+  @observable planningMode = PlanningMode.default
 }
 
 export const sharedAppStateStore = new AppStateStore()
