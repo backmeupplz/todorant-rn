@@ -133,7 +133,7 @@
   "infoBreakdown": "This is the task breakdown screen. Feel free to add multiple tasks that are going to appear in the tasks list instead of the original task. After you add the new smaller tasks, the original task will be marked completed.",
   "infoAdd": "This is the add task screen. Tasks should always be actionable (\"Find best flights to Mexico\" vs \"Go to Mexico\") and as small and exact as possible (\"Dust the displays\" vs \"Clean the house\"). You can add muptiple tasks here.\n\nTasks should have either a date or a month assigned to them. You cannot select the current month.\n\nFrogs are tasks that you don't want to deal with — they will appear first on your list. The earlier you start on a frog, the more chances are that you will complete it.",
   "infoEdit": "This is the edit task screen. Here you can edit the task. Yep, this is it.",
-  "infoPlanning": "This is your planning section. Feel free to rearrange tasks and date titles by long pressing and dragging them — it's fun!",
+  "infoPlanning": "This is your planning section. Feel free to rearrange tasks (by using the button in the top left corner) and date titles (by long pressing and dragging them) — it's fun!\n\nAlso, don't forget to use #hashtags.",
   "infoSettings": "This is your settings screen. Here you can configure various options. Please, make sure you read the \"How to use Todorant\" section.",
   "infoSockets": "Todorant uses sockets to sync it's data with server. It works like magic as soon as both checkmarks are in place.",
   "infoData": "Here you can see the most recent info about you local data storage and sync stats.",
