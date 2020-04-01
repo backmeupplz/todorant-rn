@@ -139,5 +139,8 @@
   "infoData": "Here you can see the most recent info about you local data storage and sync stats.",
   "infoRules": "Please, read the rules thoroughly to get the most out of Todorant.",
   "preserveOrderByTime": "Preserve exact time order",
-  "rearrange": "Rearrange"
+  "rearrange": "Rearrange",
+  "subscriptionMonth": "month",
+  "subscriptionYeariOS": "year (~15% discount)",
+  "subscriptionYearAndroid": "year (~16.6% discount)"
 }

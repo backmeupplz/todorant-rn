@@ -124,7 +124,7 @@ class PaywallContent extends Component<{
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.trial &&
                 !sharedSessionStore.isTrialOver &&
-                  !sharedSessionStore.user.createdOnApple && (
+                !sharedSessionStore.user.createdOnApple && (
                   <Text {...sharedColors.textExtraStyle}>
                     {translate('trialText')}
                   </Text>
@@ -174,10 +174,10 @@ class PaywallContent extends Component<{
                   <Text>
                     {product.localizedPrice}/
                     {product.productId.includes('monthly')
-                      ? 'month'
+                      ? translate('subscriptionMonth')
                       : Platform.OS === 'android'
-                      ? 'year (16.6% discount)'
-                      : 'year (~15% discount)'}
+                      ? translate('subscriptionYearAndroid')
+                      : translate('subscriptionYeariOS')}
                   </Text>
                 </Button>
               ))}
