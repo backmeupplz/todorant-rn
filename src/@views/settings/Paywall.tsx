@@ -144,7 +144,8 @@ class PaywallContent extends Component<{
               )}
             </>
           )}
-          {!sharedSessionStore.hasPurchased && (
+          {(!sharedSessionStore.hasPurchased ||
+            this.props.route.params?.type === 'appleUnauthorized') && (
             <>
               {this.vm.products.map((product, i) => (
                 <Button

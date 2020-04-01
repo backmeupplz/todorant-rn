@@ -43,7 +43,6 @@ class SessionStore {
   @computed get hasPurchased() {
     return (
       !!this.user?.subscriptionId ||
-      !!this.user?.appleSubId ||
       !!this.user?.appleReceipt ||
       !!this.user?.googleReceipt
     )
