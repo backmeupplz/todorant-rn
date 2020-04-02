@@ -9,6 +9,7 @@ export enum Language {
   auto = 'auto',
   ru = 'ru',
   en = 'en',
+  uk = 'uk',
 }
 
 class SettingsStore {

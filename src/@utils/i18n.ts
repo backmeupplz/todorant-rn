@@ -6,6 +6,7 @@ import { AsyncStorage } from 'react-native'
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),
   ru: () => require('@assets/translations/ru.json'),
+  uk: () => require('@assets/translations/uk.json'),
 } as { [index: string]: any }
 
 export const translate = (key: any, config?: any) => i18n.t(key, config)
@@ -26,6 +27,7 @@ export function setI18nConfig() {
   i18n.translations = {
     en: translationGetters['en'](),
     ru: translationGetters['ru'](),
+    uk: translationGetters['uk'](),
   }
 }
 

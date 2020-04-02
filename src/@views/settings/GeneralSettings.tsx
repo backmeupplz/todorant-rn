@@ -34,12 +34,13 @@ export class GeneralSettings extends Component {
               { label: translate('languageAuto'), code: 'en' },
               { label: 'English', code: 'en' },
               { label: 'Русский', code: 'ru' },
+              { label: 'Український', code: 'uk' },
             ]
             ActionSheet.show(
               {
                 options: options.map(v => v.label).concat(translate('cancel')),
-                cancelButtonIndex: 2,
-                destructiveButtonIndex: 2,
+                cancelButtonIndex: 3,
+                destructiveButtonIndex: 3,
                 title: '',
               },
               async i => {
