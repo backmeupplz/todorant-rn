@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from './src/@views/BottomTabNavigator'
 import { navigationRef } from './src/@utils/navigation'
@@ -9,6 +9,12 @@ import '@utils/purchases'
 import { Root, StyleProvider } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig } from '@utils/i18n'
+import codePush from 'react-native-code-push'
+
+const CodePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  installMode: codePush.InstallMode.IMMEDIATE,
+}
 
 setI18nConfig()
 
@@ -21,16 +27,19 @@ GoogleSignin.configure({
 
 console.disableYellowBox = true
 
-const App = () => {
-  return (
-    <Root>
-      <StyleProvider style={getTheme()}>
-        <NavigationContainer ref={navigationRef}>
-          <BottomTabNavigator />
-        </NavigationContainer>
-      </StyleProvider>
-    </Root>
-  )
+@codePush(CodePushOptions)
+class App extends Component {
+  render() {
+    return (
+      <Root>
+        <StyleProvider style={getTheme()}>
+          <NavigationContainer ref={navigationRef}>
+            <BottomTabNavigator />
+          </NavigationContainer>
+        </StyleProvider>
+      </Root>
+    )
+  }
 }
 
 export default App

@@ -49,6 +49,7 @@
 		BB3A79F12425B9530014DE92 /* KeychainManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */; };
 		BB3A79F92426933F0014DE92 /* TodorantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F82426933F0014DE92 /* TodorantUITests.swift */; };
 		BB3A7A03242694A70014DE92 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */; };
+		BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB5F405C2436349300236BCD /* AppCenter-Config.plist */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		CF3E6CD6D6B6474EBD791451 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 726ADF191BCC4DABA2BDD39F /* FontAwesome.ttf */; };
 		D60E3EF2395E4EDDBB5FF961 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8011F29EDD71472C976D89F7 /* Zocial.ttf */; };
@@ -152,6 +153,7 @@
 		BB3A79F82426933F0014DE92 /* TodorantUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodorantUITests.swift; sourceTree = "<group>"; };
 		BB3A79FA2426933F0014DE92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		BB5F405C2436349300236BCD /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C72AEC71CCC0426695FAC0E7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		C994668131DC345D4AAF61E4 /* Pods-Todorant-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOS/Pods-Todorant-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				BB3A79E62425B6850014DE92 /* Todorant-Bridging-Header.h */,
 				BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */,
 				BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */,
+				BB5F405C2436349300236BCD /* AppCenter-Config.plist */,
 			);
 			name = Todorant;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				7B12A8A76FF44FD093CAF4C3 /* Ionicons.ttf in Resources */,
 				8D517A9FC5C64CB6BDEEF5FD /* MaterialCommunityIcons.ttf in Resources */,
 				7691E5F7153D400DBCD3B873 /* MaterialIcons.ttf in Resources */,
+				BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */,
 				3B6C4B4962F84F0189F5094F /* Octicons.ttf in Resources */,
 				35C472DA5F424C548513FFF9 /* Roboto_medium.ttf in Resources */,
 				E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */,
