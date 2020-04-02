@@ -473,7 +473,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }}
               />
             </Item>
-            {this.props.vm.showMore && (
+            {this.props.vm.showMore && !this.props.vm.editedTodo && (
               <Item
                 style={{
                   justifyContent: 'space-between',
