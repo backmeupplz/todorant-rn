@@ -5,6 +5,12 @@ import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { getLanguageTag } from '@utils/i18n'
 
+export enum Language {
+  auto = 'auto',
+  ru = 'ru',
+  en = 'en',
+}
+
 class SettingsStore {
   hydrated = false
 
@@ -15,9 +21,11 @@ class SettingsStore {
   @persist @observable newTodosGoFirst?: boolean
   @persist @observable preserveOrderByTime?: boolean
 
+  @observable language = 'en'
+
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined
-      ? getLanguageTag() === 'en'
+      ? this.language === 'en'
         ? 0
         : 1
       : this.firstDayOfWeek
@@ -110,7 +118,8 @@ class SettingsStore {
 }
 
 export const sharedSettingsStore = new SettingsStore()
-hydrate('SettingsStore', sharedSettingsStore).then(() => {
+hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   sharedSettingsStore.hydrated = true
   hydrateStore('SettingsStore')
+  sharedSettingsStore.language = await getLanguageTag()
 })

@@ -1,4 +1,5 @@
 import { sockets } from '@utils/sockets'
+
 const hydratedStores = {
   TodoStore: false,
   SettingsStore: false,

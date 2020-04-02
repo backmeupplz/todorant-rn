@@ -1,18 +1,20 @@
-import { memoize } from 'lodash'
 import i18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
+import { Language } from '@stores/SettingsStore'
+import { AsyncStorage } from 'react-native'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),
   ru: () => require('@assets/translations/ru.json'),
 } as { [index: string]: any }
 
-export const translate = memoize(
-  (key, config?) => i18n.t(key, config),
-  (key, config?) => (config ? key + JSON.stringify(config) : key)
-)
+export const translate = (key: any, config?: any) => i18n.t(key, config)
 
-export function getLanguageTag() {
+export async function getLanguageTag() {
+  const language = (await AsyncStorage.getItem('language')) || Language.auto
+  if (language !== Language.auto) {
+    return language
+  }
   const fallback = { languageTag: 'en' }
   const { languageTag } =
     RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
@@ -21,12 +23,13 @@ export function getLanguageTag() {
 }
 
 export function setI18nConfig() {
-  const languageTag = getLanguageTag()
-
-  if (translate.cache.clear) {
-    translate.cache.clear()
+  i18n.translations = {
+    en: translationGetters['en'](),
+    ru: translationGetters['ru'](),
   }
+}
 
-  i18n.translations = { [languageTag]: translationGetters[languageTag]() }
+export async function setI18nConfigAsync() {
+  const languageTag = await getLanguageTag()
   i18n.locale = languageTag
 }

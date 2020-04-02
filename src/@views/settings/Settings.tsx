@@ -32,6 +32,7 @@ import { deleteAllTodos, addTodosEn, addTodosRu } from '@utils/debug'
 import { LoginTelegram } from './LoginTelegram'
 import { IntroMessage } from './IntroMessage'
 import { InfoButton } from './InfoButton'
+import { GeneralSettings } from './GeneralSettings'
 
 const Stack = createStackNavigator()
 
@@ -120,6 +121,7 @@ export class SettingsContent extends Component {
                 {translate('dataInfo')}
               </Text>
             </ListItem>
+            <GeneralSettings />
             <ListItem itemHeader>
               <Text style={{ color: sharedColors.placeholderColor }}>
                 {translate('info')}
@@ -201,7 +203,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
               <Text style={{ color: sharedColors.placeholderColor }}>
-                v{DeviceInfo.getVersion()}
+                v{DeviceInfo.getVersion()}.1
                 {__DEV__ ? '.dev' : ''}
               </Text>
             </ListItem>

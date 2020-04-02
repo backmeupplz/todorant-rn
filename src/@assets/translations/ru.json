@@ -143,5 +143,7 @@
   "rearrange": "Смена порядка",
   "subscriptionMonth": "месяц",
   "subscriptionYeariOS": "год (~15% скидка)",
-  "subscriptionYearAndroid": "год (~16.6% скидка)"
+  "subscriptionYearAndroid": "год (~16.6% скидка)",
+  "language": "Язык",
+  "languageAuto": "Авто"
 }

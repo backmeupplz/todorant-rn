@@ -9,6 +9,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const Tab = createBottomTabNavigator()
 
@@ -16,6 +17,7 @@ export default observer(() => {
   return (
     <>
       <Tab.Navigator
+        {...({ language: sharedSettingsStore.language } as any)}
         backBehavior="none"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {

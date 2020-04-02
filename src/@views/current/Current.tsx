@@ -21,6 +21,7 @@ import { SubscriptionStatus } from '@models/User'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { InfoButton } from '@views/settings/InfoButton'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const Stack = createStackNavigator()
 
@@ -90,7 +91,7 @@ class CurrentContent extends Component {
       ? sharedTodoStore.progress.completed / sharedTodoStore.progress.count
       : 1
     return (
-      <Container>
+      <Container {...({ language: sharedSettingsStore.language } as any)}>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <View
             style={{
@@ -164,7 +165,9 @@ export function Current() {
   return (
     <Observer>
       {() => (
-        <Stack.Navigator>
+        <Stack.Navigator
+          {...({ language: sharedSettingsStore.language } as any)}
+        >
           <Stack.Screen
             name="Current"
             component={CurrentContent}

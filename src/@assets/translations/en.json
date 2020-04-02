@@ -142,5 +142,7 @@
   "rearrange": "Rearrange",
   "subscriptionMonth": "month",
   "subscriptionYeariOS": "year (~15% discount)",
-  "subscriptionYearAndroid": "year (~16.6% discount)"
+  "subscriptionYearAndroid": "year (~16.6% discount)",
+  "language": "Language",
+  "languageAuto": "Auto"
 }

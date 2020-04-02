@@ -8,7 +8,7 @@ import '@utils/ignoreWarnings'
 import '@utils/purchases'
 import { Root, StyleProvider } from 'native-base'
 import getTheme from './native-base-theme/components'
-import { setI18nConfig } from '@utils/i18n'
+import { setI18nConfig, setI18nConfigAsync } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 
 const CodePushOptions = {
@@ -17,6 +17,7 @@ const CodePushOptions = {
 }
 
 setI18nConfig()
+setI18nConfigAsync()
 
 GoogleSignin.configure({
   webClientId:
