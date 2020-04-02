@@ -480,6 +480,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   paddingVertical: 16,
                   paddingRight: 12,
                   borderColor: sharedColors.placeholderColor,
+                  flex: 1,
                 }}
               >
                 <Text {...sharedColors.textExtraStyle}>
