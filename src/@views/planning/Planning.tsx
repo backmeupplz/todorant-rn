@@ -140,6 +140,7 @@ class PlanningVM {
     from: number
     to: number
   }) => {
+    // Create the map of werre titles start and end
     const titleToIndexes = [] as [string, number, number][] // title, startIndex, endIndex
     this.todosWithSections.forEach((item, i) => {
       if (item.title) {
@@ -149,8 +150,11 @@ class PlanningVM {
         }
       }
     })
+    // Create a placeholder for the affected titles to fix order later
     const affectedTitles = [] as string[]
+    // Get the dragged item
     const draggedItem = this.todosWithSections[from]
+    // If it is todo, then derive from and to titles to add to affected titles
     if (draggedItem.item) {
       const titleFrom = getTitle(draggedItem.item)
       let titleTo: string | undefined
@@ -171,7 +175,9 @@ class PlanningVM {
           affectedTitles.push(titleFrom, titleTo)
         }
       }
-    } else if (draggedItem.title) {
+    }
+    // It it is title add itself and its old and new neighbours to affected titles
+    else if (draggedItem.title) {
       // Add the title
       affectedTitles.push(draggedItem.title)
       // Add old neighbours
@@ -194,7 +200,9 @@ class PlanningVM {
         }
       }
     }
+    // Get a copy of affected titles (we are going to modify the original array)
     const affectedTitlesCopy = [...affectedTitles]
+    // Get first title
     let currentTitle = ''
     let currentMonthAndYear = ''
     let currentDate: string | undefined
@@ -207,6 +215,7 @@ class PlanningVM {
         break
       }
     }
+    // Go over all titles and todos, make note of all affected todos and titles
     let titleCounter = ''
     const affectedSectionHeadersOrTodo = [] as SectionHeaderOrTodo[]
     for (const sectionHeaderOrTodo of data) {
@@ -224,6 +233,7 @@ class PlanningVM {
         affectedSectionHeadersOrTodo.push(sectionHeaderOrTodo)
       }
     }
+    // Fix order of tasks and titles
     let orderCounter = 0
     affectedSectionHeadersOrTodo.forEach(sectionHeaderOrTodo => {
       if (sectionHeaderOrTodo.title) {
@@ -257,14 +267,22 @@ class PlanningVM {
         orderCounter++
       }
     })
+    console.log(
+      affectedSectionHeadersOrTodo.map(
+        v => v.title || `(${v.item?.order}) ${v.item?.text}`
+      )
+    )
+    // Sync and fix time order if necessary
     if (sharedSettingsStore.preserveOrderByTime) {
       fixOrder(
-        affectedTitles,
+        affectedTitlesCopy,
         undefined,
         undefined,
         draggedItem.item ? [draggedItem.item] : undefined
       )
     } else {
+      // Refresh
+      sharedTodoStore.refreshTodos()
       sockets.todoSyncManager.sync()
     }
   }
