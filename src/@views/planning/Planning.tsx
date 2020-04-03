@@ -267,11 +267,6 @@ class PlanningVM {
         orderCounter++
       }
     })
-    console.log(
-      affectedSectionHeadersOrTodo.map(
-        v => v.title || `(${v.item?.order}) ${v.item?.text}`
-      )
-    )
     // Sync and fix time order if necessary
     if (sharedSettingsStore.preserveOrderByTime) {
       fixOrder(
