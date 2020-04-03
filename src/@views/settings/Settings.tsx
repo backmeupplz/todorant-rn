@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import {
-  Container,
-  Content,
-  List,
-  ListItem,
-  Text,
-  Button,
-  View,
-} from 'native-base'
+import { Container, Content, List, ListItem, Text, Button } from 'native-base'
 import { TermsOfUse } from './TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from './PrivacyPolicy'
@@ -35,6 +27,8 @@ import { InfoButton } from './InfoButton'
 import { GeneralSettings } from './GeneralSettings'
 
 const Stack = createStackNavigator()
+
+const codePushVersion = 4
 
 @observer
 export class SettingsContent extends Component {
@@ -203,7 +197,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
               <Text style={{ color: sharedColors.placeholderColor }}>
-                v{DeviceInfo.getVersion()}.3
+                v{DeviceInfo.getVersion()}.{codePushVersion}
                 {__DEV__ ? '.dev' : ''}
               </Text>
             </ListItem>
