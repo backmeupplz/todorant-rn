@@ -46,8 +46,15 @@ class TodoStore {
   }
 
   @computed get isPlanningRequired() {
-    const todayString = `T${Math.floor(new Date().getTime() / 1000) -
-      (Math.floor(new Date().getTime() / 1000) % (24 * 60 * 60)) -
+    const todayWithTimezoneOffset = new Date()
+    todayWithTimezoneOffset.setMinutes(
+      todayWithTimezoneOffset.getMinutes() -
+        todayWithTimezoneOffset.getTimezoneOffset()
+    )
+    const todayString = `T${Math.floor(
+      todayWithTimezoneOffset.getTime() / 1000
+    ) -
+      (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
       1}:000`
     const todos = this.allTodos.filtered(
       `deleted = false && completed = false && _exactDate < ${todayString}`
