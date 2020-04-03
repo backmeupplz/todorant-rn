@@ -35,16 +35,18 @@ export class GeneralSettings extends Component {
               { label: translate('languageAuto'), code: 'en' },
               { label: 'English', code: 'en' },
               { label: 'Русский', code: 'ru' },
-              { label: 'Український', code: 'uk' },
+              { label: 'Українська', code: 'uk' },
             ]
             ActionSheet.show(
               {
-                options: options.map(v => v.label).concat(translate('cancel')),
+                options: options
+                  .map((v) => v.label)
+                  .concat(translate('cancel')),
                 cancelButtonIndex: 4,
                 destructiveButtonIndex: 4,
                 title: '',
               },
-              async i => {
+              async (i) => {
                 if (i === 0) {
                   await AsyncStorage.setItem('language', Language.auto)
                   RNRestart.Restart()

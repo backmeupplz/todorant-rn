@@ -36,7 +36,7 @@ class PaywallContent extends Component<{
   vm = new PaywallVM()
 
   async componentDidMount() {
-    purchaseListener.fail = err => {
+    purchaseListener.fail = (err) => {
       alertError(err.message || translate('purchaseError'))
     }
     purchaseListener.success = () => {
@@ -169,7 +169,10 @@ class PaywallContent extends Component<{
                   )}
                   <Text>
                     {Platform.OS === 'android'
-                      ? product.title.toLowerCase().replace(' (todorant x)', '')
+                      ? product.title
+                          .toLowerCase()
+                          .replace(' (todorant x)', '')
+                          .replace(' (todorant)', '')
                       : product.title}
                   </Text>
                   <Text>

@@ -142,5 +142,7 @@
   "rearrange": "Пересування",
   "subscriptionMonth": "місяць",
   "subscriptionYeariOS": "рік (знижка ~15%)",
-  "subscriptionYearAndroid": "рік (знижка ~16.6%)"
+  "subscriptionYearAndroid": "рік (знижка ~16.6%)",
+  "language": "Мова",
+  "languageAuto": "Авто"
 }
