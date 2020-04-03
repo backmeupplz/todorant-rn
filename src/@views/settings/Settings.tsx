@@ -203,7 +203,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
               <Text style={{ color: sharedColors.placeholderColor }}>
-                v{DeviceInfo.getVersion()}.2
+                v{DeviceInfo.getVersion()}.3
                 {__DEV__ ? '.dev' : ''}
               </Text>
             </ListItem>
