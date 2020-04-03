@@ -14,7 +14,7 @@ class SessionStore {
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 
-  @persist @observable introMessageShown = false
+  @persist @observable introMessageShown = __DEV__ ? true : false
 
   @computed get appInstalledMonthAgo() {
     const monthAgo = new Date()
