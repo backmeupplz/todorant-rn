@@ -5,11 +5,19 @@ import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
 import { goBack } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
+import CodePush from 'react-native-code-push'
 
 @observer
 export class IntroMessage extends Component {
-  componentDidMount() {
-    sharedSessionStore.introMessageShown = true
+  async componentDidMount() {
+    try {
+      const updateRequested = await CodePush.checkForUpdate()
+      if (!updateRequested) {
+        sharedSessionStore.introMessageShown = true
+      }
+    } catch (err) {
+      // Do nothing
+    }
   }
 
   render() {
