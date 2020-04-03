@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CodePushDeploymentKey</key>
-	<string>iPXp3IyEom4BmcXeLW4eej0B8cAq7UMqQZyrT</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -37,6 +35,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>34</string>
+	<key>CodePushDeploymentKey</key>
+	<string>iPXp3IyEom4BmcXeLW4eej0B8cAq7UMqQZyrT</string>
 	<key>FacebookAppID</key>
 	<string>640750769753434</string>
 	<key>FacebookDisplayName</key>
@@ -111,6 +111,7 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

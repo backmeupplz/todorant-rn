@@ -15,7 +15,7 @@ import { sharedColors } from '@utils/sharedColors'
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
     return (
-      <ListItem style={{ justifyContent: 'space-between' }}>
+      <ListItem style={{ justifyContent: 'space-between', flex: 1 }}>
         <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
         <Text {...sharedColors.textExtraStyle}>{this.props.subtitle}</Text>
       </ListItem>

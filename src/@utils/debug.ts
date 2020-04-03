@@ -59,9 +59,74 @@ export function addTodosRu() {
       monthAndYear: getDateMonthAndYearString(daysAgo(-5)),
       date: getDateDateString(daysAgo(-5)),
     },
-  ].map(v => {
+  ].map((v) => {
     return Object.assign({}, template, v)
-  }) as Todo[]).map(v => {
+  }) as Todo[]).map((v) => {
+    v._exactDate = new Date(getTitle(v))
+    return v
+  })
+
+  realm.write(() => {
+    for (const todo of todos) {
+      realm.create(Todo, todo)
+    }
+  })
+
+  sharedTodoStore.refreshTodos()
+}
+
+export function addTodosUk() {
+  const template = {
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    completed: false,
+    frog: false,
+    frogFails: 0,
+    skipped: false,
+    order: 0,
+    monthAndYear: getDateMonthAndYearString(daysAgo(0)),
+    deleted: false,
+    date: getDateDateString(daysAgo(0)),
+    time: undefined,
+
+    _tempSyncId: uuid(),
+  }
+  const todos = ([
+    {
+      text: 'Закінчити звіт для Трансгалактіческой Федерації',
+      frog: true,
+      monthAndYear: getDateMonthAndYearString(daysAgo(0)),
+      date: getDateDateString(daysAgo(0)),
+    },
+    {
+      text: 'Відправити посилку на Юпітер',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-1)),
+      date: getDateDateString(daysAgo(-1)),
+    },
+    {
+      text: 'Забрати онука з Вимірювання-28',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-2)),
+      date: getDateDateString(daysAgo(-2)),
+      time: '10:12',
+    },
+    {
+      text: 'Розбити атом Гелія',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-3)),
+      date: getDateDateString(daysAgo(-3)),
+    },
+    {
+      text: 'Полагодити двигун на темної матерії в кораблі',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-4)),
+      date: getDateDateString(daysAgo(-4)),
+    },
+    {
+      text: 'Розібратися з тим, як доставити вчених до чорної діри',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-5)),
+      date: getDateDateString(daysAgo(-5)),
+    },
+  ].map((v) => {
+    return Object.assign({}, template, v)
+  }) as Todo[]).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
   })
@@ -124,9 +189,9 @@ export function addTodosEn() {
       monthAndYear: getDateMonthAndYearString(daysAgo(-5)),
       date: getDateDateString(daysAgo(-5)),
     },
-  ].map(v => {
+  ].map((v) => {
     return Object.assign({}, template, v)
-  }) as Todo[]).map(v => {
+  }) as Todo[]).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
   })

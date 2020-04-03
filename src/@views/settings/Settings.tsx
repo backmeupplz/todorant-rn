@@ -20,7 +20,12 @@ import { Paywall } from './Paywall'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { deleteAllTodos, addTodosEn, addTodosRu } from '@utils/debug'
+import {
+  deleteAllTodos,
+  addTodosEn,
+  addTodosRu,
+  addTodosUk,
+} from '@utils/debug'
 import { LoginTelegram } from './LoginTelegram'
 import { IntroMessage } from './IntroMessage'
 import { InfoButton } from './InfoButton'
@@ -68,6 +73,16 @@ export class SettingsContent extends Component {
                   testID="add_en"
                 >
                   <Text {...sharedColors.textExtraStyle}>add en todos</Text>
+                </Button>
+                <Button
+                  onPress={() => {
+                    addTodosUk()
+                  }}
+                  accessible
+                  accessibilityLabel="add_uk"
+                  testID="add_uk"
+                >
+                  <Text {...sharedColors.textExtraStyle}>add uk todos</Text>
                 </Button>
               </>
             )}
