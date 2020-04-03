@@ -24,7 +24,7 @@ export class IntroMessage extends Component {
     return (
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <Text
               style={{ padding: 12, color: sharedColors.textColor }}
               key={i}

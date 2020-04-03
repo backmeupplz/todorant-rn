@@ -9,10 +9,11 @@ devices([
   "iPad Pro (10.5-inch)",
   "iPad Pro (12.9-inch) (2nd generation)",
   "iPad Pro (12.9-inch) (3rd generation)",
-  "iPad Pro (11-inch)",
+  "iPad Pro (11-inch) (2nd generation)",
 ])
 
 languages([
+  "uk",
   "en-US",
   "ru",
 ])
