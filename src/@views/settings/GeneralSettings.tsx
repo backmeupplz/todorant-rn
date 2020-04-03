@@ -11,6 +11,7 @@ import { AsyncStorage } from 'react-native'
 const codeToName = {
   en: 'English',
   ru: 'Русский',
+  uk: 'Українськa',
 }
 
 @observer
@@ -39,17 +40,16 @@ export class GeneralSettings extends Component {
             ActionSheet.show(
               {
                 options: options.map(v => v.label).concat(translate('cancel')),
-                cancelButtonIndex: 3,
-                destructiveButtonIndex: 3,
+                cancelButtonIndex: 4,
+                destructiveButtonIndex: 4,
                 title: '',
               },
               async i => {
                 if (i === 0) {
                   await AsyncStorage.setItem('language', Language.auto)
-                } else if (i < 3) {
+                  RNRestart.Restart()
+                } else if (i < 4) {
                   await AsyncStorage.setItem('language', options[i].code)
-                }
-                if (i < 3) {
                   RNRestart.Restart()
                 }
               }
