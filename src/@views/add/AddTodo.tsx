@@ -201,6 +201,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   style={{
                     justifyContent: 'center',
                     flexDirection: 'column',
+                    flex: 1,
                   }}
                 >
                   <Text>
@@ -244,7 +245,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               <Input
                 placeholder={translate('text')}
                 value={this.props.vm.text}
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.props.vm.text = text
                 }}
                 placeholderTextColor={sharedColors.placeholderColor}
@@ -284,7 +285,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 minDate={getDateString(new Date())}
                 current={this.props.vm.datePickerValue || new Date()}
                 markedDates={this.props.vm.markedDate}
-                onDayPress={day => {
+                onDayPress={(day) => {
                   this.props.vm.datePickerValue = day.dateString
                   this.props.vm.showDatePicker = false
                 }}
@@ -314,9 +315,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   this.props.vm.showMonthAndYearPicker
                 ) {
                   this.props.vm.monthAndYear = getDateMonthAndYearString(
-                    moment()
-                      .add(1, 'month')
-                      .toDate()
+                    moment().add(1, 'month').toDate()
                   )
                 }
               }}
@@ -450,7 +449,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               </Text>
               <Switch
                 value={this.props.vm.frog}
-                onValueChange={value => {
+                onValueChange={(value) => {
                   this.props.vm.frog = value
                 }}
               />
@@ -468,7 +467,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               </Text>
               <Switch
                 value={this.props.vm.completed}
-                onValueChange={value => {
+                onValueChange={(value) => {
                   this.props.vm.completed = value
                 }}
               />
@@ -488,7 +487,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 </Text>
                 <Switch
                   value={this.props.vm.addOnTop}
-                  onValueChange={value => {
+                  onValueChange={(value) => {
                     this.props.vm.addOnTop = value
                   }}
                 />
@@ -685,7 +684,7 @@ class AddTodoContent extends Component<{
                 justifyContent: 'center',
               }}
               onPress={() => {
-                this.vms.forEach(vm => {
+                this.vms.forEach((vm) => {
                   vm.collapsed = true
                 })
                 this.vms.push(new TodoVM())
