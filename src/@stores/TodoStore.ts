@@ -51,11 +51,11 @@ class TodoStore {
       todayWithTimezoneOffset.getMinutes() -
         todayWithTimezoneOffset.getTimezoneOffset()
     )
-    const todayString = `T${Math.floor(
-      todayWithTimezoneOffset.getTime() / 1000
-    ) -
+    const todayString = `T${
+      Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
-      1}:000`
+      1
+    }:000`
     const todos = this.allTodos.filtered(
       `deleted = false && completed = false && _exactDate < ${todayString}`
     )
@@ -82,7 +82,7 @@ class TodoStore {
       return
     }
     // Modify dates
-    todosChangedOnServer.forEach(todo => {
+    todosChangedOnServer.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
@@ -107,7 +107,10 @@ class TodoStore {
       if (localTodo) {
         if (localTodo.updatedAt < serverTodo.updatedAt) {
           realm.write(() => {
-            Object.assign(localTodo, serverTodo)
+            if (localTodo) {
+              Object.assign(localTodo, serverTodo)
+              localTodo._exactDate = new Date(getTitle(localTodo))
+            }
           })
         }
       } else {
@@ -121,7 +124,7 @@ class TodoStore {
       }
     }
     // Push
-    const todosToPush = todosChangedLocally.filter(todo => {
+    const todosToPush = todosChangedLocally.filter((todo) => {
       if (!todo._id) {
         return true
       }
@@ -144,9 +147,9 @@ class TodoStore {
       this.refreshTodos()
       return
     }
-    const savedPushedTodos = await pushBack(todosToPush.map(v => ({ ...v })))
+    const savedPushedTodos = await pushBack(todosToPush.map((v) => ({ ...v })))
     // Modify dates
-    savedPushedTodos.forEach(todo => {
+    savedPushedTodos.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
@@ -158,6 +161,7 @@ class TodoStore {
         const localTodo = this.getTodoById(todo._tempSyncId)
         if (localTodo) {
           Object.assign(localTodo, todo)
+          localTodo._exactDate = new Date(getTitle(localTodo))
         }
       }
     })

@@ -125,7 +125,7 @@ class PlanningVM {
               sharedAppStateStore.todoSection === TodoSectionType.completed
             )
           )
-          .map(v => ({ item: v })),
+          .map((v) => ({ item: v })),
       ]
     }
     return result
@@ -235,7 +235,7 @@ class PlanningVM {
     }
     // Fix order of tasks and titles
     let orderCounter = 0
-    affectedSectionHeadersOrTodo.forEach(sectionHeaderOrTodo => {
+    affectedSectionHeadersOrTodo.forEach((sectionHeaderOrTodo) => {
       if (sectionHeaderOrTodo.title) {
         if (sectionHeaderOrTodo.title !== currentTitle) {
           orderCounter = 0
@@ -256,6 +256,7 @@ class PlanningVM {
             todo.order = orderCounter
             todo.monthAndYear = currentMonthAndYear
             todo.date = currentDate
+            todo._exactDate = new Date(getTitle(todo))
             if (failed) {
               todo.frogFails++
               if (todo.frogFails > 1) {
