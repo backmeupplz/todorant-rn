@@ -6,7 +6,7 @@ import moment from 'moment'
 import { sockets } from '@utils/sockets'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -84,6 +84,21 @@ export class Data extends Component {
             >
               <Text {...sharedColors.textExtraStyle}>
                 {translate('syncDataHard')}
+              </Text>
+            </ListItem>
+            <ListItem
+              button
+              onPress={() => {
+                const todos = realm.objects<Todo>(Todo)
+                realm.write(() => {
+                  for (const todo of todos) {
+                    todo._exactDate = new Date(getTitle(todo))
+                  }
+                })
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('syncExactDates')}
               </Text>
             </ListItem>
           </List>

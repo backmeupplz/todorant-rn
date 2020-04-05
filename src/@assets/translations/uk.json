@@ -144,5 +144,6 @@
   "subscriptionYeariOS": "рік (знижка ~15%)",
   "subscriptionYearAndroid": "рік (знижка ~16.6%)",
   "language": "Мова",
-  "languageAuto": "Авто"
+  "languageAuto": "Авто",
+  "syncExactDates": "Перерахувати точні дати"
 }

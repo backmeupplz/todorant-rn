@@ -145,5 +145,6 @@
   "subscriptionYeariOS": "year (~15% discount)",
   "subscriptionYearAndroid": "year (~16.6% discount)",
   "language": "Language",
-  "languageAuto": "Auto"
+  "languageAuto": "Auto",
+  "syncExactDates": "Recalculate exact dates"
 }
