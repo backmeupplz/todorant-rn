@@ -20,7 +20,7 @@ import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 
-const showDebugInfo = false
+const showDebugInfo = true
 
 export enum CardType {
   done = 'done',
@@ -43,9 +43,9 @@ class TodoCardVM {
         }
         if (startOffseting) {
           offset++
+          t.order -= 1
+          t.updatedAt = new Date()
           if (!t.skipped) {
-            t.order -= offset
-            t.updatedAt = new Date()
             break
           }
         }
