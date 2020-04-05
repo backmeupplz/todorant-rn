@@ -33,6 +33,7 @@ import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Platform } from 'react-native'
+import Clipboard from '@react-native-community/clipboard'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -251,6 +252,26 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 placeholderTextColor={sharedColors.placeholderColor}
                 style={{ color: sharedColors.textColor }}
               />
+              {Platform.OS === 'android' && (
+                <Button
+                  icon
+                  transparent
+                  small
+                  onPress={async () => {
+                    const textFromClipboard = await Clipboard.getString()
+                    this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
+                  }}
+                  style={{ marginHorizontal: -10 }}
+                >
+                  <Icon
+                    type="MaterialIcons"
+                    name="assignment"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                </Button>
+              )}
               <CollapseButton vm={this.props.vm} />
             </Item>
             <Item
