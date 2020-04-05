@@ -58,7 +58,7 @@ public class AppTest {
 
             onView(withTagValue(is("add_ru"))).perform(click());
             try {
-                Thread.sleep(4000);
+                Thread.sleep(8000);
             } catch (InterruptedException e) {
 
             }
@@ -96,7 +96,7 @@ public class AppTest {
 
             onView(withTagValue(is("add_uk"))).perform(click());
             try {
-                Thread.sleep(4000);
+                Thread.sleep(8000);
             } catch (InterruptedException e) {
 
             }
@@ -134,7 +134,7 @@ public class AppTest {
 
             onView(withTagValue(is("add_en"))).perform(click());
             try {
-                Thread.sleep(4000);
+                Thread.sleep(8000);
             } catch (InterruptedException e) {
 
             }
