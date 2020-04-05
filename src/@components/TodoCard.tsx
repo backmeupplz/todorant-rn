@@ -21,7 +21,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
-const showDebugInfo = true
+const showDebugInfo = false
 
 export enum CardType {
   done = 'done',
@@ -214,9 +214,9 @@ export class TodoCard extends Component<{
   render() {
     return (
       <Card
+        noShadow={!sharedColors.isDark}
         style={{
           backgroundColor: sharedColors.backgroundColor,
-          borderColor: sharedColors.borderColor,
         }}
       >
         <CardItem
@@ -293,13 +293,16 @@ export class TodoCard extends Component<{
                     />
                   </Button>
                 )}
-              <Button icon transparent>
+              <Button
+                icon
+                transparent
+                onPress={() => {
+                  this.vm.delete(this.props.todo)
+                }}
+              >
                 <Icon
                   type="MaterialIcons"
                   name="delete"
-                  onPress={() => {
-                    this.vm.delete(this.props.todo)
-                  }}
                   style={{ color: sharedColors.primaryColor }}
                   {...sharedColors.iconExtraStyle}
                 />
@@ -323,13 +326,16 @@ export class TodoCard extends Component<{
                 !this.props.todo.time &&
                 !this.props.todo.frog &&
                 !this.vm.isLast(this.props.todo) && (
-                  <Button icon transparent>
+                  <Button
+                    icon
+                    transparent
+                    onPress={() => {
+                      this.vm.skip(this.props.todo)
+                    }}
+                  >
                     <Icon
                       type="MaterialIcons"
                       name="arrow-forward"
-                      onPress={() => {
-                        this.vm.skip(this.props.todo)
-                      }}
                       {...sharedColors.iconExtraStyle}
                     />
                   </Button>
@@ -352,24 +358,30 @@ export class TodoCard extends Component<{
                 </Button>
               )}
               {this.props.type === CardType.done ? (
-                <Button icon transparent>
+                <Button
+                  icon
+                  transparent
+                  onPress={() => {
+                    this.vm.uncomplete(this.props.todo)
+                  }}
+                >
                   <Icon
                     type="MaterialIcons"
                     name="repeat"
-                    onPress={() => {
-                      this.vm.uncomplete(this.props.todo)
-                    }}
                     {...sharedColors.iconExtraStyle}
                   />
                 </Button>
               ) : (
-                <Button icon transparent>
+                <Button
+                  icon
+                  transparent
+                  onPress={() => {
+                    this.vm.complete(this.props.todo)
+                  }}
+                >
                   <Icon
                     type="MaterialIcons"
                     name="done"
-                    onPress={() => {
-                      this.vm.complete(this.props.todo)
-                    }}
                     {...sharedColors.iconExtraStyle}
                   />
                 </Button>

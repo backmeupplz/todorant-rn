@@ -509,7 +509,7 @@ class PlanningHeaderLeft extends Component {
                 ? 'format-list-numbered'
                 : 'close'
             }
-            {...sharedColors.iconExtraStyle}
+            {...sharedColors.textExtraStyle}
           />
         </Button>
       )
