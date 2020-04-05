@@ -8,7 +8,7 @@ class ColorModeManager {
   }
 
   constructor() {
-    eventEmitter.on('currentModeChanged', newMode => {
+    eventEmitter.on('currentModeChanged', (newMode) => {
       this.mode = newMode
     })
   }
@@ -26,7 +26,7 @@ class ColorModeManager {
     return this.isDark ? '#343434' : '#fff'
   }
   @computed get borderColor() {
-    return this.isDark ? '#919191' : undefined
+    return this.isDark ? '#919191' : '#919191'
   }
   @computed get headerExtraStyle() {
     return {

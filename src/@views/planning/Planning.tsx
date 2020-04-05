@@ -390,6 +390,8 @@ class PlanningContent extends Component {
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}
           onPress={plusButtonAction}
+          useNativeFeedback={true}
+          fixNativeFeedbackRadius={true}
         />
       </Container>
     )
@@ -493,7 +495,14 @@ class PlanningHeaderLeft extends Component {
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <Button
           icon
-          transparent
+          transparent={Platform.OS === 'ios'}
+          style={{
+            backgroundColor:
+              Platform.OS === 'android'
+                ? sharedColors.backgroundColor
+                : undefined,
+            elevation: 0,
+          }}
           small
           onPress={() => {
             sharedAppStateStore.planningMode =

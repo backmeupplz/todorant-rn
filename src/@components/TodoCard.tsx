@@ -11,7 +11,7 @@ import { observer } from 'mobx-react'
 import { fixOrder } from '@utils/fixOrder'
 import { navigate } from '@utils/navigation'
 import { l } from '@utils/linkify'
-import { Linking } from 'react-native'
+import { Linking, Platform } from 'react-native'
 import { sharedAppStateStore, PlanningMode } from '@stores/AppStateStore'
 import { alertConfirm } from '@utils/alert'
 import { computed } from 'mobx'
@@ -214,9 +214,10 @@ export class TodoCard extends Component<{
   render() {
     return (
       <Card
-        noShadow={!sharedColors.isDark}
+        noShadow
         style={{
           backgroundColor: sharedColors.backgroundColor,
+          borderColor: sharedColors.borderColor,
         }}
       >
         <CardItem
@@ -259,7 +260,7 @@ export class TodoCard extends Component<{
             footer
             style={{
               justifyContent: 'space-between',
-              backgroundColor: 'transparrent',
+              backgroundColor: 'transparent',
             }}
           >
             {this.props.todo.skipped && (
@@ -280,7 +281,14 @@ export class TodoCard extends Component<{
                 !isTodoToday(this.props.todo) && (
                   <Button
                     icon
-                    transparent
+                    style={{
+                      backgroundColor:
+                        Platform.OS === 'android'
+                          ? sharedColors.backgroundColor
+                          : undefined,
+                      elevation: 0,
+                    }}
+                    transparent={Platform.OS === 'ios'}
                     onPress={() => {
                       this.vm.moveToToday(this.props.todo)
                     }}
@@ -295,7 +303,14 @@ export class TodoCard extends Component<{
                 )}
               <Button
                 icon
-                transparent
+                style={{
+                  backgroundColor:
+                    Platform.OS === 'android'
+                      ? sharedColors.backgroundColor
+                      : undefined,
+                  elevation: 0,
+                }}
+                transparent={Platform.OS === 'ios'}
                 onPress={() => {
                   this.vm.delete(this.props.todo)
                 }}
@@ -310,7 +325,14 @@ export class TodoCard extends Component<{
               {this.props.type !== CardType.current && (
                 <Button
                   icon
-                  transparent
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    elevation: 0,
+                  }}
+                  transparent={Platform.OS === 'ios'}
                   onPress={() => {
                     navigate('EditTodo', { editedTodo: this.props.todo })
                   }}
@@ -328,7 +350,14 @@ export class TodoCard extends Component<{
                 !this.vm.isLast(this.props.todo) && (
                   <Button
                     icon
-                    transparent
+                    style={{
+                      backgroundColor:
+                        Platform.OS === 'android'
+                          ? sharedColors.backgroundColor
+                          : undefined,
+                      elevation: 0,
+                    }}
+                    transparent={Platform.OS === 'ios'}
                     onPress={() => {
                       this.vm.skip(this.props.todo)
                     }}
@@ -343,7 +372,14 @@ export class TodoCard extends Component<{
               {this.props.type === CardType.current && (
                 <Button
                   icon
-                  transparent
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    elevation: 0,
+                  }}
+                  transparent={Platform.OS === 'ios'}
                   onPress={() => {
                     navigate('BreakdownTodo', {
                       breakdownTodo: this.props.todo,
@@ -360,7 +396,14 @@ export class TodoCard extends Component<{
               {this.props.type === CardType.done ? (
                 <Button
                   icon
-                  transparent
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    elevation: 0,
+                  }}
+                  transparent={Platform.OS === 'ios'}
                   onPress={() => {
                     this.vm.uncomplete(this.props.todo)
                   }}
@@ -374,7 +417,14 @@ export class TodoCard extends Component<{
               ) : (
                 <Button
                   icon
-                  transparent
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    elevation: 0,
+                  }}
+                  transparent={Platform.OS === 'ios'}
                   onPress={() => {
                     this.vm.complete(this.props.todo)
                   }}

@@ -189,9 +189,14 @@ class PaywallContent extends Component<{
                 style={{
                   justifyContent: 'center',
                   marginTop: 8,
+                  backgroundColor:
+                    Platform.OS === 'android'
+                      ? sharedColors.backgroundColor
+                      : undefined,
+                  elevation: 0,
                 }}
                 small
-                transparent
+                transparent={Platform.OS === 'ios'}
                 onPress={() => {
                   navigate('Terms')
                 }}
@@ -203,9 +208,14 @@ class PaywallContent extends Component<{
               <Button
                 style={{
                   justifyContent: 'center',
+                  backgroundColor:
+                    Platform.OS === 'android'
+                      ? sharedColors.backgroundColor
+                      : undefined,
+                  elevation: 0,
                 }}
                 small
-                transparent
+                transparent={Platform.OS === 'ios'}
                 onPress={() => {
                   navigate('Privacy')
                 }}
@@ -221,8 +231,13 @@ class PaywallContent extends Component<{
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: 16,
+              backgroundColor:
+                Platform.OS === 'android'
+                  ? sharedColors.backgroundColor
+                  : undefined,
+              elevation: 0,
             }}
-            transparent
+            transparent={Platform.OS === 'ios'}
             onPress={() => {
               restorePurchases()
             }}

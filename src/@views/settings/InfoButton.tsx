@@ -14,6 +14,7 @@ export class InfoButtonContent extends Component<{ message: string }> {
       toValue: back ? 1 : 0,
       duration: 150,
       easing: Easing.linear,
+      useNativeDriver: true,
     }).start()
   }
 

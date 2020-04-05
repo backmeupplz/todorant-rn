@@ -44,7 +44,7 @@
     "mobx-persist": "backmeupplz/mobx-persist",
     "mobx-react": "^6.1.7",
     "moment": "^2.24.0",
-    "native-base": "^2.13.8",
+    "native-base": "^2.13.12",
     "react": "16.9.0",
     "react-native": "0.62.1",
     "react-native-action-button": "^2.8.5",

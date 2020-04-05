@@ -155,6 +155,8 @@ class CurrentContent extends Component {
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}
           onPress={plusButtonAction}
+          useNativeFeedback={true}
+          fixNativeFeedbackRadius={true}
         />
       </Container>
     )

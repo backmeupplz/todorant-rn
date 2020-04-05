@@ -149,7 +149,14 @@ class CollapseButton extends Component<{ vm: TodoVM }> {
     return (
       <Button
         icon
-        transparent
+        transparent={Platform.OS === 'ios'}
+        style={{
+          backgroundColor:
+            Platform.OS === 'android'
+              ? sharedColors.backgroundColor
+              : undefined,
+          elevation: 0,
+        }}
         small
         onPress={() => {
           this.props.vm.collapsed = !this.props.vm.collapsed
@@ -255,13 +262,20 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               {Platform.OS === 'android' && (
                 <Button
                   icon
-                  transparent
+                  transparent={Platform.OS === 'ios'}
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    marginHorizontal: -10,
+                    elevation: 0,
+                  }}
                   small
                   onPress={async () => {
                     const textFromClipboard = await Clipboard.getString()
                     this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
                   }}
-                  style={{ marginHorizontal: -10 }}
                 >
                   <Icon
                     type="MaterialIcons"
@@ -426,7 +440,14 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 {!!this.props.vm.time && (
                   <Button
                     icon
-                    transparent
+                    transparent={Platform.OS === 'ios'}
+                    style={{
+                      backgroundColor:
+                        Platform.OS === 'android'
+                          ? sharedColors.backgroundColor
+                          : undefined,
+                      elevation: 0,
+                    }}
                     small
                     onPress={() => {
                       this.props.vm.time = undefined
@@ -518,11 +539,18 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               <Item style={{ borderColor: sharedColors.placeholderColor }}>
                 <Button
                   block
-                  transparent
+                  transparent={Platform.OS === 'ios'}
+                  style={{
+                    backgroundColor:
+                      Platform.OS === 'android'
+                        ? sharedColors.backgroundColor
+                        : undefined,
+                    flex: 1,
+                    elevation: 0,
+                  }}
                   onPress={() => {
                     this.props.vm.showMore = true
                   }}
-                  style={{ flex: 1 }}
                 >
                   <Text style={{ color: sharedColors.primaryColor }}>
                     {translate('addTodoMore')}
@@ -657,8 +685,13 @@ class AddTodoContent extends Component<{
               {a.length > 1 && (
                 <>
                   <Button
-                    transparent
+                    transparent={Platform.OS === 'ios'}
                     style={{
+                      backgroundColor:
+                        Platform.OS === 'android'
+                          ? sharedColors.backgroundColor
+                          : undefined,
+                      elevation: 0,
                       marginHorizontal: 10,
                       justifyContent: 'center',
                     }}
@@ -697,8 +730,13 @@ class AddTodoContent extends Component<{
           </Button>
           {this.screenType === AddTodoScreenType.add && (
             <Button
-              transparent
+              transparent={Platform.OS === 'ios'}
               style={{
+                backgroundColor:
+                  Platform.OS === 'android'
+                    ? sharedColors.backgroundColor
+                    : undefined,
+                elevation: 0,
                 marginHorizontal: 10,
                 marginTop: 10,
                 flex: 1,
