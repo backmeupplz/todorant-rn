@@ -19,6 +19,7 @@ import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { extraButtonProps } from '@utils/extraButtonProps'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -186,17 +187,13 @@ class PaywallContent extends Component<{
                 </Button>
               ))}
               <Button
+                {...extraButtonProps(sharedColors)}
                 style={{
                   justifyContent: 'center',
                   marginTop: 8,
-                  backgroundColor:
-                    Platform.OS === 'android'
-                      ? sharedColors.backgroundColor
-                      : undefined,
-                  elevation: 0,
+                  ...extraButtonProps(sharedColors).style,
                 }}
                 small
-                transparent={Platform.OS === 'ios'}
                 onPress={() => {
                   navigate('Terms')
                 }}
@@ -206,16 +203,12 @@ class PaywallContent extends Component<{
                 </Text>
               </Button>
               <Button
+                {...extraButtonProps(sharedColors)}
                 style={{
                   justifyContent: 'center',
-                  backgroundColor:
-                    Platform.OS === 'android'
-                      ? sharedColors.backgroundColor
-                      : undefined,
-                  elevation: 0,
+                  ...extraButtonProps(sharedColors).style,
                 }}
                 small
-                transparent={Platform.OS === 'ios'}
                 onPress={() => {
                   navigate('Privacy')
                 }}
@@ -227,17 +220,13 @@ class PaywallContent extends Component<{
             </>
           )}
           <Button
+            {...extraButtonProps(sharedColors)}
             style={{
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: 16,
-              backgroundColor:
-                Platform.OS === 'android'
-                  ? sharedColors.backgroundColor
-                  : undefined,
-              elevation: 0,
+              ...extraButtonProps(sharedColors).style,
             }}
-            transparent={Platform.OS === 'ios'}
             onPress={() => {
               restorePurchases()
             }}

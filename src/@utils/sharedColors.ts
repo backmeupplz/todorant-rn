@@ -1,7 +1,7 @@
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
 
-class ColorModeManager {
+export class ColorModeManager {
   @observable mode = initialMode
   @computed get isDark() {
     return this.mode === 'dark'

@@ -33,6 +33,7 @@ import { InfoButton } from '@views/settings/InfoButton'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sockets } from '@utils/sockets'
+import { extraButtonProps } from '@utils/extraButtonProps'
 
 const Stack = createStackNavigator()
 
@@ -469,7 +470,7 @@ class PlanningHeaderRight extends Component {
     return sharedAppStateStore.hash ? (
       <Button
         icon
-        transparent
+        {...extraButtonProps(sharedColors)}
         small
         onPress={() => {
           sharedAppStateStore.hash = ''
@@ -495,14 +496,7 @@ class PlanningHeaderLeft extends Component {
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <Button
           icon
-          transparent={Platform.OS === 'ios'}
-          style={{
-            backgroundColor:
-              Platform.OS === 'android'
-                ? sharedColors.backgroundColor
-                : undefined,
-            elevation: 0,
-          }}
+          {...extraButtonProps(sharedColors)}
           small
           onPress={() => {
             sharedAppStateStore.planningMode =

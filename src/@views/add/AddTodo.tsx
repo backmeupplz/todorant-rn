@@ -34,6 +34,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Platform } from 'react-native'
 import Clipboard from '@react-native-community/clipboard'
+import { extraButtonProps } from '@utils/extraButtonProps'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -149,14 +150,7 @@ class CollapseButton extends Component<{ vm: TodoVM }> {
     return (
       <Button
         icon
-        transparent={Platform.OS === 'ios'}
-        style={{
-          backgroundColor:
-            Platform.OS === 'android'
-              ? sharedColors.backgroundColor
-              : undefined,
-          elevation: 0,
-        }}
+        {...extraButtonProps(sharedColors)}
         small
         onPress={() => {
           this.props.vm.collapsed = !this.props.vm.collapsed
@@ -262,15 +256,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               {Platform.OS === 'android' && (
                 <Button
                   icon
-                  transparent={Platform.OS === 'ios'}
-                  style={{
-                    backgroundColor:
-                      Platform.OS === 'android'
-                        ? sharedColors.backgroundColor
-                        : undefined,
-                    marginHorizontal: -10,
-                    elevation: 0,
-                  }}
+                  {...extraButtonProps(sharedColors)}
                   small
                   onPress={async () => {
                     const textFromClipboard = await Clipboard.getString()
@@ -440,14 +426,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 {!!this.props.vm.time && (
                   <Button
                     icon
-                    transparent={Platform.OS === 'ios'}
-                    style={{
-                      backgroundColor:
-                        Platform.OS === 'android'
-                          ? sharedColors.backgroundColor
-                          : undefined,
-                      elevation: 0,
-                    }}
+                    {...extraButtonProps(sharedColors)}
                     small
                     onPress={() => {
                       this.props.vm.time = undefined
@@ -539,14 +518,10 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
               <Item style={{ borderColor: sharedColors.placeholderColor }}>
                 <Button
                   block
-                  transparent={Platform.OS === 'ios'}
+                  {...extraButtonProps(sharedColors)}
                   style={{
-                    backgroundColor:
-                      Platform.OS === 'android'
-                        ? sharedColors.backgroundColor
-                        : undefined,
+                    ...extraButtonProps(sharedColors).style,
                     flex: 1,
-                    elevation: 0,
                   }}
                   onPress={() => {
                     this.props.vm.showMore = true
@@ -685,21 +660,20 @@ class AddTodoContent extends Component<{
               {a.length > 1 && (
                 <>
                   <Button
-                    transparent={Platform.OS === 'ios'}
+                    {...extraButtonProps(sharedColors)}
                     style={{
-                      backgroundColor:
-                        Platform.OS === 'android'
-                          ? sharedColors.backgroundColor
-                          : undefined,
-                      elevation: 0,
+                      ...extraButtonProps(sharedColors).style,
                       marginHorizontal: 10,
                       justifyContent: 'center',
+                      flex: 1,
                     }}
                     onPress={() => {
                       this.vms.splice(i, 1)
                     }}
                   >
-                    <Text style={{ color: 'tomato' }}>Delete</Text>
+                    <Text style={{ color: 'tomato' }}>
+                      {translate('delete')}
+                    </Text>
                   </Button>
                   <View
                     style={{
@@ -730,13 +704,9 @@ class AddTodoContent extends Component<{
           </Button>
           {this.screenType === AddTodoScreenType.add && (
             <Button
-              transparent={Platform.OS === 'ios'}
+              {...extraButtonProps(sharedColors)}
               style={{
-                backgroundColor:
-                  Platform.OS === 'android'
-                    ? sharedColors.backgroundColor
-                    : undefined,
-                elevation: 0,
+                ...extraButtonProps(sharedColors).style,
                 marginHorizontal: 10,
                 marginTop: 10,
                 flex: 1,
