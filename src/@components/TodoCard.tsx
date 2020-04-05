@@ -39,7 +39,12 @@ class TodoCardVM {
     let offset = 0
     realm.write(() => {
       for (const t of neighbours) {
-        if (t._id === todo._id) {
+        if (
+          (t._id && todo._id && t._id === todo._id) ||
+          (t._tempSyncId &&
+            todo._tempSyncId &&
+            t._tempSyncId === todo._tempSyncId)
+        ) {
           startOffseting = true
           continue
         }
