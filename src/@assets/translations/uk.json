@@ -145,5 +145,6 @@
   "subscriptionYearAndroid": "рік (знижка ~16.6%)",
   "language": "Мова",
   "languageAuto": "Авто",
-  "syncExactDates": "Перерахувати точні дати"
+  "syncExactDates": "Перерахувати точні дати",
+  "askBeforeDelete": "Запитувати перед видаленням завдань"
 }

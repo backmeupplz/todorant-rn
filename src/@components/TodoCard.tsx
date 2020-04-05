@@ -19,6 +19,7 @@ import moment from 'moment'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const showDebugInfo = true
 
@@ -78,20 +79,29 @@ class TodoCardVM {
   }
 
   delete(todo: Todo) {
-    alertConfirm(
-      `${translate('deleteTodo')} "${
-        todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
-      }"?`,
-      translate('delete'),
-      () => {
-        realm.write(() => {
-          todo.deleted = true
-          todo.updatedAt = new Date()
-        })
+    if (sharedSettingsStore.askBeforeDelete) {
+      alertConfirm(
+        `${translate('deleteTodo')} "${
+          todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
+        }"?`,
+        translate('delete'),
+        () => {
+          realm.write(() => {
+            todo.deleted = true
+            todo.updatedAt = new Date()
+          })
 
-        fixOrder([getTitle(todo)])
-      }
-    )
+          fixOrder([getTitle(todo)])
+        }
+      )
+    } else {
+      realm.write(() => {
+        todo.deleted = true
+        todo.updatedAt = new Date()
+      })
+
+      fixOrder([getTitle(todo)])
+    }
   }
 
   uncomplete(todo: Todo) {
@@ -310,6 +320,7 @@ export class TodoCard extends Component<{
                 </Button>
               )}
               {this.props.type === CardType.current &&
+                !this.props.todo.time &&
                 !this.props.todo.frog &&
                 !this.vm.isLast(this.props.todo) && (
                   <Button icon transparent>

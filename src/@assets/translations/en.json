@@ -146,5 +146,6 @@
   "subscriptionYearAndroid": "year (~16.6% discount)",
   "language": "Language",
   "languageAuto": "Auto",
-  "syncExactDates": "Recalculate exact dates"
+  "syncExactDates": "Recalculate exact dates",
+  "askBeforeDelete": "Verify deleting todos"
 }

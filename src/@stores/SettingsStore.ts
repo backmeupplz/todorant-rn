@@ -24,6 +24,8 @@ class SettingsStore {
 
   @observable language = 'en'
 
+  @persist @observable askBeforeDelete = true
+
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined
       ? this.language === 'en'

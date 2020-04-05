@@ -16,6 +16,7 @@ export class TodoSettings extends Component {
           style={{
             justifyContent: 'space-between',
             borderColor: sharedColors.placeholderColor,
+            flex: 1,
           }}
         >
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
@@ -23,7 +24,7 @@ export class TodoSettings extends Component {
           </Text>
           <Switch
             value={sharedSettingsStore.showTodayOnAddTodo}
-            onValueChange={value => {
+            onValueChange={(value) => {
               sharedSettingsStore.showTodayOnAddTodo = value
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
@@ -34,6 +35,7 @@ export class TodoSettings extends Component {
           style={{
             justifyContent: 'space-between',
             borderColor: sharedColors.placeholderColor,
+            flex: 1,
           }}
         >
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
@@ -41,7 +43,7 @@ export class TodoSettings extends Component {
           </Text>
           <Switch
             value={sharedSettingsStore.newTodosGoFirst}
-            onValueChange={value => {
+            onValueChange={(value) => {
               sharedSettingsStore.newTodosGoFirst = value
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
@@ -52,6 +54,7 @@ export class TodoSettings extends Component {
           style={{
             justifyContent: 'space-between',
             borderColor: sharedColors.placeholderColor,
+            flex: 1,
           }}
         >
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
@@ -59,10 +62,27 @@ export class TodoSettings extends Component {
           </Text>
           <Switch
             value={sharedSettingsStore.preserveOrderByTime}
-            onValueChange={value => {
+            onValueChange={(value) => {
               sharedSettingsStore.preserveOrderByTime = value
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
+            }}
+          />
+        </ListItem>
+        <ListItem
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+            flex: 1,
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('askBeforeDelete')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.askBeforeDelete}
+            onValueChange={(value) => {
+              sharedSettingsStore.askBeforeDelete = value
             }}
           />
         </ListItem>
@@ -75,13 +95,13 @@ export class TodoSettings extends Component {
             ActionSheet.show(
               {
                 options: [0, 1, 2, 3, 4, 5, 6]
-                  .map(v => translate(`weekday${v}`))
+                  .map((v) => translate(`weekday${v}`))
                   .concat([translate('cancel')]),
                 cancelButtonIndex: 7,
                 destructiveButtonIndex: 7,
                 title: '',
               },
-              i => {
+              (i) => {
                 if (i < 7) {
                   sharedSettingsStore.firstDayOfWeek = i
                   sharedSettingsStore.updatedAt = new Date()

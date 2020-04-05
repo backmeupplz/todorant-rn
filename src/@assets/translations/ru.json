@@ -147,5 +147,6 @@
   "subscriptionYearAndroid": "год (~16.6% скидка)",
   "language": "Язык",
   "languageAuto": "Авто",
-  "syncExactDates": "Пересчитать точные даты"
+  "syncExactDates": "Пересчитать точные даты",
+  "askBeforeDelete": "Спрашивать перед удалением задач"
 }
