@@ -22,7 +22,7 @@ class TodorantUITests: XCTestCase {
     func testScreenshots() {
     let app = XCUIApplication()
       
-    sleep(10)
+    sleep(20)
     
     snapshot("0Empty")
     if deviceLanguage == "ru" {
@@ -31,7 +31,7 @@ class TodorantUITests: XCTestCase {
       app.otherElements["delete"].tap()
       sleep(2)
       app.otherElements["add_ru"].tap()
-      sleep(2)
+      sleep(8)
       app.buttons["Текущее, tab, 1 of 3"].tap()
       snapshot("1Current")
       app.buttons["Планирование, tab, 2 of 3"].tap()
@@ -42,7 +42,7 @@ class TodorantUITests: XCTestCase {
       app.otherElements["delete"].tap()
       sleep(2)
       app.otherElements["add_uk"].tap()
-      sleep(2)
+      sleep(8)
       app.buttons["Поточне, tab, 1 of 3"].tap()
       snapshot("1Current")
       app.buttons["Планування, tab, 2 of 3"].tap()
@@ -53,7 +53,7 @@ class TodorantUITests: XCTestCase {
       app.otherElements["delete"].tap()
       sleep(2)
       app.otherElements["add_en"].tap()
-      sleep(2)
+      sleep(8)
       app.buttons["Current, tab, 1 of 3"].tap()
       snapshot("1Current")
       app.buttons["Planning, tab, 2 of 3"].tap()
