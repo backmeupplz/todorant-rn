@@ -24,7 +24,6 @@ import { Login } from '@views/settings/Login'
 import { Paywall } from '@views/settings/Paywall'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { Platform } from 'react-native'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
@@ -34,6 +33,7 @@ import { fixOrder } from '@utils/fixOrder'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sockets } from '@utils/sockets'
 import { extraButtonProps } from '@utils/extraButtonProps'
+import { AddButton } from '@components/AddButton'
 
 const Stack = createStackNavigator()
 
@@ -57,8 +57,8 @@ class PlanningVM {
   @computed get allTodosAndHash() {
     return sharedAppStateStore.hash
       ? this.allTodosFiltered.filtered(
-          `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
-        )
+        `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
+      )
       : this.allTodosFiltered
   }
 
@@ -110,8 +110,8 @@ class PlanningVM {
           ? 1
           : -1
         : new Date(a.title) < new Date(b.title)
-        ? 1
-        : -1
+          ? 1
+          : -1
     })
     let result: SectionHeaderOrTodo[] = []
     for (const todoSection of gatheredTodos) {
@@ -301,17 +301,17 @@ class TodoCardPlanningVariable extends Component<{
         }
       />
     ) : (
-      <TouchableOpacity onPressIn={this.props.drag}>
-        <TodoCard
-          todo={this.props.item}
-          type={
-            sharedAppStateStore.todoSection === TodoSectionType.planning
-              ? CardType.planning
-              : CardType.done
-          }
-        />
-      </TouchableOpacity>
-    )
+        <TouchableOpacity onPressIn={this.props.drag}>
+          <TodoCard
+            todo={this.props.item}
+            type={
+              sharedAppStateStore.todoSection === TodoSectionType.planning
+                ? CardType.planning
+                : CardType.done
+            }
+          />
+        </TouchableOpacity>
+      )
   }
 }
 
@@ -359,34 +359,34 @@ class PlanningContent extends Component {
                   </Text>
                 </TouchableWithoutFeedback>
               ) : (
-                <View style={{ padding: isActive ? 10 : 0 }}>
-                  <TodoCardPlanningVariable item={item.item!} drag={drag} />
-                </View>
-              )
+                  <View style={{ padding: isActive ? 10 : 0 }}>
+                    <TodoCardPlanningVariable item={item.item!} drag={drag} />
+                  </View>
+                )
             }
             keyExtractor={(_, index) => `${index}`}
             onDragEnd={this.vm.onDragEnd}
           />
         ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              alignItems: 'center',
-              margin: 12,
-            }}
-          >
-            <H1 {...sharedColors.textExtraStyle}>👀</H1>
-            <H1 {...sharedColors.textExtraStyle}>
-              {translate('noTodosExistTitle')}
-            </H1>
-            <Text
-              style={{ textAlign: 'center', color: sharedColors.textColor }}
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: 12,
+              }}
             >
-              {translate('noTodosExistText')}
-            </Text>
-          </View>
-        )}
+              <H1 {...sharedColors.textExtraStyle}>👀</H1>
+              <H1 {...sharedColors.textExtraStyle}>
+                {translate('noTodosExistTitle')}
+              </H1>
+              <Text
+                style={{ textAlign: 'center', color: sharedColors.textColor }}
+              >
+                {translate('noTodosExistText')}
+              </Text>
+            </View>
+          )}
         <ActionButton
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}
@@ -407,60 +407,60 @@ class PlanningHeader extends Component {
     ) : sharedAppStateStore.planningMode === PlanningMode.rearrange ? (
       <Text {...sharedColors.textExtraStyle}>{translate('rearrange')}</Text>
     ) : (
-      <Segment>
-        <Button
-          first
-          active={sharedAppStateStore.todoSection === TodoSectionType.planning}
-          onPress={() => {
-            sharedAppStateStore.todoSection = TodoSectionType.planning
-          }}
-          style={{
-            borderColor: sharedColors.primaryColor,
-            backgroundColor:
-              sharedAppStateStore.todoSection === TodoSectionType.planning
-                ? sharedColors.primaryColor
-                : sharedColors.backgroundColor,
-          }}
-        >
-          <Text
-            style={{
-              color:
-                sharedAppStateStore.todoSection === TodoSectionType.planning
-                  ? sharedColors.backgroundColor
-                  : sharedColors.primaryColor,
-            }}
-          >
-            {translate('planning')}
-          </Text>
-        </Button>
-        <Button
-          transparent
-          last
-          active={sharedAppStateStore.todoSection === TodoSectionType.completed}
-          onPress={() => {
-            sharedAppStateStore.todoSection = TodoSectionType.completed
-          }}
-          style={{
-            borderColor: sharedColors.primaryColor,
-            backgroundColor:
-              sharedAppStateStore.todoSection === TodoSectionType.completed
-                ? sharedColors.primaryColor
-                : sharedColors.backgroundColor,
-          }}
-        >
-          <Text
-            style={{
-              color:
-                sharedAppStateStore.todoSection === TodoSectionType.completed
-                  ? sharedColors.backgroundColor
-                  : sharedColors.primaryColor,
-            }}
-          >
-            {translate('completed')}
-          </Text>
-        </Button>
-      </Segment>
-    )
+          <Segment>
+            <Button
+              first
+              active={sharedAppStateStore.todoSection === TodoSectionType.planning}
+              onPress={() => {
+                sharedAppStateStore.todoSection = TodoSectionType.planning
+              }}
+              style={{
+                borderColor: sharedColors.primaryColor,
+                backgroundColor:
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? sharedColors.primaryColor
+                    : sharedColors.backgroundColor,
+              }}
+            >
+              <Text
+                style={{
+                  color:
+                    sharedAppStateStore.todoSection === TodoSectionType.planning
+                      ? sharedColors.backgroundColor
+                      : sharedColors.primaryColor,
+                }}
+              >
+                {translate('planning')}
+              </Text>
+            </Button>
+            <Button
+              transparent
+              last
+              active={sharedAppStateStore.todoSection === TodoSectionType.completed}
+              onPress={() => {
+                sharedAppStateStore.todoSection = TodoSectionType.completed
+              }}
+              style={{
+                borderColor: sharedColors.primaryColor,
+                backgroundColor:
+                  sharedAppStateStore.todoSection === TodoSectionType.completed
+                    ? sharedColors.primaryColor
+                    : sharedColors.backgroundColor,
+              }}
+            >
+              <Text
+                style={{
+                  color:
+                    sharedAppStateStore.todoSection === TodoSectionType.completed
+                      ? sharedColors.backgroundColor
+                      : sharedColors.primaryColor,
+                }}
+              >
+                {translate('completed')}
+              </Text>
+            </Button>
+          </Segment>
+        )
   }
 }
 
@@ -483,8 +483,8 @@ class PlanningHeaderRight extends Component {
         />
       </Button>
     ) : (
-      InfoButton('infoPlanning')()
-    )
+        InfoButton('infoPlanning')()
+      )
   }
 }
 
@@ -548,7 +548,12 @@ export function Planning() {
             options={{
               title: translate('addTodo'),
               ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoAdd'),
+              headerRight: () => (
+                <View style={{ flexDirection: 'row' }}>
+                  <AddButton />
+                  {InfoButton('infoAdd')()}
+                </View>
+              ),
             }}
           />
           <Stack.Screen

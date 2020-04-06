@@ -88,7 +88,7 @@ class TodoCardVM {
     if (sharedSettingsStore.askBeforeDelete) {
       alertConfirm(
         `${translate('deleteTodo')} "${
-          todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
+        todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
         }"?`,
         translate('delete'),
         () => {
@@ -296,7 +296,6 @@ export class TodoCard extends Component<{
                       type="MaterialIcons"
                       name="arrow-upward"
                       {...sharedColors.iconExtraStyle}
-                      {...sharedColors.iconExtraStyle}
                     />
                   </Button>
                 )}
@@ -379,20 +378,20 @@ export class TodoCard extends Component<{
                   />
                 </Button>
               ) : (
-                <Button
-                  icon
-                  {...extraButtonProps(sharedColors)}
-                  onPress={() => {
-                    this.vm.complete(this.props.todo)
-                  }}
-                >
-                  <Icon
-                    type="MaterialIcons"
-                    name="done"
-                    {...sharedColors.iconExtraStyle}
-                  />
-                </Button>
-              )}
+                  <Button
+                    icon
+                    {...extraButtonProps(sharedColors)}
+                    onPress={() => {
+                      this.vm.complete(this.props.todo)
+                    }}
+                  >
+                    <Icon
+                      type="MaterialIcons"
+                      name="done"
+                      {...sharedColors.iconExtraStyle}
+                    />
+                  </Button>
+                )}
             </View>
           </CardItem>
         )}

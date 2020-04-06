@@ -22,6 +22,7 @@ import { plusButtonAction } from '@utils/plusButtonAction'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { InfoButton } from '@views/settings/InfoButton'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { AddButton } from '@components/AddButton'
 
 const Stack = createStackNavigator()
 
@@ -63,14 +64,14 @@ class ProgressBar extends Component<{ progress: number }> {
         style={{ flex: 1, marginEnd: 12 }}
       />
     ) : (
-      <ProgressBarAndroid
-        styleAttr="Horizontal"
-        indeterminate={false}
-        progress={this.props.progress}
-        style={{ flex: 1, marginEnd: 12 }}
-        color={sharedColors.primaryColor}
-      />
-    )
+        <ProgressBarAndroid
+          styleAttr="Horizontal"
+          indeterminate={false}
+          progress={this.props.progress}
+          style={{ flex: 1, marginEnd: 12 }}
+          color={sharedColors.primaryColor}
+        />
+      )
   }
 }
 
@@ -111,7 +112,7 @@ class CurrentContent extends Component {
           )}
           {!!sharedTodoStore.progress.count &&
             sharedTodoStore.progress.count ===
-              sharedTodoStore.progress.completed && (
+            sharedTodoStore.progress.completed && (
               <View
                 style={{
                   flex: 1,
@@ -185,7 +186,12 @@ export function Current() {
             options={{
               title: translate('addTodo'),
               ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoAdd'),
+              headerRight: () => (
+                <View style={{ flexDirection: 'row' }}>
+                  <AddButton />
+                  {InfoButton('infoAdd')()}
+                </View>
+              ),
             }}
           />
           <Stack.Screen
@@ -194,7 +200,12 @@ export function Current() {
             options={{
               title: translate('breakdownTodo'),
               ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoBreakdown'),
+              headerRight: () => (
+                <View style={{ flexDirection: 'row' }}>
+                  <AddButton />
+                  {InfoButton('infoBreakdown')()}
+                </View>
+              )
             }}
           />
           <Stack.Screen
