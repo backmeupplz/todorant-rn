@@ -21,6 +21,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { extraButtonProps } from '@utils/extraButtonProps'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const showDebugInfo = false
 
@@ -210,6 +211,7 @@ class TodoCardTextBlock extends Component<{ todo: Todo; isOld: boolean }> {
 export class TodoCard extends Component<{
   todo: Todo
   type: CardType
+  drag?: () => void
 }> {
   vm = new TodoCardVM()
 
@@ -237,21 +239,24 @@ export class TodoCard extends Component<{
             {__DEV__ && showDebugInfo && (
               <DebugTodoInfo todo={this.props.todo} />
             )}
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-              {sharedAppStateStore.planningMode === PlanningMode.rearrange && (
-                <Icon
-                  type="MaterialIcons"
-                  name="menu"
-                  style={{
-                    marginRight: 5,
-                    ...sharedColors.iconExtraStyle.style,
-                  }}
-                />
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start', flex: 1 }}>
+              {this.props.type !== CardType.current && sharedAppStateStore.planningMode === PlanningMode.rearrange && (
+                <TouchableOpacity onPressIn={this.props.drag}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="menu"
+                    style={{
+                      marginRight: 5,
+                      ...sharedColors.iconExtraStyle.style,
+                    }}
+                  />
+                </TouchableOpacity>
               )}
               <View
                 style={{
+                  flex: 1,
                   paddingTop:
-                    sharedAppStateStore.planningMode === PlanningMode.rearrange
+                    this.props.type !== CardType.current && sharedAppStateStore.planningMode === PlanningMode.rearrange
                       ? 5
                       : 0,
                 }}
@@ -261,7 +266,7 @@ export class TodoCard extends Component<{
             </View>
           </Body>
         </CardItem>
-        {sharedAppStateStore.planningMode === PlanningMode.default && (
+        {(sharedAppStateStore.planningMode === PlanningMode.default || this.props.type === CardType.current) && (
           <CardItem
             footer
             style={{

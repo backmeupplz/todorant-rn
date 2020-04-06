@@ -286,36 +286,6 @@ class PlanningVM {
 }
 
 @observer
-class TodoCardPlanningVariable extends Component<{
-  item: Todo
-  drag: () => void
-}> {
-  render() {
-    return sharedAppStateStore.planningMode === PlanningMode.default ? (
-      <TodoCard
-        todo={this.props.item}
-        type={
-          sharedAppStateStore.todoSection === TodoSectionType.planning
-            ? CardType.planning
-            : CardType.done
-        }
-      />
-    ) : (
-        <TouchableOpacity onPressIn={this.props.drag}>
-          <TodoCard
-            todo={this.props.item}
-            type={
-              sharedAppStateStore.todoSection === TodoSectionType.planning
-                ? CardType.planning
-                : CardType.done
-            }
-          />
-        </TouchableOpacity>
-      )
-  }
-}
-
-@observer
 class PlanningContent extends Component {
   vm = new PlanningVM()
 
@@ -333,15 +303,16 @@ class PlanningContent extends Component {
             {translate('planningText')}
           </Text>
         )}
-        {this.vm.todosWithSections.length ? (
+        {this.vm.todosWithSections.length ? sharedAppStateStore.planningMode === PlanningMode.default ? (
           <DraggableFlatList
+            removeClippedSubviews={true}
             data={this.vm.todosWithSections}
             renderItem={({ item, index, drag, isActive }) =>
               item.title ? (
                 <TouchableWithoutFeedback
                   key={index}
                   onLongPress={
-                    sharedAppStateStore.todoSection === TodoSectionType.planning
+                    sharedAppStateStore.todoSection === TodoSectionType.planning && sharedAppStateStore.planningMode === PlanningMode.rearrange
                       ? drag
                       : undefined
                   }
@@ -360,7 +331,15 @@ class PlanningContent extends Component {
                 </TouchableWithoutFeedback>
               ) : (
                   <View style={{ padding: isActive ? 10 : 0 }}>
-                    <TodoCardPlanningVariable item={item.item!} drag={drag} />
+                    <TodoCard
+                      todo={item.item!}
+                      type={
+                        sharedAppStateStore.todoSection === TodoSectionType.planning && sharedAppStateStore.planningMode === PlanningMode.rearrange
+                          ? CardType.planning
+                          : CardType.done
+                      }
+                      drag={drag}
+                    />
                   </View>
                 )
             }
@@ -368,6 +347,49 @@ class PlanningContent extends Component {
             onDragEnd={this.vm.onDragEnd}
           />
         ) : (
+            <DraggableFlatList
+              removeClippedSubviews={true}
+              data={this.vm.todosWithSections}
+              renderItem={({ item, index, drag, isActive }) =>
+                item.title ? (
+                  <TouchableWithoutFeedback
+                    key={index}
+                    onLongPress={
+                      sharedAppStateStore.todoSection === TodoSectionType.planning
+                        ? drag
+                        : undefined
+                    }
+                    style={{ paddingHorizontal: isActive ? 10 : 0 }}
+                  >
+                    <Text
+                      style={{
+                        marginHorizontal: 10,
+                        marginTop: 16,
+                        ...sharedColors.textExtraStyle.style,
+                      }}
+                      key={index}
+                    >
+                      {item.title}
+                    </Text>
+                  </TouchableWithoutFeedback>
+                ) : (
+                    <View style={{ padding: isActive ? 10 : 0 }}>
+                      <TodoCard
+                        todo={item.item!}
+                        type={
+                          sharedAppStateStore.todoSection === TodoSectionType.planning
+                            ? CardType.planning
+                            : CardType.done
+                        }
+                        drag={drag}
+                      />
+                    </View>
+                  )
+              }
+              keyExtractor={(_, index) => `${index}`}
+              onDragEnd={this.vm.onDragEnd}
+            />
+          ) : (
             <View
               style={{
                 flex: 1,
