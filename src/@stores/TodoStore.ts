@@ -14,6 +14,8 @@ class TodoStore {
 
   @observable allTodos = realm.objects<Todo>(Todo)
 
+  @persist recalculatedExactDates = false
+
   @computed get todayTodos() {
     const today = new Date()
     return this.todosForDate(getDateString(today))
@@ -51,11 +53,11 @@ class TodoStore {
       todayWithTimezoneOffset.getMinutes() -
         todayWithTimezoneOffset.getTimezoneOffset()
     )
-    const todayString = `T${
-      Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
+    const todayString = `T${Math.floor(
+      todayWithTimezoneOffset.getTime() / 1000
+    ) -
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
-      1
-    }:000`
+      1}:000`
     const todos = this.allTodos.filtered(
       `deleted = false && completed = false && _exactDate < ${todayString}`
     )
@@ -82,17 +84,20 @@ class TodoStore {
       return
     }
     // Modify dates
-    todosChangedOnServer.forEach((todo) => {
+    todosChangedOnServer.forEach(todo => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
     // Get variables
-    const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
-      if (c._id) {
-        p[c._id] = c
-      }
-      return p
-    }, {} as { [index: string]: Todo })
+    const serverTodosMap = todosChangedOnServer.reduce(
+      (p, c) => {
+        if (c._id) {
+          p[c._id] = c
+        }
+        return p
+      },
+      {} as { [index: string]: Todo }
+    )
     const todosChangedLocally = this.lastSyncDate
       ? this.allTodos.filtered(
           `updatedAt > ${realmTimestampFromDate(this.lastSyncDate)}`
@@ -124,7 +129,7 @@ class TodoStore {
       }
     }
     // Push
-    const todosToPush = todosChangedLocally.filter((todo) => {
+    const todosToPush = todosChangedLocally.filter(todo => {
       if (!todo._id) {
         return true
       }
@@ -147,9 +152,9 @@ class TodoStore {
       this.refreshTodos()
       return
     }
-    const savedPushedTodos = await pushBack(todosToPush.map((v) => ({ ...v })))
+    const savedPushedTodos = await pushBack(todosToPush.map(v => ({ ...v })))
     // Modify dates
-    savedPushedTodos.forEach((todo) => {
+    savedPushedTodos.forEach(todo => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
@@ -173,6 +178,22 @@ class TodoStore {
     this.allTodos = realm.objects<Todo>(Todo)
   }
 
+  recalculateExactDatesIfNeeded() {
+    if (!this.recalculatedExactDates) {
+      this.recalculateExactDates()
+    }
+    this.recalculatedExactDates = true
+  }
+
+  recalculateExactDates() {
+    const todos = realm.objects<Todo>(Todo)
+    realm.write(() => {
+      for (const todo of todos) {
+        todo._exactDate = new Date(getTitle(todo))
+      }
+    })
+  }
+
   private getTodoById = (id?: string) => {
     if (!id) {
       return undefined
@@ -191,5 +212,6 @@ function realmTimestampFromDate(date: Date) {
 export const sharedTodoStore = new TodoStore()
 hydrate('TodoStore', sharedTodoStore).then(() => {
   sharedTodoStore.hydrated = true
+  sharedTodoStore.recalculateExactDatesIfNeeded()
   hydrateStore('TodoStore')
 })

@@ -89,12 +89,7 @@ export class Data extends Component {
             <ListItem
               button
               onPress={() => {
-                const todos = realm.objects<Todo>(Todo)
-                realm.write(() => {
-                  for (const todo of todos) {
-                    todo._exactDate = new Date(getTitle(todo))
-                  }
-                })
+                sharedTodoStore.recalculateExactDates()
               }}
             >
               <Text {...sharedColors.textExtraStyle}>
