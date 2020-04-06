@@ -8,7 +8,7 @@ export class ColorModeManager {
   }
 
   constructor() {
-    eventEmitter.on('currentModeChanged', (newMode) => {
+    eventEmitter.on('currentModeChanged', newMode => {
       this.mode = newMode
     })
   }
@@ -20,7 +20,7 @@ export class ColorModeManager {
     return !this.isDark ? '#f9f9f9' : '#060606'
   }
   @computed get primaryColor() {
-    return this.isDark ? '#f9f9f9' : 'tomato'
+    return this.isDark ? '#f9f9f9' : '#eb6a52'
   }
   @computed get backgroundColor() {
     return this.isDark ? '#343434' : '#fff'
