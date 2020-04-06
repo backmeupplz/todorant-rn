@@ -23,7 +23,7 @@ export class ColorModeManager {
     return this.isDark ? '#f9f9f9' : '#eb6a52'
   }
   @computed get backgroundColor() {
-    return this.isDark ? '#343434' : '#fff'
+    return this.isDark ? '#343434' : '#fff8f7'
   }
   @computed get borderColor() {
     return this.isDark ? '#919191' : '#919191'
