@@ -29,6 +29,7 @@
   "email": "Email",
   "facebook": "Facebook",
   "telegram": "Telegram",
+  "apple": "Apple",
   "todosCount": "Todos count",
   "todosLastSync": "Todos last synced",
   "notSyncedYet": "Not synced yet",
