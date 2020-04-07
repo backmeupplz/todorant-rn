@@ -10,6 +10,9 @@ import { Root, StyleProvider } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync } from '@utils/i18n'
 import codePush from 'react-native-code-push'
+import { observer } from 'mobx-react'
+import { StatusBar, Platform } from 'react-native'
+import { sharedColors } from '@utils/sharedColors'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -29,12 +32,14 @@ GoogleSignin.configure({
 console.disableYellowBox = true
 
 @codePush(CodePushOptions)
+@observer
 class App extends Component {
   render() {
     return (
       <Root>
         <StyleProvider style={getTheme()}>
           <NavigationContainer ref={navigationRef}>
+            <StatusBar backgroundColor={sharedColors.backgroundColor} barStyle={Platform.OS === 'android' ? sharedColors.isDark ? 'light-content' : 'dark-content' : undefined} />
             <BottomTabNavigator />
           </NavigationContainer>
         </StyleProvider>
