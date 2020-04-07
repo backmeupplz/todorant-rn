@@ -13,6 +13,7 @@ import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
 import { StatusBar, Platform } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
+import SplashScreen from 'react-native-splash-screen'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -34,6 +35,10 @@ console.disableYellowBox = true
 @codePush(CodePushOptions)
 @observer
 class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide()
+  }
+
   render() {
     return (
       <Root>

@@ -24,6 +24,7 @@
 #import <AppCenterReactNative.h>
 #import <AppCenterReactNativeAnalytics.h>
 #import <AppCenterReactNativeCrashes.h>
+#import "RNSplashScreen.h"
 
 @implementation AppDelegate
 
@@ -52,6 +53,8 @@
   [AppCenterReactNative register];
   [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];
   [AppCenterReactNativeCrashes registerWithAutomaticProcessing];
+  
+  [RNSplashScreen show];
   
   return YES;
 }
