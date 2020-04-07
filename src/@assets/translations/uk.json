@@ -147,5 +147,6 @@
   "language": "Мова",
   "languageAuto": "Авто",
   "syncExactDates": "Перерахувати точні дати",
-  "askBeforeDelete": "Запитувати перед видаленням завдань"
+  "askBeforeDelete": "Запитувати перед видаленням завдань",
+  "copied": "скопійовано"
 }

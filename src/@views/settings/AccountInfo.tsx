@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { ListItem, Text } from 'native-base'
+import { ListItem, Text, Toast } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Clipboard } from 'react-native'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
@@ -14,6 +15,10 @@ class InfoRow extends Component<{ title: string; value: string }> {
         style={{
           justifyContent: 'space-between',
           borderColor: sharedColors.placeholderColor,
+        }}
+        onPress={() => {
+          Clipboard.setString(this.props.value)
+          Toast.show({ text: `"${this.props.value}" ${translate('copied')}` })
         }}
       >
         <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>

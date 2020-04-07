@@ -148,5 +148,6 @@
   "language": "Language",
   "languageAuto": "Auto",
   "syncExactDates": "Recalculate exact dates",
-  "askBeforeDelete": "Verify deleting todos"
+  "askBeforeDelete": "Verify deleting todos",
+  "copied": "copied"
 }
