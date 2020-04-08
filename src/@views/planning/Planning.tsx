@@ -305,7 +305,6 @@ class PlanningContent extends Component {
         )}
         {this.vm.todosWithSections.length ? sharedAppStateStore.planningMode === PlanningMode.default ? (
           <DraggableFlatList
-            removeClippedSubviews={true}
             data={this.vm.todosWithSections}
             renderItem={({ item, index, drag, isActive }) =>
               item.title ? (
@@ -334,7 +333,7 @@ class PlanningContent extends Component {
                     <TodoCard
                       todo={item.item!}
                       type={
-                        sharedAppStateStore.todoSection === TodoSectionType.planning && sharedAppStateStore.planningMode === PlanningMode.rearrange
+                        sharedAppStateStore.todoSection === TodoSectionType.planning
                           ? CardType.planning
                           : CardType.done
                       }
@@ -348,7 +347,6 @@ class PlanningContent extends Component {
           />
         ) : (
             <DraggableFlatList
-              removeClippedSubviews={true}
               data={this.vm.todosWithSections}
               renderItem={({ item, index, drag, isActive }) =>
                 item.title ? (
