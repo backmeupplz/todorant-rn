@@ -17,7 +17,7 @@ import SplashScreen from 'react-native-splash-screen'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-  installMode: codePush.InstallMode.IMMEDIATE,
+  installMode: __DEV__ ? codePush.InstallMode.ON_NEXT_RESTART : codePush.InstallMode.IMMEDIATE,
 }
 
 setI18nConfig()
