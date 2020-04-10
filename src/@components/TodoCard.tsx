@@ -29,6 +29,7 @@ export enum CardType {
   done = 'done',
   planning = 'planning',
   current = 'current',
+  breakdown = 'breakdown'
 }
 
 class TodoCardVM {
@@ -266,7 +267,7 @@ export class TodoCard extends Component<{
             </View>
           </Body>
         </CardItem>
-        {(sharedAppStateStore.planningMode === PlanningMode.default || this.props.type === CardType.current) && (
+        {this.props.type !== CardType.breakdown && (sharedAppStateStore.planningMode === PlanningMode.default || this.props.type === CardType.current) && (
           <CardItem
             footer
             style={{

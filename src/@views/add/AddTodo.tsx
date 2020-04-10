@@ -36,6 +36,7 @@ import { Platform } from 'react-native'
 import Clipboard from '@react-native-community/clipboard'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { addButtonStore } from '@components/AddButton'
+import { TodoCard, CardType } from '@components/TodoCard'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -551,6 +552,7 @@ class AddTodoContent extends Component<{
   @observable screenType = AddTodoScreenType.add
   @observable vms = [new TodoVM()]
   breakdownTodo?: Todo
+  @observable isBreakdown = false
 
   saveTodo() {
     const titlesToFixOrder = [] as string[]
@@ -648,6 +650,7 @@ class AddTodoContent extends Component<{
     }
     if (this.props.route.params?.breakdownTodo) {
       this.breakdownTodo = this.props.route.params?.breakdownTodo
+      this.isBreakdown = true
     }
     addButtonStore.add = this.addTodo
   }
@@ -663,6 +666,7 @@ class AddTodoContent extends Component<{
     return (
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
+          {this.isBreakdown && !!this.breakdownTodo && <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />}
           {this.vms.map((vm, i, a) => (
             <View key={i}>
               <AddTodoForm vm={vm} />
