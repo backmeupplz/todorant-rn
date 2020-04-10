@@ -209,7 +209,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                     flex: 1,
                   }}
                 >
-                  <Text>
+                  <Text numberOfLines={1}>
                     {this.props.vm.frog && (
                       <Text {...sharedColors.textExtraStyle}>🐸 </Text>
                     )}
@@ -248,6 +248,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }}
               >
                 <Input
+                  multiline
                   placeholder={translate('text')}
                   value={this.props.vm.text}
                   onChangeText={(text) => {
