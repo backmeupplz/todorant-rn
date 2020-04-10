@@ -241,7 +241,7 @@ export class TodoCard extends Component<{
               <DebugTodoInfo todo={this.props.todo} />
             )}
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', flex: 1 }}>
-              {this.props.type !== CardType.current && sharedAppStateStore.planningMode === PlanningMode.rearrange && (
+              {this.props.type !== CardType.breakdown && this.props.type !== CardType.current && sharedAppStateStore.planningMode === PlanningMode.rearrange && (
                 <TouchableOpacity onPressIn={this.props.drag}>
                   <Icon
                     type="MaterialIcons"
