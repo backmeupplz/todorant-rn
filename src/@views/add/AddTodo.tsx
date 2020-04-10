@@ -37,6 +37,7 @@ import Clipboard from '@react-native-community/clipboard'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { addButtonStore } from '@components/AddButton'
 import { TodoCard, CardType } from '@components/TodoCard'
+import { linkify } from '@utils/linkify'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -550,7 +551,7 @@ class AddTodoContent extends Component<{
   >
 }> {
   @observable screenType = AddTodoScreenType.add
-  @observable vms = [new TodoVM()]
+  @observable vms: TodoVM[] = []
   breakdownTodo?: Todo
   @observable isBreakdown = false
 
@@ -644,13 +645,14 @@ class AddTodoContent extends Component<{
   }
 
   componentDidMount() {
-    if (this.props.route.params?.editedTodo) {
-      this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
-      this.screenType = AddTodoScreenType.edit
-    }
     if (this.props.route.params?.breakdownTodo) {
       this.breakdownTodo = this.props.route.params?.breakdownTodo
       this.isBreakdown = true
+    }
+    this.addTodo()
+    if (this.props.route.params?.editedTodo) {
+      this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
+      this.screenType = AddTodoScreenType.edit
     }
     addButtonStore.add = this.addTodo
   }
@@ -659,7 +661,16 @@ class AddTodoContent extends Component<{
     this.vms.forEach((vm) => {
       vm.collapsed = true
     })
-    this.vms.push(new TodoVM())
+    const newVM = new TodoVM()
+    if (this.breakdownTodo) {
+      let matches = linkify.match(this.breakdownTodo.text) || []
+      const newText = matches
+        .map(v => /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined)
+        .filter(v => !!v)
+        .join(' ')
+      newVM.text = newText
+    }
+    this.vms.push(newVM)
   }
 
   render() {

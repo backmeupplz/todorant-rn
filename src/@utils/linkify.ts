@@ -1,7 +1,7 @@
 import * as url from 'url'
 import Linkify from 'linkify-it'
 
-const linkify = Linkify()
+export const linkify = Linkify()
 linkify
   .tlds(require('tlds'))
   .tlds('onion', true)
@@ -43,10 +43,10 @@ export function l(text: string) {
       url: match.url,
       value: parsedUrl.hostname
         ? `${parsedUrl.hostname}${
-            (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
-              ? '/...'
-              : ''
-          }`
+        (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
+          ? '/...'
+          : ''
+        }`
         : parsedUrl.href,
     })
     endIndex = match.lastIndex
