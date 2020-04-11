@@ -16,6 +16,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import { PlanningVM } from '@views/planning/PlanningVM'
+import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 
 @observer
 export class PlanningContent extends Component {
@@ -128,24 +129,7 @@ export class PlanningContent extends Component {
             />
           )
         ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              alignItems: 'center',
-              margin: 12,
-            }}
-          >
-            <H1 {...sharedColors.textExtraStyle}>👀</H1>
-            <H1 {...sharedColors.textExtraStyle}>
-              {translate('noTodosExistTitle')}
-            </H1>
-            <Text
-              style={{ textAlign: 'center', color: sharedColors.textColor }}
-            >
-              {translate('noTodosExistText')}
-            </Text>
-          </View>
+          <NoTodosPlaceholder />
         )}
         <ActionButton
           buttonColor={sharedColors.primaryColor}

@@ -15,6 +15,8 @@ class AppStateStore {
   @observable hash = ''
 
   @observable planningMode = PlanningMode.default
+
+  @observable languageTag = 'en'
 }
 
 export const sharedAppStateStore = new AppStateStore()

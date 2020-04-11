@@ -24,7 +24,6 @@ const CodePushOptions = {
 }
 
 setI18nConfig()
-setI18nConfigAsync()
 
 GoogleSignin.configure({
   webClientId:
@@ -38,7 +37,8 @@ console.disableYellowBox = true
 @codePush(CodePushOptions)
 @observer
 class App extends Component {
-  componentDidMount() {
+  async componentDidMount() {
+    await setI18nConfigAsync()
     SplashScreen.hide()
   }
 

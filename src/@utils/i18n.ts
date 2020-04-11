@@ -1,3 +1,4 @@
+import { sharedAppStateStore } from '@stores/AppStateStore'
 import i18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
 import { Language } from '@stores/SettingsStore'
@@ -9,7 +10,10 @@ const translationGetters = {
   uk: () => require('@assets/translations/uk.json'),
 } as { [index: string]: any }
 
-export const translate = (key: any, config?: any) => i18n.t(key, config)
+export const translate = (key: any, config?: any) => {
+  const languageTag = sharedAppStateStore.languageTag
+  return i18n.t(key, config)
+}
 
 export async function getLanguageTag() {
   const language = (await AsyncStorage.getItem('language')) || Language.auto
@@ -34,4 +38,5 @@ export function setI18nConfig() {
 export async function setI18nConfigAsync() {
   const languageTag = await getLanguageTag()
   i18n.locale = languageTag
+  sharedAppStateStore.languageTag = languageTag
 }
