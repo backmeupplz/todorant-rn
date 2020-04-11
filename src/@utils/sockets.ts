@@ -17,8 +17,6 @@ const socketIO = SocketIO(
 
 type PromiseMap = { [index: string]: { res: Function; rej: Function } }
 
-const warningsOn = false
-
 class SyncManager<T> {
   name: string
   pendingPushes: PromiseMap
@@ -45,13 +43,17 @@ class SyncManager<T> {
     this.onObjectsFromServer = onObjectsFromServer
 
     // -1
-    socketIO.on(`${name}_sync_request`, this.sync)
+    socketIO.on(`${name}_sync_request`, () => {
+      console.warn(`${this.name}: sync_request`)
+      this.sync()
+    })
 
     // 2
     socketIO.on(name, async (response: T) => {
-      if (warningsOn) {
-        console.warn(`${this.name}: onObjectsFromServer`, response)
-      }
+      console.warn(
+        `${this.name}: onObjectsFromServer`,
+        Array.isArray(response) ? response.length : 1
+      )
       try {
         await onObjectsFromServer(response, this.pushObjects)
       } catch (err) {
@@ -60,9 +62,10 @@ class SyncManager<T> {
     })
     // 4
     socketIO.on(`${name}_pushed`, (pushId: string, objects: T) => {
-      if (warningsOn) {
-        console.warn(`${this.name}: pushed`, pushId, objects)
-      }
+      console.warn(
+        `${this.name}: pushed`,
+        Array.isArray(objects) ? objects.length : 1
+      )
       this.pendingPushes[pushId]?.res(objects)
       delete this.pendingPushes[pushId]
       if (setLastSyncDate) {
@@ -71,9 +74,7 @@ class SyncManager<T> {
     })
     // 4
     socketIO.on(`${name}_pushed_error`, (pushId: string, error: Error) => {
-      if (warningsOn) {
-        console.warn(`${this.name}: pushed_error`, pushId, error)
-      }
+      console.warn(`${this.name}: pushed_error`, pushId, error)
       this.pendingPushes[pushId]?.rej(error)
       delete this.pendingPushes[pushId]
     })
@@ -84,9 +85,7 @@ class SyncManager<T> {
     if (!sharedSessionStore.user?.token || !socketIO.connected) {
       return
     }
-    if (warningsOn) {
-      console.warn(`${this.name}: sync`, this.latestSyncDate())
-    }
+    console.warn(`${this.name}: sync`, this.latestSyncDate())
     socketIO.emit(`sync_${this.name}`, this.latestSyncDate())
   }
 
@@ -95,9 +94,11 @@ class SyncManager<T> {
     return new Promise<T>((res, rej) => {
       const pushId = uuid()
       this.pendingPushes[pushId] = { res, rej }
-      if (warningsOn) {
-        console.warn(`${this.name}: pushObjects`, pushId, objects)
-      }
+      console.warn(
+        `${this.name}: pushObjects`,
+        pushId,
+        Array.isArray(objects) ? objects.length : 1
+      )
       socketIO.emit(`push_${this.name}`, pushId, objects)
     })
   }
@@ -127,9 +128,12 @@ class SocketManager {
       this.pendingPushes,
       () => sharedTodoStore.lastSyncDate,
       (objects, pushBack) => {
-        return sharedTodoStore.onObjectsFromServer(objects, pushBack)
+        return sharedTodoStore.onObjectsFromServer(
+          objects,
+          pushBack as () => Promise<Todo[]>
+        )
       },
-      lastSyncDate => {
+      (lastSyncDate) => {
         sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
       }
     )

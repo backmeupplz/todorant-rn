@@ -53,11 +53,11 @@ class TodoStore {
       todayWithTimezoneOffset.getMinutes() -
         todayWithTimezoneOffset.getTimezoneOffset()
     )
-    const todayString = `T${Math.floor(
-      todayWithTimezoneOffset.getTime() / 1000
-    ) -
+    const todayString = `T${
+      Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
-      1}:000`
+      1
+    }:000`
     const todos = this.allTodos.filtered(
       `deleted = false && completed = false && _exactDate < ${todayString}`
     )
@@ -84,20 +84,17 @@ class TodoStore {
       return
     }
     // Modify dates
-    todosChangedOnServer.forEach(todo => {
+    todosChangedOnServer.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })
     // Get variables
-    const serverTodosMap = todosChangedOnServer.reduce(
-      (p, c) => {
-        if (c._id) {
-          p[c._id] = c
-        }
-        return p
-      },
-      {} as { [index: string]: Todo }
-    )
+    const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
+      if (c._id) {
+        p[c._id] = c
+      }
+      return p
+    }, {} as { [index: string]: Todo })
     const todosChangedLocally = this.lastSyncDate
       ? this.allTodos.filtered(
           `updatedAt > ${realmTimestampFromDate(this.lastSyncDate)}`
@@ -129,7 +126,7 @@ class TodoStore {
       }
     }
     // Push
-    const todosToPush = todosChangedLocally.filter(todo => {
+    const todosToPush = todosChangedLocally.filter((todo) => {
       if (!todo._id) {
         return true
       }
@@ -140,6 +137,12 @@ class TodoStore {
         return true
       }
     })
+    if (!todosToPush.length) {
+      sharedTodoStore.lastSyncDate = new Date()
+      // Refresh
+      this.refreshTodos()
+      return
+    }
     realm.write(() => {
       for (const todoToPush of todosToPush) {
         if (!todoToPush._tempSyncId) {
@@ -147,14 +150,11 @@ class TodoStore {
         }
       }
     })
-    if (!todosToPush.length) {
-      // Refresh
-      this.refreshTodos()
-      return
-    }
-    const savedPushedTodos = await pushBack(todosToPush.map(v => ({ ...v })))
+    const savedPushedTodos = await pushBack(
+      todosToPush.map((v) => ({ ...v })) as any
+    )
     // Modify dates
-    savedPushedTodos.forEach(todo => {
+    savedPushedTodos.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
     })

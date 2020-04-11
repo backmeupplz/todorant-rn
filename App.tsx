@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import 'mobx-react-lite/batchingForReactNative'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from './src/@views/BottomTabNavigator'
 import { navigationRef } from './src/@utils/navigation'
@@ -17,7 +18,9 @@ import SplashScreen from 'react-native-splash-screen'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-  installMode: __DEV__ ? codePush.InstallMode.ON_NEXT_RESTART : codePush.InstallMode.IMMEDIATE,
+  installMode: __DEV__
+    ? codePush.InstallMode.ON_NEXT_RESTART
+    : codePush.InstallMode.IMMEDIATE,
 }
 
 setI18nConfig()
@@ -44,7 +47,16 @@ class App extends Component {
       <Root>
         <StyleProvider style={getTheme()}>
           <NavigationContainer ref={navigationRef}>
-            <StatusBar backgroundColor={sharedColors.backgroundColor} barStyle={Platform.OS === 'android' ? sharedColors.isDark ? 'light-content' : 'dark-content' : undefined} />
+            <StatusBar
+              backgroundColor={sharedColors.backgroundColor}
+              barStyle={
+                Platform.OS === 'android'
+                  ? sharedColors.isDark
+                    ? 'light-content'
+                    : 'dark-content'
+                  : undefined
+              }
+            />
             <BottomTabNavigator />
           </NavigationContainer>
         </StyleProvider>

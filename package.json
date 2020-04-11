@@ -6,8 +6,6 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "android-shake": "adb shell input text \"RR\"",
     "code-push-ios": "appcenter codepush release-react -a borodutch/Todorant -d Production",
     "code-push-android": "appcenter codepush release-react -a borodutch/Todorant-1 -d Production"
@@ -45,6 +43,7 @@
     "mobx-react": "^6.1.7",
     "moment": "^2.24.0",
     "native-base": "^2.13.12",
+    "prettier": "^2.0.4",
     "react": "16.9.0",
     "react-native": "0.62.1",
     "react-native-action-button": "^2.8.5",
@@ -74,15 +73,8 @@
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
-    "@react-native-community/eslint-config": "^0.0.5",
-    "@types/jest": "^24.0.24",
     "@types/react-native": "^0.60.25",
     "@types/react-test-renderer": "16.9.1",
-    "@typescript-eslint/eslint-plugin": "^2.12.0",
-    "@typescript-eslint/parser": "^2.12.0",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.5.1",
-    "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.8.3"

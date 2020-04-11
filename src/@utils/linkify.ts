@@ -7,7 +7,7 @@ linkify
   .tlds('onion', true)
   .set({ fuzzyIP: true })
   .add('#', {
-    validate: (text, pos, self) => {
+    validate: (text, pos) => {
       const tail = text.slice(pos - 1)
       const result = /[\u0400-\u04FFa-zA-Z_0-9]+/.exec(tail)
       return result ? result[0].length : 0
@@ -43,10 +43,10 @@ export function l(text: string) {
       url: match.url,
       value: parsedUrl.hostname
         ? `${parsedUrl.hostname}${
-        (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
-          ? '/...'
-          : ''
-        }`
+            (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
+              ? '/...'
+              : ''
+          }`
         : parsedUrl.href,
     })
     endIndex = match.lastIndex
