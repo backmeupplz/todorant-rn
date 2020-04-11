@@ -36,7 +36,8 @@ import { Platform } from 'react-native'
 import Clipboard from '@react-native-community/clipboard'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { addButtonStore } from '@components/AddButton'
-import { TodoCard, CardType } from '@components/TodoCard'
+import { TodoCard } from '@components/TodoCard'
+import { CardType } from '@components/TodoCard/CardType'
 import { linkify } from '@utils/linkify'
 
 enum AddTodoScreenType {
@@ -232,7 +233,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                       }}
                     >{`${this.props.vm.monthAndYear}${
                       this.props.vm.date ? `-${this.props.vm.date}` : ''
-                      }`}</Text>
+                    }`}</Text>
                   )}
                 </View>
                 <CollapseButton vm={this.props.vm} />
@@ -240,305 +241,305 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
             </Item>
           </Form>
         ) : (
-            <Form>
+          <Form>
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
+              <Input
+                multiline
+                placeholder={translate('text')}
+                value={this.props.vm.text}
+                onChangeText={(text) => {
+                  this.props.vm.text = text
+                }}
+                placeholderTextColor={sharedColors.placeholderColor}
+                style={{ color: sharedColors.textColor }}
+              />
+              {Platform.OS === 'android' && (
+                <Button
+                  icon
+                  {...extraButtonProps(sharedColors)}
+                  small
+                  onPress={async () => {
+                    const textFromClipboard = await Clipboard.getString()
+                    this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
+                  }}
+                >
+                  <Icon
+                    type="MaterialIcons"
+                    name="assignment"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                </Button>
+              )}
+              <CollapseButton vm={this.props.vm} />
+            </Item>
+            <Item
+              onPress={() => {
+                this.props.vm.showDatePicker = !this.props.vm.showDatePicker
+                if (!this.props.vm.date) {
+                  this.props.vm.monthAndYear = undefined
+                  this.props.vm.date = undefined
+                }
+                this.props.vm.showMonthAndYearPicker = false
+              }}
+              style={{
+                paddingVertical: 16,
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
+              <Text
+                style={{
+                  color:
+                    this.props.vm.datePickerValue && !!this.props.vm.date
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
+                }}
+              >
+                {this.props.vm.datePickerValue && !!this.props.vm.date
+                  ? this.props.vm.datePickerValue
+                  : translate('addTodoDay')}
+              </Text>
+            </Item>
+            {this.props.vm.showDatePicker && (
+              <Calendar
+                minDate={getDateString(new Date())}
+                current={this.props.vm.datePickerValue || new Date()}
+                markedDates={this.props.vm.markedDate}
+                onDayPress={(day) => {
+                  this.props.vm.datePickerValue = day.dateString
+                  this.props.vm.showDatePicker = false
+                }}
+                theme={{
+                  backgroundColor: sharedColors.backgroundColor,
+                  calendarBackground: sharedColors.backgroundColor,
+                  selectedDayBackgroundColor: 'dodgerblue',
+                  textDisabledColor: sharedColors.placeholderColor,
+                  dayTextColor: sharedColors.textColor,
+                  textSectionTitleColor: sharedColors.textColor,
+                  monthTextColor: sharedColors.textColor,
+                }}
+                firstDay={sharedSettingsStore.firstDayOfWeekSafe}
+              />
+            )}
+            <Item
+              onPress={() => {
+                this.props.vm.showMonthAndYearPicker = !this.props.vm
+                  .showMonthAndYearPicker
+                if (!!this.props.vm.date) {
+                  this.props.vm.monthAndYear = undefined
+                  this.props.vm.date = undefined
+                }
+                this.props.vm.showDatePicker = false
+                if (
+                  !this.props.vm.monthAndYear &&
+                  this.props.vm.showMonthAndYearPicker
+                ) {
+                  this.props.vm.monthAndYear = getDateMonthAndYearString(
+                    moment().add(1, 'month').toDate()
+                  )
+                }
+              }}
+              style={{
+                paddingVertical: 16,
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
+              <Text
+                style={{
+                  color:
+                    this.props.vm.datePickerValue && !this.props.vm.date
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
+                }}
+              >
+                {this.props.vm.datePickerValue && !this.props.vm.date
+                  ? this.props.vm.datePickerValue
+                  : translate('addTodoMonth')}
+              </Text>
+            </Item>
+            {this.props.vm.showMonthAndYearPicker && (
+              <MonthPicker
+                selectedDate={this.props.vm.monthAndYearPickerValue}
+                onMonthChange={(date: Moment) => {
+                  this.props.vm.monthAndYearPickerValue = date.toDate()
+                }}
+                minDate={moment().add(1, 'month')}
+                maxDate={moment().add(100, 'years')}
+                containerStyle={{
+                  backgroundColor: sharedColors.backgroundColor,
+                }}
+                monthTextStyle={sharedColors.textExtraStyle.style}
+                yearTextStyle={sharedColors.textExtraStyle.style}
+                selectedBackgroundColor={sharedColors.primaryColor}
+                selectedMonthTextStyle={{
+                  color: sharedColors.invertedTextColor,
+                }}
+                monthDisabledStyle={{ color: sharedColors.placeholderColor }}
+                seperatorColor={sharedColors.placeholderColor}
+                nextIcon={
+                  <Icon
+                    type="MaterialIcons"
+                    name="keyboard-arrow-right"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                }
+                prevIcon={
+                  <Icon
+                    type="MaterialIcons"
+                    name="keyboard-arrow-left"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                }
+              />
+            )}
+            {this.props.vm.showMore && (
               <Item
                 style={{
+                  paddingVertical: this.props.vm.time ? 11 : 16,
                   justifyContent: 'space-between',
                   borderColor: sharedColors.placeholderColor,
                 }}
               >
-                <Input
-                  multiline
-                  placeholder={translate('text')}
-                  value={this.props.vm.text}
-                  onChangeText={(text) => {
-                    this.props.vm.text = text
+                <Text
+                  style={{
+                    color: this.props.vm.time
+                      ? sharedColors.textColor
+                      : sharedColors.placeholderColor,
+                    flex: 1,
                   }}
-                  placeholderTextColor={sharedColors.placeholderColor}
-                  style={{ color: sharedColors.textColor }}
-                />
-                {Platform.OS === 'android' && (
+                  onPress={() => {
+                    if (!this.props.vm.time) {
+                      this.props.vm.timePickerValue = new Date()
+                    }
+                    this.props.vm.showTimePicker = !this.props.vm.showTimePicker
+                  }}
+                >
+                  {this.props.vm.time
+                    ? this.props.vm.time
+                    : translate('addTodoTime')}
+                </Text>
+                {!!this.props.vm.time && (
                   <Button
                     icon
                     {...extraButtonProps(sharedColors)}
                     small
-                    onPress={async () => {
-                      const textFromClipboard = await Clipboard.getString()
-                      this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
+                    onPress={() => {
+                      this.props.vm.time = undefined
                     }}
                   >
                     <Icon
                       type="MaterialIcons"
-                      name="assignment"
+                      name="close"
                       style={{
                         color: sharedColors.textColor,
                       }}
                     />
                   </Button>
                 )}
-                <CollapseButton vm={this.props.vm} />
               </Item>
-              <Item
-                onPress={() => {
-                  this.props.vm.showDatePicker = !this.props.vm.showDatePicker
-                  if (!this.props.vm.date) {
-                    this.props.vm.monthAndYear = undefined
-                    this.props.vm.date = undefined
+            )}
+            {this.props.vm.showTimePicker && (
+              <DateTimePicker
+                value={this.props.vm.timePickerValue || new Date()}
+                mode="time"
+                onChange={(event, date) => {
+                  if (Platform.OS === 'android') {
+                    this.props.vm.showTimePicker = false
                   }
-                  this.props.vm.showMonthAndYearPicker = false
-                }}
-                style={{
-                  paddingVertical: 16,
-                  borderColor: sharedColors.placeholderColor,
-                }}
-              >
-                <Text
-                  style={{
-                    color:
-                      this.props.vm.datePickerValue && !!this.props.vm.date
-                        ? sharedColors.textColor
-                        : sharedColors.placeholderColor,
-                  }}
-                >
-                  {this.props.vm.datePickerValue && !!this.props.vm.date
-                    ? this.props.vm.datePickerValue
-                    : translate('addTodoDay')}
-                </Text>
-              </Item>
-              {this.props.vm.showDatePicker && (
-                <Calendar
-                  minDate={getDateString(new Date())}
-                  current={this.props.vm.datePickerValue || new Date()}
-                  markedDates={this.props.vm.markedDate}
-                  onDayPress={(day) => {
-                    this.props.vm.datePickerValue = day.dateString
-                    this.props.vm.showDatePicker = false
-                  }}
-                  theme={{
-                    backgroundColor: sharedColors.backgroundColor,
-                    calendarBackground: sharedColors.backgroundColor,
-                    selectedDayBackgroundColor: 'dodgerblue',
-                    textDisabledColor: sharedColors.placeholderColor,
-                    dayTextColor: sharedColors.textColor,
-                    textSectionTitleColor: sharedColors.textColor,
-                    monthTextColor: sharedColors.textColor,
-                  }}
-                  firstDay={sharedSettingsStore.firstDayOfWeekSafe}
-                />
-              )}
-              <Item
-                onPress={() => {
-                  this.props.vm.showMonthAndYearPicker = !this.props.vm
-                    .showMonthAndYearPicker
-                  if (!!this.props.vm.date) {
-                    this.props.vm.monthAndYear = undefined
-                    this.props.vm.date = undefined
-                  }
-                  this.props.vm.showDatePicker = false
-                  if (
-                    !this.props.vm.monthAndYear &&
-                    this.props.vm.showMonthAndYearPicker
-                  ) {
-                    this.props.vm.monthAndYear = getDateMonthAndYearString(
-                      moment().add(1, 'month').toDate()
-                    )
+                  if (event.type === 'set' || Platform.OS === 'ios') {
+                    this.props.vm.timePickerValue = date
                   }
                 }}
-                style={{
-                  paddingVertical: 16,
-                  borderColor: sharedColors.placeholderColor,
+              />
+            )}
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                paddingVertical: 16,
+                paddingRight: 12,
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('addTodoFrog')}
+              </Text>
+              <Switch
+                value={this.props.vm.frog}
+                onValueChange={(value) => {
+                  this.props.vm.frog = value
                 }}
-              >
-                <Text
-                  style={{
-                    color:
-                      this.props.vm.datePickerValue && !this.props.vm.date
-                        ? sharedColors.textColor
-                        : sharedColors.placeholderColor,
-                  }}
-                >
-                  {this.props.vm.datePickerValue && !this.props.vm.date
-                    ? this.props.vm.datePickerValue
-                    : translate('addTodoMonth')}
-                </Text>
-              </Item>
-              {this.props.vm.showMonthAndYearPicker && (
-                <MonthPicker
-                  selectedDate={this.props.vm.monthAndYearPickerValue}
-                  onMonthChange={(date: Moment) => {
-                    this.props.vm.monthAndYearPickerValue = date.toDate()
-                  }}
-                  minDate={moment().add(1, 'month')}
-                  maxDate={moment().add(100, 'years')}
-                  containerStyle={{
-                    backgroundColor: sharedColors.backgroundColor,
-                  }}
-                  monthTextStyle={sharedColors.textExtraStyle.style}
-                  yearTextStyle={sharedColors.textExtraStyle.style}
-                  selectedBackgroundColor={sharedColors.primaryColor}
-                  selectedMonthTextStyle={{
-                    color: sharedColors.invertedTextColor,
-                  }}
-                  monthDisabledStyle={{ color: sharedColors.placeholderColor }}
-                  seperatorColor={sharedColors.placeholderColor}
-                  nextIcon={
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-right"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  }
-                  prevIcon={
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-left"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  }
-                />
-              )}
-              {this.props.vm.showMore && (
-                <Item
-                  style={{
-                    paddingVertical: this.props.vm.time ? 11 : 16,
-                    justifyContent: 'space-between',
-                    borderColor: sharedColors.placeholderColor,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: this.props.vm.time
-                        ? sharedColors.textColor
-                        : sharedColors.placeholderColor,
-                      flex: 1,
-                    }}
-                    onPress={() => {
-                      if (!this.props.vm.time) {
-                        this.props.vm.timePickerValue = new Date()
-                      }
-                      this.props.vm.showTimePicker = !this.props.vm.showTimePicker
-                    }}
-                  >
-                    {this.props.vm.time
-                      ? this.props.vm.time
-                      : translate('addTodoTime')}
-                  </Text>
-                  {!!this.props.vm.time && (
-                    <Button
-                      icon
-                      {...extraButtonProps(sharedColors)}
-                      small
-                      onPress={() => {
-                        this.props.vm.time = undefined
-                      }}
-                    >
-                      <Icon
-                        type="MaterialIcons"
-                        name="close"
-                        style={{
-                          color: sharedColors.textColor,
-                        }}
-                      />
-                    </Button>
-                  )}
-                </Item>
-              )}
-              {this.props.vm.showTimePicker && (
-                <DateTimePicker
-                  value={this.props.vm.timePickerValue || new Date()}
-                  mode="time"
-                  onChange={(event, date) => {
-                    if (Platform.OS === 'android') {
-                      this.props.vm.showTimePicker = false
-                    }
-                    if (event.type === 'set' || Platform.OS === 'ios') {
-                      this.props.vm.timePickerValue = date
-                    }
-                  }}
-                />
-              )}
+              />
+            </Item>
+            <Item
+              style={{
+                justifyContent: 'space-between',
+                paddingVertical: 16,
+                paddingRight: 12,
+                borderColor: sharedColors.placeholderColor,
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('completed')}
+              </Text>
+              <Switch
+                value={this.props.vm.completed}
+                onValueChange={(value) => {
+                  this.props.vm.completed = value
+                }}
+              />
+            </Item>
+            {this.props.vm.showMore && !this.props.vm.editedTodo && (
               <Item
                 style={{
                   justifyContent: 'space-between',
                   paddingVertical: 16,
                   paddingRight: 12,
                   borderColor: sharedColors.placeholderColor,
+                  flex: 1,
                 }}
               >
                 <Text {...sharedColors.textExtraStyle}>
-                  {translate('addTodoFrog')}
+                  {translate('addTodoOnTop')}
                 </Text>
                 <Switch
-                  value={this.props.vm.frog}
+                  value={this.props.vm.addOnTop}
                   onValueChange={(value) => {
-                    this.props.vm.frog = value
+                    this.props.vm.addOnTop = value
                   }}
                 />
               </Item>
-              <Item
-                style={{
-                  justifyContent: 'space-between',
-                  paddingVertical: 16,
-                  paddingRight: 12,
-                  borderColor: sharedColors.placeholderColor,
-                }}
-              >
-                <Text {...sharedColors.textExtraStyle}>
-                  {translate('completed')}
-                </Text>
-                <Switch
-                  value={this.props.vm.completed}
-                  onValueChange={(value) => {
-                    this.props.vm.completed = value
-                  }}
-                />
-              </Item>
-              {this.props.vm.showMore && !this.props.vm.editedTodo && (
-                <Item
+            )}
+            {!this.props.vm.showMore && (
+              <Item style={{ borderColor: sharedColors.placeholderColor }}>
+                <Button
+                  block
+                  {...extraButtonProps(sharedColors)}
                   style={{
-                    justifyContent: 'space-between',
-                    paddingVertical: 16,
-                    paddingRight: 12,
-                    borderColor: sharedColors.placeholderColor,
+                    ...extraButtonProps(sharedColors).style,
                     flex: 1,
                   }}
+                  onPress={() => {
+                    this.props.vm.showMore = true
+                  }}
                 >
-                  <Text {...sharedColors.textExtraStyle}>
-                    {translate('addTodoOnTop')}
+                  <Text style={{ color: sharedColors.primaryColor }}>
+                    {translate('addTodoMore')}
                   </Text>
-                  <Switch
-                    value={this.props.vm.addOnTop}
-                    onValueChange={(value) => {
-                      this.props.vm.addOnTop = value
-                    }}
-                  />
-                </Item>
-              )}
-              {!this.props.vm.showMore && (
-                <Item style={{ borderColor: sharedColors.placeholderColor }}>
-                  <Button
-                    block
-                    {...extraButtonProps(sharedColors)}
-                    style={{
-                      ...extraButtonProps(sharedColors).style,
-                      flex: 1,
-                    }}
-                    onPress={() => {
-                      this.props.vm.showMore = true
-                    }}
-                  >
-                    <Text style={{ color: sharedColors.primaryColor }}>
-                      {translate('addTodoMore')}
-                    </Text>
-                  </Button>
-                </Item>
-              )}
-            </Form>
-          )}
+                </Button>
+              </Item>
+            )}
+          </Form>
+        )}
       </>
     )
   }
@@ -666,8 +667,10 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo) {
       let matches = linkify.match(this.breakdownTodo.text) || []
       const newText = matches
-        .map(v => /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined)
-        .filter(v => !!v)
+        .map((v) =>
+          /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined
+        )
+        .filter((v) => !!v)
         .join(' ')
       newVM.text = newText
     }
@@ -678,7 +681,9 @@ class AddTodoContent extends Component<{
     return (
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
-          {this.isBreakdown && !!this.breakdownTodo && <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />}
+          {this.isBreakdown && !!this.breakdownTodo && (
+            <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />
+          )}
           {this.vms.map((vm, i, a) => (
             <View key={i}>
               <AddTodoForm vm={vm} />

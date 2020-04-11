@@ -6,8 +6,8 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionStatus } from '@models/User'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { subscriptionStatusName } from '@views/current/Current'
 import { daysAgo } from '@utils/plusButtonAction'
+import { subscriptionStatusName } from '@utils/subscriptionStatusName'
 
 @observer
 export class SubscriptionSection extends Component {
