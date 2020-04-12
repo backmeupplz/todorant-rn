@@ -33,7 +33,7 @@ import { GeneralSettings } from '@views/settings/GeneralSettings'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 7
+const codePushVersion = 8
 
 @observer
 export class SettingsContent extends Component {
