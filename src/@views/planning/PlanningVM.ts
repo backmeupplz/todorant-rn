@@ -225,6 +225,7 @@ export class PlanningVM {
             todo.monthAndYear = currentMonthAndYear
             todo.date = currentDate
             todo._exactDate = new Date(getTitle(todo))
+            todo.updatedAt = new Date()
             if (failed) {
               todo.frogFails++
               if (todo.frogFails > 1) {
