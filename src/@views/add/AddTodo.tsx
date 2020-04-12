@@ -183,6 +183,7 @@ class CollapseButton extends Component<{ vm: TodoVM }> {
 @observer
 class AddTodoForm extends Component<{ vm: TodoVM }> {
   render() {
+    const languageTag = sharedAppStateStore.languageTag
     return (
       <>
         {this.props.vm.collapsed ? (
@@ -366,7 +367,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
             </Item>
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
-                localeLanguage={sharedAppStateStore.languageTag}
+                localeLanguage={languageTag}
                 selectedDate={this.props.vm.monthAndYearPickerValue}
                 onMonthChange={(date: Moment) => {
                   this.props.vm.monthAndYearPickerValue = date.toDate()
