@@ -79,10 +79,8 @@ class TodoVM {
       this.date = undefined
       return
     }
-    if (this.showDatePicker) {
-      this.monthAndYear = getDateMonthAndYearString(value)
-      this.date = getDateDateString(value)
-    }
+    this.monthAndYear = getDateMonthAndYearString(value)
+    this.date = getDateDateString(value)
   }
 
   @computed
@@ -258,7 +256,10 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   this.props.vm.text = text
                 }}
                 placeholderTextColor={sharedColors.placeholderColor}
-                style={{ color: sharedColors.textColor }}
+                style={{
+                  color: sharedColors.textColor,
+                  marginVertical: Platform.OS === 'ios' ? 10 : undefined,
+                }}
               />
               {Platform.OS === 'android' && (
                 <Button
@@ -461,6 +462,12 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
                   }
                   if (event.type === 'set' || Platform.OS === 'ios') {
                     this.props.vm.timePickerValue = date
+                    if (
+                      !this.props.vm.datePickerValue &&
+                      !this.props.vm.monthAndYearPickerValue
+                    ) {
+                      this.props.vm.datePickerValue = getDateString(new Date())
+                    }
                   }
                 }}
               />
