@@ -3,7 +3,7 @@ import i18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
 import { Language } from '@stores/SettingsStore'
 import { AsyncStorage } from 'react-native'
-import { configCalendar } from './configCalendar'
+import { configCalendar } from '@utils/configCalendar'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),

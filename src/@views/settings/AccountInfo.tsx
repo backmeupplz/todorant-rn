@@ -38,37 +38,37 @@ export class AccountInfo extends Component {
         </Text>
       </ListItem>
     ) : (
-        <>
+      <>
+        <InfoRow
+          title={translate('name')}
+          value={sharedSessionStore.user.name}
+        />
+        {sharedSessionStore.user.email && (
           <InfoRow
-            title={translate('name')}
-            value={sharedSessionStore.user.name}
+            title={translate('email')}
+            value={sharedSessionStore.user.email}
           />
-          {sharedSessionStore.user.email && (
-            <InfoRow
-              title={translate('email')}
-              value={sharedSessionStore.user.email}
-            />
-          )}
-          {sharedSessionStore.user.facebookId && (
-            <InfoRow
-              title={translate('facebook')}
-              value={sharedSessionStore.user.facebookId}
-            />
-          )}
-          {sharedSessionStore.user.telegramId && (
-            <InfoRow
-              title={translate('telegram')}
-              value={sharedSessionStore.user.telegramId}
-            />
-          )}
-          {sharedSessionStore.user.appleSubId && (
-            <InfoRow
-              title={translate('apple')}
-              value={sharedSessionStore.user.appleSubId}
-            />
-          )}
-          <SubscriptionSection />
-        </>
-      )
+        )}
+        {sharedSessionStore.user.facebookId && (
+          <InfoRow
+            title={translate('facebook')}
+            value={sharedSessionStore.user.facebookId}
+          />
+        )}
+        {sharedSessionStore.user.telegramId && (
+          <InfoRow
+            title={translate('telegram')}
+            value={sharedSessionStore.user.telegramId}
+          />
+        )}
+        {sharedSessionStore.user.appleSubId && (
+          <InfoRow
+            title={translate('apple')}
+            value={sharedSessionStore.user.appleSubId}
+          />
+        )}
+        <SubscriptionSection />
+      </>
+    )
   }
 }

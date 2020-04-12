@@ -39,6 +39,7 @@ import { addButtonStore } from '@components/AddButton'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { linkify } from '@utils/linkify'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 enum AddTodoScreenType {
   add = 'add',
@@ -365,6 +366,7 @@ class AddTodoForm extends Component<{ vm: TodoVM }> {
             </Item>
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
+                localeLanguage={sharedAppStateStore.languageTag}
                 selectedDate={this.props.vm.monthAndYearPickerValue}
                 onMonthChange={(date: Moment) => {
                   this.props.vm.monthAndYearPickerValue = date.toDate()

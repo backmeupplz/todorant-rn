@@ -1,8 +1,7 @@
-import { Todo } from './../@models/Todo'
-import { getTitle } from '@models/Todo'
-import { realm } from './realm'
+import { Todo, getTitle } from '@models/Todo'
+import { realm } from '@utils/realm'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { getDateMonthAndYearString, getDateDateString } from './time'
+import { getDateMonthAndYearString, getDateDateString } from '@utils/time'
 import uuid from 'uuid'
 
 export function deleteAllTodos() {

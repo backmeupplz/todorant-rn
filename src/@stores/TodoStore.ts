@@ -1,4 +1,4 @@
-import { realm } from './../@utils/realm'
+import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'
 import { Todo, getTitle } from '@models/Todo'
 import { persist } from 'mobx-persist'

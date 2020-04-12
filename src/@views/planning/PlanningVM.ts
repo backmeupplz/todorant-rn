@@ -1,11 +1,11 @@
 import { sockets } from '@utils/sockets'
 import { fixOrder } from '@utils/fixOrder'
-import { SectionHeaderOrTodo } from './SectionHeaderOrTodo'
+import { SectionHeaderOrTodo } from '@views/planning/SectionHeaderOrTodo'
 import { getDateString, isDateTooOld } from '@utils/time'
 import { Todo, compareTodos, getTitle, isTodoOld } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { computed } from "mobx"
+import { computed } from 'mobx'
 import { realm } from '@utils/realm'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
@@ -24,8 +24,8 @@ export class PlanningVM {
   @computed get allTodosAndHash() {
     return sharedAppStateStore.hash
       ? this.allTodosFiltered.filtered(
-        `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
-      )
+          `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
+        )
       : this.allTodosFiltered
   }
 
@@ -77,8 +77,8 @@ export class PlanningVM {
           ? 1
           : -1
         : new Date(a.title) < new Date(b.title)
-          ? 1
-          : -1
+        ? 1
+        : -1
     })
     let result: SectionHeaderOrTodo[] = []
     for (const todoSection of gatheredTodos) {

@@ -7,7 +7,7 @@ import RNIap, {
 } from 'react-native-iap'
 import { observable } from 'mobx'
 import * as rest from '@utils/rest'
-import { alertError } from './alert'
+import { alertError } from '@utils/alert'
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 

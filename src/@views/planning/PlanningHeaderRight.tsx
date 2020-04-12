@@ -1,10 +1,10 @@
-import { observer } from "mobx-react"
-import React, { Component } from "react"
-import { sharedAppStateStore } from "@stores/AppStateStore"
-import { Button, Icon } from "native-base"
-import { extraButtonProps } from "@utils/extraButtonProps"
-import { sharedColors } from "@utils/sharedColors"
-import { InfoButton } from "@views/settings/InfoButton"
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { Button, Icon } from 'native-base'
+import { extraButtonProps } from '@utils/extraButtonProps'
+import { sharedColors } from '@utils/sharedColors'
+import { InfoButton } from '@views/settings/InfoButton'
 
 @observer
 export class PlanningHeaderRight extends Component {
@@ -25,7 +25,7 @@ export class PlanningHeaderRight extends Component {
         />
       </Button>
     ) : (
-        InfoButton('infoPlanning')()
-      )
+      InfoButton('infoPlanning')()
+    )
   }
 }

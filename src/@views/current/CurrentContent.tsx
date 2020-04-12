@@ -12,8 +12,8 @@ import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import ActionButton from 'react-native-action-button'
 import { plusButtonAction } from '@utils/plusButtonAction'
-import { NoTodosPlaceholder } from './NoTodosPlaceholder'
-import { AllDonePlaceholder } from './AllDonePlaceholder'
+import { NoTodosPlaceholder } from '@views/current/NoTodosPlaceholder'
+import { AllDonePlaceholder } from '@views/current/AllDonePlaceholder'
 
 @observer
 export class CurrentContent extends Component {

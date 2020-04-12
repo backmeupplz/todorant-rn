@@ -8,7 +8,7 @@ import SocketIO from 'socket.io-client'
 import { sharedSessionStore } from '@stores/SessionStore'
 import uuid from 'uuid'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { isHydrated } from './hydrated'
+import { isHydrated } from '@utils/hydrated'
 import { User } from '@models/User'
 
 const socketIO = SocketIO(

@@ -6,7 +6,7 @@ import { User, areUsersPartiallyEqual, SubscriptionStatus } from '@models/User'
 import { persist } from 'mobx-persist'
 import { observable, computed } from 'mobx'
 import { hydrate } from '@utils/hydrate'
-import { sharedSettingsStore } from './SettingsStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { setToken, removeToken } from '@utils/keychain'
 
 class SessionStore {

@@ -1,4 +1,4 @@
-import { ColorModeManager } from './sharedColors'
+import { ColorModeManager } from '@utils/sharedColors'
 import { Platform } from 'react-native'
 
 export const extraButtonProps = (sharedColors: ColorModeManager) => ({
