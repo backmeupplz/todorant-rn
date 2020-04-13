@@ -15,9 +15,13 @@ import { sharedColors } from '@utils/sharedColors'
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
     return (
-      <ListItem style={{ justifyContent: 'space-between', flex: 1 }}>
-        <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
-        <Text {...sharedColors.textExtraStyle}>{this.props.subtitle}</Text>
+      <ListItem>
+        <Text style={{ ...sharedColors.textExtraStyle.style, flex: 1 }}>
+          {this.props.title}
+        </Text>
+        <Text style={{ ...sharedColors.textExtraStyle.style }}>
+          {this.props.subtitle}
+        </Text>
       </ListItem>
     )
   }
@@ -36,6 +40,9 @@ export class Data extends Component {
                 realm.objects<Todo>(Todo).filtered('deleted = false').length
               }`}
             />
+            <ListItem itemHeader>
+              <Text {...sharedColors.textExtraStyle}>{translate('sync')}</Text>
+            </ListItem>
             <Row
               title={translate('todosLastSync')}
               subtitle={`${

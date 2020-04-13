@@ -19,7 +19,9 @@ export class TodoSettings extends Component {
             flex: 1,
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+          >
             {translate('defaultToToday')}
           </Text>
           <Switch
@@ -38,7 +40,9 @@ export class TodoSettings extends Component {
             flex: 1,
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+          >
             {translate('newTodosGoOnTop')}
           </Text>
           <Switch
@@ -57,7 +61,9 @@ export class TodoSettings extends Component {
             flex: 1,
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+          >
             {translate('preserveOrderByTime')}
           </Text>
           <Switch
@@ -76,7 +82,9 @@ export class TodoSettings extends Component {
             flex: 1,
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+          >
             {translate('askBeforeDelete')}
           </Text>
           <Switch

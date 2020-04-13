@@ -31,10 +31,10 @@
   "telegram": "Telegram",
   "apple": "Apple",
   "todosCount": "Todos count",
-  "todosLastSync": "Todos last synced",
+  "todosLastSync": "Todos",
   "notSyncedYet": "Not synced yet",
-  "settingsLastSync": "Settings last synced",
-  "accountLastSync": "Account last synced",
+  "settingsLastSync": "Settings",
+  "accountLastSync": "Account",
   "syncData": "Sync data",
   "googleTokenError": "No access token returned from Google",
   "facebookPermissionsError": "Facebook permissions not granted",
@@ -149,5 +149,6 @@
   "languageAuto": "Auto",
   "syncExactDates": "Recalculate exact dates",
   "askBeforeDelete": "Verify deleting todos",
-  "copied": "copied"
+  "copied": "copied",
+  "sync": "Synchronization"
 }

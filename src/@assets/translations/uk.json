@@ -31,10 +31,10 @@
   "telegram": "Telegram",
   "apple": "Apple",
   "todosCount": "Кількість завдань",
-  "todosLastSync": "Завдань востаннє синхронізовано",
+  "todosLastSync": "Завдання",
   "notSyncedYet": "Не синхронізовано",
-  "settingsLastSync": "Налаштування востаннє синхронізовано",
-  "accountLastSync": "Обліковий запис востаннє синхронізовано",
+  "settingsLastSync": "Налаштування",
+  "accountLastSync": "Обліковий запис",
   "syncData": "Синхронізувати дані",
   "googleTokenError": "Жоден токен доступу не було повернуто з Google",
   "facebookPermissionsError": "Достатніх дозволів Facebook не надано",
@@ -148,5 +148,6 @@
   "languageAuto": "Авто",
   "syncExactDates": "Перерахувати точні дати",
   "askBeforeDelete": "Запитувати перед видаленням завдань",
-  "copied": "скопійовано"
+  "copied": "скопійовано",
+  "sync": "Синхронізація"
 }
