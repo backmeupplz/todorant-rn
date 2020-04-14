@@ -30,7 +30,10 @@ class TodoStore {
               8,
               2
             )}"`
-          : `monthAndYear = "${title.substr(0, 7)}" && !date`
+          : `monthAndYear = "${title.substr(
+              0,
+              7
+            )}" && (date == "" || date == null)`
       )
       .sorted('order')
   }

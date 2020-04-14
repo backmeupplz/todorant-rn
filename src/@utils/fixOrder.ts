@@ -15,11 +15,11 @@ export async function fixOrder(
   const titlesInvolvedSet = new Set(titlesInvolved)
   // Get ids
   const addTodosOnTopIds = addTodosOnTop
-    .map(t => t._id || t._tempSyncId)
-    .filter(v => !!v) as string[]
+    .map((t) => t._id || t._tempSyncId)
+    .filter((v) => !!v) as string[]
   const addTodosToBottomIds = addTodosToBottom
-    .map(t => t._id || t._tempSyncId)
-    .filter(v => !!v) as string[]
+    .map((t) => t._id || t._tempSyncId)
+    .filter((v) => !!v) as string[]
   // Fix every title
   for (const titleInvolved of titlesInvolvedSet) {
     const todos = sharedTodoStore.todosForDate(titleInvolved)
@@ -87,7 +87,9 @@ function fixOneTodoTime(
   todos: (Todo & Realm.Object)[],
   timeTodosToYield: Todo[]
 ) {
-  const timeTodosToYieldIds = timeTodosToYield.map(t => t._id || t._tempSyncId)
+  const timeTodosToYieldIds = timeTodosToYield.map(
+    (t) => t._id || t._tempSyncId
+  )
   let time: number | undefined
   let prevTodoWithTimeIndex: number | undefined
   let i = 0
@@ -126,7 +128,7 @@ function fixOneTodoTime(
 }
 
 function minutesFromTime(time: string) {
-  const components = time.split(':').map(c => parseInt(c, 10))
+  const components = time.split(':').map((c) => parseInt(c, 10))
   return components[0] * 60 + components[1]
 }
 
