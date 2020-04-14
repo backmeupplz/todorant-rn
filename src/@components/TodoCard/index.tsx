@@ -154,7 +154,6 @@ export class TodoCard extends Component<{
                   </Button>
                 )}
                 {this.props.type === CardType.current &&
-                  !this.props.todo.time &&
                   !this.props.todo.frog &&
                   !this.vm.isLast(this.props.todo) && (
                     <Button
