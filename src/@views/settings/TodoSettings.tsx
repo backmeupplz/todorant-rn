@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { Switch } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class TodoSettings extends Component {
@@ -124,6 +125,19 @@ export class TodoSettings extends Component {
           </Text>
           <Text {...sharedColors.textExtraStyle}>
             {translate(`weekday${sharedSettingsStore.firstDayOfWeekSafe}`)}
+          </Text>
+        </ListItem>
+        <ListItem
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+          }}
+          onPress={() => {
+            navigate('Tags')
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('tags')}
           </Text>
         </ListItem>
       </>

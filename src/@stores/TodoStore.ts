@@ -72,9 +72,6 @@ class TodoStore {
   }
 
   logout = () => {
-    realm.write(() => {
-      realm.deleteAll()
-    })
     this.lastSyncDate = undefined
     this.refreshTodos()
   }

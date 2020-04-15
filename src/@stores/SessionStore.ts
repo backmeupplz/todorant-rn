@@ -1,3 +1,4 @@
+import { sharedTagStore } from '@stores/TagStore'
 import { daysBetween } from '@utils/daysBetween'
 import { hydrateStore } from '@utils/hydrated'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -8,6 +9,7 @@ import { observable, computed } from 'mobx'
 import { hydrate } from '@utils/hydrate'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { setToken, removeToken } from '@utils/keychain'
+import { realm } from '@utils/realm'
 
 class SessionStore {
   @persist('date') @observable appInstalled = new Date()
@@ -58,8 +60,12 @@ class SessionStore {
 
   logout() {
     this.user = undefined
+    realm.write(() => {
+      realm.deleteAll()
+    })
     sharedTodoStore.logout()
     sharedSettingsStore.logout()
+    sharedTagStore.logout()
     sockets.logout()
     removeToken()
   }

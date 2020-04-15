@@ -5532,6 +5532,14 @@ react-native-code-push@^6.2.0:
     semver "^7.1.1"
     xcode "1.0.0"
 
+react-native-color-picker@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-color-picker/-/react-native-color-picker-0.5.2.tgz#659e8e97330db2d8778d4fcd2fe922f52e420d3c"
+  integrity sha512-Gboev/3/Bj8dVlqmf1eVGbxpFq4O+pz35jUKp/PWnC/e3R+VN+hiaxhuOr8BRLGTleOtj2Mu4yNMqHTfghJTfQ==
+  dependencies:
+    prop-types "^15.5.10"
+    tinycolor2 "^1.4.1"
+
 react-native-dark-mode@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-native-dark-mode/-/react-native-dark-mode-0.2.2.tgz#4faa335e36330bfca832ba8b3d2bd84c7b880381"
@@ -6741,6 +6749,11 @@ time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
   integrity sha1-dkpaEa9QVhkhsTPztE5hhofg9cM=
+
+tinycolor2@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.1.tgz#f4fad333447bc0b07d4dc8e9209d8f39a8ac77e8"
+  integrity sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=
 
 tlds@^1.207.0:
   version "1.207.0"

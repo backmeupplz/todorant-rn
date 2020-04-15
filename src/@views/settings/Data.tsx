@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Content, List, ListItem, Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedTagStore } from '@stores/TagStore'
 import moment from 'moment'
 import { sockets } from '@utils/sockets'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -10,6 +11,7 @@ import { Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Tag } from '@models/Tag'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -34,10 +36,19 @@ export class Data extends Component {
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
+            <ListItem itemHeader>
+              <Text {...sharedColors.textExtraStyle}>{translate('count')}</Text>
+            </ListItem>
             <Row
-              title={translate('todosCount')}
+              title={translate('todosLastSync')}
               subtitle={`${
                 realm.objects<Todo>(Todo).filtered('deleted = false').length
+              }`}
+            />
+            <Row
+              title={translate('tags')}
+              subtitle={`${
+                realm.objects<Tag>(Tag).filtered('deleted = false').length
               }`}
             />
             <ListItem itemHeader>
@@ -48,6 +59,16 @@ export class Data extends Component {
               subtitle={`${
                 sharedTodoStore.lastSyncDate
                   ? moment(sharedTodoStore.lastSyncDate).format(
+                      'YYYY-MM-DD hh:mm:ss'
+                    )
+                  : translate('notSyncedYet')
+              }`}
+            />
+            <Row
+              title={translate('tags')}
+              subtitle={`${
+                sharedTagStore.lastSyncDate
+                  ? moment(sharedTagStore.lastSyncDate).format(
                       'YYYY-MM-DD hh:mm:ss'
                     )
                   : translate('notSyncedYet')

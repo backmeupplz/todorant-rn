@@ -1,5 +1,6 @@
+import { sharedTagStore } from '@stores/TagStore'
+import { Tag } from '@models/Tag'
 import { Settings } from '@models/Settings'
-
 import { alertError } from '@utils/alert'
 import { Todo } from '@models/Todo'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -108,6 +109,7 @@ class SocketManager {
   pendingPushes = {} as PromiseMap
 
   todoSyncManager: SyncManager<Todo[]>
+  tagsSyncManager: SyncManager<Tag[]>
   settingsSyncManager: SyncManager<Settings>
   userSyncManager: SyncManager<User>
 
@@ -135,6 +137,20 @@ class SocketManager {
       },
       (lastSyncDate) => {
         sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
+      }
+    )
+    this.tagsSyncManager = new SyncManager<Tag[]>(
+      'tags',
+      this.pendingPushes,
+      () => sharedTagStore.lastSyncDate,
+      (objects, pushBack) => {
+        return sharedTagStore.onObjectsFromServer(
+          objects,
+          pushBack as () => Promise<Tag[]>
+        )
+      },
+      (lastSyncDate) => {
+        sharedTagStore.lastSyncDate = new Date(lastSyncDate)
       }
     )
     this.settingsSyncManager = new SyncManager<Settings>(
@@ -217,6 +233,7 @@ class SocketManager {
       return
     }
     this.todoSyncManager.sync()
+    this.tagsSyncManager.sync()
     this.settingsSyncManager.sync()
     this.userSyncManager.sync()
   }

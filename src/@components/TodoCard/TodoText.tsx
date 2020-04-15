@@ -5,6 +5,7 @@ import { Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { sharedTagStore } from '@stores/TagStore'
 
 @observer
 export class TodoText extends Component<{ text: string; isOld: boolean }> {
@@ -19,7 +20,13 @@ export class TodoText extends Component<{ text: string; isOld: boolean }> {
           <Text
             key={i}
             style={{
-              color: p.type !== 'text' ? 'dodgerblue' : sharedColors.textColor,
+              color:
+                p.type !== 'text'
+                  ? p.type === 'url'
+                    ? 'dodgerblue'
+                    : sharedTagStore.tagColorMap[p.url?.substr(1) || ''] ||
+                      'dodgerblue'
+                  : sharedColors.textColor,
             }}
             onPress={() => {
               if (p.type === 'link' && p.url) {

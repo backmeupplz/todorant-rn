@@ -40,13 +40,14 @@ import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { linkify } from '@utils/linkify'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { sharedTagStore } from '@stores/TagStore'
 
 enum AddTodoScreenType {
   add = 'add',
   edit = 'edit',
 }
 
-class TodoVM {
+export class TodoVM {
   @observable text = ''
   @observable completed = false
   @observable frog = false
@@ -646,6 +647,9 @@ class AddTodoContent extends Component<{
       })
       titlesToFixOrder.push(breakdownTodoTitle)
     }
+    // Add tags
+    sharedTagStore.addTags(this.vms)
+    // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
   }

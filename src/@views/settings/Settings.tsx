@@ -30,10 +30,12 @@ import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { InfoButton } from '@views/settings/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
+import { Tags } from '@views/settings/Tags'
+import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 11
+const codePushVersion = 12
 
 @observer
 export class SettingsContent extends Component {
@@ -333,6 +335,26 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntro'),
+            }}
+          />
+          <Stack.Screen
+            name="Tags"
+            component={Tags}
+            options={{
+              title: translate('tags'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoTags'),
+            }}
+          />
+          <Stack.Screen
+            name="ColorPicker"
+            component={ColorPicker}
+            options={{
+              title: translate('changeColor'),
+              headerTitleAlign: 'center',
+              headerRight: () => <ColorPickerHeaderRight />,
+              ...sharedColors.headerExtraStyle,
             }}
           />
         </Stack.Navigator>
