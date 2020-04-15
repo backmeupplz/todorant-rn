@@ -35,7 +35,7 @@ import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 12
+const codePushVersion = 13
 
 @observer
 export class SettingsContent extends Component {
