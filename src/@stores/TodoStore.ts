@@ -1,6 +1,6 @@
 import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo, getTitle, compareTodos } from '@models/Todo'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
 import { getDateString } from '@utils/time'
@@ -39,7 +39,9 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    const todayTodos = this.todayTodos.filtered('completed = false')
+    const todayTodos = Array.from(
+      this.todayTodos.filtered('completed = false')
+    ).sort(compareTodos(false))
     return todayTodos.length ? todayTodos[0] : undefined
   }
 
