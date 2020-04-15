@@ -8,8 +8,8 @@
     "start": "react-native start",
     "android-shake": "adb shell input text \"RR\"",
     "code-push": "yarn code-push-ios && yarn code-push-android",
-    "code-push-ios": "appcenter codepush release-react -a borodutch/Todorant -d Production",
-    "code-push-android": "appcenter codepush release-react -a borodutch/Todorant-1 -d Production"
+    "code-push-ios": "appcenter codepush release-react -a borodutch/Todorant -d Production -m",
+    "code-push-android": "appcenter codepush release-react -a borodutch/Todorant-1 -d Production -m"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
