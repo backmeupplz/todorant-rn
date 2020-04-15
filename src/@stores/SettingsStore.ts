@@ -12,6 +12,12 @@ export enum Language {
   uk = 'uk',
 }
 
+export enum ColorMode {
+  auto = 'auto',
+  dark = 'dark',
+  light = 'light',
+}
+
 class SettingsStore {
   hydrated = false
 
@@ -23,6 +29,7 @@ class SettingsStore {
   @persist @observable preserveOrderByTime?: boolean
 
   @observable language = 'en'
+  @persist @observable colorMode = ColorMode.auto
 
   @persist @observable askBeforeDelete = true
 

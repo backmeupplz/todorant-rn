@@ -154,5 +154,8 @@
   "sync": "Synchronization",
   "infoTags": "This is the list of all the hashtags you have used. If you don't see anything — go on, create a task with a #hastag in its text, it is the only way to add hashtags to this list.\n\nIf you want to change a hashtags color or to delete it, tap on it. Don't worry, hashtags are separate from todos — doing anything on this screen won't affect your todos. Well, changing colors can make your todos look cooler.",
   "changeColor": "Change color",
-  "changeColorToDefault": "Reset color"
+  "changeColorToDefault": "Reset color",
+  "colorMode": "Color mode",
+  "dark": "Dark",
+  "light": "Light"
 }

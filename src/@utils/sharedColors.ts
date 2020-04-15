@@ -1,14 +1,17 @@
+import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
 
 export class ColorModeManager {
   @observable mode = initialMode
   @computed get isDark() {
-    return this.mode === 'dark'
+    return sharedSettingsStore.colorMode === ColorMode.auto
+      ? this.mode === 'dark'
+      : sharedSettingsStore.colorMode === ColorMode.dark
   }
 
   constructor() {
-    eventEmitter.on('currentModeChanged', newMode => {
+    eventEmitter.on('currentModeChanged', (newMode) => {
       this.mode = newMode
     })
   }

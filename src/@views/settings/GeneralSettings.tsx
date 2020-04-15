@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { ListItem, Text, ActionSheet } from 'native-base'
-import { sharedSettingsStore, Language } from '@stores/SettingsStore'
+import { sharedSettingsStore, Language, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -20,6 +20,19 @@ export class GeneralSettings extends Component {
     return sharedSettingsStore.language === Language.auto
       ? translate('languageAuto')
       : (codeToName as any)[sharedSettingsStore.language]
+  }
+
+  @computed get colorModeLabel() {
+    switch (sharedSettingsStore.colorMode) {
+      case ColorMode.auto:
+        return translate('languageAuto')
+      case ColorMode.dark:
+        return translate('dark')
+      case ColorMode.light:
+        return translate('light')
+      default:
+        return ''
+    }
   }
 
   render() {
@@ -62,6 +75,39 @@ export class GeneralSettings extends Component {
             {translate('language')}
           </Text>
           <Text {...sharedColors.textExtraStyle}>{this.languageLabel}</Text>
+        </ListItem>
+        <ListItem
+          style={{
+            justifyContent: 'space-between',
+            borderColor: sharedColors.placeholderColor,
+          }}
+          onPress={() => {
+            const options = [
+              { label: translate('languageAuto'), mode: ColorMode.auto },
+              { label: translate('dark'), mode: ColorMode.dark },
+              { label: translate('light'), mode: ColorMode.light },
+            ]
+            ActionSheet.show(
+              {
+                options: options
+                  .map((v) => v.label)
+                  .concat(translate('cancel')),
+                cancelButtonIndex: 4,
+                destructiveButtonIndex: 4,
+                title: '',
+              },
+              async (i) => {
+                if (i < 3) {
+                  sharedSettingsStore.colorMode = options[i].mode
+                }
+              }
+            )
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('colorMode')}
+          </Text>
+          <Text {...sharedColors.textExtraStyle}>{this.colorModeLabel}</Text>
         </ListItem>
       </>
     )
