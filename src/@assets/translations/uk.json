@@ -151,7 +151,7 @@
   "askBeforeDelete": "Запитувати перед видаленням завдань",
   "copied": "скопійовано",
   "sync": "Синхронізація",
-  "infoTags": "This is the list of all the hashtags you have used. If you don't see anything — go on, create a task with a #hastag in its text, it is the only way to add hashtags to this list.\n\nIf you want to change a hashtags color or to delete it, tap on it. Don't worry, hashtags are separate from todos — doing anything on this screen won't affect your todos. Well, changing colors can make your todos look cooler.",
+  "infoTags": "Це увесь перелік хештеґів, якими Ви користуєтеся. Якщо Ви нічого тут не бачите — вперед! — створюйте завдання з #хештеґом прямо в тексті.\n\nЯкщо маєте бажання змінити колір хештеґів або видалити їх, просто торкніться. І не хвилюйтеся — хештеґи зберігаються окремо від завдань — що б Ви не зробили на цьому екрані, це жодним чином не вплине на Ваші завдання. Хіба що зміна кольору зробить їх цікавіше.",
   "changeColor": "Поміняти колір",
   "changeColorToDefault": "Скинути колір"
 }
