@@ -13,6 +13,7 @@ import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
+import { Clipboard } from 'react-native'
 
 const showDebugInfo = false
 
@@ -77,9 +78,29 @@ export class TodoCard extends Component<{
                     sharedAppStateStore.planningMode === PlanningMode.rearrange
                       ? 5
                       : 0,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}
               >
                 <TodoCardTextBlock todo={this.props.todo} isOld={this.isOld} />
+                {this.props.type === CardType.breakdown && (
+                  <Button
+                    icon
+                    {...extraButtonProps(sharedColors)}
+                    small
+                    onPress={async () => {
+                      await Clipboard.setString(this.props.todo.text)
+                    }}
+                  >
+                    <Icon
+                      type="MaterialIcons"
+                      name="assignment"
+                      style={{
+                        color: sharedColors.textColor,
+                      }}
+                    />
+                  </Button>
+                )}
               </View>
             </View>
           </Body>

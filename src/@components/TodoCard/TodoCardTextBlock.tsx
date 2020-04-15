@@ -12,7 +12,7 @@ export class TodoCardTextBlock extends Component<{
 }> {
   render() {
     return (
-      <Text>
+      <Text style={{ flex: 1 }}>
         <Text {...sharedColors.textExtraStyle}>
           {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
           {__DEV__ && `(${this.props.todo.order}) `}
