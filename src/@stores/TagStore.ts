@@ -1,5 +1,5 @@
 import { sockets } from '@utils/sockets'
-import { TodoVM } from '@views/add/AddTodo'
+import { TodoVM } from '@views/add/TodoVM'
 import { Tag } from '@models/Tag'
 import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'

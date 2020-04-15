@@ -38,17 +38,26 @@ export function l(text: string) {
     const parsedUrl = url.parse(
       text.substr(match.index, match.lastIndex - match.index)
     )
-    elements.push({
-      type: /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(match.url) ? 'hash' : 'link',
-      url: match.url,
-      value: parsedUrl.hostname
-        ? `${parsedUrl.hostname}${
-            (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
-              ? '/...'
-              : ''
-          }`
-        : parsedUrl.href,
-    })
+    const isHash = /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(match.url)
+    const isText = !isHash && match.url.substr(0, 1) === '#'
+    if (!isText) {
+      elements.push({
+        type: isHash ? 'hash' : 'link',
+        url: match.url,
+        value: parsedUrl.hostname
+          ? `${parsedUrl.hostname}${
+              (parsedUrl.pathname || '/').substr(1) || parsedUrl.hash
+                ? '/...'
+                : ''
+            }`
+          : parsedUrl.href,
+      })
+    } else {
+      elements.push({
+        type: 'text',
+        value: match.url,
+      })
+    }
     endIndex = match.lastIndex
   }
   // Last text
