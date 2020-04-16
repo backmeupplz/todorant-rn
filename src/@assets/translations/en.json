@@ -157,5 +157,6 @@
   "changeColorToDefault": "Reset color",
   "colorMode": "Color mode",
   "dark": "Dark",
-  "light": "Light"
+  "light": "Light",
+  "loadingData": "Loading your data..."
 }

@@ -156,5 +156,6 @@
   "changeColorToDefault": "Скинути колір",
   "colorMode": "Тема",
   "dark": "Темна",
-  "light": "Світла"
+  "light": "Світла",
+  "loadingData": "Завантажуємо ваші дані..."
 }

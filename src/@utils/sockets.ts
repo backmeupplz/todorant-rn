@@ -11,12 +11,15 @@ import uuid from 'uuid'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { isHydrated } from '@utils/hydrated'
 import { User } from '@models/User'
+import events from 'events'
 
 const socketIO = SocketIO(
   __DEV__ ? 'http://192.168.31.27:3000' : 'https://ws.todorant.com'
 )
 
 type PromiseMap = { [index: string]: { res: Function; rej: Function } }
+
+export const syncEventEmitter = new events.EventEmitter()
 
 class SyncManager<T> {
   name: string
@@ -59,6 +62,7 @@ class SyncManager<T> {
         await onObjectsFromServer(response, this.pushObjects)
       } catch (err) {
         alertError(err)
+        syncEventEmitter.emit(`${name}_sync_errored`, err)
       }
     })
     // 4
@@ -72,12 +76,14 @@ class SyncManager<T> {
       if (setLastSyncDate) {
         setLastSyncDate(new Date())
       }
+      syncEventEmitter.emit(`${name}_synced`)
     })
     // 4
     socketIO.on(`${name}_pushed_error`, (pushId: string, error: Error) => {
       console.warn(`${this.name}: pushed_error`, pushId, error)
       this.pendingPushes[pushId]?.rej(error)
       delete this.pendingPushes[pushId]
+      syncEventEmitter.emit(`${name}_sync_errored`, error)
     })
   }
 

@@ -2,21 +2,27 @@ import React, { Component } from 'react'
 import { WebView } from 'react-native-webview'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { goBack, navigationRef } from '@utils/navigation'
+import { goBack } from '@utils/navigation'
 import { alertError } from '@utils/alert'
 import { User } from '@models/User'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 const base = __DEV__ ? 'http://192.168.31.27:8080' : 'https://todorant.com'
 
 @observer
-export class LoginTelegram extends Component {
+class LoginTelegramContent extends Component<{
+  route: RouteProp<
+    Record<string, { setLoadingToTrue: () => void } | undefined>,
+    string
+  >
+}> {
   render() {
     return (
       <WebView
         source={{ uri: `${base}/mobile-login/telegram` }}
         style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
-        onLoadStart={e => {
+        onLoadStart={(e) => {
           try {
             const url = e.nativeEvent.url
             if (url.includes('mobile_login_success')) {
@@ -27,11 +33,7 @@ export class LoginTelegram extends Component {
               userInfo.updatedAt = new Date(userInfo.updatedAt)
               sharedSessionStore.login(userInfo)
               goBack()
-              setTimeout(() => {
-                if (navigationRef.current?.canGoBack) {
-                  goBack()
-                }
-              }, 1000)
+              this.props.route.params?.setLoadingToTrue()
             }
           } catch (err) {
             goBack()
@@ -41,4 +43,14 @@ export class LoginTelegram extends Component {
       />
     )
   }
+}
+
+export const LoginTelegram = () => {
+  const route = useRoute<
+    RouteProp<
+      Record<string, { setLoadingToTrue: () => void } | undefined>,
+      string
+    >
+  >()
+  return <LoginTelegramContent route={route} />
 }

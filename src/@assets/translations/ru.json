@@ -157,5 +157,6 @@
   "changeColorToDefault": "Сбросить цвет",
   "colorMode": "Тема",
   "dark": "Темная",
-  "light": "Светлая"
+  "light": "Светлая",
+  "loadingData": "Загружаем ваши данные..."
 }

@@ -1,3 +1,4 @@
+import { syncEventEmitter } from './../@utils/sockets'
 import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'
 import { Todo, getTitle, compareTodos } from '@models/Todo'
@@ -143,6 +144,7 @@ class TodoStore {
       sharedTodoStore.lastSyncDate = new Date()
       // Refresh
       this.refreshTodos()
+      syncEventEmitter.emit(`todos_synced`)
       return
     }
     realm.write(() => {
