@@ -65,6 +65,12 @@ export class ColorModeManager {
   @computed get oldTodoBackground() {
     return this.isDark ? 'maroon' : 'lavenderblush'
   }
+  @computed get done() {
+    return this.isDark ? 'forestgreen' : 'limegreen'
+  }
+  @computed get delete() {
+    return this.isDark ? 'firebrick' : 'orangered'
+  }
 }
 
 export const sharedColors = new ColorModeManager()
