@@ -14,21 +14,18 @@ import { observable } from 'mobx'
 @observer
 class TodoCardBackground extends Component<{
   direction: string
+  todo: Todo
 }> {
   render() {
     return (
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems:
             this.props.direction === 'left' ? 'flex-start' : 'flex-end',
-          backgroundColor:
-            this.props.direction === 'left'
-              ? sharedColors.done
-              : sharedColors.delete,
           paddingHorizontal: 20,
-          marginVertical: 5,
+          marginTop: 20,
         }}
       >
         <Icon
@@ -73,8 +70,12 @@ class TodoSwipeRow extends Component<{
             this.acting = false
           }
         }}
+        style={{
+          backgroundColor:
+            this.direction === 'left' ? sharedColors.done : sharedColors.delete,
+        }}
       >
-        <TodoCardBackground direction={this.direction} />
+        <TodoCardBackground direction={this.direction} todo={this.props.todo} />
         {this.props.children}
       </SwipeRow>
     )
