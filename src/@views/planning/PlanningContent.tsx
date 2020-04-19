@@ -34,6 +34,7 @@ export class PlanningContent extends Component {
         )}
         {this.vm.todosWithSections.length ? (
           <DraggableFlatList
+            autoscrollSpeed={200}
             data={this.vm.todosWithSections}
             renderItem={({ item, index, drag, isActive }) =>
               item.title ? (
