@@ -7,11 +7,13 @@ import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { TodoCardActions } from './TodoCardActions'
 import { TodoCardBody } from './TodoCardBody'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 @observer
 export class TodoCard extends Component<{
   todo: Todo
   type: CardType
+  drag: () => void
 }> {
   vm = new TodoCardVM()
 
@@ -24,11 +26,13 @@ export class TodoCard extends Component<{
           borderColor: sharedColors.borderColor,
         }}
       >
-        <TodoCardBody
-          vm={this.vm}
-          todo={this.props.todo}
-          type={this.props.type}
-        />
+        <TouchableWithoutFeedback onLongPress={this.props.drag}>
+          <TodoCardBody
+            vm={this.vm}
+            todo={this.props.todo}
+            type={this.props.type}
+          />
+        </TouchableWithoutFeedback>
         {this.props.type !== CardType.breakdown && (
           <TodoCardActions
             todo={this.props.todo}

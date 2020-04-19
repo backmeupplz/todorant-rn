@@ -35,17 +35,17 @@ export class PlanningContent extends Component {
         {this.vm.todosWithSections.length ? (
           <DraggableFlatList
             data={this.vm.todosWithSections}
-            renderItem={({ item, index, drag, isActive }) => (
-              <TouchableWithoutFeedback
-                key={index}
-                onLongPress={
-                  sharedAppStateStore.todoSection === TodoSectionType.planning
-                    ? drag
-                    : undefined
-                }
-                style={{ paddingHorizontal: isActive ? 10 : 0 }}
-              >
-                {item.title ? (
+            renderItem={({ item, index, drag, isActive }) =>
+              item.title ? (
+                <TouchableWithoutFeedback
+                  key={index}
+                  onLongPress={
+                    sharedAppStateStore.todoSection === TodoSectionType.planning
+                      ? drag
+                      : undefined
+                  }
+                  style={{ paddingHorizontal: isActive ? 10 : 0 }}
+                >
                   <Text
                     style={{
                       marginHorizontal: 10,
@@ -56,21 +56,22 @@ export class PlanningContent extends Component {
                   >
                     {item.title}
                   </Text>
-                ) : (
-                  <View style={{ padding: isActive ? 10 : 0 }}>
-                    <TodoCard
-                      todo={item.item!}
-                      type={
-                        sharedAppStateStore.todoSection ===
-                        TodoSectionType.planning
-                          ? CardType.planning
-                          : CardType.done
-                      }
-                    />
-                  </View>
-                )}
-              </TouchableWithoutFeedback>
-            )}
+                </TouchableWithoutFeedback>
+              ) : (
+                <View style={{ padding: isActive ? 10 : 0 }} key={index}>
+                  <TodoCard
+                    todo={item.item!}
+                    type={
+                      sharedAppStateStore.todoSection ===
+                      TodoSectionType.planning
+                        ? CardType.planning
+                        : CardType.done
+                    }
+                    drag={drag}
+                  />
+                </View>
+              )
+            }
             keyExtractor={(_, index) => `${index}`}
             onDragEnd={this.vm.onDragEnd}
           />
