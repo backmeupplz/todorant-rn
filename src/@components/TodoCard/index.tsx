@@ -13,7 +13,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 export class TodoCard extends Component<{
   todo: Todo
   type: CardType
-  drag: () => void
+  drag?: () => void
 }> {
   vm = new TodoCardVM()
 
