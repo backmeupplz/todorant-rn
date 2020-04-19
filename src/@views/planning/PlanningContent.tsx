@@ -5,11 +5,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import ActionButton from 'react-native-action-button'
-import {
-  sharedAppStateStore,
-  TodoSectionType,
-  PlanningMode,
-} from '@stores/AppStateStore'
+import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'
@@ -37,34 +33,29 @@ export class PlanningContent extends Component {
           </Text>
         )}
         {this.vm.todosWithSections.length ? (
-          sharedAppStateStore.planningMode === PlanningMode.default ? (
-            <DraggableFlatList
-              data={this.vm.todosWithSections}
-              renderItem={({ item, index, drag, isActive }) =>
-                item.title ? (
-                  <TouchableWithoutFeedback
+          <DraggableFlatList
+            data={this.vm.todosWithSections}
+            renderItem={({ item, index, drag, isActive }) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onLongPress={
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? drag
+                    : undefined
+                }
+                style={{ paddingHorizontal: isActive ? 10 : 0 }}
+              >
+                {item.title ? (
+                  <Text
+                    style={{
+                      marginHorizontal: 10,
+                      marginTop: 16,
+                      ...sharedColors.textExtraStyle.style,
+                    }}
                     key={index}
-                    onLongPress={
-                      sharedAppStateStore.todoSection ===
-                        TodoSectionType.planning &&
-                      sharedAppStateStore.planningMode ===
-                        PlanningMode.rearrange
-                        ? drag
-                        : undefined
-                    }
-                    style={{ paddingHorizontal: isActive ? 10 : 0 }}
                   >
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        marginTop: 16,
-                        ...sharedColors.textExtraStyle.style,
-                      }}
-                      key={index}
-                    >
-                      {item.title}
-                    </Text>
-                  </TouchableWithoutFeedback>
+                    {item.title}
+                  </Text>
                 ) : (
                   <View style={{ padding: isActive ? 10 : 0 }}>
                     <TodoCard
@@ -75,59 +66,14 @@ export class PlanningContent extends Component {
                           ? CardType.planning
                           : CardType.done
                       }
-                      drag={drag}
                     />
                   </View>
-                )
-              }
-              keyExtractor={(_, index) => `${index}`}
-              onDragEnd={this.vm.onDragEnd}
-            />
-          ) : (
-            <DraggableFlatList
-              data={this.vm.todosWithSections}
-              renderItem={({ item, index, drag, isActive }) =>
-                item.title ? (
-                  <TouchableWithoutFeedback
-                    key={index}
-                    onLongPress={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? drag
-                        : undefined
-                    }
-                    style={{ paddingHorizontal: isActive ? 10 : 0 }}
-                  >
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        marginTop: 16,
-                        ...sharedColors.textExtraStyle.style,
-                      }}
-                      key={index}
-                    >
-                      {item.title}
-                    </Text>
-                  </TouchableWithoutFeedback>
-                ) : (
-                  <View style={{ padding: isActive ? 10 : 0 }}>
-                    <TodoCard
-                      todo={item.item!}
-                      type={
-                        sharedAppStateStore.todoSection ===
-                        TodoSectionType.planning
-                          ? CardType.planning
-                          : CardType.done
-                      }
-                      drag={drag}
-                    />
-                  </View>
-                )
-              }
-              keyExtractor={(_, index) => `${index}`}
-              onDragEnd={this.vm.onDragEnd}
-            />
-          )
+                )}
+              </TouchableWithoutFeedback>
+            )}
+            keyExtractor={(_, index) => `${index}`}
+            onDragEnd={this.vm.onDragEnd}
+          />
         ) : (
           <NoTodosPlaceholder />
         )}

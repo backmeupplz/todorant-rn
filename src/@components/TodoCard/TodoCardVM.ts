@@ -1,9 +1,10 @@
+import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
 import { alertConfirm } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo, getTitle, isTodoOld } from '@models/Todo'
 import {
   getDateStringFromTodo,
   getDateDateString,
@@ -107,5 +108,9 @@ export class TodoCardVM {
     })
 
     fixOrder([getTitle(todo)])
+  }
+
+  isOld(type: CardType, todo: Todo) {
+    return type !== CardType.done && isTodoOld(todo)
   }
 }
