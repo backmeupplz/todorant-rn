@@ -20,6 +20,7 @@ export class TodoCardVM {
     let startOffseting = false
     let offset = 0
     realm.write(() => {
+      let foundValidNeighbour = false
       for (const t of neighbours) {
         if (
           (t._id && todo._id && t._id === todo._id) ||
@@ -32,12 +33,21 @@ export class TodoCardVM {
         }
         if (startOffseting) {
           offset++
-          t.order -= 1
-          t.updatedAt = new Date()
           if (!t.skipped) {
+            t.order -= offset
+            t.updatedAt = new Date()
+            foundValidNeighbour = true
             break
           }
         }
+      }
+      if (!foundValidNeighbour) {
+        neighbours.forEach((n, i) => {
+          if (i > 0) {
+            n.order--
+            n.updatedAt = new Date()
+          }
+        })
       }
       todo.order += offset
       todo.skipped = true
@@ -47,11 +57,14 @@ export class TodoCardVM {
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
-  isLast(todo: Todo) {
+  isSkippable(todo: Todo) {
+    if (todo.frog || todo.time) {
+      return false
+    }
     const neighbours = sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
       .filtered(`completed = ${todo.completed}`)
-    return neighbours.length <= 1
+    return neighbours.length > 1
   }
 
   moveToToday(todo: Todo) {

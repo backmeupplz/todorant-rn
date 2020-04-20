@@ -3,4 +3,5 @@
     <color name="splashscreen_bg">#fff8f7</color>
     <color name="app_bg">#fff8f7</color>
     <color name="primary_dark">#fff8f7</color>
+    <color name="textColor">#000000</color>
 </resources>

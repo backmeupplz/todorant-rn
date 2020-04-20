@@ -84,8 +84,7 @@ export class TodoCardActions extends Component<{
             </Button>
           )}
           {this.props.type === CardType.current &&
-            !this.props.todo.frog &&
-            !this.props.vm.isLast(this.props.todo) && (
+            this.props.vm.isSkippable(this.props.todo) && (
               <Button
                 icon
                 {...extraButtonProps(sharedColors)}
