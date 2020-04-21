@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { CardItem, Body, View, Button, Icon } from 'native-base'
+import { CardItem, Body, View, Icon } from 'native-base'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { CardType } from '@components/TodoCard/CardType'
 import { Todo } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { Clipboard } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const showDebugInfo = false
 
@@ -44,10 +44,7 @@ export class TodoCardBody extends Component<{
             >
               <TodoCardTextBlock todo={this.props.todo} isOld={isOld} />
               {this.props.type === CardType.breakdown && (
-                <Button
-                  icon
-                  {...extraButtonProps(sharedColors)}
-                  small
+                <TouchableOpacity
                   onPress={async () => {
                     await Clipboard.setString(this.props.todo.text)
                   }}
@@ -56,10 +53,13 @@ export class TodoCardBody extends Component<{
                     type="MaterialIcons"
                     name="assignment"
                     style={{
+                      fontSize: 20,
                       color: sharedColors.textColor,
+                      paddingLeft: 5,
+                      paddingTop: 3,
                     }}
                   />
-                </Button>
+                </TouchableOpacity>
               )}
             </View>
           </View>
