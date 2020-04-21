@@ -98,6 +98,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                   color: sharedColors.textColor,
                   marginVertical: Platform.OS === 'ios' ? 10 : undefined,
                 }}
+                autoFocus
               />
               {Platform.OS === 'android' && (
                 <Button
