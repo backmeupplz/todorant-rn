@@ -33,6 +33,8 @@
   "count": "Count",
   "todosLastSync": "Todos",
   "tags": "Hashtags",
+  "tagsCount": "Hashtags",
+  "todoCount": "Todos",
   "notSyncedYet": "Not synced yet",
   "settingsLastSync": "Settings",
   "accountLastSync": "Account",

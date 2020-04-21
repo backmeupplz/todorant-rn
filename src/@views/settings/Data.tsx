@@ -40,13 +40,13 @@ export class Data extends Component {
               <Text {...sharedColors.textExtraStyle}>{translate('count')}</Text>
             </ListItem>
             <Row
-              title={translate('todosLastSync')}
+              title={translate('todoCount')}
               subtitle={`${
                 realm.objects<Todo>(Todo).filtered('deleted = false').length
               }`}
             />
             <Row
-              title={translate('tags')}
+              title={translate('tagsCount')}
               subtitle={`${
                 realm.objects<Tag>(Tag).filtered('deleted = false').length
               }`}

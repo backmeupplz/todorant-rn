@@ -24,6 +24,7 @@ export class TodoCardTextBlock extends Component<{
         style={{
           flexDirection: 'row',
           flexWrap: 'wrap',
+          flex: 1,
         }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
