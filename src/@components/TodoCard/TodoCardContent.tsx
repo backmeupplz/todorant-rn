@@ -21,7 +21,7 @@ export class TodoCardContent extends Component<{
 }> {
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}>
+      <View style={{ backgroundColor: sharedColors.backgroundColor }}>
         <Card
           noShadow
           style={{
@@ -29,19 +29,21 @@ export class TodoCardContent extends Component<{
             borderColor: sharedColors.borderColor,
           }}
         >
-          <TouchableOpacity onLongPress={this.props.drag}>
-            {/* <Text onPress={() => console.log('noice')}>Noice</Text> */}
-            <View
-              onMoveShouldSetResponder={() => true}
-              onStartShouldSetResponder={() => true}
-            >
+          {this.props.type === CardType.planning ? (
+            <TouchableOpacity onLongPress={this.props.drag}>
               <TodoCardBody
                 vm={this.props.vm}
                 todo={this.props.todo}
                 type={this.props.type}
               />
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          ) : (
+            <TodoCardBody
+              vm={this.props.vm}
+              todo={this.props.todo}
+              type={this.props.type}
+            />
+          )}
           {this.props.type !== CardType.breakdown && (
             <TodoCardActions
               todo={this.props.todo}
