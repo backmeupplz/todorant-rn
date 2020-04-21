@@ -30,6 +30,7 @@ struct Todo: Codable {
 
   let monthAndYear: String
   let date: String?
+  let time: String?
 
   let createdAt: String
   let updatedAt: String

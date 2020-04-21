@@ -79,7 +79,9 @@ struct CurrentTodoViewCard: View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
         VStack {
-          Text("\(todo.frog ? "🐸 " : "")\(todo.text)")
+          Text(
+            "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+          )
             .lineLimit(self.store.expanded ? nil : 1)
             .fixedSize(horizontal: false, vertical: true)
           HStack {
@@ -100,7 +102,7 @@ struct CurrentTodoViewCard: View {
               Image(systemName: "trash")
                 .modifier(CurrentButtonIcon())
             }
-            if !todo.skipped && !todo.frog {
+            if !todo.skipped && !todo.frog && todo.time == nil {
               Button(action: {
                 self.store.loading = true
                 TodoRoute<EmptyResponse>(route: .skip(id: todo._id))
