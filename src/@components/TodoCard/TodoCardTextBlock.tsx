@@ -33,6 +33,11 @@ export class TodoCardTextBlock extends Component<{
             style={{ ...sharedColors.textExtraStyle.style }}
           >{`(${this.props.todo.order}) `}</Text>
         )}
+        {__DEV__ && (
+          <Text
+            style={{ ...sharedColors.textExtraStyle.style }}
+          >{`(${this.props.todo.frogFails}) `}</Text>
+        )}
         {this.props.todo.frog && (
           <Text style={{ ...sharedColors.textExtraStyle.style }}>🐸 </Text>
         )}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Content, Text, Button, Icon, View } from 'native-base'
-import { goBack } from '@utils/navigation'
+import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
 import { getDateMonthAndYearString } from '@utils/time'
@@ -20,6 +20,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { TodoVM } from '@views/add/TodoVM'
 import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
+import { Alert } from 'react-native'
 
 @observer
 class AddTodoContent extends Component<{
@@ -76,6 +77,32 @@ class AddTodoContent extends Component<{
       } else if (vm.editedTodo) {
         const oldTitle = getTitle(vm.editedTodo)
         const failed = isTodoOld(vm.editedTodo)
+
+        if (
+          vm.editedTodo.frogFails > 2 &&
+          (vm.editedTodo.monthAndYear !==
+            (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
+            vm.editedTodo.date !== vm.date)
+        ) {
+          setTimeout(() => {
+            Alert.alert(translate('error'), translate('breakdownRequest'), [
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+              {
+                text: translate('breakdownButton'),
+                onPress: () => {
+                  goBack()
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: vm.editedTodo,
+                  })
+                },
+              },
+            ])
+          }, 100)
+          return
+        }
 
         realm.write(() => {
           if (!vm.editedTodo) {

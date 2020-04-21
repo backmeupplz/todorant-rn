@@ -188,7 +188,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
             </Item>
             {this.props.vm.showDatePicker && (
               <Calendar
-                minDate={getDateString(new Date())}
+                minDate={__DEV__ ? undefined : getDateString(new Date())}
                 current={this.props.vm.datePickerValue || new Date()}
                 markedDates={this.props.vm.markedDate}
                 onDayPress={(day) => {

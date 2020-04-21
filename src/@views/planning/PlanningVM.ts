@@ -1,3 +1,6 @@
+import { navigate } from '@utils/navigation'
+import { translate } from '@utils/i18n'
+import { Alert } from 'react-native'
 import { sockets } from '@utils/sockets'
 import { fixOrder } from '@utils/fixOrder'
 import { SectionHeaderOrTodo } from '@views/planning/SectionHeaderOrTodo'
@@ -142,6 +145,25 @@ export class PlanningVM {
         } else {
           affectedTitles.push(titleFrom, titleTo)
         }
+      }
+      if (draggedItem.item.frogFails > 2 && titleTo !== titleFrom) {
+        setTimeout(() => {
+          Alert.alert(translate('error'), translate('breakdownRequest'), [
+            {
+              text: translate('cancel'),
+              style: 'cancel',
+            },
+            {
+              text: translate('breakdownButton'),
+              onPress: () => {
+                navigate('BreakdownTodo', {
+                  breakdownTodo: draggedItem.item,
+                })
+              },
+            },
+          ])
+        }, 100)
+        return
       }
     }
     // It it is title add itself and its old and new neighbours to affected titles
