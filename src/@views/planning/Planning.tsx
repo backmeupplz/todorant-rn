@@ -5,6 +5,7 @@ import { PlanningContent } from '@views/planning/PlanningContent'
 import { PlanningHeader } from '@views/planning/PlanningHeader'
 import { PlanningHeaderRight } from '@views/planning/PlanningHeaderRight'
 import { sharedColors } from '@utils/sharedColors'
+import { headerBackButtonProps } from '@utils/headerBackButton'
 
 const Stack = createStackNavigator()
 
@@ -21,6 +22,7 @@ export class Planning extends Component {
             headerRight: () => <PlanningHeaderRight />,
             headerTitleAlign: 'center',
             ...sharedColors.headerExtraStyle,
+            ...headerBackButtonProps(),
           }}
         />
       </Stack.Navigator>

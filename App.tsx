@@ -25,6 +25,7 @@ import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
+import { headerBackButtonProps } from '@utils/headerBackButton'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -75,6 +76,7 @@ class App extends Component {
                 component={BottomTabNavigator}
                 options={{
                   headerShown: false,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -89,6 +91,7 @@ class App extends Component {
                       {InfoButton('infoAdd')()}
                     </View>
                   ),
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -103,6 +106,7 @@ class App extends Component {
                       {InfoButton('infoBreakdown')()}
                     </View>
                   ),
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -112,6 +116,7 @@ class App extends Component {
                   title: translate('editTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoEdit'),
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -121,6 +126,7 @@ class App extends Component {
                   title: translate('pleaseLogin'),
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -130,6 +136,7 @@ class App extends Component {
                   title: translate('subscription'),
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -138,6 +145,7 @@ class App extends Component {
                 options={{
                   title: translate('termsOfUse'),
                   ...sharedColors.headerExtraStyle,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -146,6 +154,7 @@ class App extends Component {
                 options={{
                   title: translate('privacyPolicy'),
                   ...sharedColors.headerExtraStyle,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -155,6 +164,7 @@ class App extends Component {
                   title: translate('loginTelegram'),
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
+                  ...headerBackButtonProps(),
                 }}
               />
               <Stack.Screen
@@ -165,6 +175,7 @@ class App extends Component {
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoIntro'),
+                  ...headerBackButtonProps(),
                 }}
               />
             </Stack.Navigator>

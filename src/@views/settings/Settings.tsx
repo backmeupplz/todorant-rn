@@ -32,6 +32,7 @@ import { InfoButton } from '@views/settings/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
 import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
+import { headerBackButtonProps } from '@utils/headerBackButton'
 
 const Stack = createStackNavigator()
 
@@ -256,6 +257,7 @@ export function Settings() {
               title: translate('settings'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoSettings'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -264,6 +266,7 @@ export function Settings() {
             options={{
               title: translate('termsOfUse'),
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -272,6 +275,7 @@ export function Settings() {
             options={{
               title: translate('privacyPolicy'),
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -280,6 +284,7 @@ export function Settings() {
             options={{
               title: translate('pleaseLogin'),
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -289,6 +294,7 @@ export function Settings() {
               title: translate('socketsInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoSockets'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -298,6 +304,7 @@ export function Settings() {
               title: translate('dataInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoData'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -307,6 +314,7 @@ export function Settings() {
               title: translate('howTo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoRules'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -316,6 +324,7 @@ export function Settings() {
               title: translate('subscription'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -325,6 +334,7 @@ export function Settings() {
               title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -335,6 +345,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntro'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -345,6 +356,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoTags'),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -355,6 +367,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               headerRight: () => <ColorPickerHeaderRight />,
               ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
         </Stack.Navigator>
