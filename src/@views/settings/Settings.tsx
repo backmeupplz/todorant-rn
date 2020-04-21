@@ -36,7 +36,7 @@ import { headerBackButtonProps } from '@utils/headerBackButton'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 18
+const codePushVersion = 19
 
 @observer
 export class SettingsContent extends Component {
