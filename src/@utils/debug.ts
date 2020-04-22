@@ -204,6 +204,71 @@ export function addTodosEn() {
   sharedTodoStore.refreshTodos()
 }
 
+export function addTodosIt() {
+  const template = {
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    completed: false,
+    frog: false,
+    frogFails: 0,
+    skipped: false,
+    order: 0,
+    monthAndYear: getDateMonthAndYearString(daysAgo(0)),
+    deleted: false,
+    date: getDateDateString(daysAgo(0)),
+    time: undefined,
+
+    _tempSyncId: uuid(),
+  }
+  const todos = ([
+    {
+      text: 'Rapporto finale per la Federazione Transgalattica',
+      frog: true,
+      monthAndYear: getDateMonthAndYearString(daysAgo(0)),
+      date: getDateDateString(daysAgo(0)),
+    },
+    {
+      text: 'Invia la spedizione a Giove',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-1)),
+      date: getDateDateString(daysAgo(-1)),
+    },
+    {
+      text: 'Riporta il nipote dalla Dimensione-28',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-2)),
+      date: getDateDateString(daysAgo(-2)),
+      time: '10:12',
+    },
+    {
+      text: "Dividi l'atomo di idrogeno",
+      monthAndYear: getDateMonthAndYearString(daysAgo(-3)),
+      date: getDateDateString(daysAgo(-3)),
+    },
+    {
+      text: 'Ripara il motore della nave della materia oscura',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-4)),
+      date: getDateDateString(daysAgo(-4)),
+    },
+    {
+      text: 'Trova un modo per mandare gli scienziati nel buco nero',
+      monthAndYear: getDateMonthAndYearString(daysAgo(-5)),
+      date: getDateDateString(daysAgo(-5)),
+    },
+  ].map((v) => {
+    return Object.assign({}, template, v)
+  }) as Todo[]).map((v) => {
+    v._exactDate = new Date(getTitle(v))
+    return v
+  })
+
+  realm.write(() => {
+    for (const todo of todos) {
+      realm.create(Todo, todo)
+    }
+  })
+
+  sharedTodoStore.refreshTodos()
+}
+
 function daysAgo(count: number) {
   const date = new Date()
   date.setDate(date.getDate() - count)

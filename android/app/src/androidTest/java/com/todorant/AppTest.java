@@ -116,6 +116,44 @@ public class AppTest {
             }
             Screengrab.screenshot("2Planning");
 
+        } if (LocaleUtil.getTestLocale().getLanguage().equals("it")) {
+            onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+
+            }
+
+            onView(withTagValue(is("delete"))).perform(click());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+
+            }
+
+            onView(withTagValue(is("add_it"))).perform(click());
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException e) {
+
+            }
+
+            onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
+            Screengrab.screenshot("1Current");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+
+            }
+            onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+
+            }
+            Screengrab.screenshot("2Planning");
+
         } else {
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
 

@@ -47,6 +47,17 @@ class TodorantUITests: XCTestCase {
       snapshot("1Current")
       app.buttons["Планування, tab, 2 of 3"].tap()
       snapshot("2Planning")
+    } else if deviceLanguage == "it" {
+      app.buttons["Impostazioni, tab, 3 of 3"].tap()
+      sleep(2)
+      app.otherElements["delete"].tap()
+      sleep(2)
+      app.otherElements["add_it"].tap()
+      sleep(8)
+      app.buttons["Corrente, tab, 1 of 3"].tap()
+      snapshot("1Current")
+      app.buttons["Pianificazione, tab, 2 of 3"].tap()
+      snapshot("2Planning")
     } else {
       app.buttons["Settings, tab, 3 of 3"].tap()
       sleep(2)
