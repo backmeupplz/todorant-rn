@@ -24,7 +24,6 @@ class TodorantUITests: XCTestCase {
       
     sleep(20)
     
-    snapshot("0Empty")
     if deviceLanguage == "ru" {
       app.buttons["Настройки, tab, 3 of 3"].tap()
       sleep(2)
@@ -36,6 +35,13 @@ class TodorantUITests: XCTestCase {
       snapshot("1Current")
       app.buttons["Планирование, tab, 2 of 3"].tap()
       snapshot("2Planning")
+      sleep(2)
+      app.buttons["Настройки, tab, 3 of 3"].tap()
+      sleep(2)
+      app.otherElements["delete"].tap()
+      sleep(4)
+      app.buttons["Текущее, tab, 1 of 3"].tap()
+      snapshot("0Empty")
     } else if deviceLanguage == "uk" {
       app.buttons["Налаштування, tab, 3 of 3"].tap()
       sleep(2)
@@ -47,6 +53,13 @@ class TodorantUITests: XCTestCase {
       snapshot("1Current")
       app.buttons["Планування, tab, 2 of 3"].tap()
       snapshot("2Planning")
+      sleep(2)
+      app.buttons["Налаштування, tab, 3 of 3"].tap()
+      sleep(2)
+      app.otherElements["delete"].tap()
+      sleep(4)
+      app.buttons["Поточне, tab, 1 of 3"].tap()
+      snapshot("0Empty")
     } else if deviceLanguage == "it" {
       app.buttons["Impostazioni, tab, 3 of 3"].tap()
       sleep(2)
@@ -58,6 +71,13 @@ class TodorantUITests: XCTestCase {
       snapshot("1Current")
       app.buttons["Pianificazione, tab, 2 of 3"].tap()
       snapshot("2Planning")
+      sleep(2)
+      app.buttons["Impostazioni, tab, 3 of 3"].tap()
+      sleep(2)
+      app.otherElements["delete"].tap()
+      sleep(4)
+      app.buttons["Corrente, tab, 1 of 3"].tap()
+      snapshot("0Empty")
     } else {
       app.buttons["Settings, tab, 3 of 3"].tap()
       sleep(2)
@@ -69,6 +89,13 @@ class TodorantUITests: XCTestCase {
       snapshot("1Current")
       app.buttons["Planning, tab, 2 of 3"].tap()
       snapshot("2Planning")
+      sleep(2)
+      app.buttons["Settings, tab, 3 of 3"].tap()
+      sleep(2)
+      app.otherElements["delete"].tap()
+      sleep(4)
+      app.buttons["Current, tab, 1 of 3"].tap()
+      snapshot("0Empty")
     }
   }
 }
