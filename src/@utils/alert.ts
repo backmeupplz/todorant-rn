@@ -1,5 +1,5 @@
 import { translate } from '@utils/i18n'
-import { Alert } from 'react-native'
+import { Alert, Linking } from 'react-native'
 
 export function alertError(error: Error | string) {
   setTimeout(() => {
@@ -30,5 +30,28 @@ export function alertConfirm(
 export function alertMessage(title: string, message: string, ok?: () => void) {
   setTimeout(() => {
     Alert.alert(title, message, [{ text: translate('ok'), onPress: ok }])
+  }, 100)
+}
+
+export function alertSupport() {
+  setTimeout(() => {
+    Alert.alert(translate('support'), translate('supportText'), [
+      {
+        text: translate('cancel'),
+        style: 'cancel',
+      },
+      {
+        text: 'n@borodutch.com',
+        onPress: () => {
+          Linking.openURL('mailto:n@borodutch.com')
+        },
+      },
+      {
+        text: '@borodutch',
+        onPress: () => {
+          Linking.openURL('https://t.me/borodutch')
+        },
+      },
+    ])
   }, 100)
 }

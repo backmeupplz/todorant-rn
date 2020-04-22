@@ -33,6 +33,7 @@ import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
 import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
+import { alertSupport } from '@utils/alert'
 
 const Stack = createStackNavigator()
 
@@ -187,26 +188,7 @@ export class SettingsContent extends Component {
               button
               style={{ borderColor: sharedColors.placeholderColor }}
               onPress={() => {
-                setTimeout(() => {
-                  Alert.alert(translate('support'), translate('supportText'), [
-                    {
-                      text: translate('cancel'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'n@borodutch.com',
-                      onPress: () => {
-                        Linking.openURL('mailto:n@borodutch.com')
-                      },
-                    },
-                    {
-                      text: '@borodutch',
-                      onPress: () => {
-                        Linking.openURL('https://t.me/borodutch')
-                      },
-                    },
-                  ])
-                }, 500)
+                alertSupport()
               }}
             >
               <Text {...sharedColors.textExtraStyle}>

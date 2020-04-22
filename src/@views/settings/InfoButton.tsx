@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Button, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import { alertMessage } from '@utils/alert'
+import { alertMessage, alertSupport } from '@utils/alert'
 import { translate } from '@utils/i18n'
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing, Alert } from 'react-native'
 
 export class InfoButtonContent extends Component<{ message: string }> {
   animationValue = new Animated.Value(0)
@@ -34,7 +34,21 @@ export class InfoButtonContent extends Component<{ message: string }> {
           icon
           transparent
           onPress={() => {
-            alertMessage(translate('infoTitle'), translate(this.props.message))
+            setTimeout(() => {
+              Alert.alert(
+                translate('infoTitle'),
+                translate(this.props.message),
+                [
+                  {
+                    text: translate('support'),
+                    onPress: () => {
+                      alertSupport()
+                    },
+                  },
+                  { text: translate('ok'), onPress: () => {} },
+                ]
+              )
+            }, 100)
           }}
           onPressIn={() => {
             this.animate(true)
