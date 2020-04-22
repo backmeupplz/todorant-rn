@@ -10,6 +10,7 @@ export enum Language {
   ru = 'ru',
   en = 'en',
   uk = 'uk',
+  it = 'it',
 }
 
 export enum ColorMode {

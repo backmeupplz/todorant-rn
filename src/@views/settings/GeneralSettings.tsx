@@ -12,6 +12,7 @@ const codeToName = {
   en: 'English',
   ru: 'Русский',
   uk: 'Українськa',
+  it: 'Italiano',
 }
 
 @observer
@@ -49,21 +50,22 @@ export class GeneralSettings extends Component {
               { label: 'English', code: 'en' },
               { label: 'Русский', code: 'ru' },
               { label: 'Українська', code: 'uk' },
+              { label: 'Italiano', code: 'it' },
             ]
             ActionSheet.show(
               {
                 options: options
                   .map((v) => v.label)
                   .concat(translate('cancel')),
-                cancelButtonIndex: 4,
-                destructiveButtonIndex: 4,
+                cancelButtonIndex: 5,
+                destructiveButtonIndex: 5,
                 title: '',
               },
               async (i) => {
                 if (i === 0) {
                   await AsyncStorage.setItem('language', Language.auto)
                   RNRestart.Restart()
-                } else if (i < 4) {
+                } else if (i < 5) {
                   await AsyncStorage.setItem('language', options[i].code)
                   RNRestart.Restart()
                 }

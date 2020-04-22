@@ -9,10 +9,10 @@ const translationGetters = {
   en: () => require('@assets/translations/en.json'),
   ru: () => require('@assets/translations/ru.json'),
   uk: () => require('@assets/translations/uk.json'),
+  it: () => require('@assets/translations/it.json'),
 } as { [index: string]: any }
 
 export const translate = (key: any, config?: any) => {
-  const languageTag = sharedAppStateStore.languageTag
   return i18n.t(key, config)
 }
 
@@ -33,6 +33,7 @@ export function setI18nConfig() {
     en: translationGetters['en'](),
     ru: translationGetters['ru'](),
     uk: translationGetters['uk'](),
+    it: translationGetters['it'](),
   }
 }
 
