@@ -73,7 +73,11 @@ export class PlanningContent extends Component {
                 </View>
               )
             }
-            keyExtractor={(_, index) => `${index}`}
+            keyExtractor={(item, index) =>
+              `${index}-${
+                item.title || item.item?._id || item.item?._tempSyncId
+              }`
+            }
             onDragEnd={this.vm.onDragEnd}
           />
         ) : (
