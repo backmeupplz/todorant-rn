@@ -9,6 +9,8 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+const debug = false
+
 @observer
 export class TodoCardTextBlock extends Component<{
   todo: Todo
@@ -28,12 +30,12 @@ export class TodoCardTextBlock extends Component<{
         }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
-        {__DEV__ && (
+        {__DEV__ && debug && (
           <Text
             style={{ ...sharedColors.textExtraStyle.style }}
           >{`(${this.props.todo.order}) `}</Text>
         )}
-        {__DEV__ && (
+        {__DEV__ && debug && (
           <Text
             style={{ ...sharedColors.textExtraStyle.style }}
           >{`(${this.props.todo.frogFails}) `}</Text>
