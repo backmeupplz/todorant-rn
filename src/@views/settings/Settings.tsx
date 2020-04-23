@@ -37,7 +37,7 @@ import { alertSupport } from '@utils/alert'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 19
+const codePushVersion = 20
 
 @observer
 export class SettingsContent extends Component {
