@@ -162,5 +162,6 @@
   "loadingData": "Loading your data...",
   "breakdownRequest": "Looks like you move this task way too much. Please break it down, you can no longer move it to another date. Believe me, it will help to compele the task!",
   "breakdownButton": "Breakdown",
-  "back": "Back"
+  "back": "Back",
+  "important": "Important"
 }

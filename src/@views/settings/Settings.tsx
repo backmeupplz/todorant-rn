@@ -37,7 +37,7 @@ import { alertSupport } from '@utils/alert'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 20
+const codePushVersion = 21
 
 @observer
 export class SettingsContent extends Component {
@@ -102,6 +102,22 @@ export class SettingsContent extends Component {
             )}
             <ListItem itemHeader first>
               <Text style={{ color: sharedColors.placeholderColor }}>
+                {translate('important')}
+              </Text>
+            </ListItem>
+            <ListItem
+              button
+              style={{ borderColor: sharedColors.placeholderColor }}
+              onPress={() => {
+                navigate('Rules')
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('howToUse')}
+              </Text>
+            </ListItem>
+            <ListItem itemHeader first>
+              <Text style={{ color: sharedColors.placeholderColor }}>
                 {translate('account')}
               </Text>
             </ListItem>
@@ -148,17 +164,6 @@ export class SettingsContent extends Component {
             <ListItem itemHeader>
               <Text style={{ color: sharedColors.placeholderColor }}>
                 {translate('info')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              style={{ borderColor: sharedColors.placeholderColor }}
-              onPress={() => {
-                navigate('Rules')
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('howToUse')}
               </Text>
             </ListItem>
             <ListItem

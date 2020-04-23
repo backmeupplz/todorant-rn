@@ -159,5 +159,6 @@
   "colorMode": "Modalità colore",
   "dark": "Scuro",
   "light": "Chiaro",
-  "loadingData": "Carico i tuoi dati..."
+  "loadingData": "Carico i tuoi dati...",
+  "important": "Importante"
 }
