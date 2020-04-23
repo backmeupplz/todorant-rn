@@ -45,7 +45,7 @@ export class TodoVM {
     }
     const match = matches[0]
     return sharedTagStore.undeletedTags.filtered(
-      `tag CONTAINS "${match.substr(1)}"`
+      `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
     )
   }
 
