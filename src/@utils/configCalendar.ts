@@ -1,7 +1,12 @@
 import { LocaleConfig } from 'react-native-calendars'
 
 export function configCalendar(defaultLocale: string) {
-  LocaleConfig.defaultLocale = defaultLocale
+  const locales = ['ru', 'en', 'uk', 'it']
+  if (locales.indexOf(defaultLocale) > -1) {
+    LocaleConfig.defaultLocale = defaultLocale
+  } else {
+    LocaleConfig.defaultLocale = 'en'
+  }
 }
 
 LocaleConfig.locales['ru'] = {
@@ -172,6 +177,6 @@ LocaleConfig.locales['it'] = {
     'sabato',
   ],
   dayNamesShort: ['Do', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
-  amDesignator: '',
-  pmDesignator: '',
+  amDesignator: 'AM',
+  pmDesignator: 'PM',
 }
