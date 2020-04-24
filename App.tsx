@@ -26,6 +26,7 @@ import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
+import { RateModal } from '@components/RateModal'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -58,18 +59,19 @@ class App extends Component {
   render() {
     return (
       <Root>
-        <StyleProvider style={getTheme()}>
-          <NavigationContainer ref={navigationRef}>
-            <StatusBar
-              backgroundColor={sharedColors.backgroundColor}
-              barStyle={
-                Platform.OS === 'android'
-                  ? sharedColors.isDark
-                    ? 'light-content'
-                    : 'dark-content'
-                  : undefined
-              }
-            />
+        <NavigationContainer ref={navigationRef}>
+          <StatusBar
+            backgroundColor={sharedColors.backgroundColor}
+            barStyle={
+              Platform.OS === 'android'
+                ? sharedColors.isDark
+                  ? 'light-content'
+                  : 'dark-content'
+                : undefined
+            }
+          />
+          <RateModal />
+          <StyleProvider style={getTheme()}>
             <Stack.Navigator>
               <Stack.Screen
                 name="BottomTabNavigator"
@@ -179,8 +181,8 @@ class App extends Component {
                 }}
               />
             </Stack.Navigator>
-          </NavigationContainer>
-        </StyleProvider>
+          </StyleProvider>
+        </NavigationContainer>
       </Root>
     )
   }

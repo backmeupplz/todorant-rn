@@ -159,5 +159,22 @@
   "colorMode": "Tema",
   "dark": "Scuro",
   "light": "Chiaro",
-  "loadingData": "Carico i tuoi dati..."
+  "loadingData": "Carico i tuoi dati...",
+  "breakdownRequest": "Sembra che tu abbia spostato troppo questo compito. Per favore, abbattetelo, non potete più spostarlo ad un'altra data. Credetemi, servirà a costringere il compito!",
+  "breakdownButton": "Ripartizione",
+  "back": "Indietro",
+  "important": "Importante",
+  "rateTitle": "Hai completato più di 100 compiti! 🎉🎉🎉 Quanto ha migliorato la tua vita il Todorant?",
+  "rate": "Rate",
+  "send": "Inviare",
+  "rateCommentPlaceholder": "Per favore, scrivete qualche parola su ciò che non vi è piaciuto del Todorant",
+  "rateCommentEmptyError": "Per favore non lasciare il campo dei commenti in bianco",
+  "starTerrible": "Affatto",
+  "starBad": "A bit",
+  "starOkay": "Piuttosto",
+  "starGood": "Abbastanza",
+  "starGreat": "Un sacco",
+  "rateSolicitationApple": "Ti dispiacerebbe lasciare a Todorant una valutazione a 5 stelle sull'App Store, per favore? Aiuta molto",
+  "rateSolicitationGoogle": "Ti dispiacerebbe lasciare a Todorant una valutazione a 5 stelle su Play Store, per favore? Aiuta molto",
+  "rateButton": "Lascia la recensione!"
 }

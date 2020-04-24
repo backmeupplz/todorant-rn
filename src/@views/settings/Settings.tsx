@@ -98,6 +98,14 @@ export class SettingsContent extends Component {
                 >
                   <Text {...sharedColors.textExtraStyle}>add it todos</Text>
                 </Button>
+                <Button
+                  onPress={() => {
+                    sharedSessionStore.numberOfTodosCompleted = 0
+                    sharedSessionStore.askedToRate = false
+                  }}
+                >
+                  <Text {...sharedColors.textExtraStyle}>reset rating</Text>
+                </Button>
               </>
             )}
             <ListItem itemHeader first>

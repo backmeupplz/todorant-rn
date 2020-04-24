@@ -21,6 +21,7 @@ import { TodoVM } from '@views/add/TodoVM'
 import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
 import { Alert } from 'react-native'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 @observer
 class AddTodoContent extends Component<{
@@ -138,6 +139,7 @@ class AddTodoContent extends Component<{
         this.breakdownTodo.updatedAt = new Date()
       })
       titlesToFixOrder.push(breakdownTodoTitle)
+      sharedSessionStore.numberOfTodosCompleted++
     }
     // Add tags
     sharedTagStore.addTags(this.vms)

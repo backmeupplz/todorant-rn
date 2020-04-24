@@ -18,6 +18,12 @@ class SessionStore {
 
   @persist @observable introMessageShown = __DEV__ ? true : false
 
+  @persist @observable numberOfTodosCompleted = 0
+  @persist @observable askedToRate = false
+  @computed get needsToRequestRate() {
+    return !this.askedToRate && this.numberOfTodosCompleted > 101
+  }
+
   @computed get appInstalledMonthAgo() {
     const monthAgo = new Date()
     monthAgo.setMonth(monthAgo.getMonth() - 1)

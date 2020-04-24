@@ -72,3 +72,15 @@ export function verifyPurchaseApple(receipt: string) {
     }
   )
 }
+
+export function sendFeedback(state: object) {
+  return axios.post<void>(
+    `${base}/feedback`,
+    { state },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
+}

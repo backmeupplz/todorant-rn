@@ -163,5 +163,18 @@
   "breakdownRequest": "Looks like you move this task way too much. Please break it down, you can no longer move it to another date. Believe me, it will help to compele the task!",
   "breakdownButton": "Breakdown",
   "back": "Back",
-  "important": "Important"
+  "important": "Important",
+  "rateTitle": "You completed more than 100 tasks! 🎉🎉🎉 How much did Todorant improve your life?",
+  "rate": "Rate",
+  "send": "Send",
+  "rateCommentPlaceholder": "Please write a few words about what you did not like about Todorant",
+  "rateCommentEmptyError": "Please don't leave the comment field blank",
+  "starTerrible": "Not at all",
+  "starBad": "A bit",
+  "starOkay": "Somewhat",
+  "starGood": "Fairly",
+  "starGreat": "A lot",
+  "rateSolicitationApple": "Would you mind leaving Todorant a 5 star rating on the App Store, please? It helps a lot!",
+  "rateSolicitationGoogle": "Would you mind leaving Todorant a 5 star rating on the Play Store, please? It helps a lot!",
+  "rateButton": "Leave rating!"
 }

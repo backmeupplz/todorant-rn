@@ -1,3 +1,4 @@
+import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
 import { alertConfirm } from '@utils/alert'
@@ -121,6 +122,7 @@ export class TodoCardVM {
     })
 
     fixOrder([getTitle(todo)])
+    sharedSessionStore.numberOfTodosCompleted++
   }
 
   isOld(type: CardType, todo: Todo) {
