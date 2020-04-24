@@ -29,21 +29,17 @@ export class TodoCardContent extends Component<{
             borderColor: sharedColors.borderColor,
           }}
         >
-          {this.props.type === CardType.planning ? (
-            <TouchableOpacity onLongPress={this.props.drag}>
-              <TodoCardBody
-                vm={this.props.vm}
-                todo={this.props.todo}
-                type={this.props.type}
-              />
-            </TouchableOpacity>
-          ) : (
-            <TodoCardBody
-              vm={this.props.vm}
-              todo={this.props.todo}
-              type={this.props.type}
-            />
-          )}
+          <TodoCardBody
+            vm={this.props.vm}
+            todo={this.props.todo}
+            type={this.props.type}
+            drag={
+              this.props.type === CardType.planning
+                ? this.props.drag
+                : undefined
+            }
+          />
+
           {this.props.type !== CardType.breakdown && (
             <TodoCardActions
               todo={this.props.todo}

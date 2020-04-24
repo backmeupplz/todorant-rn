@@ -17,6 +17,7 @@ export class TodoCardBody extends Component<{
   vm: TodoCardVM
   type: CardType
   todo: Todo
+  drag?: () => void
 }> {
   render() {
     const isOld = this.props.vm.isOld(this.props.type, this.props.todo)
@@ -42,7 +43,11 @@ export class TodoCardBody extends Component<{
                 justifyContent: 'space-between',
               }}
             >
-              <TodoCardTextBlock todo={this.props.todo} isOld={isOld} />
+              <TodoCardTextBlock
+                todo={this.props.todo}
+                isOld={isOld}
+                drag={this.props.drag}
+              />
               {this.props.type === CardType.breakdown && (
                 <TouchableOpacity
                   onPress={async () => {

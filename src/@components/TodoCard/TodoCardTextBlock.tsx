@@ -15,6 +15,7 @@ const debug = false
 export class TodoCardTextBlock extends Component<{
   todo: Todo
   isOld: boolean
+  drag?: () => void
 }> {
   get linkifiedText() {
     return l(this.props.todo.text)
@@ -22,13 +23,7 @@ export class TodoCardTextBlock extends Component<{
 
   render() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          flex: 1,
-        }}
-      >
+      <Text onLongPress={this.props.drag} style={{ flex: 1 }}>
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
         {__DEV__ && debug && (
           <Text
@@ -59,7 +54,7 @@ export class TodoCardTextBlock extends Component<{
               {p.value}
             </Text>
           ) : (
-            <TouchableOpacity
+            <Text
               key={i}
               onPress={() => {
                 if (p.type === 'link' && p.url) {
@@ -68,22 +63,19 @@ export class TodoCardTextBlock extends Component<{
                   sharedAppStateStore.hash = p.value
                 }
               }}
+              style={{
+                color:
+                  p.type === 'url'
+                    ? 'dodgerblue'
+                    : sharedTagStore.tagColorMap[p.url?.substr(1) || ''] ||
+                      'dodgerblue',
+              }}
             >
-              <Text
-                style={{
-                  color:
-                    p.type === 'url'
-                      ? 'dodgerblue'
-                      : sharedTagStore.tagColorMap[p.url?.substr(1) || ''] ||
-                        'dodgerblue',
-                }}
-              >
-                {p.value}
-              </Text>
-            </TouchableOpacity>
+              {p.value}
+            </Text>
           )
         )}
-      </View>
+      </Text>
     )
   }
 }
