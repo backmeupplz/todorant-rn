@@ -10,10 +10,15 @@ import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 const Tab = createBottomTabNavigator()
 
 export default observer(() => {
+  // Hack to make this reactive
+  let languageTag = sharedAppStateStore.languageTag
+  languageTag = `${languageTag}`
+
   return (
     <>
       <Tab.Navigator

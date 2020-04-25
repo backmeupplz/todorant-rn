@@ -3,10 +3,15 @@ import { View, H1, Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 export class AllDonePlaceholder extends Component {
   render() {
+    // Hack to make this reactive
+    let languageTag = sharedAppStateStore.languageTag
+    languageTag = `${languageTag}`
+
     return (
       <View
         style={{

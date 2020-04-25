@@ -27,6 +27,7 @@ import { LoginTelegram } from '@views/settings/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -57,6 +58,10 @@ class App extends Component {
   }
 
   render() {
+    // Hack to make this reactive
+    let languageTag = sharedAppStateStore.languageTag
+    languageTag = `${languageTag}`
+
     return (
       <Root>
         <NavigationContainer ref={navigationRef}>
