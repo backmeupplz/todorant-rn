@@ -67,13 +67,7 @@ class App extends Component {
         <NavigationContainer ref={navigationRef}>
           <StatusBar
             backgroundColor={sharedColors.backgroundColor}
-            barStyle={
-              Platform.OS === 'android'
-                ? sharedColors.isDark
-                  ? 'light-content'
-                  : 'dark-content'
-                : undefined
-            }
+            barStyle={sharedColors.isDark ? 'light-content' : 'dark-content'}
           />
           <RateModal />
           <StyleProvider style={getTheme()}>
