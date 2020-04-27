@@ -11,6 +11,7 @@ export const extraButtonProps = (sharedColors: ColorModeManager) => ({
               ? sharedColors.backgroundColor
               : undefined,
           elevation: 0,
+          overflow: 'hidden',
         }
       : undefined,
   androidRippleColor:
