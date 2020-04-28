@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content, List, ListItem, Text, Button } from 'native-base'
+import { Container, Content, List, ListItem, Text } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
@@ -34,6 +34,7 @@ import { Tags } from '@views/settings/Tags'
 import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { alertSupport } from '@utils/alert'
+import { Button } from '@components/Button'
 
 const Stack = createStackNavigator()
 

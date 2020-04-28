@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, H1, View, Button, Icon } from 'native-base'
+import { Container, H1, View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Tag } from '@models/Tag'
@@ -14,6 +14,7 @@ import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sockets } from '@utils/sockets'
+import { Button } from '@components/Button'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardItem, View, Text, Button, Icon } from 'native-base'
+import { CardItem, View, Text, Icon } from 'native-base'
 import { Todo, isTodoToday } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
@@ -8,6 +8,7 @@ import { CardType } from '@components/TodoCard/CardType'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
+import { Button } from '@components/Button'
 
 @observer
 export class TodoCardActions extends Component<{

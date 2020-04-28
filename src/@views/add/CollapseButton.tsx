@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
-import { Button, Icon } from 'native-base'
+import { Icon } from 'native-base'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
+import { Button } from '@components/Button'
 
 @observer
 export class CollapseButton extends Component<{ vm: TodoVM }> {

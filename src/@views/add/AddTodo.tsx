@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Button, Icon, View } from 'native-base'
+import { Container, Content, Text, Icon, View } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
@@ -22,6 +22,7 @@ import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
 import { Alert } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { Button } from '@components/Button'
 
 @observer
 class AddTodoContent extends Component<{

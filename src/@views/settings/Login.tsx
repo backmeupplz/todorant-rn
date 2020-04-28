@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Button, Spinner, View } from 'native-base'
+import { Container, Content, Text, Spinner, View } from 'native-base'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'
@@ -18,6 +18,7 @@ import appleAuth, {
   AppleAuthRequestScope,
 } from '@invertase/react-native-apple-authentication'
 import { syncEventEmitter } from '@utils/sockets'
+import { Button } from '@components/Button'
 
 class LoginVM {
   @observable loading = false

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Text, ListItem, View } from 'native-base'
+import { Text, ListItem, View } from 'native-base'
 import { observer } from 'mobx-react'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -8,6 +8,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { daysAgo } from '@utils/plusButtonAction'
 import { subscriptionStatusName } from '@utils/subscriptionStatusName'
+import { Button } from '@components/Button'
 
 @observer
 export class SubscriptionSection extends Component {

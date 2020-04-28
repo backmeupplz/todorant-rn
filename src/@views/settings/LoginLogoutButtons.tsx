@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { Button, Text, ListItem } from 'native-base'
+import { Text, ListItem } from 'native-base'
 import { navigate } from '@utils/navigation'
 import { alertConfirm } from '@utils/alert'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { Button } from '@components/Button'
 
 @observer
 export class LoginLogoutButtons extends Component {

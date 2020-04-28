@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Button, Spinner } from 'native-base'
+import { Container, Content, Text, Spinner } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionStatus } from '@models/User'
 import { observer } from 'mobx-react'
@@ -20,6 +20,7 @@ import { Platform } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { extraButtonProps } from '@utils/extraButtonProps'
+import { Button } from '@components/Button'
 
 class PaywallVM {
   @observable products: Subscription[] = []

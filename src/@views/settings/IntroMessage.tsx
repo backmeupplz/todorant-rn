@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Button } from 'native-base'
+import { Container, Content, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
 import { goBack } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import CodePush from 'react-native-code-push'
+import { Button } from '@components/Button'
 
 @observer
 export class IntroMessage extends Component {

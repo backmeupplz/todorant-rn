@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { Form, Item, View, Text, Input, Button, Icon } from 'native-base'
+import { Form, Item, View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
@@ -15,6 +15,7 @@ import moment, { Moment } from 'moment'
 import MonthPicker from 'react-native-month-picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Switch, FlatList } from 'react-native-gesture-handler'
+import { Button } from '@components/Button'
 
 @observer
 export class AddTodoForm extends Component<{ vm: TodoVM }> {

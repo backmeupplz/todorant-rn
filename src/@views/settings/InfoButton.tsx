@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Button, Icon } from 'native-base'
+import { Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import { alertMessage, alertSupport } from '@utils/alert'
+import { alertSupport } from '@utils/alert'
 import { translate } from '@utils/i18n'
 import { Animated, Easing, Alert } from 'react-native'
+import { Button } from '@components/Button'
 
 export class InfoButtonContent extends Component<{ message: string }> {
   animationValue = new Animated.Value(0)

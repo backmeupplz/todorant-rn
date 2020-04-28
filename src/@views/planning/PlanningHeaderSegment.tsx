@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Segment, Button, Text } from 'native-base'
+import { Button, Segment, Text } from 'native-base'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
