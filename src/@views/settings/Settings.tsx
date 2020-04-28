@@ -38,7 +38,7 @@ import { Button } from '@components/Button'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 25
+const codePushVersion = 26
 
 @observer
 export class SettingsContent extends Component {
