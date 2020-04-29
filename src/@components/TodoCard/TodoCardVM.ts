@@ -12,6 +12,7 @@ import {
   getDateMonthAndYearString,
 } from '@utils/time'
 import { realm } from '@utils/realm'
+import { startConfetti } from '@components/Confetti'
 
 export class TodoCardVM {
   skip(todo: Todo) {
@@ -123,6 +124,7 @@ export class TodoCardVM {
 
     fixOrder([getTitle(todo)])
     sharedSessionStore.numberOfTodosCompleted++
+    startConfetti()
   }
 
   isOld(type: CardType, todo: Todo) {

@@ -23,6 +23,7 @@ import { AddTodoForm } from '@views/add/AddTodoForm'
 import { Alert } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
+import { startConfetti } from '@components/Confetti'
 
 @observer
 class AddTodoContent extends Component<{
@@ -147,6 +148,7 @@ class AddTodoContent extends Component<{
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
+    startConfetti()
   }
 
   @computed get isValid() {

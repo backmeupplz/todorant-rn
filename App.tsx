@@ -12,7 +12,7 @@ import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
-import { StatusBar, Platform } from 'react-native'
+import { StatusBar } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -28,6 +28,7 @@ import { IntroMessage } from '@views/settings/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { ConfettiView } from '@components/Confetti'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -181,6 +182,7 @@ class App extends Component {
               />
             </Stack.Navigator>
           </StyleProvider>
+          <ConfettiView />
         </NavigationContainer>
       </Root>
     )
