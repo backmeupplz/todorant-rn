@@ -48,24 +48,6 @@ export class TodoCardBody extends Component<{
                 isOld={isOld}
                 drag={this.props.drag}
               />
-              {this.props.type === CardType.breakdown && (
-                <TouchableOpacity
-                  onPress={async () => {
-                    await Clipboard.setString(this.props.todo.text)
-                  }}
-                >
-                  <Icon
-                    type="MaterialIcons"
-                    name="assignment"
-                    style={{
-                      fontSize: 20,
-                      color: sharedColors.textColor,
-                      paddingLeft: 5,
-                      paddingTop: 3,
-                    }}
-                  />
-                </TouchableOpacity>
-              )}
             </View>
           </View>
         </Body>
