@@ -7,7 +7,6 @@ let confettiRef: any
 let animating = false
 export function startConfetti() {
   const random = Math.floor(Math.random() * 5)
-  console.log(random)
   if (animating || random !== 0) {
     return
   }
