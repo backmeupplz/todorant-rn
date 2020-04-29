@@ -155,7 +155,12 @@ class TagStore {
     const dbtags = this.allTags
       .filtered('deleted = false')
       .map((tag) => tag.tag)
-    const tagsToAdd = tags.filter((tag) => dbtags.indexOf(tag) < 0)
+    let tagsToAdd = tags.filter((tag) => dbtags.indexOf(tag) < 0)
+    const tagsToAddMap = tagsToAdd.reduce((p, c) => {
+      p[c] = true
+      return p
+    }, {} as { [index: string]: boolean })
+    tagsToAdd = Object.keys(tagsToAddMap)
     realm.write(() => {
       for (const tag of tagsToAdd) {
         realm.create(Tag, {

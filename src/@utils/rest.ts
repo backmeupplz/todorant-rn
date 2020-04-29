@@ -4,7 +4,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { Platform } from 'react-native'
 
 const base = __DEV__
-  ? 'http://192.168.31.27:1337'
+  ? 'http://192.168.31.26:1337'
   : 'https://backend.todorant.com'
 
 const extraParams =

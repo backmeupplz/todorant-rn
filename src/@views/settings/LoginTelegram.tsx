@@ -8,7 +8,7 @@ import { User } from '@models/User'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { useRoute, RouteProp } from '@react-navigation/native'
 
-const base = __DEV__ ? 'http://192.168.31.27:8080' : 'https://todorant.com'
+const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 
 @observer
 class LoginTelegramContent extends Component<{

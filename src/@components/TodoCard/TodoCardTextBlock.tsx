@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { Todo } from '@models/Todo'
-import { Text, View } from 'native-base'
+import { Text, Toast } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { l } from '@utils/linkify'
-import { Linking } from 'react-native'
+import { Linking, Clipboard } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { translate } from '@utils/i18n'
 
 const debug = false
 
@@ -23,7 +23,16 @@ export class TodoCardTextBlock extends Component<{
 
   render() {
     return (
-      <Text onLongPress={this.props.drag} style={{ flex: 1 }}>
+      <Text
+        onLongPress={this.props.drag}
+        onPress={() => {
+          Clipboard.setString(this.props.todo.text)
+          Toast.show({
+            text: `"${this.props.todo.text}" ${translate('copied')}`,
+          })
+        }}
+        style={{ flex: 1 }}
+      >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
         {__DEV__ && debug && (
           <Text
