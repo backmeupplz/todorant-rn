@@ -28,6 +28,7 @@ export class ConfettiView extends Component {
           left: 0,
           right: 0,
         }}
+        pointerEvents="none"
       >
         <Confetti
           duration={2000}
