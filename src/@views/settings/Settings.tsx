@@ -40,7 +40,7 @@ import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 29
+const codePushVersion = 30
 
 @observer
 export class SettingsContent extends Component {
