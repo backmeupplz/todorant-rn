@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { CardItem, View, Text, Icon } from 'native-base'
-import { Todo, isTodoToday } from '@models/Todo'
+import { Todo, isTodoToday, isTodoOld } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
@@ -40,7 +40,8 @@ export class TodoCardActions extends Component<{
           }}
         >
           {this.props.type === CardType.planning &&
-            !isTodoToday(this.props.todo) && (
+            !isTodoToday(this.props.todo) &&
+            !isTodoOld(this.props.todo) && (
               <Button
                 icon
                 {...extraButtonProps(sharedColors)}
