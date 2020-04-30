@@ -176,5 +176,10 @@
   "starGreat": "Un sacco",
   "rateSolicitationApple": "Ti dispiacerebbe lasciare a Todorant una valutazione a 5 stelle sull'App Store, per favore? Aiuta molto",
   "rateSolicitationGoogle": "Ti dispiacerebbe lasciare a Todorant una valutazione a 5 stelle su Play Store, per favore? Aiuta molto",
-  "rateButton": "Lascia la recensione!"
+  "rateButton": "Lascia la recensione!",
+  "integrations": "Integrazioni",
+  "notConnected": "Non connesso",
+  "disconnect": "Disconnetti",
+  "infoIntegrations": "Qui è possibile impostare integrazioni di applicazioni di terze parti toccando le opzioni.",
+  "googleCalendar": "Google Calendar"
 }

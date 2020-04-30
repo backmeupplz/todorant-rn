@@ -35,6 +35,8 @@ import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { alertSupport } from '@utils/alert'
 import { Button } from '@components/Button'
+import { Integrations } from '@views/settings/integrations/Integrations'
+import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 
 const Stack = createStackNavigator()
 
@@ -372,6 +374,27 @@ export function Settings() {
               title: translate('changeColor'),
               headerTitleAlign: 'center',
               headerRight: () => <ColorPickerHeaderRight />,
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="Integrations"
+            component={Integrations}
+            options={{
+              title: translate('integrations'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              headerRight: InfoButton('infoIntegrations'),
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="GoogleCalendar"
+            component={GoogleCalendar}
+            options={{
+              title: translate('googleCalendar'),
+              headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),
             }}

@@ -7,6 +7,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { computed } from 'mobx'
 import RNRestart from 'react-native-restart'
 import { AsyncStorage } from 'react-native'
+import { navigate } from '@utils/navigation'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 const codeToName = {
   en: 'English',
@@ -111,6 +113,18 @@ export class GeneralSettings extends Component {
           </Text>
           <Text {...sharedColors.textExtraStyle}>{this.colorModeLabel}</Text>
         </ListItem>
+        {!!sharedSessionStore.user && (
+          <ListItem
+            onPress={() => {
+              navigate('Integrations')
+            }}
+            style={{ borderColor: sharedColors.placeholderColor }}
+          >
+            <Text style={{ flex: 1, color: sharedColors.textColor }}>
+              {translate('integrations')}
+            </Text>
+          </ListItem>
+        )}
       </>
     )
   }

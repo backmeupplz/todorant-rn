@@ -48,7 +48,7 @@ export class RateModal extends Component {
         }}
         placeholderTextColor={sharedColors.placeholderColor}
         errorTextStyle={{ color: 'tomato' }}
-        textBoxStyle={{ color: sharedColors.textColor }}
+        {...({ textBoxStyle: { color: sharedColors.textColor } } as any)}
         onRated={() => {
           setTimeout(() => {
             Alert.alert(

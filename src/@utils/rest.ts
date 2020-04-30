@@ -1,3 +1,4 @@
+import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { User } from '@models/User'
 import axios, { AxiosResponse } from 'axios'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -77,6 +78,26 @@ export function sendFeedback(state: object) {
   return axios.post<void>(
     `${base}/feedback`,
     { state },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
+}
+
+export function calendarAuthenticationURL() {
+  return axios.get<string>(`${base}/google/calendarAuthenticationURL`, {
+    headers: {
+      token: sharedSessionStore.user?.token,
+    },
+  })
+}
+
+export function calendarAuthorize(code: string) {
+  return axios.post<GoogleCalendarCredentials>(
+    `${base}/google/calendarAuthorize`,
+    { code },
     {
       headers: {
         token: sharedSessionStore.user?.token,
