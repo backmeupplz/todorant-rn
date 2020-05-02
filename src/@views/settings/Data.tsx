@@ -59,7 +59,7 @@ export class Data extends Component {
               subtitle={`${
                 sharedTodoStore.lastSyncDate
                   ? moment(sharedTodoStore.lastSyncDate).format(
-                      'YYYY-MM-DD hh:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   : translate('notSyncedYet')
               }`}
@@ -69,7 +69,7 @@ export class Data extends Component {
               subtitle={`${
                 sharedTagStore.lastSyncDate
                   ? moment(sharedTagStore.lastSyncDate).format(
-                      'YYYY-MM-DD hh:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   : translate('notSyncedYet')
               }`}
@@ -79,7 +79,7 @@ export class Data extends Component {
               subtitle={`${
                 sharedSettingsStore.updatedAt
                   ? moment(sharedSettingsStore.updatedAt).format(
-                      'YYYY-MM-DD hh:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   : translate('notSyncedYet')
               }`}
@@ -89,7 +89,7 @@ export class Data extends Component {
               subtitle={`${
                 sharedSessionStore.user?.updatedAt
                   ? moment(sharedSessionStore.user.updatedAt).format(
-                      'YYYY-MM-DD hh:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   : translate('notSyncedYet')
               }`}

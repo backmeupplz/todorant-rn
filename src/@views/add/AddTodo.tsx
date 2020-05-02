@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Icon, View } from 'native-base'
+import { Container, Content, Text, Icon, View, Toast } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
@@ -20,7 +20,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { TodoVM } from '@views/add/TodoVM'
 import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
-import { Alert } from 'react-native'
+import { Alert, Clipboard } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
 import { startConfetti } from '@components/Confetti'
@@ -234,6 +234,14 @@ class AddTodoContent extends Component<{
               this.saveTodo()
             }}
             disabled={!this.isValid}
+            onLongPress={() => {
+              Clipboard.setString(
+                JSON.stringify(this.props.route.params?.editedTodo)
+              )
+              Toast.show({
+                text: translate('copied'),
+              })
+            }}
           >
             <Text>
               {this.screenType === AddTodoScreenType.add
