@@ -122,6 +122,21 @@ class LoginVM {
       this.loading = false
     }
   }
+
+  loginWithToken = async (token: string) => {
+    this.loading = true
+    try {
+      const todorantUserInfo = (await rest.loginToken(token)).data
+      todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
+      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      this.syncLoading = true
+      sharedSessionStore.login(todorantUserInfo)
+    } catch (error) {
+      alertError(error)
+    } finally {
+      this.loading = false
+    }
+  }
 }
 
 @observer
@@ -210,6 +225,23 @@ export class LoginContent extends Component<{
               disabled={this.vm.loading}
             >
               <Text>{translate('loginTelegram')}</Text>
+            </Button>
+            <Button
+              style={{
+                justifyContent: 'center',
+                backgroundColor: 'darkslateblue',
+                marginBottom: 10,
+              }}
+              onPress={() => {
+                navigate('LoginQR', {
+                  getToken: (token: string) => {
+                    this.vm.loginWithToken(token)
+                  },
+                })
+              }}
+              disabled={this.vm.loading}
+            >
+              <Text>{translate('loginQR')}</Text>
             </Button>
           </Content>
         </Container>

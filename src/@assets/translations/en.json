@@ -181,5 +181,9 @@
   "notConnected": "Not connected",
   "disconnect": "Disconnect",
   "infoIntegrations": "You can setup third party app integrations here by tapping the options.",
-  "googleCalendar": "Google Calendar"
+  "googleCalendar": "Google Calendar",
+  "loginQR": "Login with QR",
+  "qrDescription": "Please open the QR code popup on the Todorant website and scan the code here",
+  "cameraAuthorization": "Camera not authorized",
+  "needCameraPermission": "Todorant uses camera to scan QR codes"
 }

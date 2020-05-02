@@ -4,8 +4,8 @@ import { Container, Content, List, ListItem, Text } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
-import { Login } from '@views/settings/Login'
-import { LoginLogoutButtons } from '@views/settings/LoginLogoutButtons'
+import { Login } from '@views/settings/Login/Login'
+import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
 import { AccountInfo } from '@views/settings/AccountInfo'
 import { Sockets } from '@views/settings/Sockets'
 import { observer, Observer } from 'mobx-react'
@@ -26,17 +26,21 @@ import {
   addTodosUk,
   addTodosIt,
 } from '@utils/debug'
-import { LoginTelegram } from '@views/settings/LoginTelegram'
+import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { InfoButton } from '@views/settings/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
-import { ColorPicker, ColorPickerHeaderRight } from './ColorPicker'
+import {
+  ColorPicker,
+  ColorPickerHeaderRight,
+} from '@views/settings/ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { alertSupport } from '@utils/alert'
 import { Button } from '@components/Button'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
+import { LoginQR } from '@views/settings/Login/LoginQR'
 
 const Stack = createStackNavigator()
 
@@ -394,6 +398,16 @@ export function Settings() {
             component={GoogleCalendar}
             options={{
               title: translate('googleCalendar'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="LoginQR"
+            component={LoginQR}
+            options={{
+              title: translate('loginQR'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),

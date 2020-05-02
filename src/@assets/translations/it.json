@@ -181,5 +181,9 @@
   "notConnected": "Non connesso",
   "disconnect": "Disconnetti",
   "infoIntegrations": "Qui è possibile impostare integrazioni di applicazioni di terze parti toccando le opzioni.",
-  "googleCalendar": "Google Calendar"
+  "googleCalendar": "Google Calendar",
+  "loginQR": "Login con QR",
+  "qrDescription": "Aprite il popup del codice QR sul sito web del Todorant e scansionate il codice qui",
+  "cameraAuthorization": "Telecamera non autorizzata",
+  "needCameraPermission": "Todorant utilizza la fotocamera per la scansione dei codici QR"
 }

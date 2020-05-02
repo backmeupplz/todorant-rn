@@ -143,6 +143,8 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - Permission-Camera (2.1.4):
+    - RNPermissions
   - RCTRequired (0.62.1)
   - RCTRestart (0.0.14):
     - React
@@ -308,6 +310,14 @@ PODS:
     - React-cxxreact (= 0.62.1)
     - React-jsi (= 0.62.1)
   - React-jsinspector (0.62.1)
+  - react-native-camera (3.23.1):
+    - React
+    - react-native-camera/RCT (= 3.23.1)
+    - react-native-camera/RN (= 3.23.1)
+  - react-native-camera/RCT (3.23.1):
+    - React
+  - react-native-camera/RN (3.23.1):
+    - React
   - react-native-fbsdk (1.1.2):
     - React
     - react-native-fbsdk/Core (= 1.1.2)
@@ -416,6 +426,8 @@ PODS:
     - React
   - RNLocalize (1.4.0):
     - React
+  - RNPermissions (2.1.4):
+    - React
   - RNReanimated (1.8.0):
     - React
   - RNScreens (2.4.0):
@@ -435,6 +447,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTRestart (from `../node_modules/react-native-restart`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -447,6 +460,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -475,6 +489,7 @@ DEPENDENCIES:
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNIap (from `../node_modules/react-native-iap`)
   - RNLocalize (from `../node_modules/react-native-localize`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - SwiftKeychainWrapper
@@ -529,6 +544,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-Camera:
+    :path: "../node_modules/react-native-permissions/ios/Camera.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTRestart:
@@ -549,6 +566,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
   react-native-netinfo:
@@ -603,6 +622,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-iap"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -645,6 +666,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
   RCTRequired: e291538a455f5ad1afc2139a4288990be0cadd46
   RCTRestart: 3915cac548a37703970941ca33de79a304b8b247
   RCTTypeSafety: 8b6237185765dd9a03a3647807e08864105b1f95
@@ -655,6 +677,7 @@ SPEC CHECKSUMS:
   React-jsi: 600d8e42510c3254fd2abd702f4b9d3f598d8f52
   React-jsiexecutor: e9698dee4fd43ceb44832baf15d5745f455b0157
   React-jsinspector: f74a62727e5604119abd4a1eda52c0a12144bcd5
+  react-native-camera: 1b52abea404d04e040edb3e74b7c5523c01a3089
   react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
   react-native-netinfo: becc6dd2bb2335aa85a8adbaefc8e206125e6177
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
@@ -682,12 +705,13 @@ SPEC CHECKSUMS:
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNIap: 3b6882c6478c4ea3b0f79486566ec01b2c92fd24
   RNLocalize: b6df30cc25ae736d37874f9bce13351db2f56796
+  RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1
 
-PODFILE CHECKSUM: 74e5ef6ff57fb8993546a761a91d0bb37046e1e2
+PODFILE CHECKSUM: 0b7f72da1138c4d8350be1fb6100989c9b9c2d64
 
 COCOAPODS: 1.9.1

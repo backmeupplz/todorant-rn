@@ -40,6 +40,10 @@ target 'Todorant' do
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
 end
 
 target 'TodorantToday' do

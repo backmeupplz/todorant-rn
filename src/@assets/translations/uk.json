@@ -180,5 +180,9 @@
   "notConnected": "Не з'єднано",
   "disconnect": "Відключити",
   "infoIntegrations": "Тут можна налаштувати інтеграції зі сторонніми сервісами, натиснув на опції на екрані.",
-  "googleCalendar": "Google Calendar"
+  "googleCalendar": "Google Calendar",
+  "loginQR": "Увійти за допомогою QR",
+  "qrDescription": "Будь ласка, відкрийте вікно з QR кодом в веб-версії Тудуранта і проскануйте код тут",
+  "cameraAuthorization": "Камера не дозволена",
+  "needCameraPermission": "Тудурант використовує камеру для сканування QR кодів"
 }

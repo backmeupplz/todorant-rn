@@ -50,6 +50,15 @@ export function loginApple(code: string, user?: any) {
     .then(cleanLocalAppleReceipt)
 }
 
+export function loginToken(token: string) {
+  return axios
+    .post<User>(`${base}/login/token`, {
+      token,
+      ...extraParams,
+    })
+    .then(cleanLocalAppleReceipt)
+}
+
 export function verifyPurchaseGoogle(payload: {
   packageName: string
   productId: string
