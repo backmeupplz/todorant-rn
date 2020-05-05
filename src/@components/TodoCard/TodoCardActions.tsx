@@ -26,11 +26,11 @@ export class TodoCardActions extends Component<{
         }}
       >
         {this.props.todo.skipped && (
-          <View>
-            <Text {...sharedColors.textExtraStyle}>
-              ({translate('skipped')})
-            </Text>
-          </View>
+          <Icon
+            type="MaterialIcons"
+            name="arrow-forward"
+            style={{ color: 'grey', fontSize: 20 }}
+          />
         )}
         <View
           style={{
