@@ -44,7 +44,7 @@ import { LoginQR } from '@views/settings/Login/LoginQR'
 
 const Stack = createStackNavigator()
 
-const codePushVersion = 33
+const codePushVersion = require('@utils/version.json').version.split('.')[0]
 
 @observer
 export class SettingsContent extends Component {
