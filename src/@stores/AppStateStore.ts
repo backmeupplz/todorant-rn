@@ -11,7 +11,7 @@ class AppStateStore {
 
   @observable languageTag = 'en'
 
-  @observable searchEnabled = true
+  @observable searchEnabled = false
   @observable searchQuery = ''
 }
 
