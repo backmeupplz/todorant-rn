@@ -10,6 +10,9 @@ class AppStateStore {
   @observable hash = ''
 
   @observable languageTag = 'en'
+
+  @observable searchEnabled = true
+  @observable searchQuery = ''
 }
 
 export const sharedAppStateStore = new AppStateStore()

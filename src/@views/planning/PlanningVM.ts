@@ -29,6 +29,10 @@ export class PlanningVM {
       ? this.allTodosFiltered.filtered(
           `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
         )
+      : sharedAppStateStore.searchEnabled && !!sharedAppStateStore.searchQuery
+      ? this.allTodosFiltered.filtered(
+          `${`text CONTAINS[c] "${sharedAppStateStore.searchQuery}"`}`
+        )
       : this.allTodosFiltered
   }
 
