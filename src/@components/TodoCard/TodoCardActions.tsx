@@ -101,24 +101,24 @@ export class TodoCardActions extends Component<{
                 />
               </Button>
             )}
-          {this.props.type === CardType.current ||
-            (this.props.type === CardType.planning && (
-              <Button
-                icon
-                {...extraButtonProps(sharedColors)}
-                onPress={() => {
-                  navigate('BreakdownTodo', {
-                    breakdownTodo: this.props.todo,
-                  })
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name="list"
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            ))}
+          {(this.props.type === CardType.current ||
+            this.props.type === CardType.planning) && (
+            <Button
+              icon
+              {...extraButtonProps(sharedColors)}
+              onPress={() => {
+                navigate('BreakdownTodo', {
+                  breakdownTodo: this.props.todo,
+                })
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name="list"
+                {...sharedColors.iconExtraStyle}
+              />
+            </Button>
+          )}
           {this.props.type === CardType.done ? (
             <Button
               icon
