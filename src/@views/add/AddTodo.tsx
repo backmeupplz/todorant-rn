@@ -61,6 +61,7 @@ class AddTodoContent extends Component<{
           deleted: false,
           date: vm.date,
           time: vm.time,
+          encrypted: !!sharedSessionStore.encryptionKey,
 
           _tempSyncId: uuid(),
         } as Todo

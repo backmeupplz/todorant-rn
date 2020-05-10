@@ -125,6 +125,18 @@ export class GeneralSettings extends Component {
             </Text>
           </ListItem>
         )}
+        {!!sharedSessionStore.user && (
+          <ListItem
+            onPress={() => {
+              navigate('Security')
+            }}
+            style={{ borderColor: sharedColors.placeholderColor }}
+          >
+            <Text style={{ flex: 1, color: sharedColors.textColor }}>
+              {translate('security')}
+            </Text>
+          </ListItem>
+        )}
       </>
     )
   }

@@ -24,6 +24,7 @@ export class Todo {
       order: 'int',
       monthAndYear: { type: 'string', indexed: true },
       deleted: { type: 'bool', indexed: true },
+      encrypted: { type: 'bool', indexed: true, default: false },
       date: { type: 'string?', indexed: true },
       time: 'string?',
     },
@@ -40,29 +41,13 @@ export class Todo {
   @observable order!: number
   @observable monthAndYear!: string
   @observable deleted!: boolean
+  @observable encrypted!: boolean
   @observable date?: string
   @observable time?: string
 
   // Local values
   @observable _tempSyncId?: string
   _exactDate!: Date
-
-  isStrictlyEqual(todo: Todo) {
-    return this._id === todo._id &&
-      this.createdAt === todo.createdAt &&
-      this.updatedAt === todo.updatedAt &&
-      this.text === todo.text &&
-      this.completed === todo.completed &&
-      this.frog === todo.frog &&
-      this.frogFails === todo.frogFails &&
-      this.skipped === todo.skipped &&
-      this.order === todo.order &&
-      this.monthAndYear === todo.monthAndYear &&
-      this.deleted === todo.deleted &&
-      this.date === todo.date &&
-      this.time === todo.time &&
-      this._tempSyncId === todo._tempSyncId && this._exactDate === todo._exactDate
-  }
 }
 
 export function isTodoToday(todo: Todo) {

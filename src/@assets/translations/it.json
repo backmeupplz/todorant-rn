@@ -187,5 +187,19 @@
   "qrDescription": "Aprite il popup del codice QR sul sito web di Todorant e scansionate il codice qui",
   "cameraAuthorization": "Telecamera non autorizzata",
   "needCameraPermission": "Todorant utilizza la fotocamera per la scansione dei codici QR",
-  "search": "Ricerca"
+  "search": "Ricerca",
+  "security": "Sicurezza",
+  "encryptTodo": "Crittografare todos",
+  "infoSecurity": "Utilizzate questa sezione con la massima cautela! La crittografia non funziona se non si aggiunge una password. Ci saranno due tipi di attività: criptata e non criptata. Tutti i nuovi compiti saranno criptati. I vecchi todos possono essere convertiti per essere criptati con il pulsante qui sotto. Se si perde la password non ci sarà modo di recuperare le attività.",
+  "encryptedTodos": "Attività cifrate",
+  "unencryptedTodos": "Attività non cifrate",
+  "encryptAllButton": "Crittografare tutto",
+  "decryptAllButton": "Decodificare tutti",
+  "password": "Password",
+  "save": "Salva",
+  "encryptionConfirm": "Sei sicuro di voler criptare il todos con questa password? Sarete in grado di decifrare i todos in seguito con la stessa password. Se perdi la password, non sarai in grado di decifrare todos!",
+  "encryptionDisableConfirm": "Sei sicuro di voler rimuovere la chiave e disattivare la crittografia? In questo modo non si decifreranno i compiti che sono criptati.",
+  "disable": "Disattivare",
+  "confirmEncryptAll": "Siete sicuri di voler crittografare tutte le attività con la password? Se perdi la password, non sarai in grado di decifrare le attività!",
+  "confirmDecryptAll": "Siete sicuri di voler decifrare tutte le attività?"
 }

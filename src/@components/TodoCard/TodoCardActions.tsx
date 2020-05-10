@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { CardItem, View, Text, Icon } from 'native-base'
+import { CardItem, View, Icon } from 'native-base'
 import { Todo, isTodoToday, isTodoOld } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
@@ -25,11 +24,18 @@ export class TodoCardActions extends Component<{
           backgroundColor: 'transparent',
         }}
       >
+        {!!this.props.todo.encrypted && (
+          <Icon
+            type="MaterialIcons"
+            name="vpn-key"
+            style={{ color: 'grey', fontSize: 15, marginRight: -15 }}
+          />
+        )}
         {this.props.todo.skipped && (
           <Icon
             type="MaterialIcons"
             name="arrow-forward"
-            style={{ color: 'grey', fontSize: 20 }}
+            style={{ color: 'grey', fontSize: 15 }}
           />
         )}
         <View

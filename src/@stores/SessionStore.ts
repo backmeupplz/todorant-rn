@@ -18,6 +18,8 @@ class SessionStore {
 
   @persist @observable introMessageShown = __DEV__ ? true : false
 
+  @persist @observable encryptionKey?: string
+
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
   @computed get needsToRequestRate() {
@@ -66,6 +68,7 @@ class SessionStore {
 
   logout() {
     this.user = undefined
+    this.encryptionKey = undefined
     realm.write(() => {
       realm.deleteAll()
     })

@@ -41,6 +41,7 @@ import { Button } from '@components/Button'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { LoginQR } from '@views/settings/Login/LoginQR'
+import { Security } from './Security'
 
 const Stack = createStackNavigator()
 
@@ -149,32 +150,36 @@ export class SettingsContent extends Component {
                 {translate('general')}
               </Text>
             </ListItem>
-            <ListItem
-              button
-              onPress={() => {
-                navigate('Sockets')
-              }}
-              style={{
-                justifyContent: 'space-between',
-                borderColor: sharedColors.placeholderColor,
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('socketsInfo')}
-              </Text>
-              <CheckOrCross ok={sharedSocketStore.connected} />
-            </ListItem>
-            <ListItem
-              button
-              onPress={() => {
-                navigate('Data')
-              }}
-              style={{ borderColor: sharedColors.placeholderColor }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('dataInfo')}
-              </Text>
-            </ListItem>
+            {!!sharedSessionStore.user && (
+              <ListItem
+                button
+                onPress={() => {
+                  navigate('Sockets')
+                }}
+                style={{
+                  justifyContent: 'space-between',
+                  borderColor: sharedColors.placeholderColor,
+                }}
+              >
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('socketsInfo')}
+                </Text>
+                <CheckOrCross ok={sharedSocketStore.connected} />
+              </ListItem>
+            )}
+            {!!sharedSessionStore.user && (
+              <ListItem
+                button
+                onPress={() => {
+                  navigate('Data')
+                }}
+                style={{ borderColor: sharedColors.placeholderColor }}
+              >
+                <Text {...sharedColors.textExtraStyle}>
+                  {translate('dataInfo')}
+                </Text>
+              </ListItem>
+            )}
             <GeneralSettings />
             <ListItem itemHeader>
               <Text style={{ color: sharedColors.placeholderColor }}>
@@ -408,6 +413,16 @@ export function Settings() {
             component={LoginQR}
             options={{
               title: translate('loginQR'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="Security"
+            component={Security}
+            options={{
+              title: translate('security'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),

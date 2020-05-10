@@ -7,6 +7,7 @@ import uuid from 'uuid'
 import { getDateString } from '@utils/time'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
+import { decrypt, encrypt } from '@utils/encryption'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -114,6 +115,9 @@ class TodoStore {
           realm.write(() => {
             if (localTodo) {
               Object.assign(localTodo, serverTodo)
+              if (localTodo.encrypted) {
+                localTodo.text = decrypt(localTodo.text)
+              }
               localTodo._exactDate = new Date(getTitle(localTodo))
             }
           })
@@ -122,6 +126,9 @@ class TodoStore {
         const newTodo = {
           ...serverTodo,
           _exactDate: new Date(getTitle(serverTodo)),
+        }
+        if (newTodo.encrypted) {
+          newTodo.text = decrypt(newTodo.text)
         }
         realm.write(() => {
           realm.create(Todo, newTodo)
@@ -155,7 +162,14 @@ class TodoStore {
       }
     })
     const savedPushedTodos = await pushBack(
-      todosToPush.map((v) => ({ ...v })) as any
+      todosToPush
+        .map((v) => ({ ...v }))
+        .map((v) => {
+          if (v.encrypted) {
+            v.text = encrypt(v.text)
+          }
+          return v
+        }) as any
     )
     // Modify dates
     savedPushedTodos.forEach((todo) => {
@@ -170,6 +184,9 @@ class TodoStore {
         const localTodo = this.getTodoById(todo._tempSyncId)
         if (localTodo) {
           Object.assign(localTodo, todo)
+          if (localTodo.encrypted) {
+            localTodo.text = decrypt(localTodo.text)
+          }
           localTodo._exactDate = new Date(getTitle(localTodo))
         }
       }

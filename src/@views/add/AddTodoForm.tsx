@@ -16,6 +16,7 @@ import MonthPicker from 'react-native-month-picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Switch, FlatList } from 'react-native-gesture-handler'
 import { Button } from '@components/Button'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 @observer
 export class AddTodoForm extends Component<{ vm: TodoVM }> {
@@ -100,26 +101,34 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                   marginVertical: Platform.OS === 'ios' ? 10 : undefined,
                 }}
                 autoFocus
+                disabled={
+                  this.props.vm.editedTodo?.encrypted &&
+                  !sharedSessionStore.encryptionKey
+                }
               />
-              {Platform.OS === 'android' && (
-                <Button
-                  icon
-                  {...extraButtonProps(sharedColors)}
-                  small
-                  onPress={async () => {
-                    const textFromClipboard = await Clipboard.getString()
-                    this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
-                  }}
-                >
-                  <Icon
-                    type="MaterialIcons"
-                    name="assignment"
-                    style={{
-                      color: sharedColors.textColor,
+              {Platform.OS === 'android' &&
+                !(
+                  this.props.vm.editedTodo?.encrypted &&
+                  !sharedSessionStore.encryptionKey
+                ) && (
+                  <Button
+                    icon
+                    {...extraButtonProps(sharedColors)}
+                    small
+                    onPress={async () => {
+                      const textFromClipboard = await Clipboard.getString()
+                      this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
                     }}
-                  />
-                </Button>
-              )}
+                  >
+                    <Icon
+                      type="MaterialIcons"
+                      name="assignment"
+                      style={{
+                        color: sharedColors.textColor,
+                      }}
+                    />
+                  </Button>
+                )}
               <CollapseButton vm={this.props.vm} />
             </Item>
             {!!this.props.vm.tags.length && (
