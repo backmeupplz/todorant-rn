@@ -167,6 +167,20 @@ export class Security extends Component {
                             translate('encryptionConfirm'),
                             translate('save'),
                             () => {
+                              const encrytedTodos = realm
+                                .objects<Todo>(Todo)
+                                .filtered('encrypted = true')
+                              if (encrytedTodos.length) {
+                                const encryptedTodo = encrytedTodos[0]
+                                const decryptedText = _d(
+                                  encryptedTodo.text,
+                                  this.password
+                                )
+                                if (!decryptedText) {
+                                  alertError(translate('passwordError'))
+                                  return
+                                }
+                              }
                               sharedSessionStore.encryptionKey = this.password
                               this.encryptEncrypted(false, this.password)
                             }

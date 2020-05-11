@@ -201,5 +201,6 @@
   "encryptionDisableConfirm": "Sei sicuro di voler rimuovere la chiave e disattivare la crittografia? In questo modo non si decifreranno i compiti che sono criptati.",
   "disable": "Disattivare",
   "confirmEncryptAll": "Siete sicuri di voler crittografare tutte le attività con la password? Se perdi la password, non sarai in grado di decifrare le attività!",
-  "confirmDecryptAll": "Siete sicuri di voler decifrare tutte le attività?"
+  "confirmDecryptAll": "Siete sicuri di voler decifrare tutte le attività?",
+  "passwordError": "Password errata. Sembra che alcune delle attività criptate che avete non possano essere decifrate da questa password."
 }

@@ -201,5 +201,6 @@
   "encryptionDisableConfirm": "Are you sure you want to remove the key and disable the encryption? This will not decrypt the tasks that are encrypted.",
   "disable": "Disable",
   "confirmEncryptAll": "Are you sure you want to encrypt all tasks with the password? If you loose the password, you will not be able to decrypt the tasks!",
-  "confirmDecryptAll": "Are you sure you want to decrypt all tasks?"
+  "confirmDecryptAll": "Are you sure you want to decrypt all tasks?",
+  "passwordError": "Wrong password. Looks like some of the encrypted tasks you have cannot be decrypted by this password."
 }
