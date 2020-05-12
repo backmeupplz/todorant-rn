@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text } from 'native-base'
 import Animated, { Easing } from 'react-native-reanimated'
+import { translate } from '@utils/i18n'
 
 export let dayCompleteOverlayRef: any
 
@@ -51,15 +52,17 @@ export class DayCompleteOverlay extends Component {
           right: 0,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
           opacity,
         }}
         pointerEvents="none"
       >
         <Text style={{ color: 'rgba(153, 126, 40, 1)', fontSize: 40 }}>
-          Mission passed
+          {translate('missionPassed')}
         </Text>
-        <Text style={{ color: 'white', fontSize: 40 }}>Respect +</Text>
+        <Text style={{ color: 'white', fontSize: 40 }}>
+          {translate('respect')}
+        </Text>
       </Animated.View>
     )
   }

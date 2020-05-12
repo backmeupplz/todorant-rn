@@ -1,6 +1,8 @@
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Sound from 'react-native-sound'
 
+Sound.setMode('Default')
+
 const sounds = {} as { [index: string]: Sound }
 
 const splat = new Sound(require('../@assets/sounds/splat.mp3'), (error) => {
