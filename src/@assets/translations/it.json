@@ -202,5 +202,8 @@
   "disable": "Disattivare",
   "confirmEncryptAll": "Siete sicuri di voler crittografare tutte le attività con la password? Se perdi la password, non sarai in grado di decifrare le attività!",
   "confirmDecryptAll": "Siete sicuri di voler decifrare tutte le attività?",
-  "passwordError": "Password errata. Sembra che alcune delle attività criptate che avete non possano essere decifrate da questa password."
+  "passwordError": "Password errata. Sembra che alcune delle attività criptate che avete non possano essere decifrate da questa password.",
+  "soundEffects": "Effetti sonori",
+  "missionPassed": "Mission passed",
+  "respect": "Rispettare +"
 }

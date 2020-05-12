@@ -24,6 +24,8 @@ import { Alert, Clipboard } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
 import { startConfetti } from '@components/Confetti'
+import { playFrogComplete, playTaskComplete } from '@utils/sound'
+import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 
 @observer
 class AddTodoContent extends Component<{
@@ -134,6 +136,11 @@ class AddTodoContent extends Component<{
     }
     if (this.breakdownTodo) {
       const breakdownTodoTitle = getTitle(this.breakdownTodo)
+      if (this.breakdownTodo.frog) {
+        playFrogComplete()
+      } else {
+        playTaskComplete()
+      }
       realm.write(() => {
         if (!this.breakdownTodo) {
           return
@@ -150,6 +157,7 @@ class AddTodoContent extends Component<{
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
     startConfetti()
+    checkDayCompletionRoutine()
   }
 
   @computed get isValid() {

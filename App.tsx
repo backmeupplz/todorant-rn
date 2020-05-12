@@ -29,6 +29,7 @@ import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
+import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -182,6 +183,7 @@ class App extends Component {
               />
             </Stack.Navigator>
           </StyleProvider>
+          <DayCompleteOverlay />
           <ConfettiView />
         </NavigationContainer>
       </Root>

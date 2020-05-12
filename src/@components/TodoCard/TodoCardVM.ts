@@ -1,3 +1,4 @@
+import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
@@ -13,6 +14,7 @@ import {
 } from '@utils/time'
 import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
+import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 
 export class TodoCardVM {
   skip(todo: Todo) {
@@ -117,6 +119,12 @@ export class TodoCardVM {
   }
 
   complete(todo: Todo) {
+    if (todo.frog) {
+      playFrogComplete()
+    } else {
+      playTaskComplete()
+    }
+
     realm.write(() => {
       todo.completed = true
       todo.updatedAt = new Date()
@@ -125,6 +133,7 @@ export class TodoCardVM {
     fixOrder([getTitle(todo)])
     sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
+    checkDayCompletionRoutine()
   }
 
   isOld(type: CardType, todo: Todo) {

@@ -38,6 +38,8 @@ class SettingsStore {
 
   @persist @observable askBeforeDelete = true
 
+  @persist @observable soundOn = true
+
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined
       ? this.language === 'en'
@@ -139,6 +141,7 @@ class SettingsStore {
     this.preserveOrderByTime = undefined
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
+    this.soundOn = true
   }
 }
 

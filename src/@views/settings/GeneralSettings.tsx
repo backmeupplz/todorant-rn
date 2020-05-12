@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListItem, Text, ActionSheet } from 'native-base'
+import { ListItem, Text, ActionSheet, Switch } from 'native-base'
 import { sharedSettingsStore, Language, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
@@ -137,6 +137,22 @@ export class GeneralSettings extends Component {
             </Text>
           </ListItem>
         )}
+        <ListItem
+          style={{
+            borderColor: sharedColors.placeholderColor,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('soundEffects')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.soundOn}
+            onValueChange={(val) => {
+              sharedSettingsStore.soundOn = val
+            }}
+          />
+        </ListItem>
       </>
     )
   }
