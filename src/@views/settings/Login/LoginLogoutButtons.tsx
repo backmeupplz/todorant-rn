@@ -37,7 +37,7 @@ export class LoginLogoutButtons extends Component {
                 navigate('Login')
               }}
             >
-              <Text>{translate('login')}</Text>
+              <Text>{translate('loginButton')}</Text>
             </Button>
             <Text style={{ marginTop: 5, color: sharedColors.textColor }}>
               {translate('alreadyRegistered')}

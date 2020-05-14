@@ -40,7 +40,7 @@ export class AccountInfo extends Component {
     ) : (
       <>
         <InfoRow
-          title={translate('name')}
+          title={translate('nameLabel')}
           value={sharedSessionStore.user.name}
         />
         {sharedSessionStore.user.email && (

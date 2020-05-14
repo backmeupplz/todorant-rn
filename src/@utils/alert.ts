@@ -35,7 +35,7 @@ export function alertMessage(title: string, message: string, ok?: () => void) {
 
 export function alertSupport() {
   setTimeout(() => {
-    Alert.alert(translate('support'), translate('supportText'), [
+    Alert.alert(translate('supportLabel'), translate('supportText'), [
       {
         text: translate('cancel'),
         style: 'cancel',

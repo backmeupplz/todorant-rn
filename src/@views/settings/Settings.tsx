@@ -227,7 +227,7 @@ export class SettingsContent extends Component {
               }}
             >
               <Text {...sharedColors.textExtraStyle}>
-                {translate('support')}
+                {translate('supportLabel')}
               </Text>
             </ListItem>
             <ListItem style={{ borderColor: sharedColors.placeholderColor }}>

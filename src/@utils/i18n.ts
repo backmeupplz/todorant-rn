@@ -17,7 +17,8 @@ export const translate = (key: any, config?: any) => {
 }
 
 export async function getLanguageTag() {
-  const language = (await AsyncStorage.getItem('language')) || Language.auto
+  const language =
+    (await AsyncStorage.getItem('languageSelect')) || Language.auto
   if (language !== Language.auto) {
     return language
   }

@@ -65,10 +65,10 @@ export class GeneralSettings extends Component {
               },
               async (i) => {
                 if (i === 0) {
-                  await AsyncStorage.setItem('language', Language.auto)
+                  await AsyncStorage.setItem('languageSelect', Language.auto)
                   RNRestart.Restart()
                 } else if (i < 5) {
-                  await AsyncStorage.setItem('language', options[i].code)
+                  await AsyncStorage.setItem('languageSelect', options[i].code)
                   RNRestart.Restart()
                 }
               }
@@ -76,7 +76,7 @@ export class GeneralSettings extends Component {
           }}
         >
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
-            {translate('language')}
+            {translate('languageSelect')}
           </Text>
           <Text {...sharedColors.textExtraStyle}>{this.languageLabel}</Text>
         </ListItem>

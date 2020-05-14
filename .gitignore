@@ -66,3 +66,5 @@ ios/Pods/
 ios/derived
 
 ios/Todorant.app.dSYM.zip
+
+.env

@@ -41,7 +41,7 @@ export class InfoButtonContent extends Component<{ message: string }> {
                 translate(this.props.message),
                 [
                   {
-                    text: translate('support'),
+                    text: translate('supportLabel'),
                     onPress: () => {
                       alertSupport()
                     },

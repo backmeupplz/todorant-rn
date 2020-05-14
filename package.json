@@ -10,7 +10,9 @@
     "code-push": "yarn git-pre-code-push && yarn code-push-ios && yarn code-push-android",
     "code-push-ios": "appcenter codepush patch -a borodutch/Todorant --disabled Production && appcenter codepush release-react -a borodutch/Todorant -d Production -m",
     "code-push-android": "appcenter codepush patch -a borodutch/Todorant-1 --disabled Production && appcenter codepush release-react -a borodutch/Todorant-1 -d Production -m",
-    "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push"
+    "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
+    "upload-translations": "node scripts/upload.js",
+    "download-translations": "node scripts/download.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
@@ -83,6 +85,8 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
+    "@types/dotenv": "^8.2.0",
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@types/react-native": "^0.60.25",
