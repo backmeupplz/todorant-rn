@@ -39,11 +39,14 @@ const fs = require('fs')
   console.log('==== Reversed map')
   console.log(reversedMap)
   for (const language in reversedMap) {
+    if (language === 'ua') {
+      continue
+    }
     const obj = reversedMap[language]
     const json = JSON.stringify(obj, undefined, 2)
     fs.writeFileSync(
       `${__dirname}/../src/@assets/translations/${language}.json`,
-      json
+      `${json}\n`
     )
   }
   console.log('==== Saved object to the file')
