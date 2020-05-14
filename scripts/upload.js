@@ -8,9 +8,13 @@ const files = fs.readdirSync(`${__dirname}/../src/@assets/translations`)
 const localizations = {}
 
 for (const fileName of files) {
-  localizations[fileName.split('.')[0]] = JSON.parse(
+  let fileNameLeft = fileName.split('.')[0]
+  if (fileNameLeft === 'uk') {
+    fileNameLeft = 'ua'
+  }
+  localizations[fileNameLeft] = JSON.parse(
     fs.readFileSync(
-      `${__dirname}/../src/@assets/translations/${fileName}`,
+      `${__dirname}/../src/@assets/translations/${fileName.split('.')[0]}.json`,
       'utf8'
     )
   )
