@@ -6,7 +6,7 @@ const fs = require('fs')
 ;(async function getTranslations() {
   console.log('==== Getting localizations')
   const translations = (
-    await axios.get('http://localhost:1337/localizations?tag=mobile')
+    await axios.get('https://localizer.todorant.com/localizations?tag=mobile')
   ).data.filter((l) => {
     return l.tags.indexOf('mobile') > -1
   })

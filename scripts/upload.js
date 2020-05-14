@@ -43,7 +43,7 @@ keys.forEach((key) => {
   console.log('==== Posting body:')
   console.log(JSON.stringify(result, undefined, 2))
   try {
-    await axios.post(`http://localhost:1337/localizations`, {
+    await axios.post(`https://localizer.todorant.com/localizations`, {
       localizations: result,
       password: process.env.PASSWORD,
       username: 'borodutch',
