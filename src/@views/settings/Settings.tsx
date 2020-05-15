@@ -273,7 +273,14 @@ export function Settings() {
             options={{
               title: translate('settings'),
               ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoSettings'),
+              headerRight: InfoButton('infoSettings', [
+                {
+                  text: translate('howToUse'),
+                  onPress: () => {
+                    navigate('Rules')
+                  },
+                },
+              ]),
               ...headerBackButtonProps(),
             }}
           />

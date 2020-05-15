@@ -3,10 +3,13 @@ import { Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { alertSupport } from '@utils/alert'
 import { translate } from '@utils/i18n'
-import { Animated, Easing, Alert } from 'react-native'
+import { Animated, Easing, Alert, AlertButton } from 'react-native'
 import { Button } from '@components/Button'
 
-export class InfoButtonContent extends Component<{ message: string }> {
+export class InfoButtonContent extends Component<{
+  message: string
+  extraButtons?: AlertButton[]
+}> {
   animationValue = new Animated.Value(0)
 
   animate(back: boolean) {
@@ -40,6 +43,7 @@ export class InfoButtonContent extends Component<{ message: string }> {
                 translate('infoTitle'),
                 translate(this.props.message),
                 [
+                  ...(this.props.extraButtons || []),
                   {
                     text: translate('supportLabel'),
                     onPress: () => {
@@ -72,6 +76,7 @@ export class InfoButtonContent extends Component<{ message: string }> {
   }
 }
 
-export const InfoButton = (message: string) => () => (
-  <InfoButtonContent message={message} />
-)
+export const InfoButton = (
+  message: string,
+  extraButtons?: AlertButton[]
+) => () => <InfoButtonContent message={message} extraButtons={extraButtons} />
