@@ -36,6 +36,8 @@ export function setI18nConfig() {
     uk: translationGetters['uk'](),
     it: translationGetters['it'](),
   }
+  i18n.fallbacks = true
+  i18n.defaultLocale = 'en'
 }
 
 export async function setI18nConfigAsync() {
