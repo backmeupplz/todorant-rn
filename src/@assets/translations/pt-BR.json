@@ -1,12 +1,9 @@
 {
-  "support": "Suporte",
   "cancel": "Cancelar",
   "delete": "Apagar",
   "current": "Atual",
   "planning": "Planejamento",
   "skipped": "Pular",
-  "name": "Nome",
-  "language": "Linguagem",
   "login": "Logar",
   "settings": "Configurações",
   "addTodo": "Adicionar tarefa",

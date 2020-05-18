@@ -208,5 +208,6 @@
   "passwordError": "Password errata. Sembra che alcune delle attività criptate che avete non possano essere decifrate da questa password.",
   "soundEffects": "Effetti sonori",
   "missionPassed": "Mission passed",
-  "respect": "Rispettare +"
+  "respect": "Rispettare +",
+  "emptyHashtags": "L'elenco degli hashtag è vuoto per ora. Create il vostro primo compito con un #hashtag per aggiungere il primo hashtag qui!"
 }

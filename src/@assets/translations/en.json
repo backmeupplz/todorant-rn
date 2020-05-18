@@ -209,5 +209,6 @@
   "passwordError": "Wrong password. Looks like some of the encrypted tasks you have cannot be decrypted by this password.",
   "soundEffects": "Sound effects",
   "missionPassed": "Mission passed",
-  "respect": "Respect +"
+  "respect": "Respect +",
+  "emptyHashtags": "Hashtag list is empty for now. Create your first task with a #hashtag to add the first hashtag here!"
 }

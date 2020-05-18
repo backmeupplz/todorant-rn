@@ -82,30 +82,42 @@ export class Tags extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        <FlatList
-          data={sharedTagStore.undeletedTags}
-          renderItem={({ item }) => {
-            return (
-              <ListItem
-                style={{ justifyContent: 'space-between' }}
-                onPress={() => this.vm.onTap(item)}
-              >
-                <Text style={{ color: item.color || 'dodgerblue' }}>
-                  #{item.tag}
-                </Text>
-                <Icon
-                  type="MaterialIcons"
-                  name="edit"
-                  style={{
-                    ...sharedColors.iconExtraStyle.style,
-                    fontSize: 20,
-                  }}
-                />
-              </ListItem>
-            )
-          }}
-          keyExtractor={(_, index) => `${index}`}
-        />
+        {sharedTagStore.undeletedTags.length ? (
+          <FlatList
+            data={sharedTagStore.undeletedTags}
+            renderItem={({ item }) => {
+              return (
+                <ListItem
+                  style={{ justifyContent: 'space-between' }}
+                  onPress={() => this.vm.onTap(item)}
+                >
+                  <Text style={{ color: item.color || 'dodgerblue' }}>
+                    #{item.tag}
+                  </Text>
+                  <Icon
+                    type="MaterialIcons"
+                    name="edit"
+                    style={{
+                      ...sharedColors.iconExtraStyle.style,
+                      fontSize: 20,
+                    }}
+                  />
+                </ListItem>
+              )
+            }}
+            keyExtractor={(_, index) => `${index}`}
+          />
+        ) : (
+          <Text
+            style={{
+              ...sharedColors.textExtraStyle.style,
+              textAlign: 'center',
+              padding: 20,
+            }}
+          >
+            {translate('emptyHashtags')}
+          </Text>
+        )}
       </Container>
     )
   }
