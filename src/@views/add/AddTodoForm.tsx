@@ -256,7 +256,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
             </Item>
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
-                localeLanguage={languageTag}
+                localeLanguage={languageTag.substr(0, 2)}
                 selectedDate={this.props.vm.monthAndYearPickerValue}
                 onMonthChange={(date: Moment) => {
                   this.props.vm.monthAndYearPickerValue = date.toDate()

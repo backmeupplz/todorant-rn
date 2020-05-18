@@ -10,6 +10,8 @@ const translationGetters = {
   ru: () => require('@assets/translations/ru.json'),
   uk: () => require('@assets/translations/uk.json'),
   it: () => require('@assets/translations/it.json'),
+  es: () => require('@assets/translations/es.json'),
+  'pt-BR': () => require('@assets/translations/pt-BR.json'),
 } as { [index: string]: any }
 
 export const translate = (key: any, config?: any) => {
@@ -35,6 +37,8 @@ export function setI18nConfig() {
     ru: translationGetters['ru'](),
     uk: translationGetters['uk'](),
     it: translationGetters['it'](),
+    es: translationGetters['es'](),
+    'pt-BR': translationGetters['pt-BR'](),
   }
   i18n.fallbacks = true
   i18n.defaultLocale = 'en'

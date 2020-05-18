@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Todorant
+
+  Created by Nikita Kolmogorov on 2020-05-01.
+  Copyright © 2020 Facebook. All rights reserved.
+*/
+
+"NSCameraUsageDescription" = "Todorant usa câmera para escanear códigos QR";

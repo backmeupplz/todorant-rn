@@ -12,6 +12,8 @@ export enum Language {
   en = 'en',
   uk = 'uk',
   it = 'it',
+  es = 'es',
+  'pt-BR' = 'pt-BR',
 }
 
 export enum ColorMode {

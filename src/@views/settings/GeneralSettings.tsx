@@ -15,6 +15,8 @@ const codeToName = {
   ru: 'Русский',
   uk: 'Українськa',
   it: 'Italiano',
+  es: 'Español',
+  'pt-BR': 'Português Brasileiro',
 }
 
 @observer
@@ -53,21 +55,23 @@ export class GeneralSettings extends Component {
               { label: 'Русский', code: 'ru' },
               { label: 'Українська', code: 'uk' },
               { label: 'Italiano', code: 'it' },
+              { label: 'Español', code: 'es' },
+              { label: 'Português Brasileiro', code: 'pt-BR' },
             ]
             ActionSheet.show(
               {
                 options: options
                   .map((v) => v.label)
                   .concat(translate('cancel')),
-                cancelButtonIndex: 5,
-                destructiveButtonIndex: 5,
+                cancelButtonIndex: 7,
+                destructiveButtonIndex: 7,
                 title: '',
               },
               async (i) => {
                 if (i === 0) {
                   await AsyncStorage.setItem('languageSelect', Language.auto)
                   RNRestart.Restart()
-                } else if (i < 5) {
+                } else if (i < 7) {
                   await AsyncStorage.setItem('languageSelect', options[i].code)
                   RNRestart.Restart()
                 }

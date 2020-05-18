@@ -1,7 +1,8 @@
 import { LocaleConfig } from 'react-native-calendars'
+import moment from 'moment'
 
 export function configCalendar(defaultLocale: string) {
-  const locales = ['ru', 'en', 'uk', 'it']
+  const locales = ['ru', 'en', 'uk', 'it', 'es', 'pt-BR']
   if (locales.indexOf(defaultLocale) > -1) {
     LocaleConfig.defaultLocale = defaultLocale
   } else {
@@ -177,6 +178,100 @@ LocaleConfig.locales['it'] = {
     'sabato',
   ],
   dayNamesShort: ['Do', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+  amDesignator: 'AM',
+  pmDesignator: 'PM',
+}
+
+moment.locale('pt-BR')
+console.log(
+  moment.months(),
+  moment.monthsShort(),
+  moment.weekdays(),
+  moment.weekdaysShort()
+)
+
+LocaleConfig.locales['es'] = {
+  monthNames: [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ],
+  monthNamesShort: [
+    'Ene.',
+    'Feb.',
+    'Mar.',
+    'Abr.',
+    'May.',
+    'Jun.',
+    'Jul.',
+    'Ago.',
+    'Sep.',
+    'Oct.',
+    'Nov.',
+    'Dic.',
+  ],
+  dayNames: [
+    'domingo',
+    'lunes',
+    'martes',
+    'miércoles',
+    'jueves',
+    'viernes',
+    'sábado',
+  ],
+  dayNamesShort: ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'],
+  amDesignator: 'AM',
+  pmDesignator: 'PM',
+}
+
+LocaleConfig.locales['pt-BR'] = {
+  monthNames: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
+  ],
+  dayNames: [
+    'Domingo',
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+  ],
+  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
   amDesignator: 'AM',
   pmDesignator: 'PM',
 }

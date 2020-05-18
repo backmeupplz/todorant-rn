@@ -160,6 +160,10 @@
 		BB78173B245CE04D004EF3E5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173C245CE050004EF3E5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173D245CE051004EF3E5 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BBC0EFFD24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		BBC0EFFE24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BBC0EFFF2473500B000B9C72 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		BBC0F0002473500B000B9C72 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		BBE891C82436B1D800A9CA36 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBE891C92436B1E400A9CA36 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -459,6 +463,8 @@
 				ru,
 				uk,
 				it,
+				es,
+				"pt-BR",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -697,6 +703,8 @@
 				BBE891C82436B1D800A9CA36 /* ru */,
 				BBE891C92436B1E400A9CA36 /* uk */,
 				BB093AB424508A14007616A5 /* it */,
+				BBC0EFFD24734FC2000B9C72 /* es */,
+				BBC0EFFF2473500B000B9C72 /* pt-BR */,
 			);
 			name = LaunchScreen.xib;
 			path = Todorant;
@@ -709,6 +717,8 @@
 				BB78173B245CE04D004EF3E5 /* it */,
 				BB78173C245CE050004EF3E5 /* ru */,
 				BB78173D245CE051004EF3E5 /* uk */,
+				BBC0EFFE24734FC2000B9C72 /* es */,
+				BBC0F0002473500B000B9C72 /* pt-BR */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
