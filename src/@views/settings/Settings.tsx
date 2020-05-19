@@ -25,6 +25,8 @@ import {
   addTodosRu,
   addTodosUk,
   addTodosIt,
+  addTodosEs,
+  addTodosPtBR,
 } from '@utils/debug'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
@@ -105,6 +107,26 @@ export class SettingsContent extends Component {
                   testID="add_it"
                 >
                   <Text {...sharedColors.textExtraStyle}>add it todos</Text>
+                </Button>
+                <Button
+                  onPress={() => {
+                    addTodosEs()
+                  }}
+                  accessible
+                  accessibilityLabel="add_es"
+                  testID="add_es"
+                >
+                  <Text {...sharedColors.textExtraStyle}>add es todos</Text>
+                </Button>
+                <Button
+                  onPress={() => {
+                    addTodosPtBR()
+                  }}
+                  accessible
+                  accessibilityLabel="add_pt_br"
+                  testID="add_pt_br"
+                >
+                  <Text {...sharedColors.textExtraStyle}>add pt-BR todos</Text>
                 </Button>
                 <Button
                   onPress={() => {

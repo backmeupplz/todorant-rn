@@ -26,6 +26,11 @@ Build debug and test APK for screenshots
 fastlane android take_screenshots
 ```
 
+### android copy_es_screenshots
+```
+fastlane android copy_es_screenshots
+```
+
 ### android upload_screenshots
 ```
 fastlane android upload_screenshots

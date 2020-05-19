@@ -19,6 +19,16 @@ platform :android do
     capture_android_screenshots
   end
 
+  lane :copy_es_screenshots do
+    sh("rm", "-rf", "./metadata/android/es-US/images")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-US")
+    sh("rm", "-rf", "./metadata/android/es-ES/images")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-ES")
+    sh("rm", "-rf", "./metadata/android/es-419/images")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-419")
+    sh("rm", "-rf", "./metadata/android/es")
+  end
+
   lane :upload_screenshots do
     supply(
       skip_upload_apk: true,
@@ -32,6 +42,7 @@ platform :android do
   lane :screenshots do
     build_for_screengrab
     take_screenshots
+    copy_es_screenshots
     upload_screenshots
   end
 

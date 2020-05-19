@@ -94,6 +94,46 @@ public class AppTest {
             onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("0Empty");
+        } else if (LocaleUtil.getTestLocale().getLanguage().contains("es")) {
+            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("delete"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("add_es"))).perform(click());
+            try { Thread.sleep(8000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
+            Screengrab.screenshot("1Current");
+            try { Thread.sleep(3000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(3000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("2Planning");
+            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("delete"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("0Empty");
+        } else if (LocaleUtil.getTestLocale().getLanguage().contains("pt")) {
+            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("delete"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("add_pt_br"))).perform(click());
+            try { Thread.sleep(8000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
+            Screengrab.screenshot("1Current");
+            try { Thread.sleep(3000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(3000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("2Planning");
+            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(withTagValue(is("delete"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("0Empty");
         } else {
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}

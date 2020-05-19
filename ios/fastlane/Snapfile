@@ -11,6 +11,9 @@ devices([
 ])
 
 languages([
+  "pt-BR",
+  "es-ES",
+  "es-MX",
   "uk",
   "en-US",
   "ru",
