@@ -40,10 +40,10 @@ platform :android do
   end
 
   lane :screenshots do
-    # build_for_screengrab
+    build_for_screengrab
     take_screenshots
     copy_es_screenshots
-    # upload_screenshots
+    upload_screenshots
   end
 
   lane :increment_android_versions do

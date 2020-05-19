@@ -68,3 +68,5 @@ ios/derived
 ios/Todorant.app.dSYM.zip
 
 .env
+
+android/fastlane/metadata/android/*/images/phoneScreenshots/*
