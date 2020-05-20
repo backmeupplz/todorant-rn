@@ -8,6 +8,7 @@ import uuid from 'uuid'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { l } from '@utils/linkify'
+import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 
 class TagStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -175,10 +176,6 @@ class TagStore {
     this.refreshTags()
     sockets.tagsSyncManager.sync()
   }
-}
-
-function realmTimestampFromDate(date: Date) {
-  return `T${Math.floor(date.getTime() / 1000)}:000`
 }
 
 export const sharedTagStore = new TagStore()

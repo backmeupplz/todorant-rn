@@ -8,6 +8,7 @@ import { getDateString } from '@utils/time'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { decrypt, encrypt } from '@utils/encryption'
+import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -224,10 +225,6 @@ class TodoStore {
     )
     return todos.length ? todos[0] : undefined
   }
-}
-
-function realmTimestampFromDate(date: Date) {
-  return `T${Math.floor(date.getTime() / 1000)}:000`
 }
 
 export const sharedTodoStore = new TodoStore()

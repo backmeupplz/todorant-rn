@@ -437,6 +437,8 @@ PODS:
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
+  - RNSVG (12.1.0):
+    - React
   - SSZipArchive (2.2.2)
   - SwiftKeychainWrapper (3.4.0)
   - Yoga (1.14.0)
@@ -498,6 +500,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSound (from `../node_modules/react-native-sound`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - SwiftKeychainWrapper
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -636,6 +639,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSound:
     :path: "../node_modules/react-native-sound"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -717,6 +722,7 @@ SPEC CHECKSUMS:
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1

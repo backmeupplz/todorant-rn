@@ -53,6 +53,7 @@
     "react": "16.9.0",
     "react-native": "0.62.1",
     "react-native-action-button": "^2.8.5",
+    "react-native-calendar-heatmap": "backmeupplz/react-native-calendar-heatmap#3b1322038eaaca99fee37c836cd86fd4d3a99640",
     "react-native-calendars": "^1.261.0",
     "react-native-camera": "^3.23.1",
     "react-native-code-push": "^6.2.0",
@@ -75,6 +76,7 @@
     "react-native-sound": "^0.11.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-store-rating": "backmeupplz/react-native-store-rating#83d1c9188597cf02ec20f447b60d6b431d4a1e11",
+    "react-native-svg": "^12.1.0",
     "react-native-swipe-list-view": "^2.5.0",
     "react-native-webview": "^8.0.6",
     "realm": "4.0.0-beta.0",
@@ -85,12 +87,12 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "@types/dotenv": "^8.2.0",
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
+    "@types/dotenv": "^8.2.0",
     "@types/react-native": "^0.60.25",
     "@types/react-test-renderer": "16.9.1",
+    "dotenv": "^8.2.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.8.3"

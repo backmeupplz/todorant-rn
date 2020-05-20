@@ -30,6 +30,7 @@ import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
+import { HeroProfile } from '@views/hero/HeroProfile'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -178,6 +179,17 @@ class App extends Component {
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoIntro'),
+                  ...headerBackButtonProps(),
+                }}
+              />
+              <Stack.Screen
+                name="HeroProfile"
+                component={HeroProfile}
+                options={{
+                  title: translate('heroProfileTitle'),
+                  headerTitleAlign: 'center',
+                  ...sharedColors.headerExtraStyle,
+                  headerRight: InfoButton('infoHero'),
                   ...headerBackButtonProps(),
                 }}
               />

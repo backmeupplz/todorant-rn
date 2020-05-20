@@ -7,6 +7,7 @@ import { InfoButton } from '@views/settings/InfoButton'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { CurrentContent } from '@views/current/CurrentContent'
 import { headerBackButtonProps } from '@utils/headerBackButton'
+import { HeroButton } from '@views/settings/HeroButton'
 
 const Stack = createStackNavigator()
 
@@ -23,6 +24,7 @@ export function Current() {
             options={{
               title: translate('current'),
               ...sharedColors.headerExtraStyle,
+              headerLeft: HeroButton(),
               headerRight: InfoButton('infoCurrent'),
               ...headerBackButtonProps(),
             }}
