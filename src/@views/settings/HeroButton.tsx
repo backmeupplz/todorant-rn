@@ -5,6 +5,7 @@ import { Button } from '@components/Button'
 import { navigate } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { ProgressBar } from '@components/ProgressBar'
+const shortNum = require('number-shortener')
 
 export class HeroButtonContent extends Component<{}> {
   animationValue = new Animated.Value(0)
@@ -48,7 +49,7 @@ export class HeroButtonContent extends Component<{}> {
             alignItems: 'center',
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>15</Text>
+          <Text {...sharedColors.textExtraStyle}>{shortNum(1500)}</Text>
           <View
             style={{
               width: '100%',

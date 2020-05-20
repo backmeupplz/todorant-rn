@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { H1, Container, Content, View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import CalendarHeatmap from 'react-native-calendar-heatmap'
 import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
 import { observable } from 'mobx'
@@ -107,6 +106,13 @@ export class HeroProfile extends Component {
                 ...sharedColors.textExtraStyle.style,
               }}
             >
+              {translate(`tasksCompleted`)} {this.points}
+            </Text>
+            <Text
+              style={{
+                ...sharedColors.textExtraStyle.style,
+              }}
+            >
               {translate(`pointsTillNextRank`)} {this.nextRank - this.points}
             </Text>
             <View
@@ -123,21 +129,6 @@ export class HeroProfile extends Component {
                 }
               />
             </View>
-            <H1
-              style={{
-                ...sharedColors.textExtraStyle.style,
-                marginVertical: 20,
-              }}
-            >
-              {translate('activity')}
-            </H1>
-            <CalendarHeatmap
-              endDate={new Date().setDate(new Date().getDate() - 1)}
-              numDays={90}
-              values={this.contributions}
-              gutterSize={1}
-              showMonthLabels={false}
-            />
           </View>
         </Content>
       </Container>

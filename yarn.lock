@@ -5070,6 +5070,11 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+number-shortener@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/number-shortener/-/number-shortener-1.0.1.tgz#df4bc205b7b5170eaabb33775b8b85570959bc55"
+  integrity sha512-I/M1nzsUSyQa1iSefi0aFWceoLcw29Y9DTuawG8cq1pyFZjRyCsJo/+Fpe6XQIWVBKrLklhWGmfbnZMgBEsZgg==
+
 oauth-sign@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
@@ -5699,10 +5704,6 @@ react-native-action-button@^2.8.5:
   integrity sha512-BvGZpzuGeuFR2Y6j93+vKiSqDhsF87VHvNXFs/qEYKfzT4b1ASAT/GQbgS6gNt4jRJCUnJWYrIwlBzRjesZQmQ==
   dependencies:
     prop-types "^15.5.10"
-
-react-native-calendar-heatmap@backmeupplz/react-native-calendar-heatmap#3b1322038eaaca99fee37c836cd86fd4d3a99640:
-  version "0.2.1"
-  resolved "https://codeload.github.com/backmeupplz/react-native-calendar-heatmap/tar.gz/3b1322038eaaca99fee37c836cd86fd4d3a99640"
 
 react-native-calendars@^1.261.0:
   version "1.265.0"
