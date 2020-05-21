@@ -100,7 +100,6 @@ class HeroStore {
     }
     // Modify settings
     hero.updatedAt = hero.updatedAt ? new Date(hero.updatedAt) : undefined
-    console.log(hero)
     // First pull
     if (!this.updatedAt) {
       this.points = hero.points
