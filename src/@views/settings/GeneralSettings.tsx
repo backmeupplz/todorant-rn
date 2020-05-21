@@ -44,10 +44,7 @@ export class GeneralSettings extends Component {
     return (
       <>
         <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-          }}
+          {...sharedColors.listItemExtraStyle}
           onPress={() => {
             const options = [
               { label: translate('languageAuto'), code: 'en' },
@@ -85,10 +82,7 @@ export class GeneralSettings extends Component {
           <Text {...sharedColors.textExtraStyle}>{this.languageLabel}</Text>
         </ListItem>
         <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-          }}
+          {...sharedColors.listItemExtraStyle}
           onPress={() => {
             const options = [
               { label: translate('languageAuto'), mode: ColorMode.auto },
@@ -122,7 +116,7 @@ export class GeneralSettings extends Component {
             onPress={() => {
               navigate('Integrations')
             }}
-            style={{ borderColor: sharedColors.placeholderColor }}
+            {...sharedColors.listItemExtraStyle}
           >
             <Text style={{ flex: 1, color: sharedColors.textColor }}>
               {translate('integrations')}
@@ -134,19 +128,14 @@ export class GeneralSettings extends Component {
             onPress={() => {
               navigate('Security')
             }}
-            style={{ borderColor: sharedColors.placeholderColor }}
+            {...sharedColors.listItemExtraStyle}
           >
             <Text style={{ flex: 1, color: sharedColors.textColor }}>
               {translate('security')}
             </Text>
           </ListItem>
         )}
-        <ListItem
-          style={{
-            borderColor: sharedColors.placeholderColor,
-            justifyContent: 'space-between',
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
             {translate('soundEffects')}
           </Text>
@@ -157,12 +146,7 @@ export class GeneralSettings extends Component {
             }}
           />
         </ListItem>
-        <ListItem
-          style={{
-            borderColor: sharedColors.placeholderColor,
-            justifyContent: 'space-between',
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text style={{ flex: 1, color: sharedColors.textColor }}>
             {translate('gamification')}
           </Text>

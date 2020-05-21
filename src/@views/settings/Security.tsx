@@ -83,16 +83,13 @@ export class Security extends Component {
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
-            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Text {...sharedColors.textExtraStyle}>
                 {translate('infoSecurity')}
               </Text>
             </ListItem>
             <ListItem
-              style={{
-                justifyContent: 'space-between',
-                borderColor: sharedColors.placeholderColor,
-              }}
+              {...sharedColors.listItemExtraStyle}
               onLongPress={() => {
                 if (!sharedSessionStore.encryptionKey) {
                   return
@@ -134,11 +131,7 @@ export class Security extends Component {
             </ListItem>
             {this.encryptionOn && (
               <>
-                <ListItem
-                  style={{
-                    borderColor: sharedColors.placeholderColor,
-                  }}
-                >
+                <ListItem {...sharedColors.listItemExtraStyle}>
                   <Input
                     placeholder={translate('password')}
                     value={this.password}
@@ -159,7 +152,7 @@ export class Security extends Component {
                 </ListItem>
                 {!!this.password &&
                   this.password !== sharedSessionStore.encryptionKey && (
-                    <ListItem>
+                    <ListItem {...sharedColors.listItemExtraStyle}>
                       <Button
                         style={{ flex: 1, justifyContent: 'center' }}
                         onPress={() => {
@@ -196,7 +189,7 @@ export class Security extends Component {
             <ListItem itemHeader>
               <Text {...sharedColors.textExtraStyle}>{translate('count')}</Text>
             </ListItem>
-            <ListItem style={{ justifyContent: 'space-between' }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Text {...sharedColors.textExtraStyle}>
                 {translate('encryptedTodos')}
               </Text>
@@ -208,7 +201,7 @@ export class Security extends Component {
                 }
               </Text>
             </ListItem>
-            <ListItem style={{ justifyContent: 'space-between' }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Text {...sharedColors.textExtraStyle}>
                 {translate('unencryptedTodos')}
               </Text>
@@ -226,11 +219,11 @@ export class Security extends Component {
               </Text>
             </ListItem>
             {this.loading && (
-              <ListItem style={{ justifyContent: 'center' }}>
+              <ListItem {...sharedColors.listItemExtraStyle}>
                 <Spinner />
               </ListItem>
             )}
-            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Button
                 style={{ flex: 1, justifyContent: 'center' }}
                 onPress={() => {
@@ -251,7 +244,7 @@ export class Security extends Component {
                 <Text>{translate('encryptAllButton')}</Text>
               </Button>
             </ListItem>
-            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Button
                 style={{ flex: 1, justifyContent: 'center' }}
                 onPress={() => {

@@ -1,6 +1,7 @@
 import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
+import { StyleProp, ViewStyle } from 'react-native'
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
@@ -50,6 +51,15 @@ export class ColorModeManager {
         color: this.textColor,
       },
     }
+  }
+  @computed get listItemExtraStyle() {
+    return {
+      style: {
+        borderColor: sharedColors.placeholderColor,
+        justifyContent: 'space-between',
+      },
+      underlayColor: 'rgba(0,0,0,0.2)',
+    } as { style: StyleProp<ViewStyle>; underlayColor: string }
   }
   @computed get iconExtraStyle() {
     return {

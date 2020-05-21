@@ -88,7 +88,7 @@ export class Tags extends Component {
             renderItem={({ item }) => {
               return (
                 <ListItem
-                  style={{ justifyContent: 'space-between' }}
+                  {...sharedColors.listItemExtraStyle}
                   onPress={() => this.vm.onTap(item)}
                 >
                   <Text style={{ color: item.color || 'dodgerblue' }}>

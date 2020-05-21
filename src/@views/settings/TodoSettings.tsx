@@ -13,13 +13,7 @@ export class TodoSettings extends Component {
   render() {
     return (
       <>
-        <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-            flex: 1,
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text
             style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
           >
@@ -34,13 +28,7 @@ export class TodoSettings extends Component {
             }}
           />
         </ListItem>
-        <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-            flex: 1,
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text
             style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
           >
@@ -55,13 +43,7 @@ export class TodoSettings extends Component {
             }}
           />
         </ListItem>
-        <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-            flex: 1,
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text
             style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
           >
@@ -76,13 +58,7 @@ export class TodoSettings extends Component {
             }}
           />
         </ListItem>
-        <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-            flex: 1,
-          }}
-        >
+        <ListItem {...sharedColors.listItemExtraStyle}>
           <Text
             style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
           >
@@ -96,10 +72,7 @@ export class TodoSettings extends Component {
           />
         </ListItem>
         <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-          }}
+          {...sharedColors.listItemExtraStyle}
           onPress={() => {
             ActionSheet.show(
               {
@@ -128,10 +101,7 @@ export class TodoSettings extends Component {
           </Text>
         </ListItem>
         <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-          }}
+          {...sharedColors.listItemExtraStyle}
           onPress={() => {
             navigate('Tags')
           }}

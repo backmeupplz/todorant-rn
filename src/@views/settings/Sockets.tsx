@@ -10,7 +10,7 @@ import { sharedColors } from '@utils/sharedColors'
 class Row extends Component<{ title: string; ok: boolean }> {
   render() {
     return (
-      <ListItem style={{ justifyContent: 'space-between' }}>
+      <ListItem {...sharedColors.listItemExtraStyle}>
         <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
         <CheckOrCross ok={this.props.ok} />
       </ListItem>
@@ -34,7 +34,7 @@ export class Sockets extends Component {
               ok={sharedSocketStore.authorized}
             />
             {sharedSocketStore.connectionError && (
-              <ListItem>
+              <ListItem {...sharedColors.listItemExtraStyle}>
                 <Text {...sharedColors.textExtraStyle}>
                   {translate('socketError')}
                 </Text>

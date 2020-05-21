@@ -14,12 +14,13 @@ export class LoginLogoutButtons extends Component {
     return (
       <ListItem
         style={{
-          flexDirection: 'column',
           borderColor: sharedColors.placeholderColor,
+          flexDirection: 'column',
         }}
       >
         {!!sharedSessionStore.user ? (
           <Button
+            style={{ flex: 1 }}
             block
             onPress={() => {
               alertConfirm(translate('logoutText'), translate('logout'), () => {
@@ -32,6 +33,7 @@ export class LoginLogoutButtons extends Component {
         ) : (
           <>
             <Button
+              style={{ flex: 1 }}
               block
               onPress={() => {
                 navigate('Login')

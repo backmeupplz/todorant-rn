@@ -12,10 +12,7 @@ class InfoRow extends Component<{ title: string; value: string }> {
   render() {
     return (
       <ListItem
-        style={{
-          justifyContent: 'space-between',
-          borderColor: sharedColors.placeholderColor,
-        }}
+        {...sharedColors.listItemExtraStyle}
         onPress={() => {
           Clipboard.setString(this.props.value)
           Toast.show({ text: `"${this.props.value}" ${translate('copied')}` })
@@ -32,7 +29,7 @@ class InfoRow extends Component<{ title: string; value: string }> {
 export class AccountInfo extends Component {
   render() {
     return !sharedSessionStore.user ? (
-      <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+      <ListItem {...sharedColors.listItemExtraStyle}>
         <Text {...sharedColors.textExtraStyle}>
           {translate('anonymousText')}
         </Text>

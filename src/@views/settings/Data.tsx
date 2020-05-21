@@ -20,7 +20,7 @@ import * as rest from '@utils/rest'
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
     return (
-      <ListItem>
+      <ListItem {...sharedColors.listItemExtraStyle}>
         <Text style={{ ...sharedColors.textExtraStyle.style, flex: 1 }}>
           {this.props.title}
         </Text>
@@ -108,6 +108,7 @@ export class Data extends Component {
               }`}
             />
             <ListItem
+              {...sharedColors.listItemExtraStyle}
               button
               onPress={() => {
                 sockets.globalSync()
@@ -118,6 +119,7 @@ export class Data extends Component {
               </Text>
             </ListItem>
             <ListItem
+              {...sharedColors.listItemExtraStyle}
               button
               onPress={() => {
                 sockets.hardSync()
@@ -128,6 +130,7 @@ export class Data extends Component {
               </Text>
             </ListItem>
             <ListItem
+              {...sharedColors.listItemExtraStyle}
               button
               onPress={() => {
                 sharedTodoStore.recalculateExactDates()
@@ -138,6 +141,7 @@ export class Data extends Component {
               </Text>
             </ListItem>
             <ListItem
+              {...sharedColors.listItemExtraStyle}
               button
               onPress={async () => {
                 const data = gatherData()

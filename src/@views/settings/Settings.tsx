@@ -145,7 +145,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem
               button
-              style={{ borderColor: sharedColors.placeholderColor }}
+              {...sharedColors.listItemExtraStyle}
               onPress={() => {
                 navigate('Rules')
               }}
@@ -178,10 +178,7 @@ export class SettingsContent extends Component {
                 onPress={() => {
                   navigate('Sockets')
                 }}
-                style={{
-                  justifyContent: 'space-between',
-                  borderColor: sharedColors.placeholderColor,
-                }}
+                {...sharedColors.listItemExtraStyle}
               >
                 <Text {...sharedColors.textExtraStyle}>
                   {translate('socketsInfo')}
@@ -195,7 +192,7 @@ export class SettingsContent extends Component {
                 onPress={() => {
                   navigate('Data')
                 }}
-                style={{ borderColor: sharedColors.placeholderColor }}
+                {...sharedColors.listItemExtraStyle}
               >
                 <Text {...sharedColors.textExtraStyle}>
                   {translate('dataInfo')}
@@ -210,7 +207,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem
               button
-              style={{ borderColor: sharedColors.placeholderColor }}
+              {...sharedColors.listItemExtraStyle}
               onPress={() => {
                 navigate('Intro')
               }}
@@ -221,7 +218,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem
               button
-              style={{ borderColor: sharedColors.placeholderColor }}
+              {...sharedColors.listItemExtraStyle}
               onPress={() => {
                 navigate('Terms')
               }}
@@ -232,7 +229,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem
               button
-              style={{ borderColor: sharedColors.placeholderColor }}
+              {...sharedColors.listItemExtraStyle}
               onPress={() => {
                 navigate('Privacy')
               }}
@@ -243,7 +240,7 @@ export class SettingsContent extends Component {
             </ListItem>
             <ListItem
               button
-              style={{ borderColor: sharedColors.placeholderColor }}
+              {...sharedColors.listItemExtraStyle}
               onPress={() => {
                 alertSupport()
               }}
@@ -252,7 +249,7 @@ export class SettingsContent extends Component {
                 {translate('supportLabel')}
               </Text>
             </ListItem>
-            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Text style={{ color: sharedColors.placeholderColor }}>
                 v{DeviceInfo.getVersion()}.{codePushVersion}
                 {__DEV__ ? '.dev' : ''}
@@ -260,17 +257,12 @@ export class SettingsContent extends Component {
             </ListItem>
             {__DEV__ && (
               <>
-                <ListItem
-                  itemHeader
-                  style={{ borderColor: sharedColors.placeholderColor }}
-                >
+                <ListItem itemHeader>
                   <Text style={{ color: sharedColors.placeholderColor }}>
                     Debug
                   </Text>
                 </ListItem>
-                <ListItem
-                  style={{ borderColor: sharedColors.placeholderColor }}
-                >
+                <ListItem {...sharedColors.listItemExtraStyle}>
                   <Text {...sharedColors.textExtraStyle}>
                     {JSON.stringify(sharedSessionStore.user, undefined, 2)}
                   </Text>

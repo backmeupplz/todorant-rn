@@ -74,10 +74,7 @@ export class Integrations extends Component {
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         <List>
           <ListItem
-            style={{
-              justifyContent: 'space-between',
-              borderColor: sharedColors.placeholderColor,
-            }}
+            {...sharedColors.listItemExtraStyle}
             onPress={() => {
               this.googleCalendarTapped()
             }}

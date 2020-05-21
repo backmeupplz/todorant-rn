@@ -16,10 +16,7 @@ export class SubscriptionSection extends Component {
     return (
       <>
         <ListItem
-          style={{
-            justifyContent: 'space-between',
-            borderColor: sharedColors.placeholderColor,
-          }}
+          {...sharedColors.listItemExtraStyle}
           onPress={() => {
             navigate(
               'Paywall',
@@ -57,7 +54,7 @@ export class SubscriptionSection extends Component {
           (!sharedSessionStore.isSubscriptionActive ||
             sharedSessionStore.user.subscriptionStatus ===
               SubscriptionStatus.trial) && (
-            <ListItem style={{ borderColor: sharedColors.placeholderColor }}>
+            <ListItem {...sharedColors.listItemExtraStyle}>
               <Button
                 danger
                 style={{ flex: 1 }}
