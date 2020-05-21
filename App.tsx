@@ -31,6 +31,7 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
+import { sharedHeroStore } from '@stores/HeroStore'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -188,8 +189,18 @@ class App extends Component {
                 options={{
                   title: translate('heroProfileTitle'),
                   headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton('infoHero'),
+                  headerStyle: {
+                    backgroundColor: sharedHeroStore.rankColor[1],
+                  },
+                  headerTitleStyle: {
+                    color: sharedHeroStore.rankColor[2],
+                  },
+                  headerTintColor: sharedHeroStore.rankColor[2],
+                  headerRight: InfoButton(
+                    'infoHero',
+                    undefined,
+                    sharedHeroStore.rankColor[2]
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />

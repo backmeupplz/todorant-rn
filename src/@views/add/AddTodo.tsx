@@ -26,6 +26,7 @@ import { Button } from '@components/Button'
 import { startConfetti } from '@components/Confetti'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import { sharedHeroStore } from '@stores/HeroStore'
 
 @observer
 class AddTodoContent extends Component<{
@@ -141,6 +142,7 @@ class AddTodoContent extends Component<{
       } else {
         playTaskComplete()
       }
+      sharedHeroStore.incrementPoints()
       realm.write(() => {
         if (!this.breakdownTodo) {
           return
@@ -150,13 +152,13 @@ class AddTodoContent extends Component<{
       })
       titlesToFixOrder.push(breakdownTodoTitle)
       sharedSessionStore.numberOfTodosCompleted++
+      startConfetti()
     }
     // Add tags
     sharedTagStore.addTags(this.vms)
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
-    startConfetti()
     checkDayCompletionRoutine()
   }
 

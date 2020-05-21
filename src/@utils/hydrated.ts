@@ -4,6 +4,7 @@ const hydratedStores = {
   TodoStore: false,
   TagStore: false,
   SettingsStore: false,
+  HeroStore: false,
   SessionStore: false,
 } as { [index: string]: boolean }
 

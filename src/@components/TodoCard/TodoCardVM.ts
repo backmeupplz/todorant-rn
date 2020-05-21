@@ -1,3 +1,4 @@
+import { sharedHeroStore } from '@stores/HeroStore'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
@@ -124,6 +125,7 @@ export class TodoCardVM {
     } else {
       playTaskComplete()
     }
+    sharedHeroStore.incrementPoints()
 
     realm.write(() => {
       todo.completed = true

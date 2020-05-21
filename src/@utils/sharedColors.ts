@@ -1,6 +1,7 @@
 import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
+const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
   @observable mode = initialMode
@@ -14,6 +15,7 @@ export class ColorModeManager {
     eventEmitter.on('currentModeChanged', (newMode) => {
       this.mode = newMode
     })
+    this.generateColorSchemes()
   }
 
   @computed get textColor() {
@@ -70,6 +72,16 @@ export class ColorModeManager {
   }
   @computed get delete() {
     return this.isDark ? 'firebrick' : 'orangered'
+  }
+
+  colorSchemes = [] as string[][]
+
+  generateColorSchemes() {
+    for (let i = 0; i < 360; i += 20) {
+      const scheme = new ColorScheme()
+      scheme.from_hue(i).scheme('mono').variation('soft')
+      this.colorSchemes.push(scheme.colors().map((c: any) => `#${c}`))
+    }
   }
 }
 

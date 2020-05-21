@@ -157,6 +157,22 @@ export class GeneralSettings extends Component {
             }}
           />
         </ListItem>
+        <ListItem
+          style={{
+            borderColor: sharedColors.placeholderColor,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            {translate('gamification')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.gamificationOn}
+            onValueChange={(val) => {
+              sharedSettingsStore.gamificationOn = val
+            }}
+          />
+        </ListItem>
       </>
     )
   }

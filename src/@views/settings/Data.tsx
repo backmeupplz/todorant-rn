@@ -12,6 +12,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Tag } from '@models/Tag'
+import { sharedHeroStore } from '@stores/HeroStore'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -89,6 +90,16 @@ export class Data extends Component {
               subtitle={`${
                 sharedSessionStore.user?.updatedAt
                   ? moment(sharedSessionStore.user.updatedAt).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    )
+                  : translate('notSyncedYet')
+              }`}
+            />
+            <Row
+              title={translate('gamification')}
+              subtitle={`${
+                sharedHeroStore.updatedAt
+                  ? moment(sharedHeroStore.updatedAt).format(
                       'YYYY-MM-DD HH:mm:ss'
                     )
                   : translate('notSyncedYet')

@@ -1,135 +1,167 @@
 import React, { Component } from 'react'
 import { H1, Container, Content, View, Text } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
-import { observable } from 'mobx'
-import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
-import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
-import { getDateString } from '@utils/time'
 import { ProgressBar } from '@components/ProgressBar'
+import { sharedHeroStore, ranks } from '@stores/HeroStore'
+import { ViewStyle } from 'react-native'
+import { computed } from 'mobx'
 
-const ranks = [
-  0,
-  69,
-  100,
-  200,
-  400,
-  420,
-  777,
-  800,
-  1600,
-  3200,
-  6400,
-  12800,
-  25600,
-]
+class Box extends Component<{
+  style?: ViewStyle
+  marginBottomSmall?: boolean
+  marginBottomBig?: boolean
+  colorScheme?: string[]
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          backgroundColor: (this.props.colorScheme ||
+            sharedHeroStore.rankColor)[1],
+          padding: 10,
+          marginHorizontal: 10,
+
+          borderRadius: 10,
+          borderWidth: 0,
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+
+          shadowColor: (this.props.colorScheme || sharedHeroStore.rankColor)[1],
+          shadowOpacity: 0.6,
+          shadowRadius: 5,
+
+          marginBottom: this.props.marginBottomSmall
+            ? 10
+            : this.props.marginBottomBig
+            ? 30
+            : undefined,
+
+          ...this.props.style,
+        }}
+      >
+        {this.props.children}
+      </View>
+    )
+  }
+}
 
 @observer
 export class HeroProfile extends Component {
-  @observable contributions = [] as Array<{ date: string }>
-  @observable points = 10
-
-  componentDidMount() {
-    const hundredDaysAgo = new Date()
-    hundredDaysAgo.setDate(hundredDaysAgo.getDate() - 100)
-    this.contributions = Array.from(
-      realm
-        .objects<Todo>(Todo)
-        .filtered(
-          `deleted = false && completed = true && _exactDate > ${realmTimestampFromDate(
-            hundredDaysAgo
-          )}`
-        )
-    ).map((todo) => ({ date: getDateString(todo._exactDate) }))
-    this.forceUpdate()
-  }
-
-  get rank() {
-    let prevRank = 0
-    for (const rank of ranks) {
-      if (this.points > prevRank && this.points < rank) {
-        return prevRank
-      }
-    }
-    return -1
-  }
-
-  get nextRank() {
-    let prevRank = 0
-    for (const rank of ranks) {
-      if (this.points > prevRank && this.points < rank) {
-        return rank
-      }
-    }
-    return -1
+  @computed get previousRanks() {
+    return ranks.filter((r) => r < sharedHeroStore.rank)
   }
 
   render() {
     return (
       <Container>
         <Content
-          style={{ backgroundColor: sharedColors.backgroundColor, padding: 12 }}
+          style={{
+            backgroundColor: sharedHeroStore.rankColor[3],
+            flex: 1,
+            paddingTop: 10,
+          }}
+          contentContainerStyle={{
+            alignItems: 'center',
+          }}
         >
-          <View
-            style={{
-              alignItems: 'center',
-              flex: 1,
-            }}
-          >
-            <H1
-              style={{
-                ...sharedColors.textExtraStyle.style,
-                marginBottom: 20,
-              }}
-            >
+          <Box marginBottomSmall>
+            <Text style={{ color: sharedHeroStore.rankColor[2] }}>
               {translate('rank')}
+            </Text>
+          </Box>
+          <Box marginBottomSmall>
+            <H1 style={{ color: sharedHeroStore.rankColor[2] }}>
+              {translate(`rank${sharedHeroStore.rank}Title`)}
             </H1>
-            <Text
-              style={{
-                ...sharedColors.textExtraStyle.style,
-              }}
-            >
-              {translate(`rank${this.rank}Title`)}
+          </Box>
+          <Box marginBottomBig>
+            <Text style={{ color: sharedHeroStore.rankColor[2] }}>
+              {translate(`rank${sharedHeroStore.rank}Description`)}
             </Text>
-            <Text
-              style={{
-                ...sharedColors.textExtraStyle.style,
-                marginBottom: 20,
-              }}
-            >
-              {translate(`rank${this.rank}Description`)}
+          </Box>
+          <Box marginBottomSmall>
+            <H1 style={{ color: sharedHeroStore.rankColor[2] }}>
+              🏅 {sharedHeroStore.points} 🏅
+            </H1>
+          </Box>
+          <Box marginBottomBig>
+            <Text style={{ color: sharedHeroStore.rankColor[2] }}>
+              {translate(`tasksCompleted`)}
             </Text>
-            <Text
-              style={{
-                ...sharedColors.textExtraStyle.style,
-              }}
-            >
-              {translate(`tasksCompleted`)} {this.points}
+          </Box>
+          <Box marginBottomSmall>
+            <Text style={{ color: sharedHeroStore.rankColor[2] }}>
+              {translate(`pointsTillNextRank`)}{' '}
+              {sharedHeroStore.nextRank - sharedHeroStore.points}
             </Text>
-            <Text
-              style={{
-                ...sharedColors.textExtraStyle.style,
-              }}
-            >
-              {translate(`pointsTillNextRank`)} {this.nextRank - this.points}
-            </Text>
-            <View
-              style={{
-                flex: 1,
-                width: '100%',
-                height: 10,
-                marginTop: 20,
-              }}
-            >
-              <ProgressBar
-                progress={
-                  (this.points - this.rank) / (this.nextRank - this.rank)
-                }
-              />
-            </View>
-          </View>
+          </Box>
+          <Box
+            style={{
+              flex: 1,
+              width: '90%',
+              height: 10,
+              paddingVertical: 10,
+              paddingLeft: 22,
+            }}
+            marginBottomBig
+          >
+            <ProgressBar
+              progress={sharedHeroStore.progress}
+              color={sharedHeroStore.rankColor[2]}
+              trackColor={sharedHeroStore.rankColor[3]}
+            />
+          </Box>
+          {!!this.previousRanks.length && (
+            <>
+              <Box marginBottomSmall>
+                <Text style={{ color: sharedHeroStore.rankColor[2] }}>
+                  {translate(`achievements`)}
+                </Text>
+              </Box>
+              <View style={{ marginBottom: 20, width: '100%' }}>
+                {this.previousRanks
+                  .map((r, i) => (
+                    <View
+                      style={{
+                        width: '100%',
+                        backgroundColor: sharedHeroStore.colorForRank(i)[3],
+                        paddingVertical: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        key={i}
+                        colorScheme={sharedHeroStore.colorForRank(i)}
+                      >
+                        <Text
+                          style={{
+                            color: sharedHeroStore.colorForRank(i)[2],
+                            textAlign: 'center',
+                          }}
+                        >
+                          {r}
+                        </Text>
+                        <H1
+                          style={{
+                            color: sharedHeroStore.colorForRank(i)[2],
+                            textAlign: 'center',
+                          }}
+                        >
+                          {translate(`rank${r}Title`)}
+                        </H1>
+                        <Text
+                          style={{ color: sharedHeroStore.colorForRank(i)[2] }}
+                        >
+                          {translate(`rank${r}Description`)}
+                        </Text>
+                      </Box>
+                    </View>
+                  ))
+                  .reverse()}
+              </View>
+            </>
+          )}
         </Content>
       </Container>
     )

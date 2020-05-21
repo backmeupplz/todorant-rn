@@ -9,6 +9,7 @@ import { Button } from '@components/Button'
 export class InfoButtonContent extends Component<{
   message: string
   extraButtons?: AlertButton[]
+  tintColor?: string
 }> {
   animationValue = new Animated.Value(0)
 
@@ -67,7 +68,8 @@ export class InfoButtonContent extends Component<{
             name="info-outline"
             style={{
               fontSize: 28,
-              ...sharedColors.textExtraStyle.style,
+              color:
+                this.props.tintColor || sharedColors.textExtraStyle.style.color,
             }}
           />
         </Button>
@@ -78,5 +80,12 @@ export class InfoButtonContent extends Component<{
 
 export const InfoButton = (
   message: string,
-  extraButtons?: AlertButton[]
-) => () => <InfoButtonContent message={message} extraButtons={extraButtons} />
+  extraButtons?: AlertButton[],
+  tintColor?: string
+) => () => (
+  <InfoButtonContent
+    message={message}
+    extraButtons={extraButtons}
+    tintColor={tintColor}
+  />
+)

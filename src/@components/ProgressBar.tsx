@@ -4,12 +4,18 @@ import { Platform, ProgressViewIOS, ProgressBarAndroid } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 
 @observer
-export class ProgressBar extends Component<{ progress: number }> {
+export class ProgressBar extends Component<{
+  progress: number
+  color?: string
+  trackColor?: string
+}> {
   render() {
     return Platform.OS === 'ios' ? (
       <ProgressViewIOS
         progress={this.props.progress}
         style={{ flex: 1, marginEnd: 12 }}
+        progressTintColor={this.props.color || sharedColors.primaryColor}
+        trackTintColor={this.props.trackColor}
       />
     ) : (
       <ProgressBarAndroid
@@ -17,7 +23,7 @@ export class ProgressBar extends Component<{ progress: number }> {
         indeterminate={false}
         progress={this.props.progress}
         style={{ flex: 1, marginEnd: 12 }}
-        color={sharedColors.primaryColor}
+        color={this.props.color || sharedColors.primaryColor}
       />
     )
   }

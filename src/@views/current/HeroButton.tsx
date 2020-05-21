@@ -5,8 +5,12 @@ import { Button } from '@components/Button'
 import { navigate } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { ProgressBar } from '@components/ProgressBar'
+import { sharedHeroStore } from '@stores/HeroStore'
+import { observer } from 'mobx-react'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 const shortNum = require('number-shortener')
 
+@observer
 export class HeroButtonContent extends Component<{}> {
   animationValue = new Animated.Value(0)
 
@@ -26,7 +30,7 @@ export class HeroButtonContent extends Component<{}> {
       outputRange: ['0deg', '45deg'],
     })
 
-    return (
+    return sharedSettingsStore.gamificationOn ? (
       <Animated.View
         style={{
           transform: [{ rotate: spin }],
@@ -49,7 +53,9 @@ export class HeroButtonContent extends Component<{}> {
             alignItems: 'center',
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>{shortNum(1500)}</Text>
+          <Text {...sharedColors.textExtraStyle}>
+            {shortNum(sharedHeroStore.points)}
+          </Text>
           <View
             style={{
               width: '100%',
@@ -61,11 +67,17 @@ export class HeroButtonContent extends Component<{}> {
               paddingLeft: 12,
             }}
           >
-            <ProgressBar progress={0.5} />
+            <ProgressBar
+              progress={sharedHeroStore.progress}
+              color={sharedHeroStore.rankColor[sharedColors.isDark ? 2 : 3]}
+              trackColor={
+                sharedHeroStore.rankColor[sharedColors.isDark ? 3 : 2]
+              }
+            />
           </View>
         </Button>
       </Animated.View>
-    )
+    ) : null
   }
 }
 

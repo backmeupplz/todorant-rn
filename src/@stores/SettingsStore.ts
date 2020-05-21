@@ -41,6 +41,7 @@ class SettingsStore {
   @persist @observable askBeforeDelete = true
 
   @persist @observable soundOn = true
+  @persist @observable gamificationOn = true
 
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined

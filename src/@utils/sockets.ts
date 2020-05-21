@@ -1,3 +1,5 @@
+import { sharedHeroStore } from '@stores/HeroStore'
+import { Hero } from '@models/Hero'
 import { sharedTagStore } from '@stores/TagStore'
 import { Tag } from '@models/Tag'
 import { Settings } from '@models/Settings'
@@ -117,6 +119,7 @@ class SocketManager {
   todoSyncManager: SyncManager<Todo[]>
   tagsSyncManager: SyncManager<Tag[]>
   settingsSyncManager: SyncManager<Settings>
+  heroSyncManager: SyncManager<Hero>
   userSyncManager: SyncManager<User>
 
   constructor() {
@@ -173,6 +176,14 @@ class SocketManager {
       () => sharedSessionStore.user?.updatedAt,
       (objects, pushBack) => {
         return sharedSessionStore.onObjectsFromServer(objects, pushBack)
+      }
+    )
+    this.heroSyncManager = new SyncManager<Hero>(
+      'hero',
+      this.pendingPushes,
+      () => sharedHeroStore.updatedAt,
+      (objects, pushBack) => {
+        return sharedHeroStore.onObjectsFromServer(objects, pushBack)
       }
     )
   }
@@ -242,6 +253,7 @@ class SocketManager {
     this.tagsSyncManager.sync()
     this.settingsSyncManager.sync()
     this.userSyncManager.sync()
+    this.heroSyncManager.sync()
   }
 }
 

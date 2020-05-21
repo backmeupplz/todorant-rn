@@ -7,7 +7,7 @@ import { InfoButton } from '@views/settings/InfoButton'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { CurrentContent } from '@views/current/CurrentContent'
 import { headerBackButtonProps } from '@utils/headerBackButton'
-import { HeroButton } from '@views/settings/HeroButton'
+import { HeroButton } from '@views/current/HeroButton'
 
 const Stack = createStackNavigator()
 
