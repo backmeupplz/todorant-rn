@@ -24,7 +24,9 @@ export function Current() {
             options={{
               title: translate('current'),
               ...sharedColors.headerExtraStyle,
-              headerLeft: HeroButton(),
+              headerLeft: sharedSettingsStore.gamificationOn
+                ? HeroButton()
+                : undefined,
               headerRight: InfoButton('infoCurrent'),
               ...headerBackButtonProps(),
             }}

@@ -7,7 +7,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { ProgressBar } from '@components/ProgressBar'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { observer } from 'mobx-react'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 const shortNum = require('number-shortener')
 
 @observer
@@ -30,7 +29,7 @@ export class HeroButtonContent extends Component<{}> {
       outputRange: ['0deg', '45deg'],
     })
 
-    return sharedSettingsStore.gamificationOn ? (
+    return (
       <Animated.View
         style={{
           transform: [{ rotate: spin }],
@@ -77,7 +76,7 @@ export class HeroButtonContent extends Component<{}> {
           </View>
         </Button>
       </Animated.View>
-    ) : null
+    )
   }
 }
 

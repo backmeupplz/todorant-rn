@@ -57,10 +57,16 @@ export class DayCompleteOverlay extends Component {
         }}
         pointerEvents="none"
       >
-        <Text style={{ color: 'rgba(153, 126, 40, 1)', fontSize: 40 }}>
+        <Text
+          style={{
+            color: 'rgba(153, 126, 40, 1)',
+            fontSize: 40,
+            textAlign: 'center',
+          }}
+        >
           {translate('missionPassed')}
         </Text>
-        <Text style={{ color: 'white', fontSize: 40 }}>
+        <Text style={{ color: 'white', fontSize: 40, textAlign: 'center' }}>
           {translate('respect')}
         </Text>
       </Animated.View>
