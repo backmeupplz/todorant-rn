@@ -255,5 +255,6 @@
   "rank9000Description": "You lift the tasks like they are nothing!",
   "rank12800Title": "Doctor Manhattan ⚛",
   "rank12800Description": "You breakdown the tasks like you split the atoms. Keep up the good work!",
-  "achievements": "Achievements"
+  "achievements": "Achievements",
+  "sendDataToServer": "Send data to server"
 }

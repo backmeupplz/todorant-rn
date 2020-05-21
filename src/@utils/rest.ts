@@ -95,6 +95,18 @@ export function sendFeedback(state: object) {
   )
 }
 
+export function sendData(data: any) {
+  return axios.post<void>(
+    `${base}/data`,
+    { data },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
+}
+
 export function calendarAuthenticationURL() {
   return axios.get<string>(`${base}/google/calendarAuthenticationURL`, {
     headers: {

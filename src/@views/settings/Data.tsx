@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, List, ListItem, Text } from 'native-base'
+import { Container, Content, List, ListItem, Text, Toast } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedTagStore } from '@stores/TagStore'
@@ -13,6 +13,8 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Tag } from '@models/Tag'
 import { sharedHeroStore } from '@stores/HeroStore'
+import { gatherData } from '@utils/gatherData'
+import * as rest from '@utils/rest'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -133,6 +135,20 @@ export class Data extends Component {
             >
               <Text {...sharedColors.textExtraStyle}>
                 {translate('syncExactDates')}
+              </Text>
+            </ListItem>
+            <ListItem
+              button
+              onPress={async () => {
+                const data = gatherData()
+                await rest.sendData(data)
+                Toast.show({
+                  text: '👍',
+                })
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>
+                {translate('sendDataToServer')}
               </Text>
             </ListItem>
           </List>
