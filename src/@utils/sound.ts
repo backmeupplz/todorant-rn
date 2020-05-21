@@ -2,6 +2,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import Sound from 'react-native-sound'
 
 Sound.setMode('Default')
+Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
