@@ -8,6 +8,9 @@ import { Linking, Clipboard } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
+import { CardType } from '@components/TodoCard/CardType'
+import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { navigate } from '@utils/navigation'
 
 const debug = false
 
@@ -15,6 +18,7 @@ const debug = false
 export class TodoCardTextBlock extends Component<{
   todo: Todo
   isOld: boolean
+  type: CardType
   drag?: () => void
 }> {
   get linkifiedText() {
@@ -26,10 +30,14 @@ export class TodoCardTextBlock extends Component<{
       <Text
         onLongPress={this.props.drag}
         onPress={() => {
-          Clipboard.setString(this.props.todo.text)
-          Toast.show({
-            text: `"${this.props.todo.text}" ${translate('copied')}`,
-          })
+          if (this.props.type === CardType.breakdown) {
+            Clipboard.setString(this.props.todo.text)
+            Toast.show({
+              text: `"${this.props.todo.text}" ${translate('copied')}`,
+            })
+          } else {
+            navigate('EditTodo', { editedTodo: this.props.todo })
+          }
         }}
         style={{ flex: 1 }}
       >

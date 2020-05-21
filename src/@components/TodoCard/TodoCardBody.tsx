@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { CardItem, Body, View, Icon } from 'native-base'
+import { CardItem, Body, View } from 'native-base'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { CardType } from '@components/TodoCard/CardType'
 import { Todo } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
-import { Clipboard } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const showDebugInfo = false
 
@@ -47,6 +45,7 @@ export class TodoCardBody extends Component<{
                 todo={this.props.todo}
                 isOld={isOld}
                 drag={this.props.drag}
+                type={this.props.type}
               />
             </View>
           </View>
