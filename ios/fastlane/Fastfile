@@ -20,6 +20,16 @@ platform :ios do
     )
   end
 
+  lane :upload_screenshots do
+    upload_to_app_store(
+      submit_for_review: false,
+      skip_screenshots: false,
+      automatic_release: false,
+      skip_metadata: true,
+      skip_binary_upload: true
+    )
+  end
+
   lane :release do
     increment_version_number
     increment_build_number
