@@ -26,6 +26,11 @@ fastlane ios commit_and_push_ios_release
 fastlane ios release
 ```
 
+### ios releasenoscreenshots
+```
+fastlane ios releasenoscreenshots
+```
+
 
 ----
 
