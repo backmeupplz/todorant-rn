@@ -1,0 +1,29 @@
+{
+  "default": {
+    "background": "./background.png",
+    "keyword": {
+      "font": "../../fonts/Roboto/Roboto-Regular.ttf",
+      "color": "#ffffff"
+    },
+    "title": {
+      "font": "../../fonts/Roboto/Roboto-Regular.ttf",
+      "color": "#ffffff"
+    },
+    "show_complete_frame": false,
+    "use_platform": "ANDROID",
+    "force_device_type": "Google Pixel 3",
+    "stack_title": true,
+    "padding": 50
+  },
+  "data": [
+    {
+      "filter": "Empty"
+    },
+    {
+      "filter": "Current"
+    },
+    {
+      "filter": "Planning"
+    }
+  ]
+}

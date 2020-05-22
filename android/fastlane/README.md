@@ -31,6 +31,16 @@ fastlane android take_screenshots
 fastlane android copy_es_screenshots
 ```
 
+### android remove_unframed_screenshots
+```
+fastlane android remove_unframed_screenshots
+```
+
+### android frame
+```
+fastlane android frame
+```
+
 ### android upload_screenshots
 ```
 fastlane android upload_screenshots

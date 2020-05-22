@@ -20,13 +20,23 @@ platform :android do
   end
 
   lane :copy_es_screenshots do
-    sh("rm", "-rf", "./metadata/android/es-US/images")
+    sh("rm", "-rf", "./metadata/android/es-US/images/phoneScreenshots/*.png")
     sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-US")
-    sh("rm", "-rf", "./metadata/android/es-ES/images")
+    sh("rm", "-rf", "./metadata/android/es-ES/images/phoneScreenshots/*.png")
     sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-ES")
-    sh("rm", "-rf", "./metadata/android/es-419/images")
+    sh("rm", "-rf", "./metadata/android/es-419/images/phoneScreenshots/*.png")
     sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-419")
     sh("rm", "-rf", "./metadata/android/es")
+  end
+
+  lane :remove_unframed_screenshots do
+    sh "find ./metadata/android/*/images/phoneScreenshots/ -type f ! -name '*_framed.png' ! -name '*.strings' -delete"
+  end
+
+  lane :frame do
+    frameit(
+      path: './fastlane/metadata/android'
+    )
   end
 
   lane :upload_screenshots do
@@ -43,6 +53,8 @@ platform :android do
     build_for_screengrab
     take_screenshots
     copy_es_screenshots
+    frame
+    remove_unframed_screenshots
     upload_screenshots
   end
 
