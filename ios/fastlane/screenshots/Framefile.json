@@ -1,0 +1,22 @@
+{
+  "default": {
+    "background": "./background.png",
+    "keyword": {
+      "font": "../fonts/SanFrancisco/SanFranciscoDisplay-Regular.otf",
+      "color": "#ffffff"
+    },
+    "title": {
+      "font": "../fonts/SanFrancisco/SanFranciscoDisplay-Thin.otf",
+      "color": "#ffffff"
+    },
+    "show_complete_frame": false,
+    "stack_title": true,
+    "padding": 50
+  },
+  "data": [
+    {
+      "filter": "iPad Pro (10.5-inch)",
+      "force_device_type": "iPad Pro"
+    }
+  ]
+}

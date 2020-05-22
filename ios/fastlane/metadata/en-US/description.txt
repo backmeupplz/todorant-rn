@@ -1,10 +1,18 @@
-I'll get straight to the point: to do lists are lame. But this app fixes them. How?
+Productivity systems fail. Todorant doesn't. Carefully crafted set of limitations and praise teaches the primitive part of the brain to crave productivity like we crave sugar. While other apps focus on storing, organizing and automating endless lists of to-dos, Todorant focuses on what matters: completing tasks.
 
-By doing less. Todorant offers methodology, not another useless list where you put all the tasks and forget about them. Todorant tricks your brain into doing stuff.
+— No more "projects": this concept never works in the long term (we all have "sport", "self-improvement", "someday maybe" lists that we never open)
+— No more dangling to-dos: every task has a date or a month assigned to it
+— Focus on what matters: you only see and work on one task at a time after you finish planning
+— Benefit from willpower depletion: mark unpleasant tasks as "frogs" and Todorant will make you do them in the morning when you are most likely to complete them
+— Be aware: you always know what to do now and when every task will be completed
+— Remember *everything*: no more thinking "Did I forget that thing that my spouse told me to do?", "Should I do taxes now or wait until later?", "What's that thing I had to do for work?"
+— Learn to be productive: Todorant gives you the list of rules and constantly reminds you about them
 
-Tired of task managers never working for you? Try Todorant. It helped me to finally complete 7 projects in 2019. It can help you too. No strings attached, try for free for the first 30 days. You live will change — mine did.
+Why does it work?
 
-Ready to boost your productivity? Download today.
+I've read and tried over 20 books and productivity methodologies. I'm sure you tried a few yourselves. Unfortunately, they never helped me: they were either lacking features or were too overcomplicated. So I combined them all and simplified the result. I took away everything that doesn't help or hurts productivity and left what helps.
 
-Privacy policy: https://todorant.com/privacy
-Terms of use: https://todorant.com/terms
+The reason Todorant works is that it does not overwhelm your "smart" brain, appeals to your "primitive" brain and never gives you anxiety about undone tasks. Try it today, don't delay the positive change in your life!
+
+Privacy policy: todorant.com/privacy
+Terms of use: todorant.com/terms
