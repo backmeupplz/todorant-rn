@@ -4,9 +4,9 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { dayCompleteOverlayRef } from '@components/DayCompleteOverlay'
 import { playDayComplete } from '@utils/sound'
 
-export function checkDayCompletionRoutine() {
+export function shouldShowDayCompletionRoutine() {
   if (!sharedSettingsStore.soundOn) {
-    return
+    return false
   }
   const today = new Date()
   const todayTodos = sharedTodoStore.todosForDate(getDateString(today))
@@ -17,6 +17,14 @@ export function checkDayCompletionRoutine() {
   }
 
   if (!!progress.count && progress.count === progress.completed) {
+    return true
+  }
+
+  return false
+}
+
+export function checkDayCompletionRoutine() {
+  if (shouldShowDayCompletionRoutine()) {
     startDayCompleteRoutine()
   }
 }

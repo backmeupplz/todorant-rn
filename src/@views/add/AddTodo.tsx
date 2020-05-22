@@ -25,7 +25,10 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
 import { startConfetti } from '@components/Confetti'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
-import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import {
+  checkDayCompletionRoutine,
+  shouldShowDayCompletionRoutine,
+} from '@utils/dayCompleteRoutine'
 import { sharedHeroStore } from '@stores/HeroStore'
 
 @observer
@@ -41,6 +44,8 @@ class AddTodoContent extends Component<{
   @observable isBreakdown = false
 
   saveTodo() {
+    const dayCompletinRoutineDoneInitially = shouldShowDayCompletionRoutine()
+
     const titlesToFixOrder = [] as string[]
     const addTodosOnTop = [] as Todo[]
     const addTodosToBottom = [] as Todo[]
@@ -159,7 +164,9 @@ class AddTodoContent extends Component<{
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
-    checkDayCompletionRoutine()
+    if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
+      checkDayCompletionRoutine()
+    }
   }
 
   @computed get isValid() {
