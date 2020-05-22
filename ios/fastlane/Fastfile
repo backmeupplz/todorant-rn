@@ -26,7 +26,8 @@ platform :ios do
       skip_screenshots: false,
       automatic_release: false,
       skip_metadata: true,
-      skip_binary_upload: true
+      skip_binary_upload: true,
+      app_version: "1.0.40"
     )
   end
 
