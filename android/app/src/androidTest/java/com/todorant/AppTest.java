@@ -34,145 +34,60 @@ public class AppTest {
 
         try { Thread.sleep(25000); } catch (InterruptedException e) {}
 
-        Screengrab.screenshot("0Empty");
+        String settings = "Settings";
+        String current = "Current";
+        String planning = "Planning";
+        String addTodoButton = "add_en";   
+
         if (LocaleUtil.getTestLocale().getLanguage().equals("ru")) {
-            onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_ru"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Текущее, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Планирование, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Планирование, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
+            settings = "Настройки";
+            current = "Текущее";
+            planning = "Планирование";
+            addTodoButton = "add_ru";
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("uk")) {
-            onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_uk"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Поточне, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Планування, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Планування, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
+            settings = "Налаштування";
+            current = "Поточне";
+            planning = "Планування";
+            addTodoButton = "add_uk";
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("it")) {
-            onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_it"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
+            settings = "Impostazioni";
+            current = "Corrente";
+            planning = "Pianificazione";
+            addTodoButton = "add_it";
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("es")) {
-            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_es"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
+            settings = "Ajustes";
+            current = "Actual";
+            planning = "Planeación";
+            addTodoButton = "add_es";
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("pt")) {
-            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_pt_br"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
-        } else {
-            onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(withTagValue(is("add_en"))).perform(click());
-            try { Thread.sleep(8000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Current, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("1Current");
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planning, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(3000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("2Planning");
-            onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            // Dark mode
-            onView(withTagValue(is("turn_dark_on"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Planning, tab, 2 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("3Dark");
+            settings = "Configurações";
+            current = "Atual";
+            planning = "Planejamento";
+            addTodoButton = "add_pt_br";
         }
+
+        // Empty current
+        Screengrab.screenshot("0Empty");
+        // Add todos
+        onView(allOf(withContentDescription(String.format("%s, tab, 3 of 3", settings)), isDisplayed())).perform(click());
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        onView(withTagValue(is(addTodoButton))).perform(click());
+        try { Thread.sleep(8000); } catch (InterruptedException e) {}
+        // Filled planning
+        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 3", planning)), isDisplayed())).perform(click());
+        try { Thread.sleep(3000); } catch (InterruptedException e) {}
+        Screengrab.screenshot("2Planning");
+        // Filled current
+        onView(allOf(withContentDescription(String.format("%s, tab, 1 of 3", current)), isDisplayed())).perform(click());
+        try { Thread.sleep(3000); } catch (InterruptedException e) {}
+        Screengrab.screenshot("1Current");
+        // Dark mode
+        onView(allOf(withContentDescription(String.format("%s, tab, 3 of 3", settings)), isDisplayed())).perform(click());
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        onView(withTagValue(is("turn_dark_on"))).perform(click());
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 3", planning)), isDisplayed())).perform(click());
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        Screengrab.screenshot("3Dark");
     }
 }

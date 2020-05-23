@@ -6,7 +6,7 @@
       "color": "#ffffff"
     },
     "title": {
-      "font": "../../fonts/Roboto/Roboto-Regular.ttf",
+      "font": "../../fonts/Roboto/Roboto-Thin.ttf",
       "color": "#ffffff"
     },
     "show_complete_frame": false,

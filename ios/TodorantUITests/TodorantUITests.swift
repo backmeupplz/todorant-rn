@@ -21,117 +21,63 @@ class TodorantUITests: XCTestCase {
   
     func testScreenshots() {
     let app = XCUIApplication()
+
+    var settings = "Settings"
+    var current = "Current"
+    var planning = "Planning"
+    var addTodosButton = "add_en"
+
+    if deviceLanguage == "ru" {
+      settings = "Настройки"
+      current = "Текущее"
+      planning = "Планирование"
+      addTodosButton = "add_ru"
+    } else if deviceLanguage == "uk" {
+      settings = "Налаштування"
+      current = "Поточне"
+      planning = "Планування"
+      addTodosButton = "add_uk"
+    } else if deviceLanguage == "it" {
+      settings = "Impostazioni"
+      current = "Corrente"
+      planning = "Pianificazione"
+      addTodosButton = "add_it"
+    } else if deviceLanguage.contains("es") {
+      settings = "Ajustes"
+      current = "Actual"
+      planning = "Planeación"
+      addTodosButton = "add_es"
+    } else if deviceLanguage.contains("pt") {
+      settings = "Configurações"
+      current = "Atual"
+      planning = "Planejamento"
+      addTodosButton = "add_pt_br"
+    }
       
     sleep(20)
-    
-    if deviceLanguage == "ru" {
-      app.buttons["Настройки, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_ru"].tap()
-      sleep(8)
-      app.buttons["Текущее, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Планирование, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Настройки, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Текущее, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    } else if deviceLanguage == "uk" {
-      app.buttons["Налаштування, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_uk"].tap()
-      sleep(8)
-      app.buttons["Поточне, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Планування, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Налаштування, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Поточне, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    } else if deviceLanguage == "it" {
-      app.buttons["Impostazioni, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_it"].tap()
-      sleep(8)
-      app.buttons["Corrente, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Pianificazione, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Impostazioni, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Corrente, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    } else if deviceLanguage.contains("es") {
-      app.buttons["Ajustes, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_es"].tap()
-      sleep(8)
-      app.buttons["Actual, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Planeación, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Ajustes, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Actual, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    } else if deviceLanguage.contains("pt") {
-      app.buttons["Configurações, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_pt_br"].tap()
-      sleep(8)
-      app.buttons["Atual, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Planejamento, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Configurações, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Atual, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    } else {
-      app.buttons["Settings, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(2)
-      app.otherElements["add_en"].tap()
-      sleep(8)
-      app.buttons["Current, tab, 1 of 3"].tap()
-      snapshot("1Current")
-      app.buttons["Planning, tab, 2 of 3"].tap()
-      snapshot("2Planning")
-      sleep(2)
-      app.buttons["Settings, tab, 3 of 3"].tap()
-      sleep(2)
-      app.otherElements["delete"].tap()
-      sleep(4)
-      app.buttons["Current, tab, 1 of 3"].tap()
-      snapshot("0Empty")
-    }
+
+    // Empty current
+    snapshot("0Empty")
+    // Add todos
+    app.buttons["\(settings), tab, 3 of 3"].tap()
+    sleep(2)
+    app.otherElements["\(addTodosButton)"].tap()
+    sleep(8)
+    // Filled current
+    app.buttons["\(current), tab, 1 of 3"].tap()
+    sleep(2)
+    snapshot("1Current")
+    // Filled planning
+    app.buttons["\(planning), tab, 2 of 3"].tap()
+    sleep(2)
+    snapshot("2Planning")
+    // Dark mode
+    app.buttons["\(settings), tab, 3 of 3"].tap()
+    sleep(2)
+    app.otherElements["turn_dark_on"].tap()
+    sleep(2)
+    app.buttons["\(current), tab, 1 of 3"].tap()
+    sleep(2)
+    snapshot("3Dark")
   }
 }
