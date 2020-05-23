@@ -5,7 +5,9 @@ import { alertSupport } from '@utils/alert'
 import { translate } from '@utils/i18n'
 import { Animated, Easing, Alert, AlertButton } from 'react-native'
 import { Button } from '@components/Button'
+import { observer } from 'mobx-react'
 
+@observer
 export class InfoButtonContent extends Component<{
   message: string
   extraButtons?: AlertButton[]

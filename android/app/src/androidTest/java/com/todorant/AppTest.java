@@ -34,6 +34,7 @@ public class AppTest {
 
         try { Thread.sleep(25000); } catch (InterruptedException e) {}
 
+        Screengrab.screenshot("0Empty");
         if (LocaleUtil.getTestLocale().getLanguage().equals("ru")) {
             onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -58,12 +59,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Текущее, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("uk")) {
             onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -88,12 +83,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Поточне, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("it")) {
             onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -118,12 +107,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("es")) {
             onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -148,12 +131,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("pt")) {
             onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -178,12 +155,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         } else {
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -208,12 +179,6 @@ public class AppTest {
             Screengrab.screenshot("3Dark");
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
-
-            onView(withTagValue(is("delete"))).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            onView(allOf(withContentDescription("Current, tab, 1 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            Screengrab.screenshot("0Empty");
         }
     }
 }
