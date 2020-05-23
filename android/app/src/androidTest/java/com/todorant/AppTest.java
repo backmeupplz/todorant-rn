@@ -57,8 +57,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Планирование, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("uk")) {
             onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -81,8 +79,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Планування, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         } else if (LocaleUtil.getTestLocale().getLanguage().equals("it")) {
             onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -105,8 +101,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("es")) {
             onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -129,8 +123,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         } else if (LocaleUtil.getTestLocale().getLanguage().contains("pt")) {
             onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -153,8 +145,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         } else {
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
@@ -177,8 +167,6 @@ public class AppTest {
             onView(allOf(withContentDescription("Planning, tab, 2 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("3Dark");
-            onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
         }
     }
 }
