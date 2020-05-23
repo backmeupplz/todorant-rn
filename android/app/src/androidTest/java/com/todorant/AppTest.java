@@ -43,6 +43,7 @@ public class AppTest {
             onView(withTagValue(is("add_ru"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Текущее, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Планирование, tab, 2 of 3"), isDisplayed())).perform(click());
@@ -65,6 +66,7 @@ public class AppTest {
             onView(withTagValue(is("add_uk"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Поточне, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Планування, tab, 2 of 3"), isDisplayed())).perform(click());
@@ -87,6 +89,7 @@ public class AppTest {
             onView(withTagValue(is("add_it"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(3000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
@@ -109,6 +112,7 @@ public class AppTest {
             onView(withTagValue(is("add_es"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(3000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
@@ -131,6 +135,7 @@ public class AppTest {
             onView(withTagValue(is("add_pt_br"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(3000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
@@ -153,6 +158,7 @@ public class AppTest {
             onView(withTagValue(is("add_en"))).perform(click());
             try { Thread.sleep(8000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Current, tab, 1 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
             Screengrab.screenshot("1Current");
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Planning, tab, 2 of 3"), isDisplayed())).perform(click());
