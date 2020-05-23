@@ -19,15 +19,6 @@ import { Paywall } from '@views/settings/Paywall'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import {
-  deleteAllTodos,
-  addTodosEn,
-  addTodosRu,
-  addTodosUk,
-  addTodosIt,
-  addTodosEs,
-  addTodosPtBR,
-} from '@utils/debug'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
 import { InfoButton } from '@views/settings/InfoButton'
@@ -39,11 +30,11 @@ import {
 } from '@views/settings/ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { alertSupport } from '@utils/alert'
-import { Button } from '@components/Button'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { LoginQR } from '@views/settings/Login/LoginQR'
-import { Security } from './Security'
+import { Security } from '@views/settings/Security'
+import { DebugButtons } from '@views/settings/DebugButtons'
 
 const Stack = createStackNavigator()
 
@@ -56,88 +47,7 @@ export class SettingsContent extends Component {
       <Container>
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           <List>
-            {__DEV__ && (
-              <>
-                <Button
-                  onPress={() => {
-                    deleteAllTodos()
-                  }}
-                  accessible
-                  accessibilityLabel="delete"
-                  testID="delete"
-                >
-                  <Text {...sharedColors.textExtraStyle}>delete all todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosRu()
-                  }}
-                  accessible
-                  accessibilityLabel="add_ru"
-                  testID="add_ru"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add ru todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosEn()
-                  }}
-                  accessible
-                  accessibilityLabel="add_en"
-                  testID="add_en"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add en todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosUk()
-                  }}
-                  accessible
-                  accessibilityLabel="add_uk"
-                  testID="add_uk"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add uk todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosIt()
-                  }}
-                  accessible
-                  accessibilityLabel="add_it"
-                  testID="add_it"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add it todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosEs()
-                  }}
-                  accessible
-                  accessibilityLabel="add_es"
-                  testID="add_es"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add es todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    addTodosPtBR()
-                  }}
-                  accessible
-                  accessibilityLabel="add_pt_br"
-                  testID="add_pt_br"
-                >
-                  <Text {...sharedColors.textExtraStyle}>add pt-BR todos</Text>
-                </Button>
-                <Button
-                  onPress={() => {
-                    sharedSessionStore.numberOfTodosCompleted = 0
-                    sharedSessionStore.askedToRate = false
-                  }}
-                >
-                  <Text {...sharedColors.textExtraStyle}>reset rating</Text>
-                </Button>
-              </>
-            )}
+            <DebugButtons />
             <ListItem itemHeader first>
               <Text style={{ color: sharedColors.placeholderColor }}>
                 {translate('important')}

@@ -49,6 +49,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Планирование, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Настройки, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Текущее, tab, 1 of 3"), isDisplayed())).perform(click());
@@ -69,6 +79,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Планування, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Налаштування, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Поточне, tab, 1 of 3"), isDisplayed())).perform(click());
@@ -89,6 +109,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Pianificazione, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Impostazioni, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Corrente, tab, 1 of 3"), isDisplayed())).perform(click());
@@ -109,6 +139,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Planeación, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Ajustes, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Actual, tab, 1 of 3"), isDisplayed())).perform(click());
@@ -129,6 +169,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Planejamento, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Configurações, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Atual, tab, 1 of 3"), isDisplayed())).perform(click());
@@ -149,6 +199,16 @@ public class AppTest {
             Screengrab.screenshot("2Planning");
             onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+            // Dark mode
+            onView(withTagValue(is("turn_dark_on"))).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            onView(allOf(withContentDescription("Planning, tab, 2 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+            Screengrab.screenshot("3Dark");
+            onView(allOf(withContentDescription("Settings, tab, 3 of 3"), isDisplayed())).perform(click());
+            try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
             onView(withTagValue(is("delete"))).perform(click());
             try { Thread.sleep(2000); } catch (InterruptedException e) {}
             onView(allOf(withContentDescription("Current, tab, 1 of 3"), isDisplayed())).perform(click());

@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 default_platform(:android)
 
 platform :android do
