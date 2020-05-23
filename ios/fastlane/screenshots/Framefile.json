@@ -2,11 +2,11 @@
   "default": {
     "background": "./background.png",
     "keyword": {
-      "font": "../fonts/SanFrancisco/SanFranciscoDisplay-Regular.otf",
+      "font": "../fonts/SanFrancisco/SF-Pro-Display-Regular.otf",
       "color": "#ffffff"
     },
     "title": {
-      "font": "../fonts/SanFrancisco/SanFranciscoDisplay-Thin.otf",
+      "font": "../fonts/SanFrancisco/SF-Pro-Display-Thin.otf",
       "color": "#ffffff"
     },
     "show_complete_frame": false,
