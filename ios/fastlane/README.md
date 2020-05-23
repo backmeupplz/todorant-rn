@@ -31,9 +31,9 @@ fastlane ios frame
 fastlane ios release
 ```
 
-### ios releasenoscreenshots
+### ios take_and_upload_screenshots
 ```
-fastlane ios releasenoscreenshots
+fastlane ios take_and_upload_screenshots
 ```
 
 
