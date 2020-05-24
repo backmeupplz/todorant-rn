@@ -20,5 +20,39 @@ fastlane screenshots
 cd ../ios
 fastlane snapshot
 
+# Crop and move screenshots for android
+mkdir scripts/screenshots/tmp
+for i in $(find android/fastlane/metadata/android -name *.png | grep -v "background"); do
+  language="$(cut -d'/' -f5 <<< $i)"
+  filename="$(cut -d'/' -f8 <<< $i)"
+  short_filename="$(cut -d'_' -f1 <<< $filename)"
+  echo $language
+  echo $short_filename
+  destination="scripts/screenshots/tmp/$language-$short_filename.png"
+  echo $destination
+  cp $i $destination
+  width=`identify -format %w $destination`
+  convert $destination -crop "$width"x"$width"+0+0 $destination
+done
+mv scripts/screenshots/tmp/ ../todorant-frontend/public/img/screenshots/android
+
+# Crop and move screenshots for ios
+mkdir scripts/screenshots/tmp
+find ios/fastlane/screenshots -name "* *" -type f | rename 's/ /_/g'
+for i in $(find ios/fastlane/screenshots -name "*.png" | grep -v "background"); do
+  echo $i
+  language="$(cut -d'/' -f4 <<< $i)"
+  filename="$(cut -d'/' -f5 <<< $i)"
+  short_filename="$(cut -d'-' -f2 <<< $filename)"
+  echo $language
+  echo $short_filename
+  destination="scripts/screenshots/tmp/$language-$short_filename.png"
+  echo $destination
+  cp $i $destination
+  width=`identify -format %w $destination`
+  convert $destination -crop "$width"x"$width"+0+0 $destination
+done
+mv scripts/screenshots/tmp/ ../todorant-frontend/public/img/screenshots/ios
+
 # Reset
 git reset --hard
