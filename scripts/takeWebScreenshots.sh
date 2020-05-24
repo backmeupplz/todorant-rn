@@ -21,6 +21,7 @@ cd ../ios
 fastlane snapshot
 
 # Crop and move screenshots for android
+cd ..
 mkdir scripts/screenshots/tmp
 for i in $(find android/fastlane/metadata/android -name *.png | grep -v "background"); do
   language="$(cut -d'/' -f5 <<< $i)"
