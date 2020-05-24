@@ -73,3 +73,5 @@ android/fastlane/metadata/android/*/images/phoneScreenshots/*.png
 android/fastlane/metadata/android/screenshots.html
 
 ios/fastlane/screenshots/screenshots.html
+
+android/*.hprof
