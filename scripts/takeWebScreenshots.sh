@@ -20,3 +20,5 @@ fastlane screenshots
 cd ../ios
 fastlane snapshot
 
+# Reset
+git reset --hard
