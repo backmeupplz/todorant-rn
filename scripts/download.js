@@ -2,6 +2,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: `${__dirname}/../.env` })
 const axios = require('axios')
 const fs = require('fs')
+const unflatten = require('flat').unflatten
 
 ;(async function getTranslations() {
   console.log('==== Getting localizations')
@@ -40,7 +41,7 @@ const fs = require('fs')
   console.log(reversedMap)
   for (let language in reversedMap) {
     const obj = reversedMap[language]
-    const json = JSON.stringify(obj, undefined, 2)
+    const json = JSON.stringify(unflatten(obj), undefined, 2)
     if (language === 'ua') {
       language = 'uk'
     }

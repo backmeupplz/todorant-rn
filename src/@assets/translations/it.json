@@ -209,5 +209,8 @@
   "soundEffects": "Effetti sonori",
   "missionPassed": "Mission passed",
   "respect": "Rispettare +",
-  "emptyHashtags": "L'elenco degli hashtag è vuoto per ora. Create il vostro primo compito con un #hashtag per aggiungere il primo hashtag qui!"
+  "emptyHashtags": "L'elenco degli hashtag è vuoto per ora. Create il vostro primo compito con un #hashtag per aggiungere il primo hashtag qui!",
+  "encryption": {
+    "repeatPassword": "Ripetere la password"
+  }
 }

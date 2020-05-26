@@ -30,10 +30,12 @@ export class Security extends Component {
 
   @observable encryptionOn = false
   @observable password = ''
+  @observable passwordRepeat = ''
 
   componentDidMount() {
     this.encryptionOn = !!sharedSessionStore.encryptionKey
     this.password = sharedSessionStore.encryptionKey || ''
+    this.passwordRepeat = sharedSessionStore.encryptionKey || ''
   }
 
   changeEncrypted(encrypted: boolean) {
@@ -150,8 +152,28 @@ export class Security extends Component {
                     maxLength={35}
                   />
                 </ListItem>
+                <ListItem {...sharedColors.listItemExtraStyle}>
+                  <Input
+                    placeholder={translate('encryption.repeatPassword')}
+                    value={this.passwordRepeat}
+                    onChangeText={(text) => {
+                      this.passwordRepeat = text
+                    }}
+                    placeholderTextColor={sharedColors.placeholderColor}
+                    style={{
+                      color: sharedColors.textColor,
+                      marginVertical: -10,
+                      paddingVertical: -10,
+                    }}
+                    secureTextEntry
+                    autoCompleteType="password"
+                    autoCorrect={false}
+                    maxLength={35}
+                  />
+                </ListItem>
                 {!!this.password &&
-                  this.password !== sharedSessionStore.encryptionKey && (
+                  this.password !== sharedSessionStore.encryptionKey &&
+                  this.password === this.passwordRepeat && (
                     <ListItem {...sharedColors.listItemExtraStyle}>
                       <Button
                         style={{ flex: 1, justifyContent: 'center' }}

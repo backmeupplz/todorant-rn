@@ -256,5 +256,8 @@
   "rank12800Title": "Doctor Manhattan ⚛",
   "rank12800Description": "You breakdown the tasks like you split the atoms. Keep up the good work!",
   "achievements": "Achievements",
-  "sendDataToServer": "Send data to server"
+  "sendDataToServer": "Send data to server",
+  "encryption": {
+    "repeatPassword": "Repeat password"
+  }
 }

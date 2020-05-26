@@ -2,6 +2,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: `${__dirname}/../.env` })
 const axios = require('axios')
 const fs = require('fs')
+const flatten = require('flat')
 
 const files = fs.readdirSync(`${__dirname}/../src/@assets/translations`)
 
@@ -12,10 +13,14 @@ for (const fileName of files) {
   if (fileNameLeft === 'uk') {
     fileNameLeft = 'ua'
   }
-  localizations[fileNameLeft] = JSON.parse(
-    fs.readFileSync(
-      `${__dirname}/../src/@assets/translations/${fileName.split('.')[0]}.json`,
-      'utf8'
+  localizations[fileNameLeft] = flatten(
+    JSON.parse(
+      fs.readFileSync(
+        `${__dirname}/../src/@assets/translations/${
+          fileName.split('.')[0]
+        }.json`,
+        'utf8'
+      )
     )
   )
 }
