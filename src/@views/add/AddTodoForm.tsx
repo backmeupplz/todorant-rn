@@ -30,6 +30,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
               style={{
                 paddingTop: 10,
                 paddingBottom: 10,
+                paddingRight: 10,
                 borderColor: sharedColors.placeholderColor,
               }}
               onPress={() => {
@@ -86,6 +87,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
               style={{
                 justifyContent: 'space-between',
                 borderColor: sharedColors.placeholderColor,
+                paddingRight: 10,
               }}
             >
               <Input
@@ -106,6 +108,28 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                   !sharedSessionStore.encryptionKey
                 }
               />
+              {!!this.props.vm.text && (
+                <Button
+                  icon
+                  {...extraButtonProps(sharedColors)}
+                  small
+                  onPress={async () => {
+                    this.props.vm.text = ''
+                  }}
+                  style={{
+                    ...extraButtonProps(sharedColors).style,
+                    marginHorizontal: -10,
+                  }}
+                >
+                  <Icon
+                    type="MaterialIcons"
+                    name="close"
+                    style={{
+                      color: sharedColors.textColor,
+                    }}
+                  />
+                </Button>
+              )}
               {Platform.OS === 'android' &&
                 !(
                   this.props.vm.editedTodo?.encrypted &&
@@ -118,6 +142,10 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                     onPress={async () => {
                       const textFromClipboard = await Clipboard.getString()
                       this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
+                    }}
+                    style={{
+                      ...extraButtonProps(sharedColors).style,
+                      marginHorizontal: -10,
                     }}
                   >
                     <Icon

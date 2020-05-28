@@ -17,6 +17,11 @@ export class CollapseButton extends Component<{ vm: TodoVM }> {
         onPress={() => {
           this.props.vm.collapsed = !this.props.vm.collapsed
         }}
+        style={{
+          ...extraButtonProps(sharedColors).style,
+          marginHorizontal: -10,
+          paddingHorizontal: -10,
+        }}
       >
         <Icon
           type="MaterialIcons"
