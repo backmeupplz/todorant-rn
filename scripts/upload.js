@@ -50,6 +50,8 @@ keys.forEach((key) => {
   result[key] = keyObject
 })
 
+// iOS permissions
+
 const locales = ['en', 'es', 'it', 'pt-BR', 'ru', 'uk']
 const iosStrings = {}
 for (const locale of locales) {
@@ -65,6 +67,57 @@ for (const locale in iosStrings) {
       reversedIosStrings[key] = {}
     }
     reversedIosStrings[key][locale] = iosStrings[locale][key]
+  }
+}
+
+// Metadata iOS
+
+const languages = ['en-US', 'es-ES', 'es-MX', 'it', 'pt-BR', 'ru', 'uk']
+const iosMetadata = {}
+for (const language of languages) {
+  const description = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/description.txt`,
+    'utf-8'
+  )
+  const keywords = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/keywords.txt`,
+    'utf-8'
+  )
+  const name = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/name.txt`,
+    'utf-8'
+  )
+  const promotional_text = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/promotional_text.txt`,
+    'utf-8'
+  )
+  const release_notes = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/release_notes.txt`,
+    'utf-8'
+  )
+  const subtitle = fs.readFileSync(
+    `${__dirname}/../ios/fastlane/metadata/${language}/subtitle.txt`,
+    'utf-8'
+  )
+
+  const map = { 'en-US': 'en', 'es-ES': 'es', 'es-MX': 'es' }
+
+  const languageTag = map[language] || language
+
+  const keys = {
+    description: description,
+    keywords: keywords,
+    name: name,
+    promotional_text: promotional_text,
+    release_notes: release_notes,
+    subtitle: subtitle,
+  }
+
+  for (const k in keys) {
+    if (!iosMetadata[`metadata.${k}`]) {
+      iosMetadata[`metadata.${k}`] = {}
+    }
+    iosMetadata[`metadata.${k}`][languageTag] = keys[k]
   }
 }
 
@@ -89,6 +142,15 @@ for (const locale in iosStrings) {
       tags: ['ios-permissions'],
     })
     console.error(`==== iOS strings body posted!`)
+    console.log('==== Posting ios metadata body:')
+    console.log(JSON.stringify(iosMetadata, undefined, 2))
+    await axios.post(`https://localizer.todorant.com/localizations`, {
+      localizations: iosMetadata,
+      password: process.env.PASSWORD,
+      username: 'borodutch',
+      tags: ['metadata'],
+    })
+    console.error(`==== iOS metadata body posted!`)
   } catch (err) {
     console.error(`==== Error posting: ${err.message}`)
   }
