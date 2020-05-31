@@ -3,6 +3,7 @@ dotenv.config({ path: `${__dirname}/../.env` })
 const axios = require('axios')
 const fs = require('fs')
 const unflatten = require('flat').unflatten
+const i18nStringsFiles = require('i18n-strings-files')
 
 ;(async function getTranslations() {
   console.log('==== Getting localizations')
@@ -51,4 +52,43 @@ const unflatten = require('flat').unflatten
     )
   }
   console.log('==== Saved object to the file')
+  console.log('==== Getting iOS permissions')
+  const iOSTranslations = (
+    await axios.get('https://localizer.todorant.com/localizations')
+  ).data.filter((l) => {
+    return l.tags.indexOf('ios-permissions') > -1
+  })
+  const iOSt = {}
+  for (const t of iOSTranslations) {
+    const key = t.key
+    const variants = t.variants.filter((v) => !!v.selected)
+    iOSt[key] = variants.reduce((p, c) => {
+      p[c.language] = c.text
+      return p
+    }, {})
+  }
+  console.log('==== Got iOS permissions')
+  const reversedIos = {}
+  Object.keys(iOSt).forEach((k) => {
+    const internals = iOSt[k]
+    for (const language in internals) {
+      const text = internals[language]
+      if (!reversedIos[language]) {
+        reversedIos[language] = {}
+      }
+      reversedIos[language][k] = text
+    }
+  })
+  console.log(reversedIos)
+  console.log('==== Saving iOS permissions')
+  for (const language in reversedIos) {
+    const value = reversedIos[language]
+
+    i18nStringsFiles.writeFileSync(
+      `${__dirname}/../ios/${language}.lproj/InfoPlist.strings`,
+      value,
+      'UTF-8'
+    )
+  }
+  console.log('==== Saved iOS permissions')
 })()

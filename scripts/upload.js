@@ -3,6 +3,7 @@ dotenv.config({ path: `${__dirname}/../.env` })
 const axios = require('axios')
 const fs = require('fs')
 const flatten = require('flat')
+const i18nStringsFiles = require('i18n-strings-files')
 
 const files = fs.readdirSync(`${__dirname}/../src/@assets/translations`)
 
@@ -48,6 +49,25 @@ keys.forEach((key) => {
   }
   result[key] = keyObject
 })
+
+const locales = ['en', 'es', 'it', 'pt-BR', 'ru', 'uk']
+const iosStrings = {}
+for (const locale of locales) {
+  iosStrings[locale] = i18nStringsFiles.readFileSync(
+    `${__dirname}/../ios/${locale}.lproj/InfoPlist.strings`,
+    'UTF-8'
+  )
+}
+const reversedIosStrings = {}
+for (const locale in iosStrings) {
+  for (const key in iosStrings[locale]) {
+    if (!reversedIosStrings[key]) {
+      reversedIosStrings[key] = {}
+    }
+    reversedIosStrings[key][locale] = iosStrings[locale][key]
+  }
+}
+
 ;(async function postLocalizations() {
   console.log('==== Posting body:')
   console.log(JSON.stringify(result, undefined, 2))
@@ -60,6 +80,15 @@ keys.forEach((key) => {
       tags: ['mobile'],
     })
     console.error(`==== Body posted!`)
+    console.log('==== Posting ios strings body:')
+    console.log(JSON.stringify(reversedIosStrings, undefined, 2))
+    await axios.post(`https://localizer.todorant.com/localizations`, {
+      localizations: reversedIosStrings,
+      password: process.env.PASSWORD,
+      username: 'borodutch',
+      tags: ['ios-permissions'],
+    })
+    console.error(`==== iOS strings body posted!`)
   } catch (err) {
     console.error(`==== Error posting: ${err.message}`)
   }
