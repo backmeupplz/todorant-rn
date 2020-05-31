@@ -108,7 +108,12 @@ class SyncManager<T> {
         pushId,
         Array.isArray(objects) ? objects.length : 1
       )
-      socketIO.emit(`push_${this.name}`, pushId, objects)
+      socketIO.emit(
+        `push_${this.name}`,
+        pushId,
+        objects,
+        sharedSessionStore.encryptionKey
+      )
     })
   }
 }
