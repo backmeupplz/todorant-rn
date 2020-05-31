@@ -91,4 +91,51 @@ const i18nStringsFiles = require('i18n-strings-files')
     )
   }
   console.log('==== Saved iOS permissions')
+  console.log('==== Getting iOS metadata')
+  const metadataTranslations = (
+    await axios.get('https://localizer.todorant.com/localizations')
+  ).data.filter((l) => {
+    return l.tags.indexOf('metadata') > -1
+  })
+  const metadata = {}
+  for (const t of metadataTranslations) {
+    const key = t.key.replace('metadata.', '')
+    const variants = t.variants.filter((v) => !!v.selected)
+    metadata[key] = variants.reduce((p, c) => {
+      p[c.language] = c.text
+      return p
+    }, {})
+  }
+  console.log('==== Got iOS metadata')
+  const reversedMetadata = {}
+  Object.keys(metadata).forEach((k) => {
+    const internals = metadata[k]
+    for (const language in internals) {
+      const text = internals[language]
+      if (!reversedMetadata[language]) {
+        reversedMetadata[language] = {}
+      }
+      reversedMetadata[language][k] = text
+    }
+  })
+  console.log(reversedMetadata)
+  console.log('==== Saving iOS metadata')
+  const languageMap = {
+    en: ['en-US'],
+    es: ['es-ES', 'es-MX'],
+  }
+
+  for (const language in reversedMetadata) {
+    const value = reversedMetadata[language]
+    for (const lTag of languageMap[language] || [language]) {
+      for (const k in value) {
+        fs.writeFileSync(
+          `${__dirname}/../ios/fastlane/metadata/${lTag}/${k}.txt`,
+          value[k],
+          'UTF-8'
+        )
+      }
+    }
+  }
+  console.log('==== Saved iOS metadata')
 })()
