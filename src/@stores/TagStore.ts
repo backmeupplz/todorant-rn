@@ -19,7 +19,10 @@ class TagStore {
   @observable tagColorMap = {} as { [index: string]: string }
 
   @computed get undeletedTags() {
-    return this.allTags.filtered('deleted = false').sorted('tag')
+    return this.allTags.filtered('deleted = false').sorted([
+      ['numberOfUses', true],
+      ['tag', false],
+    ])
   }
 
   constructor() {
@@ -153,9 +156,24 @@ class TagStore {
       .filter((c) => c.type === 'hash')
       .map((c) => c.url?.substr(1))
       .filter((c) => !!c) as string[]
-    const dbtags = this.allTags
-      .filtered('deleted = false')
-      .map((tag) => tag.tag)
+    const tagsMap = tags.reduce((p, c) => {
+      if (p[c]) {
+        p[c]++
+      } else {
+        p[c] = 1
+      }
+      return p
+    }, {} as { [index: string]: number })
+    const dbtagsObjects = this.allTags.filtered('deleted = false')
+    realm.write(() => {
+      for (const dbtag of dbtagsObjects) {
+        if (tagsMap[dbtag.tag]) {
+          dbtag.numberOfUses += tagsMap[dbtag.tag]
+          dbtag.updatedAt = new Date()
+        }
+      }
+    })
+    const dbtags = dbtagsObjects.map((tag) => tag.tag)
     let tagsToAdd = tags.filter((tag) => dbtags.indexOf(tag) < 0)
     const tagsToAddMap = tagsToAdd.reduce((p, c) => {
       p[c] = true

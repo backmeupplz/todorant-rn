@@ -12,6 +12,7 @@ export class Tag {
 
       tag: 'string',
       color: 'string?',
+      numberOfUses: { type: 'int', indexed: true, default: 0 },
     },
   }
 
@@ -23,4 +24,5 @@ export class Tag {
 
   @observable tag!: string
   @observable color?: string
+  @observable numberOfUses!: number
 }
