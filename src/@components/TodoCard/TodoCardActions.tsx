@@ -26,8 +26,10 @@ class IconButton extends Component<{
           style={{
             color: this.props.color || sharedColors.defaultIconColor,
             opacity: this.props.fullColor ? 1.0 : 0.8,
-            rotation: this.props.rotation,
             marginHorizontal: 6,
+            transform: this.props.rotation
+              ? [{ rotate: `${this.props.rotation}deg` }]
+              : undefined,
           }}
         />
       </TouchableOpacity>

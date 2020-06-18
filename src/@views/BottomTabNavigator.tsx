@@ -3,7 +3,7 @@ import { Settings } from '@views/settings/Settings'
 import { Planning } from '@views/planning/Planning'
 import { Current } from '@views/current/Current'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon, View } from 'native-base'
+import { View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { observer } from 'mobx-react'
@@ -11,8 +11,16 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import SvgUri from 'react-native-svg-uri'
 
 const Tab = createBottomTabNavigator()
+
+const currentIcon = require('@assets/images/current.svg')
+const currentIconActive = require('@assets/images/current-active.svg')
+const planningIcon = require('@assets/images/planning.svg')
+const planningIconActive = require('@assets/images/planning-active.svg')
+const settingsIcon = require('@assets/images/settings.svg')
+const settingsIconActive = require('@assets/images/settings-active.svg')
 
 export default observer(() => {
   // Hack to make this reactive
@@ -25,24 +33,20 @@ export default observer(() => {
         {...({ language: sharedSettingsStore.language } as any)}
         backBehavior="none"
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let name = 'event-available'
+          tabBarIcon: ({ focused, size }) => {
+            let name = 'current'
+            let icon = focused ? currentIconActive : currentIcon
             if (route.name === 'Planning') {
-              name = 'list'
+              name = 'planning'
+              icon = focused ? planningIconActive : planningIcon
             } else if (route.name === 'Settings') {
               name = 'settings'
+              icon = focused ? settingsIconActive : settingsIcon
             }
             return (
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
-                  <Icon
-                    type="MaterialIcons"
-                    name={name}
-                    fontSize={size}
-                    style={{
-                      color,
-                    }}
-                  />
+                  <SvgUri width={size} height={size} source={icon} />
                   {route.name === 'Settings' && !sharedSessionStore.user && (
                     <View
                       style={{
@@ -66,6 +70,13 @@ export default observer(() => {
           inactiveTintColor: 'gray',
           style: {
             backgroundColor: sharedColors.backgroundColor,
+            borderTopColor: sharedColors.borderColor,
+          },
+          labelStyle: {
+            fontFamily: 'SF-Pro-Text-Regular',
+          },
+          tabStyle: {
+            paddingTop: 6,
           },
         }}
       >

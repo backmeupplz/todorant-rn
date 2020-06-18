@@ -4,15 +4,14 @@ import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
-import ActionButton from 'react-native-action-button'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { plusButtonAction } from '@utils/plusButtonAction'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
+import { PlusButton } from '@components/PlusButton'
 
 @observer
 export class PlanningContent extends Component {
@@ -84,13 +83,7 @@ export class PlanningContent extends Component {
         ) : (
           <NoTodosPlaceholder />
         )}
-        <ActionButton
-          buttonColor={sharedColors.primaryColor}
-          buttonTextStyle={{ color: sharedColors.invertedTextColor }}
-          onPress={plusButtonAction}
-          useNativeFeedback={true}
-          fixNativeFeedbackRadius={true}
-        />
+        <PlusButton />
       </Container>
     )
   }

@@ -4,18 +4,17 @@ import { CurrentVM } from '@views/current/CurrentVM'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Container, Text } from 'native-base'
+import { Container } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
-import ActionButton from 'react-native-action-button'
-import { plusButtonAction } from '@utils/plusButtonAction'
 import { NoTodosPlaceholder } from '@views/current/NoTodosPlaceholder'
 import { AllDonePlaceholder } from '@views/current/AllDonePlaceholder'
 import { HeaderScrollView } from '@components/HeaderScrollView'
 import { translate } from '@utils/i18n'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { SegmentedProgressView } from '@components/SegmentedProgressView'
+import { PlusButton } from '@components/PlusButton'
 
 @observer
 export class CurrentContent extends Component {
@@ -30,9 +29,6 @@ export class CurrentContent extends Component {
   }
 
   render() {
-    const progress = sharedTodoStore.progress.count
-      ? sharedTodoStore.progress.completed / sharedTodoStore.progress.count
-      : 1
     return (
       <Container {...({ language: sharedSettingsStore.language } as any)}>
         <HeaderScrollView
@@ -53,13 +49,7 @@ export class CurrentContent extends Component {
               sharedTodoStore.progress.completed && <AllDonePlaceholder />}
           {!sharedTodoStore.progress.count && <NoTodosPlaceholder />}
         </HeaderScrollView>
-        <ActionButton
-          buttonColor={sharedColors.primaryColor}
-          buttonTextStyle={{ color: sharedColors.invertedTextColor }}
-          onPress={plusButtonAction}
-          useNativeFeedback={true}
-          fixNativeFeedbackRadius={true}
-        />
+        <PlusButton />
       </Container>
     )
   }

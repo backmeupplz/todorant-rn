@@ -3,14 +3,11 @@ import { observer } from 'mobx-react'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { Todo } from '@models/Todo'
 import { CardType } from '@components/TodoCard/CardType'
-import { View, Card, Text } from 'native-base'
+import { View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import {
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-} from 'react-native-gesture-handler'
 import { TodoCardBody } from '@components/TodoCard/TodoCardBody'
 import { TodoCardActions } from '@components/TodoCard/TodoCardActions'
+import { Platform } from 'react-native'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -27,14 +24,22 @@ export class TodoCardContent extends Component<{
           marginHorizontal: 16,
           marginVertical: 8,
           borderRadius: 14,
-          borderWidth: 1,
-          borderColor: 'rgba(255, 255, 255, 0.05)',
+          borderWidth:
+            Platform.OS === 'android' && !sharedColors.isDark ? undefined : 1,
+          borderColor:
+            Platform.OS === 'android' && !sharedColors.isDark
+              ? undefined
+              : 'rgba(0, 0, 0, 0.05)',
+          // iOS
           shadowOffset: {
             width: 0,
             height: 2,
           },
-          shadowColor: 'rgba(0, 0, 0, 0.04)',
+          shadowColor: 'black',
+          shadowOpacity: 0.05,
           shadowRadius: 30,
+          // Android
+          elevation: 2,
         }}
       >
         <TodoCardBody

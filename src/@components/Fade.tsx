@@ -29,6 +29,7 @@ function Fade(props: FadeProps) {
     const animationConfig = {
       duration: duration || 200,
       easing: Easing.linear,
+      useNativeDriver: true,
     }
     const opacityConfig = {
       ...animationConfig,
