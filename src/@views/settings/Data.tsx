@@ -15,19 +15,22 @@ import { Tag } from '@models/Tag'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { gatherData } from '@utils/gatherData'
 import * as rest from '@utils/rest'
+import { SectionHeader } from '@components/SectionHeader'
+import { TableItem } from '@components/TableItem'
+import { Divider } from '@components/Divider'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
   render() {
     return (
-      <ListItem {...sharedColors.listItemExtraStyle}>
-        <Text style={{ ...sharedColors.textExtraStyle.style, flex: 1 }}>
+      <TableItem>
+        <Text style={{ ...sharedColors.regularTextExtraStyle.style, flex: 1 }}>
           {this.props.title}
         </Text>
-        <Text style={{ ...sharedColors.textExtraStyle.style }}>
+        <Text style={{ ...sharedColors.regularTextExtraStyle.style }}>
           {this.props.subtitle}
         </Text>
-      </ListItem>
+      </TableItem>
     )
   }
 }
@@ -37,125 +40,121 @@ export class Data extends Component {
   render() {
     return (
       <Container>
-        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
-          <List>
-            <ListItem itemHeader>
-              <Text {...sharedColors.textExtraStyle}>{translate('count')}</Text>
-            </ListItem>
-            <Row
-              title={translate('todoCount')}
-              subtitle={`${
-                realm.objects<Todo>(Todo).filtered('deleted = false').length
-              }`}
-            />
-            <Row
-              title={translate('tagsCount')}
-              subtitle={`${
-                realm.objects<Tag>(Tag).filtered('deleted = false').length
-              }`}
-            />
-            <ListItem itemHeader>
-              <Text {...sharedColors.textExtraStyle}>{translate('sync')}</Text>
-            </ListItem>
-            <Row
-              title={translate('todosLastSync')}
-              subtitle={`${
-                sharedTodoStore.lastSyncDate
-                  ? moment(sharedTodoStore.lastSyncDate).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
-                  : translate('notSyncedYet')
-              }`}
-            />
-            <Row
-              title={translate('tags')}
-              subtitle={`${
-                sharedTagStore.lastSyncDate
-                  ? moment(sharedTagStore.lastSyncDate).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
-                  : translate('notSyncedYet')
-              }`}
-            />
-            <Row
-              title={translate('settingsLastSync')}
-              subtitle={`${
-                sharedSettingsStore.updatedAt
-                  ? moment(sharedSettingsStore.updatedAt).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
-                  : translate('notSyncedYet')
-              }`}
-            />
-            <Row
-              title={translate('accountLastSync')}
-              subtitle={`${
-                sharedSessionStore.user?.updatedAt
-                  ? moment(sharedSessionStore.user.updatedAt).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
-                  : translate('notSyncedYet')
-              }`}
-            />
-            <Row
-              title={translate('gamification')}
-              subtitle={`${
-                sharedHeroStore.updatedAt
-                  ? moment(sharedHeroStore.updatedAt).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
-                  : translate('notSyncedYet')
-              }`}
-            />
-            <ListItem
-              {...sharedColors.listItemExtraStyle}
-              button
-              onPress={() => {
-                sockets.globalSync()
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('syncData')}
-              </Text>
-            </ListItem>
-            <ListItem
-              {...sharedColors.listItemExtraStyle}
-              button
-              onPress={() => {
-                sockets.hardSync()
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('syncDataHard')}
-              </Text>
-            </ListItem>
-            <ListItem
-              {...sharedColors.listItemExtraStyle}
-              button
-              onPress={() => {
-                sharedTodoStore.recalculateExactDates()
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('syncExactDates')}
-              </Text>
-            </ListItem>
-            <ListItem
-              {...sharedColors.listItemExtraStyle}
-              button
-              onPress={async () => {
-                const data = gatherData()
-                await rest.sendData(data)
-                Toast.show({
-                  text: '👍',
-                })
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('sendDataToServer')}
-              </Text>
-            </ListItem>
-          </List>
+        <Content
+          style={{
+            backgroundColor: sharedColors.backgroundColor,
+            paddingTop: 16,
+          }}
+        >
+          {/* Count */}
+          <SectionHeader title={translate('count')} />
+          <Row
+            title={translate('todoCount')}
+            subtitle={`${
+              realm.objects<Todo>(Todo).filtered('deleted = false').length
+            }`}
+          />
+          <Row
+            title={translate('tagsCount')}
+            subtitle={`${
+              realm.objects<Tag>(Tag).filtered('deleted = false').length
+            }`}
+          />
+          {/* Sync */}
+          <Divider />
+          <SectionHeader title={translate('sync')} />
+          <Row
+            title={translate('todosLastSync')}
+            subtitle={`${
+              sharedTodoStore.lastSyncDate
+                ? moment(sharedTodoStore.lastSyncDate).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                : translate('notSyncedYet')
+            }`}
+          />
+          <Row
+            title={translate('tags')}
+            subtitle={`${
+              sharedTagStore.lastSyncDate
+                ? moment(sharedTagStore.lastSyncDate).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                : translate('notSyncedYet')
+            }`}
+          />
+          <Row
+            title={translate('settingsLastSync')}
+            subtitle={`${
+              sharedSettingsStore.updatedAt
+                ? moment(sharedSettingsStore.updatedAt).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                : translate('notSyncedYet')
+            }`}
+          />
+          <Row
+            title={translate('accountLastSync')}
+            subtitle={`${
+              sharedSessionStore.user?.updatedAt
+                ? moment(sharedSessionStore.user.updatedAt).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                : translate('notSyncedYet')
+            }`}
+          />
+          <Row
+            title={translate('gamification')}
+            subtitle={`${
+              sharedHeroStore.updatedAt
+                ? moment(sharedHeroStore.updatedAt).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )
+                : translate('notSyncedYet')
+            }`}
+          />
+          {/* Actions */}
+          <Divider />
+          <TableItem
+            onPress={() => {
+              sockets.globalSync()
+            }}
+          >
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('syncData')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={() => {
+              sockets.hardSync()
+            }}
+          >
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('syncDataHard')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={() => {
+              sharedTodoStore.recalculateExactDates()
+            }}
+          >
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('syncExactDates')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={async () => {
+              const data = gatherData()
+              await rest.sendData(data)
+              Toast.show({
+                text: '👍',
+              })
+            }}
+          >
+            <Text {...sharedColors.textExtraStyle}>
+              {translate('sendDataToServer')}
+            </Text>
+          </TableItem>
         </Content>
       </Container>
     )

@@ -51,7 +51,6 @@ export class SettingsContent extends Component {
       <Container>
         <HeaderScrollView
           title={translate('settings')}
-          containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
           infoTitle="infoSettings"
         >
           {/* <DebugButtons /> */}

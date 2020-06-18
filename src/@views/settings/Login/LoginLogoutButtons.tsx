@@ -43,7 +43,12 @@ export class LoginLogoutButtons extends Component {
             >
               <Text>{translate('loginButton')}</Text>
             </Button>
-            <Text style={{ marginVertical: 12, color: sharedColors.textColor }}>
+            <Text
+              style={{
+                marginVertical: 12,
+                ...sharedColors.regularTextExtraStyle.style,
+              }}
+            >
               {translate('alreadyRegistered')}
             </Text>
           </>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListItem, Text, ActionSheet, Switch } from 'native-base'
+import { Text, ActionSheet, Switch, View } from 'native-base'
 import { sharedSettingsStore, Language, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
@@ -144,22 +144,50 @@ export class GeneralSettings extends Component {
             </Text>
           </TableItem>
         )}
-        <TableItem>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+            marginVertical: 8,
+          }}
+        >
           <Text
-            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('soundEffects')}
           </Text>
           <Switch
             value={sharedSettingsStore.soundOn}
-            onValueChange={(val) => {
-              sharedSettingsStore.soundOn = val
+            onValueChange={(value) => {
+              sharedSettingsStore.soundOn = value
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
-        </TableItem>
-        <TableItem>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+            marginVertical: 8,
+          }}
+        >
           <Text
-            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('gamification')}
           </Text>
@@ -168,8 +196,10 @@ export class GeneralSettings extends Component {
             onValueChange={(val) => {
               sharedSettingsStore.gamificationOn = val
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
-        </TableItem>
+        </View>
       </>
     )
   }

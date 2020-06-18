@@ -31,6 +31,8 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
         <TableItem>
@@ -50,6 +52,8 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
         <TableItem>
@@ -69,6 +73,8 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
         <TableItem>
@@ -86,6 +92,8 @@ export class TodoSettings extends Component {
             onValueChange={(value) => {
               sharedSettingsStore.askBeforeDelete = value
             }}
+            thumbColor="lightgrey"
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
         <TableItem

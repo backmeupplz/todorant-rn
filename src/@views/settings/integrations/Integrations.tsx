@@ -6,7 +6,7 @@ import {
   List,
   Text,
   ActionSheet,
-  Spinner,
+  Content,
 } from 'native-base'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
@@ -16,6 +16,8 @@ import { sockets } from '@utils/sockets'
 import { observable } from 'mobx'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'
+import { Spinner } from '@components/Spinner'
+import { TableItem } from '@components/TableItem'
 
 @observer
 export class Integrations extends Component {
@@ -71,9 +73,14 @@ export class Integrations extends Component {
 
   render() {
     return (
-      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        <List>
-          <ListItem
+      <Container
+        style={{
+          backgroundColor: sharedColors.backgroundColor,
+          paddingTop: 16,
+        }}
+      >
+        <Content>
+          <TableItem
             {...sharedColors.listItemExtraStyle}
             onPress={() => {
               this.googleCalendarTapped()
@@ -83,7 +90,7 @@ export class Integrations extends Component {
               {translate('googleCalendar')}
             </Text>
             {this.loading ? (
-              <Spinner style={{ width: 10, height: 10 }} />
+              <Spinner noPadding maxHeight={25} />
             ) : (
               <Text {...sharedColors.textExtraStyle}>
                 {translate(
@@ -93,8 +100,8 @@ export class Integrations extends Component {
                 )}
               </Text>
             )}
-          </ListItem>
-        </List>
+          </TableItem>
+        </Content>
       </Container>
     )
   }

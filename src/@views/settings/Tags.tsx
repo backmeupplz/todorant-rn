@@ -10,6 +10,7 @@ import { alertConfirm } from '@utils/alert'
 import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { navigate } from '@utils/navigation'
+import { TableItem } from '@components/TableItem'
 
 class TagsVM {
   onTap(tag: Tag) {
@@ -81,28 +82,21 @@ export class Tags extends Component {
 
   render() {
     return (
-      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
+      <Container
+        style={{
+          backgroundColor: sharedColors.backgroundColor,
+        }}
+      >
         {sharedTagStore.undeletedTags.length ? (
           <FlatList
             data={sharedTagStore.undeletedTags}
             renderItem={({ item }) => {
               return (
-                <ListItem
-                  {...sharedColors.listItemExtraStyle}
-                  onPress={() => this.vm.onTap(item)}
-                >
+                <TableItem onPress={() => this.vm.onTap(item)}>
                   <Text style={{ color: item.color || 'dodgerblue' }}>
                     #{item.tag}
                   </Text>
-                  <Icon
-                    type="MaterialIcons"
-                    name="edit"
-                    style={{
-                      ...sharedColors.iconExtraStyle.style,
-                      fontSize: 20,
-                    }}
-                  />
-                </ListItem>
+                </TableItem>
               )
             }}
             keyExtractor={(_, index) => `${index}`}
@@ -110,7 +104,7 @@ export class Tags extends Component {
         ) : (
           <Text
             style={{
-              ...sharedColors.textExtraStyle.style,
+              ...sharedColors.regularTextExtraStyle.style,
               textAlign: 'center',
               padding: 20,
             }}

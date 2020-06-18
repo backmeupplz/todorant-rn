@@ -46,6 +46,7 @@
 		BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB78173A245CE04A004EF3E5 /* InfoPlist.strings */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA28768F24FA47F2A8AB4F61 /* Roboto.ttf */; };
+		627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,6 +171,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F71C0E4786A440F492A9778E /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; name = "SF-Pro-Text-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +266,7 @@
 				154358CD284B4EB49B97AE76 /* SF-Pro-Rounded-Bold.otf */,
 				ACB7BED24F044CBEAA61BF2B /* SF-Pro-Rounded-Regular.otf */,
 				7DB7BB28CCFD45EB9E738C2C /* SF-Pro-Text-Regular.otf */,
+				492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				1199FFFB71BB46BBA418AEE6 /* SF-Pro-Rounded-Bold.otf in Resources */,
 				64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */,
 				B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */,
+				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

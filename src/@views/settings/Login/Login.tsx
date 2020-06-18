@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Spinner, View } from 'native-base'
+import { Container, Content, Text, View } from 'native-base'
+import { Spinner } from '@components/Spinner'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
 import * as rest from '@utils/rest'

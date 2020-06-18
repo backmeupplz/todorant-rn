@@ -3,7 +3,7 @@ import { WebView } from 'react-native-webview'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { observable } from 'mobx'
-import { Spinner } from 'native-base'
+import { Spinner } from '@components/Spinner'
 
 @observer
 export class PrivacyPolicy extends Component {
@@ -12,9 +12,7 @@ export class PrivacyPolicy extends Component {
   render() {
     return (
       <>
-        {this.loading && (
-          <Spinner style={{ backgroundColor: sharedColors.backgroundColor }} />
-        )}
+        {this.loading && <Spinner />}
         <WebView
           onLoadEnd={() => {
             this.loading = false

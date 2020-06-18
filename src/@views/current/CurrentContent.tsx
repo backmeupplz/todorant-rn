@@ -5,7 +5,6 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Container } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { NoTodosPlaceholder } from '@views/current/NoTodosPlaceholder'
@@ -33,7 +32,6 @@ export class CurrentContent extends Component {
       <Container {...({ language: sharedSettingsStore.language } as any)}>
         <HeaderScrollView
           title={translate('current')}
-          containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
           showsHeroButton
           infoTitle="infoCurrent"
         >

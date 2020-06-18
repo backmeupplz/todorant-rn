@@ -1,116 +1,36 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import {
-  View,
-  ScrollView,
-  Text,
-  Animated,
-  Dimensions,
-  StyleSheet,
-} from 'react-native'
+import { View, ScrollView, Text, Animated, Dimensions } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
 import { observer } from 'mobx-react'
 import { InfoButton } from '@components/InfoButton'
 import { HeroButton } from '@components/HeroButton'
+import { sharedColors } from '@utils/sharedColors'
+import { observable } from 'mobx'
 
 const headerHeight = ifIphoneX(88, 60)
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent' },
-  headerContainer: {
-    height: headerHeight,
-  },
-  headline: {
-    fontSize: 17,
-    lineHeight: 22,
-    fontWeight: '500',
-    letterSpacing: 0.019,
-  },
-  title: {
-    letterSpacing: 0.011,
-    fontFamily: 'SF-Pro-Display-Bold',
-    marginLeft: 16,
-  },
-})
-
 const { height } = Dimensions.get('window')
 
 @observer
-export class HeaderScrollView extends Component {
-  static propTypes = {
-    title: PropTypes.string,
-    titleStyle: PropTypes.object,
-    headlineStyle: PropTypes.object,
-    children: PropTypes.node,
-    containerStyle: PropTypes.object,
-    headerContainerStyle: PropTypes.object,
-    headerComponentContainerStyle: PropTypes.object,
-    scrollContainerStyle: PropTypes.object,
-    fadeDirection: PropTypes.string,
-    scrollViewProps: PropTypes.object,
-    showsHeroButton: PropTypes.bool,
-    infoTitle: PropTypes.string,
-  }
-
-  static defaultProps = {
-    scrollViewProps: {},
-    showsHeroButton: false,
-  }
-
-  state = {
-    headerHeight: 0,
-    headerY: 0,
-    isHeaderScrolled: false,
-    fadeDirection: '',
-  }
-
-  onLayout = (event: any) => {
-    this.setState({
-      headerHeight: event.nativeEvent.layout.height,
-      headerY: event.nativeEvent.layout.y,
-    })
-  }
+export class HeaderScrollView extends Component<{
+  title: string
+  showsHeroButton?: boolean
+  infoTitle: string
+}> {
+  @observable headerHeight = 0
+  @observable headerY = 0
+  @observable isHeaderScrolled = false
 
   scrollAnimatedValue = new Animated.Value(0)
 
-  handleScroll = (event: any) => {
-    const offset = event.nativeEvent.contentOffset.y
-    const scrollHeaderOffset = this.state.headerHeight + this.state.headerY - 8
-    const isHeaderScrolled = scrollHeaderOffset < offset
-
-    if (!this.state.isHeaderScrolled && isHeaderScrolled) {
-      this.setState({
-        isHeaderScrolled,
-      })
-    }
-
-    if (this.state.isHeaderScrolled && !isHeaderScrolled) {
-      this.setState({
-        isHeaderScrolled,
-      })
-    }
-  }
-
   render() {
-    const {
-      children,
-      title = '',
-      titleStyle = {},
-      containerStyle = {},
-      headerContainerStyle = {},
-      headlineStyle = {},
-      scrollContainerStyle = {},
-      fadeDirection,
-      scrollViewProps = {},
-      showsHeroButton,
-      infoTitle,
-    } = this.props as any
-
-    const fontSize = titleStyle.fontSize || 34
+    const fontSize = 34
     const titleStyles = {
       fontSize,
       lineHeight: fontSize * 1.2,
+      letterSpacing: 0.011,
+      fontFamily: 'SF-Pro-Display-Bold',
+      marginLeft: 16,
     }
 
     const animatedFontSize = this.scrollAnimatedValue.interpolate({
@@ -120,19 +40,37 @@ export class HeaderScrollView extends Component {
     })
 
     return (
-      <View style={[styles.container, containerStyle]}>
-        <View style={[styles.headerContainer, headerContainerStyle]}>
-          <Fade visible={this.state.isHeaderScrolled} direction={fadeDirection}>
+      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+        <View
+          style={{
+            height: headerHeight,
+            backgroundColor: sharedColors.backgroundColor,
+          }}
+        >
+          <Fade visible={this.isHeaderScrolled}>
             <View
               style={{
                 height: headerHeight,
                 alignItems: 'center',
                 justifyContent: 'flex-end',
                 paddingBottom: 12,
+                borderBottomColor: sharedColors.isDark
+                  ? 'rgba(255, 255, 255, 0.1)'
+                  : 'rgba(0, 0, 0, 0.1)',
+                borderBottomWidth: 1,
               }}
             >
-              <Text style={[styles.headline, headlineStyle]}>{title}</Text>
-              {!!infoTitle && (
+              <Text
+                style={{
+                  fontSize: 17,
+                  lineHeight: 22,
+                  fontWeight: '500',
+                  letterSpacing: 0.019,
+                }}
+              >
+                {this.props.title}
+              </Text>
+              {!!this.props.infoTitle && (
                 <View
                   style={{
                     position: 'absolute',
@@ -145,7 +83,7 @@ export class HeaderScrollView extends Component {
                     paddingHorizontal: 12,
                   }}
                 >
-                  {InfoButton(infoTitle)()}
+                  {InfoButton(this.props.infoTitle)()}
                 </View>
               )}
             </View>
@@ -159,12 +97,23 @@ export class HeaderScrollView extends Component {
               },
             ],
             {
-              listener: this.handleScroll,
+              listener: (event: any) => {
+                const offset = event.nativeEvent.contentOffset.y
+                const scrollHeaderOffset = this.headerHeight + this.headerY - 8
+                const isHeaderScrolled = scrollHeaderOffset < offset
+
+                if (!this.isHeaderScrolled && isHeaderScrolled) {
+                  this.isHeaderScrolled = isHeaderScrolled
+                }
+
+                if (this.isHeaderScrolled && !isHeaderScrolled) {
+                  this.isHeaderScrolled = isHeaderScrolled
+                }
+              },
             }
           )}
           scrollEventThrottle={8}
-          contentContainerStyle={scrollContainerStyle}
-          {...scrollViewProps}
+          style={{ backgroundColor: sharedColors.backgroundColor }}
         >
           <View
             style={{
@@ -176,27 +125,28 @@ export class HeaderScrollView extends Component {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Animated.Text
                 style={[
-                  styles.title,
-                  titleStyle,
                   titleStyles,
                   {
                     fontSize: animatedFontSize,
                   },
                 ]}
-                onLayout={this.onLayout}
+                onLayout={(event: any) => {
+                  this.headerHeight = event.nativeEvent.layout.height
+                  this.headerY = event.nativeEvent.layout.y
+                }}
               >
-                {title}
+                {this.props.title}
               </Animated.Text>
 
-              {!!infoTitle && (
+              {!!this.props.infoTitle && (
                 <View style={{ marginHorizontal: 12 }}>
-                  {InfoButton(infoTitle)()}
+                  {InfoButton(this.props.infoTitle)()}
                 </View>
               )}
             </View>
-            {showsHeroButton && <HeroButton />}
+            {this.props.showsHeroButton && <HeroButton />}
           </View>
-          {children}
+          {this.props.children}
         </ScrollView>
       </View>
     )

@@ -12,10 +12,10 @@ type FadeProps = {
   duration?: number
 }
 
-const opacityValue = new Value(0)
-const translationValue = new Value(0)
-
 function Fade(props: FadeProps) {
+  const opacityValue = new Value(0)
+  const translationValue = new Value(0)
+
   const { style, children, direction, visible, duration } = props
   const [isReady, setIsReady] = useState(false)
 
@@ -34,11 +34,13 @@ function Fade(props: FadeProps) {
     const opacityConfig = {
       ...animationConfig,
       toValue: visible ? 1 : 0,
+      useNativeDriver: true,
     }
     const directionConfig = direction === 'up' ? [0, 5] : [5, 0]
     const translationConfig = {
       ...animationConfig,
       toValue: visible ? directionConfig[0] : directionConfig[1],
+      useNativeDriver: true,
     }
 
     timing(opacityValue, opacityConfig).start()

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Spinner } from 'native-base'
+import { Container, Content, Text, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionStatus } from '@models/User'
 import { observer } from 'mobx-react'
@@ -21,6 +21,9 @@ import { navigate } from '@utils/navigation'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { TableItem } from '@components/TableItem'
+import { Divider } from '@components/Divider'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -71,11 +74,14 @@ class PaywallContent extends Component<{
     return (
       <Container>
         <Content
-          style={{ padding: 16, backgroundColor: sharedColors.backgroundColor }}
+          style={{
+            paddingVertical: 16,
+            backgroundColor: sharedColors.backgroundColor,
+          }}
         >
           {this.props.route.params?.type === 'appleUnauthorized' ? (
-            <>
-              <Text {...sharedColors.textExtraStyle}>
+            <View style={{ marginHorizontal: 16 }}>
+              <Text {...sharedColors.regularTextExtraStyle}>
                 {translate('appleUnauthorizedText')}
               </Text>
               <Text style={{ color: sharedColors.textColor, marginTop: 10 }}>
@@ -86,17 +92,17 @@ class PaywallContent extends Component<{
                   flex: 1,
                   paddingVertical: 16,
                   textAlign: 'right',
-                  ...sharedColors.textExtraStyle.style,
+                  ...sharedColors.regularTextExtraStyle.style,
                 }}
               >
                 {translate('signature')}
               </Text>
-            </>
+            </View>
           ) : (
-            <>
+            <View style={{ marginHorizontal: 16 }}>
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.active && (
-                <Text {...sharedColors.textExtraStyle}>
+                <Text {...sharedColors.regularTextExtraStyle}>
                   {translate('activeText')}
                 </Text>
               )}
@@ -105,19 +111,19 @@ class PaywallContent extends Component<{
                 (sharedSessionStore.user?.subscriptionStatus ===
                   SubscriptionStatus.trial &&
                   (sharedSessionStore.isTrialOver ||
-                    sharedSessionStore.user.createdOnApple))) && (
-                <Text {...sharedColors.textExtraStyle}>
+                    sharedSessionStore.user?.createdOnApple))) && (
+                <Text {...sharedColors.regularTextExtraStyle}>
                   {translate('endTrialText')}
                 </Text>
               )}
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.earlyAdopter && (
-                <Text {...sharedColors.textExtraStyle}>
-                  <Text {...sharedColors.textExtraStyle}>
+                <Text {...sharedColors.regularTextExtraStyle}>
+                  <Text {...sharedColors.regularTextExtraStyle}>
                     {translate('earlyAdopterText')}
                   </Text>
                   {sharedSessionStore.hasPurchased && (
-                    <Text {...sharedColors.textExtraStyle}>
+                    <Text {...sharedColors.regularTextExtraStyle}>
                       {translate('earlyAdopterTextBonus')}
                     </Text>
                   )}
@@ -126,8 +132,8 @@ class PaywallContent extends Component<{
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.trial &&
                 !sharedSessionStore.isTrialOver &&
-                !sharedSessionStore.user.createdOnApple && (
-                  <Text {...sharedColors.textExtraStyle}>
+                !sharedSessionStore.user?.createdOnApple && (
+                  <Text {...sharedColors.regularTextExtraStyle}>
                     {translate('trialText')}
                   </Text>
                 )}
@@ -136,7 +142,7 @@ class PaywallContent extends Component<{
                   flex: 1,
                   paddingVertical: 16,
                   textAlign: 'right',
-                  ...sharedColors.textExtraStyle.style,
+                  ...sharedColors.regularTextExtraStyle.style,
                 }}
               >
                 {translate('signature')}
@@ -144,7 +150,7 @@ class PaywallContent extends Component<{
               {(this.vm.loading || purchaseListener.isPurchasing) && (
                 <Spinner />
               )}
-            </>
+            </View>
           )}
           {(!sharedSessionStore.hasPurchased ||
             this.props.route.params?.type === 'appleUnauthorized') && (
@@ -154,7 +160,9 @@ class PaywallContent extends Component<{
                   style={{
                     justifyContent: 'center',
                     flexDirection: 'column',
-                    marginTop: 16,
+                    marginVertical: 8,
+                    marginHorizontal: 16,
+                    borderRadius: 10,
                     height:
                       this.props.route.params?.type === 'appleUnauthorized'
                         ? 75
@@ -187,56 +195,36 @@ class PaywallContent extends Component<{
                   </Text>
                 </Button>
               ))}
-              <Button
-                {...extraButtonProps(sharedColors)}
-                style={{
-                  justifyContent: 'center',
-                  marginTop: 8,
-                  ...extraButtonProps(sharedColors).style,
-                }}
-                small
+              <Divider />
+              <TableItem
                 onPress={() => {
                   navigate('Terms')
                 }}
               >
-                <Text style={{ color: sharedColors.placeholderColor }}>
+                <Text {...sharedColors.regularTextExtraStyle}>
                   {translate('termsOfUse')}
                 </Text>
-              </Button>
-              <Button
-                {...extraButtonProps(sharedColors)}
-                style={{
-                  justifyContent: 'center',
-                  ...extraButtonProps(sharedColors).style,
-                }}
-                small
+              </TableItem>
+              <TableItem
                 onPress={() => {
                   navigate('Privacy')
                 }}
               >
-                <Text style={{ color: sharedColors.placeholderColor }}>
+                <Text {...sharedColors.regularTextExtraStyle}>
                   {translate('privacyPolicy')}
                 </Text>
-              </Button>
+              </TableItem>
             </>
           )}
-          <Button
-            {...extraButtonProps(sharedColors)}
-            style={{
-              justifyContent: 'center',
-              flexDirection: 'column',
-              marginTop: 16,
-              ...extraButtonProps(sharedColors).style,
-            }}
+          <TableItem
             onPress={() => {
               restorePurchases()
             }}
-            disabled={purchaseListener.isPurchasing}
           >
-            <Text {...sharedColors.textExtraStyle}>
+            <Text {...sharedColors.regularTextExtraStyle}>
               {translate('restorePurchases')}
             </Text>
-          </Button>
+          </TableItem>
         </Content>
       </Container>
     )
