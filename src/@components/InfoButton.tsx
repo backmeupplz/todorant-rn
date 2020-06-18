@@ -16,6 +16,9 @@ export class InfoButtonContent extends Component<{
   render() {
     return (
       <TouchableOpacity
+        style={{
+          marginRight: 12,
+        }}
         onPress={() => {
           setTimeout(() => {
             Alert.alert(translate('infoTitle'), translate(this.props.message), [

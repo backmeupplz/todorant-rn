@@ -35,7 +35,7 @@ export class ColorModeManager {
     return this.isDark ? '#1F1F1F' : '#FFFFFF'
   }
   @computed get borderColor() {
-    return this.isDark ? 'rgba(243, 243, 246, 0.3)' : '#919191'
+    return this.isDark ? 'rgba(243, 243, 246, 0.3)' : 'rgba(0, 0, 0, 0.3)'
   }
   @computed get headerExtraStyle() {
     return {
@@ -52,6 +52,14 @@ export class ColorModeManager {
     return {
       style: {
         color: this.textColor,
+      },
+    }
+  }
+  @computed get regularTextExtraStyle() {
+    return {
+      style: {
+        color: this.textColor,
+        fontFamily: 'SF-Pro-Text-Regular',
       },
     }
   }

@@ -9,14 +9,14 @@ import { sharedColors } from '@utils/sharedColors'
 import { daysAgo } from '@utils/plusButtonAction'
 import { subscriptionStatusName } from '@utils/subscriptionStatusName'
 import { Button } from '@components/Button'
+import { TableItem } from '@components/TableItem'
 
 @observer
 export class SubscriptionSection extends Component {
   render() {
     return (
       <>
-        <ListItem
-          {...sharedColors.listItemExtraStyle}
+        <TableItem
           onPress={() => {
             navigate(
               'Paywall',
@@ -28,11 +28,21 @@ export class SubscriptionSection extends Component {
             )
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>
+          <Text
+            style={{
+              color: sharedColors.textColor,
+              fontFamily: 'SF-Pro-Text-Regular',
+            }}
+          >
             {translate('subscription')}
           </Text>
           <View style={{ alignItems: 'flex-end' }}>
-            <Text {...sharedColors.textExtraStyle}>
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
               {subscriptionStatusName(
                 sharedSessionStore.user?.subscriptionStatus
               )()}
@@ -49,15 +59,15 @@ export class SubscriptionSection extends Component {
                 </Text>
               )}
           </View>
-        </ListItem>
+        </TableItem>
         {sharedSessionStore.user?.token &&
           (!sharedSessionStore.isSubscriptionActive ||
             sharedSessionStore.user.subscriptionStatus ===
               SubscriptionStatus.trial) && (
-            <ListItem {...sharedColors.listItemExtraStyle}>
+            <TableItem>
               <Button
                 danger
-                style={{ flex: 1 }}
+                style={{ flex: 1, borderRadius: 10 }}
                 block
                 onPress={() => {
                   navigate(
@@ -71,7 +81,7 @@ export class SubscriptionSection extends Component {
               >
                 <Text>{translate('buySubscription')}</Text>
               </Button>
-            </ListItem>
+            </TableItem>
           )}
       </>
     )

@@ -178,6 +178,7 @@ export class LoginContent extends Component<{
                 justifyContent: 'center',
                 backgroundColor: 'tomato',
                 marginBottom: 10,
+                borderRadius: 10,
               }}
               onPress={this.vm.loginWithGoogle}
               disabled={this.vm.loading}
@@ -189,6 +190,7 @@ export class LoginContent extends Component<{
                 justifyContent: 'center',
                 backgroundColor: 'cornflowerblue',
                 marginBottom: 10,
+                borderRadius: 10,
               }}
               onPress={this.vm.loginWithFacebook}
               disabled={this.vm.loading}
@@ -198,7 +200,7 @@ export class LoginContent extends Component<{
             {Platform.OS === 'ios' && (
               <View style={{ paddingBottom: 10 }}>
                 <AppleButton
-                  cornerRadius={5}
+                  cornerRadius={10}
                   style={{
                     height: 50,
                     flex: 1,
@@ -214,6 +216,7 @@ export class LoginContent extends Component<{
                 justifyContent: 'center',
                 backgroundColor: 'dodgerblue',
                 marginBottom: 10,
+                borderRadius: 10,
               }}
               onPress={() => {
                 navigate('LoginTelegram', {
@@ -231,6 +234,7 @@ export class LoginContent extends Component<{
                 justifyContent: 'center',
                 backgroundColor: 'darkslateblue',
                 marginBottom: 10,
+                borderRadius: 10,
               }}
               onPress={() => {
                 navigate('LoginQR', {

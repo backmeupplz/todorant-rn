@@ -27,7 +27,10 @@ export class IntroMessage extends Component {
         <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
           {[1, 2, 3, 4, 5].map((i) => (
             <Text
-              style={{ padding: 12, color: sharedColors.textColor }}
+              style={{
+                padding: 12,
+                ...sharedColors.regularTextExtraStyle.style,
+              }}
               key={i}
             >
               {translate(`intro${i}`)}
@@ -38,13 +41,13 @@ export class IntroMessage extends Component {
               flex: 1,
               padding: 12,
               textAlign: 'right',
-              ...sharedColors.textExtraStyle.style,
+              ...sharedColors.regularTextExtraStyle.style,
             }}
           >
             {translate('signature')}
           </Text>
           <Button
-            style={{ justifyContent: 'center', margin: 10 }}
+            style={{ justifyContent: 'center', margin: 10, borderRadius: 10 }}
             onPress={() => {
               goBack()
             }}

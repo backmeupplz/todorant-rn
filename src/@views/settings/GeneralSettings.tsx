@@ -9,6 +9,7 @@ import RNRestart from 'react-native-restart'
 import { AsyncStorage } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { TableItem } from '@components/TableItem'
 
 const codeToName = {
   en: 'English',
@@ -43,8 +44,7 @@ export class GeneralSettings extends Component {
   render() {
     return (
       <>
-        <ListItem
-          {...sharedColors.listItemExtraStyle}
+        <TableItem
           onPress={() => {
             const options = [
               { label: translate('languageAuto'), code: 'en' },
@@ -76,13 +76,16 @@ export class GeneralSettings extends Component {
             )
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('languageSelect')}
           </Text>
-          <Text {...sharedColors.textExtraStyle}>{this.languageLabel}</Text>
-        </ListItem>
-        <ListItem
-          {...sharedColors.listItemExtraStyle}
+          <Text {...sharedColors.regularTextExtraStyle}>
+            {this.languageLabel}
+          </Text>
+        </TableItem>
+        <TableItem
           onPress={() => {
             const options = [
               { label: translate('languageAuto'), mode: ColorMode.auto },
@@ -106,37 +109,45 @@ export class GeneralSettings extends Component {
             )
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('colorMode')}
           </Text>
-          <Text {...sharedColors.textExtraStyle}>{this.colorModeLabel}</Text>
-        </ListItem>
+          <Text {...sharedColors.regularTextExtraStyle}>
+            {this.colorModeLabel}
+          </Text>
+        </TableItem>
         {!!sharedSessionStore.user && (
-          <ListItem
+          <TableItem
             onPress={() => {
               navigate('Integrations')
             }}
-            {...sharedColors.listItemExtraStyle}
           >
-            <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            <Text
+              style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+            >
               {translate('integrations')}
             </Text>
-          </ListItem>
+          </TableItem>
         )}
         {!!sharedSessionStore.user && (
-          <ListItem
+          <TableItem
             onPress={() => {
               navigate('Security')
             }}
-            {...sharedColors.listItemExtraStyle}
           >
-            <Text style={{ flex: 1, color: sharedColors.textColor }}>
+            <Text
+              style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+            >
               {translate('security')}
             </Text>
-          </ListItem>
+          </TableItem>
         )}
-        <ListItem {...sharedColors.listItemExtraStyle}>
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+        <TableItem>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('soundEffects')}
           </Text>
           <Switch
@@ -145,9 +156,11 @@ export class GeneralSettings extends Component {
               sharedSettingsStore.soundOn = val
             }}
           />
-        </ListItem>
-        <ListItem {...sharedColors.listItemExtraStyle}>
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+        </TableItem>
+        <TableItem>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('gamification')}
           </Text>
           <Switch
@@ -156,7 +169,7 @@ export class GeneralSettings extends Component {
               sharedSettingsStore.gamificationOn = val
             }}
           />
-        </ListItem>
+        </TableItem>
       </>
     )
   }

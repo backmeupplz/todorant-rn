@@ -34,6 +34,8 @@ export class CurrentContent extends Component {
         <HeaderScrollView
           title={translate('current')}
           containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
+          showsHeroButton
+          infoTitle="infoCurrent"
         >
           {!!sharedTodoStore.progress.count && (
             <SegmentedProgressView

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListItem, Text, ActionSheet } from 'native-base'
+import { Text, ActionSheet } from 'native-base'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sockets } from '@utils/sockets'
 import { observer } from 'mobx-react'
@@ -7,15 +7,20 @@ import { Switch } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { navigate } from '@utils/navigation'
+import { TableItem } from '@components/TableItem'
 
 @observer
 export class TodoSettings extends Component {
   render() {
     return (
       <>
-        <ListItem {...sharedColors.listItemExtraStyle}>
+        <TableItem>
           <Text
-            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('defaultToToday')}
           </Text>
@@ -27,10 +32,14 @@ export class TodoSettings extends Component {
               sockets.settingsSyncManager.sync()
             }}
           />
-        </ListItem>
-        <ListItem {...sharedColors.listItemExtraStyle}>
+        </TableItem>
+        <TableItem>
           <Text
-            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('newTodosGoOnTop')}
           </Text>
@@ -42,10 +51,14 @@ export class TodoSettings extends Component {
               sockets.settingsSyncManager.sync()
             }}
           />
-        </ListItem>
-        <ListItem {...sharedColors.listItemExtraStyle}>
+        </TableItem>
+        <TableItem>
           <Text
-            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('preserveOrderByTime')}
           </Text>
@@ -57,10 +70,14 @@ export class TodoSettings extends Component {
               sockets.settingsSyncManager.sync()
             }}
           />
-        </ListItem>
-        <ListItem {...sharedColors.listItemExtraStyle}>
+        </TableItem>
+        <TableItem>
           <Text
-            style={{ flex: 1, color: sharedColors.textColor, paddingRight: 10 }}
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
           >
             {translate('askBeforeDelete')}
           </Text>
@@ -70,9 +87,8 @@ export class TodoSettings extends Component {
               sharedSettingsStore.askBeforeDelete = value
             }}
           />
-        </ListItem>
-        <ListItem
-          {...sharedColors.listItemExtraStyle}
+        </TableItem>
+        <TableItem
           onPress={() => {
             ActionSheet.show(
               {
@@ -93,23 +109,26 @@ export class TodoSettings extends Component {
             )
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('firstDayOfWeek')}
           </Text>
           <Text {...sharedColors.textExtraStyle}>
             {translate(`weekday${sharedSettingsStore.firstDayOfWeekSafe}`)}
           </Text>
-        </ListItem>
-        <ListItem
-          {...sharedColors.listItemExtraStyle}
+        </TableItem>
+        <TableItem
           onPress={() => {
             navigate('Tags')
           }}
         >
-          <Text style={{ flex: 1, color: sharedColors.textColor }}>
+          <Text
+            style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+          >
             {translate('tags')}
           </Text>
-        </ListItem>
+        </TableItem>
       </>
     )
   }

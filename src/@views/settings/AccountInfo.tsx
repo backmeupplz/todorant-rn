@@ -1,26 +1,28 @@
 import React, { Component } from 'react'
-import { ListItem, Text, Toast } from 'native-base'
+import { Text, Toast } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Clipboard } from 'react-native'
+import { SectionHeader } from '@components/SectionHeader'
+import { TableItem } from '@components/TableItem'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
   render() {
     return (
-      <ListItem
+      <TableItem
         {...sharedColors.listItemExtraStyle}
         onPress={() => {
           Clipboard.setString(this.props.value)
           Toast.show({ text: `"${this.props.value}" ${translate('copied')}` })
         }}
       >
-        <Text {...sharedColors.textExtraStyle}>{this.props.title}</Text>
-        <Text {...sharedColors.textExtraStyle}>{this.props.value}</Text>
-      </ListItem>
+        <Text {...sharedColors.regularTextExtraStyle}>{this.props.title}</Text>
+        <Text {...sharedColors.regularTextExtraStyle}>{this.props.value}</Text>
+      </TableItem>
     )
   }
 }
@@ -29,13 +31,17 @@ class InfoRow extends Component<{ title: string; value: string }> {
 export class AccountInfo extends Component {
   render() {
     return !sharedSessionStore.user ? (
-      <ListItem {...sharedColors.listItemExtraStyle}>
-        <Text {...sharedColors.textExtraStyle}>
-          {translate('anonymousText')}
-        </Text>
-      </ListItem>
+      <>
+        <SectionHeader title={translate('account')} />
+        <TableItem>
+          <Text {...sharedColors.regularTextExtraStyle}>
+            {translate('anonymousText')}
+          </Text>
+        </TableItem>
+      </>
     ) : (
       <>
+        <SectionHeader title={translate('account')} />
         <InfoRow
           title={translate('nameLabel')}
           value={sharedSessionStore.user.name}

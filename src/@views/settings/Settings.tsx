@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Content, List, ListItem, Text } from 'native-base'
+import { Container, Text } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
@@ -35,6 +35,10 @@ import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { LoginQR } from '@views/settings/Login/LoginQR'
 import { Security } from '@views/settings/Security'
 import { DebugButtons } from '@views/settings/DebugButtons'
+import { HeaderScrollView } from '@components/HeaderScrollView'
+import { Divider } from '@components/Divider'
+import { SectionHeader } from '@components/SectionHeader'
+import { TableItem } from '@components/TableItem'
 
 const Stack = createStackNavigator()
 
@@ -45,142 +49,145 @@ export class SettingsContent extends Component {
   render() {
     return (
       <Container>
-        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
-          <List>
-            <DebugButtons />
-            <ListItem itemHeader first>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                {translate('important')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              {...sharedColors.listItemExtraStyle}
+        <HeaderScrollView
+          title={translate('settings')}
+          containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
+          infoTitle="infoSettings"
+        >
+          {/* <DebugButtons /> */}
+          {/* Important */}
+          <Divider />
+          <SectionHeader title={translate('important')} />
+          <TableItem
+            onPress={() => {
+              navigate('Rules')
+            }}
+          >
+            <Text {...sharedColors.regularTextExtraStyle}>
+              {translate('howToUse')}
+            </Text>
+          </TableItem>
+          {/* Account */}
+          <Divider />
+          <AccountInfo />
+          <LoginLogoutButtons />
+          {/* Todos */}
+          <Divider />
+          <SectionHeader title={translate('todos')} />
+          <TodoSettings />
+          {/* General */}
+          <Divider />
+          <SectionHeader title={translate('general')} />
+          {!!sharedSessionStore.user && (
+            <TableItem
               onPress={() => {
-                navigate('Rules')
+                navigate('Sockets')
               }}
             >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('howToUse')}
+              <Text {...sharedColors.regularTextExtraStyle}>
+                {translate('socketsInfo')}
               </Text>
-            </ListItem>
-            <ListItem itemHeader first>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                {translate('account')}
+              <CheckOrCross ok={sharedSocketStore.connected} />
+            </TableItem>
+          )}
+          {!!sharedSessionStore.user && (
+            <TableItem
+              onPress={() => {
+                navigate('Data')
+              }}
+            >
+              <Text {...sharedColors.regularTextExtraStyle}>
+                {translate('dataInfo')}
               </Text>
-            </ListItem>
-            <AccountInfo />
-            <LoginLogoutButtons />
-            <ListItem itemHeader>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                {translate('todos')}
-              </Text>
-            </ListItem>
-            <TodoSettings />
-            <ListItem itemHeader>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                {translate('general')}
-              </Text>
-            </ListItem>
-            {!!sharedSessionStore.user && (
-              <ListItem
-                button
-                onPress={() => {
-                  navigate('Sockets')
-                }}
-                {...sharedColors.listItemExtraStyle}
-              >
-                <Text {...sharedColors.textExtraStyle}>
-                  {translate('socketsInfo')}
+            </TableItem>
+          )}
+          <GeneralSettings />
+          {/* Information */}
+          <Divider />
+          <SectionHeader title={translate('info')} />
+          <TableItem
+            onPress={() => {
+              navigate('Intro')
+            }}
+          >
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
+              {translate('introButton')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={() => {
+              navigate('Terms')
+            }}
+          >
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
+              {translate('termsOfUse')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={() => {
+              navigate('Privacy')
+            }}
+          >
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
+              {translate('privacyPolicy')}
+            </Text>
+          </TableItem>
+          <TableItem
+            onPress={() => {
+              alertSupport()
+            }}
+          >
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
+              {translate('supportLabel')}
+            </Text>
+          </TableItem>
+          <Divider />
+          <TableItem>
+            <Text
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Text-Regular',
+              }}
+            >
+              v{DeviceInfo.getVersion()}.{codePushVersion}
+              {__DEV__ ? '.dev' : ''}
+            </Text>
+          </TableItem>
+          {/* {__DEV__ && (
+            <>
+              <ListItem itemHeader>
+                <Text style={{ color: sharedColors.placeholderColor }}>
+                  Debug
                 </Text>
-                <CheckOrCross ok={sharedSocketStore.connected} />
               </ListItem>
-            )}
-            {!!sharedSessionStore.user && (
-              <ListItem
-                button
-                onPress={() => {
-                  navigate('Data')
-                }}
-                {...sharedColors.listItemExtraStyle}
-              >
+              <ListItem {...sharedColors.listItemExtraStyle}>
                 <Text {...sharedColors.textExtraStyle}>
-                  {translate('dataInfo')}
+                  {JSON.stringify(sharedSessionStore.user, undefined, 2)}
                 </Text>
               </ListItem>
-            )}
-            <GeneralSettings />
-            <ListItem itemHeader>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                {translate('info')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              {...sharedColors.listItemExtraStyle}
-              onPress={() => {
-                navigate('Intro')
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('introButton')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              {...sharedColors.listItemExtraStyle}
-              onPress={() => {
-                navigate('Terms')
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('termsOfUse')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              {...sharedColors.listItemExtraStyle}
-              onPress={() => {
-                navigate('Privacy')
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('privacyPolicy')}
-              </Text>
-            </ListItem>
-            <ListItem
-              button
-              {...sharedColors.listItemExtraStyle}
-              onPress={() => {
-                alertSupport()
-              }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('supportLabel')}
-              </Text>
-            </ListItem>
-            <ListItem {...sharedColors.listItemExtraStyle}>
-              <Text style={{ color: sharedColors.placeholderColor }}>
-                v{DeviceInfo.getVersion()}.{codePushVersion}
-                {__DEV__ ? '.dev' : ''}
-              </Text>
-            </ListItem>
-            {__DEV__ && (
-              <>
-                <ListItem itemHeader>
-                  <Text style={{ color: sharedColors.placeholderColor }}>
-                    Debug
-                  </Text>
-                </ListItem>
-                <ListItem {...sharedColors.listItemExtraStyle}>
-                  <Text {...sharedColors.textExtraStyle}>
-                    {JSON.stringify(sharedSessionStore.user, undefined, 2)}
-                  </Text>
-                </ListItem>
-              </>
-            )}
-          </List>
-        </Content>
+            </>
+          )} */}
+        </HeaderScrollView>
       </Container>
     )
   }
@@ -195,16 +202,7 @@ export function Settings() {
             name="Settings"
             component={SettingsContent}
             options={{
-              title: translate('settings'),
-              ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoSettings', [
-                {
-                  text: translate('howToUse'),
-                  onPress: () => {
-                    navigate('Rules')
-                  },
-                },
-              ]),
+              headerShown: false,
               ...headerBackButtonProps(),
             }}
           />

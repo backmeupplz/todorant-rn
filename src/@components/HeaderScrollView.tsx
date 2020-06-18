@@ -49,10 +49,13 @@ export class HeaderScrollView extends Component {
     scrollContainerStyle: PropTypes.object,
     fadeDirection: PropTypes.string,
     scrollViewProps: PropTypes.object,
+    showsHeroButton: PropTypes.bool,
+    infoTitle: PropTypes.string,
   }
 
   static defaultProps = {
     scrollViewProps: {},
+    showsHeroButton: false,
   }
 
   state = {
@@ -100,6 +103,8 @@ export class HeaderScrollView extends Component {
       scrollContainerStyle = {},
       fadeDirection,
       scrollViewProps = {},
+      showsHeroButton,
+      infoTitle,
     } = this.props as any
 
     const fontSize = titleStyle.fontSize || 34
@@ -127,20 +132,22 @@ export class HeaderScrollView extends Component {
               }}
             >
               <Text style={[styles.headline, headlineStyle]}>{title}</Text>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  flex: 1,
-                  height: '100%',
-                  alignContent: 'center',
-                  justifyContent: 'flex-end',
-                  paddingHorizontal: 12,
-                }}
-              >
-                {InfoButton('infoCurrent')()}
-              </View>
+              {!!infoTitle && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    flex: 1,
+                    height: '100%',
+                    alignContent: 'center',
+                    justifyContent: 'flex-end',
+                    paddingHorizontal: 12,
+                  }}
+                >
+                  {InfoButton(infoTitle)()}
+                </View>
+              )}
             </View>
           </Fade>
         </View>
@@ -180,11 +187,14 @@ export class HeaderScrollView extends Component {
               >
                 {title}
               </Animated.Text>
-              <View style={{ marginHorizontal: 12 }}>
-                {InfoButton('infoCurrent')()}
-              </View>
+
+              {!!infoTitle && (
+                <View style={{ marginHorizontal: 12 }}>
+                  {InfoButton(infoTitle)()}
+                </View>
+              )}
             </View>
-            <HeroButton />
+            {showsHeroButton && <HeroButton />}
           </View>
           {children}
         </ScrollView>

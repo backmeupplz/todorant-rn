@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { Text, ListItem } from 'native-base'
+import { Text, View } from 'native-base'
 import { navigate } from '@utils/navigation'
 import { alertConfirm } from '@utils/alert'
 import { observer } from 'mobx-react'
@@ -12,15 +12,17 @@ import { Button } from '@components/Button'
 export class LoginLogoutButtons extends Component {
   render() {
     return (
-      <ListItem
+      <View
         style={{
-          borderColor: sharedColors.placeholderColor,
           flexDirection: 'column',
+          paddingHorizontal: 16,
+          alignItems: 'center',
+          marginVertical: 16,
         }}
       >
         {!!sharedSessionStore.user ? (
           <Button
-            style={{ flex: 1 }}
+            style={{ flex: 1, borderRadius: 10 }}
             block
             onPress={() => {
               alertConfirm(translate('logoutText'), translate('logout'), () => {
@@ -33,7 +35,7 @@ export class LoginLogoutButtons extends Component {
         ) : (
           <>
             <Button
-              style={{ flex: 1 }}
+              style={{ flex: 1, borderRadius: 10 }}
               block
               onPress={() => {
                 navigate('Login')
@@ -41,12 +43,12 @@ export class LoginLogoutButtons extends Component {
             >
               <Text>{translate('loginButton')}</Text>
             </Button>
-            <Text style={{ marginTop: 5, color: sharedColors.textColor }}>
+            <Text style={{ marginVertical: 12, color: sharedColors.textColor }}>
               {translate('alreadyRegistered')}
             </Text>
           </>
         )}
-      </ListItem>
+      </View>
     )
   }
 }
