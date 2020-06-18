@@ -4,10 +4,36 @@ import { Todo, isTodoToday, isTodoOld } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
-import { Button } from '@components/Button'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import CustomIcon from '@components/CustomIcon'
+
+@observer
+class IconButton extends Component<{
+  onPress: () => void
+  name: string
+  color?: string
+  rotation?: number
+  fullColor?: boolean
+}> {
+  render() {
+    return (
+      <TouchableOpacity onPress={this.props.onPress}>
+        <CustomIcon
+          name={this.props.name}
+          size={28}
+          style={{
+            color: this.props.color || sharedColors.defaultIconColor,
+            opacity: this.props.fullColor ? 1.0 : 0.8,
+            rotation: this.props.rotation,
+            marginHorizontal: 6,
+          }}
+        />
+      </TouchableOpacity>
+    )
+  }
+}
 
 @observer
 export class TodoCardActions extends Component<{
@@ -43,116 +69,73 @@ export class TodoCardActions extends Component<{
             flexDirection: 'row',
             flex: 1,
             justifyContent: 'flex-end',
+            alignItems: 'center',
           }}
         >
-          {this.props.type === CardType.planning &&
-            !isTodoToday(this.props.todo) &&
-            !isTodoOld(this.props.todo) && (
-              <Button
-                icon
-                {...extraButtonProps(sharedColors)}
-                onPress={() => {
-                  this.props.vm.moveToToday(this.props.todo)
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name="arrow-upward"
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
-            )}
-          <Button
-            icon
-            {...extraButtonProps(sharedColors)}
+          <IconButton
             onPress={() => {
               this.props.vm.delete(this.props.todo)
             }}
-          >
-            <Icon
-              type="MaterialIcons"
-              name="delete"
-              style={{ color: sharedColors.primaryColor }}
-              {...sharedColors.iconExtraStyle}
-            />
-          </Button>
+            color={sharedColors.destructIconColor}
+            name="delete_outline_28-iOS"
+          />
+          {this.props.type === CardType.planning &&
+            !isTodoToday(this.props.todo) &&
+            !isTodoOld(this.props.todo) && (
+              <IconButton
+                onPress={() => {
+                  this.props.vm.moveToToday(this.props.todo)
+                }}
+                name="reply_outline_28"
+                rotation={90}
+              />
+            )}
           {this.props.type !== CardType.current && (
-            <Button
-              icon
-              {...extraButtonProps(sharedColors)}
+            <IconButton
               onPress={() => {
                 navigate('EditTodo', { editedTodo: this.props.todo })
               }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name="edit"
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
+              name="edit_outline_28"
+            />
           )}
           {this.props.type === CardType.current &&
             this.props.vm.isSkippable(this.props.todo) && (
-              <Button
-                icon
-                {...extraButtonProps(sharedColors)}
+              <IconButton
                 onPress={() => {
                   this.props.vm.skip(this.props.todo)
                 }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name="arrow-forward"
-                  {...sharedColors.iconExtraStyle}
-                />
-              </Button>
+                name="arrow_right_outline_28--forward"
+              />
             )}
           {(this.props.type === CardType.current ||
             this.props.type === CardType.planning) && (
-            <Button
-              icon
-              {...extraButtonProps(sharedColors)}
+            <IconButton
               onPress={() => {
                 navigate('BreakdownTodo', {
                   breakdownTodo: this.props.todo,
                 })
               }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name="list"
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
+              name="list_outline_28"
+            />
           )}
           {this.props.type === CardType.done ? (
-            <Button
-              icon
-              {...extraButtonProps(sharedColors)}
+            <IconButton
               onPress={() => {
                 this.props.vm.uncomplete(this.props.todo)
               }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name="repeat"
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
+              name="arrow_uturn_right_outline_28"
+              color={sharedColors.successIconColor}
+              fullColor
+            />
           ) : (
-            <Button
-              icon
-              {...extraButtonProps(sharedColors)}
+            <IconButton
               onPress={() => {
                 this.props.vm.complete(this.props.todo)
               }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name="done"
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
+              name="done_outline_28--check"
+              color={sharedColors.successIconColor}
+              fullColor
+            />
           )}
         </View>
       </CardItem>

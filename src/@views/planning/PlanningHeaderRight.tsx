@@ -4,7 +4,7 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { Icon } from 'native-base'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
-import { InfoButton } from '@views/settings/InfoButton'
+import { InfoButton } from '@components/InfoButton'
 import { Button } from '@components/Button'
 
 @observer

@@ -4,16 +4,18 @@ import { CurrentVM } from '@views/current/CurrentVM'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Container, Content, View, Text } from 'native-base'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { Container, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import { ProgressBar } from '@components/ProgressBar'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import ActionButton from 'react-native-action-button'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import { NoTodosPlaceholder } from '@views/current/NoTodosPlaceholder'
 import { AllDonePlaceholder } from '@views/current/AllDonePlaceholder'
+import { HeaderScrollView } from '@components/HeaderScrollView'
+import { translate } from '@utils/i18n'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { SegmentedProgressView } from '@components/SegmentedProgressView'
 
 @observer
 export class CurrentContent extends Component {
@@ -33,20 +35,16 @@ export class CurrentContent extends Component {
       : 1
     return (
       <Container {...({ language: sharedSettingsStore.language } as any)}>
-        <Content style={{ backgroundColor: sharedColors.backgroundColor }}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              margin: 12,
-            }}
-          >
-            <ProgressBar progress={progress} />
-            <Text {...sharedColors.textExtraStyle}>
-              {`${sharedTodoStore.progress.completed}/${sharedTodoStore.progress.count}`}
-            </Text>
-          </View>
+        <HeaderScrollView
+          title={translate('current')}
+          containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
+        >
+          {!!sharedTodoStore.progress.count && (
+            <SegmentedProgressView
+              completed={sharedTodoStore.progress.completed}
+              total={sharedTodoStore.progress.count}
+            />
+          )}
           {!!this.vm.currentTodo && (
             <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
           )}
@@ -54,7 +52,7 @@ export class CurrentContent extends Component {
             sharedTodoStore.progress.count ===
               sharedTodoStore.progress.completed && <AllDonePlaceholder />}
           {!sharedTodoStore.progress.count && <NoTodosPlaceholder />}
-        </Content>
+        </HeaderScrollView>
         <ActionButton
           buttonColor={sharedColors.primaryColor}
           buttonTextStyle={{ color: sharedColors.invertedTextColor }}

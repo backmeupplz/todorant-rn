@@ -9,7 +9,6 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
-import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
 
 const debug = false
@@ -39,7 +38,7 @@ export class TodoCardTextBlock extends Component<{
             navigate('EditTodo', { editedTodo: this.props.todo })
           }
         }}
-        style={{ flex: 1 }}
+        style={{ flex: 1, fontFamily: 'SF-Pro-Text-Regular' }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
         {__DEV__ && debug && (

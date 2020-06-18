@@ -21,7 +21,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
 import { IntroMessage } from '@views/settings/IntroMessage'
-import { InfoButton } from '@views/settings/InfoButton'
+import { InfoButton } from '@components/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
 import {

@@ -26,10 +26,13 @@ export class ColorModeManager {
     return !this.isDark ? '#f9f9f9' : '#060606'
   }
   @computed get primaryColor() {
-    return this.isDark ? '#f9f9f9' : '#eb6a52'
+    return this.isDark ? '#FF641A' : '#eb6a52'
   }
   @computed get backgroundColor() {
-    return this.isDark ? '#343434' : '#fff8f7'
+    return this.isDark ? '#19191A' : '#FCFCFE'
+  }
+  @computed get cardBackgroundColor() {
+    return this.isDark ? '#1F1F1F' : '#FCFCFE'
   }
   @computed get borderColor() {
     return this.isDark ? '#919191' : '#919191'
@@ -67,6 +70,15 @@ export class ColorModeManager {
         color: this.primaryColor,
       },
     }
+  }
+  @computed get defaultIconColor() {
+    return this.isDark ? 'rgb(51, 102, 255)' : this.primaryColor
+  }
+  @computed get destructIconColor() {
+    return this.isDark ? '#E64646' : this.primaryColor
+  }
+  @computed get successIconColor() {
+    return this.isDark ? '#4BB34B' : this.primaryColor
   }
   @computed get placeholderColor() {
     return 'grey'

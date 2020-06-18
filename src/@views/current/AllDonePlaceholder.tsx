@@ -20,9 +20,33 @@ export class AllDonePlaceholder extends Component {
           alignItems: 'center',
         }}
       >
-        <H1 {...sharedColors.textExtraStyle}>🎉</H1>
-        <H1 {...sharedColors.textExtraStyle}>{translate('allDoneTitle')}</H1>
-        <Text style={{ textAlign: 'center', color: sharedColors.textColor }}>
+        <H1
+          style={{
+            color: sharedColors.textColor,
+            marginHorizontal: 24,
+            marginBottom: 12,
+          }}
+        >
+          🎉
+        </H1>
+        <H1
+          style={{
+            color: sharedColors.textColor,
+            opacity: 0.9,
+            marginHorizontal: 24,
+            marginBottom: 16,
+          }}
+        >
+          {translate('allDoneTitle')}
+        </H1>
+        <Text
+          style={{
+            textAlign: 'center',
+            color: sharedColors.textColor,
+            opacity: 0.8,
+            marginHorizontal: 24,
+          }}
+        >
           {translate('allDoneText')}
         </Text>
       </View>
