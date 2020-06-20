@@ -91,7 +91,9 @@ class App extends Component {
                   title: translate('addTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: () => (
-                    <View style={{ flexDirection: 'row' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <AddButton />
                       {InfoButton('infoAdd')()}
                     </View>

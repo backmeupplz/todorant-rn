@@ -247,7 +247,7 @@ class AddTodoContent extends Component<{
           ))}
           <Button
             block
-            style={{ marginHorizontal: 10, marginTop: 10 }}
+            style={{ marginHorizontal: 10, marginTop: 10, borderRadius: 10 }}
             onPress={() => {
               this.saveTodo()
             }}
@@ -278,6 +278,7 @@ class AddTodoContent extends Component<{
                 marginTop: 10,
                 flex: 1,
                 justifyContent: 'center',
+                borderRadius: 10,
               }}
               onPress={() => {
                 this.addTodo()

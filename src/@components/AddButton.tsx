@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Icon } from 'native-base'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { Button } from '@components/Button'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export const addButtonStore = {
   add: () => {},
@@ -13,13 +12,7 @@ export const addButtonStore = {
 export class AddButton extends Component {
   render() {
     return (
-      <Button
-        icon
-        {...extraButtonProps(sharedColors)}
-        style={{
-          ...extraButtonProps(sharedColors).style,
-          marginHorizontal: -10,
-        }}
+      <TouchableOpacity
         onPress={() => {
           addButtonStore.add()
         }}
@@ -29,9 +22,11 @@ export class AddButton extends Component {
           name="add"
           style={{
             color: sharedColors.textColor,
+            opacity: 0.5,
+            marginHorizontal: 12,
           }}
         />
-      </Button>
+      </TouchableOpacity>
     )
   }
 }
