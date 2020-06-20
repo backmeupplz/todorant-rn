@@ -2,9 +2,8 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { Icon } from 'native-base'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
-import { Button } from '@components/Button'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 @observer
 export class PlanningHeaderLeft extends Component {
@@ -12,20 +11,18 @@ export class PlanningHeaderLeft extends Component {
     return (
       !sharedAppStateStore.hash &&
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
-        <Button
-          icon
-          {...extraButtonProps(sharedColors)}
-          small
+        <TouchableOpacity
           onPress={() => {
             sharedAppStateStore.searchEnabled = !sharedAppStateStore.searchEnabled
           }}
+          style={{ marginLeft: 12 }}
         >
           <Icon
             type="MaterialIcons"
             name={sharedAppStateStore.searchEnabled ? 'close' : 'search'}
-            {...sharedColors.iconExtraStyle}
+            style={{ color: sharedColors.textColor, opacity: 0.5 }}
           />
-        </Button>
+        </TouchableOpacity>
       )
     )
   }

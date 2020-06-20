@@ -9,7 +9,7 @@ import { observer } from 'mobx-react'
 export class PlanningHeaderSegment extends Component {
   render() {
     return (
-      <Segment>
+      <Segment style={{ opacity: 0.8 }}>
         <Button
           first
           active={sharedAppStateStore.todoSection === TodoSectionType.planning}
@@ -17,10 +17,10 @@ export class PlanningHeaderSegment extends Component {
             sharedAppStateStore.todoSection = TodoSectionType.planning
           }}
           style={{
-            borderColor: sharedColors.primaryColor,
+            borderColor: sharedColors.textColor,
             backgroundColor:
               sharedAppStateStore.todoSection === TodoSectionType.planning
-                ? sharedColors.primaryColor
+                ? sharedColors.textColor
                 : sharedColors.backgroundColor,
           }}
         >
@@ -29,7 +29,7 @@ export class PlanningHeaderSegment extends Component {
               color:
                 sharedAppStateStore.todoSection === TodoSectionType.planning
                   ? sharedColors.backgroundColor
-                  : sharedColors.primaryColor,
+                  : sharedColors.textColor,
             }}
           >
             {translate('planning')}
@@ -43,10 +43,10 @@ export class PlanningHeaderSegment extends Component {
             sharedAppStateStore.todoSection = TodoSectionType.completed
           }}
           style={{
-            borderColor: sharedColors.primaryColor,
+            borderColor: sharedColors.textColor,
             backgroundColor:
               sharedAppStateStore.todoSection === TodoSectionType.completed
-                ? sharedColors.primaryColor
+                ? sharedColors.textColor
                 : sharedColors.backgroundColor,
           }}
         >
@@ -55,7 +55,7 @@ export class PlanningHeaderSegment extends Component {
               color:
                 sharedAppStateStore.todoSection === TodoSectionType.completed
                   ? sharedColors.backgroundColor
-                  : sharedColors.primaryColor,
+                  : sharedColors.textColor,
             }}
           >
             {translate('completed')}

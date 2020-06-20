@@ -2,29 +2,26 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { Icon } from 'native-base'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
 import { InfoButton } from '@components/InfoButton'
-import { Button } from '@components/Button'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 @observer
 export class PlanningHeaderRight extends Component {
   render() {
     return sharedAppStateStore.hash ? (
-      <Button
-        icon
-        {...extraButtonProps(sharedColors)}
-        small
+      <TouchableOpacity
         onPress={() => {
           sharedAppStateStore.hash = ''
         }}
+        style={{ marginRight: 12 }}
       >
         <Icon
           type="MaterialIcons"
           name="close"
-          {...sharedColors.iconExtraStyle}
+          style={{ color: sharedColors.textColor, opacity: 0.5 }}
         />
-      </Button>
+      </TouchableOpacity>
     ) : (
       InfoButton('infoPlanning')()
     )

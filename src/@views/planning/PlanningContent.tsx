@@ -49,7 +49,7 @@ export class PlanningContent extends Component {
                 >
                   <Text
                     style={{
-                      marginHorizontal: 10,
+                      marginHorizontal: 16,
                       marginTop: 16,
                       ...sharedColors.textExtraStyle.style,
                     }}
