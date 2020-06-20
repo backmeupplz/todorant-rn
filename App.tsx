@@ -189,13 +189,7 @@ class App extends Component {
                 options={{
                   title: translate('heroProfileTitle'),
                   headerTitleAlign: 'center',
-                  headerStyle: {
-                    backgroundColor: sharedHeroStore.rankColor[1],
-                  },
-                  headerTitleStyle: {
-                    color: sharedHeroStore.rankColor[2],
-                  },
-                  headerTintColor: sharedHeroStore.rankColor[2],
+                  ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton(
                     'infoHero',
                     undefined,

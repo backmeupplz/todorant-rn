@@ -7,6 +7,8 @@ import { InfoButton } from '@components/InfoButton'
 import { HeroButton } from '@components/HeroButton'
 import { sharedColors } from '@utils/sharedColors'
 import { observable } from 'mobx'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const headerHeight = ifIphoneX(88, 60)
 const { height } = Dimensions.get('window')
@@ -66,6 +68,7 @@ export class HeaderScrollView extends Component<{
                   lineHeight: 22,
                   fontWeight: '500',
                   letterSpacing: 0.019,
+                  color: sharedColors.textColor,
                 }}
               >
                 {this.props.title}
@@ -128,6 +131,7 @@ export class HeaderScrollView extends Component<{
                   titleStyles,
                   {
                     fontSize: animatedFontSize,
+                    color: sharedColors.textColor,
                   },
                 ]}
                 onLayout={(event: any) => {
@@ -144,7 +148,8 @@ export class HeaderScrollView extends Component<{
                 </View>
               )}
             </View>
-            {this.props.showsHeroButton && <HeroButton />}
+            {this.props.showsHeroButton &&
+              sharedSettingsStore.gamificationOn && <HeroButton />}
           </View>
           {this.props.children}
         </ScrollView>

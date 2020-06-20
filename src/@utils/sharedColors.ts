@@ -2,6 +2,7 @@ import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
+import { updateAndroidNavigationBarColor } from './androidNavigationBar'
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
@@ -15,6 +16,7 @@ export class ColorModeManager {
   constructor() {
     eventEmitter.on('currentModeChanged', (newMode) => {
       this.mode = newMode
+      updateAndroidNavigationBarColor()
     })
     this.generateColorSchemes()
   }
@@ -107,7 +109,7 @@ export class ColorModeManager {
   colorSchemes = [] as string[][]
 
   generateColorSchemes() {
-    for (let i = 0; i < 360; i += 20) {
+    for (let i = 0; i < 360; i += 15) {
       const scheme = new ColorScheme()
       scheme.from_hue(i).scheme('mono').variation('soft')
       this.colorSchemes.push(scheme.colors().map((c: any) => `#${c}`))

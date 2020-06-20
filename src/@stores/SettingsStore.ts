@@ -5,6 +5,7 @@ import { observable, computed } from 'mobx'
 import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { getLanguageTag } from '@utils/i18n'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 export enum Language {
   auto = 'auto',
@@ -153,4 +154,5 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   sharedSettingsStore.hydrated = true
   hydrateStore('SettingsStore')
   sharedSettingsStore.language = await getLanguageTag()
+  updateAndroidNavigationBarColor()
 })
