@@ -30,6 +30,7 @@ import {
   shouldShowDayCompletionRoutine,
 } from '@utils/dayCompleteRoutine'
 import { sharedHeroStore } from '@stores/HeroStore'
+import { Divider } from '@components/Divider'
 
 @observer
 class AddTodoContent extends Component<{
@@ -215,34 +216,17 @@ class AddTodoContent extends Component<{
           )}
           {this.vms.map((vm, i, a) => (
             <View key={i}>
-              <AddTodoForm vm={vm} />
-              {a.length > 1 && (
-                <>
-                  <Button
-                    {...extraButtonProps(sharedColors)}
-                    style={{
-                      ...extraButtonProps(sharedColors).style,
-                      marginHorizontal: 10,
-                      justifyContent: 'center',
-                      flex: 1,
-                    }}
-                    onPress={() => {
-                      this.vms.splice(i, 1)
-                    }}
-                  >
-                    <Text style={{ color: 'tomato' }}>
-                      {translate('delete')}
-                    </Text>
-                  </Button>
-                  <View
-                    style={{
-                      flex: 1,
-                      height: 2,
-                      backgroundColor: sharedColors.specialSeparatorColor,
-                    }}
-                  />
-                </>
-              )}
+              <AddTodoForm
+                vm={vm}
+                deleteTodo={
+                  a.length > 1
+                    ? () => {
+                        this.vms.splice(i, 1)
+                      }
+                    : undefined
+                }
+              />
+              {i < a.length - 1 && <Divider />}
             </View>
           ))}
           <Button
@@ -279,6 +263,7 @@ class AddTodoContent extends Component<{
                 flex: 1,
                 justifyContent: 'center',
                 borderRadius: 10,
+                marginBottom: 16,
               }}
               onPress={() => {
                 this.addTodo()

@@ -2,25 +2,16 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { Icon } from 'native-base'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { sharedColors } from '@utils/sharedColors'
-import { Button } from '@components/Button'
+import { TouchableOpacity } from 'react-native'
 
 @observer
 export class CollapseButton extends Component<{ vm: TodoVM }> {
   render() {
     return (
-      <Button
-        icon
-        {...extraButtonProps(sharedColors)}
-        small
+      <TouchableOpacity
         onPress={() => {
           this.props.vm.collapsed = !this.props.vm.collapsed
-        }}
-        style={{
-          ...extraButtonProps(sharedColors).style,
-          marginHorizontal: -10,
-          paddingHorizontal: -10,
         }}
       >
         <Icon
@@ -35,9 +26,11 @@ export class CollapseButton extends Component<{ vm: TodoVM }> {
               !this.props.vm.collapsed || this.props.vm.isValid
                 ? sharedColors.textColor
                 : 'tomato',
+            fontSize: 20,
+            marginTop: this.props.vm.collapsed ? undefined : 5,
           }}
         />
-      </Button>
+      </TouchableOpacity>
     )
   }
 }

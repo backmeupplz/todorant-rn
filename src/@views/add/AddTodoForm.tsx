@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { Form, Item, View, Text, Input, Icon } from 'native-base'
+import { Item, View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
-import { Platform, Clipboard } from 'react-native'
+import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
@@ -14,217 +14,448 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import moment, { Moment } from 'moment'
 import MonthPicker from 'react-native-month-picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { Switch, FlatList } from 'react-native-gesture-handler'
+import {
+  Switch,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native-gesture-handler'
 import { Button } from '@components/Button'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { IconButton } from '@components/IconButton'
+import CustomIcon from '@components/CustomIcon'
 
 @observer
-export class AddTodoForm extends Component<{ vm: TodoVM }> {
+class TouchableOpacityIcon extends Component<{
+  onPress: () => void
+  iconName: string
+  style?: StyleProp<ViewStyle>
+  size?: number
+}> {
+  render() {
+    return (
+      <TouchableOpacity onPress={this.props.onPress} style={this.props.style}>
+        <Icon
+          type="MaterialIcons"
+          name={this.props.iconName}
+          style={{
+            color: sharedColors.textColor,
+            fontSize: this.props.size,
+          }}
+        />
+      </TouchableOpacity>
+    )
+  }
+}
+
+@observer
+class CollapsedTodo extends Component<{
+  deleteTodo?: () => void
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          marginVertical: 8,
+          marginHorizontal: 16,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        {!!this.props.deleteTodo && (
+          <IconButton
+            onPress={() => {
+              if (this.props.deleteTodo) {
+                this.props.deleteTodo()
+              }
+            }}
+            color={sharedColors.destructIconColor}
+            name="delete_outline_28-iOS"
+          />
+        )}
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              justifyContent: 'center',
+              flexDirection: 'column',
+              flex: 1,
+              marginHorizontal: 8,
+            }}
+          >
+            <Text
+              numberOfLines={1}
+              style={{
+                color: sharedColors.textColor,
+                fontFamily: 'SF-Pro-Display-Medium',
+                fontSize: 15,
+              }}
+            >
+              {this.props.vm.frog && (
+                <Text {...sharedColors.textExtraStyle}>🐸 </Text>
+              )}
+              {this.props.vm.time && (
+                <Text {...sharedColors.textExtraStyle}>
+                  {this.props.vm.time}{' '}
+                </Text>
+              )}
+              <Text {...sharedColors.textExtraStyle}>
+                {this.props.vm.text ? this.props.vm.text : translate('todo')}
+              </Text>
+            </Text>
+            {!!this.props.vm.monthAndYear && (
+              <Text
+                style={{
+                  fontFamily: 'SF-Pro-Text-Regular',
+                  fontSize: 13,
+                  color: sharedColors.placeholderColor,
+                }}
+              >{`${this.props.vm.monthAndYear}${
+                this.props.vm.date ? `-${this.props.vm.date}` : ''
+              }`}</Text>
+            )}
+          </View>
+          <CollapseButton vm={this.props.vm} />
+        </View>
+      </View>
+    )
+  }
+}
+
+@observer
+class TextRow extends Component<{
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          borderColor: sharedColors.placeholderColor,
+          marginVertical: 4,
+        }}
+      >
+        <Input
+          multiline
+          placeholder={translate('text')}
+          value={this.props.vm.text}
+          onChangeText={(text) => {
+            this.props.vm.text = text
+          }}
+          placeholderTextColor={sharedColors.placeholderColor}
+          style={{
+            color: sharedColors.textColor,
+            fontFamily: 'SF-Pro-Text-Regular',
+            fontSize: 15,
+            padding: 0,
+            paddingLeft: 1,
+          }}
+          autoFocus
+          disabled={
+            this.props.vm.editedTodo?.encrypted &&
+            !sharedSessionStore.encryptionKey
+          }
+          selectionColor={sharedColors.primaryColor}
+        />
+        {!!this.props.vm.text && (
+          <TouchableOpacityIcon
+            onPress={async () => {
+              this.props.vm.text = ''
+            }}
+            iconName="close"
+            style={{ marginRight: 8, marginTop: 5 }}
+            size={20}
+          />
+        )}
+        {Platform.OS === 'android' &&
+          !(
+            this.props.vm.editedTodo?.encrypted &&
+            !sharedSessionStore.encryptionKey
+          ) && (
+            <TouchableOpacityIcon
+              onPress={async () => {
+                const textFromClipboard = await Clipboard.getString()
+                this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
+              }}
+              iconName="assignment"
+              style={{ marginRight: 8, marginTop: 5 }}
+              size={20}
+            />
+          )}
+        <CollapseButton vm={this.props.vm} />
+      </View>
+    )
+  }
+}
+
+@observer
+class TagsRow extends Component<{
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          marginBottom: 4,
+        }}
+      >
+        <FlatList
+          horizontal
+          data={this.props.vm.tags}
+          keyExtractor={(_, index) => `${index}`}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.vm.applyTag(item)
+                }}
+                style={{ paddingHorizontal: 4 }}
+              >
+                <Text
+                  style={{
+                    color: item.color || 'dodgerblue',
+                  }}
+                >
+                  #{item.tag}
+                </Text>
+              </TouchableOpacity>
+            )
+          }}
+        />
+      </View>
+    )
+  }
+}
+
+@observer
+class DateRow extends Component<{
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.props.vm.showDatePicker = !this.props.vm.showDatePicker
+          if (!this.props.vm.date) {
+            this.props.vm.monthAndYear = undefined
+            this.props.vm.date = undefined
+          }
+          this.props.vm.showMonthAndYearPicker = false
+        }}
+        style={{
+          borderColor: sharedColors.placeholderColor,
+          paddingVertical: 4,
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color:
+              this.props.vm.datePickerValue && !!this.props.vm.date
+                ? sharedColors.textColor
+                : sharedColors.placeholderColor,
+            fontFamily: 'SF-Pro-Text-Regular',
+            fontSize: 15,
+          }}
+        >
+          {this.props.vm.datePickerValue && !!this.props.vm.date
+            ? this.props.vm.datePickerValue
+            : translate('addTodoDay')}
+        </Text>
+        <CustomIcon
+          name="chevron_right_outline_28"
+          color={sharedColors.borderColor}
+          size={24}
+        />
+      </TouchableOpacity>
+    )
+  }
+}
+
+@observer
+class MonthRow extends Component<{
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.props.vm.showMonthAndYearPicker = !this.props.vm
+            .showMonthAndYearPicker
+          if (!!this.props.vm.date) {
+            this.props.vm.monthAndYear = undefined
+            this.props.vm.date = undefined
+          }
+          this.props.vm.showDatePicker = false
+          if (
+            !this.props.vm.monthAndYear &&
+            this.props.vm.showMonthAndYearPicker
+          ) {
+            this.props.vm.monthAndYear = getDateMonthAndYearString(
+              moment().add(1, 'month').toDate()
+            )
+          }
+        }}
+        style={{
+          borderColor: sharedColors.placeholderColor,
+          paddingVertical: 4,
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color:
+              this.props.vm.datePickerValue && !this.props.vm.date
+                ? sharedColors.textColor
+                : sharedColors.placeholderColor,
+            fontFamily: 'SF-Pro-Text-Regular',
+            fontSize: 15,
+          }}
+        >
+          {this.props.vm.datePickerValue && !this.props.vm.date
+            ? this.props.vm.datePickerValue
+            : translate('addTodoMonth')}
+        </Text>
+        <CustomIcon
+          name="chevron_right_outline_28"
+          color={sharedColors.borderColor}
+          size={24}
+        />
+      </TouchableOpacity>
+    )
+  }
+}
+
+@observer
+class TimeRow extends Component<{
+  vm: TodoVM
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          borderColor: sharedColors.placeholderColor,
+          paddingVertical: 4,
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color: this.props.vm.time
+              ? sharedColors.textColor
+              : sharedColors.placeholderColor,
+            flex: 1,
+            fontFamily: 'SF-Pro-Text-Regular',
+            fontSize: 15,
+          }}
+          onPress={() => {
+            if (!this.props.vm.time) {
+              this.props.vm.timePickerValue = new Date()
+            }
+            this.props.vm.showTimePicker = !this.props.vm.showTimePicker
+          }}
+        >
+          {this.props.vm.time ? this.props.vm.time : translate('addTodoTime')}
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          {!!this.props.vm.time && (
+            <TouchableOpacity
+              onPress={() => {
+                this.props.vm.time = undefined
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name="close"
+                style={{
+                  color: sharedColors.borderColor,
+                  fontSize: 24,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+          <CustomIcon
+            name="chevron_right_outline_28"
+            color={sharedColors.borderColor}
+            size={24}
+          />
+        </View>
+      </View>
+    )
+  }
+}
+
+@observer
+export class SwitchRow extends Component<{
+  name: string
+  value: boolean
+  onValueChange: (value: boolean) => void
+}> {
+  render() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          borderColor: sharedColors.placeholderColor,
+          alignItems: 'center',
+          paddingVertical: 4,
+        }}
+      >
+        <Text
+          style={{
+            color: sharedColors.textColor,
+            fontFamily: 'SF-Pro-Text-Regular',
+            fontSize: 15,
+          }}
+        >
+          {this.props.name}
+        </Text>
+        <Switch
+          value={this.props.value}
+          onValueChange={this.props.onValueChange}
+          thumbColor="lightgrey"
+          trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
+        />
+      </View>
+    )
+  }
+}
+
+@observer
+export class AddTodoForm extends Component<{
+  vm: TodoVM
+  deleteTodo?: () => void
+}> {
   render() {
     const languageTag = sharedAppStateStore.languageTag
     return (
       <>
         {this.props.vm.collapsed ? (
-          <Form>
-            <Item
-              style={{
-                paddingTop: 10,
-                paddingBottom: 10,
-                paddingRight: 10,
-                borderColor: sharedColors.placeholderColor,
-              }}
-              onPress={() => {
-                this.props.vm.collapsed = false
-              }}
-            >
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  flexDirection: 'row',
-                  flex: 1,
-                }}
-              >
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    flex: 1,
-                  }}
-                >
-                  <Text numberOfLines={1}>
-                    {this.props.vm.frog && (
-                      <Text {...sharedColors.textExtraStyle}>🐸 </Text>
-                    )}
-                    {this.props.vm.time && (
-                      <Text {...sharedColors.textExtraStyle}>
-                        {this.props.vm.time}{' '}
-                      </Text>
-                    )}
-                    <Text {...sharedColors.textExtraStyle}>
-                      {this.props.vm.text
-                        ? this.props.vm.text
-                        : translate('todo')}
-                    </Text>
-                  </Text>
-                  {!!this.props.vm.monthAndYear && (
-                    <Text
-                      style={{
-                        color: sharedColors.placeholderColor,
-                        fontSize: 12,
-                      }}
-                    >{`${this.props.vm.monthAndYear}${
-                      this.props.vm.date ? `-${this.props.vm.date}` : ''
-                    }`}</Text>
-                  )}
-                </View>
-                <CollapseButton vm={this.props.vm} />
-              </View>
-            </Item>
-          </Form>
+          <CollapsedTodo
+            deleteTodo={this.props.deleteTodo}
+            vm={this.props.vm}
+          />
         ) : (
-          <Form>
-            <Item
-              style={{
-                justifyContent: 'space-between',
-                borderColor: sharedColors.placeholderColor,
-                paddingRight: 10,
-              }}
-            >
-              <Input
-                multiline
-                placeholder={translate('text')}
-                value={this.props.vm.text}
-                onChangeText={(text) => {
-                  this.props.vm.text = text
-                }}
-                placeholderTextColor={sharedColors.placeholderColor}
-                style={{
-                  color: sharedColors.textColor,
-                  marginVertical: Platform.OS === 'ios' ? 10 : undefined,
-                }}
-                autoFocus
-                disabled={
-                  this.props.vm.editedTodo?.encrypted &&
-                  !sharedSessionStore.encryptionKey
-                }
-              />
-              {!!this.props.vm.text && (
-                <Button
-                  icon
-                  {...extraButtonProps(sharedColors)}
-                  small
-                  onPress={async () => {
-                    this.props.vm.text = ''
-                  }}
-                  style={{
-                    ...extraButtonProps(sharedColors).style,
-                    marginHorizontal: -10,
-                  }}
-                >
-                  <Icon
-                    type="MaterialIcons"
-                    name="close"
-                    style={{
-                      color: sharedColors.textColor,
-                    }}
-                  />
-                </Button>
-              )}
-              {Platform.OS === 'android' &&
-                !(
-                  this.props.vm.editedTodo?.encrypted &&
-                  !sharedSessionStore.encryptionKey
-                ) && (
-                  <Button
-                    icon
-                    {...extraButtonProps(sharedColors)}
-                    small
-                    onPress={async () => {
-                      const textFromClipboard = await Clipboard.getString()
-                      this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
-                    }}
-                    style={{
-                      ...extraButtonProps(sharedColors).style,
-                      marginHorizontal: -10,
-                    }}
-                  >
-                    <Icon
-                      type="MaterialIcons"
-                      name="assignment"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  </Button>
-                )}
-              <CollapseButton vm={this.props.vm} />
-            </Item>
-            {!!this.props.vm.tags.length && (
-              <Item
-                style={{
-                  justifyContent: 'space-between',
-                  borderColor: sharedColors.placeholderColor,
-                }}
-              >
-                <View
-                  style={{
-                    paddingVertical: 5,
-                  }}
-                >
-                  <FlatList
-                    horizontal
-                    data={this.props.vm.tags}
-                    keyExtractor={(_, index) => `${index}`}
-                    renderItem={({ item }) => {
-                      return (
-                        <Button
-                          {...extraButtonProps(sharedColors)}
-                          onPress={() => {
-                            this.props.vm.applyTag(item)
-                          }}
-                        >
-                          <Text
-                            style={{
-                              color: item.color || 'dodgerblue',
-                              padding: 10,
-                            }}
-                          >
-                            #{item.tag}
-                          </Text>
-                        </Button>
-                      )
-                    }}
-                  />
-                </View>
-              </Item>
-            )}
-            <Item
-              onPress={() => {
-                this.props.vm.showDatePicker = !this.props.vm.showDatePicker
-                if (!this.props.vm.date) {
-                  this.props.vm.monthAndYear = undefined
-                  this.props.vm.date = undefined
-                }
-                this.props.vm.showMonthAndYearPicker = false
-              }}
-              style={{
-                paddingVertical: 16,
-                borderColor: sharedColors.placeholderColor,
-              }}
-            >
-              <Text
-                style={{
-                  color:
-                    this.props.vm.datePickerValue && !!this.props.vm.date
-                      ? sharedColors.textColor
-                      : sharedColors.placeholderColor,
-                }}
-              >
-                {this.props.vm.datePickerValue && !!this.props.vm.date
-                  ? this.props.vm.datePickerValue
-                  : translate('addTodoDay')}
-              </Text>
-            </Item>
+          <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+            <TextRow vm={this.props.vm} />
+            {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
+            <DateRow vm={this.props.vm} />
             {this.props.vm.showDatePicker && (
               <Calendar
                 minDate={__DEV__ ? undefined : getDateString(new Date())}
@@ -246,42 +477,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                 firstDay={sharedSettingsStore.firstDayOfWeekSafe}
               />
             )}
-            <Item
-              onPress={() => {
-                this.props.vm.showMonthAndYearPicker = !this.props.vm
-                  .showMonthAndYearPicker
-                if (!!this.props.vm.date) {
-                  this.props.vm.monthAndYear = undefined
-                  this.props.vm.date = undefined
-                }
-                this.props.vm.showDatePicker = false
-                if (
-                  !this.props.vm.monthAndYear &&
-                  this.props.vm.showMonthAndYearPicker
-                ) {
-                  this.props.vm.monthAndYear = getDateMonthAndYearString(
-                    moment().add(1, 'month').toDate()
-                  )
-                }
-              }}
-              style={{
-                paddingVertical: 16,
-                borderColor: sharedColors.placeholderColor,
-              }}
-            >
-              <Text
-                style={{
-                  color:
-                    this.props.vm.datePickerValue && !this.props.vm.date
-                      ? sharedColors.textColor
-                      : sharedColors.placeholderColor,
-                }}
-              >
-                {this.props.vm.datePickerValue && !this.props.vm.date
-                  ? this.props.vm.datePickerValue
-                  : translate('addTodoMonth')}
-              </Text>
-            </Item>
+            <MonthRow vm={this.props.vm} />
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
                 localeLanguage={languageTag.substr(0, 2)}
@@ -322,52 +518,7 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }
               />
             )}
-            {this.props.vm.showMore && (
-              <Item
-                style={{
-                  paddingVertical: this.props.vm.time ? 11 : 16,
-                  justifyContent: 'space-between',
-                  borderColor: sharedColors.placeholderColor,
-                }}
-              >
-                <Text
-                  style={{
-                    color: this.props.vm.time
-                      ? sharedColors.textColor
-                      : sharedColors.placeholderColor,
-                    flex: 1,
-                  }}
-                  onPress={() => {
-                    if (!this.props.vm.time) {
-                      this.props.vm.timePickerValue = new Date()
-                    }
-                    this.props.vm.showTimePicker = !this.props.vm.showTimePicker
-                  }}
-                >
-                  {this.props.vm.time
-                    ? this.props.vm.time
-                    : translate('addTodoTime')}
-                </Text>
-                {!!this.props.vm.time && (
-                  <Button
-                    icon
-                    {...extraButtonProps(sharedColors)}
-                    small
-                    onPress={() => {
-                      this.props.vm.time = undefined
-                    }}
-                  >
-                    <Icon
-                      type="MaterialIcons"
-                      name="close"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  </Button>
-                )}
-              </Item>
-            )}
+            {this.props.vm.showMore && <TimeRow vm={this.props.vm} />}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
                 value={this.props.vm.timePickerValue || new Date()}
@@ -388,83 +539,88 @@ export class AddTodoForm extends Component<{ vm: TodoVM }> {
                 }}
               />
             )}
-            <Item
-              style={{
-                justifyContent: 'space-between',
-                paddingVertical: 16,
-                paddingRight: 12,
-                borderColor: sharedColors.placeholderColor,
+            <SwitchRow
+              name={translate('addTodoFrog')}
+              value={this.props.vm.frog}
+              onValueChange={(value) => {
+                this.props.vm.frog = value
               }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('addTodoFrog')}
-              </Text>
-              <Switch
-                value={this.props.vm.frog}
-                onValueChange={(value) => {
-                  this.props.vm.frog = value
-                }}
-              />
-            </Item>
-            <Item
-              style={{
-                justifyContent: 'space-between',
-                paddingVertical: 16,
-                paddingRight: 12,
-                borderColor: sharedColors.placeholderColor,
+            />
+            <SwitchRow
+              name={translate('completed')}
+              value={this.props.vm.completed}
+              onValueChange={(value) => {
+                this.props.vm.completed = value
               }}
-            >
-              <Text {...sharedColors.textExtraStyle}>
-                {translate('completed')}
-              </Text>
-              <Switch
-                value={this.props.vm.completed}
-                onValueChange={(value) => {
-                  this.props.vm.completed = value
-                }}
-              />
-            </Item>
+            />
             {this.props.vm.showMore && !this.props.vm.editedTodo && (
-              <Item
-                style={{
-                  justifyContent: 'space-between',
-                  paddingVertical: 16,
-                  paddingRight: 12,
-                  borderColor: sharedColors.placeholderColor,
-                  flex: 1,
+              <SwitchRow
+                name={translate('addTodoOnTop')}
+                value={this.props.vm.addOnTop}
+                onValueChange={(value) => {
+                  this.props.vm.addOnTop = value
                 }}
-              >
-                <Text {...sharedColors.textExtraStyle}>
-                  {translate('addTodoOnTop')}
-                </Text>
-                <Switch
-                  value={this.props.vm.addOnTop}
-                  onValueChange={(value) => {
-                    this.props.vm.addOnTop = value
-                  }}
-                />
-              </Item>
+              />
             )}
             {!this.props.vm.showMore && (
-              <Item style={{ borderColor: sharedColors.placeholderColor }}>
-                <Button
-                  block
-                  {...extraButtonProps(sharedColors)}
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginVertical: 4,
+                  alignItems: 'center',
+                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                }}
+                onPress={() => {
+                  this.props.vm.showMore = true
+                }}
+              >
+                <Text
                   style={{
-                    ...extraButtonProps(sharedColors).style,
+                    color: sharedColors.primaryColor,
                     flex: 1,
                   }}
-                  onPress={() => {
-                    this.props.vm.showMore = true
+                >
+                  {translate('addTodoMore')}
+                </Text>
+                <CustomIcon
+                  name="chevron_right_outline_28"
+                  color={sharedColors.primaryColor}
+                  size={24}
+                />
+              </TouchableOpacity>
+            )}
+            {!!this.props.deleteTodo && (
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginVertical: 4,
+                  alignItems: 'center',
+                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                }}
+                onPress={() => {
+                  if (this.props.deleteTodo) {
+                    this.props.deleteTodo()
+                  }
+                }}
+              >
+                <Text
+                  style={{
+                    color: sharedColors.primaryColor,
+                    flex: 1,
                   }}
                 >
-                  <Text style={{ color: sharedColors.primaryColor }}>
-                    {translate('addTodoMore')}
-                  </Text>
-                </Button>
-              </Item>
+                  {translate('delete')}
+                </Text>
+                <CustomIcon
+                  name="chevron_right_outline_28"
+                  color={sharedColors.primaryColor}
+                  size={24}
+                />
+              </TouchableOpacity>
             )}
-          </Form>
+          </View>
         )}
       </>
     )
