@@ -53,7 +53,7 @@ export class SettingsContent extends Component {
           title={translate('settings')}
           infoTitle="infoSettings"
         >
-          {/* <DebugButtons /> */}
+          <DebugButtons />
           {/* Important */}
           <Divider />
           <SectionHeader title={translate('important')} />
