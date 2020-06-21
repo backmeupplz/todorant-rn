@@ -10,6 +10,7 @@ import { AsyncStorage } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 const codeToName = {
   en: 'English',
@@ -104,6 +105,7 @@ export class GeneralSettings extends Component {
               async (i) => {
                 if (i < 3) {
                   sharedSettingsStore.colorMode = options[i].mode
+                  updateAndroidNavigationBarColor()
                 }
               }
             )

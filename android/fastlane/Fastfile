@@ -57,7 +57,7 @@ platform :android do
     copy_es_screenshots
     frame
     remove_unframed_screenshots
-    upload_screenshots
+    # upload_screenshots
   end
 
   lane :increment_android_versions do
