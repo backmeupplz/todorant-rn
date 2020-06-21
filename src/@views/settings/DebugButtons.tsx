@@ -13,6 +13,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 @observer
 export class DebugButtons extends Component {
@@ -92,6 +93,7 @@ export class DebugButtons extends Component {
         <Button
           onPress={() => {
             sharedSettingsStore.colorMode = ColorMode.dark
+            updateAndroidNavigationBarColor()
           }}
           accessible
           accessibilityLabel="turn_dark_on"
