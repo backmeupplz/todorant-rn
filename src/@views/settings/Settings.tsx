@@ -39,6 +39,7 @@ import { HeaderScrollView } from '@components/HeaderScrollView'
 import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
+import fonts from '@utils/fonts'
 
 const Stack = createStackNavigator()
 
@@ -112,7 +113,7 @@ export class SettingsContent extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               {translate('introButton')}
@@ -126,7 +127,7 @@ export class SettingsContent extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               {translate('termsOfUse')}
@@ -140,7 +141,7 @@ export class SettingsContent extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               {translate('privacyPolicy')}
@@ -154,7 +155,7 @@ export class SettingsContent extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               {translate('supportLabel')}
@@ -165,7 +166,7 @@ export class SettingsContent extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               v{DeviceInfo.getVersion()}.{codePushVersion}

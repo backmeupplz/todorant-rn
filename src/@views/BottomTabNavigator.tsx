@@ -12,6 +12,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import SvgUri from 'react-native-svg-uri'
+import fonts from '@utils/fonts'
 
 const Tab = createBottomTabNavigator()
 
@@ -73,7 +74,7 @@ export default observer(() => {
             borderTopColor: sharedColors.borderColor,
           },
           labelStyle: {
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
           },
           tabStyle: {
             paddingTop: 6,

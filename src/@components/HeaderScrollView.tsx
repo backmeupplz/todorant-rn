@@ -7,8 +7,8 @@ import { InfoButton } from '@components/InfoButton'
 import { HeroButton } from '@components/HeroButton'
 import { sharedColors } from '@utils/sharedColors'
 import { observable } from 'mobx'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import fonts from '@utils/fonts'
 
 const headerHeight = ifIphoneX(88, 60)
 const { height } = Dimensions.get('window')
@@ -31,7 +31,7 @@ export class HeaderScrollView extends Component<{
       fontSize,
       lineHeight: fontSize * 1.2,
       letterSpacing: 0.011,
-      fontFamily: 'SF-Pro-Display-Bold',
+      fontFamily: fonts.SFProDisplayBold,
       marginLeft: 16,
     }
 

@@ -6,7 +6,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { computed } from 'mobx'
 import RNRestart from 'react-native-restart'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Platform } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
@@ -170,7 +170,7 @@ export class GeneralSettings extends Component {
             onValueChange={(value) => {
               sharedSettingsStore.soundOn = value
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </View>
@@ -198,7 +198,7 @@ export class GeneralSettings extends Component {
             onValueChange={(val) => {
               sharedSettingsStore.gamificationOn = val
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </View>

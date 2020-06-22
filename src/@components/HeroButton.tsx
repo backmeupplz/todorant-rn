@@ -6,6 +6,8 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ProgressView } from './ProgressView'
+import fonts from '@utils/fonts'
+import { Platform } from 'react-native'
 const shortNum = require('number-shortener')
 
 @observer
@@ -29,9 +31,9 @@ export class HeroButton extends Component {
         <Text
           style={{
             color: tintColor,
-            fontFamily: 'SF-Pro-Rounded-Bold',
+            fontFamily: fonts.SFProRoundedBold,
             fontSize: 22,
-            marginBottom: -5,
+            marginBottom: Platform.OS === 'android' ? -5 : undefined,
           }}
         >
           {shortNum(sharedHeroStore.points)}

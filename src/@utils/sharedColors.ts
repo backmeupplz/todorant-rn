@@ -3,6 +3,7 @@ import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { observable, computed } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
 import { updateAndroidNavigationBarColor } from './androidNavigationBar'
+import fonts from './fonts'
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
@@ -61,7 +62,7 @@ export class ColorModeManager {
     return {
       style: {
         color: this.textColor,
-        fontFamily: 'SF-Pro-Text-Regular',
+        fontFamily: fonts.SFProTextRegular,
       },
     }
   }

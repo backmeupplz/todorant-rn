@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
+import fonts from '@utils/fonts'
 
 @observer
 export class SegmentedProgressView extends Component<{
@@ -21,7 +22,7 @@ export class SegmentedProgressView extends Component<{
         <Text
           style={{
             color: sharedColors.primaryColor,
-            fontFamily: 'SF-Pro-Rounded-Regular',
+            fontFamily: fonts.SFProRoundedRegular,
             fontSize: 22,
             marginHorizontal: 16,
           }}
@@ -55,7 +56,7 @@ export class SegmentedProgressView extends Component<{
         <Text
           style={{
             color: sharedColors.primaryColor,
-            fontFamily: 'SF-Pro-Rounded-Regular',
+            fontFamily: fonts.SFProRoundedRegular,
             fontSize: 22,
             marginHorizontal: 16,
           }}

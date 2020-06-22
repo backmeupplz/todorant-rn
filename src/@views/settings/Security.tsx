@@ -15,6 +15,7 @@ import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
+import { Platform } from 'react-native'
 
 @observer
 export class Security extends Component {
@@ -108,7 +109,7 @@ export class Security extends Component {
                   }
                 }
               }}
-              thumbColor="lightgrey"
+              thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
               trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
             />
           </TableItem>

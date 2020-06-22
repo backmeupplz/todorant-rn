@@ -6,6 +6,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { sharedHeroStore } from '@stores/HeroStore'
+import fonts from '@utils/fonts'
 
 @observer
 class CircleWithText extends Component<{
@@ -25,7 +26,7 @@ class CircleWithText extends Component<{
         <Text
           style={{
             color: this.props.color,
-            fontFamily: 'SF-Pro-Rounded-Bold',
+            fontFamily: fonts.SFProRoundedBold,
             fontSize: 22,
             marginLeft: 16,
           }}
@@ -101,7 +102,7 @@ export class RankCard extends Component<{
             {!this.props.finished && (
               <Text
                 style={{
-                  fontFamily: 'SF-Pro-Rounded-Regular',
+                  fontFamily: fonts.SFProRoundedRegular,
                   fontSize: 15,
                   color: '#888888',
                 }}
@@ -128,7 +129,7 @@ export class RankCard extends Component<{
                 <Text
                   style={{
                     fontSize: 17,
-                    fontFamily: 'SF-Pro-Rounded-Regular',
+                    fontFamily: fonts.SFProRoundedRegular,
                     color: '#888888',
                   }}
                 >
@@ -138,7 +139,7 @@ export class RankCard extends Component<{
               <Text
                 style={{
                   fontSize: 20,
-                  fontFamily: 'SF-Pro-Rounded-Regular',
+                  fontFamily: fonts.SFProRoundedRegular,
                   color: sharedColors.textColor,
                 }}
               >
@@ -147,7 +148,7 @@ export class RankCard extends Component<{
             </View>
             <Text
               style={{
-                fontFamily: 'SF-Pro-Rounded-Regular',
+                fontFamily: fonts.SFProRoundedRegular,
                 fontSize: 15,
                 color: '#888888',
               }}

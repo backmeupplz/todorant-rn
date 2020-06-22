@@ -10,6 +10,7 @@ import { daysAgo } from '@utils/plusButtonAction'
 import { subscriptionStatusName } from '@utils/subscriptionStatusName'
 import { Button } from '@components/Button'
 import { TableItem } from '@components/TableItem'
+import fonts from '@utils/fonts'
 
 @observer
 export class SubscriptionSection extends Component {
@@ -31,7 +32,7 @@ export class SubscriptionSection extends Component {
           <Text
             style={{
               color: sharedColors.textColor,
-              fontFamily: 'SF-Pro-Text-Regular',
+              fontFamily: fonts.SFProTextRegular,
             }}
           >
             {translate('subscription')}
@@ -40,7 +41,7 @@ export class SubscriptionSection extends Component {
             <Text
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Text-Regular',
+                fontFamily: fonts.SFProTextRegular,
               }}
             >
               {subscriptionStatusName(

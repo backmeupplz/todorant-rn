@@ -10,6 +10,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
 import { navigate } from '@utils/navigation'
+import fonts from '@utils/fonts'
 
 const debug = false
 
@@ -38,7 +39,7 @@ export class TodoCardTextBlock extends Component<{
             navigate('EditTodo', { editedTodo: this.props.todo })
           }
         }}
-        style={{ flex: 1, fontFamily: 'SF-Pro-Text-Regular' }}
+        style={{ flex: 1, fontFamily: fonts.SFProTextRegular }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
         {__DEV__ && debug && (

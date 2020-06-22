@@ -14,6 +14,7 @@ import { translate } from '@utils/i18n'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { SegmentedProgressView } from '@components/SegmentedProgressView'
 import { PlusButton } from '@components/PlusButton'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 export class CurrentContent extends Component {
@@ -28,6 +29,10 @@ export class CurrentContent extends Component {
   }
 
   render() {
+    // Hack to make this reactive
+    let languageTag = sharedAppStateStore.languageTag
+    languageTag = `${languageTag}`
+
     return (
       <Container {...({ language: sharedSettingsStore.language } as any)}>
         <HeaderScrollView

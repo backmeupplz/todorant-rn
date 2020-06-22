@@ -44,6 +44,8 @@ target 'Todorant' do
   
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+  
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 end
 
 target 'TodorantToday' do

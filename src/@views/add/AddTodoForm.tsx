@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { Item, View, Text, Input, Icon } from 'native-base'
+import { View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
 import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -19,10 +18,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native-gesture-handler'
-import { Button } from '@components/Button'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
+import fonts from '@utils/fonts'
 
 @observer
 class TouchableOpacityIcon extends Component<{
@@ -92,7 +91,7 @@ class CollapsedTodo extends Component<{
               numberOfLines={1}
               style={{
                 color: sharedColors.textColor,
-                fontFamily: 'SF-Pro-Display-Medium',
+                fontFamily: fonts.SFProDisplayMedium,
                 fontSize: 15,
               }}
             >
@@ -111,7 +110,7 @@ class CollapsedTodo extends Component<{
             {!!this.props.vm.monthAndYear && (
               <Text
                 style={{
-                  fontFamily: 'SF-Pro-Text-Regular',
+                  fontFamily: fonts.SFProTextRegular,
                   fontSize: 13,
                   color: sharedColors.placeholderColor,
                 }}
@@ -151,10 +150,10 @@ class TextRow extends Component<{
           placeholderTextColor={sharedColors.placeholderColor}
           style={{
             color: sharedColors.textColor,
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
             fontSize: 15,
             padding: 0,
-            paddingLeft: 1,
+            paddingLeft: Platform.OS === 'android' ? 1 : undefined,
           }}
           autoFocus
           disabled={
@@ -263,7 +262,7 @@ class DateRow extends Component<{
               this.props.vm.datePickerValue && !!this.props.vm.date
                 ? sharedColors.textColor
                 : sharedColors.placeholderColor,
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
             fontSize: 15,
           }}
         >
@@ -320,7 +319,7 @@ class MonthRow extends Component<{
               this.props.vm.datePickerValue && !this.props.vm.date
                 ? sharedColors.textColor
                 : sharedColors.placeholderColor,
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
             fontSize: 15,
           }}
         >
@@ -360,7 +359,7 @@ class TimeRow extends Component<{
               ? sharedColors.textColor
               : sharedColors.placeholderColor,
             flex: 1,
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
             fontSize: 15,
           }}
           onPress={() => {
@@ -420,7 +419,7 @@ export class SwitchRow extends Component<{
         <Text
           style={{
             color: sharedColors.textColor,
-            fontFamily: 'SF-Pro-Text-Regular',
+            fontFamily: fonts.SFProTextRegular,
             fontSize: 15,
           }}
         >
@@ -429,7 +428,7 @@ export class SwitchRow extends Component<{
         <Switch
           value={this.props.value}
           onValueChange={this.props.onValueChange}
-          thumbColor="lightgrey"
+          thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
           trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
         />
       </View>

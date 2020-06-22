@@ -75,12 +75,11 @@ class PaywallContent extends Component<{
       <Container>
         <Content
           style={{
-            paddingVertical: 16,
             backgroundColor: sharedColors.backgroundColor,
           }}
         >
           {this.props.route.params?.type === 'appleUnauthorized' ? (
-            <View style={{ marginHorizontal: 16 }}>
+            <View style={{ marginHorizontal: 16, marginTop: 12 }}>
               <Text {...sharedColors.regularTextExtraStyle}>
                 {translate('appleUnauthorizedText')}
               </Text>

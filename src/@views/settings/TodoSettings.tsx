@@ -8,6 +8,7 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
+import { Platform } from 'react-native'
 
 @observer
 export class TodoSettings extends Component {
@@ -31,7 +32,7 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
@@ -52,7 +53,7 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
@@ -73,7 +74,7 @@ export class TodoSettings extends Component {
               sharedSettingsStore.updatedAt = new Date()
               sockets.settingsSyncManager.sync()
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
@@ -92,7 +93,7 @@ export class TodoSettings extends Component {
             onValueChange={(value) => {
               sharedSettingsStore.askBeforeDelete = value
             }}
-            thumbColor="lightgrey"
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
