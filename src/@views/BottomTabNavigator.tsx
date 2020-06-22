@@ -11,17 +11,15 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import SvgUri from 'react-native-svg-uri'
 import fonts from '@utils/fonts'
+import CurrentIcon from '@assets/images/current'
+import CurrentActiveIcon from '@assets/images/current-active'
+import PlanningIcon from '@assets/images/planning'
+import PlanningActiveIcon from '@assets/images/planning-active'
+import SettingsIcon from '@assets/images/settings'
+import SettingsActiveIcon from '@assets/images/settings-active'
 
 const Tab = createBottomTabNavigator()
-
-const currentIcon = require('@assets/images/current.svg')
-const currentIconActive = require('@assets/images/current-active.svg')
-const planningIcon = require('@assets/images/planning.svg')
-const planningIconActive = require('@assets/images/planning-active.svg')
-const settingsIcon = require('@assets/images/settings.svg')
-const settingsIconActive = require('@assets/images/settings-active.svg')
 
 export default observer(() => {
   // Hack to make this reactive
@@ -36,18 +34,22 @@ export default observer(() => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, size }) => {
             let name = 'current'
-            let icon = focused ? currentIconActive : currentIcon
+            let icon = focused ? CurrentActiveIcon({}) : CurrentIcon({})
             if (route.name === 'Planning') {
               name = 'planning'
-              icon = focused ? planningIconActive : planningIcon
+              icon = focused
+                ? PlanningActiveIcon({ width: size, height: size })
+                : PlanningIcon({ width: size, height: size })
             } else if (route.name === 'Settings') {
               name = 'settings'
-              icon = focused ? settingsIconActive : settingsIcon
+              icon = focused
+                ? SettingsActiveIcon({ width: size, height: size })
+                : SettingsIcon({ width: size, height: size })
             }
             return (
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
-                  <SvgUri width={size} height={size} source={icon} />
+                  {icon}
                   {route.name === 'Settings' && !sharedSessionStore.user && (
                     <View
                       style={{
