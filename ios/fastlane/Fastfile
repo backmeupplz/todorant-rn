@@ -48,7 +48,7 @@ platform :ios do
   lane :upload_screenshots do
     upload_to_app_store(
       submit_for_review: false,
-      skip_screenshots: false,
+      skip_screenshots: true,
       automatic_release: false,
       skip_metadata: true,
       skip_binary_upload: true
