@@ -44,6 +44,7 @@ export class ColorModeManager {
     return {
       headerStyle: {
         backgroundColor: this.backgroundColor,
+        shadowColor: this.isDark ? this.borderColor : undefined,
       },
       headerTitleStyle: {
         color: this.textColor,

@@ -931,6 +931,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.7.0.tgz#54be55f22c6a6358d5d61f2aa1bc1de20c7b53b6"
   integrity sha512-ZhmkaqRpLFvOMu/Ln3YCitBJUgk7lbFsvcinbW/LIktXM6BwVwEZPTkYr+N74hEAhKz2CcDN8aMzzaokxwxRqg==
 
+"@react-native-community/segmented-control@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/segmented-control/-/segmented-control-2.0.1.tgz#d4a057ed8087e09ce1e9ff90ae93b141192bff14"
+  integrity sha512-ckPdb10orBiyhtxrMlv4Eu+RdB/3Ir/YpjC4Q3bLpR0FL9qb0I60YzMSgNbLl2iLvYamhflikKYdpwDtN9cdOg==
+
 "@react-native-firebase/app-types@6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app-types/-/app-types-6.4.0.tgz#f3d8c1d63f5bc5f6d5f9683caa428b189a968839"

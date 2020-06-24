@@ -1,67 +1,60 @@
 import React, { Component } from 'react'
-import { Button, Segment, Text } from 'native-base'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
+import SegmentedControl from '@react-native-community/segmented-control'
+import { sharedColors } from '@utils/sharedColors'
+import { Platform, SnapshotViewIOS } from 'react-native'
+import fonts from '@utils/fonts'
 
 @observer
 export class PlanningHeaderSegment extends Component {
   render() {
     return (
-      <Segment style={{ opacity: 0.8 }}>
-        <Button
-          first
-          active={sharedAppStateStore.todoSection === TodoSectionType.planning}
-          onPress={() => {
+      <SegmentedControl
+        values={[translate('planning'), translate('completed')]}
+        selectedIndex={
+          sharedAppStateStore.todoSection === TodoSectionType.planning ? 0 : 1
+        }
+        onChange={(event) => {
+          if (event.nativeEvent.selectedSegmentIndex === 0) {
             sharedAppStateStore.todoSection = TodoSectionType.planning
-          }}
-          style={{
-            borderColor: sharedColors.textColor,
-            backgroundColor:
-              sharedAppStateStore.todoSection === TodoSectionType.planning
-                ? sharedColors.textColor
-                : sharedColors.backgroundColor,
-          }}
-        >
-          <Text
-            style={{
-              color:
-                sharedAppStateStore.todoSection === TodoSectionType.planning
-                  ? sharedColors.backgroundColor
-                  : sharedColors.textColor,
-            }}
-          >
-            {translate('planning')}
-          </Text>
-        </Button>
-        <Button
-          transparent
-          last
-          active={sharedAppStateStore.todoSection === TodoSectionType.completed}
-          onPress={() => {
+          } else {
             sharedAppStateStore.todoSection = TodoSectionType.completed
-          }}
-          style={{
-            borderColor: sharedColors.textColor,
-            backgroundColor:
-              sharedAppStateStore.todoSection === TodoSectionType.completed
-                ? sharedColors.textColor
-                : sharedColors.backgroundColor,
-          }}
-        >
-          <Text
-            style={{
-              color:
-                sharedAppStateStore.todoSection === TodoSectionType.completed
-                  ? sharedColors.backgroundColor
-                  : sharedColors.textColor,
-            }}
-          >
-            {translate('completed')}
-          </Text>
-        </Button>
-      </Segment>
+          }
+        }}
+        appearance={sharedColors.isDark ? 'dark' : 'light'}
+        backgroundColor={
+          sharedColors.isDark && Platform.OS === 'android'
+            ? '#2f2f33'
+            : undefined
+        }
+        tintColor={
+          Platform.OS === 'android'
+            ? sharedColors.isDark
+              ? '#68686d'
+              : '#6e7185'
+            : undefined
+        }
+        fontStyle={
+          Platform.OS === 'android'
+            ? {
+                fontFamily: fonts.SFProRoundedRegular,
+                color: sharedColors.isDark ? undefined : sharedColors.textColor,
+              }
+            : undefined
+        }
+        activeFontStyle={
+          Platform.OS === 'android'
+            ? {
+                fontFamily: fonts.SFProRoundedBold,
+                color: sharedColors.isDark
+                  ? undefined
+                  : sharedColors.invertedTextColor,
+              }
+            : undefined
+        }
+      />
     )
   }
 }

@@ -338,6 +338,8 @@ PODS:
     - React
   - react-native-safe-area-context (0.6.4):
     - React
+  - react-native-segmented-control (2.0.1):
+    - React
   - react-native-splash-screen (3.2.0):
     - React
   - react-native-webview (8.2.1):
@@ -476,6 +478,7 @@ DEPENDENCIES:
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-segmented-control (from `../node_modules/@react-native-community/segmented-control`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -591,6 +594,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-segmented-control:
+    :path: "../node_modules/@react-native-community/segmented-control"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-webview:
@@ -705,6 +710,7 @@ SPEC CHECKSUMS:
   react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
   react-native-netinfo: becc6dd2bb2335aa85a8adbaefc8e206125e6177
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
+  react-native-segmented-control: b922568e7ff4e1ee241c9b747a29cea89f68548c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webview: 160ac8d6bb974e2933f2de6bb7464a8e934ff31d
   React-RCTActionSheet: af8f28dd82fec89b8fe29637b8c779829e016a88
