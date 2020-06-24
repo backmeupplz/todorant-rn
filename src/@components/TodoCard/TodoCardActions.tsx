@@ -59,8 +59,7 @@ export class TodoCardActions extends Component<{
                 onPress={() => {
                   this.props.vm.moveToToday(this.props.todo)
                 }}
-                name="reply_outline_28"
-                rotation={90}
+                name="reply_outline_28-1"
               />
             )}
           {this.props.type !== CardType.current && (

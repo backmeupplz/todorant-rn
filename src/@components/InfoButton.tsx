@@ -35,10 +35,10 @@ export class InfoButtonContent extends Component<{
         }}
       >
         <CustomIcon
-          name="report_outline_28"
+          name="-Icon-1"
           color={sharedColors.textColor}
           size={28}
-          style={{ opacity: 0.5, rotation: 180 }}
+          style={{ opacity: 0.5 }}
         />
       </TouchableOpacity>
     )

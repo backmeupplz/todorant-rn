@@ -9,7 +9,6 @@ export class IconButton extends Component<{
   onPress: () => void
   name: string
   color?: string
-  rotation?: number
   fullColor?: boolean
 }> {
   render() {
@@ -22,9 +21,6 @@ export class IconButton extends Component<{
             color: this.props.color || sharedColors.defaultIconColor,
             opacity: this.props.fullColor ? 1.0 : 0.8,
             marginHorizontal: 6,
-            transform: this.props.rotation
-              ? [{ rotate: `${this.props.rotation}deg` }]
-              : undefined,
           }}
         />
       </TouchableOpacity>
