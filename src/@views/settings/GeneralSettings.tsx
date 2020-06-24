@@ -153,7 +153,7 @@ export class GeneralSettings extends Component {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 16,
-            marginVertical: 8,
+            marginVertical: 12,
           }}
         >
           <Text
@@ -181,7 +181,7 @@ export class GeneralSettings extends Component {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 16,
-            marginVertical: 8,
+            marginVertical: 12,
           }}
         >
           <Text

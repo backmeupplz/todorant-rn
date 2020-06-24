@@ -31,6 +31,9 @@ import {
 } from '@utils/dayCompleteRoutine'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { Divider } from '@components/Divider'
+import LinearGradient from 'react-native-linear-gradient'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import CustomIcon from '@components/CustomIcon'
 
 @observer
 class AddTodoContent extends Component<{
@@ -229,53 +232,77 @@ class AddTodoContent extends Component<{
               {i < a.length - 1 && <Divider />}
             </View>
           ))}
-          <Button
-            block
-            style={{ marginHorizontal: 10, marginTop: 10, borderRadius: 10 }}
-            onPress={() => {
-              this.saveTodo()
-            }}
-            disabled={!this.isValid}
-            onLongPress={() => {
-              Clipboard.setString(
-                JSON.stringify(this.props.route.params?.editedTodo)
-              )
-              Toast.show({
-                text: translate('copied'),
-              })
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 16,
+              justifyContent: 'center',
             }}
           >
-            <Text>
-              {this.screenType === AddTodoScreenType.add
-                ? this.vms.length > 1
-                  ? translate('addTodoPlural')
-                  : translate('addTodoSingular')
-                : translate('saveTodo')}
-            </Text>
-          </Button>
-          {this.screenType === AddTodoScreenType.add && (
-            <Button
-              {...extraButtonProps(sharedColors)}
+            <View
               style={{
-                ...extraButtonProps(sharedColors).style,
-                marginHorizontal: 10,
-                marginTop: 10,
-                flex: 1,
-                justifyContent: 'center',
-                borderRadius: 10,
-                marginBottom: 16,
-              }}
-              onPress={() => {
-                this.addTodo()
+                marginRight: 10,
+                marginVertical: 10,
+                flexGrow: 1,
               }}
             >
-              <Icon
-                type="MaterialIcons"
-                name="add"
-                {...sharedColors.iconExtraStyle}
-              />
-            </Button>
-          )}
+              <Button
+                style={{ borderRadius: 10, justifyContent: 'center' }}
+                onPress={() => {
+                  this.saveTodo()
+                }}
+                disabled={!this.isValid}
+                onLongPress={() => {
+                  Clipboard.setString(
+                    JSON.stringify(this.props.route.params?.editedTodo)
+                  )
+                  Toast.show({
+                    text: translate('copied'),
+                  })
+                }}
+              >
+                <Text>
+                  {this.screenType === AddTodoScreenType.add
+                    ? this.vms.length > 1
+                      ? translate('addTodoPlural')
+                      : translate('addTodoSingular')
+                    : translate('saveTodo')}
+                </Text>
+              </Button>
+            </View>
+            {this.screenType === AddTodoScreenType.add && (
+              <View
+                style={{
+                  aspectRatio: 1,
+                  marginVertical: 10,
+                  flexShrink: 1,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    this.addTodo()
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#1148B9', '#5C9BFF']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={{
+                      backgroundColor:
+                        'linear-gradient(126.87deg, #1148B9 0%, #5C9BFF 100%)',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 10,
+                    }}
+                  >
+                    <CustomIcon name="add_outline_28" size={20} color="white" />
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </Content>
       </Container>
     )
