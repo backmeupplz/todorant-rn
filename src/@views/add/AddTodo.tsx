@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, Icon, View, Toast } from 'native-base'
+import { Container, Content, Text, View, Toast } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
@@ -11,7 +11,6 @@ import { useRoute, RouteProp } from '@react-navigation/native'
 import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { extraButtonProps } from '@utils/extraButtonProps'
 import { addButtonStore } from '@components/AddButton'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
@@ -218,7 +217,7 @@ class AddTodoContent extends Component<{
             <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />
           )}
           {this.vms.map((vm, i, a) => (
-            <View key={i}>
+            <View key={i} style={{ marginTop: i === 0 ? 10 : undefined }}>
               <AddTodoForm
                 vm={vm}
                 deleteTodo={

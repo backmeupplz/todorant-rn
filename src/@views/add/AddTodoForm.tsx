@@ -23,6 +23,8 @@ import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 
+const fontSize = 18
+
 @observer
 class TouchableOpacityIcon extends Component<{
   onPress: () => void
@@ -53,13 +55,17 @@ class CollapsedTodo extends Component<{
 }> {
   render() {
     return (
-      <View
+      <TouchableOpacity
         style={{
           flex: 1,
           marginVertical: 8,
-          marginHorizontal: 16,
+          marginLeft: 12,
           flexDirection: 'row',
           alignItems: 'center',
+          marginRight: 16,
+        }}
+        onPress={() => {
+          this.props.vm.collapsed = false
         }}
       >
         {!!this.props.deleteTodo && (
@@ -92,7 +98,7 @@ class CollapsedTodo extends Component<{
               style={{
                 color: sharedColors.textColor,
                 fontFamily: fonts.SFProDisplayMedium,
-                fontSize: 15,
+                fontSize: fontSize,
               }}
             >
               {this.props.vm.frog && (
@@ -121,7 +127,7 @@ class CollapsedTodo extends Component<{
           </View>
           <CollapseButton vm={this.props.vm} />
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }
@@ -137,7 +143,7 @@ class TextRow extends Component<{
           flexDirection: 'row',
           justifyContent: 'space-between',
           borderColor: sharedColors.placeholderColor,
-          marginVertical: 4,
+          marginVertical: 8,
         }}
       >
         <Input
@@ -151,7 +157,7 @@ class TextRow extends Component<{
           style={{
             color: sharedColors.textColor,
             fontFamily: fonts.SFProTextRegular,
-            fontSize: 15,
+            fontSize: fontSize,
             padding: 0,
             paddingLeft: Platform.OS === 'android' ? 1 : undefined,
           }}
@@ -249,7 +255,7 @@ class DateRow extends Component<{
         }}
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 4,
+          paddingVertical: 8,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -263,7 +269,7 @@ class DateRow extends Component<{
                 ? sharedColors.textColor
                 : sharedColors.placeholderColor,
             fontFamily: fonts.SFProTextRegular,
-            fontSize: 15,
+            fontSize: fontSize,
           }}
         >
           {this.props.vm.datePickerValue && !!this.props.vm.date
@@ -306,7 +312,7 @@ class MonthRow extends Component<{
         }}
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 4,
+          paddingVertical: 8,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -320,7 +326,7 @@ class MonthRow extends Component<{
                 ? sharedColors.textColor
                 : sharedColors.placeholderColor,
             fontFamily: fonts.SFProTextRegular,
-            fontSize: 15,
+            fontSize: fontSize,
           }}
         >
           {this.props.vm.datePickerValue && !this.props.vm.date
@@ -346,7 +352,7 @@ class TimeRow extends Component<{
       <View
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 4,
+          paddingVertical: 8,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -360,7 +366,7 @@ class TimeRow extends Component<{
               : sharedColors.placeholderColor,
             flex: 1,
             fontFamily: fonts.SFProTextRegular,
-            fontSize: 15,
+            fontSize: fontSize,
           }}
           onPress={() => {
             if (!this.props.vm.time) {
@@ -413,14 +419,14 @@ export class SwitchRow extends Component<{
           justifyContent: 'space-between',
           borderColor: sharedColors.placeholderColor,
           alignItems: 'center',
-          paddingVertical: 4,
+          paddingVertical: 8,
         }}
       >
         <Text
           style={{
             color: sharedColors.textColor,
             fontFamily: fonts.SFProTextRegular,
-            fontSize: 15,
+            fontSize: fontSize,
           }}
         >
           {this.props.name}
@@ -566,7 +572,7 @@ export class AddTodoForm extends Component<{
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginVertical: 4,
+                  paddingVertical: 8,
                   alignItems: 'center',
                   opacity: sharedColors.isDark ? 0.8 : undefined,
                 }}
@@ -578,6 +584,7 @@ export class AddTodoForm extends Component<{
                   style={{
                     color: sharedColors.primaryColor,
                     flex: 1,
+                    fontSize,
                   }}
                 >
                   {translate('addTodoMore')}
@@ -594,7 +601,7 @@ export class AddTodoForm extends Component<{
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginVertical: 4,
+                  paddingVertical: 8,
                   alignItems: 'center',
                   opacity: sharedColors.isDark ? 0.8 : undefined,
                 }}
@@ -608,6 +615,7 @@ export class AddTodoForm extends Component<{
                   style={{
                     color: sharedColors.primaryColor,
                     flex: 1,
+                    fontSize,
                   }}
                 >
                   {translate('delete')}
