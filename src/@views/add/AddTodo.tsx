@@ -33,6 +33,7 @@ import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
+import { sockets } from '@utils/sockets'
 
 @observer
 class AddTodoContent extends Component<{
@@ -78,6 +79,12 @@ class AddTodoContent extends Component<{
         } as Todo
         todo._exactDate = new Date(getTitle(todo))
 
+        // Increment hero store
+        if (todo.completed) {
+          sharedHeroStore.points++
+          sharedHeroStore.updatedAt = new Date()
+        }
+
         realm.write(() => {
           const dbtodo = realm.create(Todo, todo)
           involvedTodos.push(dbtodo)
@@ -119,6 +126,12 @@ class AddTodoContent extends Component<{
           return
         }
 
+        if (vm.completed) {
+          // Increment hero store
+          sharedHeroStore.points++
+          sharedHeroStore.updatedAt = new Date()
+        }
+
         realm.write(() => {
           if (!vm.editedTodo) {
             return
@@ -150,7 +163,11 @@ class AddTodoContent extends Component<{
       } else {
         playTaskComplete()
       }
-      sharedHeroStore.incrementPoints()
+
+      // Increment hero store
+      sharedHeroStore.points++
+      sharedHeroStore.updatedAt = new Date()
+
       realm.write(() => {
         if (!this.breakdownTodo) {
           return
@@ -170,6 +187,8 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
+    // Sync hero
+    sockets.heroSyncManager.sync()
   }
 
   @computed get isValid() {
