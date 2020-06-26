@@ -21,7 +21,16 @@ class InfoRow extends Component<{ title: string; value: string }> {
         }}
       >
         <Text {...sharedColors.regularTextExtraStyle}>{this.props.title}</Text>
-        <Text {...sharedColors.regularTextExtraStyle}>{this.props.value}</Text>
+        <Text
+          style={{
+            ...sharedColors.regularTextExtraStyle.style,
+            flexWrap: 'wrap',
+          }}
+        >
+          {this.props.value.length <= 30
+            ? this.props.value
+            : `${this.props.value.substr(0, 30)}...`}
+        </Text>
       </TableItem>
     )
   }
