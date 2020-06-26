@@ -24,6 +24,7 @@ import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 
 const fontSize = 18
+const verticalSpacing = 8
 
 @observer
 class TouchableOpacityIcon extends Component<{
@@ -58,11 +59,11 @@ class CollapsedTodo extends Component<{
       <TouchableOpacity
         style={{
           flex: 1,
-          marginVertical: 8,
-          marginLeft: 12,
+          paddingVertical: verticalSpacing,
+          paddingLeft: 12,
           flexDirection: 'row',
           alignItems: 'center',
-          marginRight: 16,
+          paddingRight: 16,
         }}
         onPress={() => {
           this.props.vm.collapsed = false
@@ -90,7 +91,7 @@ class CollapsedTodo extends Component<{
               justifyContent: 'center',
               flexDirection: 'column',
               flex: 1,
-              marginHorizontal: 8,
+              paddingHorizontal: 8,
             }}
           >
             <Text
@@ -143,7 +144,7 @@ class TextRow extends Component<{
           flexDirection: 'row',
           justifyContent: 'space-between',
           borderColor: sharedColors.placeholderColor,
-          marginVertical: 8,
+          paddingVertical: verticalSpacing,
         }}
       >
         <Input
@@ -174,7 +175,7 @@ class TextRow extends Component<{
               this.props.vm.text = ''
             }}
             iconName="close"
-            style={{ marginRight: 8, marginTop: 5 }}
+            style={{ paddingRight: 8, paddingTop: 5 }}
             size={20}
           />
         )}
@@ -189,7 +190,7 @@ class TextRow extends Component<{
                 this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
               }}
               iconName="assignment"
-              style={{ marginRight: 8, marginTop: 5 }}
+              style={{ paddingRight: 8, paddingTop: 5 }}
               size={20}
             />
           )}
@@ -207,7 +208,7 @@ class TagsRow extends Component<{
     return (
       <View
         style={{
-          marginBottom: 4,
+          paddingBottom: verticalSpacing / 2,
         }}
       >
         <FlatList
@@ -255,7 +256,7 @@ class DateRow extends Component<{
         }}
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 8,
+          paddingVertical: verticalSpacing,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -312,7 +313,7 @@ class MonthRow extends Component<{
         }}
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 8,
+          paddingVertical: verticalSpacing,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -352,7 +353,7 @@ class TimeRow extends Component<{
       <View
         style={{
           borderColor: sharedColors.placeholderColor,
-          paddingVertical: 8,
+          paddingVertical: verticalSpacing,
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -419,7 +420,7 @@ export class SwitchRow extends Component<{
           justifyContent: 'space-between',
           borderColor: sharedColors.placeholderColor,
           alignItems: 'center',
-          paddingVertical: 8,
+          paddingVertical: verticalSpacing,
         }}
       >
         <Text
@@ -457,7 +458,9 @@ export class AddTodoForm extends Component<{
             vm={this.props.vm}
           />
         ) : (
-          <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+          <View
+            style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
+          >
             <TextRow vm={this.props.vm} />
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <DateRow vm={this.props.vm} />
@@ -572,7 +575,7 @@ export class AddTodoForm extends Component<{
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  paddingVertical: 8,
+                  paddingVertical: verticalSpacing,
                   alignItems: 'center',
                   opacity: sharedColors.isDark ? 0.8 : undefined,
                 }}
@@ -601,7 +604,7 @@ export class AddTodoForm extends Component<{
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  paddingVertical: 8,
+                  paddingVertical: verticalSpacing,
                   alignItems: 'center',
                   opacity: sharedColors.isDark ? 0.8 : undefined,
                 }}
