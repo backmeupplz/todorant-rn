@@ -21,6 +21,7 @@ export class DebugButtons extends Component {
     return __DEV__ ? (
       <>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             deleteAllTodos()
           }}
@@ -28,9 +29,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="delete"
           testID="delete"
         >
-          <Text {...sharedColors.textExtraStyle}>delete all todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            delete all todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosRu()
           }}
@@ -38,9 +42,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_ru"
           testID="add_ru"
         >
-          <Text {...sharedColors.textExtraStyle}>add ru todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add ru todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosEn()
           }}
@@ -48,9 +55,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_en"
           testID="add_en"
         >
-          <Text {...sharedColors.textExtraStyle}>add en todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add en todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosUk()
           }}
@@ -58,9 +68,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_uk"
           testID="add_uk"
         >
-          <Text {...sharedColors.textExtraStyle}>add uk todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add uk todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosIt()
           }}
@@ -68,9 +81,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_it"
           testID="add_it"
         >
-          <Text {...sharedColors.textExtraStyle}>add it todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add it todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosEs()
           }}
@@ -78,9 +94,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_es"
           testID="add_es"
         >
-          <Text {...sharedColors.textExtraStyle}>add es todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add es todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             addTodosPtBR()
           }}
@@ -88,9 +107,12 @@ export class DebugButtons extends Component {
           accessibilityLabel="add_pt_br"
           testID="add_pt_br"
         >
-          <Text {...sharedColors.textExtraStyle}>add pt-BR todos</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add pt-BR todos
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             sharedSettingsStore.colorMode = ColorMode.dark
             updateAndroidNavigationBarColor()
@@ -99,15 +121,20 @@ export class DebugButtons extends Component {
           accessibilityLabel="turn_dark_on"
           testID="turn_dark_on"
         >
-          <Text {...sharedColors.textExtraStyle}>turn dark on</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            turn dark on
+          </Text>
         </Button>
         <Button
+          style={{ margin: 2 }}
           onPress={() => {
             sharedSessionStore.numberOfTodosCompleted = 0
             sharedSessionStore.askedToRate = false
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>reset rating</Text>
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            reset rating
+          </Text>
         </Button>
       </>
     ) : null
