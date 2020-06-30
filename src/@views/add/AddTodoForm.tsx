@@ -529,6 +529,7 @@ export class AddTodoForm extends Component<{
             {this.props.vm.showMore && <TimeRow vm={this.props.vm} />}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
+                textColor={sharedColors.textColor}
                 value={this.props.vm.timePickerValue || new Date()}
                 mode="time"
                 onChange={(event, date) => {
