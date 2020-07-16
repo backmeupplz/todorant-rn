@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, List, ListItem, Text, Toast } from 'native-base'
+import { Container, Content, Text, Toast } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedTagStore } from '@stores/TagStore'

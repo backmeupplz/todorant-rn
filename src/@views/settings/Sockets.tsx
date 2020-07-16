@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, List, ListItem, Text } from 'native-base'
+import { Container, Content, Text } from 'native-base'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { observer } from 'mobx-react'

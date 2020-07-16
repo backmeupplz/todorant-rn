@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import { sharedColors } from '@utils/sharedColors'
-import {
-  ListItem,
-  Container,
-  List,
-  Text,
-  ActionSheet,
-  Content,
-} from 'native-base'
+import { Container, Text, ActionSheet, Content } from 'native-base'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedSettingsStore } from '@stores/SettingsStore'
