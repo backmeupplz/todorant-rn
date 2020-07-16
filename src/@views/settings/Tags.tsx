@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, ListItem, Container, Icon, ActionSheet } from 'native-base'
+import { Text, Container, ActionSheet } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { FlatList } from 'react-native-gesture-handler'
 import { sharedTagStore } from '@stores/TagStore'

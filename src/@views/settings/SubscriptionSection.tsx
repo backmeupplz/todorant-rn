@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, ListItem, View } from 'native-base'
+import { Text, View } from 'native-base'
 import { observer } from 'mobx-react'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'

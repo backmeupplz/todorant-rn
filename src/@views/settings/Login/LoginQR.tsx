@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { observer, Observer } from 'mobx-react'
-import { User } from '@models/User'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { Text } from 'native-base'
 import QRCodeScanner from 'react-native-qrcode-scanner'
@@ -73,7 +72,7 @@ class LoginQRContent extends Component<{
 
 export const LoginQR = () => {
   const route = useRoute<
-    RouteProp<Record<string, { getToken: (token: sting) => void }>, string>
+    RouteProp<Record<string, { getToken: (token: string) => void }>, string>
   >()
   return <LoginQRContent route={route} />
 }
