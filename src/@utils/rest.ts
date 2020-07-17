@@ -4,9 +4,7 @@ import axios, { AxiosResponse } from 'axios'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Platform } from 'react-native'
 
-const base = __DEV__
-  ? 'http://192.168.31.26:1337'
-  : 'https://backend.todorant.com'
+const base = __DEV__ ? 'http://localhost:1337' : 'https://backend.todorant.com'
 
 const extraParams =
   Platform.OS === 'ios'
