@@ -155,6 +155,7 @@ class TextRow extends Component<{
             this.props.vm.text = text
           }}
           placeholderTextColor={sharedColors.placeholderColor}
+          maxLength={1500}
           style={{
             color: sharedColors.textColor,
             fontFamily: fonts.SFProTextRegular,
