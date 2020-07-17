@@ -12,7 +12,8 @@
     "code-push-android": "appcenter codepush patch -a borodutch/Todorant-1 --disabled Production && appcenter codepush release-react -a borodutch/Todorant-1 -d Production -m",
     "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
     "upload-translations": "node scripts/upload.js",
-    "download-translations": "node scripts/download.js"
+    "download-translations": "node scripts/download.js",
+    "adb": "adb reverse tcp:3000 tcp:3000 && adb reverse tcp:1337 tcp:1337"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
