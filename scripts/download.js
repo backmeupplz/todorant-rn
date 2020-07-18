@@ -17,7 +17,10 @@ const i18nStringsFiles = require('i18n-strings-files')
   // Get flattened map
   const flattenedMap = {} // { key: {en: '', ru: ''}}
   translations.forEach((t) => {
-    const key = t.key
+    let key = t.key
+    if (key === 'settings.duplicateTagInBreakdown') {
+      key = 'settingsObject.duplicateTagInBreakdown'
+    }
     const variants = t.variants.filter((v) => !!v.selected)
     flattenedMap[key] = variants.reduce((p, c) => {
       p[c.language] = c.text

@@ -14,7 +14,7 @@ for (const fileName of files) {
   if (fileNameLeft === 'uk') {
     fileNameLeft = 'ua'
   }
-  localizations[fileNameLeft] = flatten(
+  const flatObj = flatten(
     JSON.parse(
       fs.readFileSync(
         `${__dirname}/../src/@assets/translations/${
@@ -24,7 +24,14 @@ for (const fileName of files) {
       )
     )
   )
+  flatObj['settings.duplicateTagInBreakdown'] =
+    flatObj['settingsObject.duplicateTagInBreakdown']
+  delete flatObj['settingsObject.duplicateTagInBreakdown']
+  localizations[fileNameLeft] = flatObj
 }
+
+console.log(localizations['en'])
+process.exit(0)
 
 const result = {}
 

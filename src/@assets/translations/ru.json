@@ -260,6 +260,9 @@
   "encryption": {
     "repeatPassword": "Повторите пароль"
   },
+  "settingsObject": {
+    "duplicateTagInBreakdown": "Копировать хештеги при разбивке"
+  },
   "level": "Уровень",
   "points": "очков",
   "pointsTillNextLevel": "очков до следующего уровня"

@@ -260,6 +260,9 @@
   "encryption": {
     "repeatPassword": "Repeat password"
   },
+  "settingsObject": {
+    "duplicateTagInBreakdown": "Copy hashtags during breakdown"
+  },
   "level": "Level",
   "points": "points",
   "pointsTillNextLevel": "points to unlock next level"
