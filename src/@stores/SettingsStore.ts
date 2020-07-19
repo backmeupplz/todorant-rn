@@ -132,7 +132,7 @@ class SettingsStore {
       this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
-      if (settings.language) {
+      if (settings.language !== this.language) {
         await AsyncStorage.setItem('languageSelect', settings.language)
         RNRestart.Restart()
       }
