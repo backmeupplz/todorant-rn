@@ -124,6 +124,10 @@ class SettingsStore {
     }
     // Consequent pull
     else if (this.updatedAt < settings.updatedAt) {
+      if (settings.language !== this.language && settings.language) {
+        await AsyncStorage.setItem('languageSelect', settings.language)
+        RNRestart.Restart()
+      }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
@@ -132,10 +136,6 @@ class SettingsStore {
       this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
-      if (settings.language !== this.language) {
-        await AsyncStorage.setItem('languageSelect', settings.language)
-        RNRestart.Restart()
-      }
     }
     // Consequent push
     else if (this.updatedAt > settings.updatedAt) {
