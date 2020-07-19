@@ -6,6 +6,8 @@ import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { getLanguageTag } from '@utils/i18n'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import RNRestart from 'react-native-restart'
+import { AsyncStorage } from 'react-native'
 
 export enum Language {
   auto = 'auto',
@@ -33,11 +35,11 @@ class SettingsStore {
   @persist @observable newTodosGoFirst?: boolean
   @persist @observable preserveOrderByTime?: boolean
   @persist @observable duplicateTagInBreakdown?: boolean
+  @persist @observable language?: string
   @persist('object', GoogleCalendarCredentials)
   @observable
   googleCalendarCredentials?: GoogleCalendarCredentials
 
-  @observable language = 'en'
   @persist @observable colorMode = ColorMode.auto
 
   @persist @observable askBeforeDelete = true
@@ -71,6 +73,7 @@ class SettingsStore {
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
+      this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       if (settings.updatedAt) {
         this.updatedAt = new Date(settings.updatedAt)
@@ -81,6 +84,7 @@ class SettingsStore {
           newTodosGoFirst: this.newTodosGoFirst,
           preserveOrderByTime: this.preserveOrderByTime,
           duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+          language: this.language,
           googleCalendarCredentials: this.googleCalendarCredentials,
         })
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
@@ -88,6 +92,7 @@ class SettingsStore {
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
         this.preserveOrderByTime = pushedSettings.preserveOrderByTime
         this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+        this.language = pushedSettings.language
         this.googleCalendarCredentials =
           pushedSettings.googleCalendarCredentials
         this.updatedAt = pushedSettings.updatedAt
@@ -103,6 +108,7 @@ class SettingsStore {
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+        language: this.language,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
@@ -110,6 +116,7 @@ class SettingsStore {
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+      this.language = pushedSettings.language
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -122,8 +129,13 @@ class SettingsStore {
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
+      this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
+      if (settings.language) {
+        await AsyncStorage.setItem('languageSelect', settings.language)
+        RNRestart.Restart()
+      }
     }
     // Consequent push
     else if (this.updatedAt > settings.updatedAt) {
@@ -133,6 +145,7 @@ class SettingsStore {
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+        language: this.language,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
@@ -140,6 +153,7 @@ class SettingsStore {
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+      this.language = pushedSettings.language
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -153,6 +167,7 @@ class SettingsStore {
     this.newTodosGoFirst = undefined
     this.preserveOrderByTime = undefined
     this.duplicateTagInBreakdown = undefined
+    this.language = undefined
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
     this.soundOn = true

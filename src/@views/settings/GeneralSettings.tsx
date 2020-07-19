@@ -11,6 +11,7 @@ import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import { sockets } from '@utils/sockets'
 
 const codeToName = {
   en: 'English',
@@ -26,7 +27,7 @@ export class GeneralSettings extends Component {
   @computed get languageLabel() {
     return sharedSettingsStore.language === Language.auto
       ? translate('languageAuto')
-      : (codeToName as any)[sharedSettingsStore.language]
+      : (codeToName as any)[sharedSettingsStore.language || 'en']
   }
 
   @computed get colorModeLabel() {
@@ -70,6 +71,9 @@ export class GeneralSettings extends Component {
                   await AsyncStorage.setItem('languageSelect', Language.auto)
                   RNRestart.Restart()
                 } else if (i < 7) {
+                  sharedSettingsStore.language = options[i].code
+                  sharedSettingsStore.updatedAt = new Date()
+                  sockets.settingsSyncManager.sync()
                   await AsyncStorage.setItem('languageSelect', options[i].code)
                   RNRestart.Restart()
                 }
