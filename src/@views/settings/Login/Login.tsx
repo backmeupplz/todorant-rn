@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, View } from 'native-base'
+import { Container, Content, Text, View, Input } from 'native-base'
 import { Spinner } from '@components/Spinner'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import { alertError } from '@utils/alert'
@@ -24,6 +24,7 @@ import { Button } from '@components/Button'
 class LoginVM {
   @observable loading = false
   @observable syncLoading = false
+  @observable debugToken = ''
 
   constructor() {
     syncEventEmitter.addListener('todos_synced', () => {
@@ -248,6 +249,36 @@ export class LoginContent extends Component<{
             >
               <Text>{translate('loginQR')}</Text>
             </Button>
+            {__DEV__ && (
+              <>
+                <Input
+                  value={this.vm.debugToken}
+                  onChangeText={(value) => {
+                    this.vm.debugToken = value
+                  }}
+                  style={{
+                    color: sharedColors.textColor,
+                  }}
+                  placeholder="Enter token here"
+                  placeholderTextColor={sharedColors.placeholderColor}
+                />
+                <Button
+                  style={{
+                    justifyContent: 'center',
+                    backgroundColor: 'darkslateblue',
+                    marginBottom: 10,
+                    borderRadius: 10,
+                  }}
+                  onPress={() => {
+                    console.log(this.vm.debugToken)
+                    this.vm.loginWithToken(this.vm.debugToken)
+                  }}
+                  disabled={this.vm.loading}
+                >
+                  <Text>Login with token</Text>
+                </Button>
+              </>
+            )}
           </Content>
         </Container>
         {this.vm.syncLoading && (
