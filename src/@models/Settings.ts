@@ -8,4 +8,5 @@ export interface Settings {
   duplicateTagInBreakdown?: boolean
   updatedAt?: Date
   googleCalendarCredentials?: GoogleCalendarCredentials
+  language?: string
 }
