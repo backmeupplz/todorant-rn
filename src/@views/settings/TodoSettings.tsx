@@ -97,6 +97,27 @@ export class TodoSettings extends Component {
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
           />
         </TableItem>
+        <TableItem>
+          <Text
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
+          >
+            {translate('settingsObject.duplicateTagInBreakdown')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.duplicateTagInBreakdown}
+            onValueChange={(value) => {
+              sharedSettingsStore.duplicateTagInBreakdown = value
+              sharedSettingsStore.updatedAt = new Date()
+              sockets.settingsSyncManager.sync()
+            }}
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
+          />
+        </TableItem>
         <TableItem
           onPress={() => {
             ActionSheet.show(

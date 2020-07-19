@@ -32,6 +32,7 @@ class SettingsStore {
   @persist @observable firstDayOfWeek?: number
   @persist @observable newTodosGoFirst?: boolean
   @persist @observable preserveOrderByTime?: boolean
+  @persist @observable duplicateTagInBreakdown?: boolean
   @persist('object', GoogleCalendarCredentials)
   @observable
   googleCalendarCredentials?: GoogleCalendarCredentials
@@ -69,6 +70,7 @@ class SettingsStore {
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
+      this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       if (settings.updatedAt) {
         this.updatedAt = new Date(settings.updatedAt)
@@ -78,12 +80,14 @@ class SettingsStore {
           firstDayOfWeek: this.firstDayOfWeek,
           newTodosGoFirst: this.newTodosGoFirst,
           preserveOrderByTime: this.preserveOrderByTime,
+          duplicateTagInBreakdown: this.duplicateTagInBreakdown,
           googleCalendarCredentials: this.googleCalendarCredentials,
         })
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
         this.firstDayOfWeek = pushedSettings.firstDayOfWeek
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
         this.preserveOrderByTime = pushedSettings.preserveOrderByTime
+        this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
         this.googleCalendarCredentials =
           pushedSettings.googleCalendarCredentials
         this.updatedAt = pushedSettings.updatedAt
@@ -98,12 +102,14 @@ class SettingsStore {
         firstDayOfWeek: this.firstDayOfWeek,
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
+        duplicateTagInBreakdown: this.duplicateTagInBreakdown,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
+      this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -115,6 +121,7 @@ class SettingsStore {
       this.firstDayOfWeek = settings.firstDayOfWeek
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
+      this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
     }
@@ -125,12 +132,14 @@ class SettingsStore {
         firstDayOfWeek: this.firstDayOfWeek,
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
+        duplicateTagInBreakdown: this.duplicateTagInBreakdown,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
+      this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -143,6 +152,7 @@ class SettingsStore {
     this.firstDayOfWeek = undefined
     this.newTodosGoFirst = undefined
     this.preserveOrderByTime = undefined
+    this.duplicateTagInBreakdown = undefined
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
     this.soundOn = true

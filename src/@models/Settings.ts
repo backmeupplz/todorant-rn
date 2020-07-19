@@ -5,6 +5,7 @@ export interface Settings {
   firstDayOfWeek?: number
   newTodosGoFirst?: boolean
   preserveOrderByTime?: boolean
+  duplicateTagInBreakdown?: boolean
   updatedAt?: Date
   googleCalendarCredentials?: GoogleCalendarCredentials
 }
