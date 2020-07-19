@@ -22,6 +22,7 @@ import { AddTodoForm } from '@views/add/AddTodoForm'
 import { Alert, Clipboard } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { startConfetti } from '@components/Confetti'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import {
@@ -216,14 +217,16 @@ class AddTodoContent extends Component<{
     })
     const newVM = new TodoVM()
     if (this.breakdownTodo) {
-      let matches = linkify.match(this.breakdownTodo.text) || []
-      const newText = matches
-        .map((v) =>
-          /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined
-        )
-        .filter((v) => !!v)
-        .join(' ')
-      newVM.text = newText
+      if (sharedSettingsStore.duplicateTagInBreakdown) {
+        let matches = linkify.match(this.breakdownTodo.text) || []
+        const newText = matches
+          .map((v) =>
+            /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined
+          )
+          .filter((v) => !!v)
+          .join(' ')
+        newVM.text = newText
+      }
     }
     this.vms.push(newVM)
   }
