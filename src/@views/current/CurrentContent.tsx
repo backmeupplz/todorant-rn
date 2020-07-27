@@ -4,7 +4,7 @@ import { CurrentVM } from '@views/current/CurrentVM'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Container } from 'native-base'
+import { Container, View, Text } from 'native-base'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { NoTodosPlaceholder } from '@views/current/NoTodosPlaceholder'
@@ -15,6 +15,12 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { SegmentedProgressView } from '@components/SegmentedProgressView'
 import { PlusButton } from '@components/PlusButton'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import * as Progress from 'react-native-progress'
+import { FlatList } from 'react-native-gesture-handler'
+import { sharedTagStore } from '@stores/TagStore'
+import { ProgressView } from '@components/ProgressView'
+import { sharedColors } from '@utils/sharedColors'
+import fonts from '@utils/fonts'
 
 @observer
 export class CurrentContent extends Component {
@@ -29,6 +35,7 @@ export class CurrentContent extends Component {
   }
 
   render() {
+    let epics = sharedTagStore.undeletedTags.filter((tag) => tag.epic)
     // Hack to make this reactive
     let languageTag = sharedAppStateStore.languageTag
     languageTag = `${languageTag}`
@@ -40,6 +47,47 @@ export class CurrentContent extends Component {
           showsHeroButton
           infoTitle="infoCurrent"
         >
+          <FlatList
+            data={epics}
+            renderItem={({ item }) => {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: sharedColors.primaryColor,
+                      fontFamily: fonts.SFProRoundedRegular,
+                      fontSize: 22,
+                      marginHorizontal: 16,
+                    }}
+                  >
+                    {item.epicPoints}
+                  </Text>
+                  <ProgressView
+                    progress={item.epicPoints! / item.epicGoal!}
+                    tintColor={item.color || sharedColors.primaryColor}
+                    trackColor={sharedColors.textColor}
+                  />
+                  <Text
+                    style={{
+                      color: sharedColors.primaryColor,
+                      fontFamily: fonts.SFProRoundedRegular,
+                      fontSize: 22,
+                      marginHorizontal: 16,
+                    }}
+                  >
+                    {item.epicGoal}
+                  </Text>
+                </View>
+              )
+            }}
+          />
           {!!sharedTodoStore.progress.count && (
             <SegmentedProgressView
               completed={sharedTodoStore.progress.completed}

@@ -188,6 +188,10 @@ class TagStore {
           deleted: false,
           tag,
           _tempSyncId: uuid(),
+          epic: false,
+          epicCompleted: false,
+          epicGoal: 0,
+          epicPoints: 0,
         })
       }
     })
