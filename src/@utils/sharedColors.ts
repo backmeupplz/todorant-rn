@@ -108,6 +108,10 @@ export class ColorModeManager {
     return this.isDark ? 'firebrick' : 'orangered'
   }
 
+  @computed get epic() {
+    return this.isDark ? '#404040' : '#CCCCCC'
+  }
+
   colorSchemes = [] as string[][]
 
   generateColorSchemes() {

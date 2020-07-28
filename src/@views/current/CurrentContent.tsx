@@ -49,6 +49,7 @@ export class CurrentContent extends Component {
           infoTitle="infoCurrent"
         >
           <FlatList
+            style={{ marginVertical: 20 }}
             data={epics}
             renderItem={({ item }) => {
               return (
@@ -56,17 +57,20 @@ export class CurrentContent extends Component {
                   style={{
                     flex: 1,
                     flexDirection: 'column',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                   }}
                 >
                   <Text
                     style={{
-                      color: sharedColors.primaryColor,
+                      color: item.color || sharedColors.primaryColor,
                       fontFamily: fonts.SFProRoundedRegular,
                       fontSize: 22,
+                      marginHorizontal: 16,
+                      marginBottom: -24,
                     }}
                   >
-                    {item.tag}
+                    {`#${item.tag}`}
                   </Text>
                   <View
                     style={{
@@ -78,10 +82,10 @@ export class CurrentContent extends Component {
                   >
                     <Text
                       style={{
-                        color: sharedColors.primaryColor,
                         fontFamily: fonts.SFProRoundedRegular,
                         fontSize: 22,
                         marginHorizontal: 16,
+                        color: item.color || sharedColors.primaryColor,
                       }}
                     >
                       {item.epicPoints}
@@ -89,27 +93,28 @@ export class CurrentContent extends Component {
                     <ProgressView
                       progress={item.epicPoints! / item.epicGoal!}
                       tintColor={item.color || sharedColors.primaryColor}
-                      trackColor={sharedColors.textColor}
+                      trackColor={sharedColors.epic}
                     />
-                    {item.epicPoints == item.epicGoal && (
+                    {item.epicPoints != item.epicGoal ? (
+                      <Text
+                        style={{
+                          fontFamily: fonts.SFProRoundedRegular,
+                          fontSize: 22,
+                          marginHorizontal: 16,
+                          color: item.color || sharedColors.primaryColor,
+                        }}
+                      >
+                        {item.epicGoal}
+                      </Text>
+                    ) : (
                       <IconButton
                         onPress={() => {
                           sharedTagStore.completeEpic(item)
                         }}
-                        color={sharedColors.destructIconColor}
+                        color={item.color || sharedColors.destructIconColor}
                         name="done_outline_28--check"
                       />
                     )}
-                    <Text
-                      style={{
-                        color: sharedColors.primaryColor,
-                        fontFamily: fonts.SFProRoundedRegular,
-                        fontSize: 22,
-                        marginHorizontal: 16,
-                      }}
-                    >
-                      {item.epicGoal}
-                    </Text>
                   </View>
                 </View>
               )
