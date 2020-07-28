@@ -80,8 +80,9 @@ class AddTodoContent extends Component<{
         } as Todo
         todo._exactDate = new Date(getTitle(todo))
 
-        // Increment hero store
         if (todo.completed) {
+          sharedTagStore.incrementEpicPoints(todo)
+          // Increment hero store
           sharedHeroStore.points++
           sharedHeroStore.updatedAt = new Date()
         }
@@ -128,6 +129,25 @@ class AddTodoContent extends Component<{
         }
 
         if (vm.completed) {
+          const todo = {
+            updatedAt: new Date(),
+            createdAt: new Date(),
+            text: vm.text,
+            completed: vm.completed,
+            frog: vm.frog,
+            frogFails: 0,
+            skipped: false,
+            order: vm.order,
+            monthAndYear:
+              vm.monthAndYear || getDateMonthAndYearString(new Date()),
+            deleted: false,
+            date: vm.date,
+            time: vm.time,
+            encrypted: !!sharedSessionStore.encryptionKey,
+
+            _tempSyncId: uuid(),
+          } as Todo
+          sharedTagStore.incrementEpicPoints(todo)
           // Increment hero store
           sharedHeroStore.points++
           sharedHeroStore.updatedAt = new Date()
@@ -165,6 +185,7 @@ class AddTodoContent extends Component<{
         playTaskComplete()
       }
 
+      sharedTagStore.incrementEpicPoints(this.breakdownTodo)
       // Increment hero store
       sharedHeroStore.points++
       sharedHeroStore.updatedAt = new Date()

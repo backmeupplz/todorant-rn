@@ -108,7 +108,7 @@ export class ColorModeManager {
     return this.isDark ? 'firebrick' : 'orangered'
   }
 
-  @computed get epic() {
+  @computed get progressBar() {
     return this.isDark ? '#404040' : '#CCCCCC'
   }
 

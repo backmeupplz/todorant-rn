@@ -10,6 +10,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { extraButtonProps } from '@utils/extraButtonProps'
+import { translate } from '@utils/i18n'
 
 const AddEpicStore = {
   save: () => {},
@@ -86,7 +87,7 @@ class AddEpicContent extends Component<{
             onChangeText={(text) => {
               this.epicGoal = parseInt(text)
             }}
-            placeholder="Epic Goal"
+            placeholder={translate('epicGoal')}
             keyboardType="number-pad"
             style={{
               flex: 1,

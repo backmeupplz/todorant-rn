@@ -321,7 +321,7 @@ export function Settings() {
             name="AddEpic"
             component={AddEpic}
             options={{
-              title: 'Сделать эпиком',
+              title: translate('epicInto'),
               headerTitleAlign: 'center',
               headerRight: () => <AddEpicHeaderRight />,
               ...sharedColors.headerExtraStyle,

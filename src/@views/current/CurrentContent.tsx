@@ -25,6 +25,7 @@ import { IconButton } from '@components/IconButton'
 @observer
 export class CurrentContent extends Component {
   vm = new CurrentVM()
+  epics = sharedTagStore.undeletedTags.filter((tag) => tag.epic)
 
   componentDidMount() {
     setTimeout(() => {
@@ -35,7 +36,6 @@ export class CurrentContent extends Component {
   }
 
   render() {
-    let epics = sharedTagStore.undeletedTags.filter((tag) => tag.epic)
     // Hack to make this reactive
     let languageTag = sharedAppStateStore.languageTag
     languageTag = `${languageTag}`
@@ -49,7 +49,8 @@ export class CurrentContent extends Component {
         >
           <FlatList
             style={{ marginVertical: 20 }}
-            data={epics}
+            data={this.epics}
+            keyExtractor={(item, index) => `key${index}`}
             renderItem={({ item }) => {
               return (
                 <View
@@ -69,7 +70,7 @@ export class CurrentContent extends Component {
                       marginBottom: -24,
                     }}
                   >
-                    {`#${item.tag}`}
+                    #{item.tag}
                   </Text>
                   <View
                     style={{
@@ -92,7 +93,7 @@ export class CurrentContent extends Component {
                     <ProgressView
                       progress={item.epicPoints! / item.epicGoal!}
                       tintColor={item.color || sharedColors.primaryColor}
-                      trackColor={sharedColors.epic}
+                      trackColor={sharedColors.progressBar}
                     />
                     {item.epicPoints != item.epicGoal ? (
                       <Text

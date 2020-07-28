@@ -265,5 +265,8 @@
   },
   "level": "Уровень",
   "points": "очков",
-  "pointsTillNextLevel": "очков до следующего уровня"
+  "pointsTillNextLevel": "очков до следующего уровня",
+  "epicNumberError": "Должно быть цифрой",
+  "epicInto": "Сделать эпиком",
+  "epicGoal": "Цель эпика"
 }

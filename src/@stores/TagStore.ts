@@ -158,8 +158,8 @@ class TagStore {
     sockets.tagsSyncManager.sync()
   }
 
-  incrementEpicPoints = (tags: Todo) => {
-    const tagsInTodo = l(tags.text)
+  incrementEpicPoints = (todo: Todo) => {
+    const tagsInTodo = l(todo.text)
       .filter((c) => c.type === 'hash')
       .map((c) => c.url?.substr(1))
     const epics = this.allTags
@@ -167,10 +167,13 @@ class TagStore {
       .filter((epic) => tagsInTodo.includes(epic.tag))
     epics.forEach((epic) => {
       const dbtag = this.getTagById(epic._id)
-      if (!dbtag) {
+      if (!dbtag || !dbtag.epicGoal) {
         return
       }
-      if (dbtag.epicPoints! < dbtag.epicGoal!)
+      if (!dbtag.epicPoints) {
+        dbtag.epicPoints = 0
+      }
+      if (dbtag.epicPoints < dbtag.epicGoal)
         realm.write(() => {
           dbtag.epicPoints!++
           dbtag.updatedAt = new Date()

@@ -265,5 +265,8 @@
   },
   "level": "Level",
   "points": "points",
-  "pointsTillNextLevel": "points to unlock next level"
+  "pointsTillNextLevel": "points to unlock next level",
+  "epicNumberError": "Should be a number",
+  "epicInto": "Make an epic",
+  "epicGoal": "Epic goal"
 }

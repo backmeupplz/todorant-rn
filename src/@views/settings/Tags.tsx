@@ -11,12 +11,6 @@ import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
-import { createStackNavigator } from '@react-navigation/stack'
-import { AddEpic } from '@views/epics/AddEpic'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { CurrentContent } from '@views/current/CurrentContent'
-
-const Stack = createStackNavigator()
 
 class TagsVM {
   onTap(tag: Tag) {
@@ -32,9 +26,9 @@ class TagsVM {
     }
     if (!isEpic) {
       if (hasColor) {
-        options.splice(2, 0, 'Make an epic')
+        options.splice(2, 0, translate('epicInto'))
       } else {
-        options.splice(1, 0, 'Make an epic')
+        options.splice(1, 0, translate('epicInto'))
       }
     }
     const cancelButtonIndex = options.length - 1
@@ -53,7 +47,7 @@ class TagsVM {
         } else if (buttonIndex === 0) {
           this.changeColor(tag)
         } else if (!isEpic && buttonIndex === 1) {
-          this.intoEpic(tag)
+          this.makeAnEpic(tag)
         } else {
           this.changeColorToDefault(tag)
         }
@@ -90,7 +84,7 @@ class TagsVM {
     sharedTagStore.refreshTags()
     sockets.tagsSyncManager.sync()
   }
-  intoEpic(tag: Tag) {
+  makeAnEpic(tag: Tag) {
     navigate('AddEpic', { tag: { ...tag } })
   }
 }
