@@ -16,6 +16,7 @@ import {
 import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import { sharedTagStore } from '@stores/TagStore'
 
 export class TodoCardVM {
   skip(todo: Todo) {
@@ -126,6 +127,7 @@ export class TodoCardVM {
       playTaskComplete()
     }
     sharedHeroStore.incrementPoints()
+    sharedTagStore.incrementEpicPoints(todo)
 
     realm.write(() => {
       todo.completed = true

@@ -9,6 +9,7 @@ import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { l } from '@utils/linkify'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
+import { Todo } from '@models/Todo'
 
 class TagStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -139,6 +140,44 @@ class TagStore {
         }
         return p
       }, {} as { [index: string]: string })
+  }
+
+  completeEpic = (epic: Tag) => {
+    const dbtag = this.getTagById(epic._id)
+    if (!dbtag) {
+      return
+    }
+    realm.write(() => {
+      dbtag.epic = false
+      dbtag.epicPoints = 0
+      dbtag.epicGoal = 0
+      dbtag.epicCompleted = true
+      dbtag.updatedAt = new Date()
+    })
+    this.refreshTags()
+    sockets.tagsSyncManager.sync()
+  }
+
+  incrementEpicPoints = (tags: Todo) => {
+    const tagsInTodo = l(tags.text)
+      .filter((c) => c.type === 'hash')
+      .map((c) => c.url?.substr(1))
+    const epics = this.allTags
+      .filtered('epic = true')
+      .filter((epic) => tagsInTodo.includes(epic.tag))
+    epics.forEach((epic) => {
+      const dbtag = this.getTagById(epic._id)
+      if (!dbtag) {
+        return
+      }
+      if (dbtag.epicPoints! < dbtag.epicGoal!)
+        realm.write(() => {
+          dbtag.epicPoints!++
+          dbtag.updatedAt = new Date()
+        })
+    })
+    this.refreshTags()
+    sockets.tagsSyncManager.sync()
   }
 
   getTagById = (id?: string) => {

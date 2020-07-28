@@ -52,7 +52,7 @@ class TagsVM {
           this.deleteTag(tag)
         } else if (buttonIndex === 0) {
           this.changeColor(tag)
-        } else if (buttonIndex === 1) {
+        } else if (!isEpic && buttonIndex === 1) {
           this.intoEpic(tag)
         } else {
           this.changeColorToDefault(tag)

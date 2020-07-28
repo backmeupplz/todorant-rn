@@ -21,6 +21,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { ProgressView } from '@components/ProgressView'
 import { sharedColors } from '@utils/sharedColors'
 import fonts from '@utils/fonts'
+import { IconButton } from '@components/IconButton'
 
 @observer
 export class CurrentContent extends Component {
@@ -54,8 +55,7 @@ export class CurrentContent extends Component {
                 <View
                   style={{
                     flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
                     alignItems: 'center',
                   }}
                 >
@@ -64,26 +64,53 @@ export class CurrentContent extends Component {
                       color: sharedColors.primaryColor,
                       fontFamily: fonts.SFProRoundedRegular,
                       fontSize: 22,
-                      marginHorizontal: 16,
                     }}
                   >
-                    {item.epicPoints}
+                    {item.tag}
                   </Text>
-                  <ProgressView
-                    progress={item.epicPoints! / item.epicGoal!}
-                    tintColor={item.color || sharedColors.primaryColor}
-                    trackColor={sharedColors.textColor}
-                  />
-                  <Text
+                  <View
                     style={{
-                      color: sharedColors.primaryColor,
-                      fontFamily: fonts.SFProRoundedRegular,
-                      fontSize: 22,
-                      marginHorizontal: 16,
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                   >
-                    {item.epicGoal}
-                  </Text>
+                    <Text
+                      style={{
+                        color: sharedColors.primaryColor,
+                        fontFamily: fonts.SFProRoundedRegular,
+                        fontSize: 22,
+                        marginHorizontal: 16,
+                      }}
+                    >
+                      {item.epicPoints}
+                    </Text>
+                    <ProgressView
+                      progress={item.epicPoints! / item.epicGoal!}
+                      tintColor={item.color || sharedColors.primaryColor}
+                      trackColor={sharedColors.textColor}
+                    />
+                    {item.epicPoints == item.epicGoal && (
+                      <IconButton
+                        onPress={() => {
+                          sharedTagStore.completeEpic(item)
+                        }}
+                        color={sharedColors.destructIconColor}
+                        name="done_outline_28--check"
+                      />
+                    )}
+                    <Text
+                      style={{
+                        color: sharedColors.primaryColor,
+                        fontFamily: fonts.SFProRoundedRegular,
+                        fontSize: 22,
+                        marginHorizontal: 16,
+                      }}
+                    >
+                      {item.epicGoal}
+                    </Text>
+                  </View>
                 </View>
               )
             }}
