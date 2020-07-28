@@ -107,13 +107,15 @@ export class CurrentContent extends Component {
                         {item.epicGoal}
                       </Text>
                     ) : (
-                      <IconButton
-                        onPress={() => {
-                          sharedTagStore.completeEpic(item)
-                        }}
-                        color={item.color || sharedColors.destructIconColor}
-                        name="done_outline_28--check"
-                      />
+                      <View style={{ marginRight: 8 }}>
+                        <IconButton
+                          onPress={() => {
+                            sharedTagStore.completeEpic(item)
+                          }}
+                          color={item.color || sharedColors.destructIconColor}
+                          name="done_outline_28--check"
+                        />
+                      </View>
                     )}
                   </View>
                 </View>
