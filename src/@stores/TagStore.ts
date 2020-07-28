@@ -158,8 +158,8 @@ class TagStore {
     sockets.tagsSyncManager.sync()
   }
 
-  incrementEpicPoints = (todo: Todo) => {
-    const tagsInTodo = l(todo.text)
+  incrementEpicPoints = (text: string) => {
+    const tagsInTodo = l(text)
       .filter((c) => c.type === 'hash')
       .map((c) => c.url?.substr(1))
     const epics = this.allTags

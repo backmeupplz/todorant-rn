@@ -127,7 +127,7 @@ export class TodoCardVM {
       playTaskComplete()
     }
     sharedHeroStore.incrementPoints()
-    sharedTagStore.incrementEpicPoints(todo)
+    sharedTagStore.incrementEpicPoints(todo.text)
 
     realm.write(() => {
       todo.completed = true
