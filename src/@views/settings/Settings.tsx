@@ -40,6 +40,7 @@ import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
+import { AddEpic, AddEpicHeaderRight } from '@views/epics/AddEpic'
 
 const Stack = createStackNavigator()
 
@@ -312,6 +313,17 @@ export function Settings() {
               title: translate('changeColor'),
               headerTitleAlign: 'center',
               headerRight: () => <ColorPickerHeaderRight />,
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="AddEpic"
+            component={AddEpic}
+            options={{
+              title: translate('epicInto'),
+              headerTitleAlign: 'center',
+              headerRight: () => <AddEpicHeaderRight />,
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),
             }}

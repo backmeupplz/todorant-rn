@@ -15,6 +15,7 @@ import { TableItem } from '@components/TableItem'
 class TagsVM {
   onTap(tag: Tag) {
     const hasColor = !!tag.color
+    const isEpic = !!tag.epic
     const options = [
       translate('changeColor'),
       translate('delete'),
@@ -22,6 +23,13 @@ class TagsVM {
     ]
     if (hasColor) {
       options.splice(1, 0, translate('changeColorToDefault'))
+    }
+    if (!isEpic) {
+      if (hasColor) {
+        options.splice(2, 0, translate('epicInto'))
+      } else {
+        options.splice(1, 0, translate('epicInto'))
+      }
     }
     const cancelButtonIndex = options.length - 1
     const deleteButtonIndex = options.length - 2
@@ -38,6 +46,8 @@ class TagsVM {
           this.deleteTag(tag)
         } else if (buttonIndex === 0) {
           this.changeColor(tag)
+        } else if (!isEpic && buttonIndex === 1) {
+          this.makeAnEpic(tag)
         } else {
           this.changeColorToDefault(tag)
         }
@@ -73,6 +83,9 @@ class TagsVM {
     })
     sharedTagStore.refreshTags()
     sockets.tagsSyncManager.sync()
+  }
+  makeAnEpic(tag: Tag) {
+    navigate('AddEpic', { tag: { ...tag } })
   }
 }
 

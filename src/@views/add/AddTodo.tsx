@@ -80,8 +80,9 @@ class AddTodoContent extends Component<{
         } as Todo
         todo._exactDate = new Date(getTitle(todo))
 
-        // Increment hero store
         if (todo.completed) {
+          sharedTagStore.incrementEpicPoints(todo.text)
+          // Increment hero store
           sharedHeroStore.points++
           sharedHeroStore.updatedAt = new Date()
         }
@@ -128,6 +129,7 @@ class AddTodoContent extends Component<{
         }
 
         if (vm.completed) {
+          sharedTagStore.incrementEpicPoints(vm.text)
           // Increment hero store
           sharedHeroStore.points++
           sharedHeroStore.updatedAt = new Date()
@@ -165,6 +167,7 @@ class AddTodoContent extends Component<{
         playTaskComplete()
       }
 
+      sharedTagStore.incrementEpicPoints(this.breakdownTodo.text)
       // Increment hero store
       sharedHeroStore.points++
       sharedHeroStore.updatedAt = new Date()
