@@ -27,6 +27,7 @@ export class Integrations extends Component {
         },
         async (i) => {
           if (i === 0) {
+            await rest.closeChannel()
             sharedSettingsStore.googleCalendarCredentials = undefined
             sharedSettingsStore.updatedAt = new Date()
             sockets.settingsSyncManager.sync()

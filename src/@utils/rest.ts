@@ -124,3 +124,11 @@ export function calendarAuthorize(code: string) {
     }
   )
 }
+
+export function closeChannel() {
+  return axios.post(`${base}/google/closeChannel`, undefined, {
+    headers: {
+      token: sharedSessionStore.user?.token,
+    },
+  })
+}
