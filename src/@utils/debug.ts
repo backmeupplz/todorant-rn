@@ -93,7 +93,7 @@ export function addTodosUk() {
   }
   const todos = ([
     {
-      text: 'Закінчити звіт для Трансгалактіческой Федерації',
+      text: 'Закінчити звіт для Трансгалактичної Федерації',
       frog: true,
       monthAndYear: getDateMonthAndYearString(daysAgo(0)),
       date: getDateDateString(daysAgo(0)),
