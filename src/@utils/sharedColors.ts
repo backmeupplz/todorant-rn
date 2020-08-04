@@ -108,6 +108,10 @@ export class ColorModeManager {
     return this.isDark ? 'firebrick' : 'orangered'
   }
 
+  @computed get progressBarBackground() {
+    return this.isDark ? 'rgba(249, 249, 249, 0.2)' : 'rgba(6, 6, 6, 0.2)'
+  }
+
   colorSchemes = [] as string[][]
 
   generateColorSchemes() {

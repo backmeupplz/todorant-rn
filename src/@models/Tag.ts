@@ -13,6 +13,11 @@ export class Tag {
       tag: 'string',
       color: 'string?',
       numberOfUses: { type: 'int', indexed: true, default: 0 },
+
+      epic: 'bool?',
+      epicGoal: 'int?',
+      epicCompleted: 'bool?',
+      epicPoints: 'int?',
     },
   }
 
@@ -25,4 +30,9 @@ export class Tag {
   @observable tag!: string
   @observable color?: string
   @observable numberOfUses!: number
+
+  @observable epic?: boolean
+  @observable epicGoal?: number
+  @observable epicCompleted?: boolean
+  @observable epicPoints?: number
 }
