@@ -7,12 +7,12 @@ export enum TodoSectionType {
 
 class AppStateStore {
   @observable todoSection: TodoSectionType = TodoSectionType.planning
-  @observable hash = ''
+  @observable hash: string[] = []
 
   @observable languageTag = 'en'
 
   @observable searchEnabled = false
-  @observable searchQuery = ''
+  @observable searchQuery: string[] = []
 }
 
 export const sharedAppStateStore = new AppStateStore()

@@ -12,7 +12,7 @@ export class PlanningHeaderRight extends Component {
     return sharedAppStateStore.hash ? (
       <TouchableOpacity
         onPress={() => {
-          sharedAppStateStore.hash = ''
+          sharedAppStateStore.hash = []
         }}
         style={{ marginRight: 12 }}
       >

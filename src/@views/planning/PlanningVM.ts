@@ -25,10 +25,11 @@ export class PlanningVM {
   }
 
   @computed get allTodosAndHash() {
-    return sharedAppStateStore.hash
-      ? this.allTodosFiltered.filtered(
-          `${`text CONTAINS[c] "${sharedAppStateStore.hash}"`}`
-        )
+    const hashes = sharedAppStateStore.hash
+      .map((hash) => `text CONTAINS[c] "${hash}"`)
+      .join(' AND ')
+    return sharedAppStateStore.hash.length
+      ? this.allTodosFiltered.filtered(`${hashes}`)
       : sharedAppStateStore.searchEnabled && !!sharedAppStateStore.searchQuery
       ? this.allTodosFiltered.filtered(
           `${`text CONTAINS[c] "${sharedAppStateStore.searchQuery}"`}`
