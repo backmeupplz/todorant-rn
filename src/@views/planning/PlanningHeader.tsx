@@ -20,11 +20,15 @@ export class PlanningHeader extends Component {
 
   render() {
     return sharedAppStateStore.hash ? (
-      <Text {...sharedColors.textExtraStyle}>
-        {sharedAppStateStore.hash.length > 4
-          ? `${sharedAppStateStore.hash.slice(0, 4).join(' ')} ...`
-          : sharedAppStateStore.hash.join(' ')}
-      </Text>
+      <View style={{ marginRight: 24 }}>
+        <Text
+          {...sharedColors.textExtraStyle}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+        >
+          {sharedAppStateStore.hash}
+        </Text>
+      </View>
     ) : sharedAppStateStore.searchEnabled ? (
       <Input
         style={{
