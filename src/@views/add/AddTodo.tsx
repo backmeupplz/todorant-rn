@@ -39,7 +39,10 @@ import { sockets } from '@utils/sockets'
 @observer
 class AddTodoContent extends Component<{
   route: RouteProp<
-    Record<string, { editedTodo: Todo; breakdownTodo: Todo } | undefined>,
+    Record<
+      string,
+      { editedTodo: Todo; breakdownTodo: Todo; date: string } | undefined
+    >,
     string
   >
 }> {
@@ -231,6 +234,10 @@ class AddTodoContent extends Component<{
         newVM.text = newText
       }
     }
+    if (this.props.route.params?.date) {
+      newVM.monthAndYear = this.props.route.params?.date.substr(0, 8)
+      newVM.date = this.props.route.params?.date.substr(8, 2)
+    }
     this.vms.push(newVM)
   }
 
@@ -336,7 +343,10 @@ class AddTodoContent extends Component<{
 export const AddTodo = () => {
   const route = useRoute<
     RouteProp<
-      Record<string, { editedTodo: Todo; breakdownTodo: Todo } | undefined>,
+      Record<
+        string,
+        { editedTodo: Todo; breakdownTodo: Todo; date: string } | undefined
+      >,
       string
     >
   >()

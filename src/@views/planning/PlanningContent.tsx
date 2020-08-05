@@ -12,6 +12,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
+import { IconButton } from '@components/IconButton'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class PlanningContent extends Component {
@@ -47,16 +49,35 @@ export class PlanningContent extends Component {
                   }
                   style={{ paddingHorizontal: isActive ? 10 : 0 }}
                 >
-                  <Text
+                  <View
                     style={{
                       marginHorizontal: 16,
                       marginTop: 16,
-                      ...sharedColors.textExtraStyle.style,
+                      flexDirection: 'row',
                     }}
-                    key={index}
                   >
-                    {item.title}
-                  </Text>
+                    <Text
+                      style={{
+                        ...sharedColors.textExtraStyle.style,
+                      }}
+                      key={index}
+                    >
+                      {item.title}
+                    </Text>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <IconButton
+                        onPress={() => {
+                          navigate('AddTodo', { date: item.title })
+                        }}
+                        size={20}
+                        name="add_outline_28"
+                      />
+                    </View>
+                  </View>
                 </TouchableWithoutFeedback>
               ) : (
                 <View style={{ padding: isActive ? 10 : 0 }} key={index}>

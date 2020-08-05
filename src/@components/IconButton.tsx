@@ -10,13 +10,14 @@ export class IconButton extends Component<{
   name: string
   color?: string
   fullColor?: boolean
+  size?: number
 }> {
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <CustomIcon
           name={this.props.name}
-          size={28}
+          size={this.props.size || 28}
           style={{
             color: this.props.color || sharedColors.defaultIconColor,
             opacity: this.props.fullColor ? 1.0 : 0.8,
