@@ -20,7 +20,15 @@ export class PlanningHeader extends Component {
 
   render() {
     return sharedAppStateStore.hash ? (
-      <Text {...sharedColors.textExtraStyle}>{sharedAppStateStore.hash}</Text>
+      <View style={{ marginRight: 24 }}>
+        <Text
+          {...sharedColors.textExtraStyle}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+        >
+          {sharedAppStateStore.hash}
+        </Text>
+      </View>
     ) : sharedAppStateStore.searchEnabled ? (
       <Input
         style={{
@@ -31,7 +39,7 @@ export class PlanningHeader extends Component {
         placeholderTextColor={sharedColors.placeholderColor}
         autoFocus
         onChangeText={(text) => {
-          sharedAppStateStore.searchQuery = text
+          sharedAppStateStore.searchQuery = [text]
         }}
       />
     ) : (

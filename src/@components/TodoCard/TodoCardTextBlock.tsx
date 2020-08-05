@@ -77,7 +77,9 @@ export class TodoCardTextBlock extends Component<{
                 if (p.type === 'link' && p.url) {
                   Linking.openURL(p.url)
                 } else if (p.type === 'hash') {
-                  sharedAppStateStore.hash = p.value
+                  if (!sharedAppStateStore.hash.includes(p.value)) {
+                    sharedAppStateStore.hash.push(p.value)
+                  }
                 }
               }}
               style={{
