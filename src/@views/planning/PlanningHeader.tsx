@@ -21,7 +21,9 @@ export class PlanningHeader extends Component {
   render() {
     return sharedAppStateStore.hash ? (
       <Text {...sharedColors.textExtraStyle}>
-        {sharedAppStateStore.hash.join(' ')}
+        {sharedAppStateStore.hash.length > 4
+          ? `${sharedAppStateStore.hash.slice(0, 4).join(' ')} ...`
+          : sharedAppStateStore.hash.join(' ')}
       </Text>
     ) : sharedAppStateStore.searchEnabled ? (
       <Input
