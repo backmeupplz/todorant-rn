@@ -30,9 +30,6 @@ for (const fileName of files) {
   localizations[fileNameLeft] = flatObj
 }
 
-console.log(localizations['en'])
-process.exit(0)
-
 const result = {}
 
 const keys = Array.from(
