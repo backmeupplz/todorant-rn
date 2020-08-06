@@ -18,6 +18,9 @@ import PlanningIcon from '@assets/images/planning'
 import PlanningActiveIcon from '@assets/images/planning-active'
 import SettingsIcon from '@assets/images/settings'
 import SettingsActiveIcon from '@assets/images/settings-active'
+import DelegationIcon from '@assets/images/delegation'
+import DelegationActiveIcon from '@assets/images/delegation-active'
+import { Delegation } from '@views/delegation/Delegation'
 
 const Tab = createBottomTabNavigator()
 
@@ -40,6 +43,11 @@ export default observer(() => {
               icon = focused
                 ? PlanningActiveIcon({ width: size, height: size })
                 : PlanningIcon({ width: size, height: size })
+            } else if (route.name === 'Delegation') {
+              name = 'delegation'
+              icon = focused
+                ? DelegationActiveIcon({ width: size, height: size })
+                : DelegationIcon({ width: size, height: size })
             } else if (route.name === 'Settings') {
               name = 'settings'
               icon = focused
@@ -50,7 +58,9 @@ export default observer(() => {
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
                   {icon}
-                  {route.name === 'Settings' && !sharedSessionStore.user && (
+                  {((route.name === 'Settings' && !sharedSessionStore.user) ||
+                    (route.name === 'Delegation' &&
+                      !!sharedTodoStore.unacceptedTodos.length)) && (
                     <View
                       style={{
                         position: 'absolute',
@@ -58,7 +68,7 @@ export default observer(() => {
                         height: 6,
                         backgroundColor: 'red',
                         top: 0,
-                        right: 0,
+                        right: -5,
                         borderRadius: 3,
                       }}
                     />
@@ -94,6 +104,11 @@ export default observer(() => {
           name="Planning"
           component={Planning}
           options={{ title: translate('planning') }}
+        />
+        <Tab.Screen
+          name="Delegation"
+          component={Delegation}
+          options={{ title: translate('delegate.title') }}
         />
         <Tab.Screen
           name="Settings"

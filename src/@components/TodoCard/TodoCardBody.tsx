@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { CardItem, Body, View } from 'native-base'
+import { CardItem, Body, View, Text } from 'native-base'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { CardType } from '@components/TodoCard/CardType'
-import { Todo } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
@@ -37,10 +37,22 @@ export class TodoCardBody extends Component<{
             <View
               style={{
                 flex: 1,
-                flexDirection: 'row',
+                flexDirection: 'column',
                 justifyContent: 'space-between',
               }}
             >
+              {!!this.props.todo.delegatorName && (
+                <Text>
+                  <Text {...sharedColors.regularTextExtraStyle}>
+                    {this.props.todo.delegatorName}
+                  </Text>
+                  {this.props.todo.delegateAccepted === false && (
+                    <Text {...sharedColors.regularTextExtraStyle}>
+                      {` ${getTitle(this.props.todo)}`}
+                    </Text>
+                  )}
+                </Text>
+              )}
               <TodoCardTextBlock
                 todo={this.props.todo}
                 isOld={isOld}

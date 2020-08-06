@@ -26,9 +26,9 @@ class TagsVM {
     }
     if (!isEpic) {
       if (hasColor) {
-        options.splice(2, 0, translate('epicInto'))
+        options.splice(2, 0, translate('epic.intoEpic'))
       } else {
-        options.splice(1, 0, translate('epicInto'))
+        options.splice(1, 0, translate('epic.intoEpic'))
       }
     }
     const cancelButtonIndex = options.length - 1

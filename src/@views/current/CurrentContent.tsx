@@ -46,55 +46,40 @@ export class CurrentContent extends Component {
           showsHeroButton
           infoTitle="infoCurrent"
         >
-          <FlatList
-            style={{ marginVertical: 20 }}
-            data={sharedTagStore.undeletedTags.filter((tag) => tag.epic)}
-            keyExtractor={(item, index) => `${index}`}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: item.color || sharedColors.primaryColor,
-                      fontFamily: fonts.SFProRoundedRegular,
-                      fontSize: 22,
-                      marginHorizontal: 16,
-                      marginBottom: -24,
-                    }}
-                  >
-                    #{item.tag}
-                  </Text>
+          {!!sharedTagStore.undeletedTags.filter((tag) => tag.epic).length && (
+            <FlatList
+              style={{ marginVertical: 20 }}
+              data={sharedTagStore.undeletedTags.filter((tag) => tag.epic)}
+              keyExtractor={(_, index) => `${index}`}
+              renderItem={({ item }) => {
+                return (
                   <View
                     style={{
                       flex: 1,
-                      flexDirection: 'row',
+                      flexDirection: 'column',
                       justifyContent: 'space-between',
                       alignItems: 'center',
                     }}
                   >
                     <Text
                       style={{
+                        color: item.color || sharedColors.primaryColor,
                         fontFamily: fonts.SFProRoundedRegular,
                         fontSize: 22,
                         marginHorizontal: 16,
-                        color: item.color || sharedColors.primaryColor,
+                        marginBottom: -24,
                       }}
                     >
-                      {item.epicPoints}
+                      #{item.tag}
                     </Text>
-                    <ProgressView
-                      progress={item.epicPoints! / item.epicGoal!}
-                      tintColor={item.color || sharedColors.primaryColor}
-                      trackColor={sharedColors.progressBarBackground}
-                    />
-                    {item.epicPoints != item.epicGoal ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Text
                         style={{
                           fontFamily: fonts.SFProRoundedRegular,
@@ -103,24 +88,41 @@ export class CurrentContent extends Component {
                           color: item.color || sharedColors.primaryColor,
                         }}
                       >
-                        {item.epicGoal}
+                        {item.epicPoints}
                       </Text>
-                    ) : (
-                      <View style={{ marginRight: 8 }}>
-                        <IconButton
-                          onPress={() => {
-                            sharedTagStore.completeEpic(item)
+                      <ProgressView
+                        progress={item.epicPoints! / item.epicGoal!}
+                        tintColor={item.color || sharedColors.primaryColor}
+                        trackColor={sharedColors.progressBarBackground}
+                      />
+                      {item.epicPoints != item.epicGoal ? (
+                        <Text
+                          style={{
+                            fontFamily: fonts.SFProRoundedRegular,
+                            fontSize: 22,
+                            marginHorizontal: 16,
+                            color: item.color || sharedColors.primaryColor,
                           }}
-                          color={item.color || sharedColors.destructIconColor}
-                          name="done_outline_28--check"
-                        />
-                      </View>
-                    )}
+                        >
+                          {item.epicGoal}
+                        </Text>
+                      ) : (
+                        <View style={{ marginRight: 8 }}>
+                          <IconButton
+                            onPress={() => {
+                              sharedTagStore.completeEpic(item)
+                            }}
+                            color={item.color || sharedColors.destructIconColor}
+                            name="done_outline_28--check"
+                          />
+                        </View>
+                      )}
+                    </View>
                   </View>
-                </View>
-              )
-            }}
-          />
+                )
+              }}
+            />
+          )}
           {!!sharedTodoStore.progress.count && (
             <SegmentedProgressView
               completed={sharedTodoStore.progress.completed}

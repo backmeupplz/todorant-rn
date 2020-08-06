@@ -113,6 +113,7 @@ export class HeaderScrollView extends Component<{
                   this.isHeaderScrolled = isHeaderScrolled
                 }
               },
+              useNativeDriver: false,
             }
           )}
           scrollEventThrottle={8}

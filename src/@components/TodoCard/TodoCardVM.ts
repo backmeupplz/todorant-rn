@@ -111,6 +111,15 @@ export class TodoCardVM {
     }
   }
 
+  accept(todo: Todo) {
+    realm.write(() => {
+      todo.delegateAccepted = true
+      todo.updatedAt = new Date()
+    })
+
+    fixOrder([getTitle(todo)])
+  }
+
   uncomplete(todo: Todo) {
     realm.write(() => {
       todo.completed = false
@@ -141,6 +150,10 @@ export class TodoCardVM {
   }
 
   isOld(type: CardType, todo: Todo) {
-    return type !== CardType.done && isTodoOld(todo)
+    return (
+      type !== CardType.done &&
+      todo.delegateAccepted !== false &&
+      isTodoOld(todo)
+    )
   }
 }

@@ -30,7 +30,10 @@ export class TodoCardTextBlock extends Component<{
       <Text
         onLongPress={this.props.drag}
         onPress={() => {
-          if (this.props.type === CardType.breakdown) {
+          if (
+            this.props.type === CardType.breakdown ||
+            this.props.type === CardType.delegation
+          ) {
             Clipboard.setString(this.props.todo.text)
             Toast.show({
               text: `"${this.props.todo.text}" ${translate('copied')}`,
@@ -77,7 +80,7 @@ export class TodoCardTextBlock extends Component<{
                 if (p.type === 'link' && p.url) {
                   Linking.openURL(p.url)
                 } else if (p.type === 'hash') {
-                  if (!sharedAppStateStore.hash.includes(p.value)) {
+                  if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
                     sharedAppStateStore.hash.push(p.value)
                   }
                 }

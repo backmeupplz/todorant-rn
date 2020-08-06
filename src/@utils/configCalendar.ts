@@ -183,12 +183,6 @@ LocaleConfig.locales['it'] = {
 }
 
 moment.locale('pt-BR')
-console.log(
-  moment.months(),
-  moment.monthsShort(),
-  moment.weekdays(),
-  moment.weekdaysShort()
-)
 
 LocaleConfig.locales['es'] = {
   monthNames: [

@@ -16,10 +16,11 @@ export class PlanningVM {
   @computed get allTodosFiltered() {
     return sharedTodoStore.allTodos
       .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
       .filtered(
         `completed = ${!(
           sharedAppStateStore.todoSection === TodoSectionType.planning ||
-          !!sharedAppStateStore.hash
+          !!sharedAppStateStore.hash.length
         )}`
       )
   }

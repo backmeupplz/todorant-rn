@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 @observer
 export class PlanningHeaderRight extends Component {
   render() {
-    return sharedAppStateStore.hash ? (
+    return sharedAppStateStore.hash.length ? (
       <TouchableOpacity
         onPress={() => {
           sharedAppStateStore.hash = []

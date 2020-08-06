@@ -8,6 +8,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { TodoCardBody } from '@components/TodoCard/TodoCardBody'
 import { TodoCardActions } from '@components/TodoCard/TodoCardActions'
 import { Platform } from 'react-native'
+import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -51,12 +52,16 @@ export class TodoCardContent extends Component<{
           }
         />
 
-        {this.props.type !== CardType.breakdown && (
-          <TodoCardActions
-            todo={this.props.todo}
-            type={this.props.type}
-            vm={this.props.vm}
-          />
+        {this.props.type !== CardType.breakdown &&
+          this.props.type !== CardType.delegation && (
+            <TodoCardActions
+              todo={this.props.todo}
+              type={this.props.type}
+              vm={this.props.vm}
+            />
+          )}
+        {this.props.type === CardType.delegation && (
+          <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
         )}
       </View>
     )
