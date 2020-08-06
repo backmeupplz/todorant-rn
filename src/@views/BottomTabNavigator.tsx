@@ -18,6 +18,9 @@ import PlanningIcon from '@assets/images/planning'
 import PlanningActiveIcon from '@assets/images/planning-active'
 import SettingsIcon from '@assets/images/settings'
 import SettingsActiveIcon from '@assets/images/settings-active'
+import DelegationIcon from '@assets/images/delegation'
+import DelegationActiveIcon from '@assets/images/delegation-active'
+import { Delegation } from '@views/delegation/Delegation'
 
 const Tab = createBottomTabNavigator()
 
@@ -40,6 +43,11 @@ export default observer(() => {
               icon = focused
                 ? PlanningActiveIcon({ width: size, height: size })
                 : PlanningIcon({ width: size, height: size })
+            } else if (route.name === 'Delegation') {
+              name = 'delegation'
+              icon = focused
+                ? DelegationActiveIcon({ width: size, height: size })
+                : DelegationIcon({ width: size, height: size })
             } else if (route.name === 'Settings') {
               name = 'settings'
               icon = focused
@@ -97,8 +105,8 @@ export default observer(() => {
         />
         <Tab.Screen
           name="Delegation"
-          component={Settings}
-          options={{ title: translate('settings') }}
+          component={Delegation}
+          options={{ title: translate('delegate.title') }}
         />
         <Tab.Screen
           name="Settings"

@@ -282,7 +282,8 @@
     "inviteConfirm": "Are you sure you want to became a delegator to this user?",
     "deleteDelegateConfirmation": "Are you sure you want to delete this delegate? You will no longer be able to delegate tasks to this delegate.",
     "deleteDelegatorConfirmation": "Are you sure you want to delete this delegator? This delegator will no longer be able to delegate tasks to you.",
-    "pickDelegateField": "Delegate"
+    "pickDelegateField": "Delegate",
+    "info": "This is the page with the tasks delegated to you. You have options to delete or accept tasks that your delegators send your way."
   },
   "errors": {
     "delegate": {
