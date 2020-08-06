@@ -270,7 +270,6 @@ export class LoginContent extends Component<{
                     borderRadius: 10,
                   }}
                   onPress={() => {
-                    console.log(this.vm.debugToken)
                     this.vm.loginWithToken(this.vm.debugToken)
                   }}
                   disabled={this.vm.loading}

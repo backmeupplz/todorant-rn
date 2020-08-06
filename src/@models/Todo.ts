@@ -27,6 +27,9 @@ export class Todo {
       encrypted: { type: 'bool', indexed: true, default: false },
       date: { type: 'string?', indexed: true },
       time: 'string?',
+
+      delegatorName: { type: 'string?', indexed: true },
+      delegateAccepted: { type: 'bool?', indexed: true },
     },
   }
 
@@ -44,6 +47,9 @@ export class Todo {
   @observable encrypted!: boolean
   @observable date?: string
   @observable time?: string
+
+  @observable delegatorName?: string
+  @observable delegateAccepted?: boolean
 
   // Local values
   @observable _tempSyncId?: string

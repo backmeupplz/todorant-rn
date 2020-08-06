@@ -27,6 +27,7 @@ class TodoStore {
   todosForDate = (title: string) => {
     return this.allTodos
       .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
       .filtered(
         title.length === 10
           ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
@@ -48,6 +49,12 @@ class TodoStore {
     return todayTodos.length ? todayTodos[0] : undefined
   }
 
+  @computed get unacceptedTodos() {
+    return this.allTodos
+      .filtered('deleted = false')
+      .filtered('delegateAccepted = false')
+  }
+
   @computed get progress() {
     return {
       count: this.todayTodos.length,
@@ -67,7 +74,7 @@ class TodoStore {
       1
     }:000`
     const todos = this.allTodos.filtered(
-      `deleted = false && completed = false && _exactDate < ${todayString}`
+      `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
     )
     return !!todos.length
   }
@@ -92,6 +99,10 @@ class TodoStore {
     todosChangedOnServer.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
+      if ((todo as any).delegator && (todo as any).delegator.name) {
+        todo.delegateAccepted = !!todo.delegateAccepted
+        todo.delegatorName = (todo as any).delegator.name
+      }
     })
     // Get variables
     const serverTodosMap = todosChangedOnServer.reduce((p, c) => {

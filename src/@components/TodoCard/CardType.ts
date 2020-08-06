@@ -3,4 +3,5 @@ export enum CardType {
   planning = 'planning',
   current = 'current',
   breakdown = 'breakdown',
+  delegation = 'delegation',
 }

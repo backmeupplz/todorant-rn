@@ -52,7 +52,6 @@ export class Integrations extends Component {
   authorizeGoogleCalendar = async (code: string) => {
     this.loading = true
     try {
-      console.log(code)
       const googleCredentials = (await rest.calendarAuthorize(code)).data
       sharedSettingsStore.googleCalendarCredentials = googleCredentials
       sharedSettingsStore.updatedAt = new Date()

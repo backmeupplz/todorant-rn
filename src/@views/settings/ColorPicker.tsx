@@ -95,7 +95,6 @@ class ColorPickerContent extends Component<{
         <ColorPickerComponentAny
           style={{ flex: 1 }}
           onColorSelected={(color: string) => {
-            console.log(color)
             this.color = color
           }}
           onColorChange={(hsv: { h: number; s: number; v: number }) => {

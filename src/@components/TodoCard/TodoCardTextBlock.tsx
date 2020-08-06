@@ -30,7 +30,10 @@ export class TodoCardTextBlock extends Component<{
       <Text
         onLongPress={this.props.drag}
         onPress={() => {
-          if (this.props.type === CardType.breakdown) {
+          if (
+            this.props.type === CardType.breakdown ||
+            this.props.type === CardType.delegation
+          ) {
             Clipboard.setString(this.props.todo.text)
             Toast.show({
               text: `"${this.props.todo.text}" ${translate('copied')}`,

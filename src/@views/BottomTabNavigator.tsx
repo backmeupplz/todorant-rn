@@ -58,7 +58,9 @@ export default observer(() => {
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
                   {icon}
-                  {route.name === 'Settings' && !sharedSessionStore.user && (
+                  {((route.name === 'Settings' && !sharedSessionStore.user) ||
+                    (route.name === 'Delegation' &&
+                      !!sharedTodoStore.unacceptedTodos.length)) && (
                     <View
                       style={{
                         position: 'absolute',
@@ -66,7 +68,7 @@ export default observer(() => {
                         height: 6,
                         backgroundColor: 'red',
                         top: 0,
-                        right: 0,
+                        right: -5,
                         borderRadius: 3,
                       }}
                     />

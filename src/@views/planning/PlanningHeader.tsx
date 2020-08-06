@@ -12,7 +12,7 @@ import { observable } from 'mobx'
 export class PlanningHeader extends Component {
   @observable width = Dimensions.get('window').width
 
-  componentWillMount() {
+  componentDidMount() {
     Dimensions.addEventListener('change', () => {
       this.width = Dimensions.get('window').width
     })

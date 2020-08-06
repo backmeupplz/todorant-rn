@@ -266,6 +266,7 @@
   "level": "Level",
   "points": "points",
   "pointsTillNextLevel": "points to unlock next level",
+  "accept": "Accept",
   "delegate": {
     "title": "Delegation",
     "noDelegators": "You don't have any delegators yet. Share the link above with the people who you want to make delegators",

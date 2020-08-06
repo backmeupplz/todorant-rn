@@ -8,6 +8,10 @@ import { headerBackButtonProps } from '@utils/headerBackButton'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
 import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { FlatList } from 'react-native-gesture-handler'
+import { TodoCard } from '@components/TodoCard'
+import { CardType } from '@components/TodoCard/CardType'
 
 const Stack = createStackNavigator()
 
@@ -21,7 +25,25 @@ export class DelegateContent extends Component {
           infoTitle="delegate.info"
         >
           {!sharedSessionStore.user && <SignupPlaceholder />}
-          <NoDelegatedTasks />
+          {!!sharedSessionStore.user && (
+            <>
+              {!sharedTodoStore.unacceptedTodos.length && <NoDelegatedTasks />}
+              {!!sharedTodoStore.unacceptedTodos.length && (
+                <FlatList
+                  data={sharedTodoStore.unacceptedTodos}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <TodoCard
+                        key={index}
+                        todo={item}
+                        type={CardType.delegation}
+                      />
+                    )
+                  }}
+                />
+              )}
+            </>
+          )}
         </HeaderScrollView>
       </Container>
     )
