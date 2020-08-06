@@ -19,7 +19,7 @@ export class PlanningHeader extends Component {
   }
 
   render() {
-    return sharedAppStateStore.hash ? (
+    return sharedAppStateStore.hash.length ? (
       <View style={{ marginRight: 24 }}>
         <Text
           {...sharedColors.textExtraStyle}

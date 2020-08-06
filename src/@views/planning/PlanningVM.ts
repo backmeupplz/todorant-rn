@@ -19,7 +19,7 @@ export class PlanningVM {
       .filtered(
         `completed = ${!(
           sharedAppStateStore.todoSection === TodoSectionType.planning ||
-          !!sharedAppStateStore.hash
+          !!sharedAppStateStore.hash.length
         )}`
       )
   }

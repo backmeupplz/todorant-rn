@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 export class PlanningHeaderLeft extends Component {
   render() {
     return (
-      !sharedAppStateStore.hash &&
+      !sharedAppStateStore.hash.length &&
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <TouchableOpacity
           onPress={() => {

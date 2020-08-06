@@ -96,6 +96,11 @@ export default observer(() => {
           options={{ title: translate('planning') }}
         />
         <Tab.Screen
+          name="Delegation"
+          component={Settings}
+          options={{ title: translate('settings') }}
+        />
+        <Tab.Screen
           name="Settings"
           component={Settings}
           options={{ title: translate('settings') }}

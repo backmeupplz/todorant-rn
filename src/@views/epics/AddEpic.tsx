@@ -87,7 +87,7 @@ class AddEpicContent extends Component<{
             onChangeText={(text) => {
               this.epicGoal = parseInt(text)
             }}
-            placeholder={translate('epicGoal')}
+            placeholder={translate('epic.epicGoal')}
             keyboardType="number-pad"
             style={{
               flex: 1,
