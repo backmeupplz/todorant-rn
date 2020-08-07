@@ -23,31 +23,32 @@ platform :ios do
   end
 
   lane :release do
-    # increment_version_number
-    # increment_build_number
-    # build_app(
-    #   scheme: "Todorant",
-    #   silent: true
-    # )
-    # upload_to_app_store(
-    #   submit_for_review: true,
-    #   skip_screenshots: true,
-    #   automatic_release: true,
-    #   submission_information: {
-    #     add_id_info_uses_idfa: true,
-    #     add_id_info_limits_tracking: false,
-    #     add_id_info_serves_ads: false,
-    #     add_id_info_uses_idfa: false,
-    #     add_id_info_tracks_install: false,
-    #     add_id_info_uses_idfa: false,
-    #     export_compliance_available_on_french_store: "",
-    #     export_compliance_contains_proprietary_cryptography: "",
-    #     export_compliance_contains_third_party_cryptography: "",
-    #     export_compliance_uses_encryption: true,
-    #     export_compliance_is_exempt: true,
-    #     export_compliance_encryption_updated: false
-    #   }
-    # )
+    increment_version_number
+    increment_build_number
+    build_app(
+      scheme: "Todorant",
+      silent: true
+    )
+    upload_to_app_store(
+      submit_for_review: true,
+      skip_screenshots: true,
+      automatic_release: true,
+      submission_information: {
+        add_id_info_uses_idfa: true,
+        add_id_info_limits_tracking: false,
+        add_id_info_serves_ads: false,
+        add_id_info_uses_idfa: false,
+        add_id_info_tracks_install: false,
+        add_id_info_uses_idfa: false,
+        export_compliance_available_on_french_store: "",
+        export_compliance_contains_proprietary_cryptography: "",
+        export_compliance_contains_third_party_cryptography: "",
+        export_compliance_uses_encryption: true,
+        export_compliance_is_exempt: true,
+        export_compliance_encryption_updated: false
+      },
+      overwrite_screenshots: true,
+    )
     commit_and_push_ios_release
   end
 
