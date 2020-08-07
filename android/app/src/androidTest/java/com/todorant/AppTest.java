@@ -69,24 +69,24 @@ public class AppTest {
         // Empty current
         Screengrab.screenshot("0Empty");
         // Add todos
-        onView(allOf(withContentDescription(String.format("%s, tab, 3 of 3", settings)), isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(String.format("%s, tab, 4 of 4", settings)), isDisplayed())).perform(click());
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
         onView(withTagValue(is(addTodoButton))).perform(click());
         try { Thread.sleep(8000); } catch (InterruptedException e) {}
         // Filled planning
-        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 3", planning)), isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 4", planning)), isDisplayed())).perform(click());
         try { Thread.sleep(3000); } catch (InterruptedException e) {}
         Screengrab.screenshot("2Planning");
         // Filled current
-        onView(allOf(withContentDescription(String.format("%s, tab, 1 of 3", current)), isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(String.format("%s, tab, 1 of 4", current)), isDisplayed())).perform(click());
         try { Thread.sleep(3000); } catch (InterruptedException e) {}
         Screengrab.screenshot("1Current");
         // Dark mode
-        onView(allOf(withContentDescription(String.format("%s, tab, 3 of 3", settings)), isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(String.format("%s, tab, 4 of 4", settings)), isDisplayed())).perform(click());
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
         onView(withTagValue(is("turn_dark_on"))).perform(click());
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
-        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 3", planning)), isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(String.format("%s, tab, 2 of 4", planning)), isDisplayed())).perform(click());
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
         Screengrab.screenshot("3Dark");
     }

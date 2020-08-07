@@ -59,24 +59,24 @@ class TodorantUITests: XCTestCase {
     // Empty current
     snapshot("0Empty")
     // Add todos
-    app.buttons["\(settings), tab, 3 of 3"].tap()
+    app.buttons["\(settings), tab, 4 of 4"].tap()
     sleep(2)
     app.otherElements["\(addTodosButton)"].tap()
     sleep(8)
     // Filled current
-    app.buttons["\(current), tab, 1 of 3"].tap()
+    app.buttons["\(current), tab, 1 of 4"].tap()
     sleep(2)
     snapshot("1Current")
     // Filled planning
-    app.buttons["\(planning), tab, 2 of 3"].tap()
+    app.buttons["\(planning), tab, 2 of 4"].tap()
     sleep(2)
     snapshot("2Planning")
     // Dark mode
-    app.buttons["\(settings), tab, 3 of 3"].tap()
+    app.buttons["\(settings), tab, 4 of 4"].tap()
     sleep(2)
     app.otherElements["turn_dark_on"].tap()
     sleep(2)
-    app.buttons["\(current), tab, 1 of 3"].tap()
+    app.buttons["\(current), tab, 1 of 4"].tap()
     sleep(2)
     snapshot("3Dark")
   }
