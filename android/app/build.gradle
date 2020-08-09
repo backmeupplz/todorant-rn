@@ -133,8 +133,8 @@ android {
         applicationId "com.todorant"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 48
-        versionName "1.0.45"
+        versionCode 49
+        versionName "1.0.46"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         missingDimensionStrategy 'react-native-camera', 'general'
@@ -188,6 +188,9 @@ android {
             }
 
         }
+    }
+    dexOptions {
+       javaMaxHeapSize "3g"
     }
 }
 
