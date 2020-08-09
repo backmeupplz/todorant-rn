@@ -6,27 +6,25 @@ Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
-const splat = new Sound(require('../@assets/sounds/splat.mp3'), (error) => {
+const splat = new Sound('splat.mp3', Sound.MAIN_BUNDLE, (error) => {
   if (!error) {
-    sounds['splat'] = splat
+    sounds.splat = splat
   }
 })
 const day_complete = new Sound(
-  require('../@assets/sounds/day_compele.mp3'),
+  'day_compele.mp3',
+  Sound.MAIN_BUNDLE,
   (error) => {
     if (!error) {
-      sounds['day_complete'] = day_complete
+      sounds.day_complete = day_complete
     }
   }
 )
-const task_done = new Sound(
-  require('../@assets/sounds/task_done.mp3'),
-  (error) => {
-    if (!error) {
-      sounds['task_done'] = task_done
-    }
+const task_done = new Sound('task_done.mp3', Sound.MAIN_BUNDLE, (error) => {
+  if (!error) {
+    sounds.task_done = task_done
   }
-)
+})
 
 export function playFrogComplete() {
   playSound('splat')

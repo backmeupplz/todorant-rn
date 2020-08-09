@@ -15,11 +15,16 @@
 		177207248B224A388D087D40 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D71BEBD521BD470594B1554C /* SF-Pro-Display-Bold.otf */; };
 		35C472DA5F424C548513FFF9 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078C6EF3B568408CBB44E965 /* Roboto_medium.ttf */; };
 		4C7FD743CE1D4768853FC1E0 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48D5B2D70A0F41C0909C37E7 /* rubicon-icon-font.ttf */; };
+		627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */; };
 		64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = ACB7BED24F044CBEAA61BF2B /* SF-Pro-Rounded-Regular.otf */; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
+		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
 		B6573FC3EBA94DC698237411 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 366ADAAE3D974D6C8526B511 /* icomoon.ttf */; };
 		B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7DB7BB28CCFD45EB9E738C2C /* SF-Pro-Text-Regular.otf */; };
+		BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75424E0496100FDD0AE /* day_compele.mp3 */; };
+		BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75524E0496200FDD0AE /* task_done.mp3 */; };
+		BB13C75924E0496200FDD0AE /* splat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75624E0496200FDD0AE /* splat.mp3 */; };
 		BB3A79B62425AF000014DE92 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3A79B52425AF000014DE92 /* NotificationCenter.framework */; };
 		BB3A79C02425AF000014DE92 /* TodorantToday.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BB3A79B42425AF000014DE92 /* TodorantToday.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB3A79D32425B0470014DE92 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79C72425B0470014DE92 /* ActivityIndicator.swift */; };
@@ -46,8 +51,6 @@
 		BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB78173A245CE04A004EF3E5 /* InfoPlist.strings */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA28768F24FA47F2A8AB4F61 /* Roboto.ttf */; };
-		627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */; };
-		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,10 +103,12 @@
 		278B4B9C40DBE65C8949CAD9 /* Pods-Todorant-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		27D8BDC7E62C5A50A249023E /* Pods-Todorant-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOS/Pods-Todorant-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2D37236255CD447B84E4128E /* Pods-TodorantToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodorantToday.release.xcconfig"; path = "Target Support Files/Pods-TodorantToday/Pods-TodorantToday.release.xcconfig"; sourceTree = "<group>"; };
+		2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Display-Medium.otf"; sourceTree = "<group>"; };
 		35410BA541CE9AB73B161FE5 /* libPods-Todorant-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Todorant-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		366ADAAE3D974D6C8526B511 /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = "../src/@assets/fonts/icomoon.ttf"; sourceTree = "<group>"; };
 		3F9341AF0D9F4970BAEC6693 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		48D5B2D70A0F41C0909C37E7 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
+		492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Text-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
 		4C293B567BE94E259F75BA7F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -122,6 +127,9 @@
 		B1ECF6CCEAF233E3F0FB2142 /* Pods-TodorantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodorantTests.release.xcconfig"; path = "Target Support Files/Pods-TodorantTests/Pods-TodorantTests.release.xcconfig"; sourceTree = "<group>"; };
 		B77D05043B6041AEAAC0BE11 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		BB093AB424508A14007616A5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		BB13C75424E0496100FDD0AE /* day_compele.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = day_compele.mp3; path = ../android/app/src/main/res/raw/day_compele.mp3; sourceTree = "<group>"; };
+		BB13C75524E0496200FDD0AE /* task_done.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = task_done.mp3; path = ../android/app/src/main/res/raw/task_done.mp3; sourceTree = "<group>"; };
+		BB13C75624E0496200FDD0AE /* splat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = splat.mp3; path = ../android/app/src/main/res/raw/splat.mp3; sourceTree = "<group>"; };
 		BB3A79B42425AF000014DE92 /* TodorantToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodorantToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A79B52425AF000014DE92 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		BB3A79BD2425AF000014DE92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -172,8 +180,6 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F71C0E4786A440F492A9778E /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; name = "SF-Pro-Text-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */ = {isa = PBXFileReference; name = "SF-Pro-Display-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Display-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +250,9 @@
 		7A4B3C2623464B8A9D35439F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BB13C75424E0496100FDD0AE /* day_compele.mp3 */,
+				BB13C75624E0496200FDD0AE /* splat.mp3 */,
+				BB13C75524E0496200FDD0AE /* task_done.mp3 */,
 				B77D05043B6041AEAAC0BE11 /* AntDesign.ttf */,
 				A056F2E4FD1844908BD001DA /* Entypo.ttf */,
 				8F6115BA7FF0406CA017557A /* EvilIcons.ttf */,
@@ -489,6 +498,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				BB13C75924E0496200FDD0AE /* splat.mp3 in Resources */,
 				BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */,
@@ -500,9 +510,11 @@
 				B6573FC3EBA94DC698237411 /* icomoon.ttf in Resources */,
 				1199FFFB71BB46BBA418AEE6 /* SF-Pro-Rounded-Bold.otf in Resources */,
 				64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */,
+				BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */,
 				B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */,
 				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 				AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */,
+				BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
