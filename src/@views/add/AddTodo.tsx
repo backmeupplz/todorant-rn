@@ -235,7 +235,7 @@ class AddTodoContent extends Component<{
       }
     }
     if (this.props.route.params?.date) {
-      newVM.monthAndYear = this.props.route.params?.date.substr(0, 8)
+      newVM.monthAndYear = this.props.route.params?.date.substr(0, 7)
       newVM.date = this.props.route.params?.date.substr(8, 2)
     }
     this.vms.push(newVM)
