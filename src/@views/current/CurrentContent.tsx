@@ -45,6 +45,7 @@ export class CurrentContent extends Component {
           title={translate('current')}
           showsHeroButton
           infoTitle="infoCurrent"
+          contentContainerStyle={{ paddingBottom: 100 }}
         >
           {!!sharedTagStore.undeletedTags.filter((tag) => tag.epic).length && (
             <FlatList

@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, Animated, Dimensions } from 'react-native'
+import {
+  View,
+  ScrollView,
+  Text,
+  Animated,
+  Dimensions,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
 import { observer } from 'mobx-react'
@@ -18,6 +26,7 @@ export class HeaderScrollView extends Component<{
   title: string
   showsHeroButton?: boolean
   infoTitle: string
+  contentContainerStyle?: StyleProp<ViewStyle>
 }> {
   @observable headerHeight = 0
   @observable headerY = 0
@@ -118,6 +127,7 @@ export class HeaderScrollView extends Component<{
           )}
           scrollEventThrottle={8}
           style={{ backgroundColor: sharedColors.backgroundColor }}
+          contentContainerStyle={this.props.contentContainerStyle}
         >
           <View
             style={{
