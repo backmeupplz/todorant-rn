@@ -43,6 +43,8 @@ export class Data extends Component {
         <Content
           style={{
             backgroundColor: sharedColors.backgroundColor,
+          }}
+          contentContainerStyle={{
             paddingTop: 16,
           }}
         >
