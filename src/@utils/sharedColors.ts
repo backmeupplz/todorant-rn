@@ -40,6 +40,9 @@ export class ColorModeManager {
   @computed get borderColor() {
     return this.isDark ? 'rgba(243, 243, 246, 0.3)' : 'rgba(0, 0, 0, 0.3)'
   }
+  @computed get dividerColor() {
+    return this.isDark ? 'rgba(234, 237, 241, 0.2)' : '#D7D8D9'
+  }
   @computed get headerExtraStyle() {
     return {
       headerStyle: {

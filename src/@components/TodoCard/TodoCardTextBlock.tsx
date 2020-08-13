@@ -11,6 +11,7 @@ import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
 import { navigate } from '@utils/navigation'
 import fonts from '@utils/fonts'
+import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 
 const debug = false
 
@@ -20,6 +21,7 @@ export class TodoCardTextBlock extends Component<{
   isOld: boolean
   type: CardType
   drag?: () => void
+  vm: TodoCardVM
 }> {
   get linkifiedText() {
     return l(this.props.todo.text)
@@ -39,10 +41,13 @@ export class TodoCardTextBlock extends Component<{
               text: `"${this.props.todo.text}" ${translate('copied')}`,
             })
           } else {
-            navigate('EditTodo', { editedTodo: this.props.todo })
+            this.props.vm.expanded = !this.props.vm.expanded
           }
         }}
-        style={{ flex: 1, fontFamily: fonts.SFProTextRegular }}
+        style={{
+          flex: 1,
+          fontFamily: fonts.SFProTextRegular,
+        }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
         {__DEV__ && debug && (

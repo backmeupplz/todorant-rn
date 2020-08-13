@@ -20,9 +20,10 @@ export class TodoCardBody extends Component<{
   render() {
     const isOld = this.props.vm.isOld(this.props.type, this.props.todo)
     return (
-      <CardItem
+      <View
         style={{
           backgroundColor: isOld ? sharedColors.oldTodoBackground : undefined,
+          marginHorizontal: 16,
         }}
       >
         <Body>
@@ -58,11 +59,12 @@ export class TodoCardBody extends Component<{
                 isOld={isOld}
                 drag={this.props.drag}
                 type={this.props.type}
+                vm={this.props.vm}
               />
             </View>
           </View>
         </Body>
-      </CardItem>
+      </View>
     )
   }
 }

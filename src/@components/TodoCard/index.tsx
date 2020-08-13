@@ -10,10 +10,17 @@ export class TodoCard extends Component<{
   todo: Todo
   type: CardType
   drag?: () => void
+  active?: boolean
 }> {
   vm = new TodoCardVM()
 
   render() {
-    return <TodoCardContent {...this.props} vm={this.vm} />
+    return (
+      <TodoCardContent
+        {...this.props}
+        vm={this.vm}
+        active={this.props.active}
+      />
+    )
   }
 }

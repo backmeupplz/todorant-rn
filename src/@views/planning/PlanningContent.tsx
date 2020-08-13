@@ -55,6 +55,7 @@ export class PlanningContent extends Component {
                         : CardType.done
                     }
                     drag={drag}
+                    active={isActive}
                   />
                 </View>
               )

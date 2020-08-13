@@ -4,15 +4,21 @@ import { View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 
 @observer
-export class Divider extends Component {
+export class Divider extends Component<{
+  color?: string
+  marginVertical?: number
+}> {
   render() {
     return (
       <View
         style={{
-          backgroundColor: sharedColors.borderColor,
+          backgroundColor: this.props.color || sharedColors.borderColor,
           height: 1,
           marginHorizontal: 16,
-          marginVertical: 6,
+          marginVertical:
+            this.props.marginVertical === undefined
+              ? 6
+              : this.props.marginVertical,
         }}
       />
     )

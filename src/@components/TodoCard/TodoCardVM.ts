@@ -17,8 +17,11 @@ import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
+import { observable } from 'mobx'
 
 export class TodoCardVM {
+  @observable expanded = false
+
   skip(todo: Todo) {
     const neighbours = sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))

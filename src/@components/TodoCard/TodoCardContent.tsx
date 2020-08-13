@@ -7,8 +7,9 @@ import { View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { TodoCardBody } from '@components/TodoCard/TodoCardBody'
 import { TodoCardActions } from '@components/TodoCard/TodoCardActions'
-import { Platform } from 'react-native'
 import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
+import { Divider } from '@components/Divider'
+import { FailCircle } from './FailCircle'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -16,52 +17,59 @@ export class TodoCardContent extends Component<{
   todo: Todo
   type: CardType
   drag?: () => void
+  active?: boolean
 }> {
   render() {
     return (
-      <View
-        style={{
-          backgroundColor: sharedColors.cardBackgroundColor,
-          marginHorizontal: 16,
-          marginVertical: 8,
-          borderRadius: 14,
-          borderWidth:
-            Platform.OS === 'android' && !sharedColors.isDark ? undefined : 1,
-          borderColor:
-            Platform.OS === 'android' && !sharedColors.isDark
-              ? undefined
-              : 'rgba(0, 0, 0, 0.05)',
-          // iOS
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowColor: 'black',
-          shadowOpacity: 0.05,
-          shadowRadius: 30,
-          // Android
-          elevation: 2,
-        }}
-      >
-        <TodoCardBody
-          vm={this.props.vm}
-          todo={this.props.todo}
-          type={this.props.type}
-          drag={
-            this.props.type === CardType.planning ? this.props.drag : undefined
-          }
-        />
-
-        {this.props.type !== CardType.breakdown &&
-          this.props.type !== CardType.delegation && (
-            <TodoCardActions
-              todo={this.props.todo}
-              type={this.props.type}
-              vm={this.props.vm}
-            />
+      <View>
+        <View
+          style={{
+            paddingVertical: 10,
+          }}
+        >
+          {!!this.props.todo.frogFails && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                paddingLeft: 16,
+                marginBottom: 6,
+              }}
+            >
+              {Array(this.props.todo.frogFails)
+                .fill(0)
+                .map(() => (
+                  <FailCircle />
+                ))}
+            </View>
           )}
-        {this.props.type === CardType.delegation && (
-          <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
+          <TodoCardBody
+            vm={this.props.vm}
+            todo={this.props.todo}
+            type={this.props.type}
+            drag={
+              this.props.type === CardType.planning
+                ? this.props.drag
+                : undefined
+            }
+          />
+
+          {this.props.type !== CardType.breakdown &&
+            this.props.type !== CardType.delegation &&
+            (this.props.vm.expanded ||
+              this.props.type === CardType.current) && (
+              <TodoCardActions
+                todo={this.props.todo}
+                type={this.props.type}
+                vm={this.props.vm}
+              />
+            )}
+          {this.props.type === CardType.delegation && (
+            <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
+          )}
+        </View>
+        {!this.props.active && this.props.type !== CardType.current && (
+          <Divider color={sharedColors.dividerColor} marginVertical={0} />
         )}
       </View>
     )

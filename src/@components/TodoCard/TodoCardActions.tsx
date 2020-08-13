@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardItem, View, Icon } from 'native-base'
+import { View, Icon } from 'native-base'
 import { Todo, isTodoToday, isTodoOld } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
@@ -16,27 +16,31 @@ export class TodoCardActions extends Component<{
 }> {
   render() {
     return (
-      <CardItem
-        footer
+      <View
         style={{
           justifyContent: 'space-between',
-          backgroundColor: 'transparent',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 6,
+          paddingHorizontal: 16,
         }}
       >
-        {!!this.props.todo.encrypted && (
-          <Icon
-            type="MaterialIcons"
-            name="vpn-key"
-            style={{ color: 'grey', fontSize: 15, marginRight: -15 }}
-          />
-        )}
-        {this.props.todo.skipped && (
-          <Icon
-            type="MaterialIcons"
-            name="arrow-forward"
-            style={{ color: 'grey', fontSize: 15 }}
-          />
-        )}
+        <View style={{ flexDirection: 'row' }}>
+          {!!this.props.todo.encrypted && (
+            <Icon
+              type="MaterialIcons"
+              name="vpn-key"
+              style={{ color: 'grey', fontSize: 15 }}
+            />
+          )}
+          {this.props.todo.skipped && (
+            <Icon
+              type="MaterialIcons"
+              name="arrow-forward"
+              style={{ color: 'grey', fontSize: 15 }}
+            />
+          )}
+        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -110,7 +114,7 @@ export class TodoCardActions extends Component<{
             />
           )}
         </View>
-      </CardItem>
+      </View>
     )
   }
 }
