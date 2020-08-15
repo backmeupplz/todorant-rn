@@ -44,7 +44,12 @@ export class TodoCardBody extends Component<{
             >
               {!!this.props.todo.delegatorName && (
                 <Text>
-                  <Text {...sharedColors.regularTextExtraStyle}>
+                  <Text
+                    onPress={() => {
+                      this.props.vm.expanded = !this.props.vm.expanded
+                    }}
+                    {...sharedColors.regularTextExtraStyle}
+                  >
                     {this.props.todo.delegatorName}
                   </Text>
                   {this.props.todo.delegateAccepted === false && (
