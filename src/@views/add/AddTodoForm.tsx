@@ -153,6 +153,7 @@ class TextRow extends Component<{
           value={this.props.vm.text}
           onChangeText={(text) => {
             this.props.vm.text = text
+            sharedAppStateStore.text = text
           }}
           placeholderTextColor={sharedColors.placeholderColor}
           maxLength={1500}
@@ -174,6 +175,7 @@ class TextRow extends Component<{
           <TouchableOpacityIcon
             onPress={async () => {
               this.props.vm.text = ''
+              sharedAppStateStore.text = ''
             }}
             iconName="close"
             style={{ paddingRight: 8, paddingTop: 5 }}
@@ -275,7 +277,7 @@ class DateRow extends Component<{
           }}
         >
           {this.props.vm.datePickerValue && !!this.props.vm.date
-            ? this.props.vm.datePickerValue
+            ? sharedAppStateStore.date = this.props.vm.datePickerValue
             : translate('addTodoDay')}
         </Text>
         <CustomIcon
@@ -311,6 +313,7 @@ class MonthRow extends Component<{
               moment().add(1, 'month').toDate()
             )
           }
+          sharedAppStateStore.monthAndYear = this.props.vm.monthAndYear
         }}
         style={{
           borderColor: sharedColors.placeholderColor,
@@ -375,6 +378,7 @@ class TimeRow extends Component<{
               this.props.vm.timePickerValue = new Date()
             }
             this.props.vm.showTimePicker = !this.props.vm.showTimePicker
+            sharedAppStateStore.time = this.props.vm.time
           }}
         >
           {this.props.vm.time ? this.props.vm.time : translate('addTodoTime')}
@@ -384,6 +388,7 @@ class TimeRow extends Component<{
             <TouchableOpacity
               onPress={() => {
                 this.props.vm.time = undefined
+                sharedAppStateStore.time = this.props.vm.time
               }}
             >
               <Icon
@@ -554,6 +559,7 @@ export class AddTodoForm extends Component<{
               value={this.props.vm.frog}
               onValueChange={(value) => {
                 this.props.vm.frog = value
+                sharedAppStateStore.frog = value
               }}
             />
             <SwitchRow
@@ -561,6 +567,7 @@ export class AddTodoForm extends Component<{
               value={this.props.vm.completed}
               onValueChange={(value) => {
                 this.props.vm.completed = value
+                sharedAppStateStore.completed = value
               }}
             />
             {this.props.vm.showMore && !this.props.vm.editedTodo && (
@@ -569,6 +576,7 @@ export class AddTodoForm extends Component<{
                 value={this.props.vm.addOnTop}
                 onValueChange={(value) => {
                   this.props.vm.addOnTop = value
+                  sharedAppStateStore.addOnTop = value
                 }}
               />
             )}

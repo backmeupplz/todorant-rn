@@ -35,6 +35,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { sockets } from '@utils/sockets'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 class AddTodoContent extends Component<{
@@ -191,6 +192,7 @@ class AddTodoContent extends Component<{
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
+    sharedAppStateStore.cleanState
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
