@@ -265,7 +265,9 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = () => {
-    if(this.isDirty()) {
+    if(!this.isDirty()) {
+      goBack()
+    } else {
       Alert.alert(translate('pleaseConfirm'), undefined, [
         {
           text: translate('cancel'),
@@ -278,8 +280,7 @@ class AddTodoContent extends Component<{
           },
         },
       ])
-    } else {
-      goBack()
+      return true
     }
   }
 
