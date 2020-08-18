@@ -15,7 +15,7 @@ import { observer } from 'mobx-react'
 import { StatusBar } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
-import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { AddTodo } from '@views/add/AddTodo'
 import { AddButton } from '@components/AddButton'
 import { InfoButton } from '@components/InfoButton'
@@ -32,7 +32,7 @@ import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
-import { alertConfirm } from '@utils/alert'
+import { BackButton } from '@components/BackButton'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -101,17 +101,7 @@ class App extends Component {
                   ),
                   headerLeft: () => (
                     <View style={{ flexDirection: 'row'}}>
-                      <HeaderBackButton
-                        onPress={() => { 
-                          if(sharedAppStateStore.isDirtyState) {
-                            alertConfirm(translate('pleaseConfirm'), translate('ok'), () => {
-                              sharedAppStateStore.cleanState
-                              goBack()
-                            })
-                          } else {
-                            goBack() 
-                          }}}
-                      />
+                      <BackButton/>
                     </View>
                   ),
                   ...headerBackButtonProps(),

@@ -19,7 +19,7 @@ import { sharedTagStore } from '@stores/TagStore'
 import { TodoVM } from '@views/add/TodoVM'
 import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
-import { Alert, Clipboard } from 'react-native'
+import { Alert, Clipboard, BackHandler } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -35,7 +35,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { sockets } from '@utils/sockets'
-import { sharedAppStateStore } from '@stores/AppStateStore'
+import { backButtonStore } from '@components/BackButton'
 
 @observer
 class AddTodoContent extends Component<{
@@ -192,7 +192,6 @@ class AddTodoContent extends Component<{
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
-    sharedAppStateStore.cleanState
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
@@ -207,6 +206,8 @@ class AddTodoContent extends Component<{
   }
 
   componentDidMount() {
+    backButtonStore.back = this.onBackPress
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
     if (this.props.route.params?.breakdownTodo) {
       this.breakdownTodo = this.props.route.params?.breakdownTodo
       this.isBreakdown = true
@@ -217,6 +218,10 @@ class AddTodoContent extends Component<{
       this.screenType = AddTodoScreenType.edit
     }
     addButtonStore.add = this.addTodo
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   addTodo = () => {
@@ -241,6 +246,41 @@ class AddTodoContent extends Component<{
       newVM.date = this.props.route.params?.date.substr(8, 2)
     }
     this.vms.push(newVM)
+  }
+
+  isDirty = () => {
+    for (let vm of this.vms) {
+      if (
+        vm.text ||
+        vm.addOnTop ||
+        vm.completed ||
+        vm.frog ||
+        vm.monthAndYear ||
+        vm.date ||
+        vm.time
+      )
+        return true
+    }
+    return false
+  }
+
+  onBackPress = () => {
+    if(this.isDirty()) {
+      Alert.alert(translate('pleaseConfirm'), undefined, [
+        {
+          text: translate('cancel'),
+          style: 'cancel',
+        },
+        {
+          text: translate('ok'),
+          onPress: () => {
+            goBack()
+          },
+        },
+      ])
+    } else {
+      goBack()
+    }
   }
 
   render() {
