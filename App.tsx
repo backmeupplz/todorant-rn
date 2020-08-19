@@ -100,8 +100,8 @@ class App extends Component {
                     </View>
                   ),
                   headerLeft: () => (
-                    <View style={{ flexDirection: 'row'}}>
-                      <BackButton/>
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
                     </View>
                   ),
                   ...headerBackButtonProps(),
@@ -120,8 +120,8 @@ class App extends Component {
                     </View>
                   ),
                   headerLeft: () => (
-                    <View style={{ flexDirection: 'row'}}>
-                      <BackButton/>
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
                     </View>
                   ),
                   ...headerBackButtonProps(),
@@ -135,8 +135,8 @@ class App extends Component {
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoEdit'),
                   headerLeft: () => (
-                    <View style={{ flexDirection: 'row'}}>
-                      <BackButton/>
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
                     </View>
                   ),
                   ...headerBackButtonProps(),

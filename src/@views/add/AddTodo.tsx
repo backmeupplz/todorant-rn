@@ -221,7 +221,7 @@ class AddTodoContent extends Component<{
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
   }
 
   addTodo = () => {
@@ -250,7 +250,7 @@ class AddTodoContent extends Component<{
 
   isDirty = () => {
     for (let vm of this.vms) {
-      if (vm.editedTodo) { 
+      if (vm.editedTodo) {
         if (
           vm.editedTodo?.text != vm.text ||
           vm.editedTodo?.completed != vm.completed ||
@@ -258,9 +258,9 @@ class AddTodoContent extends Component<{
           vm.editedTodo?.monthAndYear != vm.monthAndYear ||
           vm.editedTodo?.date != vm.date ||
           vm.editedTodo?.time != vm.time
-        ) 
+        )
           return true
-    } else if (
+      } else if (
         vm.text ||
         vm.addOnTop ||
         vm.completed ||
@@ -275,20 +275,20 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = () => {
-    if(!this.isDirty()) {
+    if (!this.isDirty()) {
       goBack()
     } else {
       const options = [translate('cancel'), translate('dontSave')]
-      if(!!this.isValid) options.push(translate('save'))
+      if (!!this.isValid) options.push(translate('save'))
 
       ActionSheet.show(
         {
           options: options,
           cancelButtonIndex: 0,
           destructiveButtonIndex: 1,
-          title: translate('saveСhanges')
+          title: translate('saveСhanges'),
         },
-        buttonIndex => {
+        (buttonIndex) => {
           if (buttonIndex === 0) {
           } else if (buttonIndex === 1) {
             goBack()
