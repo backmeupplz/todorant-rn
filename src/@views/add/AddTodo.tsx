@@ -250,7 +250,17 @@ class AddTodoContent extends Component<{
 
   isDirty = () => {
     for (let vm of this.vms) {
-      if (
+      if (vm.editedTodo) { 
+        if (
+          vm.editedTodo?.text != vm.text ||
+          vm.editedTodo?.completed != vm.completed ||
+          vm.editedTodo?.frog != vm.frog ||
+          vm.editedTodo?.monthAndYear != vm.monthAndYear ||
+          vm.editedTodo?.date != vm.date ||
+          vm.editedTodo?.time != vm.time
+        ) 
+          return true
+    } else if (
         vm.text ||
         vm.addOnTop ||
         vm.completed ||
