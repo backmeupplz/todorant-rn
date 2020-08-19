@@ -119,6 +119,11 @@ class App extends Component {
                       {InfoButton('infoBreakdown')()}
                     </View>
                   ),
+                  headerLeft: () => (
+                    <View style={{ flexDirection: 'row'}}>
+                      <BackButton/>
+                    </View>
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />
@@ -129,6 +134,11 @@ class App extends Component {
                   title: translate('editTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoEdit'),
+                  headerLeft: () => (
+                    <View style={{ flexDirection: 'row'}}>
+                      <BackButton/>
+                    </View>
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export const backButtonStore = {
-    back: () => {}
+  back: () => {},
 }
 
 @observer

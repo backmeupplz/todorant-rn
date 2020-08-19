@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, View, Toast } from 'native-base'
+import { Container, Content, Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
@@ -268,18 +268,25 @@ class AddTodoContent extends Component<{
     if(!this.isDirty()) {
       goBack()
     } else {
-      Alert.alert(translate('pleaseConfirm'), undefined, [
+      const options = [translate('cancel'), translate('dontSave')]
+      if(!!this.isValid) options.push(translate('save'))
+
+      ActionSheet.show(
         {
-          text: translate('cancel'),
-          style: 'cancel',
+          options: options,
+          cancelButtonIndex: 0,
+          destructiveButtonIndex: 1,
+          title: translate('saveСhanges')
         },
-        {
-          text: translate('ok'),
-          onPress: () => {
+        buttonIndex => {
+          if (buttonIndex === 0) {
+          } else if (buttonIndex === 1) {
             goBack()
-          },
-        },
-      ])
+          } else {
+            this.saveTodo()
+          }
+        }
+      )
       return true
     }
   }
