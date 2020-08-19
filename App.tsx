@@ -32,6 +32,7 @@ import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
+import { BackButton } from '@components/BackButton'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -98,6 +99,11 @@ class App extends Component {
                       {InfoButton('infoAdd')()}
                     </View>
                   ),
+                  headerLeft: () => (
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
+                    </View>
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />
@@ -113,6 +119,11 @@ class App extends Component {
                       {InfoButton('infoBreakdown')()}
                     </View>
                   ),
+                  headerLeft: () => (
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
+                    </View>
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />
@@ -123,6 +134,11 @@ class App extends Component {
                   title: translate('editTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoEdit'),
+                  headerLeft: () => (
+                    <View style={{ flexDirection: 'row' }}>
+                      <BackButton />
+                    </View>
+                  ),
                   ...headerBackButtonProps(),
                 }}
               />
