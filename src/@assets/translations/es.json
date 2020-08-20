@@ -114,6 +114,7 @@
   "appleSigninError": "No se pudo iniciar sesión con Apple",
   "syncDataHard": "Forzar sincronización",
   "firstDayOfWeek": "Primer día de la semana",
+  "startTimeOfDay": "Comienzo del día",
   "weekday1": "Lunes",
   "weekday2": "Martes",
   "weekday3": "Miércoles",

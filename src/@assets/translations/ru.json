@@ -123,6 +123,7 @@
   "appleSigninError": "Не получилось зайти через Эппл",
   "syncDataHard": "Принудительная синхронизация",
   "firstDayOfWeek": "Первый день недели",
+  "startTimeOfDay": "Начало дня",
   "weekday1": "Понедельник",
   "weekday2": "Вторник",
   "weekday3": "Среда",

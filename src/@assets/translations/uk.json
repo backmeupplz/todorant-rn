@@ -121,6 +121,7 @@
   "appleSigninError": "Не вдалося ввійти за допомогою Apple",
   "syncDataHard": "Примусова синхронізація",
   "firstDayOfWeek": "Перший день тижня",
+  "startTimeOfDay": "Початок дня",
   "weekday1": "Понеділок",
   "weekday2": "Вівторок",
   "weekday3": "Середа",
