@@ -67,7 +67,7 @@ export function isTodoOld(todo: Todo) {
   const monthAndYear = getDateMonthAndYearString(now)
 
   const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-  const yesterday = `${parseInt(day) - 1}`
+  const yesterday = parseInt(day) - 1
   const todayDate = new Date()
   todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
   todayDate.setMinutes(parseInt(startTimeOfDay.substr(3)))
@@ -79,15 +79,12 @@ export function isTodoOld(todo: Todo) {
     }
     if (
       todo.monthAndYear === monthAndYear &&
-      parseInt(todo.date) == parseInt(yesterday) &&
+      parseInt(todo.date) == yesterday &&
       now >= todayDate
     ) {
       return true
     }
-    if (
-      todo.monthAndYear === monthAndYear &&
-      parseInt(todo.date) < parseInt(yesterday)
-    ) {
+    if (todo.monthAndYear === monthAndYear && parseInt(todo.date) < yesterday) {
       return true
     }
   } else {
