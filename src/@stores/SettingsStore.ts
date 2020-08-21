@@ -32,6 +32,7 @@ class SettingsStore {
 
   @persist @observable showTodayOnAddTodo?: boolean
   @persist @observable firstDayOfWeek?: number
+  @persist @observable startTimeOfDay?: string
   @persist @observable newTodosGoFirst?: boolean
   @persist @observable preserveOrderByTime?: boolean
   @persist @observable duplicateTagInBreakdown?: boolean
@@ -55,6 +56,10 @@ class SettingsStore {
       : this.firstDayOfWeek
   }
 
+  @computed get startTimeOfDaySafe() {
+    return this.startTimeOfDay ? this.startTimeOfDay : '00:00'
+  }
+
   onObjectsFromServer = async (
     settings: Settings,
     pushBack: (objects: Settings) => Promise<Settings>
@@ -70,6 +75,7 @@ class SettingsStore {
     if (!this.updatedAt) {
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
+      this.startTimeOfDay = settings.startTimeOfDay
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
@@ -81,6 +87,7 @@ class SettingsStore {
         const pushedSettings = await pushBack({
           showTodayOnAddTodo: this.showTodayOnAddTodo,
           firstDayOfWeek: this.firstDayOfWeek,
+          startTimeOfDay: this.startTimeOfDay,
           newTodosGoFirst: this.newTodosGoFirst,
           preserveOrderByTime: this.preserveOrderByTime,
           duplicateTagInBreakdown: this.duplicateTagInBreakdown,
@@ -89,6 +96,7 @@ class SettingsStore {
         })
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
         this.firstDayOfWeek = pushedSettings.firstDayOfWeek
+        this.startTimeOfDay = pushedSettings.startTimeOfDay
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
         this.preserveOrderByTime = pushedSettings.preserveOrderByTime
         this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
@@ -105,6 +113,7 @@ class SettingsStore {
       const pushedSettings = await pushBack({
         showTodayOnAddTodo: this.showTodayOnAddTodo,
         firstDayOfWeek: this.firstDayOfWeek,
+        startTimeOfDay: this.startTimeOfDay,
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
@@ -113,6 +122,7 @@ class SettingsStore {
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
+      this.startTimeOfDay = pushedSettings.startTimeOfDay
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
@@ -130,6 +140,7 @@ class SettingsStore {
       }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
+      this.startTimeOfDay = settings.startTimeOfDay
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
@@ -142,6 +153,7 @@ class SettingsStore {
       const pushedSettings = await pushBack({
         showTodayOnAddTodo: this.showTodayOnAddTodo,
         firstDayOfWeek: this.firstDayOfWeek,
+        startTimeOfDay: this.startTimeOfDay,
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
@@ -150,6 +162,7 @@ class SettingsStore {
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
       this.firstDayOfWeek = pushedSettings.firstDayOfWeek
+      this.startTimeOfDay = pushedSettings.startTimeOfDay
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
@@ -164,6 +177,7 @@ class SettingsStore {
   logout = () => {
     this.showTodayOnAddTodo = undefined
     this.firstDayOfWeek = undefined
+    this.startTimeOfDay = undefined
     this.newTodosGoFirst = undefined
     this.preserveOrderByTime = undefined
     this.duplicateTagInBreakdown = undefined

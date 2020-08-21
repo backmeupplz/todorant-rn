@@ -9,6 +9,7 @@ import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { decrypt, encrypt } from '@utils/encryption'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
+import { sharedSettingsStore } from './SettingsStore'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -68,6 +69,17 @@ class TodoStore {
       todayWithTimezoneOffset.getMinutes() -
         todayWithTimezoneOffset.getTimezoneOffset()
     )
+
+    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
+    const todayDate = new Date()
+    todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
+    todayDate.setMinutes(
+      parseInt(startTimeOfDay.substr(3)) - todayDate.getTimezoneOffset()
+    )
+    if (todayWithTimezoneOffset < todayDate) {
+      todayWithTimezoneOffset.setDate(todayWithTimezoneOffset.getDate() - 1)
+    }
+
     const todayString = `T${
       Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -

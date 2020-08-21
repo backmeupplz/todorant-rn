@@ -123,6 +123,7 @@
   "appleSigninError": "Could not sign in with Apple",
   "syncDataHard": "Hard sync",
   "firstDayOfWeek": "First day of a week",
+  "startTimeOfDay": "Start of the day",
   "weekday1": "Monday",
   "weekday2": "Tuesday",
   "weekday3": "Wednesday",
