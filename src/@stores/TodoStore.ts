@@ -21,8 +21,19 @@ class TodoStore {
   @persist recalculatedExactDates = false
 
   @computed get todayTodos() {
+    const now = new Date()
     const today = new Date()
-    return this.todosForDate(getDateString(today))
+    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
+    today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
+    today.setMinutes(parseInt(startTimeOfDay.substr(3)))
+
+    if (now < today) {
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      return this.todosForDate(getDateString(yesterday))
+    } else {
+      return this.todosForDate(getDateString(now))
+    }
   }
 
   todosForDate = (title: string) => {
