@@ -22,6 +22,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
+import { computed } from 'mobx'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -449,6 +450,22 @@ export class AddTodoForm extends Component<{
   vm: TodoVM
   deleteTodo?: () => void
 }> {
+  @computed get minDate() {
+    const now = new Date()
+    const today = new Date()
+    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
+    today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
+    today.setMinutes(parseInt(startTimeOfDay.substr(3)))
+
+    if (now < today) {
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      return yesterday
+    } else {
+      return new Date()
+    }
+  }
+
   render() {
     const languageTag = sharedAppStateStore.languageTag
     return (
@@ -467,7 +484,7 @@ export class AddTodoForm extends Component<{
             <DateRow vm={this.props.vm} />
             {this.props.vm.showDatePicker && (
               <Calendar
-                minDate={__DEV__ ? undefined : getDateString(new Date())}
+                minDate={__DEV__ ? undefined : getDateString(this.minDate)}
                 current={this.props.vm.datePickerValue || new Date()}
                 markedDates={this.props.vm.markedDate}
                 onDayPress={(day) => {
