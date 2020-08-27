@@ -178,26 +178,6 @@ export class TodoSettings extends Component {
             this.clearTime = false
           }}
         >
-          {this.showTimePicker && (
-            <DateTimePicker
-              textColor={sharedColors.textColor}
-              value={this.dateFromTime}
-              mode={'time'}
-              is24Hour={true}
-              display="default"
-              onChange={(event, date) => {
-                if (Platform.OS === 'android') {
-                  this.showTimePicker = false
-                }
-                if (event.type === 'set' || Platform.OS === 'ios') {
-                  this.selectedDate = date || this.dateFromTime
-                  sharedSettingsStore.startTimeOfDay = this.timeString
-                  sharedSettingsStore.updatedAt = new Date()
-                  sockets.settingsSyncManager.sync()
-                }
-              }}
-            />
-          )}
           <View
             style={{
               flexDirection: 'row',
@@ -237,6 +217,26 @@ export class TodoSettings extends Component {
             )}
           </View>
         </TableItem>
+        {this.showTimePicker && (
+          <DateTimePicker
+            textColor={sharedColors.textColor}
+            value={this.dateFromTime}
+            mode={'time'}
+            is24Hour={true}
+            display="default"
+            onChange={(event, date) => {
+              if (Platform.OS === 'android') {
+                this.showTimePicker = false
+              }
+              if (event.type === 'set' || Platform.OS === 'ios') {
+                this.selectedDate = date || this.dateFromTime
+                sharedSettingsStore.startTimeOfDay = this.timeString
+                sharedSettingsStore.updatedAt = new Date()
+                sockets.settingsSyncManager.sync()
+              }
+            }}
+          />
+        )}
         <TableItem
           onPress={() => {
             navigate('Tags')
