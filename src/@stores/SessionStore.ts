@@ -8,7 +8,7 @@ import { persist } from 'mobx-persist'
 import { observable, computed } from 'mobx'
 import { hydrate } from '@utils/hydrate'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { setToken, removeToken } from '@utils/keychain'
+import { setToken, removeToken, removePassword } from '@utils/keychain'
 import { realm } from '@utils/realm'
 
 class SessionStore {
@@ -77,6 +77,7 @@ class SessionStore {
     sharedTagStore.logout()
     sockets.logout()
     removeToken()
+    removePassword()
   }
 
   onObjectsFromServer = async (

@@ -16,6 +16,7 @@ import { TableItem } from '@components/TableItem'
 import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { Platform } from 'react-native'
+import { removePassword, setPassword } from '@utils/keychain'
 
 @observer
 export class Security extends Component {
@@ -100,6 +101,7 @@ export class Security extends Component {
                       () => {
                         const key = sharedSessionStore.encryptionKey!
                         sharedSessionStore.encryptionKey = undefined
+                        removePassword()
                         this.encryptionOn = false
                         this.encryptEncrypted(true, key)
                       }
@@ -185,6 +187,7 @@ export class Security extends Component {
                             }
                             sharedSessionStore.encryptionKey = this.password
                             this.encryptEncrypted(false, this.password)
+                            setPassword(sharedSessionStore.encryptionKey)
                           }
                         )
                       }}

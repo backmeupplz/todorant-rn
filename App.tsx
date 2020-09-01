@@ -33,6 +33,7 @@ import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { BackButton } from '@components/BackButton'
+import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -59,6 +60,7 @@ const Stack = createStackNavigator()
 class App extends Component {
   async componentDidMount() {
     await setI18nConfigAsync()
+    checkTokenAndPassword()
     SplashScreen.hide()
   }
 
