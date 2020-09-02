@@ -6019,10 +6019,10 @@ react-native-swipe-list-view@^2.5.0:
   resolved "https://registry.yarnpkg.com/react-native-swipe-list-view/-/react-native-swipe-list-view-2.5.0.tgz#4740f595aa3253ccd2c8e44131f83bc957f57ddb"
   integrity sha512-HTsVaxA3an6myShlLroTyDZo/AOrZ6HJr+EwCaGRE2YuGdM/cFHoYfsuslOEEig5GenTw8DILUB8kqYWQ5lJtA==
 
-react-native-todorant-widget@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-todorant-widget/-/react-native-todorant-widget-0.0.3.tgz#8c0d9cd1f610c8ca3b4cde6f0f84ebaca5fad449"
-  integrity sha512-fCu1O2xDwNwJzJXvBtqHaPm6GRx2bFKtGsyIZMtD+s2WtxLRyb0mlRB43A42RFFFmeww8XtN+yqWaqm2FTef7w==
+react-native-todorant-widget@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-todorant-widget/-/react-native-todorant-widget-0.0.5.tgz#4494fcb96baf7826f78326e924cbe13b94855ff9"
+  integrity sha512-pRT/hLu+5JoeWE6qn1UyFdqUo4X2pEQSoFJ39bZa2KnO/iBSsMg/dVRGeIdPMK29gXZLiUMliRCDMxP1s5IdsQ==
 
 react-native-vector-icons@^6.6.0:
   version "6.6.0"
