@@ -54,6 +54,7 @@ class TouchableOpacityIcon extends Component<{
 class CollapsedTodo extends Component<{
   deleteTodo?: () => void
   vm: TodoVM
+  drag?: () => void
 }> {
   render() {
     return (
@@ -69,6 +70,7 @@ class CollapsedTodo extends Component<{
         onPress={() => {
           this.props.vm.collapsed = false
         }}
+        onLongPress={this.props.drag}
       >
         {!!this.props.deleteTodo && (
           <IconButton
@@ -449,6 +451,7 @@ export class SwitchRow extends Component<{
 export class AddTodoForm extends Component<{
   vm: TodoVM
   deleteTodo?: () => void
+  drag?: () => void
 }> {
   @computed get minDate() {
     const now = new Date()
@@ -474,6 +477,7 @@ export class AddTodoForm extends Component<{
           <CollapsedTodo
             deleteTodo={this.props.deleteTodo}
             vm={this.props.vm}
+            drag={this.props.drag}
           />
         ) : (
           <View
