@@ -23,6 +23,7 @@ import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { Divider } from '@components/Divider'
+import { logEvent } from '@utils/logEvent'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -40,6 +41,7 @@ class PaywallContent extends Component<{
   vm = new PaywallVM()
 
   async componentDidMount() {
+    logEvent('subscription_viewed')
     purchaseListener.fail = (err) => {
       alertError(err.message || translate('purchaseError'))
     }

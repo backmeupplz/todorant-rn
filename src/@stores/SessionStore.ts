@@ -1,3 +1,4 @@
+import { logEvent } from '@utils/logEvent'
 import { sharedTagStore } from '@stores/TagStore'
 import { daysBetween } from '@utils/daysBetween'
 import { hydrateStore } from '@utils/hydrated'
@@ -64,6 +65,7 @@ class SessionStore {
     this.user = user
     sockets.authorize()
     setToken(user.token)
+    logEvent('login_success')
   }
 
   logout() {
@@ -78,6 +80,7 @@ class SessionStore {
     sockets.logout()
     removeToken()
     removePassword()
+    logEvent('logout_success')
   }
 
   onObjectsFromServer = async (

@@ -37,6 +37,7 @@ import CustomIcon from '@components/CustomIcon'
 import { sockets } from '@utils/sockets'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList from 'react-native-draggable-flatlist'
+import { logEvent } from '@utils/logEvent'
 
 @observer
 class AddTodoContent extends Component<{
@@ -207,6 +208,7 @@ class AddTodoContent extends Component<{
   }
 
   componentDidMount() {
+    logEvent('add_todo_opened')
     backButtonStore.back = this.onBackPress
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
     if (this.props.route.params?.breakdownTodo) {

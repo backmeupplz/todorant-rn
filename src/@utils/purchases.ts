@@ -1,3 +1,4 @@
+import { logEvent } from '@utils/logEvent'
 import { translate } from '@utils/i18n'
 import RNIap, {
   purchaseUpdatedListener,
@@ -48,7 +49,9 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
         }
       }
       await RNIap.finishTransaction(purchase, false)
+      logEvent('subscription_success')
     } else {
+      logEvent('subscription_purchase_error')
       throw new Error(translate('purchaseReceiptError'))
     }
 
@@ -56,6 +59,7 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
       purchaseListener.success()
     }
   } catch (err) {
+    logEvent('subscription_purchase_error')
     if (purchaseListener.fail) {
       purchaseListener.fail(err)
     }
@@ -68,6 +72,7 @@ export const purchaseUpdateSubscription = purchaseUpdatedListener(tryPurchase)
 
 export const purchaseErrorSubscription = purchaseErrorListener(
   (error: PurchaseError) => {
+    logEvent('subscription_purchase_error')
     try {
       if (purchaseListener.fail) {
         purchaseListener.fail(error)
