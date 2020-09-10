@@ -8,12 +8,17 @@ import { IconButton } from '@components/IconButton'
 import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import fonts from '@utils/fonts'
+import moment from 'moment'
+import i18n from 'i18n-js'
+import { capitalizeSentence } from '@utils/capitalizeSentence'
+import { PlanningVM } from '@views/planning/PlanningVM'
 
 @observer
 export class PlanningDateHeader extends Component<{
   drag: () => void
   isActive: boolean
   item: SectionHeaderOrTodo
+  vm: PlanningVM
 }> {
   render() {
     return (
@@ -31,6 +36,13 @@ export class PlanningDateHeader extends Component<{
               ? this.props.drag
               : undefined
           }
+          onPress={() => {
+            if (!this.props.vm.expandedTitles.has(this.props.item.title!)) {
+              this.props.vm.expandedTitles.add(this.props.item.title!)
+            } else {
+              this.props.vm.expandedTitles.delete(this.props.item.title!)
+            }
+          }}
         >
           <View
             style={{
@@ -48,7 +60,13 @@ export class PlanningDateHeader extends Component<{
                 fontFamily: fonts.SFProRoundedRegular,
               }}
             >
-              {this.props.item.title}
+              {this.props.item.title}{' '}
+              {this.props.vm.expandedTitles.has(this.props.item.title!) &&
+                capitalizeSentence(
+                  moment(this.props.item.title!)
+                    .locale(i18n.locale)
+                    .format('dddd')
+                )}
             </Text>
           </View>
         </TouchableOpacity>

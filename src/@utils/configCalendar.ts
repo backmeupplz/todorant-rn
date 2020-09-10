@@ -1,5 +1,4 @@
 import { LocaleConfig } from 'react-native-calendars'
-import moment from 'moment'
 
 export function configCalendar(defaultLocale: string) {
   const locales = ['ru', 'en', 'uk', 'it', 'es', 'pt-BR']
@@ -181,8 +180,6 @@ LocaleConfig.locales['it'] = {
   amDesignator: 'AM',
   pmDesignator: 'PM',
 }
-
-moment.locale('pt-BR')
 
 LocaleConfig.locales['es'] = {
   monthNames: [

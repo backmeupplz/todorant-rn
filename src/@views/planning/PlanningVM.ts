@@ -8,11 +8,13 @@ import { getDateString, isDateTooOld } from '@utils/time'
 import { Todo, compareTodos, getTitle, isTodoOld } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { computed } from 'mobx'
+import { computed, observable } from 'mobx'
 import { realm } from '@utils/realm'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 export class PlanningVM {
+  @observable expandedTitles = new Set<string>()
+
   @computed get allTodosFiltered() {
     return sharedTodoStore.allTodos
       .filtered('deleted = false')
