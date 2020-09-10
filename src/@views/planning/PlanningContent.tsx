@@ -43,7 +43,6 @@ export class PlanningContent extends Component {
                   isActive={isActive}
                   item={item}
                   key={index}
-                  vm={this.vm}
                 />
               ) : (
                 <View style={{ padding: isActive ? 10 : 0 }} key={index}>

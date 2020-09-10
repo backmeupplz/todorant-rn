@@ -18,7 +18,6 @@ export class PlanningDateHeader extends Component<{
   drag: () => void
   isActive: boolean
   item: SectionHeaderOrTodo
-  vm: PlanningVM
 }> {
   render() {
     return (
@@ -36,13 +35,6 @@ export class PlanningDateHeader extends Component<{
               ? this.props.drag
               : undefined
           }
-          onPress={() => {
-            if (!this.props.vm.expandedTitles.has(this.props.item.title!)) {
-              this.props.vm.expandedTitles.add(this.props.item.title!)
-            } else {
-              this.props.vm.expandedTitles.delete(this.props.item.title!)
-            }
-          }}
         >
           <View
             style={{
@@ -60,13 +52,13 @@ export class PlanningDateHeader extends Component<{
                 fontFamily: fonts.SFProRoundedRegular,
               }}
             >
-              {this.props.item.title}{' '}
-              {this.props.vm.expandedTitles.has(this.props.item.title!) &&
-                capitalizeSentence(
-                  moment(this.props.item.title!)
-                    .locale(i18n.locale)
-                    .format('dddd')
-                )}
+              {this.props.item.title}
+              {', '}
+              {capitalizeSentence(
+                moment(this.props.item.title!)
+                  .locale(i18n.locale)
+                  .format('dddd')
+              )}
             </Text>
           </View>
         </TouchableOpacity>
