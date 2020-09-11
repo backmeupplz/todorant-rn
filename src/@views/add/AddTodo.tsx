@@ -324,38 +324,30 @@ class AddTodoContent extends Component<{
           autoscrollSpeed={200}
           data={[undefined, ...this.vms]}
           renderItem={({ item, index, drag, isActive }) => {
-            return (
-              <Content>
-                {index == 0 ? (
-                  this.isBreakdown &&
-                  !!this.breakdownTodo && (
-                    <TodoCard
-                      todo={this.breakdownTodo}
-                      type={CardType.breakdown}
-                    />
-                  )
-                ) : (
-                  <View
-                    key={index}
-                    style={{
-                      marginTop: index === 0 ? 10 : undefined,
+            return index == 0 ? (
+              this.isBreakdown && !!this.breakdownTodo && (
+                <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />
+              )
+            ) : (
+              <View
+                key={index}
+                style={{
+                  marginTop: index === 0 ? 10 : undefined,
+                }}
+              >
+                {item && (
+                  <AddTodoForm
+                    vm={item}
+                    deleteTodo={() => {
+                      index && this.vms.length > 1
+                        ? this.vms.splice(index - 1, 1)
+                        : undefined
                     }}
-                  >
-                    {item && (
-                      <AddTodoForm
-                        vm={item}
-                        deleteTodo={() => {
-                          index && this.vms.length > 1
-                            ? this.vms.splice(index - 1, 1)
-                            : undefined
-                        }}
-                        drag={drag}
-                      />
-                    )}
-                    {index != this.vms.length && <Divider />}
-                  </View>
+                    drag={drag}
+                  />
                 )}
-              </Content>
+                {index != this.vms.length && <Divider />}
+              </View>
             )
           }}
           keyExtractor={(item, index) => `draggable-item-${index}`}
