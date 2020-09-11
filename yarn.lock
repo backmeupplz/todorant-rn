@@ -5959,10 +5959,10 @@ react-native-restart@^0.0.14:
   resolved "https://registry.yarnpkg.com/react-native-restart/-/react-native-restart-0.0.14.tgz#e66bf76e60421b37bfee20310beb6ab64ef57b9c"
   integrity sha512-2jQzmGlT243yRrvuj1FtOFCnMxiNoXhrP6a5ZYkouGAmtx/GgR9kI3E4iGzTJwJY7l1qbnbLHlbjn/1JAALd7Q==
 
-react-native-safe-area-context@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-0.6.4.tgz#624bd50cebc9f47853f179373501511931d2a0c3"
-  integrity sha512-xj8Mv8ZHfc8RquBgVYt+4+nOJaexTblLsQJpyx4Dh4qFUG+3QtbNlfOF7/ITj/qY5LNdlfafKoDsVgFz0WIU1w==
+react-native-safe-area-context@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.7.tgz#fc9e636dfb168f992a2172d363509ce0611a8403"
+  integrity sha512-qSyg/pVMwVPgAy8yCvw349Q+uEUhtRBV33eVXHHkfoou1vCChJxI7SmNR47/6M3BLdjWcyc4lcd018Kx+jhQCw==
 
 react-native-screens@^2.0.0-beta.2:
   version "2.4.0"

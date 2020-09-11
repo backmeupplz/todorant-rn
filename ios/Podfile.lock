@@ -336,7 +336,7 @@ PODS:
     - React
   - react-native-netinfo (5.7.0):
     - React
-  - react-native-safe-area-context (0.6.4):
+  - react-native-safe-area-context (3.1.7):
     - React
   - react-native-segmented-control (2.0.1):
     - React
@@ -714,7 +714,7 @@ SPEC CHECKSUMS:
   react-native-camera: 1b52abea404d04e040edb3e74b7c5523c01a3089
   react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
   react-native-netinfo: becc6dd2bb2335aa85a8adbaefc8e206125e6177
-  react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
+  react-native-safe-area-context: 955ecfce672683b495d9294d2f154a9ad1d9796b
   react-native-segmented-control: b922568e7ff4e1ee241c9b747a29cea89f68548c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webview: 160ac8d6bb974e2933f2de6bb7464a8e934ff31d

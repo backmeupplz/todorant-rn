@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Text, View, Toast, ActionSheet } from 'native-base'
+import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
@@ -19,7 +19,14 @@ import { sharedTagStore } from '@stores/TagStore'
 import { TodoVM } from '@views/add/TodoVM'
 import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
-import { Alert, Clipboard, BackHandler } from 'react-native'
+import {
+  Alert,
+  Clipboard,
+  BackHandler,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+} from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -38,6 +45,8 @@ import { sockets } from '@utils/sockets'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
+import { HeaderHeightContext } from '@react-navigation/stack'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 @observer
 class AddTodoContent extends Component<{
@@ -48,6 +57,7 @@ class AddTodoContent extends Component<{
     >,
     string
   >
+  headerHeight?: number
 }> {
   @observable screenType = AddTodoScreenType.add
   @observable vms: TodoVM[] = []
@@ -318,115 +328,131 @@ class AddTodoContent extends Component<{
 
   render() {
     return (
-      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        <DraggableFlatList
-          contentContainerStyle={{ paddingBottom: 100 }}
-          autoscrollSpeed={200}
-          data={[undefined, ...this.vms]}
-          renderItem={({ item, index, drag, isActive }) => {
-            return index == 0 ? (
-              this.isBreakdown && !!this.breakdownTodo && (
-                <TodoCard todo={this.breakdownTodo} type={CardType.breakdown} />
-              )
-            ) : (
-              <View
-                key={index}
-                style={{
-                  marginTop: index === 0 ? 10 : undefined,
-                }}
-              >
-                {item && (
-                  <AddTodoForm
-                    vm={item}
-                    deleteTodo={() => {
-                      index && this.vms.length > 1
-                        ? this.vms.splice(index - 1, 1)
-                        : undefined
-                    }}
-                    drag={drag}
-                  />
-                )}
-                {index != this.vms.length && <Divider />}
-              </View>
-            )
-          }}
-          keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={this.onDragEnd}
-        />
-        <View
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+        {...{ edges: ['left', 'bottom', 'right'] }}
+      >
+        <KeyboardAvoidingView
           style={{
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            justifyContent: 'center',
-            position: 'absolute',
-            bottom: 0,
+            flex: 1,
           }}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={
+            Platform.OS === 'ios'
+              ? (StatusBar.currentHeight || 0) + (this.props.headerHeight || 0)
+              : undefined
+          }
         >
-          <View
-            style={{
-              marginRight: 10,
-              marginVertical: 10,
-              flexGrow: 1,
-            }}
-          >
-            <Button
-              style={{ borderRadius: 10, justifyContent: 'center' }}
-              onPress={() => {
-                this.saveTodo()
-              }}
-              disabled={!this.isValid}
-              onLongPress={() => {
-                Clipboard.setString(
-                  JSON.stringify(this.props.route.params?.editedTodo)
+          <DraggableFlatList
+            contentContainerStyle={{ paddingBottom: 10 }}
+            autoscrollSpeed={200}
+            data={[undefined, ...this.vms]}
+            renderItem={({ item, index, drag, isActive }) => {
+              return index == 0 ? (
+                this.isBreakdown && !!this.breakdownTodo && (
+                  <TodoCard
+                    todo={this.breakdownTodo}
+                    type={CardType.breakdown}
+                  />
                 )
-                Toast.show({
-                  text: translate('copied'),
-                })
-              }}
-            >
-              <Text>
-                {this.screenType === AddTodoScreenType.add
-                  ? this.vms.length > 1
-                    ? translate('addTodoPlural')
-                    : translate('addTodoSingular')
-                  : translate('saveTodo')}
-              </Text>
-            </Button>
-          </View>
-          {this.screenType === AddTodoScreenType.add && (
-            <View
-              style={{
-                aspectRatio: 1,
-                marginVertical: 10,
-                flexShrink: 1,
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.addTodo()
-                }}
-              >
-                <LinearGradient
-                  colors={['#1148B9', '#5C9BFF']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
+              ) : (
+                <View
+                  key={index}
                   style={{
-                    backgroundColor:
-                      'linear-gradient(126.87deg, #1148B9 0%, #5C9BFF 100%)',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: 10,
+                    marginTop: index === 0 ? 10 : undefined,
                   }}
                 >
-                  <CustomIcon name="add_outline_28" size={20} color="white" />
-                </LinearGradient>
-              </TouchableOpacity>
+                  {item && (
+                    <AddTodoForm
+                      vm={item}
+                      deleteTodo={() => {
+                        index && this.vms.length > 1
+                          ? this.vms.splice(index - 1, 1)
+                          : undefined
+                      }}
+                      drag={drag}
+                    />
+                  )}
+                  {index != this.vms.length && <Divider />}
+                </View>
+              )
+            }}
+            keyExtractor={(item, index) => `draggable-item-${index}`}
+            onDragEnd={this.onDragEnd}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 16,
+              justifyContent: 'center',
+            }}
+          >
+            <View
+              style={{
+                marginRight: 10,
+                marginVertical: 10,
+                flexGrow: 1,
+              }}
+            >
+              <Button
+                style={{ borderRadius: 10, justifyContent: 'center' }}
+                onPress={() => {
+                  this.saveTodo()
+                }}
+                disabled={!this.isValid}
+                onLongPress={() => {
+                  Clipboard.setString(
+                    JSON.stringify(this.props.route.params?.editedTodo)
+                  )
+                  Toast.show({
+                    text: translate('copied'),
+                  })
+                }}
+              >
+                <Text>
+                  {this.screenType === AddTodoScreenType.add
+                    ? this.vms.length > 1
+                      ? translate('addTodoPlural')
+                      : translate('addTodoSingular')
+                    : translate('saveTodo')}
+                </Text>
+              </Button>
             </View>
-          )}
-        </View>
-      </Container>
+            {this.screenType === AddTodoScreenType.add && (
+              <View
+                style={{
+                  aspectRatio: 1,
+                  marginVertical: 10,
+                  flexShrink: 1,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    this.addTodo()
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#1148B9', '#5C9BFF']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={{
+                      backgroundColor:
+                        'linear-gradient(126.87deg, #1148B9 0%, #5C9BFF 100%)',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 10,
+                    }}
+                  >
+                    <CustomIcon name="add_outline_28" size={20} color="white" />
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     )
   }
 }
@@ -441,5 +467,11 @@ export const AddTodo = () => {
       string
     >
   >()
-  return <AddTodoContent route={route} />
+  return (
+    <HeaderHeightContext.Consumer>
+      {(headerHeight) => (
+        <AddTodoContent route={route} headerHeight={headerHeight} />
+      )}
+    </HeaderHeightContext.Consumer>
+  )
 }
