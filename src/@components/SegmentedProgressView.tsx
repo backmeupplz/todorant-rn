@@ -37,21 +37,56 @@ export class SegmentedProgressView extends Component<{
             justifyContent: 'space-between',
           }}
         >
-          {Array.from(Array(this.props.total).keys()).map((i) => (
+          {this.props.total <= 20 ? (
+            Array.from(Array(this.props.total).keys()).map((i) => (
+              <View
+                style={{
+                  marginHorizontal: 4,
+                  height: '100%',
+                  borderRadius: 10,
+                  backgroundColor:
+                    i < this.props.completed
+                      ? sharedColors.primaryColor
+                      : sharedColors.textColor,
+                  flex: 1,
+                  opacity: i < this.props.completed ? 1.0 : 0.2,
+                }}
+              />
+            ))
+          ) : (
             <View
               style={{
                 marginHorizontal: 4,
                 height: '100%',
                 borderRadius: 10,
-                backgroundColor:
-                  i < this.props.completed
-                    ? sharedColors.primaryColor
-                    : sharedColors.textColor,
                 flex: 1,
-                opacity: i < this.props.completed ? 1.0 : 0.2,
+                overflow: 'hidden',
               }}
-            />
-          ))}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  backgroundColor: sharedColors.textColor,
+                  opacity: 0.2,
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: sharedColors.primaryColor,
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  width: `${(this.props.completed / this.props.total) * 100}%`,
+                  height: '100%',
+                  borderRadius: 10,
+                }}
+              ></View>
+            </View>
+          )}
         </View>
         <Text
           style={{
