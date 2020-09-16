@@ -252,7 +252,8 @@ export class PlanningVM {
           const failed =
             isTodoOld(todo) &&
             (todo.monthAndYear !== currentMonthAndYear ||
-              todo.date !== currentDate)
+              todo.date !== currentDate) &&
+            !todo.completed
           realm.write(() => {
             todo.order = orderCounter
             todo.monthAndYear = currentMonthAndYear

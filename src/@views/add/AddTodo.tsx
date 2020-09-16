@@ -119,7 +119,8 @@ class AddTodoContent extends Component<{
         const failed =
           isTodoOld(vm.editedTodo) &&
           (vm.editedTodo.date !== vm.date ||
-            vm.editedTodo.monthAndYear !== vm.monthAndYear)
+            vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
+          !vm.editedTodo.completed
 
         if (
           vm.editedTodo.frogFails > 2 &&
