@@ -20,17 +20,18 @@ export class PlanningContent extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        {sharedTodoStore.isPlanningRequired && (
-          <Text
-            style={{
-              backgroundColor: 'dodgerblue',
-              color: 'white',
-              padding: 12,
-            }}
-          >
-            {translate('planningText')}
-          </Text>
-        )}
+        {sharedTodoStore.isPlanningRequired &&
+          sharedAppStateStore.todoSection !== TodoSectionType.completed && (
+            <Text
+              style={{
+                backgroundColor: 'dodgerblue',
+                color: 'white',
+                padding: 12,
+              }}
+            >
+              {translate('planningText')}
+            </Text>
+          )}
         {this.vm.todosWithSections.length ? (
           <DraggableFlatList
             contentContainerStyle={{ paddingBottom: 100 }}
