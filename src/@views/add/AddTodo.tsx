@@ -64,7 +64,13 @@ class AddTodoContent extends Component<{
   breakdownTodo?: Todo
   @observable isBreakdown = false
 
+  @observable savingTodo = false
+
   saveTodo() {
+    if (this.savingTodo) {
+      return
+    }
+    this.savingTodo = true
     const dayCompletinRoutineDoneInitially = shouldShowDayCompletionRoutine()
 
     const titlesToFixOrder = [] as string[]
@@ -403,7 +409,7 @@ class AddTodoContent extends Component<{
                 onPress={() => {
                   this.saveTodo()
                 }}
-                disabled={!this.isValid}
+                disabled={!this.isValid || this.savingTodo}
                 onLongPress={() => {
                   Clipboard.setString(
                     JSON.stringify(this.props.route.params?.editedTodo)
