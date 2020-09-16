@@ -53,12 +53,12 @@ export class PlanningDateHeader extends Component<{
               }}
             >
               {this.props.item.title}
-              {', '}
-              {capitalizeSentence(
-                moment(this.props.item.title!)
-                  .locale(i18n.locale)
-                  .format('dddd')
-              )}
+              {(this.props.item.title?.length || 0) === 10 &&
+                `, ${capitalizeSentence(
+                  moment(this.props.item.title!)
+                    .locale(i18n.locale)
+                    .format('dddd')
+                )}`}
             </Text>
           </View>
         </TouchableOpacity>
