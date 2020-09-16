@@ -9,7 +9,6 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
-import { navigate } from '@utils/navigation'
 import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 
