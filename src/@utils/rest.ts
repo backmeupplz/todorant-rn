@@ -124,3 +124,15 @@ export function calendarAuthorize(code: string) {
     }
   )
 }
+
+export async function setUserName(name: string) {
+  return axios.post(
+    `${base}/settings/username`,
+    { name: name },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
+}
