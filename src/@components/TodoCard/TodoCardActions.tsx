@@ -66,14 +66,12 @@ export class TodoCardActions extends Component<{
                 name="reply_outline_28-1"
               />
             )}
-          {this.props.type !== CardType.current && (
-            <IconButton
-              onPress={() => {
-                navigate('EditTodo', { editedTodo: this.props.todo })
-              }}
-              name="edit_outline_28"
-            />
-          )}
+          <IconButton
+            onPress={() => {
+              navigate('EditTodo', { editedTodo: this.props.todo })
+            }}
+            name="edit_outline_28"
+          />
           {this.props.type === CardType.current &&
             this.props.vm.isSkippable(this.props.todo) && (
               <IconButton
