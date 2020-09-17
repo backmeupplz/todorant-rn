@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Todorant</string>
     <string name="facebook_app_id">640750769753434</string>
-    <string name="CodePushDeploymentKey">TA2GeEvyVHTeEbUDfginhPeIRiCd45EsNxW2R</string>
+    <string name="CodePushDeploymentKey">NQYRJJ2hcM3BsP8asaqmrsyqFzPWkvGX-8ssj</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
 </resources>
