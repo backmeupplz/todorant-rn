@@ -3,10 +3,6 @@
 default_platform :ios
 
 platform :ios do
-  before_all do
-    cocoapods
-  end
-
   lane :commit_and_push_ios_release do
     git_add
     git_commit(
@@ -23,7 +19,8 @@ platform :ios do
   end
 
   lane :release do
-    increment_version_number
+    cocoapods
+    # increment_version_number
     increment_build_number
     build_app(
       scheme: "Todorant",
@@ -64,6 +61,7 @@ platform :ios do
   end
 
   lane :take_and_upload_screenshots do
+    cocoapods
     capture_screenshots
     frame
     upload_screenshots
