@@ -12,6 +12,8 @@ import fonts from '@utils/fonts'
 import { observable } from 'mobx'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { setUserName } from '@utils/rest'
+import { alertError } from '@utils/alert'
+import { Spinner } from '@components/Spinner'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
@@ -42,6 +44,7 @@ class InfoRow extends Component<{ title: string; value: string }> {
 
 @observer
 export class AccountInfo extends Component {
+  @observable loading = false
   @observable name = ''
   @observable nameChangingMenu = false
   render() {
@@ -57,6 +60,11 @@ export class AccountInfo extends Component {
     ) : (
       <>
         <SectionHeader title={translate('account')} />
+        {this.loading && (
+          <TableItem>
+            <Spinner />
+          </TableItem>
+        )}
         {!this.nameChangingMenu && (
           <TableItem
             {...sharedColors.listItemExtraStyle}
@@ -123,8 +131,15 @@ export class AccountInfo extends Component {
               <TouchableOpacity
                 onPress={async () => {
                   if (this.name) {
-                    setUserName(this.name)
                     this.nameChangingMenu = false
+                    this.loading = true
+                    try {
+                      await setUserName(this.name)
+                    } catch (err) {
+                      alertError(err)
+                    } finally {
+                      this.loading = false
+                    }
                   }
                 }}
                 style={{ paddingRight: 8, paddingTop: 5 }}
