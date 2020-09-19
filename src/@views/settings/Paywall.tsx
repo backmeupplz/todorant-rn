@@ -113,7 +113,7 @@ class PaywallContent extends Component<{
                   (sharedSessionStore.isTrialOver ||
                     sharedSessionStore.user?.createdOnApple))) && (
                 <Text {...sharedColors.regularTextExtraStyle}>
-                  {translate('endTrialText')}
+                  {translate('inactiveText')}
                 </Text>
               )}
               {sharedSessionStore.user?.subscriptionStatus ===

@@ -66,7 +66,7 @@
   "purchaseThankYou": "Thank you",
   "purchaseThankYouText": "Thank you for purchasing the subscription!",
   "activeText": "🎉 Thank you a lot for supporting Todorant! I personally hope that Todorant has improved your life already and will keep making it better in future! You support allows me to work on Todorant daily and to add new features simplifying the work and freeing your time and your cognitive resources. Thank you a lot, again!",
-  "endTrialText": "🐝 It looks like your Todorant trial has come to the end. This is the awkward moment when you have to decide — whether Todorant has improved your life enough to spend money on it — and I have to navigate you towards the right decision. I am at the peak of my happines when I am able to bring value to the people; and if Todorant was able to make your life better, I will be more than thankful if you buy the subscription. It is just $5/month for the unlimited productivity and free mind. Every cent I earn on Todorant will be spent on improving the service. By supporting Todorant — you allow me, independent developer, to keep improving the product that benefits us all from day to day. Thank you a lot in advance!",
+  "inactiveText": "🐝 It looks like your Todorant trial has come to the end. This is the awkward moment when you have to decide — whether Todorant has improved your life enough to spend money on it — and I have to navigate you towards the right decision. I am at the peak of my happines when I am able to bring value to the people; and if Todorant was able to make your life better, I will be more than thankful if you buy the subscription. It is just $5/month for the unlimited productivity and free mind. Every cent I earn on Todorant will be spent on improving the service. By supporting Todorant — you allow me, independent developer, to keep improving the product that benefits us all from day to day. Thank you a lot in advance!",
   "earlyAdopterText": "👏👏 — this is me applauding you; you — the crazy ones who agreed to try out the instrument of ever increasing productivity, Todorant, among the first. One can say that you are the golden thousand, feedback of whom was shaping the Todorant from the very beginning. You have all the rights to use Todorant as much as you wish — you will never experience any limits, you have earned it. However, if you noticed that Todorant has drastically improved your life — you can still buy the subscription thus saying the best kind of \"Thank you\". You will never loose the \"Early adopter 🦄\" status — but will always be able to cancel the subscription. Thank you a lot for still using Todorant — and I will keep adding new features improving the product that positively affects all of us. Good luck!",
   "earlyAdopterTextBonus": "🤗 Holy +*%$! Looks like either Todorant or I personally helped you enough that you purchased subscription even though you could use Todorant for free forever. I am deeply touched and happy to have a cup of coffee with you or just to chat a little. Feel free to reach me on Telegram (@borodutch) or by email — just click my name below. Thank you a lot! It is hard to imagine how important your contribution is!",
   "trialText": "💪 Welcome to Todorant! You have 30 days after the registration to figure out whether Todorant works well for you. After 30 days will pass, you will still have access to the old tasks but will not be able to add new ones. It is perfectly fine to purchase subscription before 30 days end. I believe that using Todorant will bring you new heights in the personal productivity!",
@@ -146,7 +146,7 @@
   "infoIntro": "Good job tapping the \"i\" button! This is the welcome message explaining what Todorant is. No more, no less.",
   "infoCurrent": "This is the current task page. It only shows you one task that you should be working on right now. Stay focused, this is the only page you need after you planned your day.\n\nYou can skip the task if it's not a frog and if it is not the last task of the day.\n\nIf task is too broad — use the breakdown feature. After breaking down the task, it will be automatically marked as completed.",
   "infoBreakdown": "This is the task breakdown screen. Feel free to add multiple tasks that are going to appear in the tasks list instead of the original task. After you add the new smaller tasks, the original task will be marked completed.",
-  "infoAdd": "This is the add task screen. Tasks should always be actionable (\"Find best flights to Mexico\" vs \"Go to Mexico\") and as small and exact as possible (\"Dust the displays\" vs \"Clean the house\"). You can add muptiple tasks here.\n\nTasks should have either a date or a month assigned to them. You cannot select the current month.\n\nFrogs are tasks that you don't want to deal with — they will appear first on your list. The earlier you start on a frog, the more chances are that you will complete it.",
+  "infoAdd": "This is the add task screen. Tasks should always be actionable (\"Find best flights to Mexico\" vs \"Go to Mexico\") and as small and exact as possible (\"Dust the displays\" vs \"Clean the house\"). You can add multiple tasks here.\n\nTasks should have either a date or a month assigned to them. You cannot select the current month.\n\nFrogs are tasks that you don't want to deal with — they will appear first on your list. The earlier you start on a frog, the more chances are that you will complete it.",
   "infoEdit": "This is the edit task screen. Here you can edit the task. Yep, this is it.",
   "infoPlanning": "This is your planning section. Feel free to rearrange tasks and date titles (by long pressing and dragging them) — it's fun!\n\nAlso, don't forget to use #hashtags.",
   "infoSettings": "This is your settings screen. Here you can configure various options. Please, make sure you read the \"How to use Todorant\" section.",
@@ -219,7 +219,6 @@
   "infoHero": "This is the profile page of you — the hero! Complete tasks and earn points to achieve higher and higher ranks!\n\nYou won't know the whole list of ranks until you achieve the highest! Remember: the only way to get to the top is through the everyday sequence of small steps.",
   "rank": "🔥 Your rank 🔥",
   "tasksCompleted": "Points earned",
-  "pointsTillNextRank": "Points required to unlock next rank:",
   "rank-1Title": "Dark matter infinity being 😈",
   "rank-1Description": "You have achieved the rank no human was able to achieve before! Congratulations, here is your pie: 🍰. It's not a lie this time.",
   "rank0Title": "Subzero −273.15 °C 🥶",
@@ -258,38 +257,35 @@
   "rank9000Description": "You lift the tasks like they are nothing!",
   "rank12800Title": "Doctor Manhattan ⚛",
   "rank12800Description": "You breakdown the tasks like you split the atoms. Keep up the good work!",
-  "achievements": "Achievements",
-  "sendDataToServer": "Send data to server",
+  "sendDataToServer": "Send data to the server",
   "encryption": {
     "repeatPassword": "Repeat password"
   },
   "settingsObject": {
-    "duplicateTagInBreakdown": "Copy hashtags during breakdown"
+    "duplicateTagInBreakdown": "Copy hashtags during a breakdown"
   },
   "level": "Level",
   "points": "points",
-  "pointsTillNextLevel": "points to unlock next level",
+  "pointsTillNextLevel": "points to unlock the next level",
   "accept": "Accept",
   "delegate": {
     "title": "Delegation",
     "noDelegators": "You don't have any delegators yet. Share the link above with the people who you want to make delegators",
     "noDelegates": "You don't have any delegates yet. Ask for an invite link to become someone's delegator.",
-    "noDelegatedTasks": "You don't have any more newly delegated tasks",
-    "noTasks": "You don't have any tasks that you delegated. Create a task and select a delegate.",
+    "noDelegatedTasks": "You don't have any more newly delegated tasks.",
     "link": "Delegate invite link",
     "linkDescription": "Share this link only with the people you trust. People can become your delegators by following this link. Delegators will only see the tasks that they delegated to you.",
-    "resetLink": "Reset the link",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
     "delegators": "Delegators",
     "delegates": "Delegates",
     "inviteSuccess": "Success! Now you can delegate tasks to this user.",
-    "inviteConfirm": "Are you sure you want to became a delegator to this user?",
+    "inviteConfirm": "Are you sure you want to become a delegator to this user?",
     "deleteDelegateConfirmation": "Are you sure you want to delete this delegate? You will no longer be able to delegate tasks to this delegate.",
     "deleteDelegatorConfirmation": "Are you sure you want to delete this delegator? This delegator will no longer be able to delegate tasks to you.",
     "pickDelegateField": "Delegate",
     "info": "This is the page with the tasks delegated to you. You have options to delete or accept tasks that your delegators send your way.",
     "signupTitle": "Oopsie",
-    "signupDescription": "You need to login before you can use delegation"
+    "signupDescription": "You need to log in before you can use delegation"
   },
   "errors": {
     "delegate": {

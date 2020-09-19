@@ -1,4 +1,4 @@
-Productivity systems fail. Todorant doesn't. Carefully crafted set of limitations and praise teaches the primitive part of the brain to crave productivity like we crave sugar. While other apps focus on storing, organizing and automating endless lists of to-dos, Todorant focuses on what matters: completing tasks.
+Productivity systems fail. Todorant doesn't. A carefully crafted set of limitations and praise teaches the primitive part of the brain to crave productivity like we crave sugar. While other apps focus on storing, organizing and automating endless lists of to-dos, Todorant focuses on what matters: completing tasks.
 
 — No more "projects": this concept never works in the long term (we all have "sport", "self-improvement", "someday maybe" lists that we never open)
 — No more dangling to-dos: every task has a date or a month assigned to it
