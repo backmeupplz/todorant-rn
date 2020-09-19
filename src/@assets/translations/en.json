@@ -2,9 +2,7 @@
   "search": "Search",
   "support": "Something isn't clear? Contact me at <a target=\"_blank\" href=\"mailto:n@borodutch.com\">n@borodutch.com</a>",
   "cancel": "Cancel",
-  "saveСhanges": "Save changes?",
   "save": "Save",
-  "dontSave": "Don't save",
   "delete": "Delete",
   "current": "Current",
   "planning": "Planning",
@@ -123,7 +121,6 @@
   "appleSigninError": "Could not sign in with Apple",
   "syncDataHard": "Hard sync",
   "firstDayOfWeek": "First day of a week",
-  "startTimeOfDay": "Start of the day",
   "weekday1": "Monday",
   "weekday2": "Tuesday",
   "weekday3": "Wednesday",
@@ -298,5 +295,8 @@
   "epic": {
     "intoEpic": "Make an Epic",
     "epicGoal": "Epic goal"
-  }
+  },
+  "saveСhanges": "Save changes?",
+  "dontSave": "Don't save",
+  "startTimeOfDay": "Start of the day"
 }

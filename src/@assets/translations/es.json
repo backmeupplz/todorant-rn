@@ -114,7 +114,6 @@
   "appleSigninError": "No se pudo iniciar sesión con Apple",
   "syncDataHard": "Forzar sincronización",
   "firstDayOfWeek": "Primer día de la semana",
-  "startTimeOfDay": "Comienzo del día",
   "weekday1": "Lunes",
   "weekday2": "Martes",
   "weekday3": "Miércoles",
@@ -177,5 +176,6 @@
   "rateSolicitationApple": "¿Te importaría dejar una calificación para Todorant de 5 estrellas en la App Store, por favor? ¡Eso ayuda mucho!",
   "rateSolicitationGoogle": "¿Te importaría dejar una calificación para Todorant de 5 estrellas en la Play Store, por favor? ¡Eso ayuda mucho!",
   "rateButton": "¡Calificar!",
-  "emptyHashtags": "La lista de Hashtag está vacía por ahora. ¡Crea tu primera tarea con un #hashtag para añadir el primer hashtag aquí!"
+  "emptyHashtags": "La lista de Hashtag está vacía por ahora. ¡Crea tu primera tarea con un #hashtag para añadir el primer hashtag aquí!",
+  "startTimeOfDay": "Comienzo del día"
 }

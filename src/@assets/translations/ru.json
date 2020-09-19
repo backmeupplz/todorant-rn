@@ -2,9 +2,7 @@
   "search": "Поиск",
   "support": "Что-то непонятно? Пишите мне на <a target=\"_blank\" href=\"mailto:n@borodutch.com\">n@borodutch.com</a>",
   "cancel": "Отменить",
-  "saveСhanges": "Сохранить изменения?",
   "save": "Сохранить",
-  "dontSave": "Не сохранять",
   "delete": "Удалить",
   "current": "Текущее",
   "planning": "Планирование",
@@ -123,7 +121,6 @@
   "appleSigninError": "Не получилось зайти через Эппл",
   "syncDataHard": "Принудительная синхронизация",
   "firstDayOfWeek": "Первый день недели",
-  "startTimeOfDay": "Начало дня",
   "weekday1": "Понедельник",
   "weekday2": "Вторник",
   "weekday3": "Среда",
@@ -298,5 +295,8 @@
   "epic": {
     "intoEpic": "Сделать эпиком",
     "epicGoal": "Цель эпика"
-  }
+  },
+  "saveСhanges": "Сохранить изменения?",
+  "dontSave": "Не сохранять",
+  "startTimeOfDay": "Начало дня"
 }

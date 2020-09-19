@@ -121,7 +121,6 @@
   "appleSigninError": "Не вдалося ввійти за допомогою Apple",
   "syncDataHard": "Примусова синхронізація",
   "firstDayOfWeek": "Перший день тижня",
-  "startTimeOfDay": "Початок дня",
   "weekday1": "Понеділок",
   "weekday2": "Вівторок",
   "weekday3": "Середа",
@@ -215,5 +214,6 @@
   "sendDataToServer": "Надіслати дані на сервер",
   "encryption": {
     "repeatPassword": "Повторіть пароль"
-  }
+  },
+  "startTimeOfDay": "Початок дня"
 }

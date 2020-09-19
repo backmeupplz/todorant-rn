@@ -121,7 +121,6 @@
   "appleSigninError": "Não pode assinar com Apple",
   "syncDataHard": "Hard sync",
   "firstDayOfWeek": "Primeiro dia da semana",
-  "startTimeOfDay": "Início do dia",
   "weekday1": "Segunda",
   "weekday2": "Terça",
   "weekday3": "Quarta",
@@ -222,5 +221,6 @@
   "sendDataToServer": "Enviar dados para o servidor",
   "encryption": {
     "repeatPassword": "Repita a senha"
-  }
+  },
+  "startTimeOfDay": "Início do dia"
 }
