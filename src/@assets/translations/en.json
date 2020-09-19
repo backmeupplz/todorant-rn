@@ -1,6 +1,13 @@
 {
   "search": "Search",
   "support": "Something isn't clear? Contact me at <a target=\"_blank\" href=\"mailto:n@borodutch.com\">n@borodutch.com</a>",
+  "todo": {
+    "create": {
+      "text": "Text of the todo",
+      "placeholder": "Todo",
+      "frog": "It's a frog!"
+    }
+  },
   "cancel": "Cancel",
   "save": "Save",
   "delete": "Delete",
@@ -19,12 +26,9 @@
   "allDoneText": "🥳 You did it! All the tasks for today are done, go get rest or maybe dance a little 💃",
   "noTodosTitle": "To infinity!",
   "noTodosText": "You don't have any todos for today. If you want to work — add a new todo for today or take the todos from future days.",
-  "todo": "Todo",
-  "text": "Text",
   "addTodoDay": "Select exact day",
   "addTodoMonth": "Or month",
   "addTodoTime": "Exact time",
-  "addTodoFrog": "It's a frog!",
   "completed": "Completed",
   "addTodoOnTop": "Add on the top",
   "addTodoMore": "More...",

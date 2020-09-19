@@ -1,5 +1,11 @@
 {
   "search": "Ricerca",
+  "todo": {
+    "create": {
+      "placeholder": "Attività",
+      "frog": "È una rana!"
+    }
+  },
   "cancel": "Annulla",
   "save": "Salva",
   "delete": "Elimina",
@@ -18,12 +24,9 @@
   "allDoneText": "🥳 Ce l'hai fatta! Le attività di oggi son state completate, riposati o balla un po' 💃",
   "noTodosTitle": "Verso l'infinito!",
   "noTodosText": "Non hai attività per oggi. Se vuoi fare qualcosa aggiungi un'attività per oggi o fai quelle dei prossimi giorni.",
-  "todo": "Attività",
-  "text": "Testo",
   "addTodoDay": "Seleziona un giorno",
   "addTodoMonth": "O un mese",
   "addTodoTime": "Ora esatta",
-  "addTodoFrog": "È una rana!",
   "completed": "Completato",
   "addTodoOnTop": "Aggiungi in cima",
   "addTodoMore": "Altre...",

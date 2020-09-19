@@ -114,7 +114,9 @@ class CollapsedTodo extends Component<{
                 </Text>
               )}
               <Text {...sharedColors.textExtraStyle}>
-                {this.props.vm.text ? this.props.vm.text : translate('todo')}
+                {this.props.vm.text
+                  ? this.props.vm.text
+                  : translate('todo.create.placeholder')}
               </Text>
             </Text>
             {!!this.props.vm.monthAndYear && (
@@ -152,7 +154,7 @@ class TextRow extends Component<{
       >
         <Input
           multiline
-          placeholder={translate('text')}
+          placeholder={translate('todo.create.text')}
           value={this.props.vm.text}
           onChangeText={(text) => {
             this.props.vm.text = text
@@ -219,7 +221,7 @@ class TagsRow extends Component<{
           horizontal
           data={this.props.vm.tags}
           keyExtractor={(_, index) => `${index}`}
-          renderItem={({ item }) => {
+          renderItem={({ item }: { item: any }) => {
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -571,7 +573,7 @@ export class AddTodoForm extends Component<{
               />
             )}
             <SwitchRow
-              name={translate('addTodoFrog')}
+              name={translate('todo.create.frog')}
               value={this.props.vm.frog}
               onValueChange={(value) => {
                 this.props.vm.frog = value

@@ -1,5 +1,12 @@
 {
   "support": "¿Algo no está claro? Contáctame en <a target=\"_blank\" href=\"mailto:n@borodutch.com\">n@borodutch.com</a>",
+  "todo": {
+    "create": {
+      "text": "Texto de la tarea",
+      "placeholder": "Tarea",
+      "frog": "¡Es un sapo!"
+    }
+  },
   "cancel": "Cancelar",
   "save": "Guardar",
   "delete": "Borrar",
@@ -16,12 +23,9 @@
   "allDoneText": "🥳 ¡Lo hiciste! Todas las tareas para hoy están hechas, ve a descansar o quizás a bailar un poco 💃",
   "noTodosTitle": "¡Hasta el infinito!",
   "noTodosText": "No tienes ninguna tarea para hoy. Si quieres trabajar agrega una nueva tarea para hoy o adelanta alguna tarea de días futuros.",
-  "todo": "Tarea",
-  "text": "Texto",
   "addTodoDay": "Selecciona el día exacto",
   "addTodoMonth": "O mes",
   "addTodoTime": "Tiempo exacto",
-  "addTodoFrog": "¡Es un sapo!",
   "completed": "Completada",
   "addTodoOnTop": "Agregar hasta arriba",
   "addTodoMore": "Más...",
