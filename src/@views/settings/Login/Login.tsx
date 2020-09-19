@@ -15,8 +15,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { Platform } from 'react-native'
 import appleAuth, {
   AppleButton,
-  AppleAuthRequestOperation,
-  AppleAuthRequestScope,
 } from '@invertase/react-native-apple-authentication'
 import { syncEventEmitter } from '@utils/sockets'
 import { Button } from '@components/Button'
@@ -95,11 +93,8 @@ class LoginVM {
     this.loading = true
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
-        requestedOperation: AppleAuthRequestOperation.LOGIN,
-        requestedScopes: [
-          AppleAuthRequestScope.EMAIL,
-          AppleAuthRequestScope.FULL_NAME,
-        ],
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       })
 
       if (appleAuthRequestResponse.authorizationCode) {

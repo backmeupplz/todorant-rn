@@ -1,4 +1,4 @@
-platform :ios, '10.0'
+platform :ios, '12.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 inhibit_all_warnings!
@@ -51,4 +51,12 @@ end
 target 'TodorantToday' do
   pod 'Alamofire', '~> 5.0'
   pod 'SwiftKeychainWrapper'
+end
+
+post_install do |pi|
+  pi.pods_project.targets.each do |t|
+    t.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+    end
+  end
 end

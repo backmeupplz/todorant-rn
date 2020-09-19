@@ -405,11 +405,11 @@ PODS:
     - ReactCommon/callinvoker (= 0.62.1)
   - ReactNativeDarkMode (0.2.2):
     - React
-  - RealmJS (4.0.0-beta.0):
+  - RealmJS (6.1.2):
     - GCDWebServer
     - React
-  - RNAppleAuthentication (0.1.1):
-    - React
+  - RNAppleAuthentication (2.0.1):
+    - React-Core
   - RNCClipboard (1.2.1):
     - React
   - RNCMaskedView (0.1.8):
@@ -729,8 +729,8 @@ SPEC CHECKSUMS:
   React-RCTVibration: 072c3b427dd29e730c2ee5bfc509cf5054741a50
   ReactCommon: 3585806280c51d5c2c0d3aa5a99014c3badb629d
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
-  RealmJS: 4f0790641a716584c4ff2c622d0782483f1762e7
-  RNAppleAuthentication: 9cca53676f5f010ffbf33eb99604383bfe0eb020
+  RealmJS: 6eb9fd885c5f3cd609b8b50282a5785cb4b48a18
+  RNAppleAuthentication: 35162025d279d135a7be78b37d9f3e29dc786cfb
   RNCClipboard: b238c952b0f8d5a6fa5ff96eacb9898608946540
   RNCMaskedView: 4383c3140f1235391fd6029968c166f09ddd0973
   RNDateTimePicker: 4bd49e09f91ca73d69119a9e1173b0d43b82f5e5
@@ -751,6 +751,6 @@ SPEC CHECKSUMS:
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1
 
-PODFILE CHECKSUM: ff2a224c9b3c0c36a6636c0b21a00864091876fe
+PODFILE CHECKSUM: 1a1b91f87be0680b93182dbbfd06efdfe9ed8542
 
 COCOAPODS: 1.9.3

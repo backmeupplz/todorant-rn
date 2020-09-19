@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
-    "@invertase/react-native-apple-authentication": "^0.1.1",
+    "@invertase/react-native-apple-authentication": "^2.0.1",
     "@react-native-community/clipboard": "^1.2.1",
     "@react-native-community/datetimepicker": "^2.2.2",
     "@react-native-community/google-signin": "^3.0.4",
@@ -94,7 +94,7 @@
     "react-native-todorant-widget": "^0.1.1",
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^8.0.6",
-    "realm": "4.0.0-beta.0",
+    "realm": "6.1.2",
     "socket.io-client": "2.1.1",
     "styled-components": "^5.0.0",
     "tlds": "^1.207.0",
