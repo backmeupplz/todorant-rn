@@ -53,13 +53,13 @@ export class Data extends Component {
           <Row
             title={translate('todoCount')}
             subtitle={`${
-              realm.objects<Todo>(Todo).filtered('deleted = false').length
+              realm.objects<Todo>('Todo').filtered('deleted = false').length
             }`}
           />
           <Row
             title={translate('tagsCount')}
             subtitle={`${
-              realm.objects<Tag>(Tag).filtered('deleted = false').length
+              realm.objects<Tag>('Tag').filtered('deleted = false').length
             }`}
           />
           {/* Sync */}

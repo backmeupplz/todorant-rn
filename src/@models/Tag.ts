@@ -1,7 +1,7 @@
 import { observable } from 'mobx'
 
 export class Tag {
-  static schema = {
+  public static schema = {
     name: 'Tag',
     properties: {
       _tempSyncId: { type: 'string?', indexed: true },

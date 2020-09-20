@@ -110,7 +110,7 @@ class AddTodoContent extends Component<{
         }
 
         realm.write(() => {
-          const dbtodo = realm.create(Todo, todo)
+          const dbtodo = realm.create<Todo>('Todo', todo)
           involvedTodos.push(dbtodo)
         })
 

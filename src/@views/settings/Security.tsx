@@ -36,7 +36,7 @@ export class Security extends Component {
     this.loading = true
     try {
       const todos = realm
-        .objects<Todo>(Todo)
+        .objects<Todo>('Todo')
         .filtered(`encrypted = ${!encrypted}`)
       realm.write(() => {
         for (const todo of todos) {
@@ -55,7 +55,7 @@ export class Security extends Component {
   encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = realm.objects<Todo>(Todo).filtered(`encrypted = true`)
+      const todos = realm.objects<Todo>('Todo').filtered(`encrypted = true`)
       realm.write(() => {
         for (const todo of todos) {
           if (encrypt) {
@@ -172,7 +172,7 @@ export class Security extends Component {
                           translate('save'),
                           () => {
                             const encrytedTodos = realm
-                              .objects<Todo>(Todo)
+                              .objects<Todo>('Todo')
                               .filtered('encrypted = true')
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
@@ -208,7 +208,7 @@ export class Security extends Component {
             <Text {...sharedColors.regularTextExtraStyle}>
               {
                 realm
-                  .objects<Todo>(Todo)
+                  .objects<Todo>('Todo')
                   .filtered('encrypted = true && deleted = false').length
               }
             </Text>
@@ -220,7 +220,7 @@ export class Security extends Component {
             <Text {...sharedColors.regularTextExtraStyle}>
               {
                 realm
-                  .objects<Todo>(Todo)
+                  .objects<Todo>('Todo')
                   .filtered('encrypted = false && deleted = false').length
               }
             </Text>
@@ -247,7 +247,8 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects<Todo>(Todo).filtered('encrypted = false').length
+                !realm.objects<Todo>('Todo').filtered('encrypted = false')
+                  .length
               }
             >
               <Text>{translate('encryptAllButton')}</Text>
@@ -267,7 +268,7 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects<Todo>(Todo).filtered('encrypted = true').length
+                !realm.objects<Todo>('Todo').filtered('encrypted = true').length
               }
             >
               <Text>{translate('decryptAllButton')}</Text>

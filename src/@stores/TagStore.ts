@@ -16,7 +16,7 @@ class TagStore {
 
   hydrated = false
 
-  @observable allTags = realm.objects<Tag>(Tag)
+  @observable allTags = realm.objects<Tag>('Tag')
   @observable tagColorMap = {} as { [index: string]: string }
 
   @computed get undeletedTags() {
@@ -78,7 +78,7 @@ class TagStore {
           ...serverTag,
         }
         realm.write(() => {
-          realm.create(Tag, newTag)
+          realm.create('Tag', newTag)
         })
       }
     }
@@ -131,7 +131,7 @@ class TagStore {
   }
 
   refreshTags = () => {
-    this.allTags = realm.objects<Tag>(Tag)
+    this.allTags = realm.objects<Tag>('Tag')
     this.tagColorMap = this.allTags
       .filtered('deleted = false')
       .reduce((p, c) => {
@@ -164,7 +164,7 @@ class TagStore {
       .map((c) => c.url?.substr(1))
     const epics = this.allTags
       .filtered('epic = true')
-      .filter((epic) => tagsInTodo.includes(epic.tag))
+      .filter((epic) => tagsInTodo.indexOf(epic.tag) > -1)
     epics.forEach((epic) => {
       const dbtag = this.getTagById(epic._id)
       realm.write(() => {
@@ -223,7 +223,7 @@ class TagStore {
     tagsToAdd = Object.keys(tagsToAddMap)
     realm.write(() => {
       for (const tag of tagsToAdd) {
-        realm.create(Tag, {
+        realm.create('Tag', {
           createdAt: new Date(),
           updatedAt: new Date(),
           deleted: false,

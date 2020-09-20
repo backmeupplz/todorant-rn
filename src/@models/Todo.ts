@@ -8,7 +8,7 @@ import { observable } from 'mobx'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 export class Todo {
-  static schema = {
+  public static schema = {
     name: 'Todo',
     properties: {
       _tempSyncId: { type: 'string?', indexed: true },

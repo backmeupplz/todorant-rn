@@ -68,7 +68,7 @@ export function addTodosRu() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 
@@ -133,7 +133,7 @@ export function addTodosUk() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 
@@ -198,7 +198,7 @@ export function addTodosEn() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 
@@ -263,7 +263,7 @@ export function addTodosIt() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 
@@ -328,7 +328,7 @@ export function addTodosEs() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 
@@ -393,7 +393,7 @@ export function addTodosPtBR() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create(Todo, todo)
+      realm.create('Todo', todo)
     }
   })
 

@@ -18,7 +18,7 @@ class TodoStore {
 
   hydrated = false
 
-  @observable allTodos = realm.objects<Todo>(Todo)
+  @observable allTodos = realm.objects<Todo>('Todo')
 
   @persist recalculatedExactDates = false
 
@@ -168,7 +168,7 @@ class TodoStore {
           newTodo.text = decrypt(newTodo.text)
         }
         realm.write(() => {
-          realm.create(Todo, newTodo)
+          realm.create('Todo', newTodo)
         })
       }
     }
@@ -233,7 +233,7 @@ class TodoStore {
   }
 
   refreshTodos = () => {
-    this.allTodos = realm.objects<Todo>(Todo)
+    this.allTodos = realm.objects<Todo>('Todo')
     if (Platform.OS === 'android') {
       TodorantWidget.forceUpdateAll()
     }
@@ -247,7 +247,7 @@ class TodoStore {
   }
 
   recalculateExactDates() {
-    const todos = realm.objects<Todo>(Todo)
+    const todos = realm.objects<Todo>('Todo')
     realm.write(() => {
       for (const todo of todos) {
         todo._exactDate = new Date(getTitle(todo))
