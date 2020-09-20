@@ -133,3 +133,28 @@ export function compareTodos(completed: Boolean) {
 export function getTitle(todo: { monthAndYear: string; date?: string }) {
   return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`
 }
+
+export function cloneTodo(todo: Todo) {
+  return {
+    _tempSyncId: todo._tempSyncId,
+    _exactDate: todo._exactDate,
+
+    _id: todo._id,
+    createdAt: todo.createdAt,
+    updatedAt: todo.updatedAt,
+    text: todo.text,
+    completed: todo.completed,
+    frog: todo.frog,
+    frogFails: todo.frogFails,
+    skipped: todo.skipped,
+    order: todo.order,
+    monthAndYear: todo.monthAndYear,
+    deleted: todo.deleted,
+    encrypted: todo.encrypted,
+    date: todo.date,
+    time: todo.time,
+
+    delegatorName: todo.delegatorName,
+    delegateAccepted: todo.delegateAccepted,
+  }
+}

@@ -1,7 +1,7 @@
 import { syncEventEmitter } from '@utils/sockets'
 import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'
-import { Todo, getTitle, compareTodos } from '@models/Todo'
+import { Todo, getTitle, compareTodos, cloneTodo } from '@models/Todo'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
 import { getDateString } from '@utils/time'
@@ -200,7 +200,7 @@ class TodoStore {
     })
     const savedPushedTodos = await pushBack(
       todosToPush
-        .map((v) => ({ ...v }))
+        .map((v) => ({ ...cloneTodo(v) }))
         .map((v) => {
           if (v.encrypted) {
             v.text = encrypt(v.text)

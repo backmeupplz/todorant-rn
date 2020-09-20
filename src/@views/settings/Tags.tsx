@@ -4,7 +4,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { FlatList } from 'react-native-gesture-handler'
 import { sharedTagStore } from '@stores/TagStore'
 import { observer } from 'mobx-react'
-import { Tag } from '@models/Tag'
+import { Tag, cloneTag } from '@models/Tag'
 import { translate } from '@utils/i18n'
 import { alertConfirm } from '@utils/alert'
 import { realm } from '@utils/realm'
@@ -73,7 +73,7 @@ class TagsVM {
   }
 
   changeColor(tag: Tag) {
-    navigate('ColorPicker', { tag: { ...tag } })
+    navigate('ColorPicker', { tag: { ...cloneTag(tag) } })
   }
 
   changeColorToDefault(tag: Tag) {
@@ -85,7 +85,7 @@ class TagsVM {
     sockets.tagsSyncManager.sync()
   }
   makeAnEpic(tag: Tag) {
-    navigate('AddEpic', { tag: { ...tag } })
+    navigate('AddEpic', { tag: { ...cloneTag(tag) } })
   }
 }
 

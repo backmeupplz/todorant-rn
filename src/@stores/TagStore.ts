@@ -1,6 +1,6 @@
 import { sockets } from '@utils/sockets'
 import { TodoVM } from '@views/add/TodoVM'
-import { Tag } from '@models/Tag'
+import { Tag, cloneTag } from '@models/Tag'
 import { realm } from '@utils/realm'
 import { observable, computed } from 'mobx'
 import { persist } from 'mobx-persist'
@@ -9,7 +9,6 @@ import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
 import { l } from '@utils/linkify'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
-import { Todo } from '@models/Todo'
 
 class TagStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -108,7 +107,7 @@ class TagStore {
       }
     })
     const savedPushedTags = await pushBack(
-      tagsToPush.map((v) => ({ ...v })) as any
+      tagsToPush.map((v) => ({ ...cloneTag(v) })) as any
     )
     // Modify dates
     savedPushedTags.forEach((tag) => {
