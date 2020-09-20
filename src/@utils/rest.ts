@@ -48,6 +48,19 @@ export function loginApple(code: string, user?: any) {
     .then(cleanLocalAppleReceipt)
 }
 
+export function loginAppleAndroid(code: string, name?: string) {
+  return axios
+    .post<User>(`${base}/login/apple-firebase`, {
+      client: 'android',
+      credential: {
+        oauthIdToken: code,
+      },
+      name,
+      ...extraParams,
+    })
+    .then(cleanLocalAppleReceipt)
+}
+
 export function loginToken(token: string) {
   return axios
     .post<User>(`${base}/login/token`, {

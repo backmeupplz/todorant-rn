@@ -9,15 +9,17 @@ import { goBack, navigate } from '@utils/navigation'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
-import { RouteProp, useRoute } from '@react-navigation/native'
+import { RouteProp, useRoute, ThemeProvider } from '@react-navigation/native'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { Platform } from 'react-native'
+import { Platform, StyleProp, TextStyle } from 'react-native'
 import appleAuth, {
   AppleButton,
+  appleAuthAndroid,
 } from '@invertase/react-native-apple-authentication'
 import { syncEventEmitter } from '@utils/sockets'
 import { Button } from '@components/Button'
+import { v4 as uuid } from 'uuid'
 
 class LoginVM {
   @observable loading = false
@@ -120,6 +122,43 @@ class LoginVM {
     }
   }
 
+  loginWithAppleAndroid = async () => {
+    const rawNonce = uuid()
+    const state = uuid()
+
+    appleAuthAndroid.configure({
+      clientId: 'com.todorant.web',
+      redirectUri: 'https://backend.todorant.com/apple',
+      responseType: appleAuthAndroid.ResponseType.ALL,
+      scope: appleAuthAndroid.Scope.ALL,
+      nonce: rawNonce,
+      state,
+    })
+
+    this.loading = true
+    try {
+      const response = await appleAuthAndroid.signIn()
+      if (response.id_token) {
+        const todorantUserInfo = (
+          await rest.loginAppleAndroid(
+            response.id_token,
+            response.user?.name?.firstName
+              ? `${response.user?.name?.firstName} ${response.user?.name?.lastName}`
+              : undefined
+          )
+        ).data
+        todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        this.syncLoading = true
+        sharedSessionStore.login(todorantUserInfo)
+      }
+    } catch (err) {
+      alertError(translate('appleSigninError'))
+    } finally {
+      this.loading = false
+    }
+  }
+
   loginWithToken = async (token: string) => {
     this.loading = true
     try {
@@ -146,6 +185,11 @@ export class LoginContent extends Component<{
   vm = new LoginVM()
 
   render() {
+    const textStyle = {
+      fontFamily: sharedColors.regularTextExtraStyle.style.fontFamily,
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+    } as StyleProp<TextStyle>
     return (
       <>
         <Container>
@@ -180,7 +224,7 @@ export class LoginContent extends Component<{
               onPress={this.vm.loginWithGoogle}
               disabled={this.vm.loading}
             >
-              <Text>{translate('loginGoogle')}</Text>
+              <Text style={textStyle}>{translate('loginGoogle')}</Text>
             </Button>
             <Button
               style={{
@@ -192,19 +236,29 @@ export class LoginContent extends Component<{
               onPress={this.vm.loginWithFacebook}
               disabled={this.vm.loading}
             >
-              <Text>{translate('loginFacebook')}</Text>
+              <Text style={textStyle}>{translate('loginFacebook')}</Text>
             </Button>
-            {Platform.OS === 'ios' && (
-              <View style={{ paddingBottom: 10 }}>
+            {(Platform.OS === 'ios' || appleAuthAndroid.isSupported) && (
+              <View
+                style={{
+                  paddingBottom: 10,
+                }}
+              >
                 <AppleButton
                   cornerRadius={10}
                   style={{
                     height: 50,
                     flex: 1,
+                    width: '100%',
                   }}
+                  textStyle={textStyle}
                   buttonStyle={AppleButton.Style.BLACK}
                   buttonType={AppleButton.Type.SIGN_IN}
-                  onPress={this.vm.loginWithApple}
+                  onPress={
+                    Platform.OS === 'ios'
+                      ? this.vm.loginWithApple
+                      : this.vm.loginWithAppleAndroid
+                  }
                 />
               </View>
             )}
@@ -224,7 +278,7 @@ export class LoginContent extends Component<{
               }}
               disabled={this.vm.loading}
             >
-              <Text>{translate('loginTelegram')}</Text>
+              <Text style={textStyle}>{translate('loginTelegram')}</Text>
             </Button>
             <Button
               style={{
@@ -242,7 +296,7 @@ export class LoginContent extends Component<{
               }}
               disabled={this.vm.loading}
             >
-              <Text>{translate('loginQR')}</Text>
+              <Text style={textStyle}>{translate('loginQR')}</Text>
             </Button>
             {__DEV__ && (
               <>
