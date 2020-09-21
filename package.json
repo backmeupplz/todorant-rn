@@ -55,7 +55,7 @@
     "mobx-persist": "backmeupplz/mobx-persist",
     "mobx-react": "^6.1.7",
     "moment": "^2.24.0",
-    "native-base": "^2.13.13",
+    "native-base": "^2.13.14",
     "number-shortener": "^1.0.1",
     "prettier": "^2.0.4",
     "randomcolor": "^0.5.4",
