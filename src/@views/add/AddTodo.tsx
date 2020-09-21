@@ -66,6 +66,8 @@ class AddTodoContent extends Component<{
 
   @observable savingTodo = false
 
+  scrollView: DraggableFlatList<TodoVM | undefined> | null = null
+
   saveTodo() {
     if (this.savingTodo) {
       return
@@ -269,6 +271,10 @@ class AddTodoContent extends Component<{
       newVM.date = this.props.route.params?.date.substr(8, 2)
     }
     this.vms.push(newVM)
+
+    if (this.scrollView && Platform.OS === 'ios') {
+      this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
+    }
   }
 
   isDirty = () => {
@@ -354,6 +360,9 @@ class AddTodoContent extends Component<{
           }
         >
           <DraggableFlatList
+            ref={(scrollView) => {
+              this.scrollView = scrollView
+            }}
             contentContainerStyle={{ paddingBottom: 10 }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}

@@ -916,10 +916,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.2.1.tgz#ecf3e348dacd4ce9be25da9f0443bd748afda774"
   integrity sha512-w/KLmYPeGuYZXxslQWinlYJdNvSFoOV2KIq7VGj93VEn8HEIZVKcOSIHJMZMh8jugAjsvVCcmkffKk7aXTVfvQ==
 
-"@react-native-community/datetimepicker@^2.2.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-2.3.2.tgz#c4dfc503ed260c7c93ce838f60e707dbba179452"
-  integrity sha512-BbDmWVIaSYoYK2x5tRRuy/UWUVS6WtZ+3D210zYZgyD47yEVcTbaLFL9zFw7VxNMb8c/6BFcEpC6k18WTYplwA==
+"@react-native-community/datetimepicker@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.2.tgz#6e52cda7fa46ecebfb216f5520cfbf2754348299"
+  integrity sha512-NLcV3HLrjtvyYM4CU4O+nWJ+LsjB4XnkUiXjK52PgnlRrg5i3hJQHcp/GsrHQbB62UC+Zn96+Hy+jiw4K5Rw/w==
   dependencies:
     invariant "^2.2.4"
 
@@ -5729,10 +5729,10 @@ react-native-device-info@^5.5.3:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.5.4.tgz#470770db4e8a35c55b8269473d81790102074057"
   integrity sha512-koR7ZvL4V+34GwhjQxb3PNZLElpEzAvDG5AE4KIc70ufKMEHJL9VCpRXBMelihlA0u9PlYzuMgBs7tovNRAzFw==
 
-react-native-draggable-flatlist@^2.3.1:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.3.2.tgz#4d84b2f7298d2426a4e5a95290c3b10861d81bf2"
-  integrity sha512-IoVmTwfUX+dvkgmIrJdPkwfgARJDCY+/KGVhYLGUzPvYpIIlcwhv7Vn6430GyEaO9TPsgnSVsOwVprnN16tn3Q==
+react-native-draggable-flatlist@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.4.0.tgz#3aa2b4762c7473315c8d10caebb05455fc3e5b9e"
+  integrity sha512-d/R7iWXgd07UuOuwEWbwy21mvvTExDBhUMSZoHssmJmEHgz4jpGn/4nVDtZfrRukB1BDC3BDPFE8cv52VkpTRA==
 
 react-native-drawer@2.5.1:
   version "2.5.1"
