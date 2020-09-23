@@ -181,7 +181,7 @@ class TextRow extends Component<{
               this.props.vm.text = ''
             }}
             iconName="close"
-            style={{ paddingRight: 8, paddingTop: 5 }}
+            style={{ paddingRight: 16, paddingTop: 5 }}
             size={20}
           />
         )}
@@ -189,14 +189,15 @@ class TextRow extends Component<{
           !(
             this.props.vm.editedTodo?.encrypted &&
             !sharedSessionStore.encryptionKey
-          ) && (
+          ) &&
+          !this.props.vm.text && (
             <TouchableOpacityIcon
               onPress={async () => {
                 const textFromClipboard = await Clipboard.getString()
                 this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
               }}
               iconName="assignment"
-              style={{ paddingRight: 8, paddingTop: 5 }}
+              style={{ paddingRight: 16, paddingTop: 5 }}
               size={20}
             />
           )}
