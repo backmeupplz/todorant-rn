@@ -507,6 +507,26 @@ export class AddTodoForm extends Component<{
                   monthTextColor: sharedColors.textColor,
                 }}
                 firstDay={sharedSettingsStore.firstDayOfWeekSafe}
+                hideArrows={false}
+                renderArrow={(direction) =>
+                  direction === 'left' ? (
+                    <Icon
+                      type="MaterialIcons"
+                      name="keyboard-arrow-left"
+                      style={{
+                        color: sharedColors.textColor,
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      type="MaterialIcons"
+                      name="keyboard-arrow-right"
+                      style={{
+                        color: sharedColors.textColor,
+                      }}
+                    />
+                  )
+                }
               />
             )}
             <MonthRow vm={this.props.vm} />
