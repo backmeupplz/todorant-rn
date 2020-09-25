@@ -384,11 +384,15 @@ class AddTodoContent extends Component<{
                   {item && (
                     <AddTodoForm
                       vm={item}
-                      deleteTodo={() => {
-                        index && this.vms.length > 1
-                          ? this.vms.splice(index - 1, 1)
+                      deleteTodo={
+                        this.vms.length > 1
+                          ? () => {
+                              if (index) {
+                                this.vms.splice(index - 1, 1)
+                              }
+                            }
                           : undefined
-                      }}
+                      }
                       drag={drag}
                     />
                   )}
