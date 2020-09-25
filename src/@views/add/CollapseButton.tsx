@@ -26,8 +26,8 @@ export class CollapseButton extends Component<{ vm: TodoVM }> {
               !this.props.vm.collapsed || this.props.vm.isValid
                 ? sharedColors.textColor
                 : 'tomato',
-            fontSize: 20,
-            marginTop: this.props.vm.collapsed ? undefined : 5,
+            fontSize: 25,
+            padding: 5,
           }}
         />
       </TouchableOpacity>

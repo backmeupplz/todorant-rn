@@ -141,6 +141,7 @@ class CollapsedTodo extends Component<{
 @observer
 class TextRow extends Component<{
   vm: TodoVM
+  showCross: boolean
 }> {
   render() {
     return (
@@ -175,21 +176,20 @@ class TextRow extends Component<{
           }
           selectionColor={sharedColors.primaryColor}
         />
-        {!!this.props.vm.text && (
+        {!!this.props.vm.text && this.props.showCross && (
           <TouchableOpacityIcon
             onPress={async () => {
               this.props.vm.text = ''
             }}
             iconName="close"
-            style={{ paddingRight: 16, paddingTop: 5 }}
-            size={20}
+            style={{ padding: 5 }}
+            size={25}
           />
         )}
-        {Platform.OS === 'android' &&
-          !(
-            this.props.vm.editedTodo?.encrypted &&
-            !sharedSessionStore.encryptionKey
-          ) &&
+        {!(
+          this.props.vm.editedTodo?.encrypted &&
+          !sharedSessionStore.encryptionKey
+        ) &&
           !this.props.vm.text && (
             <TouchableOpacityIcon
               onPress={async () => {
@@ -197,8 +197,8 @@ class TextRow extends Component<{
                 this.props.vm.text = `${this.props.vm.text}${textFromClipboard}`
               }}
               iconName="assignment"
-              style={{ paddingRight: 16, paddingTop: 5 }}
-              size={20}
+              style={{ padding: 5 }}
+              size={25}
             />
           )}
         <CollapseButton vm={this.props.vm} />
@@ -455,6 +455,7 @@ export class AddTodoForm extends Component<{
   vm: TodoVM
   deleteTodo?: () => void
   drag?: () => void
+  showCross: boolean
 }> {
   @computed get minDate() {
     const now = new Date()
@@ -486,7 +487,7 @@ export class AddTodoForm extends Component<{
           <View
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
-            <TextRow vm={this.props.vm} />
+            <TextRow vm={this.props.vm} showCross={this.props.showCross} />
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <DateRow vm={this.props.vm} />
             {this.props.vm.showDatePicker && (

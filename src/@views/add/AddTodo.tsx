@@ -363,7 +363,7 @@ class AddTodoContent extends Component<{
             ref={(scrollView) => {
               this.scrollView = scrollView
             }}
-            contentContainerStyle={{ paddingBottom: 10 }}
+            contentContainerStyle={{ paddingBottom: 10, paddingTop: 10 }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}
             renderItem={({ item, index, drag, isActive }) => {
@@ -394,6 +394,10 @@ class AddTodoContent extends Component<{
                           : undefined
                       }
                       drag={drag}
+                      showCross={
+                        !!this.breakdownTodo &&
+                        !!sharedSettingsStore.duplicateTagInBreakdown
+                      }
                     />
                   )}
                   {index != this.vms.length && <Divider />}
