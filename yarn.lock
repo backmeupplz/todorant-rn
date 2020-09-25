@@ -938,6 +938,13 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.7.0.tgz#54be55f22c6a6358d5d61f2aa1bc1de20c7b53b6"
   integrity sha512-ZhmkaqRpLFvOMu/Ln3YCitBJUgk7lbFsvcinbW/LIktXM6BwVwEZPTkYr+N74hEAhKz2CcDN8aMzzaokxwxRqg==
 
+"@react-native-community/push-notification-ios@^1.4.0", "@react-native-community/push-notification-ios@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.5.0.tgz#b41802b58d2388c8cb76cd219bbeec9ac9a4c06d"
+  integrity sha512-88Uwu6S8oRVnuMfBMGN+MtTyUjiVmMKwfObYrPmm+b2E2Aqk0WlZ4clfECukG8QIzv1pfELJZ5uZMVTYMI6klg==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/segmented-control@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/segmented-control/-/segmented-control-2.0.1.tgz#d4a057ed8087e09ce1e9ff90ae93b141192bff14"
@@ -1101,6 +1108,11 @@
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
+
+"@types/react-native-push-notification@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-5.0.3.tgz#e0c532c0ac44abf407878054d0c7a95b096eba9c"
+  integrity sha512-JqsLT9PeHWVyKRN+kVb8bzwSG8Vcj9aCngBlKuzchnNR73tu53WYb5joSxuj1bLQNGgpWta0PXesK8lukfe8uA==
 
 "@types/react-native-vector-icons@^6.4.5":
   version "6.4.5"
@@ -5810,6 +5822,13 @@ react-native-permissions@^2.0.2, react-native-permissions@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.1.4.tgz#b0663839d28444d8ea6b5302303b2151ea70d2da"
   integrity sha512-R1mVPGctEJuOlxoeIBlT5270A+DKngP78rWU0dgMxIuETjGYhBRJMKOp1rQUbp6PxcahfU+PjSTSzsbja5FyDw==
+
+react-native-push-notification@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-5.1.1.tgz#104572ddc8c73b1a3a95c90e26d05800c51b12c5"
+  integrity sha512-CJmKqzM2P/s+a9PImoaiUN4TP1+K4YfmG1B0uUbavgFdGhTtRPTLLwDfFk2h3J6VmTXNak82rUz2iGwyptHm5w==
+  dependencies:
+    "@react-native-community/push-notification-ios" "^1.4.0"
 
 react-native-qrcode-scanner@^1.4.0:
   version "1.4.0"

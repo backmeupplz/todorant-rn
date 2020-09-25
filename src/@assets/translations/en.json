@@ -304,5 +304,6 @@
   },
   "saveСhanges": "Save changes?",
   "dontSave": "Don't save",
-  "startTimeOfDay": "Start of the day"
+  "startTimeOfDay": "Start of the day",
+  "badgeIconCurrentCount": "Task count on app badge"
 }

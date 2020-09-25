@@ -114,6 +114,8 @@ export class TodoSettings extends Component {
             value={sharedSettingsStore.askBeforeDelete}
             onValueChange={(value) => {
               sharedSettingsStore.askBeforeDelete = value
+              sharedSettingsStore.updatedAt = new Date()
+              sockets.settingsSyncManager.sync()
             }}
             thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}

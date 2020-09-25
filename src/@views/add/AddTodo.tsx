@@ -70,6 +70,9 @@ class AddTodoContent extends Component<{
 
   saveTodo() {
     if (this.savingTodo) {
+      Toast.show({
+        text: '🤔',
+      })
       return
     }
     this.savingTodo = true

@@ -228,5 +228,12 @@
   "encryption": {
     "repeatPassword": "Repita a senha"
   },
+  "delegate": {
+    "title": "Atribuição",
+    "noDelegators": "Você ainda não tem atribuições. Compartilhe o link acima com as pessoas que você deseja designar atribuições.",
+    "pickDelegateField": "Atribuir",
+    "signupTitle": "Ops",
+    "signupDescription": "Você precisa fazer o login antes de usar a atribuição"
+  },
   "startTimeOfDay": "Início do dia"
 }

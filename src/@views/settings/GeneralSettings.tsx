@@ -12,6 +12,12 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import { sockets } from '@utils/sockets'
+import PushNotification from 'react-native-push-notification'
+import {
+  getNotificationPermissions,
+  updateBadgeNumber,
+  resetBadgeNumber,
+} from '@utils/notifications'
 
 const codeToName = {
   en: 'English',
@@ -201,6 +207,59 @@ export class GeneralSettings extends Component {
             value={sharedSettingsStore.gamificationOn}
             onValueChange={(val) => {
               sharedSettingsStore.gamificationOn = val
+            }}
+            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
+            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+            marginVertical: 12,
+          }}
+        >
+          <Text
+            style={{
+              flex: 1,
+              paddingRight: 10,
+              ...sharedColors.regularTextExtraStyle.style,
+            }}
+          >
+            {translate('badgeIconCurrentCount')}
+          </Text>
+          <Switch
+            value={sharedSettingsStore.badgeIconCurrentCount}
+            onValueChange={async (val) => {
+              if (val) {
+                const permissions = await getNotificationPermissions()
+                if (!permissions.badge && Platform.OS === 'ios') {
+                  try {
+                    const gotPermissions = await PushNotification.requestPermissions(
+                      ['badge']
+                    )
+                    if (gotPermissions.badge) {
+                      sharedSettingsStore.badgeIconCurrentCount = true
+                      updateBadgeNumber()
+                    } else {
+                      sharedSettingsStore.badgeIconCurrentCount = false
+                      resetBadgeNumber()
+                    }
+                  } catch (err) {
+                    sharedSettingsStore.badgeIconCurrentCount = false
+                    resetBadgeNumber()
+                  }
+                } else {
+                  sharedSettingsStore.badgeIconCurrentCount = val
+                  updateBadgeNumber()
+                }
+              } else {
+                sharedSettingsStore.badgeIconCurrentCount = val
+                resetBadgeNumber()
+              }
             }}
             thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
             trackColor={{ false: 'grey', true: sharedColors.primaryColor }}

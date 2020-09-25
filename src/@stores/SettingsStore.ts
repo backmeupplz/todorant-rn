@@ -47,6 +47,7 @@ class SettingsStore {
 
   @persist @observable soundOn = true
   @persist @observable gamificationOn = true
+  @persist @observable badgeIconCurrentCount = false
 
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined

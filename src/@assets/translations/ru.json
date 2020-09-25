@@ -304,5 +304,6 @@
   },
   "saveСhanges": "Сохранить изменения?",
   "dontSave": "Не сохранять",
-  "startTimeOfDay": "Начало дня"
+  "startTimeOfDay": "Начало дня",
+  "badgeIconCurrentCount": "Количество задач на иконке приложения"
 }

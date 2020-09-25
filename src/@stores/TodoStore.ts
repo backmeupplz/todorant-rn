@@ -12,6 +12,7 @@ import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import TodorantWidget from 'react-native-todorant-widget'
 import { Platform } from 'react-native'
+import { updateBadgeNumber } from '@utils/notifications'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -237,6 +238,7 @@ class TodoStore {
     if (Platform.OS === 'android') {
       TodorantWidget.forceUpdateAll()
     }
+    updateBadgeNumber()
   }
 
   recalculateExactDatesIfNeeded() {
