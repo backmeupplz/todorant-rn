@@ -305,5 +305,8 @@
   "saveСhanges": "Save changes?",
   "dontSave": "Don't save",
   "startTimeOfDay": "Start of the day",
-  "badgeIconCurrentCount": "Task count on app badge"
+  "badgeIconCurrentCount": "Task count on app badge",
+  "planningReminderTime": "Planning reminder time",
+  "notSet": "Not set",
+  "planningReminderText": "🎉 It's time to plan!"
 }

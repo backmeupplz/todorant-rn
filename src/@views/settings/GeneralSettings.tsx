@@ -18,6 +18,7 @@ import {
   updateBadgeNumber,
   resetBadgeNumber,
 } from '@utils/notifications'
+import { TextAndSwitch } from '@views/settings/TextAndSwitch'
 
 const codeToName = {
   en: 'English',
@@ -156,115 +157,52 @@ export class GeneralSettings extends Component {
             </Text>
           </TableItem>
         )}
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginVertical: 12,
+        <TextAndSwitch
+          title="soundEffects"
+          value={sharedSettingsStore.soundOn}
+          onValueChange={(val) => {
+            sharedSettingsStore.soundOn = val
           }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              paddingRight: 10,
-              ...sharedColors.regularTextExtraStyle.style,
-            }}
-          >
-            {translate('soundEffects')}
-          </Text>
-          <Switch
-            value={sharedSettingsStore.soundOn}
-            onValueChange={(value) => {
-              sharedSettingsStore.soundOn = value
-            }}
-            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
-            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginVertical: 12,
+        />
+        <TextAndSwitch
+          title="gamification"
+          value={sharedSettingsStore.gamificationOn}
+          onValueChange={(val) => {
+            sharedSettingsStore.gamificationOn = val
           }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              paddingRight: 10,
-              ...sharedColors.regularTextExtraStyle.style,
-            }}
-          >
-            {translate('gamification')}
-          </Text>
-          <Switch
-            value={sharedSettingsStore.gamificationOn}
-            onValueChange={(val) => {
-              sharedSettingsStore.gamificationOn = val
-            }}
-            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
-            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginVertical: 12,
-          }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              paddingRight: 10,
-              ...sharedColors.regularTextExtraStyle.style,
-            }}
-          >
-            {translate('badgeIconCurrentCount')}
-          </Text>
-          <Switch
-            value={sharedSettingsStore.badgeIconCurrentCount}
-            onValueChange={async (val) => {
-              if (val) {
-                const permissions = await getNotificationPermissions()
-                if (!permissions.badge && Platform.OS === 'ios') {
-                  try {
-                    const gotPermissions = await PushNotification.requestPermissions(
-                      ['badge']
-                    )
-                    if (gotPermissions.badge) {
-                      sharedSettingsStore.badgeIconCurrentCount = true
-                      updateBadgeNumber()
-                    } else {
-                      sharedSettingsStore.badgeIconCurrentCount = false
-                      resetBadgeNumber()
-                    }
-                  } catch (err) {
+        />
+        <TextAndSwitch
+          title="badgeIconCurrentCount"
+          value={sharedSettingsStore.badgeIconCurrentCount}
+          onValueChange={async (val) => {
+            if (val) {
+              const permissions = await getNotificationPermissions()
+              if (!permissions.badge && Platform.OS === 'ios') {
+                try {
+                  const gotPermissions = await PushNotification.requestPermissions(
+                    ['badge']
+                  )
+                  if (gotPermissions.badge) {
+                    sharedSettingsStore.badgeIconCurrentCount = true
+                    updateBadgeNumber()
+                  } else {
                     sharedSettingsStore.badgeIconCurrentCount = false
                     resetBadgeNumber()
                   }
-                } else {
-                  sharedSettingsStore.badgeIconCurrentCount = val
-                  updateBadgeNumber()
+                } catch (err) {
+                  sharedSettingsStore.badgeIconCurrentCount = false
+                  resetBadgeNumber()
                 }
               } else {
                 sharedSettingsStore.badgeIconCurrentCount = val
-                resetBadgeNumber()
+                updateBadgeNumber()
               }
-            }}
-            thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
-            trackColor={{ false: 'grey', true: sharedColors.primaryColor }}
-          />
-        </View>
+            } else {
+              sharedSettingsStore.badgeIconCurrentCount = val
+              resetBadgeNumber()
+            }
+          }}
+        />
       </>
     )
   }
