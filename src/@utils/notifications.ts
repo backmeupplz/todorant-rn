@@ -58,7 +58,6 @@ export function scheduleReminders(time: string) {
   date.setHours(parseInt(startTimeOfDay.substr(0, 2)))
   date.setMinutes(parseInt(startTimeOfDay.substr(3)))
   // Move to tomorrow
-  console.log(new Date().getTime() > date.getTime())
   if (new Date().getTime() > date.getTime()) {
     date.setDate(date.getDate() + 1)
   }
