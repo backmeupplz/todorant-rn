@@ -150,16 +150,6 @@ export async function setUserName(name: string) {
   )
 }
 
-export async function getDelegateInfo() {
-  return (
-    await axios.get(`${base}/delegate`, {
-      headers: {
-        token: sharedSessionStore.user?.token,
-      },
-    })
-  ).data
-}
-
 export async function resetDelegateToken() {
   return (
     await axios.post(
