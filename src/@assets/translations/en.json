@@ -278,6 +278,7 @@
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
     "link": "Delegate invite link",
     "linkDescription": "Share this link only with the people you trust. People can become your delegators by following this link. Delegators will only see the tasks that they delegated to you.",
+    "resetLink": "Reset the link",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
     "delegators": "Delegators",
     "delegates": "Delegates",
