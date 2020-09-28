@@ -9,7 +9,6 @@
 import SwiftUI
 
 extension Color {
-  
   static var addIconGradientFirst: Color {
     Color("addIconGradientFirstColor")
   }
@@ -29,5 +28,4 @@ extension Color {
   static var progressBar: Color {
     Color("progressBarColor")
   }
-  
 }

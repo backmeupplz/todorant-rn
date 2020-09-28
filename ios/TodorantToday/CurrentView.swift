@@ -56,20 +56,18 @@ struct CurrentView: View {
 
 struct CurrentTodoView: View {
   @EnvironmentObject var store: Store
-  
+
   let extensionContext: NSExtensionContext
 
   var body: some View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
         VStack {
-          
           SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount, maximumProgress: currentState.todosCount)
 
           TodoTextView(todo: todo)
-                    
+
           buttonsRowView(todo: todo, extensionContext: extensionContext)
-            
         }
       }
     }
@@ -77,39 +75,34 @@ struct CurrentTodoView: View {
 }
 
 struct TodoTextView: View {
-  
   let todo: Todo
   @EnvironmentObject var store: Store
-  
+
   var body: some View {
-    
     Text(
       "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
     )
-      .lineLimit(self.store.expanded ? nil : 1)
-      .fixedSize(horizontal: false, vertical: true)
-    
+    .lineLimit(self.store.expanded ? nil : 1)
+    .fixedSize(horizontal: false, vertical: true)
   }
 }
 
 struct buttonsRowView: View {
-  
   @EnvironmentObject var store: Store
   let todo: Todo
   let extensionContext: NSExtensionContext
-  
+
   var body: some View {
-    
-    HStack{
-      HStack{
-  //      Refresh button
+    HStack {
+      HStack {
+        //      Refresh button
         Button(action: {
           self.store.updateCurrent()
         }) {
           Image(uiImage: #imageLiteral(resourceName: "refresh"))
             .modifier(CurrentButtonIconModifier())
         }
-  //      Delete button
+        //      Delete button
         Button(action: {
           self.store.loading = true
           TodoRoute<EmptyResponse>(route: .delete(id: todo._id))
@@ -126,7 +119,7 @@ struct buttonsRowView: View {
           Image(uiImage: #imageLiteral(resourceName: "delete"))
             .modifier(CurrentButtonIconModifier())
         }
-  //      Skip button
+        //      Skip button
         if !todo.skipped && !todo.frog && todo.time == nil {
           Button(action: {
             self.store.loading = true
@@ -145,7 +138,7 @@ struct buttonsRowView: View {
               .modifier(CurrentButtonIconModifier())
           }
         }
-  //      Done button
+        //      Done button
         Button(action: {
           self.store.loading = true
           TodoRoute<EmptyResponse>(route: .done(id: todo._id))
@@ -163,37 +156,33 @@ struct buttonsRowView: View {
             .modifier(CurrentButtonIconModifier())
         }
       }
-        .modifier(ButtonsRowModifier())
+      .modifier(ButtonsRowModifier())
 //        Add todo button
       Button(action: {
         self.extensionContext.open(URL(string: "todorant://")!)
       }) {
-          AddTodoButtonIcon()
+        AddTodoButtonIcon()
       }
     }
   }
 }
 
-
 struct AddTodoButtonIcon: View {
-  
   let plusIcon: Color = .addIconPlus
-  
+
   let firstGradient: Color = .addIconGradientFirst
   let secondGradient: Color = .addIconGradientSecond
-  
-  
+
   var body: some View {
-      Image(uiImage: #imageLiteral(resourceName: "add_plus"))
-        .foregroundColor(plusIcon)
-        .frame(width: 48, height: 40, alignment: .center)
-        .background(LinearGradient(gradient: Gradient(colors: [firstGradient, secondGradient]), startPoint: .leading, endPoint: .trailing))
-        .cornerRadius(20)
+    Image(uiImage: #imageLiteral(resourceName: "add_plus"))
+      .foregroundColor(plusIcon)
+      .frame(width: 48, height: 40, alignment: .center)
+      .background(LinearGradient(gradient: Gradient(colors: [firstGradient, secondGradient]), startPoint: .leading, endPoint: .trailing))
+      .cornerRadius(20)
   }
 }
 
-
-// MARK: -- Modifier(s)
+// MARK: - - Modifier(s)
 
 struct CurrentButtonIconModifier: ViewModifier {
   func body(content: Content) -> some View {
@@ -202,17 +191,13 @@ struct CurrentButtonIconModifier: ViewModifier {
   }
 }
 
-
 struct ButtonsRowModifier: ViewModifier {
-  
   let mainColor: Color = .buttonsRowBackground
-  
+
   func body(content: Content) -> some View {
-      content
-        .frame(height: 40, alignment: .center)
-        .background(mainColor.opacity(0.3))
-        .cornerRadius(12)
+    content
+      .frame(height: 40, alignment: .center)
+      .background(mainColor.opacity(0.3))
+      .cornerRadius(12)
   }
 }
-
-
