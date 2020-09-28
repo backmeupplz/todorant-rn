@@ -39,16 +39,14 @@ struct CurrentView: View {
               } else {
                 CurrentTodoView(extensionContext: extensionContext)
               }
-            }
-          )
+            })
         } ?? ViewBuilder.buildEither(second:
           VStack {
             Text("error")
             Button("retry") {
               self.store.updateCurrent()
             }
-          }
-        )
+          })
       }
     }
   }
@@ -63,7 +61,10 @@ struct CurrentTodoView: View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
         VStack {
-          SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount, maximumProgress: currentState.todosCount)
+          SegmentedProgressBarView(
+            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+            maximumProgress: currentState.todosCount
+          )
 
           TodoTextView(todo: todo)
 
@@ -95,14 +96,14 @@ struct buttonsRowView: View {
   var body: some View {
     HStack {
       HStack {
-        //      Refresh button
+        // Refresh button
         Button(action: {
           self.store.updateCurrent()
         }) {
           Image(uiImage: #imageLiteral(resourceName: "refresh"))
             .modifier(CurrentButtonIconModifier())
         }
-        //      Delete button
+        // Delete button
         Button(action: {
           self.store.loading = true
           TodoRoute<EmptyResponse>(route: .delete(id: todo._id))
@@ -119,7 +120,7 @@ struct buttonsRowView: View {
           Image(uiImage: #imageLiteral(resourceName: "delete"))
             .modifier(CurrentButtonIconModifier())
         }
-        //      Skip button
+        // Skip button
         if !todo.skipped && !todo.frog && todo.time == nil {
           Button(action: {
             self.store.loading = true
@@ -138,7 +139,7 @@ struct buttonsRowView: View {
               .modifier(CurrentButtonIconModifier())
           }
         }
-        //      Done button
+        // Done button
         Button(action: {
           self.store.loading = true
           TodoRoute<EmptyResponse>(route: .done(id: todo._id))
@@ -157,7 +158,7 @@ struct buttonsRowView: View {
         }
       }
       .modifier(ButtonsRowModifier())
-//        Add todo button
+      // Add todo button
       Button(action: {
         self.extensionContext.open(URL(string: "todorant://")!)
       }) {
@@ -177,12 +178,16 @@ struct AddTodoButtonIcon: View {
     Image(uiImage: #imageLiteral(resourceName: "add_plus"))
       .foregroundColor(plusIcon)
       .frame(width: 48, height: 40, alignment: .center)
-      .background(LinearGradient(gradient: Gradient(colors: [firstGradient, secondGradient]), startPoint: .leading, endPoint: .trailing))
+      .background(LinearGradient(
+        gradient: Gradient(colors: [firstGradient, secondGradient]),
+        startPoint: .leading,
+        endPoint: .trailing
+      ))
       .cornerRadius(20)
   }
 }
 
-// MARK: - - Modifier(s)
+// MARK: - Modifiers
 
 struct CurrentButtonIconModifier: ViewModifier {
   func body(content: Content) -> some View {
