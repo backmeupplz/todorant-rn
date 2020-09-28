@@ -43,6 +43,8 @@ export class User {
   @persist @observable googleReceipt?: string
 
   @persist @observable createdOnApple?: boolean
+
+  @persist @observable delegateInviteToken?: string
 }
 
 export function areUsersPartiallyEqual(user: User, anotherUser: User) {

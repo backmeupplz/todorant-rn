@@ -41,6 +41,7 @@ import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
 import { AddEpic, AddEpicHeaderRight } from '@views/epics/AddEpic'
+import { DelegationSettings } from './DelegationSettings'
 
 const Stack = createStackNavigator()
 
@@ -76,6 +77,14 @@ export class SettingsContent extends Component {
           <Divider />
           <SectionHeader title={translate('todos')} />
           <TodoSettings />
+          {/* Delegation */}
+          {!!sharedSessionStore.user && (
+            <>
+              <Divider />
+              <SectionHeader title={translate('delegate.title')} />
+              <DelegationSettings />
+            </>
+          )}
           {/* General */}
           <Divider />
           <SectionHeader title={translate('general')} />
