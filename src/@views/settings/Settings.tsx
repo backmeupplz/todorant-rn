@@ -78,9 +78,13 @@ export class SettingsContent extends Component {
           <SectionHeader title={translate('todos')} />
           <TodoSettings />
           {/* Delegation */}
-          <Divider />
-          <SectionHeader title={translate('delegate.title')} />
-          <DelegationSettings />
+          {!!sharedSessionStore.user && (
+            <>
+              <Divider />
+              <SectionHeader title={translate('delegate.title')} />
+              <DelegationSettings />
+            </>
+          )}
           {/* General */}
           <Divider />
           <SectionHeader title={translate('general')} />
