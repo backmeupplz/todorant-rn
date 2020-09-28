@@ -79,7 +79,7 @@ public class AppTest {
         Screengrab.screenshot("2Planning");
         // Filled current
         onView(allOf(withContentDescription(String.format("%s, tab, 1 of 4", current)), isDisplayed())).perform(click());
-        try { Thread.sleep(3000); } catch (InterruptedException e) {}
+        try { Thread.sleep(4000); } catch (InterruptedException e) {}
         Screengrab.screenshot("1Current");
         // Dark mode
         onView(allOf(withContentDescription(String.format("%s, tab, 4 of 4", settings)), isDisplayed())).perform(click());
@@ -87,7 +87,7 @@ public class AppTest {
         onView(withTagValue(is("turn_dark_on"))).perform(click());
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
         onView(allOf(withContentDescription(String.format("%s, tab, 2 of 4", planning)), isDisplayed())).perform(click());
-        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        try { Thread.sleep(4000); } catch (InterruptedException e) {}
         Screengrab.screenshot("3Dark");
     }
 }
