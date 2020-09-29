@@ -65,7 +65,6 @@
   "loginButton": "Login",
   "alreadyRegistered": "(You are already registered)",
   "purchaseError": "Hm, looks like something went wrong with the purchases. Please, go to the website, login and subscribe there!",
-  "purchaseErrorTryOnWeb": "Subscribe on the web",
   "purchaseThankYou": "Thank you",
   "purchaseThankYouText": "Thank you for purchasing the subscription!",
   "activeText": "🎉 Thank you a lot for supporting Todorant! I personally hope that Todorant has improved your life already and will keep making it better in future! You support allows me to work on Todorant daily and to add new features simplifying the work and freeing your time and your cognitive resources. Thank you a lot, again!",
@@ -279,7 +278,6 @@
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
     "link": "Delegate invite link",
     "linkDescription": "Share this link only with the people you trust. People can become your delegators by following this link. Delegators will only see the tasks that they delegated to you.",
-    "resetLink": "Reset the link",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
     "delegators": "Delegators",
     "delegates": "Delegates",
@@ -290,7 +288,8 @@
     "pickDelegateField": "Delegate",
     "info": "This is the page with the tasks delegated to you. You have options to delete or accept tasks that your delegators send your way.",
     "signupTitle": "Oopsie",
-    "signupDescription": "You need to log in before you can use delegation"
+    "signupDescription": "You need to log in before you can use delegation",
+    "resetLink": "Reset the link"
   },
   "errors": {
     "delegate": {
@@ -308,6 +307,7 @@
   "dontSave": "Don't save",
   "startTimeOfDay": "Start of the day",
   "badgeIconCurrentCount": "Task count on app badge",
+  "purchaseErrorTryOnWeb": "Subscribe on the web",
   "planningReminderTime": "Planning reminder time",
   "notSet": "Not set",
   "planningReminderText": "🎉 It's time to plan!"

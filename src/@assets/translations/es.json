@@ -60,7 +60,6 @@
   "logout": "Cerrar sesión",
   "alreadyRegistered": "(Ya te encuentras registrado)",
   "purchaseError": "Hm, looks like something went wrong with the purchases. Please, go to the website, login and subscribe there!",
-  "purchaseErrorTryOnWeb": "Subscribe on the web",
   "purchaseThankYou": "Gracias",
   "purchaseThankYouText": "¡Gracias por tu suscripción!",
   "activeText": "🎉 ¡Muchas gracias por apoyar Todorant! ¡Personalmente espero que Todorant haya mejorado tu vida y que la siga mejorando en el futuro! Tu apoyo me permite trabajar en Todorant diariamente y agregar nuevas funciones que simplifican el trabajo y liberan tu tiempo y tus recursos cognitivos. De nuevo, ¡muchas gracias!",
@@ -184,5 +183,6 @@
   "rateSolicitationGoogle": "¿Te importaría dejar una calificación para Todorant de 5 estrellas en la Play Store, por favor? ¡Eso ayuda mucho!",
   "rateButton": "¡Calificar!",
   "emptyHashtags": "La lista de Hashtag está vacía por ahora. ¡Crea tu primera tarea con un #hashtag para añadir el primer hashtag aquí!",
-  "startTimeOfDay": "Comienzo del día"
+  "startTimeOfDay": "Comienzo del día",
+  "purchaseErrorTryOnWeb": "Subscribe on the web"
 }

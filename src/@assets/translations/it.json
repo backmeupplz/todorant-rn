@@ -63,7 +63,6 @@
   "loginButton": "Login",
   "alreadyRegistered": "(Sei già registrato)",
   "purchaseError": "Hm, looks like something went wrong with the purchases. Please, go to the website, login and subscribe there!",
-  "purchaseErrorTryOnWeb": "Subscribe on the web",
   "purchaseThankYou": "Grazie",
   "purchaseThankYouText": "Grazie per aver acquistato l'abbonamento!",
   "activeText": "🎉 Grazie mille per aver sostenuto Todorant! Personalmente spero che Todorant abbia già migliorato la tua vita e che continui a migliorarla in futuro! Il tuo sostegno mi permette di lavorare quotidianamente su Todorant e di aggiungere nuove funzionalità che semplificano il lavoro e liberano il tuo tempo e le tue risorse cognitive. Grazie mille, ancora una volta!",
@@ -218,5 +217,6 @@
   "emptyHashtags": "L'elenco degli hashtag è vuoto per ora. Create il vostro primo compito con un #hashtag per aggiungere il primo hashtag qui!",
   "encryption": {
     "repeatPassword": "Ripetere la password"
-  }
+  },
+  "purchaseErrorTryOnWeb": "Subscribe on the web"
 }

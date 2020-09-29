@@ -1,5 +1,5 @@
-"CFBundleDisplayName" = "Тудурант";
 "NSCameraUsageDescription" = "Тудурант використовує камеру для сканування QR кодів";
+"CFBundleDisplayName" = "Тудурант";
 "APP_NAME_SYNONYM_1" = "Тудурант";
 "APP_NAME_SYNONYM_1_PR" = "ту ду рант";
 "APP_NAME_SYNONYM_2" = "Тодорант";
@@ -7,4 +7,3 @@
 "APP_NAME_SYNONYM_3" = "Тудурэнт";
 "APP_NAME_SYNONYM_3_PR" = "ту ду рэнт";
 "NSSiriUsageDescription" = "Дозвольте Тудуранту додавання завдань голосом";
-
