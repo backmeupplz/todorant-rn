@@ -16,7 +16,7 @@ import { sockets } from '@utils/sockets'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import RNRestart from 'react-native-restart'
-import { Platform } from 'react-native'
+import { Platform, Linking } from 'react-native'
 import { navigate } from '@utils/navigation'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { Button } from '@components/Button'
@@ -43,7 +43,14 @@ class PaywallContent extends Component<{
   async componentDidMount() {
     logEvent('subscription_viewed')
     purchaseListener.fail = (err) => {
-      alertError(err.message || translate('purchaseError'))
+      alertError(
+        (Platform.OS === 'ios' ? err.message : undefined) ||
+          translate('purchaseError'),
+        Platform.OS === 'ios' ? undefined : translate('purchaseErrorTryOnWeb'),
+        () => {
+          Linking.openURL('https://todorant.com')
+        }
+      )
     }
     purchaseListener.success = () => {
       sockets.globalSync()
@@ -80,7 +87,7 @@ class PaywallContent extends Component<{
           }}
         >
           {this.props.route.params?.type === 'appleUnauthorized' ? (
-            <View style={{ marginHorizontal: 16, marginTop: 12 }}>
+            <View style={{ marginHorizontal: 16, marginTop: 16 }}>
               <Text {...sharedColors.regularTextExtraStyle}>
                 {translate('appleUnauthorizedText')}
               </Text>
@@ -99,7 +106,7 @@ class PaywallContent extends Component<{
               </Text>
             </View>
           ) : (
-            <View style={{ marginHorizontal: 16 }}>
+            <View style={{ marginHorizontal: 16, marginTop: 16 }}>
               {sharedSessionStore.user?.subscriptionStatus ===
                 SubscriptionStatus.active && (
                 <Text {...sharedColors.regularTextExtraStyle}>

@@ -1,12 +1,21 @@
 import { translate } from '@utils/i18n'
 import { Alert, Linking } from 'react-native'
 
-export function alertError(error: Error | string) {
+export function alertError(
+  error: Error | string,
+  confirmButtonText?: string,
+  confirm?: () => void
+) {
   setTimeout(() => {
     Alert.alert(
       translate('error'),
       typeof error === 'string' ? error : error.message,
-      [{ text: translate('ok') }]
+      confirmButtonText && confirm
+        ? [
+            { text: confirmButtonText, onPress: confirm },
+            { text: translate('ok') },
+          ]
+        : [{ text: translate('ok') }]
     )
   }, 100)
 }
