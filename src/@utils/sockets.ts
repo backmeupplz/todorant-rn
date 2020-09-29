@@ -16,7 +16,7 @@ import { User } from '@models/User'
 import events from 'events'
 
 const socketIO = SocketIO(
-  __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
+  __DEV__ ? 'http://192.168.31.26:3000' : 'https://ws.todorant.com'
 )
 
 type PromiseMap = { [index: string]: { res: Function; rej: Function } }

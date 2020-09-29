@@ -1,1 +1,9 @@
+"CFBundleDisplayName" = "Todorant";
 "NSCameraUsageDescription" = "Todorant usa la cámara para escanear los códigos QR";
+"APP_NAME_SYNONYM_1" = "Todorant";
+"APP_NAME_SYNONYM_1_PR" = "tu tu rant";
+"APP_NAME_SYNONYM_2" = "Todorant";
+"APP_NAME_SYNONYM_2_PR" = "to do rant";
+"APP_NAME_SYNONYM_3" = "Todorant";
+"APP_NAME_SYNONYM_3_PR" = "ta da rant";
+"NSSiriUsageDescription" = "Permitir que Todorant añada todos con la voz";

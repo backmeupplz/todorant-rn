@@ -34,6 +34,7 @@ import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { BackButton } from '@components/BackButton'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
+import { checkSiriPermission } from '@utils/permissions'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -62,6 +63,7 @@ class App extends Component {
     await setI18nConfigAsync()
     checkTokenAndPassword()
     SplashScreen.hide()
+    checkSiriPermission()
   }
 
   render() {

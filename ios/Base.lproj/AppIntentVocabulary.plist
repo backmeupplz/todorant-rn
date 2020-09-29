@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IntentPhrases</key>
+	<array>
+		<dict>
+			<key>IntentName</key>
+			<string>INAddTasksIntent</string>
+			<key>IntentExamples</key>
+			<array>
+				<string>Add a task to write the presidential speech with Todorant</string>
+				<string>Remind me to bake the cake in Todorant</string>
+				<string>Add a task to walk the dog in Todorant</string>
+				<string>Add buying milk to Todorant</string>
+				<string>Add task in Todorant</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

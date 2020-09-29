@@ -2,6 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSSiriUsageDescription</key>
+	<string>Add todos with voice</string>
+	<key>INAlternativeAppNames</key>
+	<array>
+		<dict>
+			<key>INAlternativeAppNamePronunciationHint</key>
+			<string>APP_NAME_SYNONYM_1_PR</string>
+			<key>INAlternativeAppName</key>
+			<string>APP_NAME_SYNONYM_1</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppNamePronunciationHint</key>
+			<string>APP_NAME_SYNONYM_2_PR</string>
+			<key>INAlternativeAppName</key>
+			<string>APP_NAME_SYNONYM_2</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppNamePronunciationHint</key>
+			<string>APP_NAME_SYNONYM_3_PR</string>
+			<key>INAlternativeAppName</key>
+			<string>APP_NAME_SYNONYM_3</string>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleDevelopmentRegion</key>

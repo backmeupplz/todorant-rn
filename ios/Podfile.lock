@@ -146,6 +146,8 @@ PODS:
   - nanopb/encode (1.30905.0)
   - Permission-Camera (2.1.4):
     - RNPermissions
+  - Permission-Siri (2.1.4):
+    - RNPermissions
   - PromisesObjC (1.2.10)
   - RCTRequired (0.62.1)
   - RCTRestart (0.0.14):
@@ -468,6 +470,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
+  - Permission-Siri (from `../node_modules/react-native-permissions/ios/Siri.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTRestart (from `../node_modules/react-native-restart`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -573,6 +576,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   Permission-Camera:
     :path: "../node_modules/react-native-permissions/ios/Camera.podspec"
+  Permission-Siri:
+    :path: "../node_modules/react-native-permissions/ios/Siri.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTRestart:
@@ -705,6 +710,7 @@ SPEC CHECKSUMS:
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
+  Permission-Siri: 782f6152006ace9ea1103160104f2f9fff4193c2
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
   RCTRequired: e291538a455f5ad1afc2139a4288990be0cadd46
   RCTRestart: 3915cac548a37703970941ca33de79a304b8b247
@@ -757,6 +763,6 @@ SPEC CHECKSUMS:
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1
 
-PODFILE CHECKSUM: 1a1b91f87be0680b93182dbbfd06efdfe9ed8542
+PODFILE CHECKSUM: a94ebeb8db894750e41c0bdc5ed8229ff61016c8
 
 COCOAPODS: 1.9.3
