@@ -22,6 +22,8 @@
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
 		B6573FC3EBA94DC698237411 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 366ADAAE3D974D6C8526B511 /* icomoon.ttf */; };
 		B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7DB7BB28CCFD45EB9E738C2C /* SF-Pro-Text-Regular.otf */; };
+		BB00A88125225FC400456571 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
+		BB00A88225225FC400456571 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
 		BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75424E0496100FDD0AE /* day_compele.mp3 */; };
 		BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75524E0496200FDD0AE /* task_done.mp3 */; };
 		BB13C75924E0496200FDD0AE /* splat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75624E0496200FDD0AE /* splat.mp3 */; };
@@ -126,6 +128,8 @@
 		ACB7BED24F044CBEAA61BF2B /* SF-Pro-Rounded-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Rounded-Regular.otf"; path = "../src/@assets/fonts/SF-Pro-Rounded-Regular.otf"; sourceTree = "<group>"; };
 		B1ECF6CCEAF233E3F0FB2142 /* Pods-TodorantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodorantTests.release.xcconfig"; path = "Target Support Files/Pods-TodorantTests/Pods-TodorantTests.release.xcconfig"; sourceTree = "<group>"; };
 		B77D05043B6041AEAAC0BE11 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		BB00A87F25225FC400456571 /* Color+customColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+customColors.swift"; sourceTree = "<group>"; };
+		BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedProgressBarView.swift; sourceTree = "<group>"; };
 		BB093AB424508A14007616A5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BB13C75424E0496100FDD0AE /* day_compele.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = day_compele.mp3; path = ../android/app/src/main/res/raw/day_compele.mp3; sourceTree = "<group>"; };
 		BB13C75524E0496200FDD0AE /* task_done.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = task_done.mp3; path = ../android/app/src/main/res/raw/task_done.mp3; sourceTree = "<group>"; };
@@ -320,6 +324,8 @@
 		BB3A79B72425AF000014DE92 /* TodorantToday */ = {
 			isa = PBXGroup;
 			children = (
+				BB00A87F25225FC400456571 /* Color+customColors.swift */,
+				BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */,
 				BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */,
 				BB3A79E02425B0660014DE92 /* String+Today.swift */,
 				BB3A79C72425B0470014DE92 /* ActivityIndicator.swift */,
@@ -698,6 +704,7 @@
 			files = (
 				BB3A79E22425B0660014DE92 /* String+Today.swift in Sources */,
 				BB3A79D32425B0470014DE92 /* ActivityIndicator.swift in Sources */,
+				BB00A88225225FC400456571 /* SegmentedProgressBarView.swift in Sources */,
 				BB3A79D52425B0470014DE92 /* Request.swift in Sources */,
 				BB3A79DB2425B0470014DE92 /* CurrentView.swift in Sources */,
 				BB3A79D82425B0470014DE92 /* TodayViewController.swift in Sources */,
@@ -707,6 +714,7 @@
 				BB3A79D62425B0470014DE92 /* EmptyCurrentView.swift in Sources */,
 				BB3A79DA2425B0470014DE92 /* Date+Today.swift in Sources */,
 				BB3A79D42425B0470014DE92 /* Store.swift in Sources */,
+				BB00A88125225FC400456571 /* Color+customColors.swift in Sources */,
 				BB3A79DC2425B0470014DE92 /* ProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -774,7 +782,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 72;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
@@ -804,7 +812,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 72;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -941,7 +949,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = TodorantToday/TodorantToday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 72;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -975,7 +983,7 @@
 				CODE_SIGN_ENTITLEMENTS = TodorantToday/TodorantToday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 72;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
