@@ -46,6 +46,7 @@ class SettingsStore {
   @persist @observable askBeforeDelete = true
 
   @persist @observable soundOn = true
+  @persist @observable endOfDaySoundOn = false
   @persist @observable gamificationOn = true
   @persist @observable badgeIconCurrentCount = false
   @persist @observable planningReminderTime?: string
@@ -187,6 +188,7 @@ class SettingsStore {
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
     this.soundOn = true
+    this.endOfDaySoundOn = false
   }
 }
 

@@ -39,7 +39,7 @@ export function playDayComplete() {
 }
 
 function playSound(name: string) {
-  if (!sharedSettingsStore.soundOn) {
+  if (!sharedSettingsStore.soundOn && !sharedSettingsStore.endOfDaySoundOn) {
     return
   }
   const sound = sounds[name]

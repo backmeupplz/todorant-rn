@@ -310,5 +310,6 @@
   "purchaseErrorTryOnWeb": "Subscribe on the web",
   "planningReminderTime": "Planning reminder time",
   "notSet": "Not set",
-  "planningReminderText": "🎉 It's time to plan!"
+  "planningReminderText": "🎉 It's time to plan!",
+  "endOfDaySoundOn": "All tasks done sound"
 }

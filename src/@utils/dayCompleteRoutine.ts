@@ -5,7 +5,7 @@ import { dayCompleteOverlayRef } from '@components/DayCompleteOverlay'
 import { playDayComplete } from '@utils/sound'
 
 export function shouldShowDayCompletionRoutine() {
-  if (!sharedSettingsStore.soundOn) {
+  if (!sharedSettingsStore.soundOn && !sharedSettingsStore.endOfDaySoundOn) {
     return false
   }
   const today = new Date()

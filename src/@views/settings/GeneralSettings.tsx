@@ -164,6 +164,15 @@ export class GeneralSettings extends Component {
             sharedSettingsStore.soundOn = val
           }}
         />
+        {!sharedSettingsStore.soundOn && (
+          <TextAndSwitch
+            title="endOfDaySoundOn"
+            value={sharedSettingsStore.endOfDaySoundOn}
+            onValueChange={(val) => {
+              sharedSettingsStore.endOfDaySoundOn = val
+            }}
+          />
+        )}
         <TextAndSwitch
           title="gamification"
           value={sharedSettingsStore.gamificationOn}
