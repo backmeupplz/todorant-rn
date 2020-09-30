@@ -13,7 +13,7 @@ import { realm } from '@utils/realm'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 export class PlanningVM {
-  @observable expandedTitles = new Set<string>()
+  @observable collapsedTitles = [] as string[]
 
   @computed get allTodosFiltered() {
     return sharedTodoStore.allTodos
@@ -97,14 +97,17 @@ export class PlanningVM {
         ...result,
         {
           title: todoSection.title,
+          numberOfItems: todoSection.todos.length,
         },
-        ...todoSection.todos
-          .sort(
-            compareTodos(
-              sharedAppStateStore.todoSection === TodoSectionType.completed
-            )
-          )
-          .map((v) => ({ item: v })),
+        ...(this.collapsedTitles.indexOf(todoSection.title) < 0
+          ? todoSection.todos
+              .sort(
+                compareTodos(
+                  sharedAppStateStore.todoSection === TodoSectionType.completed
+                )
+              )
+              .map((v) => ({ item: v }))
+          : []),
       ]
     }
     return result
