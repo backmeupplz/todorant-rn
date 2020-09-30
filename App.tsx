@@ -35,6 +35,7 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { BackButton } from '@components/BackButton'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
+import { checkSharedContent } from '@utils/sharing'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -64,6 +65,7 @@ class App extends Component {
     checkTokenAndPassword()
     SplashScreen.hide()
     checkSiriPermission()
+    checkSharedContent()
   }
 
   render() {

@@ -53,7 +53,13 @@ class AddTodoContent extends Component<{
   route: RouteProp<
     Record<
       string,
-      { editedTodo: Todo; breakdownTodo: Todo; date: string } | undefined
+      | {
+          editedTodo?: Todo
+          breakdownTodo?: Todo
+          date?: string
+          text?: string
+        }
+      | undefined
     >,
     string
   >
@@ -246,6 +252,9 @@ class AddTodoContent extends Component<{
       this.screenType = AddTodoScreenType.edit
     }
     addButtonStore.add = this.addTodo
+    if (this.props.route.params?.text) {
+      this.vms[0].text = this.props.route.params?.text
+    }
   }
 
   componentWillUnmount() {
@@ -492,7 +501,13 @@ export const AddTodo = () => {
     RouteProp<
       Record<
         string,
-        { editedTodo: Todo; breakdownTodo: Todo; date: string } | undefined
+        | {
+            editedTodo?: Todo
+            breakdownTodo?: Todo
+            date?: string
+            text?: string
+          }
+        | undefined
       >,
       string
     >

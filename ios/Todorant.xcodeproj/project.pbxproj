@@ -28,6 +28,9 @@
 		BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75424E0496100FDD0AE /* day_compele.mp3 */; };
 		BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75524E0496200FDD0AE /* task_done.mp3 */; };
 		BB13C75924E0496200FDD0AE /* splat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75624E0496200FDD0AE /* splat.mp3 */; };
+		BB1695F025251B64006190F8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1695EF25251B64006190F8 /* ShareViewController.swift */; };
+		BB1695F325251B64006190F8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB1695F125251B64006190F8 /* MainInterface.storyboard */; };
+		BB1695F725251B64006190F8 /* TodorantShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BB1695ED25251B64006190F8 /* TodorantShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB3A79B62425AF000014DE92 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3A79B52425AF000014DE92 /* NotificationCenter.framework */; };
 		BB3A79C02425AF000014DE92 /* TodorantToday.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BB3A79B42425AF000014DE92 /* TodorantToday.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB3A79D32425B0470014DE92 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79C72425B0470014DE92 /* ActivityIndicator.swift */; };
@@ -64,6 +67,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BB1695F525251B64006190F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB1695EC25251B64006190F8;
+			remoteInfo = TodorantShare;
+		};
 		BB3A79BE2425AF000014DE92 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -95,6 +105,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				BB3A79C02425AF000014DE92 /* TodorantToday.appex in Embed App Extensions */,
+				BB1695F725251B64006190F8 /* TodorantShare.appex in Embed App Extensions */,
 				BBDD6A7E25239A8F0064DE60 /* TodorantIntents.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -151,6 +162,11 @@
 		BB13C75424E0496100FDD0AE /* day_compele.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = day_compele.mp3; path = ../android/app/src/main/res/raw/day_compele.mp3; sourceTree = "<group>"; };
 		BB13C75524E0496200FDD0AE /* task_done.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = task_done.mp3; path = ../android/app/src/main/res/raw/task_done.mp3; sourceTree = "<group>"; };
 		BB13C75624E0496200FDD0AE /* splat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = splat.mp3; path = ../android/app/src/main/res/raw/splat.mp3; sourceTree = "<group>"; };
+		BB1695ED25251B64006190F8 /* TodorantShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodorantShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB1695EF25251B64006190F8 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		BB1695F225251B64006190F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		BB1695F425251B64006190F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB16960025251C52006190F8 /* TodorantShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodorantShare.entitlements; sourceTree = "<group>"; };
 		BB3A79B42425AF000014DE92 /* TodorantToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodorantToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A79B52425AF000014DE92 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		BB3A79BD2425AF000014DE92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -225,6 +241,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB1695EA25251B64006190F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +368,7 @@
 				BB3A79B72425AF000014DE92 /* TodorantToday */,
 				BB3A79F72426933F0014DE92 /* TodorantUITests */,
 				BBDD6A7825239A8F0064DE60 /* TodorantIntents */,
+				BB1695EE25251B64006190F8 /* TodorantShare */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C62ED693B06A801A76FE692D /* Pods */,
@@ -362,8 +386,20 @@
 				BB3A79B42425AF000014DE92 /* TodorantToday.appex */,
 				BB3A79F62426933F0014DE92 /* TodorantUITests.xctest */,
 				BBDD6A7725239A8F0064DE60 /* TodorantIntents.appex */,
+				BB1695ED25251B64006190F8 /* TodorantShare.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BB1695EE25251B64006190F8 /* TodorantShare */ = {
+			isa = PBXGroup;
+			children = (
+				BB16960025251C52006190F8 /* TodorantShare.entitlements */,
+				BB1695EF25251B64006190F8 /* ShareViewController.swift */,
+				BB1695F125251B64006190F8 /* MainInterface.storyboard */,
+				BB1695F425251B64006190F8 /* Info.plist */,
+			);
+			path = TodorantShare;
 			sourceTree = "<group>";
 		};
 		BB3A79B72425AF000014DE92 /* TodorantToday */ = {
@@ -465,11 +501,29 @@
 			dependencies = (
 				BB3A79BF2425AF000014DE92 /* PBXTargetDependency */,
 				BBDD6A7D25239A8F0064DE60 /* PBXTargetDependency */,
+				BB1695F625251B64006190F8 /* PBXTargetDependency */,
 			);
 			name = Todorant;
 			productName = Todorant;
 			productReference = 13B07F961A680F5B00A75B9A /* Todorant.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BB1695EC25251B64006190F8 /* TodorantShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB1695F825251B64006190F8 /* Build configuration list for PBXNativeTarget "TodorantShare" */;
+			buildPhases = (
+				BB1695E925251B64006190F8 /* Sources */,
+				BB1695EA25251B64006190F8 /* Frameworks */,
+				BB1695EB25251B64006190F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TodorantShare;
+			productName = TodorantShare;
+			productReference = BB1695ED25251B64006190F8 /* TodorantShare.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		BB3A79B32425AF000014DE92 /* TodorantToday */ = {
 			isa = PBXNativeTarget;
@@ -539,6 +593,11 @@
 						DevelopmentTeam = ACWP4F58HZ;
 						LastSwiftMigration = 1130;
 					};
+					BB1695EC25251B64006190F8 = {
+						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = ACWP4F58HZ;
+						ProvisioningStyle = Automatic;
+					};
 					BB3A79B32425AF000014DE92 = {
 						CreatedOnToolsVersion = 11.3.1;
 						DevelopmentTeam = ACWP4F58HZ;
@@ -580,6 +639,7 @@
 				BB3A79B32425AF000014DE92 /* TodorantToday */,
 				BB3A79F52426933F0014DE92 /* TodorantUITests */,
 				BBDD6A7625239A8F0064DE60 /* TodorantIntents */,
+				BB1695EC25251B64006190F8 /* TodorantShare */,
 			);
 		};
 /* End PBXProject section */
@@ -608,6 +668,14 @@
 				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 				AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */,
 				BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB1695EB25251B64006190F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB1695F325251B64006190F8 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,6 +882,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB1695E925251B64006190F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB1695F025251B64006190F8 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB3A79B02425AF000014DE92 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -859,6 +935,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BB1695F625251B64006190F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB1695EC25251B64006190F8 /* TodorantShare */;
+			targetProxy = BB1695F525251B64006190F8 /* PBXContainerItemProxy */;
+		};
 		BB3A79BF2425AF000014DE92 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BB3A79B32425AF000014DE92 /* TodorantToday */;
@@ -889,6 +970,14 @@
 			);
 			name = LaunchScreen.xib;
 			path = Todorant;
+			sourceTree = "<group>";
+		};
+		BB1695F125251B64006190F8 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB1695F225251B64006190F8 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 		BB78173A245CE04A004EF3E5 /* InfoPlist.strings */ = {
@@ -1079,6 +1168,63 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BB1695F925251B64006190F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = TodorantShare/TodorantShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TodorantShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.TodorantShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BB1695FA25251B64006190F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = TodorantShare/TodorantShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TodorantShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.TodorantShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1282,6 +1428,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB1695F825251B64006190F8 /* Build configuration list for PBXNativeTarget "TodorantShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB1695F925251B64006190F8 /* Debug */,
+				BB1695FA25251B64006190F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
