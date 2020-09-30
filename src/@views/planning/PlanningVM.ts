@@ -99,7 +99,7 @@ export class PlanningVM {
           title: todoSection.title,
           numberOfItems: todoSection.todos.length,
         },
-        ...(this.collapsedTitles.indexOf(todoSection.title) < 0
+        ...(true // this.collapsedTitles.indexOf(todoSection.title) < 0 // comment out for now untill better times
           ? todoSection.todos
               .sort(
                 compareTodos(

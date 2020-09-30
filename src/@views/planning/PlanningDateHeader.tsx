@@ -62,11 +62,12 @@ export class PlanningDateHeader extends Component<{
                       .locale(i18n.locale)
                       .format('dddd')
                   )}`}
-                {this.props.vm.collapsedTitles.indexOf(
+                {/* Comment out for better times */}
+                {/* {this.props.vm.collapsedTitles.indexOf(
                   this.props.item.title || ''
                 ) > -1
                   ? ` (${this.props.item.numberOfItems})`
-                  : ''}
+                  : ''} */}
               </Text>
             </View>
           </TouchableOpacity>
@@ -79,7 +80,8 @@ export class PlanningDateHeader extends Component<{
             color={sharedColors.primaryColor}
           />
         </View>
-        <TouchableOpacity
+        {/* Comment out for better times */}
+        {/* <TouchableOpacity
           onPress={() => {
             if (
               this.props.vm.collapsedTitles.indexOf(
@@ -108,7 +110,7 @@ export class PlanningDateHeader extends Component<{
             }
             style={{ color: sharedColors.primaryColor }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     )
   }
