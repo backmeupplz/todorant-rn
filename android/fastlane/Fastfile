@@ -91,4 +91,18 @@ platform :android do
     )
     commit_and_push_android_release
   end
+
+  lane :release_appgallery do
+    gradle(
+      task: 'assemble',
+      build_type: 'Release'
+    )
+    # huawei_appgallery_connect(
+    #   client_id: "463352899192226944",
+    #   client_secret: "036BF6CB4DA63D397B16C7A2FBB47F7F111A2B68BDCC9575ED8A5E4DDD05AD7D",
+    #   app_id: "102992095",
+    #   apk_path: "./app/build/outputs/bundle/release/app.aab",
+    #   changelog_path: "./fastlane/metadata/android/en-US/changelogs/default.txt"
+    # )
+  end
 end
