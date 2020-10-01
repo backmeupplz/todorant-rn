@@ -66,6 +66,11 @@ fastlane android commit_and_push_android_release
 fastlane android release
 ```
 
+### android release_appgallery
+```
+fastlane android release_appgallery
+```
+
 
 ----
 

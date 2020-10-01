@@ -13,7 +13,8 @@
     "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
     "upload-translations": "node scripts/upload.js",
     "download-translations": "node scripts/download.js",
-    "adb": "adb reverse tcp:3000 tcp:3000 && adb reverse tcp:1337 tcp:1337"
+    "adb": "adb reverse tcp:3000 tcp:3000 && adb reverse tcp:1337 tcp:1337",
+    "upload-to-appgallery": "cd android && sudo bundle exec fastlane release_appgallery"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
