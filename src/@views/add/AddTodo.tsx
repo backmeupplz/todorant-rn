@@ -47,6 +47,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Animatable from 'react-native-animatable'
 
 @observer
 class AddTodoContent extends Component<{
@@ -73,6 +74,9 @@ class AddTodoContent extends Component<{
   @observable savingTodo = false
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
+
+  addButtonView?: Animatable.View
+  hangleAddButtonViewRef = (ref: any) => (this.addButtonView = ref)
 
   saveTodo() {
     if (this.savingTodo) {
@@ -426,19 +430,40 @@ class AddTodoContent extends Component<{
               justifyContent: 'center',
             }}
           >
-            <View
+            <Animatable.View
               style={{
                 marginRight: 10,
                 marginVertical: 10,
                 flexGrow: 1,
               }}
+              ref={this.hangleAddButtonViewRef}
             >
               <Button
-                style={{ borderRadius: 10, justifyContent: 'center' }}
-                onPress={() => {
-                  this.saveTodo()
+                style={{
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  backgroundColor:
+                    !this.isValid || this.savingTodo ? 'grey' : undefined,
                 }}
-                disabled={!this.isValid || this.savingTodo}
+                onPress={() => {
+                  if (!this.isValid || this.savingTodo) {
+                    if (this.addButtonView && this.addButtonView.shake) {
+                      this.vms.forEach((vm) => {
+                        if (!vm.isValid) {
+                          vm.collapsed = false
+                        }
+                      })
+                      this.vms.forEach((vm) => {
+                        if (!vm.isValid) {
+                          vm.shakeInvalid()
+                        }
+                      })
+                      this.addButtonView.shake(1000)
+                    }
+                  } else {
+                    this.saveTodo()
+                  }
+                }}
                 onLongPress={() => {
                   Clipboard.setString(
                     JSON.stringify(this.props.route.params?.editedTodo)
@@ -456,7 +481,7 @@ class AddTodoContent extends Component<{
                     : translate('saveTodo')}
                 </Text>
               </Button>
-            </View>
+            </Animatable.View>
             {this.screenType === AddTodoScreenType.add && (
               <View
                 style={{

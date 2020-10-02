@@ -23,6 +23,7 @@ import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 import { computed } from 'mobx'
+import * as Animatable from 'react-native-animatable'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -145,7 +146,8 @@ class TextRow extends Component<{
 }> {
   render() {
     return (
-      <View
+      <Animatable.View
+        ref={this.props.vm.handleTodoTextViewRef}
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -202,7 +204,7 @@ class TextRow extends Component<{
             />
           )}
         <CollapseButton vm={this.props.vm} />
-      </View>
+      </Animatable.View>
     )
   }
 }
@@ -270,7 +272,8 @@ class DateRow extends Component<{
           alignItems: 'center',
         }}
       >
-        <Text
+        <Animatable.Text
+          ref={this.props.vm.handleExactDateViewRef}
           style={{
             color:
               this.props.vm.datePickerValue && !!this.props.vm.date
@@ -283,7 +286,7 @@ class DateRow extends Component<{
           {this.props.vm.datePickerValue && !!this.props.vm.date
             ? this.props.vm.datePickerValue
             : translate('addTodoDay')}
-        </Text>
+        </Animatable.Text>
         <CustomIcon
           name="chevron_right_outline_28"
           color={sharedColors.borderColor}
@@ -327,7 +330,8 @@ class MonthRow extends Component<{
           alignItems: 'center',
         }}
       >
-        <Text
+        <Animatable.Text
+          ref={this.props.vm.handleMonthViewRef}
           style={{
             color:
               this.props.vm.datePickerValue && !this.props.vm.date
@@ -340,7 +344,7 @@ class MonthRow extends Component<{
           {this.props.vm.datePickerValue && !this.props.vm.date
             ? this.props.vm.datePickerValue
             : translate('addTodoMonth')}
-        </Text>
+        </Animatable.Text>
         <CustomIcon
           name="chevron_right_outline_28"
           color={sharedColors.borderColor}

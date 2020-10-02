@@ -10,6 +10,7 @@ import {
 import { Todo } from '@models/Todo'
 import { observable, computed } from 'mobx'
 import moment from 'moment'
+import * as Animatable from 'react-native-animatable'
 
 export class TodoVM {
   @observable text = ''
@@ -33,6 +34,13 @@ export class TodoVM {
   @observable collapsed = false
 
   @observable showTags = false
+
+  todoTextView?: Animatable.View
+  handleTodoTextViewRef = (ref: any) => (this.todoTextView = ref)
+  exactDateView?: Animatable.Text
+  handleExactDateViewRef = (ref: any) => (this.exactDateView = ref)
+  monthView?: Animatable.Text
+  handleMonthViewRef = (ref: any) => (this.monthView = ref)
 
   @computed get tags() {
     const emptyMatches = this.text.match(/#$/g) || []
@@ -142,5 +150,17 @@ export class TodoVM {
     this.time = todo.time
 
     this.showMore = true
+  }
+
+  shakeInvalid() {
+    if (!this.text && this.todoTextView && this.todoTextView.shake) {
+      this.todoTextView.shake(1000)
+    }
+    if (!this.monthAndYear && this.exactDateView && this.exactDateView.shake) {
+      this.exactDateView.shake(1000)
+    }
+    if (!this.monthAndYear && this.monthView && this.monthView.shake) {
+      this.monthView.shake(1000)
+    }
   }
 }
