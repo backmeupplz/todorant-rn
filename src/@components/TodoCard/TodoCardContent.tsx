@@ -10,6 +10,9 @@ import { TodoCardActions } from '@components/TodoCard/TodoCardActions'
 import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
 import { Divider } from '@components/Divider'
 import { FailCircle } from './FailCircle'
+import { Vibration } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import CustomIcon from '@components/CustomIcon'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -20,57 +23,115 @@ export class TodoCardContent extends Component<{
   active?: boolean
 }> {
   render() {
+    let row: any
     return (
       <View>
-        <View
-          style={{
-            paddingVertical: 10,
+        <Swipeable
+          ref={(ref) => (row = ref)}
+          leftThreshold={100}
+          rightThreshold={100}
+          onSwipeableWillOpen={() => Vibration.vibrate(100)}
+          onSwipeableLeftOpen={() => {
+            row.close()
+            this.props.vm.complete(this.props.todo)
           }}
-        >
-          {!!this.props.todo.frogFails && (
+          onSwipeableRightOpen={() => {
+            row.close()
+            this.props.vm.delete(this.props.todo)
+          }}
+          renderLeftActions={() => (
             <View
               style={{
                 flex: 1,
-                flexDirection: 'row',
-                paddingLeft: 16,
-                marginBottom: 6,
+                justifyContent: 'center',
+                height: '98%',
+                backgroundColor: sharedColors.successIconColor,
               }}
             >
-              {Array(this.props.todo.frogFails)
-                .fill(0)
-                .map(() => (
-                  <FailCircle />
-                ))}
+              <CustomIcon
+                name={'done_outline_28--check'}
+                size={36}
+                style={{
+                  color: 'white',
+                  opacity: 1.0,
+                  marginHorizontal: 12,
+                }}
+              />
             </View>
           )}
-          <TodoCardBody
-            vm={this.props.vm}
-            todo={this.props.todo}
-            type={this.props.type}
-            drag={
-              this.props.type === CardType.planning
-                ? this.props.drag
-                : undefined
-            }
-          />
-
-          {this.props.type !== CardType.breakdown &&
-            this.props.type !== CardType.delegation &&
-            (this.props.vm.expanded ||
-              this.props.type === CardType.current) && (
-              <TodoCardActions
-                todo={this.props.todo}
-                type={this.props.type}
-                vm={this.props.vm}
+          renderRightActions={() => (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row-reverse',
+                alignItems: 'center',
+                height: '98%',
+                backgroundColor: sharedColors.destructIconColor,
+              }}
+            >
+              <CustomIcon
+                name={'delete_outline_28-iOS'}
+                size={30}
+                style={{
+                  color: 'white',
+                  opacity: 1.0,
+                  marginHorizontal: 12,
+                }}
               />
-            )}
-          {this.props.type === CardType.delegation && (
-            <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
+            </View>
           )}
-        </View>
-        {!this.props.active && this.props.type !== CardType.current && (
-          <Divider color={sharedColors.dividerColor} marginVertical={0} />
-        )}
+        >
+          <View
+            style={{
+              paddingVertical: 10,
+              backgroundColor: sharedColors.backgroundColor,
+            }}
+          >
+            {!!this.props.todo.frogFails && (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  paddingLeft: 16,
+                  marginBottom: 6,
+                }}
+              >
+                {Array(this.props.todo.frogFails)
+                  .fill(0)
+                  .map(() => (
+                    <FailCircle />
+                  ))}
+              </View>
+            )}
+            <TodoCardBody
+              vm={this.props.vm}
+              todo={this.props.todo}
+              type={this.props.type}
+              drag={
+                this.props.type === CardType.planning
+                  ? this.props.drag
+                  : undefined
+              }
+            />
+
+            {this.props.type !== CardType.breakdown &&
+              this.props.type !== CardType.delegation &&
+              (this.props.vm.expanded ||
+                this.props.type === CardType.current) && (
+                <TodoCardActions
+                  todo={this.props.todo}
+                  type={this.props.type}
+                  vm={this.props.vm}
+                />
+              )}
+            {this.props.type === CardType.delegation && (
+              <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
+            )}
+          </View>
+          {!this.props.active && this.props.type !== CardType.current && (
+            <Divider color={sharedColors.dividerColor} marginVertical={0} />
+          )}
+        </Swipeable>
       </View>
     )
   }
