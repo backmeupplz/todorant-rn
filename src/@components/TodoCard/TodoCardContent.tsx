@@ -10,7 +10,7 @@ import { TodoCardActions } from '@components/TodoCard/TodoCardActions'
 import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
 import { Divider } from '@components/Divider'
 import { FailCircle } from './FailCircle'
-import { Vibration } from 'react-native'
+import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
 
@@ -30,7 +30,11 @@ export class TodoCardContent extends Component<{
           ref={(ref) => (row = ref)}
           leftThreshold={100}
           rightThreshold={100}
-          onSwipeableWillOpen={() => Vibration.vibrate(100)}
+          onSwipeableWillOpen={() => {
+            if (Platform.OS === 'android') {
+              Vibration.vibrate(100)
+            }
+          }}
           onSwipeableLeftOpen={() => {
             row.close()
             this.props.vm.complete(this.props.todo)
