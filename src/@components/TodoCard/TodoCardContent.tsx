@@ -43,47 +43,61 @@ export class TodoCardContent extends Component<{
             row.close()
             this.props.vm.delete(this.props.todo)
           }}
-          renderLeftActions={() => (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                height: '98%',
-                backgroundColor: sharedColors.successIconColor,
-              }}
-            >
-              <CustomIcon
-                name={'done_outline_28--check'}
-                size={36}
-                style={{
-                  color: 'white',
-                  opacity: 1.0,
-                  marginHorizontal: 12,
-                }}
-              />
-            </View>
-          )}
-          renderRightActions={() => (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row-reverse',
-                alignItems: 'center',
-                height: '98%',
-                backgroundColor: sharedColors.destructIconColor,
-              }}
-            >
-              <CustomIcon
-                name={'delete_outline_28-iOS'}
-                size={30}
-                style={{
-                  color: 'white',
-                  opacity: 1.0,
-                  marginHorizontal: 12,
-                }}
-              />
-            </View>
-          )}
+          renderLeftActions={() => {
+            if (
+              this.props.type === 'current' ||
+              this.props.type === 'planning'
+            ) {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    height: '98%',
+                    backgroundColor: sharedColors.successIconColor,
+                  }}
+                >
+                  <CustomIcon
+                    name={'done_outline_28--check'}
+                    size={36}
+                    style={{
+                      color: 'white',
+                      opacity: 1.0,
+                      marginHorizontal: 12,
+                    }}
+                  />
+                </View>
+              )
+            }
+          }}
+          renderRightActions={() => {
+            if (
+              this.props.type === 'current' ||
+              this.props.type === 'planning'
+            ) {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row-reverse',
+                    alignItems: 'center',
+                    height: '98%',
+                    backgroundColor: sharedColors.destructIconColor,
+                  }}
+                >
+                  <CustomIcon
+                    name={'delete_outline_28-iOS'}
+                    size={30}
+                    style={{
+                      color: 'white',
+                      opacity: 1.0,
+                      marginHorizontal: 12,
+                    }}
+                  />
+                </View>
+              )
+            }
+          }}
         >
           <View
             style={{
