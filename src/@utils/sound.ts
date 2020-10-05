@@ -6,9 +6,14 @@ Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
-const splat = new Sound('splat.mp3', Sound.MAIN_BUNDLE, (error) => {
+const level_up = new Sound('level_up.mp3', Sound.MAIN_BUNDLE, (error) => {
   if (!error) {
-    sounds.splat = splat
+    sounds.level_up = level_up
+  }
+})
+const nice = new Sound('nice.mp3', Sound.MAIN_BUNDLE, (error) => {
+  if (!error) {
+    sounds.nice = nice
   }
 })
 const day_complete = new Sound(
@@ -27,7 +32,8 @@ const task_done = new Sound('task_done.mp3', Sound.MAIN_BUNDLE, (error) => {
 })
 
 export function playFrogComplete() {
-  playSound('splat')
+  const shouldBeNice = Math.floor(Math.random() * 10) === 0
+  playSound(shouldBeNice ? 'nice' : 'level_up')
 }
 
 export function playTaskComplete() {
