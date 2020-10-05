@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BB3A79B32425AF000014DE92"
-               BuildableName = "TodorantToday.appex"
-               BlueprintName = "TodorantToday"
+               BlueprintIdentifier = "661106992527949000D6E694"
+               BuildableName = "TodorantWidget.appex"
+               BlueprintName = "TodorantWidget"
                ReferencedContainer = "container:Todorant.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,16 +43,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BB3A79F52426933F0014DE92"
-               BuildableName = "TodorantUITests.xctest"
-               BlueprintName = "TodorantUITests"
-               ReferencedContainer = "container:Todorant.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -72,9 +62,9 @@
          BundleIdentifier = "com.apple.springboard">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BB3A79B32425AF000014DE92"
-            BuildableName = "TodorantToday.appex"
-            BlueprintName = "TodorantToday"
+            BlueprintIdentifier = "661106992527949000D6E694"
+            BuildableName = "TodorantWidget.appex"
+            BlueprintName = "TodorantWidget"
             ReferencedContainer = "container:Todorant.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
@@ -87,6 +77,23 @@
             ReferencedContainer = "container:Todorant.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "_XCWidgetKind"
+            value = ""
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "_XCWidgetDefaultView"
+            value = "timeline"
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "_XCWidgetFamily"
+            value = "medium"
+            isEnabled = "NO">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
