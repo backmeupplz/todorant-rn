@@ -11,8 +11,10 @@ import { decrypt, encrypt } from '@utils/encryption'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import TodorantWidget from 'react-native-todorant-widget'
-import { Platform } from 'react-native'
+import { Platform, NativeModules } from 'react-native'
 import { updateBadgeNumber } from '@utils/notifications'
+
+const WidgetManager = NativeModules.WidgetManager
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -237,6 +239,8 @@ class TodoStore {
     this.allTodos = realm.objects<Todo>('Todo')
     if (Platform.OS === 'android') {
       TodorantWidget.forceUpdateAll()
+    } else {
+      WidgetManager.refresh()
     }
     updateBadgeNumber()
   }

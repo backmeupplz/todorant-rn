@@ -13,9 +13,6 @@ let snapshotEntry = TodoWidgetContent(currentProgress: 1, maximumProgress: 3,
                                       todoText: "Buy soy milk")
 
 struct TodoStatusProvider: TimelineProvider {
-  // TODO: - Fetch data into the Store and update widget using
-//   WidgetCenter.shared.reloadTimelines(ofKind: "TodorantWidget")
-
   let store: Store
 
   func placeholder(in _: Context) -> TodoWidgetContent {
