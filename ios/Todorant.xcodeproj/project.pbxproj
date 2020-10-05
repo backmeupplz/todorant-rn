@@ -18,6 +18,23 @@
 		4C7FD743CE1D4768853FC1E0 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48D5B2D70A0F41C0909C37E7 /* rubicon-icon-font.ttf */; };
 		627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */; };
 		64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = ACB7BED24F044CBEAA61BF2B /* SF-Pro-Rounded-Regular.otf */; };
+		6601C07D252BA062004DF491 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6601C07C252BA062004DF491 /* WidgetKit.framework */; };
+		6601C07F252BA062004DF491 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6601C07E252BA062004DF491 /* SwiftUI.framework */; };
+		6601C082252BA062004DF491 /* HomeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6601C081252BA062004DF491 /* HomeWidget.swift */; };
+		6601C084252BA065004DF491 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6601C083252BA065004DF491 /* Assets.xcassets */; };
+		6601C088252BA065004DF491 /* HomeWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6601C07B252BA062004DF491 /* HomeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6601C093252BA157004DF491 /* TodoEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6601C092252BA157004DF491 /* TodoEntryView.swift */; };
+		6601C094252BA157004DF491 /* TodoEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6601C092252BA157004DF491 /* TodoEntryView.swift */; };
+		6601C0A2252BA1AA004DF491 /* TodoWidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */; };
+		6601C0A3252BA1AA004DF491 /* TodoWidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */; };
+		6601C0B0252BA1EB004DF491 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79C82425B0470014DE92 /* Store.swift */; };
+		6601C0B7252BA200004DF491 /* TodoRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79D22425B0470014DE92 /* TodoRoute.swift */; };
+		6601C0BE252BA205004DF491 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79C92425B0470014DE92 /* Request.swift */; };
+		6601C0C5252BA21F004DF491 /* Date+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CE2425B0470014DE92 /* Date+Today.swift */; };
+		6601C0CC252BA226004DF491 /* String+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79E02425B0660014DE92 /* String+Today.swift */; };
+		6601C0D3252BA22C004DF491 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */; };
+		6601C0DA252BA231004DF491 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
+		6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
@@ -65,10 +82,18 @@
 		BBDD6AFE25239D100064DE60 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD6AFD25239D100064DE60 /* DateFormatter+AppFormat.swift */; };
 		BBDD6B0D2523A00A0064DE60 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBDD6B0F2523A00A0064DE60 /* AppIntentVocabulary.plist */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
+		CA8FFE3188E50D368FC53FB7 /* libPods-HomeWidgetExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C2A346320688DE5997583BD /* libPods-HomeWidgetExtension.a */; };
 		E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA28768F24FA47F2A8AB4F61 /* Roboto.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6601C086252BA065004DF491 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6601C07A252BA062004DF491;
+			remoteInfo = HomeWidgetExtension;
+		};
 		BB1695F525251B64006190F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -109,6 +134,7 @@
 				BB3A79C02425AF000014DE92 /* TodorantToday.appex in Embed App Extensions */,
 				BB1695F725251B64006190F8 /* TodorantShare.appex in Embed App Extensions */,
 				BBDD6A7E25239A8F0064DE60 /* TodorantIntents.appex in Embed App Extensions */,
+				6601C088252BA065004DF491 /* HomeWidgetExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,6 +146,7 @@
 		078C6EF3B568408CBB44E965 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 		084D3A4A3ECAAED80B4D187B /* Pods-Todorant.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant.release.xcconfig"; path = "Target Support Files/Pods-Todorant/Pods-Todorant.release.xcconfig"; sourceTree = "<group>"; };
 		08DA2AA216BB3DF6570B4821 /* Pods-TodorantToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodorantToday.debug.xcconfig"; path = "Target Support Files/Pods-TodorantToday/Pods-TodorantToday.debug.xcconfig"; sourceTree = "<group>"; };
+		0C2A346320688DE5997583BD /* libPods-HomeWidgetExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HomeWidgetExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12605D19CFB4B8625CE9AE4F /* Pods-Todorant.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant.debug.xcconfig"; path = "Target Support Files/Pods-Todorant/Pods-Todorant.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Todorant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todorant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Todorant/AppDelegate.h; sourceTree = "<group>"; };
@@ -138,9 +165,18 @@
 		35410BA541CE9AB73B161FE5 /* libPods-Todorant-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Todorant-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		366ADAAE3D974D6C8526B511 /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = "../src/@assets/fonts/icomoon.ttf"; sourceTree = "<group>"; };
 		3F9341AF0D9F4970BAEC6693 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		4628E2FA74C9B4DE8AABE636 /* Pods-HomeWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-HomeWidgetExtension/Pods-HomeWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
 		48D5B2D70A0F41C0909C37E7 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		492E65EAEAD14E388A261DB3 /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Text-Medium.otf"; path = "../src/@assets/fonts/SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
 		4C293B567BE94E259F75BA7F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		6601C07B252BA062004DF491 /* HomeWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomeWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6601C07C252BA062004DF491 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		6601C07E252BA062004DF491 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		6601C081252BA062004DF491 /* HomeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWidget.swift; sourceTree = "<group>"; };
+		6601C083252BA065004DF491 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6601C085252BA065004DF491 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6601C092252BA157004DF491 /* TodoEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEntryView.swift; sourceTree = "<group>"; };
+		6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetContent.swift; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		7216CF88ED57489E91BB73DC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -225,6 +261,7 @@
 		BBE891C82436B1D800A9CA36 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBE891C92436B1E400A9CA36 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BD2595DE01B401907C2ABA14 /* Pods-HomeWidgetExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeWidgetExtension.debug.xcconfig"; path = "Target Support Files/Pods-HomeWidgetExtension/Pods-HomeWidgetExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		C72AEC71CCC0426695FAC0E7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		C994668131DC345D4AAF61E4 /* Pods-Todorant-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOS/Pods-Todorant-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		CA8ED71F6B3142F6A1CDB7DC /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
@@ -245,6 +282,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6601C078252BA062004DF491 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6601C07F252BA062004DF491 /* SwiftUI.framework in Frameworks */,
+				6601C07D252BA062004DF491 /* WidgetKit.framework in Frameworks */,
+				CA8FFE3188E50D368FC53FB7 /* libPods-HomeWidgetExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,8 +364,23 @@
 				BB3A79B52425AF000014DE92 /* NotificationCenter.framework */,
 				A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */,
 				811300D1E26285474F720D86 /* libPods-TodorantIntents.a */,
+				6601C07C252BA062004DF491 /* WidgetKit.framework */,
+				6601C07E252BA062004DF491 /* SwiftUI.framework */,
+				0C2A346320688DE5997583BD /* libPods-HomeWidgetExtension.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6601C080252BA062004DF491 /* HomeWidget */ = {
+			isa = PBXGroup;
+			children = (
+				6601C081252BA062004DF491 /* HomeWidget.swift */,
+				6601C092252BA157004DF491 /* TodoEntryView.swift */,
+				6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */,
+				6601C083252BA065004DF491 /* Assets.xcassets */,
+				6601C085252BA065004DF491 /* Info.plist */,
+			);
+			path = HomeWidget;
 			sourceTree = "<group>";
 		};
 		7A4B3C2623464B8A9D35439F /* Resources */ = {
@@ -373,6 +435,7 @@
 				BB3A79F72426933F0014DE92 /* TodorantUITests */,
 				BBDD6A7825239A8F0064DE60 /* TodorantIntents */,
 				BB1695EE25251B64006190F8 /* TodorantShare */,
+				6601C080252BA062004DF491 /* HomeWidget */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C62ED693B06A801A76FE692D /* Pods */,
@@ -391,6 +454,7 @@
 				BB3A79F62426933F0014DE92 /* TodorantUITests.xctest */,
 				BBDD6A7725239A8F0064DE60 /* TodorantIntents.appex */,
 				BB1695ED25251B64006190F8 /* TodorantShare.appex */,
+				6601C07B252BA062004DF491 /* HomeWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -481,6 +545,8 @@
 				2D37236255CD447B84E4128E /* Pods-TodorantToday.release.xcconfig */,
 				F2E7DD18A09A51A46FFC2DC2 /* Pods-TodorantIntents.debug.xcconfig */,
 				D52956E3C20AED0FAAD26EF0 /* Pods-TodorantIntents.release.xcconfig */,
+				BD2595DE01B401907C2ABA14 /* Pods-HomeWidgetExtension.debug.xcconfig */,
+				4628E2FA74C9B4DE8AABE636 /* Pods-HomeWidgetExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -508,11 +574,30 @@
 				BB3A79BF2425AF000014DE92 /* PBXTargetDependency */,
 				BBDD6A7D25239A8F0064DE60 /* PBXTargetDependency */,
 				BB1695F625251B64006190F8 /* PBXTargetDependency */,
+				6601C087252BA065004DF491 /* PBXTargetDependency */,
 			);
 			name = Todorant;
 			productName = Todorant;
 			productReference = 13B07F961A680F5B00A75B9A /* Todorant.app */;
 			productType = "com.apple.product-type.application";
+		};
+		6601C07A252BA062004DF491 /* HomeWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6601C08B252BA065004DF491 /* Build configuration list for PBXNativeTarget "HomeWidgetExtension" */;
+			buildPhases = (
+				1A91BCF205EA306C13A024BB /* [CP] Check Pods Manifest.lock */,
+				6601C077252BA062004DF491 /* Sources */,
+				6601C078252BA062004DF491 /* Frameworks */,
+				6601C079252BA062004DF491 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HomeWidgetExtension;
+			productName = HomeWidgetExtension;
+			productReference = 6601C07B252BA062004DF491 /* HomeWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		BB1695EC25251B64006190F8 /* TodorantShare */ = {
 			isa = PBXNativeTarget;
@@ -600,6 +685,11 @@
 						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
+					6601C07A252BA062004DF491 = {
+						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = ACWP4F58HZ;
+						ProvisioningStyle = Automatic;
+					};
 					BB1695EC25251B64006190F8 = {
 						CreatedOnToolsVersion = 12.0.1;
 						DevelopmentTeam = ACWP4F58HZ;
@@ -647,6 +737,7 @@
 				BB3A79F52426933F0014DE92 /* TodorantUITests */,
 				BBDD6A7625239A8F0064DE60 /* TodorantIntents */,
 				BB1695EC25251B64006190F8 /* TodorantShare */,
+				6601C07A252BA062004DF491 /* HomeWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -675,6 +766,14 @@
 				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 				AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */,
 				BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6601C079252BA062004DF491 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6601C084252BA065004DF491 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,6 +853,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-TodorantIntents-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1A91BCF205EA306C13A024BB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeWidgetExtension-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -886,8 +1007,28 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				BB3A79ED2425B71F0014DE92 /* KeychainManager.swift in Sources */,
 				BB3A79E92425B6850014DE92 /* KeychainItemAccessibility.swift in Sources */,
+				6601C093252BA157004DF491 /* TodoEntryView.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				BB3A79EA2425B6850014DE92 /* KeychainWrapper.swift in Sources */,
+				6601C0A2252BA1AA004DF491 /* TodoWidgetContent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6601C077252BA062004DF491 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6601C0CC252BA226004DF491 /* String+Today.swift in Sources */,
+				6601C0B7252BA200004DF491 /* TodoRoute.swift in Sources */,
+				6601C0BE252BA205004DF491 /* Request.swift in Sources */,
+				6601C0D3252BA22C004DF491 /* DateFormatter+AppFormat.swift in Sources */,
+				6601C082252BA062004DF491 /* HomeWidget.swift in Sources */,
+				6601C094252BA157004DF491 /* TodoEntryView.swift in Sources */,
+				6601C0A3252BA1AA004DF491 /* TodoWidgetContent.swift in Sources */,
+				6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */,
+				6601C0C5252BA21F004DF491 /* Date+Today.swift in Sources */,
+				6601C0DA252BA231004DF491 /* SegmentedProgressBarView.swift in Sources */,
+				6601C0B0252BA1EB004DF491 /* Store.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +1085,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6601C087252BA065004DF491 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6601C07A252BA062004DF491 /* HomeWidgetExtension */;
+			targetProxy = 6601C086252BA065004DF491 /* PBXContainerItemProxy */;
+		};
 		BB1695F625251B64006190F8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BB1695EC25251B64006190F8 /* TodorantShare */;
@@ -1079,6 +1225,69 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		6601C089252BA065004DF491 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD2595DE01B401907C2ABA14 /* Pods-HomeWidgetExtension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = HomeWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.HomeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6601C08A252BA065004DF491 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4628E2FA74C9B4DE8AABE636 /* Pods-HomeWidgetExtension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = HomeWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.HomeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1440,6 +1649,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6601C08B252BA065004DF491 /* Build configuration list for PBXNativeTarget "HomeWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6601C089252BA065004DF491 /* Debug */,
+				6601C08A252BA065004DF491 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
