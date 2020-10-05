@@ -15,6 +15,7 @@ class WidgetManager: NSObject {
   @objc
   func refresh() -> Void {
     if #available(iOS 14.0, *) {
+      print("Refreshing the home widget")
       WidgetCenter.shared.reloadAllTimelines()
     }
   }
