@@ -12,5 +12,7 @@
 
 RCT_EXTERN_METHOD(setToken:(NSString *)token)
 RCT_EXTERN_METHOD(removeToken)
+RCT_EXTERN_METHOD(setPassword:(NSString *)password)
+RCT_EXTERN_METHOD(removePassword)
 
 @end
