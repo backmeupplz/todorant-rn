@@ -53,9 +53,9 @@
 		BB3A79F92426933F0014DE92 /* TodorantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F82426933F0014DE92 /* TodorantUITests.swift */; };
 		BB3A7A03242694A70014DE92 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */; };
 		BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB5F405C2436349300236BCD /* AppCenter-Config.plist */; };
-		BB6DF1F7252BC07100CAAE17 /* level_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB6DF1F5252BC07100CAAE17 /* level_up.mp3 */; };
-		BB6DF1F8252BC07100CAAE17 /* nice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB6DF1F6252BC07100CAAE17 /* nice.mp3 */; };
 		BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB78173A245CE04A004EF3E5 /* InfoPlist.strings */; };
+		BB8BAE69252CD5EE009E2F91 /* nice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB8BAE67252CD5ED009E2F91 /* nice.mp3 */; };
+		BB8BAE6A252CD5EE009E2F91 /* level_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */; };
 		BBC0BDED2527CBB800B6C41D /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
 		BBC0BDF42527CBC300B6C41D /* customColorControl.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */; };
 		BBDD6A7A25239A8F0064DE60 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD6A7925239A8F0064DE60 /* IntentHandler.swift */; };
@@ -203,12 +203,12 @@
 		BB47AC0B2523D2E6000475E6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB47AC0C2523D2E7000475E6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = uk; path = uk.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB5F405C2436349300236BCD /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
-		BB6DF1F5252BC07100CAAE17 /* level_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = level_up.mp3; path = ../../../Desktop/level_up.mp3; sourceTree = "<group>"; };
-		BB6DF1F6252BC07100CAAE17 /* nice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = nice.mp3; path = ../../../Desktop/nice.mp3; sourceTree = "<group>"; };
 		BB781739245CE04A004EF3E5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173B245CE04D004EF3E5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173C245CE050004EF3E5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173D245CE051004EF3E5 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BB8BAE67252CD5ED009E2F91 /* nice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = nice.mp3; path = ../android/app/src/main/res/raw/nice.mp3; sourceTree = "<group>"; };
+		BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = level_up.mp3; path = ../android/app/src/main/res/raw/level_up.mp3; sourceTree = "<group>"; };
 		BBC0BDEC2527CBB800B6C41D /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = customColorControl.xcassets; sourceTree = "<group>"; };
 		BBC0EFFD24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -326,8 +326,8 @@
 		7A4B3C2623464B8A9D35439F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BB6DF1F5252BC07100CAAE17 /* level_up.mp3 */,
-				BB6DF1F6252BC07100CAAE17 /* nice.mp3 */,
+				BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */,
+				BB8BAE67252CD5ED009E2F91 /* nice.mp3 */,
 				BB13C75424E0496100FDD0AE /* day_compele.mp3 */,
 				BB13C75524E0496200FDD0AE /* task_done.mp3 */,
 				B77D05043B6041AEAAC0BE11 /* AntDesign.ttf */,
@@ -660,17 +660,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				BB6DF1F8252BC07100CAAE17 /* nice.mp3 in Resources */,
 				BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */,
 				35C472DA5F424C548513FFF9 /* Roboto_medium.ttf in Resources */,
 				E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */,
-				BB6DF1F7252BC07100CAAE17 /* level_up.mp3 in Resources */,
 				4C7FD743CE1D4768853FC1E0 /* rubicon-icon-font.ttf in Resources */,
 				BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */,
 				177207248B224A388D087D40 /* SF-Pro-Display-Bold.otf in Resources */,
 				BBDD6B0D2523A00A0064DE60 /* AppIntentVocabulary.plist in Resources */,
+				BB8BAE6A252CD5EE009E2F91 /* level_up.mp3 in Resources */,
 				B6573FC3EBA94DC698237411 /* icomoon.ttf in Resources */,
 				1199FFFB71BB46BBA418AEE6 /* SF-Pro-Rounded-Bold.otf in Resources */,
 				64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */,
@@ -678,6 +677,7 @@
 				B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */,
 				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 				AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */,
+				BB8BAE69252CD5EE009E2F91 /* nice.mp3 in Resources */,
 				BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
