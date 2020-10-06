@@ -15,7 +15,8 @@ class WidgetManager: NSObject {
   @objc
   func refresh() -> Void {
     if #available(iOS 14.0, *) {
-      WidgetCenter.shared.reloadAllTimelines()
+      print("WidgetManager: update timeline")
+      WidgetCenter.shared.reloadTimelines(ofKind: "TodorantWidget")
     }
   }
 }

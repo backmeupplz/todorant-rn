@@ -13,18 +13,21 @@ let snapshotEntry = TodoWidgetContent(currentProgress: 1, maximumProgress: 3,
                                       todoText: "Buy soy milk")
 
 struct TodoStatusProvider: TimelineProvider {
-  let store: Store
+  let store = Store()
 
   func placeholder(in _: Context) -> TodoWidgetContent {
     snapshotEntry
   }
 
   func getSnapshot(in _: Context, completion: @escaping (TodoWidgetContent) -> Void) {
+    store.updateCurrent()
     let entry = snapshotEntry
     completion(entry)
   }
 
   func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+    store.updateCurrent()
+    
     var entries: [TodoWidgetContent] = []
 
     store.currentState.map { currentState in
@@ -40,8 +43,10 @@ struct TodoStatusProvider: TimelineProvider {
       }
     }
 
-    let timeline = Timeline(entries: entries, policy: .never)
+    let timeline = Timeline(entries: entries, policy: .atEnd)
 
+    print("TodoStatusProvider: update timeline")
+    
     completion(timeline)
   }
 }
@@ -50,12 +55,10 @@ struct TodoStatusProvider: TimelineProvider {
 struct TodorantWidget: Widget {
   let kind: String = "TodorantWidget"
 
-  let store = Store()
-
   var body: some WidgetConfiguration {
     StaticConfiguration(
       kind: kind,
-      provider: TodoStatusProvider(store: store)
+      provider: TodoStatusProvider()
     ) { entry in
       TodoEntryView(model: entry)
     }

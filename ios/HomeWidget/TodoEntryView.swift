@@ -34,7 +34,7 @@ struct WidgetTodoTextModifier: ViewModifier {
       .padding()
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(mainColor)
-      .cornerRadius(12)
+      .clipShape(ContainerRelativeShape())
       .padding(8)
   }
 }
