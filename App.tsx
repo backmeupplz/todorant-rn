@@ -36,6 +36,7 @@ import { BackButton } from '@components/BackButton'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
+import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -66,6 +67,7 @@ class App extends Component {
     SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
+    refreshWidgetAndBadge()
   }
 
   render() {

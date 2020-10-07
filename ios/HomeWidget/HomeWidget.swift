@@ -26,28 +26,28 @@ struct TodoStatusProvider: TimelineProvider {
   }
 
   func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-    store.updateCurrent()
-    
-    var entries: [TodoWidgetContent] = []
+    store.updateCurrent {
+      var entries: [TodoWidgetContent] = []
 
-    store.currentState.map { currentState in
-      currentState.todo.map { todo in
+      store.currentState.map { currentState in
+        currentState.todo.map { todo in
 
-        let todoEntry = TodoWidgetContent(
-          currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-          maximumProgress: currentState.todosCount,
-          todoText: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
-        )
+          let todoEntry = TodoWidgetContent(
+            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+            maximumProgress: currentState.todosCount,
+            todoText: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+          )
 
-        entries.append(todoEntry)
+          entries.append(todoEntry)
+        }
       }
+
+      let timeline = Timeline(entries: entries, policy: .atEnd)
+
+      print("TodoStatusProvider: update timeline")
+      
+      completion(timeline)
     }
-
-    let timeline = Timeline(entries: entries, policy: .atEnd)
-
-    print("TodoStatusProvider: update timeline")
-    
-    completion(timeline)
   }
 }
 
