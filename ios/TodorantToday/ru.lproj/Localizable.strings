@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  Todorant
+
+  Created by Nikita Kolmogorov on 2019-10-09.
+  Copyright © 2019 Todorant. All rights reserved.
+*/
+
+"clear.subtitle" = "All the tasks for today are done";
+"empty.subtitle" = "You don't have any todos for today";
+"empty.button" = "Create one!";
+"authenticate" = "Please, login to Todorant";
+"authenticate.button" = "Login";
+"loading" = "Loading...";
+"error" = "Connection error";
+"retry" = "Try again";
+"snapshot" = "Buy oat milk";
