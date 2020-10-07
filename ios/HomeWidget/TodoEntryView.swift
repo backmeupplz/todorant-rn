@@ -21,6 +21,9 @@ struct TodoEntryView: View {
           maximumProgress: maximumProgress
         )
         .padding([.leading, .top, .trailing])
+        Text(model.text)
+          .font(.footnote)
+          .modifier(WidgetTodoTextModifier())
       } else if let title = model.title {
         Group {
           Text(title)
