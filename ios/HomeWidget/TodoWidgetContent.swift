@@ -11,8 +11,26 @@ import WidgetKit
 struct TodoWidgetContent: TimelineEntry {
   var date = Date()
 
-  let currentProgress: Int
-  let maximumProgress: Int
+  var currentProgress: Int?
+  var maximumProgress: Int?
+  let text: String
+  
+  var title: String?
+  
+  
+  init(currentProgress: Int, maximumProgress: Int, text: String) {
+    self.currentProgress = currentProgress
+    self.maximumProgress = maximumProgress
+    self.text = text
+  }
+  
+  init(title: String, text: String) {
+    self.title = title
+    self.text = text
+  }
+  
+  init(text: String) {
+    self.text = text
+  }
 
-  let todoText: String
 }

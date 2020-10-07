@@ -13,14 +13,25 @@ struct TodoEntryView: View {
 
   var body: some View {
     VStack {
-      SegmentedProgressBarView(
-        currentProgress: model.currentProgress,
-        maximumProgress: model.maximumProgress
-      )
-      .padding([.leading, .top, .trailing])
-
-      Text(model.todoText)
-        .modifier(WidgetTodoTextModifier())
+      if let currentProgress = model.currentProgress,
+        let maximumProgress = model.maximumProgress
+      {
+        SegmentedProgressBarView(
+          currentProgress: currentProgress,
+          maximumProgress: maximumProgress
+        )
+        .padding([.leading, .top, .trailing])
+      } else if let title = model.title {
+        Group {
+          Text(title)
+          Text(model.text)
+            .font(.footnote)
+        }.modifier(WidgetTodoTextModifier())
+      } else {
+        Text(model.text)
+          .font(.footnote)
+          .modifier(WidgetTodoTextModifier())
+      }
     }
   }
 }
@@ -30,7 +41,6 @@ struct WidgetTodoTextModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .font(.footnote)
       .padding()
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(mainColor)

@@ -35,6 +35,8 @@
 		6601C0D3252BA22C004DF491 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */; };
 		6601C0DA252BA231004DF491 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
 		6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
+		668AFA49252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
+		668AFA4A252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
@@ -55,7 +57,6 @@
 		BB3A79D62425B0470014DE92 /* EmptyCurrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CA2425B0470014DE92 /* EmptyCurrentView.swift */; };
 		BB3A79D72425B0470014DE92 /* ClearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CB2425B0470014DE92 /* ClearView.swift */; };
 		BB3A79D82425B0470014DE92 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CC2425B0470014DE92 /* TodayViewController.swift */; };
-		BB3A79D92425B0470014DE92 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB3A79CD2425B0470014DE92 /* Localizable.strings */; };
 		BB3A79DA2425B0470014DE92 /* Date+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CE2425B0470014DE92 /* Date+Today.swift */; };
 		BB3A79DB2425B0470014DE92 /* CurrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CF2425B0470014DE92 /* CurrentView.swift */; };
 		BB3A79DC2425B0470014DE92 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79D02425B0470014DE92 /* ProgressView.swift */; };
@@ -184,6 +185,8 @@
 		6601C085252BA065004DF491 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6601C092252BA157004DF491 /* TodoEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEntryView.swift; sourceTree = "<group>"; };
 		6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetContent.swift; sourceTree = "<group>"; };
+		668AFA4B252E40A20046205C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		668AFA53252E40B00046205C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		7216CF88ED57489E91BB73DC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -223,7 +226,6 @@
 		BB3A79CA2425B0470014DE92 /* EmptyCurrentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyCurrentView.swift; sourceTree = "<group>"; };
 		BB3A79CB2425B0470014DE92 /* ClearView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearView.swift; sourceTree = "<group>"; };
 		BB3A79CC2425B0470014DE92 /* TodayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
-		BB3A79CD2425B0470014DE92 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		BB3A79CE2425B0470014DE92 /* Date+Today.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Today.swift"; sourceTree = "<group>"; };
 		BB3A79CF2425B0470014DE92 /* CurrentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentView.swift; sourceTree = "<group>"; };
 		BB3A79D02425B0470014DE92 /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
@@ -499,7 +501,7 @@
 				BB3A79CF2425B0470014DE92 /* CurrentView.swift */,
 				BB3A79CE2425B0470014DE92 /* Date+Today.swift */,
 				BB3A79CA2425B0470014DE92 /* EmptyCurrentView.swift */,
-				BB3A79CD2425B0470014DE92 /* Localizable.strings */,
+				668AFA4C252E40A20046205C /* Localizable.strings */,
 				BB3A79D12425B0470014DE92 /* MainInterface.storyboard */,
 				BB3A79D02425B0470014DE92 /* ProgressView.swift */,
 				BB3A79C92425B0470014DE92 /* Request.swift */,
@@ -791,6 +793,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB6DF19D252BB13200CAAE17 /* customColorControl.xcassets in Resources */,
+				668AFA4A252E40A20046205C /* Localizable.strings in Resources */,
 				6601C084252BA065004DF491 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,7 +811,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBC0BDED2527CBB800B6C41D /* icons.xcassets in Resources */,
-				BB3A79D92425B0470014DE92 /* Localizable.strings in Resources */,
+				668AFA49252E40A20046205C /* Localizable.strings in Resources */,
 				BBC0BDF42527CBC300B6C41D /* customColorControl.xcassets in Resources */,
 				BB3A79DD2425B0470014DE92 /* MainInterface.storyboard in Resources */,
 			);
@@ -1147,6 +1150,15 @@
 			);
 			name = LaunchScreen.xib;
 			path = Todorant;
+			sourceTree = "<group>";
+		};
+		668AFA4C252E40A20046205C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				668AFA4B252E40A20046205C /* en */,
+				668AFA53252E40B00046205C /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		BB1695F125251B64006190F8 /* MainInterface.storyboard */ = {

@@ -9,8 +9,15 @@
 import SwiftUI
 import WidgetKit
 
-let snapshotEntry = TodoWidgetContent(currentProgress: 1, maximumProgress: 3,
-                                      todoText: "Buy soy milk")
+let snapshotText = NSLocalizedString("snapshot", comment: "")
+let titleText = NSLocalizedString("title", comment: "")
+let descriptionText = NSLocalizedString("description", comment: "")
+
+let snapshotEntry = TodoWidgetContent(
+  currentProgress: 1,
+  maximumProgress: 3,
+  text: snapshotText
+)
 
 struct TodoStatusProvider: TimelineProvider {
   let store = Store()
@@ -29,23 +36,39 @@ struct TodoStatusProvider: TimelineProvider {
     store.updateCurrent {
       var entries: [TodoWidgetContent] = []
 
-      store.currentState.map { currentState in
-        currentState.todo.map { todo in
-
-          let todoEntry = TodoWidgetContent(
-            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-            maximumProgress: currentState.todosCount,
-            todoText: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
-          )
-
-          entries.append(todoEntry)
+      if !store.authenticated {
+        let authenticateText = NSLocalizedString("authenticate", comment: "")
+        let todoEntry = TodoWidgetContent(text: authenticateText)
+        entries.append(todoEntry)
+      } else if store.errorShown {
+        let errorText = NSLocalizedString("error", comment: "")
+        let todoEntry = TodoWidgetContent(text: errorText)
+        entries.append(todoEntry)
+      } else {
+        store.currentState.map { currentState in
+          currentState.todo.map { todo in
+            if currentState.todosCount <= 0 {
+              let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
+              let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText)
+              entries.append(todoEntry)
+            } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+              let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
+              let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText)
+              entries.append(todoEntry)
+            } else {
+              let todoEntry = TodoWidgetContent(
+                currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+                maximumProgress: currentState.todosCount,
+                text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+              )
+              entries.append(todoEntry)
+            }
+          }
         }
       }
 
       let timeline = Timeline(entries: entries, policy: .atEnd)
 
-      print("TodoStatusProvider: update timeline")
-      
       completion(timeline)
     }
   }
@@ -62,7 +85,7 @@ struct TodorantWidget: Widget {
     ) { entry in
       TodoEntryView(model: entry)
     }
-    .configurationDisplayName("Todorant widget")
-    .description("Displays your current task and progress in real time.")
+    .configurationDisplayName(titleText)
+    .description(descriptionText)
   }
 }

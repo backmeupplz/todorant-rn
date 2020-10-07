@@ -38,6 +38,7 @@ struct CurrentView: View {
                 ClearView()
               } else {
                 CurrentTodoView(extensionContext: extensionContext)
+                  .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
               }
             })
         } ?? ViewBuilder.buildEither(second:
@@ -61,15 +62,26 @@ struct CurrentTodoView: View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
         VStack {
+          
+          Spacer()
+    
           SegmentedProgressBarView(
             currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
             maximumProgress: currentState.todosCount
           )
+          
+          Spacer()
 
           TodoTextView(todo: todo)
-
+          
+          Spacer()
+          
           buttonsRowView(todo: todo, extensionContext: extensionContext)
+          
+          Spacer()
+          
         }
+        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
       }
     }
   }
