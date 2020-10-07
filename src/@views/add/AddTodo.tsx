@@ -189,7 +189,7 @@ class AddTodoContent extends Component<{
           vm.editedTodo.time = vm.time
           vm.editedTodo.updatedAt = new Date()
           vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
-          if (failed) {
+          if (failed && !vm.editedTodo.date) {
             vm.editedTodo.frogFails++
             if (vm.editedTodo.frogFails > 1) {
               vm.editedTodo.frog = true
@@ -323,22 +323,34 @@ class AddTodoContent extends Component<{
     if (!this.isDirty()) {
       goBack()
     } else {
-      const options = [translate('cancel'), translate('dontSave')]
-      if (!!this.isValid) options.push(translate('save'))
+      const options = [
+        translate('dissmissTasks'),
+        translate(this.isValid ? 'changeTasks' : 'fixTasks'),
+      ]
+      if (this.isValid) {
+        options.splice(0, 0, translate('saveTasks'))
+      }
 
       ActionSheet.show(
         {
           options: options,
           cancelButtonIndex: 0,
           destructiveButtonIndex: 1,
-          title: translate('saveСhanges'),
+          title: translate(
+            this.isValid ? 'dirtyValidSave' : 'dirtyInvalidSave'
+          ),
         },
         (buttonIndex) => {
-          if (buttonIndex === 0) {
-          } else if (buttonIndex === 1) {
-            goBack()
+          if (this.isValid) {
+            if (buttonIndex === 0) {
+              this.saveTodo()
+            } else if (buttonIndex === 1) {
+              goBack()
+            }
           } else {
-            this.saveTodo()
+            if (buttonIndex === 0) {
+              goBack()
+            }
           }
         }
       )

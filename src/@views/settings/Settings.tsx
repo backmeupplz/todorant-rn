@@ -213,7 +213,7 @@ export function Settings() {
             component={SettingsContent}
             options={{
               headerShown: false,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -222,7 +222,7 @@ export function Settings() {
             options={{
               title: translate('termsOfUse'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -231,7 +231,7 @@ export function Settings() {
             options={{
               title: translate('privacyPolicy'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -240,7 +240,7 @@ export function Settings() {
             options={{
               title: translate('pleaseLogin'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -250,7 +250,7 @@ export function Settings() {
               title: translate('socketsInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoSockets'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -260,7 +260,7 @@ export function Settings() {
               title: translate('dataInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoData'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -270,7 +270,7 @@ export function Settings() {
               title: translate('howTo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoRules'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -280,7 +280,7 @@ export function Settings() {
               title: translate('subscription'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -290,7 +290,7 @@ export function Settings() {
               title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -301,7 +301,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntro'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -312,7 +312,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoTags'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -323,7 +323,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               headerRight: () => <ColorPickerHeaderRight />,
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -334,7 +334,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               headerRight: () => <AddEpicHeaderRight />,
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -345,7 +345,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntegrations'),
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -355,7 +355,7 @@ export function Settings() {
               title: translate('googleCalendar'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -365,7 +365,7 @@ export function Settings() {
               title: translate('loginQR'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
           <Stack.Screen
@@ -375,7 +375,7 @@ export function Settings() {
               title: translate('security'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
+              ...headerBackButtonProps(false),
             }}
           />
         </Stack.Navigator>
