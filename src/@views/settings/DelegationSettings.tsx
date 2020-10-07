@@ -46,6 +46,7 @@ export class DelegationSettings extends Component {
             <Text
               style={{
                 opacity: 0.4,
+                ...sharedColors.regularTextExtraStyle.style,
               }}
             >
               {`${sharedSessionStore.delegateInviteLink.substr(0, 30)}...`}
