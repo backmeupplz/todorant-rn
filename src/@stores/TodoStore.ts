@@ -10,9 +10,7 @@ import { hydrate } from '@utils/hydrate'
 import { decrypt, encrypt } from '@utils/encryption'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import TodorantWidget from 'react-native-todorant-widget'
-import { Platform } from 'react-native'
-import { updateBadgeNumber } from '@utils/notifications'
+import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -235,10 +233,7 @@ class TodoStore {
 
   refreshTodos = () => {
     this.allTodos = realm.objects<Todo>('Todo')
-    if (Platform.OS === 'android') {
-      TodorantWidget.forceUpdateAll()
-    }
-    updateBadgeNumber()
+    refreshWidgetAndBadge()
   }
 
   recalculateExactDatesIfNeeded() {

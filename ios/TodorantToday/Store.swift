@@ -62,7 +62,7 @@ class Store: ObservableObject {
 
   @Published var expanded = false
 
-  func updateCurrent() {
+  func updateCurrent(completion: (() -> Void)? = nil) {
     self.loading = true
     TodoRoute<CurrentState>(route: .current, parameters: ["date": String.today])
     .execute { result in
@@ -75,6 +75,7 @@ class Store: ObservableObject {
       case .failure:
         self.errorShown = true
       }
+      completion?()
     }
   }
 }

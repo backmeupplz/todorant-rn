@@ -25,6 +25,16 @@ class KeychainManager: NSObject {
     keychainWrapper.removeObject(forKey: "accessToken")
   }
   
+  @objc(setPassword:)
+  func setPassword(password: String) -> Void {
+    keychainWrapper.set(password, forKey: "password")
+  }
+  
+  @objc
+  func removePassword() -> Void {
+    keychainWrapper.removeObject(forKey: "password")
+  }
+  
   @objc
   static func requiresMainQueueSetup() -> Bool {
     return true

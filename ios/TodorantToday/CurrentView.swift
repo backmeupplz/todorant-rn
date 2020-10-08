@@ -21,8 +21,7 @@ struct CurrentView: View {
           self.extensionContext.open(URL(string: "todorant://")!)
         }
       } else if store.loading {
-        Text("loading")
-        ActivityIndicator()
+        CurrentTodoView(extensionContext: extensionContext, isLoading: true)
       } else if store.errorShown {
         Text("error")
         Button("retry") {
@@ -38,6 +37,7 @@ struct CurrentView: View {
                 ClearView()
               } else {
                 CurrentTodoView(extensionContext: extensionContext)
+                
               }
             })
         } ?? ViewBuilder.buildEither(second:
@@ -56,19 +56,30 @@ struct CurrentTodoView: View {
   @EnvironmentObject var store: Store
 
   let extensionContext: NSExtensionContext
+  
+  var isLoading = false
 
   var body: some View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
-        VStack {
-          SegmentedProgressBarView(
-            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-            maximumProgress: currentState.todosCount
-          )
+        GeometryReader { geometry in
+          VStack {
+      
+            SegmentedProgressBarView(
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
 
-          TodoTextView(todo: todo)
-
-          buttonsRowView(todo: todo, extensionContext: extensionContext)
+            TodoTextView(todo: todo)
+            
+            if isLoading {
+              ActivityIndicator()
+                .frame(height: 40)
+            } else {
+              buttonsRowView(todo: todo, extensionContext: extensionContext)
+            }
+          }
+          .frame(width: geometry.size.width, height: geometry.size.height)
         }
       }
     }
