@@ -202,11 +202,6 @@ class AddTodoContent extends Component<{
     }
     if (this.breakdownTodo) {
       const breakdownTodoTitle = getTitle(this.breakdownTodo)
-      if (this.breakdownTodo.frog) {
-        playFrogComplete()
-      } else {
-        playTaskComplete()
-      }
 
       sharedTagStore.incrementEpicPoints(this.breakdownTodo.text)
       // Increment hero store
@@ -223,6 +218,26 @@ class AddTodoContent extends Component<{
       titlesToFixOrder.push(breakdownTodoTitle)
       sharedSessionStore.numberOfTodosCompleted++
       startConfetti()
+    }
+    // Play sounds
+    const hasCompletedTodos =
+      !!this.breakdownTodo ||
+      this.vms.reduce(
+        (p, c) => (c.editedTodo && c.editedTodo.completed) || c.completed || p,
+        false as boolean
+      )
+    const hasFrog =
+      (!!this.breakdownTodo && this.breakdownTodo.frog) ||
+      this.vms.reduce(
+        (p, c) => (c.editedTodo && c.editedTodo.frog) || c.frog || p,
+        false as boolean
+      )
+    if (hasCompletedTodos) {
+      if (hasFrog) {
+        playFrogComplete()
+      } else {
+        playTaskComplete()
+      }
     }
     // Add tags
     sharedTagStore.addTags(this.vms)
