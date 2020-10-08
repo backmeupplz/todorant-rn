@@ -29,10 +29,12 @@ struct TodoEntryView: View {
           Text(title)
           Text(model.text)
             .font(.footnote)
+            .multilineTextAlignment(.center)
         }.modifier(WidgetTodoTextModifier())
       } else {
         Text(model.text)
           .font(.footnote)
+          .multilineTextAlignment(.center)
           .modifier(WidgetTodoTextModifier())
       }
     }

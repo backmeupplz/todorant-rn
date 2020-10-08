@@ -47,22 +47,21 @@ struct TodoStatusProvider: TimelineProvider {
       } else {
         store.currentState.map { currentState in
           currentState.todo.map { todo in
-            if currentState.todosCount <= 0 {
-              let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
-              let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText)
-              entries.append(todoEntry)
-            } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-              let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
-              let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText)
-              entries.append(todoEntry)
-            } else {
-              let todoEntry = TodoWidgetContent(
-                currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-                maximumProgress: currentState.todosCount,
-                text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
-              )
-              entries.append(todoEntry)
-            }
+            let todoEntry = TodoWidgetContent(
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount,
+              text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+            )
+            entries.append(todoEntry)
+          }
+          if currentState.todosCount <= 0 {
+            let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
+            let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText)
+            entries.append(todoEntry)
+          } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+            let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
+            let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText)
+            entries.append(todoEntry)
           }
         }
       }
