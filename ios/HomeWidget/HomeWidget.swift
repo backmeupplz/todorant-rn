@@ -41,9 +41,9 @@ struct TodoStatusProvider: TimelineProvider {
         let todoEntry = TodoWidgetContent(text: authenticateText)
         entries.append(todoEntry)
       } else if store.errorShown {
-        let errorText = NSLocalizedString("error", comment: "")
-        let todoEntry = TodoWidgetContent(text: errorText)
-        entries.append(todoEntry)
+//        let errorText = NSLocalizedString("error", comment: "")
+//        let todoEntry = TodoWidgetContent(text: errorText)
+//        entries.append(todoEntry)
       } else {
         store.currentState.map { currentState in
           currentState.todo.map { todo in
