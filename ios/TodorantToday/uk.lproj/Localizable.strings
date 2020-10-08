@@ -6,14 +6,14 @@
   Copyright © 2019 Todorant. All rights reserved.
 */
 
-"clear.subtitle" = "All the tasks for today are done";
-"empty.subtitle" = "You don't have any todos for today";
-"empty.button" = "Create one!";
-"authenticate" = "Please, login to Todorant";
-"authenticate.button" = "Login";
-"loading" = "Loading...";
-"error" = "Connection error";
-"retry" = "Try again";
-"snapshot" = "Buy oat milk";
-"title" = "Todorant widget";
-"description" = "Displays your current task and progress in real time";
+"clear.subtitle" = "Всі завдання на сьогодні виконані";
+"empty.subtitle" = "У вас немає завдань на сьогодні";
+"empty.button" = "Створіть!";
+"authenticate" = "Будь ласка, увійдіть в Тудурант";
+"authenticate.button" = "Увійти";
+"loading" = "Завантаження...";
+"error" = "Помилка підключення";
+"retry" = "Спробувати знову";
+"snapshot" = "Купити вівсяного молока";
+"title" = "Віджет Тудуранта";
+"description" = "Показує ваші поточні завдання в реальному часі";
