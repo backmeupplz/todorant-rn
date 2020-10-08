@@ -11,6 +11,7 @@ import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
+import { Alert } from 'react-native'
 
 class TagsVM {
   onTap(tag: Tag) {
@@ -90,6 +91,45 @@ class TagsVM {
 }
 
 @observer
+class DeleteAllTagsButton extends Component {
+  render() {
+    return !!sharedTagStore.undeletedTags.length ? (
+      <TableItem
+        onPress={() => {
+          setTimeout(() => {
+            Alert.alert(translate('deleteAllHashtagsConfirm'), '', [
+              {
+                text: translate('delete'),
+                onPress: () => {
+                  const undeletedTags = sharedTagStore.undeletedTags
+                  realm.write(() => {
+                    for (const tag of undeletedTags) {
+                      tag.deleted = true
+                      tag.updatedAt = new Date()
+                    }
+                  })
+                  sharedTagStore.refreshTags()
+                  sockets.tagsSyncManager.sync()
+                },
+                style: 'destructive',
+              },
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+            ])
+          }, 100)
+        }}
+      >
+        <Text style={{ color: sharedColors.destructIconColor }}>
+          {translate('deleteAllHashtags')}
+        </Text>
+      </TableItem>
+    ) : null
+  }
+}
+
+@observer
 export class Tags extends Component {
   vm = new TagsVM()
 
@@ -102,6 +142,7 @@ export class Tags extends Component {
       >
         {sharedTagStore.undeletedTags.length ? (
           <FlatList
+            ListHeaderComponent={DeleteAllTagsButton}
             data={sharedTagStore.undeletedTags}
             renderItem={({ item }) => {
               return (

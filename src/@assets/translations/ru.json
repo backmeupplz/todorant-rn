@@ -315,5 +315,7 @@
   "dissmissTasks": "Удалить задачи",
   "saveTasks": "Сохранить задачи",
   "fixTasks": "Поправить задачи",
-  "changeTasks": "Изменить задачи"
+  "changeTasks": "Изменить задачи",
+  "deleteAllHashtags": "Удалить все хэштеги",
+  "deleteAllHashtagsConfirm": "Уверены, что хотите удалить все хэштеги?"
 }

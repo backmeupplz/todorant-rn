@@ -315,5 +315,7 @@
   "dissmissTasks": "Dismiss tasks",
   "saveTasks": "Save tasks",
   "fixTasks": "Fix tasks",
-  "changeTasks": "Change tasks"
+  "changeTasks": "Change tasks",
+  "deleteAllHashtags": "Delete all hashtags",
+  "deleteAllHashtagsConfirm": "Are you sure you want to delete all hashtags?"
 }
