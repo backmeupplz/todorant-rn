@@ -81,7 +81,6 @@ struct CurrentTodoView: View {
           }
           .frame(width: geometry.size.width, height: geometry.size.height)
         }
-//        .frame(maxWidth: .infinity)
       }
     }
   }
