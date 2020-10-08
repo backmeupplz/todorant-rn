@@ -21,8 +21,7 @@ struct CurrentView: View {
           self.extensionContext.open(URL(string: "todorant://")!)
         }
       } else if store.loading {
-        Text("loading")
-        ActivityIndicator()
+        CurrentTodoView(extensionContext: extensionContext, isLoading: true)
       } else if store.errorShown {
         Text("error")
         Button("retry") {
@@ -38,7 +37,7 @@ struct CurrentView: View {
                 ClearView()
               } else {
                 CurrentTodoView(extensionContext: extensionContext)
-                  .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                
               }
             })
         } ?? ViewBuilder.buildEither(second:
@@ -57,31 +56,32 @@ struct CurrentTodoView: View {
   @EnvironmentObject var store: Store
 
   let extensionContext: NSExtensionContext
+  
+  var isLoading = false
 
   var body: some View {
     store.currentState.map { currentState in
       currentState.todo.map { todo in
-        VStack {
-          
-          Spacer()
-    
-          SegmentedProgressBarView(
-            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-            maximumProgress: currentState.todosCount
-          )
-          
-          Spacer()
+        GeometryReader { geometry in
+          VStack {
+      
+            SegmentedProgressBarView(
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
 
-          TodoTextView(todo: todo)
-          
-          Spacer()
-          
-          buttonsRowView(todo: todo, extensionContext: extensionContext)
-          
-          Spacer()
-          
+            TodoTextView(todo: todo)
+            
+            if isLoading {
+              ActivityIndicator()
+                .frame(height: 40)
+            } else {
+              buttonsRowView(todo: todo, extensionContext: extensionContext)
+            }
+          }
+          .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+//        .frame(maxWidth: .infinity)
       }
     }
   }
