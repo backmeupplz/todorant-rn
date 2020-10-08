@@ -56,7 +56,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         preferredContentSize = CGSize(width: 0, height: 110)
         return
       }
-      let text = "\(todo.frog ? "🐸 " : "")\(todo.text)"
+      let text = "\(todo.frog ? "🐸 " : "")\(todo.text.stringWithLinksTruncated())"
       let height = estimatedLabelHeight(text: text,
                                         width: maxSize.width)
       preferredContentSize = CGSize(width: 0,
@@ -81,6 +81,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
                     options: options,
                     attributes: attributes as [NSAttributedString.Key: Any],
                     context: nil).height
-    return rectangleHeight + 75
+    return rectangleHeight + 100
   }
 }

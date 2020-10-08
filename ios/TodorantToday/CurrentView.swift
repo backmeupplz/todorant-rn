@@ -68,7 +68,7 @@ struct CurrentTodoView: View {
             SegmentedProgressBarView(
               currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
               maximumProgress: currentState.todosCount
-            )
+            ).padding(.top, self.store.expanded ? 15 : 0)
 
             TodoTextView(todo: todo)
             
@@ -92,7 +92,7 @@ struct TodoTextView: View {
 
   var body: some View {
     Text(
-      "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+      "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text.stringWithLinksTruncated())"
     )
     .lineLimit(self.store.expanded ? nil : 1)
     .fixedSize(horizontal: false, vertical: true)

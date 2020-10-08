@@ -50,7 +50,7 @@ struct TodoStatusProvider: TimelineProvider {
             let todoEntry = TodoWidgetContent(
               currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
               maximumProgress: currentState.todosCount,
-              text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text)"
+              text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text.stringWithLinksTruncated())"
             )
             entries.append(todoEntry)
           }

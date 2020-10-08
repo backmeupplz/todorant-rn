@@ -89,6 +89,8 @@
 		BBDD6AF825239CE00064DE60 /* String+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD6AF725239CE00064DE60 /* String+Today.swift */; };
 		BBDD6AFE25239D100064DE60 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD6AFD25239D100064DE60 /* DateFormatter+AppFormat.swift */; };
 		BBDD6B0D2523A00A0064DE60 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBDD6B0F2523A00A0064DE60 /* AppIntentVocabulary.plist */; };
+		BBEAF65D252FBF5700E69129 /* String+truncateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */; };
+		BBEAF66A252FC0B400E69129 /* String+truncateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */; };
 		BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */; };
 		CA8FFE3188E50D368FC53FB7 /* libPods-HomeWidgetExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C2A346320688DE5997583BD /* libPods-HomeWidgetExtension.a */; };
 		E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA28768F24FA47F2A8AB4F61 /* Roboto.ttf */; };
@@ -277,6 +279,7 @@
 		BBDD6B142523A0100064DE60 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ru; path = ru.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BBE891C82436B1D800A9CA36 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBE891C92436B1E400A9CA36 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+truncateLinks.swift"; sourceTree = "<group>"; };
 		BBEE5D6623F4E9B20041BA38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BD2595DE01B401907C2ABA14 /* Pods-HomeWidgetExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeWidgetExtension.debug.xcconfig"; path = "Target Support Files/Pods-HomeWidgetExtension/Pods-HomeWidgetExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		C72AEC71CCC0426695FAC0E7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
@@ -514,6 +517,7 @@
 				BB3A79D22425B0470014DE92 /* TodoRoute.swift */,
 				BB3A79C52425B0140014DE92 /* TodorantToday.entitlements */,
 				BB3A79BD2425AF000014DE92 /* Info.plist */,
+				BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */,
 			);
 			path = TodorantToday;
 			sourceTree = "<group>";
@@ -1053,6 +1057,7 @@
 				6601C0D3252BA22C004DF491 /* DateFormatter+AppFormat.swift in Sources */,
 				6601C082252BA062004DF491 /* HomeWidget.swift in Sources */,
 				6601C094252BA157004DF491 /* TodoEntryView.swift in Sources */,
+				BBEAF66A252FC0B400E69129 /* String+truncateLinks.swift in Sources */,
 				6601C0A3252BA1AA004DF491 /* TodoWidgetContent.swift in Sources */,
 				6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */,
 				6601C0C5252BA21F004DF491 /* Date+Today.swift in Sources */,
@@ -1086,6 +1091,7 @@
 				BB3A79DA2425B0470014DE92 /* Date+Today.swift in Sources */,
 				BB3A79D42425B0470014DE92 /* Store.swift in Sources */,
 				BB00A88125225FC400456571 /* Color+customColors.swift in Sources */,
+				BBEAF65D252FBF5700E69129 /* String+truncateLinks.swift in Sources */,
 				BB3A79DC2425B0470014DE92 /* ProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
