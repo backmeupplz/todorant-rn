@@ -44,7 +44,7 @@ extension Request {
     guard let password = UserSession.password, password.count > 0 else {
       return ["token": "\(token)"]
     }
-    return ["token": "\(token)", "passwordToDecrypt": "\(password)"]
+    return ["token": "\(token)", "password-to-decrypt": "\(password)"]
   }
   var encoding: ParameterEncoding {
     return URLEncoding.default
