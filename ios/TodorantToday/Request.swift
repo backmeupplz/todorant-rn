@@ -41,7 +41,10 @@ protocol Request {
 extension Request {
   var headers: HTTPHeaders? {
     guard let token = UserSession.accessToken else { return nil }
-    return ["token": "\(token)"]
+    guard let password = UserSession.password, password.count > 0 else {
+      return ["token": "\(token)"]
+    }
+    return ["token": "\(token)", "password": "\(password)"]
   }
   var encoding: ParameterEncoding {
     return URLEncoding.default
