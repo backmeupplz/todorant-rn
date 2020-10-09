@@ -3,18 +3,25 @@ import { Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { goBack } from '@utils/navigation'
 
 export const backButtonStore = {
   back: () => {},
 }
 
 @observer
-export class BackButton extends Component {
+export class BackButton extends Component<{
+  useBackStore: boolean
+}> {
   render() {
     return (
       <TouchableOpacity
         onPress={() => {
-          backButtonStore.back()
+          if (this.props.useBackStore) {
+            backButtonStore.back()
+          } else {
+            goBack()
+          }
         }}
       >
         <Icon

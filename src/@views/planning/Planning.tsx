@@ -21,10 +21,10 @@ export class Planning extends Component {
           options={{
             headerTitle: () => <PlanningHeader />,
             headerRight: () => <PlanningHeaderRight />,
-            headerLeft: () => <PlanningHeaderLeft />,
             headerTitleAlign: 'center',
             ...sharedColors.headerExtraStyle,
             ...headerBackButtonProps(),
+            headerLeft: () => <PlanningHeaderLeft />,
           }}
         />
       </Stack.Navigator>

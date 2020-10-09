@@ -32,7 +32,6 @@ import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
-import { BackButton } from '@components/BackButton'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
@@ -107,12 +106,7 @@ class App extends Component {
                       {InfoButton('infoAdd')()}
                     </View>
                   ),
-                  headerLeft: () => (
-                    <View style={{ flexDirection: 'row' }}>
-                      <BackButton />
-                    </View>
-                  ),
-                  ...headerBackButtonProps(),
+                  ...headerBackButtonProps(true),
                 }}
               />
               <Stack.Screen
@@ -127,11 +121,6 @@ class App extends Component {
                       {InfoButton('infoBreakdown')()}
                     </View>
                   ),
-                  headerLeft: () => (
-                    <View style={{ flexDirection: 'row' }}>
-                      <BackButton />
-                    </View>
-                  ),
                   ...headerBackButtonProps(),
                 }}
               />
@@ -142,11 +131,6 @@ class App extends Component {
                   title: translate('editTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: InfoButton('infoEdit'),
-                  headerLeft: () => (
-                    <View style={{ flexDirection: 'row' }}>
-                      <BackButton />
-                    </View>
-                  ),
                   ...headerBackButtonProps(),
                 }}
               />
