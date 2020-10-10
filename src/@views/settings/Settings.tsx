@@ -42,6 +42,7 @@ import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
 import { AddEpic, AddEpicHeaderRight } from '@views/epics/AddEpic'
 import { DelegationSettings } from './DelegationSettings'
+import { DelegationUserScreen } from './DelegationUserScreen'
 
 const Stack = createStackNavigator()
 
@@ -213,7 +214,7 @@ export function Settings() {
             component={SettingsContent}
             options={{
               headerShown: false,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -222,7 +223,7 @@ export function Settings() {
             options={{
               title: translate('termsOfUse'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -231,7 +232,7 @@ export function Settings() {
             options={{
               title: translate('privacyPolicy'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -240,7 +241,7 @@ export function Settings() {
             options={{
               title: translate('pleaseLogin'),
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -250,7 +251,7 @@ export function Settings() {
               title: translate('socketsInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoSockets'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -260,7 +261,7 @@ export function Settings() {
               title: translate('dataInfo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoData'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -270,7 +271,7 @@ export function Settings() {
               title: translate('howTo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoRules'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -280,7 +281,7 @@ export function Settings() {
               title: translate('subscription'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -290,7 +291,7 @@ export function Settings() {
               title: translate('loginTelegram'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -301,7 +302,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntro'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -312,7 +313,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoTags'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -323,7 +324,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               headerRight: () => <ColorPickerHeaderRight />,
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -334,7 +335,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               headerRight: () => <AddEpicHeaderRight />,
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -345,7 +346,7 @@ export function Settings() {
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoIntegrations'),
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -355,7 +356,7 @@ export function Settings() {
               title: translate('googleCalendar'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -365,7 +366,7 @@ export function Settings() {
               title: translate('loginQR'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
             }}
           />
           <Stack.Screen
@@ -375,7 +376,27 @@ export function Settings() {
               title: translate('security'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(false),
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="Delegators"
+            component={DelegationUserScreen}
+            options={{
+              title: translate('delegate.delegators'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="Delegates"
+            component={DelegationUserScreen}
+            options={{
+              title: translate('delegate.delegates'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
             }}
           />
         </Stack.Navigator>

@@ -18,6 +18,7 @@ import * as rest from '@utils/rest'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import { Divider } from '@components/Divider'
+import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -60,6 +61,24 @@ export class Data extends Component {
             title={translate('tagsCount')}
             subtitle={`${
               realm.objects<Tag>('Tag').filtered('deleted = false').length
+            }`}
+          />
+          <Row
+            title={translate('delegate.delegators')}
+            subtitle={`${
+              realm
+                .objects<DelegationUser>('DelegationUser')
+                .filtered(`delegationType = "${DelegationUserType.delegator}"`)
+                .length
+            }`}
+          />
+          <Row
+            title={translate('delegate.delegates')}
+            subtitle={`${
+              realm
+                .objects<DelegationUser>('DelegationUser')
+                .filtered(`delegationType = "${DelegationUserType.delegate}"`)
+                .length
             }`}
           />
           {/* Sync */}

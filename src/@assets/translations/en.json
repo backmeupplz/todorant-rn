@@ -273,7 +273,7 @@
   "accept": "Accept",
   "delegate": {
     "title": "Delegation",
-    "noDelegators": "You don't have any delegators yet. Share the link above with the people who you want to make delegators",
+    "noDelegators": "You don't have any delegators yet. Share the invite link with the people who you want to make delegators",
     "noDelegates": "You don't have any delegates yet. Ask for an invite link to become someone's delegator.",
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
     "link": "Delegate invite link",

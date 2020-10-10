@@ -1,3 +1,4 @@
+import { sharedDelegationStore } from './../@stores/DelegationStore'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { Hero } from '@models/Hero'
 import { sharedTagStore } from '@stores/TagStore'
@@ -126,6 +127,7 @@ class SocketManager {
   settingsSyncManager: SyncManager<Settings>
   heroSyncManager: SyncManager<Hero>
   userSyncManager: SyncManager<User>
+  delegationSyncManager: SyncManager<any>
 
   constructor() {
     this.connect()
@@ -191,6 +193,14 @@ class SocketManager {
         return sharedHeroStore.onObjectsFromServer(objects, pushBack)
       }
     )
+    this.delegationSyncManager = new SyncManager<any>(
+      'delegate',
+      this.pendingPushes,
+      () => undefined,
+      (objects, pushBack) => {
+        return sharedDelegationStore.onObjectsFromServer(objects, pushBack)
+      }
+    )
   }
 
   connect = () => {
@@ -225,6 +235,7 @@ class SocketManager {
   onDisconnect = () => {
     sharedSocketStore.connected = false
     sharedSocketStore.authorized = false
+    this.connect()
   }
 
   onConnectError = (error: Error) => {
@@ -259,6 +270,7 @@ class SocketManager {
     this.settingsSyncManager.sync()
     this.userSyncManager.sync()
     this.heroSyncManager.sync()
+    this.delegationSyncManager.sync()
   }
 }
 

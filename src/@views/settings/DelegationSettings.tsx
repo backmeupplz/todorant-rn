@@ -9,6 +9,9 @@ import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { navigate } from '@utils/navigation'
+import fonts from '@utils/fonts'
+import { DelegationUserType } from '@models/DelegationUser'
 
 @observer
 export class DelegationSettings extends Component {
@@ -85,6 +88,38 @@ export class DelegationSettings extends Component {
               }}
             />
           </TouchableOpacity>
+        </TableItem>
+        <TableItem
+          onPress={() => {
+            navigate('Delegators', {
+              delegationType: DelegationUserType.delegator,
+            })
+          }}
+        >
+          <Text
+            style={{
+              color: sharedColors.textColor,
+              fontFamily: fonts.SFProTextRegular,
+            }}
+          >
+            {translate('delegate.delegators')}
+          </Text>
+        </TableItem>
+        <TableItem
+          onPress={() => {
+            navigate('Delegates', {
+              delegationType: DelegationUserType.delegate,
+            })
+          }}
+        >
+          <Text
+            style={{
+              color: sharedColors.textColor,
+              fontFamily: fonts.SFProTextRegular,
+            }}
+          >
+            {translate('delegate.delegates')}
+          </Text>
         </TableItem>
       </>
     )

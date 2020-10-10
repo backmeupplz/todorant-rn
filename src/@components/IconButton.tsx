@@ -11,15 +11,21 @@ export class IconButton extends Component<{
   color?: string
   fullColor?: boolean
   size?: number
+  disabled?: boolean
 }> {
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
+      <TouchableOpacity
+        onPress={this.props.onPress}
+        disabled={this.props.disabled}
+      >
         <CustomIcon
           name={this.props.name}
           size={this.props.size || 28}
           style={{
-            color: this.props.color || sharedColors.defaultIconColor,
+            color: !this.props.disabled
+              ? this.props.color || sharedColors.defaultIconColor
+              : 'gray',
             opacity: this.props.fullColor ? 1.0 : 0.8,
             marginHorizontal: 6,
           }}

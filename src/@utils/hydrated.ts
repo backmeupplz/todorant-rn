@@ -6,6 +6,7 @@ const hydratedStores = {
   SettingsStore: false,
   HeroStore: false,
   SessionStore: false,
+  DelegationStore: false,
 } as { [index: string]: boolean }
 
 export function isHydrated() {

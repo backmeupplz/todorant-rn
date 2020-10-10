@@ -23,10 +23,11 @@ export function alertError(
 export function alertConfirm(
   message: string,
   confirmButtonText: string,
-  confirm: () => void
+  confirm: () => void,
+  title?: string
 ) {
   setTimeout(() => {
-    Alert.alert(translate('pleaseConfirm'), message, [
+    Alert.alert(title || translate('pleaseConfirm'), message, [
       {
         text: translate('cancel'),
         style: 'cancel',
