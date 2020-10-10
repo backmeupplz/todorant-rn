@@ -7,14 +7,31 @@ import { ProgressView } from '@components/ProgressView'
 import { IconButton } from '@components/IconButton'
 import { sharedTagStore } from '@stores/TagStore'
 import { observer } from 'mobx-react'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { navigate } from '@utils/navigation'
 
 @observer
 class EpicText extends Component<{
   text: string
   color?: string
+  onPress?: () => void
 }> {
   render() {
-    return (
+    return this.props.onPress ? (
+      <TouchableOpacity onPress={this.props.onPress}>
+        <Text
+          style={{
+            fontFamily: fonts.SFProRoundedRegular,
+            fontSize: 22,
+            marginHorizontal: 16,
+            color: this.props.color || sharedColors.primaryColor,
+          }}
+        >
+          {this.props.text}
+        </Text>
+      </TouchableOpacity>
+    ) : (
       <Text
         style={{
           fontFamily: fonts.SFProRoundedRegular,
@@ -54,6 +71,14 @@ export class EpicProgress extends Component<{
           <EpicText
             color={this.props.epic.color}
             text={`#${this.props.epic.tag}`}
+            onPress={() => {
+              if (
+                sharedAppStateStore.hash.indexOf(`#${this.props.epic.tag}`) < 0
+              ) {
+                sharedAppStateStore.hash.push(`#${this.props.epic.tag}`)
+              }
+              navigate('Planning')
+            }}
           />
           <ProgressView
             progress={this.props.epic.epicPoints! / this.props.epic.epicGoal!}
