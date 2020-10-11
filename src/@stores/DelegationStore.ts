@@ -1,12 +1,8 @@
 import { observable, computed } from 'mobx'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
 
 class DelegationStore {
-  hydrated = false
-
   @observable allDelegationUsers = realm.objects<DelegationUser>(
     'DelegationUser'
   )
@@ -24,9 +20,6 @@ class DelegationStore {
   }
 
   onObjectsFromServer = async (objects: any) => {
-    if (!this.hydrated) {
-      return
-    }
     // Remove all
     realm.write(() => {
       realm.delete(this.allDelegationUsers)
@@ -59,7 +52,3 @@ class DelegationStore {
 }
 
 export const sharedDelegationStore = new DelegationStore()
-hydrate('DelegationStore', sharedDelegationStore).then(async () => {
-  sharedDelegationStore.hydrated = true
-  hydrateStore('DelegationStore')
-})
