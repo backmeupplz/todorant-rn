@@ -177,6 +177,7 @@ class TextRow extends Component<{
             !sharedSessionStore.encryptionKey
           }
           selectionColor={sharedColors.primaryColor}
+          keyboardType={Platform.OS === 'ios' ? 'twitter' : undefined}
         />
         {!!this.props.vm.text && this.props.showCross && (
           <TouchableOpacityIcon
