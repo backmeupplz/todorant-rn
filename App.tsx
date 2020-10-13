@@ -24,7 +24,7 @@ import { Paywall } from '@views/settings/Paywall'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
-import { IntroMessage } from '@views/settings/IntroMessage'
+import { IntroMessage } from '@views/settings/intro/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
@@ -36,6 +36,7 @@ import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
+import { Rules } from '@views/settings/Rules'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -205,6 +206,16 @@ class App extends Component {
                     undefined,
                     sharedHeroStore.rankColor[2]
                   ),
+                  ...headerBackButtonProps(),
+                }}
+              />
+              <Stack.Screen
+                name="Rules"
+                component={Rules}
+                options={{
+                  title: translate('howTo'),
+                  ...sharedColors.headerExtraStyle,
+                  headerRight: InfoButton('infoRules'),
                   ...headerBackButtonProps(),
                 }}
               />
