@@ -55,6 +55,13 @@ export function isDateTooOld(date: string, today: string) {
   return false
 }
 
+export function isToday(monthAndYear: string, date: string) {
+  const today = getDateString(new Date())
+  const todayDay = today.substr(8)
+  const todayMonthAndYear = today.substr(0, 7)
+  return todayMonthAndYear === monthAndYear && todayDay === date
+}
+
 export function getDateStringFromTodo(todo: {
   monthAndYear: string
   date?: string

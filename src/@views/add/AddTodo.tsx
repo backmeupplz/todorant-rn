@@ -3,7 +3,7 @@ import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
-import { getDateMonthAndYearString } from '@utils/time'
+import { getDateMonthAndYearString, isToday } from '@utils/time'
 import { Todo, getTitle, isTodoOld } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
@@ -318,8 +318,9 @@ class AddTodoContent extends Component<{
           vm.editedTodo?.monthAndYear != vm.monthAndYear ||
           vm.editedTodo?.date != vm.date ||
           vm.editedTodo?.time != vm.time
-        )
+        ) {
           return true
+        }
       } else if (
         vm.text ||
         vm.addOnTop ||
@@ -328,8 +329,17 @@ class AddTodoContent extends Component<{
         vm.monthAndYear ||
         vm.date ||
         vm.time
-      )
+      ) {
+        if (
+          !(vm.text || vm.addOnTop || vm.completed || vm.frog || vm.time) &&
+          vm.monthAndYear &&
+          vm.date &&
+          isToday(vm.monthAndYear, vm.date)
+        ) {
+          continue
+        }
         return true
+      }
     }
     return false
   }
