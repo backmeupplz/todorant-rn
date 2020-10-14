@@ -40,10 +40,30 @@ export class BottomControls extends Component<{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 20,
+          paddingLeft: 20,
+          paddingRight: 20,
           backgroundColor: sharedColors.backgroundColor,
         }}
       >
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {Array(this.props.count)
+            .fill(0)
+            .map((_, i) => (
+              <Dot active={i === this.props.index} key={i} />
+            ))}
+        </View>
         {this.props.index > 0 ? (
           <TouchableOpacity
             style={{
@@ -68,25 +88,6 @@ export class BottomControls extends Component<{
         ) : (
           <View />
         )}
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            top: 0,
-            left: 0,
-            right: 0,
-
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {Array(this.props.count)
-            .fill(0)
-            .map((_, i) => (
-              <Dot active={i === this.props.index} />
-            ))}
-        </View>
         <TouchableOpacity
           style={{
             flexDirection: 'row',

@@ -10,6 +10,7 @@ import { observable } from 'mobx'
 import { ImageAndTextIntroPage } from '@views/settings/intro/ImageAndTextIntroPage'
 import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const avatar = require('@assets/images/nikita.jpg')
 
@@ -78,80 +79,85 @@ export class IntroMessage extends Component {
 
   render() {
     return (
-      <Container>
-        <ScrollView
-          ref={this.scrollViewRef}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled={true}
-          onMomentumScrollEnd={(data) => {
-            data.eventPhase
-            const offset = data.nativeEvent.contentOffset.x
-            if (offset < 0) {
-              this.index = 0
-            } else if (offset > this.width * this.pages.length) {
-              this.index = this.pages.length - 1
-            } else {
-              this.index = Math.round(offset / Dimensions.get('window').width)
-            }
-          }}
-          onContentSizeChange={(w) => {
-            this.width = w / this.pages.length
-          }}
-          style={{
-            backgroundColor: sharedColors.backgroundColor,
-          }}
-          contentContainerStyle={{
-            width: `${100 * this.pages.length}%`,
-          }}
-        >
-          {this.pages.map((p, i) => (
-            <View style={{ width: this.width }} key={i}>
-              {p}
-            </View>
-          ))}
-        </ScrollView>
-        <View style={{ height: 50 }}>
-          <BottomControls
-            count={this.pages.length}
-            index={this.index}
-            indexChanged={(index) => {
-              if (index < 0 || index > this.pages.length - 1) {
-                return
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+        {...{ edges: ['left', 'bottom', 'right'] }}
+      >
+        <Container>
+          <ScrollView
+            ref={this.scrollViewRef}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled={true}
+            onMomentumScrollEnd={(data) => {
+              data.eventPhase
+              const offset = data.nativeEvent.contentOffset.x
+              if (offset < 0) {
+                this.index = 0
+              } else if (offset > this.width * this.pages.length) {
+                this.index = this.pages.length - 1
+              } else {
+                this.index = Math.round(offset / Dimensions.get('window').width)
               }
-              this.index = index
-              this.scrollViewRef.current?.scrollTo({
-                x: this.width * this.index,
-              })
             }}
-            letsGoAction={() => {
-              ActionSheet.show(
-                {
-                  options: [
-                    translate('startUsingNow'),
-                    translate('readRulesFirst'),
-                  ],
-                  title: translate('whatWouldYouLikeToDoa'),
-                },
-                (index) => {
-                  if (index === 0) {
-                    goBack()
-                  } else {
-                    goBack()
-                    navigate('Rules')
-                  }
-                  Toast.show({
-                    text: translate(
-                      index === 0 ? 'iAdmireYourBravery' : 'iAdmireYourSpirit'
-                    ),
-                    duration: 3000,
-                  })
+            onContentSizeChange={(w) => {
+              this.width = w / this.pages.length
+            }}
+            style={{
+              backgroundColor: sharedColors.backgroundColor,
+            }}
+            contentContainerStyle={{
+              width: `${100 * this.pages.length}%`,
+            }}
+          >
+            {this.pages.map((p, i) => (
+              <View style={{ width: this.width }} key={i}>
+                {p}
+              </View>
+            ))}
+          </ScrollView>
+          <View style={{ height: 50 }}>
+            <BottomControls
+              count={this.pages.length}
+              index={this.index}
+              indexChanged={(index) => {
+                if (index < 0 || index > this.pages.length - 1) {
+                  return
                 }
-              )
-            }}
-          />
-        </View>
-      </Container>
+                this.index = index
+                this.scrollViewRef.current?.scrollTo({
+                  x: this.width * this.index,
+                })
+              }}
+              letsGoAction={() => {
+                ActionSheet.show(
+                  {
+                    options: [
+                      translate('startUsingNow'),
+                      translate('readRulesFirst'),
+                    ],
+                    title: translate('whatWouldYouLikeToDoa'),
+                  },
+                  (index) => {
+                    if (index === 0) {
+                      goBack()
+                    } else {
+                      goBack()
+                      navigate('Rules')
+                    }
+                    Toast.show({
+                      text: translate(
+                        index === 0 ? 'iAdmireYourBravery' : 'iAdmireYourSpirit'
+                      ),
+                      duration: 3000,
+                    })
+                  }
+                )
+              }}
+            />
+          </View>
+        </Container>
+      </SafeAreaView>
     )
   }
 }
