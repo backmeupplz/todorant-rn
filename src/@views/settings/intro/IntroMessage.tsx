@@ -11,11 +11,13 @@ import { ImageAndTextIntroPage } from '@views/settings/intro/ImageAndTextIntroPa
 import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
 
+const avatar = require('@assets/images/nikita.jpg')
+
 @observer
 export class IntroMessage extends Component {
   pages = [
     <ImageAndTextIntroPage
-      image={require('@assets/images/nikita.jpg')}
+      image={avatar}
       texts={[
         translate('introText0'),
         translate('introText1'),
