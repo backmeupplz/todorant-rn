@@ -349,11 +349,25 @@ class AddTodoContent extends Component<{
       goBack()
     } else {
       const options = [
-        translate('dissmissTasks'),
-        translate(this.isValid ? 'changeTasks' : 'fixTasks'),
+        translate(
+          this.vms.length > 1 ? 'dissmissTasks' : 'dissmissTasksSingular'
+        ),
+        translate(
+          this.isValid
+            ? this.vms.length > 1
+              ? 'changeTasks'
+              : 'changeTasksSingular'
+            : this.vms.length > 1
+            ? 'fixTasks'
+            : 'fixTasksSingular'
+        ),
       ]
       if (this.isValid) {
-        options.splice(0, 0, translate('saveTasks'))
+        options.splice(
+          0,
+          0,
+          translate(this.vms.length > 1 ? 'saveTasks' : 'saveTasksSingular')
+        )
       }
 
       ActionSheet.show(
@@ -362,7 +376,13 @@ class AddTodoContent extends Component<{
           cancelButtonIndex: 0,
           destructiveButtonIndex: 1,
           title: translate(
-            this.isValid ? 'dirtyValidSave' : 'dirtyInvalidSave'
+            this.isValid
+              ? this.vms.length > 1
+                ? 'dirtyValidSave'
+                : 'dirtyValidSaveSingular'
+              : this.vms.length > 1
+              ? 'dirtyInvalidSave'
+              : 'dirtyInvalidSaveSingular'
           ),
         },
         (buttonIndex) => {
