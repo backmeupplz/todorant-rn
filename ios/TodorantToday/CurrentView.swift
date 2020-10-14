@@ -37,7 +37,6 @@ struct CurrentView: View {
                 ClearView()
               } else {
                 CurrentTodoView(extensionContext: extensionContext)
-                
               }
             })
         } ?? ViewBuilder.buildEither(second:
@@ -92,7 +91,7 @@ struct TodoTextView: View {
 
   var body: some View {
     Text(
-      "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "")" : "")\(todo.text.stringWithLinksTruncated())"
+      "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "") " : "")\(todo.text.stringWithLinksTruncated())"
     )
     .lineLimit(self.store.expanded ? nil : 1)
     .fixedSize(horizontal: false, vertical: true)
