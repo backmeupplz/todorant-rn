@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This is a sample actions.xml -->
+<actions>
+    <action intentName="actions.intent.CREATE_DIGITAL_DOCUMENT">
+        <fulfillment urlTemplate="todorant://createTodo{?articleBody}">
+            <parameter-mapping urlParameter="articleBody" intentParameter="digitalDocument.articleBody" />
+        </fulfillment>
+        <fulfillment urlTemplate="todorant://emptydeeplink" />
+    </action>
+</actions>
