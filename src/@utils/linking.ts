@@ -1,3 +1,4 @@
+import { sharedAppStateStore } from './../@stores/AppStateStore'
 import { translate } from '@utils/i18n'
 import { daysAgo } from '@utils/plusButtonAction'
 import { navigate } from '@utils/navigation'
@@ -46,6 +47,10 @@ function handleUrl(url: string) {
           : undefined
       )
     }
+  } else if (params.url === 'todorant://search' && params.query.query) {
+    navigate('Planning')
+    sharedAppStateStore.searchEnabled = true
+    sharedAppStateStore.searchQuery = [params.query.query as string]
   }
 }
 

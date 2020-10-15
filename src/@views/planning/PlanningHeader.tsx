@@ -38,6 +38,7 @@ export class PlanningHeader extends Component {
         placeholder={`${translate('search')}...`}
         placeholderTextColor={sharedColors.placeholderColor}
         autoFocus
+        value={sharedAppStateStore.searchQuery[0]}
         onChangeText={(text) => {
           sharedAppStateStore.searchQuery = [text]
         }}

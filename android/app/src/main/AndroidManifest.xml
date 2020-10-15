@@ -80,6 +80,9 @@
                 <data
                     android:host="create-todo"
                     android:scheme="todorant" />
+                <data
+                    android:host="search"
+                    android:scheme="todorant" />
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />

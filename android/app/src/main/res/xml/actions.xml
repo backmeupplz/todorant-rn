@@ -7,4 +7,10 @@
         </fulfillment>
         <fulfillment urlTemplate="todorant://emptydeeplink" />
     </action>
+    <action intentName="actions.intent.GET_THING">
+        <fulfillment urlTemplate="todorant://search{?query}">
+            <parameter-mapping intentParameter="thing.name" urlParameter="query" required="true" />
+        </fulfillment>
+        <fulfillment urlTemplate="todorant://emptydeeplink" />
+    </action>
 </actions>
