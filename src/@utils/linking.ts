@@ -1,3 +1,4 @@
+import { translate } from '@utils/i18n'
 import { daysAgo } from '@utils/plusButtonAction'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -9,6 +10,7 @@ import { realm } from '@utils/realm'
 import { Linking } from 'react-native'
 import QueryString from 'query-string'
 import uuid from 'uuid'
+import { Toast } from 'native-base'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -76,5 +78,13 @@ function addTodo(text: string) {
     realm.create<Todo>('Todo', todo)
   })
   // Sync todos
-  fixOrder([getTitle(todo)])
+  fixOrder(
+    [getTitle(todo)],
+    sharedSettingsStore.newTodosGoFirst ? [todo] : [],
+    sharedSettingsStore.newTodosGoFirst ? [] : [todo]
+  )
+  // Show toast
+  Toast.show({
+    text: `${translate('addedTask')}: ${text}`,
+  })
 }
