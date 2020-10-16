@@ -11,6 +11,8 @@ import { Todo } from '@models/Todo'
 import { observable, computed } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
+import React from 'react'
+import { TextInput } from 'react-native'
 
 export class TodoVM {
   @observable text = ''
@@ -35,6 +37,7 @@ export class TodoVM {
 
   @observable showTags = false
 
+  todoTextField = React.createRef<TextInput>()
   todoTextView?: Animatable.View
   handleTodoTextViewRef = (ref: any) => (this.todoTextView = ref)
   exactDateView?: Animatable.Text
@@ -61,6 +64,7 @@ export class TodoVM {
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
       this.text = `${this.text}${tag.tag} `
+      ;(this.todoTextField.current as any)._root.focus()
       return
     }
     const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
@@ -71,6 +75,7 @@ export class TodoVM {
     this.text = `${this.text.substr(0, this.text.length - match.length)}#${
       tag.tag
     } `
+    ;(this.todoTextField.current as any)._root.focus()
   }
 
   @computed

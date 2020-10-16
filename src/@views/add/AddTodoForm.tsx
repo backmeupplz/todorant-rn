@@ -178,6 +178,7 @@ class TextRow extends Component<{
           }
           selectionColor={sharedColors.primaryColor}
           keyboardType={Platform.OS === 'ios' ? 'twitter' : undefined}
+          ref={this.props.vm.todoTextField}
         />
         {!!this.props.vm.text && this.props.showCross && (
           <TouchableOpacityIcon

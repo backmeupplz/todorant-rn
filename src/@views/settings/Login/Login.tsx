@@ -187,8 +187,9 @@ export class LoginContent extends Component<{
   render() {
     const textStyle = {
       fontFamily: sharedColors.regularTextExtraStyle.style.fontFamily,
-      textTransform: 'uppercase',
+      textTransform: 'none',
       fontWeight: 'bold',
+      fontSize: 19,
     } as StyleProp<TextStyle>
     return (
       <>
