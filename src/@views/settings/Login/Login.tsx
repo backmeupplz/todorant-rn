@@ -9,7 +9,7 @@ import { goBack, navigate } from '@utils/navigation'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
-import { RouteProp, useRoute, ThemeProvider } from '@react-navigation/native'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { Platform, StyleProp, TextStyle } from 'react-native'
@@ -188,8 +188,8 @@ export class LoginContent extends Component<{
     const textStyle = {
       fontFamily: sharedColors.regularTextExtraStyle.style.fontFamily,
       textTransform: 'none',
-      fontWeight: 'bold',
-      fontSize: 19,
+      fontWeight: 'normal',
+      fontSize: Platform.OS === 'ios' ? 19 : 17,
     } as StyleProp<TextStyle>
     return (
       <>
@@ -224,8 +224,11 @@ export class LoginContent extends Component<{
               }}
               onPress={this.vm.loginWithGoogle}
               disabled={this.vm.loading}
+              textStyle={textStyle}
             >
-              <Text style={textStyle}>{translate('loginGoogle')}</Text>
+              <Text style={textStyle} uppercase={false}>
+                {translate('loginGoogle')}
+              </Text>
             </Button>
             <Button
               style={{
@@ -236,8 +239,11 @@ export class LoginContent extends Component<{
               }}
               onPress={this.vm.loginWithFacebook}
               disabled={this.vm.loading}
+              textStyle={textStyle}
             >
-              <Text style={textStyle}>{translate('loginFacebook')}</Text>
+              <Text style={textStyle} uppercase={false}>
+                {translate('loginFacebook')}
+              </Text>
             </Button>
             {(Platform.OS === 'ios' || appleAuthAndroid.isSupported) && (
               <View
@@ -278,8 +284,11 @@ export class LoginContent extends Component<{
                 })
               }}
               disabled={this.vm.loading}
+              textStyle={textStyle}
             >
-              <Text style={textStyle}>{translate('loginTelegram')}</Text>
+              <Text style={textStyle} uppercase={false}>
+                {translate('loginTelegram')}
+              </Text>
             </Button>
             <Button
               style={{
@@ -296,8 +305,11 @@ export class LoginContent extends Component<{
                 })
               }}
               disabled={this.vm.loading}
+              textStyle={textStyle}
             >
-              <Text style={textStyle}>{translate('loginQR')}</Text>
+              <Text style={textStyle} uppercase={false}>
+                {translate('loginQR')}
+              </Text>
             </Button>
             {__DEV__ && (
               <>
@@ -323,8 +335,11 @@ export class LoginContent extends Component<{
                     this.vm.loginWithToken(this.vm.debugToken)
                   }}
                   disabled={this.vm.loading}
+                  textStyle={textStyle}
                 >
-                  <Text>Login with token</Text>
+                  <Text style={textStyle} uppercase={false}>
+                    Login with token
+                  </Text>
                 </Button>
               </>
             )}
