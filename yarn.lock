@@ -6113,10 +6113,9 @@ react-native-reanimated@^1.10.2:
   dependencies:
     fbjs "^1.0.0"
 
-react-native-receive-sharing-intent@^1.0.4:
+react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-intent:
   version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-receive-sharing-intent/-/react-native-receive-sharing-intent-1.0.4.tgz#9b2ad2f46b7d301e8091da25f41a9a0d52d162a2"
-  integrity sha512-y2LF/IcmcB3DBPtjqKN80qg814xwWOZw1e1yw5jnppzMVQVmU4bPQWaGgWqr2wppq/PdWiw3shgc5oRCZC5bSg==
+  resolved "https://codeload.github.com/backmeupplz/react-native-receive-sharing-intent/tar.gz/41b66b203dc93dde70b6827e70ff2a2a14b72511"
 
 react-native-restart@^0.0.14:
   version "0.0.14"
