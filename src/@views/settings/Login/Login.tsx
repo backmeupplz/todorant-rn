@@ -348,22 +348,20 @@ export class LoginContent extends Component<{
         {this.vm.syncLoading && (
           <View
             style={{
-              backgroundColor: 'black',
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
               position: 'absolute',
               top: 0,
               left: 0,
-              flex: 1,
-              height: '100%',
-              width: '100%',
-              opacity: 0.3,
+              bottom: 0,
+              right: 0,
               justifyContent: 'center',
               alignContent: 'center',
             }}
           >
-            <Spinner />
+            <Spinner noBackgroundColor={true} />
             <Text
               style={{
-                ...sharedColors.textExtraStyle.style,
+                color: 'white',
                 textAlign: 'center',
               }}
             >
