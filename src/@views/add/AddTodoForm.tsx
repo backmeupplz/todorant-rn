@@ -336,15 +336,15 @@ class MonthRow extends Component<{
           ref={this.props.vm.handleMonthViewRef}
           style={{
             color:
-              this.props.vm.datePickerValue && !this.props.vm.date
+              this.props.vm.monthAndYearPickerValueString && !this.props.vm.date
                 ? sharedColors.textColor
                 : sharedColors.placeholderColor,
             fontFamily: fonts.SFProTextRegular,
             fontSize: fontSize,
           }}
         >
-          {this.props.vm.datePickerValue && !this.props.vm.date
-            ? this.props.vm.datePickerValue
+          {this.props.vm.monthAndYearPickerValueString && !this.props.vm.date
+            ? this.props.vm.monthAndYearPickerValueString
             : translate('addTodoMonth')}
         </Animatable.Text>
         <CustomIcon

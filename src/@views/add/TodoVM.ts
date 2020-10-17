@@ -111,6 +111,11 @@ export class TodoVM {
       this.date = undefined
     }
   }
+  @computed
+  get monthAndYearPickerValueString() {
+    const date = this.monthAndYearPickerValue
+    return date ? getDateMonthAndYearString(date) : undefined
+  }
 
   @computed
   get timePickerValue() {
