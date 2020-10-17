@@ -116,8 +116,8 @@ export class TodoCardContent extends Component<{
               >
                 {Array(this.props.todo.frogFails)
                   .fill(0)
-                  .map(() => (
-                    <FailCircle />
+                  .map((_, i) => (
+                    <FailCircle key={i} />
                   ))}
               </View>
             )}
