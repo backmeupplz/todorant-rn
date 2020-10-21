@@ -347,5 +347,6 @@
   "dissmissTasksSingular": "Dismiss task",
   "saveTasksSingular": "Save task",
   "fixTasksSingular": "Fix task",
-  "changeTasksSingular": "Change task"
+  "changeTasksSingular": "Change task",
+  "addedTask": "Added task"
 }

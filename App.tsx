@@ -5,14 +5,13 @@ import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/network'
-import '@utils/ignoreWarnings'
 import '@utils/purchases'
 import { Root, StyleProvider, View } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
-import { StatusBar } from 'react-native'
+import { StatusBar, LogBox } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -37,6 +36,7 @@ import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 import { Rules } from '@views/settings/Rules'
+import { setupLinking } from '@utils/linking'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -54,7 +54,7 @@ GoogleSignin.configure({
   forceConsentPrompt: true,
 })
 
-console.disableYellowBox = true
+LogBox.ignoreAllLogs()
 
 const Stack = createStackNavigator()
 
@@ -68,6 +68,7 @@ class App extends Component {
     checkSiriPermission()
     checkSharedContent()
     refreshWidgetAndBadge()
+    setupLinking()
   }
 
   render() {

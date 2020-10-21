@@ -347,5 +347,6 @@
   "dissmissTasksSingular": "Удалить задачу",
   "saveTasksSingular": "Сохранить задачу",
   "fixTasksSingular": "Поправить задачу",
-  "changeTasksSingular": "Изменить задачу"
+  "changeTasksSingular": "Изменить задачу",
+  "addedTask": "Задача добавлена"
 }

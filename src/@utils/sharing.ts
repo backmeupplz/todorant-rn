@@ -14,6 +14,7 @@ ReceiveSharingIntent.getReceivedFiles(
     }
     sharedText = result.join(', ')
     if (sharedText) {
+      ReceiveSharingIntent.clearReceivedFiles()
       navigate('AddTodo', { text: sharedText })
       sharedText = ''
     }
@@ -26,6 +27,8 @@ ReceiveSharingIntent.clearReceivedFiles()
 
 export function checkSharedContent() {
   if (sharedText) {
+    ReceiveSharingIntent.clearReceivedFiles()
     navigate('AddTodo', { text: sharedText })
+    sharedText = ''
   }
 }

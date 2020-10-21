@@ -58,6 +58,9 @@ class AddEpicContent extends Component<{
     if (!dbtag) {
       return
     }
+    if (!this.epicGoal || +this.epicGoal <= 0) {
+      return
+    }
     realm.write(() => {
       dbtag.epic = true
       dbtag.epicGoal = this.epicGoal

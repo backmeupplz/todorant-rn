@@ -7,6 +7,7 @@ import { PacmanIndicator } from 'react-native-indicators'
 export class Spinner extends Component<{
   noPadding?: boolean
   maxHeight?: number
+  noBackgroundColor?: boolean
 }> {
   render() {
     return (
@@ -14,7 +15,9 @@ export class Spinner extends Component<{
         color={sharedColors.primaryColor}
         animating
         style={{
-          backgroundColor: sharedColors.backgroundColor,
+          backgroundColor: this.props.noBackgroundColor
+            ? undefined
+            : sharedColors.backgroundColor,
           maxHeight: this.props.maxHeight || 45,
           paddingVertical: this.props.noPadding ? 0 : 6,
         }}
