@@ -227,7 +227,9 @@ class TodoStore {
           if (localTodo.encrypted) {
             localTodo.text = decrypt(localTodo.text)
           }
-          localTodo._exactDate = new Date(getTitle(localTodo))
+          localTodo._exactDate = localTodo.monthAndYear
+            ? new Date(getTitle(localTodo))
+            : new Date()
         }
       }
     })
