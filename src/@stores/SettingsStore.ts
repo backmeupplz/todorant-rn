@@ -7,7 +7,7 @@ import { hydrate } from '@utils/hydrate'
 import { getLanguageTag } from '@utils/i18n'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import RNRestart from 'react-native-restart'
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export enum Language {
   auto = 'auto',
