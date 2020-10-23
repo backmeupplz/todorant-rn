@@ -5,5 +5,5 @@ import { DelegationUser } from '@models/DelegationUser'
 
 export const realm = new Realm({
   schema: [Todo.schema, Tag.schema, DelegationUser.schema],
-  schemaVersion: 8,
+  schemaVersion: 9,
 })

@@ -63,7 +63,7 @@ export function isToday(monthAndYear: string, date: string) {
 }
 
 export function getDateStringFromTodo(todo: {
-  monthAndYear: string
+  monthAndYear?: string
   date?: string
 }) {
   return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`

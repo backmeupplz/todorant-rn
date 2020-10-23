@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { Todo } from '@models/Todo'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class DelegateCardActions extends Component<{
@@ -21,9 +22,25 @@ export class DelegateCardActions extends Component<{
           backgroundColor: 'transparent',
         }}
       >
+        {this.props.todo.monthAndYear && (
+          <TouchableOpacity
+            onPress={() => {
+              this.props.vm.accept(this.props.todo)
+            }}
+          >
+            <Text
+              style={{
+                ...sharedColors.regularTextExtraStyle.style,
+                color: sharedColors.successIconColor,
+              }}
+            >
+              {translate('accept')}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={() => {
-            this.props.vm.accept(this.props.todo)
+            navigate('EditTodo', { editedTodo: this.props.todo })
           }}
         >
           <Text
@@ -32,7 +49,7 @@ export class DelegateCardActions extends Component<{
               color: sharedColors.successIconColor,
             }}
           >
-            {translate('accept')}
+            {translate('edit')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
