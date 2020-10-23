@@ -51,6 +51,7 @@ export class HeroProfile extends Component {
               {this.previousRanks
                 .map((r, i) => (
                   <RankCard
+                    key={i}
                     rank={{
                       color: sharedHeroStore.colorForRank(i)[0],
                       count: r,
