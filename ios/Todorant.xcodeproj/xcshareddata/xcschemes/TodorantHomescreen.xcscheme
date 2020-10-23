@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6601C07A252BA062004DF491"
-               BuildableName = "HomeWidgetExtension.appex"
-               BlueprintName = "HomeWidgetExtension"
+               BuildableName = "TodorantHomescreen.appex"
+               BlueprintName = "TodorantHomescreen"
                ReferencedContainer = "container:Todorant.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6601C07A252BA062004DF491"
-            BuildableName = "HomeWidgetExtension.appex"
-            BlueprintName = "HomeWidgetExtension"
+            BuildableName = "TodorantHomescreen.appex"
+            BlueprintName = "TodorantHomescreen"
             ReferencedContainer = "container:Todorant.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>

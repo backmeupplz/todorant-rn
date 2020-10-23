@@ -28,7 +28,7 @@ target 'TodorantToday' do
   pod 'SwiftKeychainWrapper'
 end
 
-target 'HomeWidgetExtension' do
+target 'TodorantHomescreen' do
   pod 'Alamofire', '~> 5.0'
   pod 'SwiftKeychainWrapper'
 end
