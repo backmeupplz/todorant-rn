@@ -56,8 +56,8 @@ export class RankCard extends Component<{
       >
         {!this.props.finished && (
           <CircleWithText
-            color={this.props.rank.color}
-            count={this.props.rank.count}
+            color={this.props.nextRank?.color || 'tomato'}
+            count={this.props.nextRank?.count || 0}
           />
         )}
         <View
@@ -82,7 +82,7 @@ export class RankCard extends Component<{
               style={{
                 backgroundColor: this.props.rank.color,
                 position: 'absolute',
-                top: 0,
+                bottom: 0,
                 left: 0,
                 right: 0,
                 height:
@@ -159,8 +159,8 @@ export class RankCard extends Component<{
         </View>
         {!this.props.finished && (
           <CircleWithText
-            color={this.props.nextRank?.color || 'tomato'}
-            count={this.props.nextRank?.count || 0}
+            color={this.props.rank.color}
+            count={this.props.rank.count}
           />
         )}
       </View>

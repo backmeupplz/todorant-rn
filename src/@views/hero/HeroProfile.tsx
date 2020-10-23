@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import { sharedHeroStore, ranks } from '@stores/HeroStore'
 import { computed } from 'mobx'
 import { sharedColors } from '@utils/sharedColors'
-import { RankCard } from './RankCard'
+import { RankCard } from '@views/hero/RankCard'
 import { Divider } from '@components/Divider'
 import { translate } from '@utils/i18n'
 
