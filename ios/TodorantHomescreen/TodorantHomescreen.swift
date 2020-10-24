@@ -1,6 +1,6 @@
 //
-//  TodorantWidget.swift
-//  TodorantWidget
+//  TodorantHomescreen.swift
+//  TodorantHomescreen
 //
 //  Created by Yakov Karpov on 02.10.2020.
 //  Copyright © 2020 Todorant. All rights reserved.

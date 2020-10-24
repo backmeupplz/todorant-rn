@@ -51,7 +51,6 @@ private extension SegmentedProgressBarView {
         }
       }
       .frame(maxHeight: 2)
-      .clipShape(Capsule())
     }
   }
 
@@ -73,7 +72,6 @@ private extension SegmentedProgressBarView {
         }
       }
       .frame(maxHeight: 2)
-      .clipShape(Capsule())
     }
   }
 }
