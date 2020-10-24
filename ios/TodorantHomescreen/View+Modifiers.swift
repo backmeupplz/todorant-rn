@@ -48,7 +48,7 @@ extension View {
   }
 }
 
-enum Config {
+private enum Config {
   static let topElementPadding: CGFloat = 8
   static let mainColor: Color = .buttonsRowBackground
 }
