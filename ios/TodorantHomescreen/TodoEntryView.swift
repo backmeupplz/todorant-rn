@@ -18,8 +18,8 @@ struct TodoEntryView: View {
           Text(title)
             .widgetTitleStyle()
           Text(model.text)
-            .widgetTextStyle()
         }
+        .widgetTextStyle()
       } else if let currentProgress = model.currentProgress,
         let maximumProgress = model.maximumProgress
       {
