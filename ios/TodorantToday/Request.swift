@@ -42,9 +42,9 @@ extension Request {
   var headers: HTTPHeaders? {
     guard let token = UserSession.accessToken else { return nil }
     guard let password = UserSession.password, password.count > 0 else {
-      return ["token": "\(token)"]
+      return ["token": token]
     }
-    return ["token": "\(token)", "password-to-decrypt": "\(password)"]
+    return ["token": token, "password-to-decrypt": password]
   }
   var encoding: ParameterEncoding {
     return URLEncoding.default
@@ -56,6 +56,11 @@ extension Request {
                encoding: encoding,
                headers: headers,
                interceptor: interceptor)
+      .response { response in
+        if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+          print("Data: \(utf8Text)")
+        }
+      }
       .responseJSON {
         if let data = $0.data {
           do {

@@ -418,7 +418,7 @@ PODS:
     - React
   - RNAppleAuthentication (2.0.1):
     - React-Core
-  - RNCAsyncStorage (1.12.1):
+  - RNCAsyncStorage (1.13.0):
     - React-Core
   - RNCClipboard (1.2.1):
     - React
@@ -513,7 +513,7 @@ DEPENDENCIES:
   - ReactNativeDarkMode (from `../node_modules/react-native-dark-mode`)
   - RealmJS (from `../node_modules/realm`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
-  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
@@ -653,7 +653,7 @@ EXTERNAL SOURCES:
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
-    :path: "../node_modules/@react-native-community/async-storage"
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
@@ -760,7 +760,7 @@ SPEC CHECKSUMS:
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
   RealmJS: 6eb9fd885c5f3cd609b8b50282a5785cb4b48a18
   RNAppleAuthentication: 35162025d279d135a7be78b37d9f3e29dc786cfb
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
+  RNCAsyncStorage: a52e45079e7df6cee380be6af676a8441d38c42a
   RNCClipboard: b238c952b0f8d5a6fa5ff96eacb9898608946540
   RNCMaskedView: 4383c3140f1235391fd6029968c166f09ddd0973
   RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
