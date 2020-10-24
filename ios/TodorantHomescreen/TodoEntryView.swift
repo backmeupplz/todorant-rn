@@ -16,10 +16,10 @@ struct TodoEntryView: View {
       if let title = model.title {
         VStack {
           Text(title)
-            .font(.title)
+            .widgetTitleStyle()
           Text(model.text)
+            .widgetTextStyle()
         }
-        .modifier(WidgetTodoTextModifier())
       } else if let currentProgress = model.currentProgress,
         let maximumProgress = model.maximumProgress
       {
@@ -27,24 +27,16 @@ struct TodoEntryView: View {
           currentProgress: currentProgress,
           maximumProgress: maximumProgress
         )
-        .padding([.leading, .top, .trailing])
+        .widgetTopElementPadding()
         Text(model.text)
-          .modifier(WidgetTodoTextModifier())
+          .widgetTextStyle()
+      } else {
+      Text(model.text)
+        .widgetTextStyle()
       }
     }
   }
 }
 
-struct WidgetTodoTextModifier: ViewModifier {
-//  let mainColor: Color = .buttonsRowBackground
-  let mainColor: Color = Color(.systemRed)
 
-  func body(content: Content) -> some View {
-    content
-      .padding()
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(mainColor)
-//      .cornerRadius(10)
-      .padding()
-  }
-}
+
