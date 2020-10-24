@@ -23,7 +23,7 @@ export class Todo {
       frogFails: 'int',
       skipped: { type: 'bool', indexed: true },
       order: 'int',
-      monthAndYear: { type: 'string', indexed: true },
+      monthAndYear: { type: 'string?', indexed: true },
       deleted: { type: 'bool', indexed: true },
       encrypted: { type: 'bool', indexed: true, default: false },
       date: { type: 'string?', indexed: true },
@@ -43,7 +43,7 @@ export class Todo {
   @observable frogFails!: number
   @observable skipped!: boolean
   @observable order!: number
-  @observable monthAndYear!: string
+  @observable monthAndYear?: string
   @observable deleted!: boolean
   @observable encrypted!: boolean
   @observable date?: string
@@ -74,7 +74,7 @@ export function isTodoOld(todo: Todo) {
 
   // Exact date exists or not
   if (todo.date) {
-    if (todo.monthAndYear < monthAndYear) {
+    if (todo.monthAndYear && todo.monthAndYear < monthAndYear) {
       return true
     }
     if (
@@ -88,7 +88,7 @@ export function isTodoOld(todo: Todo) {
       return true
     }
   } else {
-    if (todo.monthAndYear <= monthAndYear) {
+    if (todo.monthAndYear && todo.monthAndYear <= monthAndYear) {
       return true
     }
   }
@@ -114,7 +114,11 @@ export function compareTodos(completed: Boolean) {
       } else if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
         return 1
       } else if (!a.date || !b.date) {
-        if (a.monthAndYear < b.monthAndYear) {
+        if (
+          a.monthAndYear &&
+          b.monthAndYear &&
+          a.monthAndYear < b.monthAndYear
+        ) {
           return completed ? 1 : -1
         } else {
           return completed ? -1 : 1
@@ -130,8 +134,10 @@ export function compareTodos(completed: Boolean) {
   }
 }
 
-export function getTitle(todo: { monthAndYear: string; date?: string }) {
-  return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`
+export function getTitle(todo: { monthAndYear?: string; date?: string }) {
+  return `${todo.monthAndYear ? todo.monthAndYear : ''}${
+    todo.date ? `-${todo.date}` : ''
+  }`
 }
 
 export function cloneTodo(todo: Todo) {
