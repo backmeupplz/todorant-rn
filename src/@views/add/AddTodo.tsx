@@ -331,7 +331,7 @@ class AddTodoContent extends Component<{
         vm.time
       ) {
         if (
-          !(vm.text || vm.addOnTop || vm.completed || vm.frog || vm.time) &&
+          !(vm.text || vm.completed || vm.frog || vm.time) &&
           vm.monthAndYear &&
           vm.date &&
           isToday(vm.monthAndYear, vm.date)

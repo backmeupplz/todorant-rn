@@ -170,7 +170,7 @@ struct buttonsRowView: View {
       .modifier(ButtonsRowModifier())
       // Add todo button
       Button(action: {
-        self.extensionContext.open(URL(string: "todorant://")!)
+        self.extensionContext.open(URL(string: "todorant://create-todo")!)
       }) {
         AddTodoButtonIcon()
       }
