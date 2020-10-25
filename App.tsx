@@ -11,7 +11,7 @@ import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
-import { StatusBar, LogBox } from 'react-native'
+import { StatusBar, LogBox, AppState } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -37,6 +37,7 @@ import { checkSharedContent } from '@utils/sharing'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
+import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -69,6 +70,12 @@ class App extends Component {
     checkSharedContent()
     refreshWidgetAndBadge()
     setupLinking()
+    checkAndroidLaunchArgs()
+    AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        checkAndroidLaunchArgs()
+      }
+    })
   }
 
   render() {
