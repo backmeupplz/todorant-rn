@@ -27,7 +27,7 @@ export async function setupLinking() {
 
 function handleUrl(url: string) {
   const params = QueryString.parseUrl(url)
-  if (params.url === 'todorant://create-todo' && params.query.articleBody) {
+  if (params.url === 'todorant://create-todo') {
     if (
       !sharedSessionStore.user?.token &&
       sharedSessionStore.appInstalledMonthAgo
@@ -37,7 +37,7 @@ function handleUrl(url: string) {
       !sharedSessionStore.user?.token ||
       sharedSessionStore.isSubscriptionActive
     ) {
-      addTodo(params.query.articleBody as string)
+      addTodo((params.query.articleBody || '') as string)
     } else {
       navigate(
         'Paywall',

@@ -40,6 +40,7 @@ export class SegmentedProgressView extends Component<{
           {this.props.total <= 20 ? (
             Array.from(Array(this.props.total).keys()).map((i) => (
               <View
+                key={i}
                 style={{
                   marginHorizontal: 4,
                   height: '100%',
