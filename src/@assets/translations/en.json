@@ -10,7 +10,6 @@
   },
   "cancel": "Cancel",
   "save": "Save",
-  "edit": "Edit",
   "delete": "Delete",
   "current": "Current",
   "planning": "Planning",
@@ -343,5 +342,6 @@
   "saveTasksSingular": "Save task",
   "fixTasksSingular": "Fix task",
   "changeTasksSingular": "Change task",
-  "addedTask": "Added task"
+  "addedTask": "Added task",
+  "edit": "Edit"
 }
