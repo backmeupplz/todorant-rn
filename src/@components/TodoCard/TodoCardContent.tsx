@@ -13,6 +13,7 @@ import { FailCircle } from './FailCircle'
 import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -27,6 +28,7 @@ export class TodoCardContent extends Component<{
     return (
       <View>
         <Swipeable
+          enabled={sharedSettingsStore.swipeActions}
           ref={(ref) => (row = ref)}
           leftThreshold={100}
           rightThreshold={100}

@@ -304,6 +304,9 @@
   "planningReminderTime": "Planning reminder time",
   "notSet": "Not set",
   "planningReminderText": "🎉 It's time to plan!",
+  "settingsActions": {
+    "swipeActions": "Swipe actions"
+  },
   "endOfDaySoundOn": "All tasks done sound",
   "dirtyValidSave": "Would you like to save the entered tasks?",
   "dirtyInvalidSave": "You didn't finish entering tasks. Do you want to dismiss the entered tasks?",
