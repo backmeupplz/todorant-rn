@@ -56,12 +56,11 @@ class ChangeTextContent extends Component<{
     const dbtag = sharedTagStore.getTagById(
       this.tag?._id || this.tag?._tempSyncId
     )
-    if (!dbtag || !this.newName || !dbtag.tag) {
+    if (!dbtag || !this.newName || !this.newName.match(/^[\S]+$/)) {
       return
     }
     realm.write(() => {
       for (const todo of sharedTodoStore.allTodos) {
-        console.log(todo.text)
         todo.text = todo.text
           .split(' ')
           .map((word) => {
@@ -108,7 +107,7 @@ class ChangeTextContent extends Component<{
             style={{
               flex: 1,
               flexDirection: 'row',
-              color: 'red',
+              color: 'green',
               textAlign: 'center',
             }}
           />
