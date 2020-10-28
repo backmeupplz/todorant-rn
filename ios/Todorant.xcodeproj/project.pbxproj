@@ -35,6 +35,10 @@
 		6601C0D3252BA22C004DF491 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */; };
 		6601C0DA252BA231004DF491 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
 		6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
+		665C1789254A26A900786973 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C1788254A26A900786973 /* ButtonsView.swift */; };
+		665C1793254A323900786973 /* ButtonEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C1792254A323900786973 /* ButtonEntryView.swift */; };
+		665C17A4254A377C00786973 /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
+		665C17AD254A377D00786973 /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
 		668AFA49252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		668AFA4A252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		66CD27FC2543D23000C8B643 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */; };
@@ -237,6 +241,8 @@
 		6601C085252BA065004DF491 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6601C092252BA157004DF491 /* TodoEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEntryView.swift; sourceTree = "<group>"; };
 		6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetContent.swift; sourceTree = "<group>"; };
+		665C1788254A26A900786973 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
+		665C1792254A323900786973 /* ButtonEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEntryView.swift; sourceTree = "<group>"; };
 		668AFA4B252E40A20046205C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		668AFA53252E40B00046205C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
@@ -500,6 +506,8 @@
 				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
 				66E864112549D3C500CA2017 /* TodoView.swift */,
 				66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */,
+				665C1788254A26A900786973 /* ButtonsView.swift */,
+				665C1792254A323900786973 /* ButtonEntryView.swift */,
 				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
 				66E864152549D3C500CA2017 /* NotificationView.swift */,
 				66E864132549D3C500CA2017 /* NotificationController.swift */,
@@ -981,6 +989,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				665C17AD254A377D00786973 /* icons.xcassets in Resources */,
 				66E864042549D3C400CA2017 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -989,6 +998,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				665C17A4254A377C00786973 /* icons.xcassets in Resources */,
 				66E8641D2549D3C500CA2017 /* Preview Assets.xcassets in Resources */,
 				66E8641A2549D3C500CA2017 /* Assets.xcassets in Resources */,
 			);
@@ -1263,6 +1273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
+				665C1793254A323900786973 /* ButtonEntryView.swift in Sources */,
 				66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */,
 				66E8648A2549DD9000CA2017 /* SegmentedProgressBarView.swift in Sources */,
 				66E864122549D3C500CA2017 /* TodoView.swift in Sources */,
@@ -1270,6 +1281,7 @@
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
 				66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */,
 				66E864162549D3C500CA2017 /* NotificationView.swift in Sources */,
+				665C1789254A26A900786973 /* ButtonsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

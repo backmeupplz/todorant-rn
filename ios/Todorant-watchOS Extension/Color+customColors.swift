@@ -16,4 +16,8 @@ extension Color {
   static var progressBar: Color {
     Color("ProgressBarColor")
   }
+  
+  static var actionButtonBackground: Color {
+    Color("ActionButtonBackgroundColor")
+  }
 }
