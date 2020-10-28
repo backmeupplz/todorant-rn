@@ -42,13 +42,15 @@
 		66E864042549D3C400CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864032549D3C400CA2017 /* Assets.xcassets */; };
 		66E8640B2549D3C500CA2017 /* Todorant-watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8640F2549D3C500CA2017 /* TodorantApp.swift */; };
-		66E864122549D3C500CA2017 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864112549D3C500CA2017 /* ContentView.swift */; };
+		66E864122549D3C500CA2017 /* DefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864112549D3C500CA2017 /* DefaultView.swift */; };
 		66E864142549D3C500CA2017 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864132549D3C500CA2017 /* NotificationController.swift */; };
 		66E864162549D3C500CA2017 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864152549D3C500CA2017 /* NotificationView.swift */; };
 		66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864172549D3C500CA2017 /* ComplicationController.swift */; };
 		66E8641A2549D3C500CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864192549D3C500CA2017 /* Assets.xcassets */; };
 		66E8641D2549D3C500CA2017 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E8641C2549D3C500CA2017 /* Preview Assets.xcassets */; };
 		66E864222549D3C500CA2017 /* Todorant-watchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 66E864012549D3C200CA2017 /* Todorant-watchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864652549D8A000CA2017 /* View+Modifiers.swift */; };
+		66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864772549DB6A00CA2017 /* Color+customColors.swift */; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
@@ -242,7 +244,7 @@
 		66E864052549D3C400CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Todorant-watchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66E8640F2549D3C500CA2017 /* TodorantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodorantApp.swift; sourceTree = "<group>"; };
-		66E864112549D3C500CA2017 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		66E864112549D3C500CA2017 /* DefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultView.swift; sourceTree = "<group>"; };
 		66E864132549D3C500CA2017 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		66E864152549D3C500CA2017 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		66E864172549D3C500CA2017 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -250,6 +252,9 @@
 		66E8641C2549D3C500CA2017 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		66E8641E2549D3C500CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66E8641F2549D3C500CA2017 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		66E864642549D8A000CA2017 /* Todorant-watchOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Todorant-watchOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		66E864652549D8A000CA2017 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
+		66E864772549DB6A00CA2017 /* Color+customColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+customColors.swift"; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		7216CF88ED57489E91BB73DC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -489,14 +494,17 @@
 		66E8640E2549D3C500CA2017 /* Todorant-watchOS Extension */ = {
 			isa = PBXGroup;
 			children = (
+				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
+				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
 				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
-				66E864112549D3C500CA2017 /* ContentView.swift */,
-				66E864132549D3C500CA2017 /* NotificationController.swift */,
+				66E864112549D3C500CA2017 /* DefaultView.swift */,
 				66E864152549D3C500CA2017 /* NotificationView.swift */,
+				66E864132549D3C500CA2017 /* NotificationController.swift */,
 				66E864172549D3C500CA2017 /* ComplicationController.swift */,
 				66E864192549D3C500CA2017 /* Assets.xcassets */,
 				66E8641E2549D3C500CA2017 /* Info.plist */,
 				66E8641F2549D3C500CA2017 /* PushNotificationPayload.apns */,
+				66E864642549D8A000CA2017 /* Todorant-watchOS-Bridging-Header.h */,
 				66E8641B2549D3C500CA2017 /* Preview Content */,
 			);
 			path = "Todorant-watchOS Extension";
@@ -865,6 +873,7 @@
 					66E864002549D3C200CA2017 = {
 						CreatedOnToolsVersion = 12.1;
 						DevelopmentTeam = ACWP4F58HZ;
+						LastSwiftMigration = 1210;
 						ProvisioningStyle = Automatic;
 					};
 					66E864092549D3C500CA2017 = {
@@ -1251,7 +1260,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
-				66E864122549D3C500CA2017 /* ContentView.swift in Sources */,
+				66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */,
+				66E864122549D3C500CA2017 /* DefaultView.swift in Sources */,
+				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
 				66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */,
 				66E864162549D3C500CA2017 /* NotificationView.swift in Sources */,
@@ -1553,6 +1564,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -1563,6 +1575,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				IBSC_MODULE = Todorant_watchOS_Extension;
 				INFOPLIST_FILE = "Todorant-watchOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp;
@@ -1570,6 +1583,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todorant-watchOS Extension/Todorant-watchOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -1586,6 +1600,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -1597,11 +1612,13 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				IBSC_MODULE = Todorant_watchOS_Extension;
 				INFOPLIST_FILE = "Todorant-watchOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todorant-watchOS Extension/Todorant-watchOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;

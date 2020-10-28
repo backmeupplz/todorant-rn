@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  DefaultView.swift
 //  Todorant-watchOS Extension
 //
 //  Created by Яков Карпов on 28.10.2020.
@@ -8,15 +8,15 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct DefaultView: View {
     var body: some View {
         Text("Hello, World!")
             .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct DefaultView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        DefaultView()
     }
 }
