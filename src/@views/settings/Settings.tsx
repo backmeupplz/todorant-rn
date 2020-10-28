@@ -43,6 +43,7 @@ import fonts from '@utils/fonts'
 import { AddEpic, AddEpicHeaderRight } from '@views/epics/AddEpic'
 import { DelegationSettings } from './DelegationSettings'
 import { DelegationUserScreen } from './DelegationUserScreen'
+import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 
 const Stack = createStackNavigator()
 
@@ -334,6 +335,17 @@ export function Settings() {
               title: translate('epic.intoEpic'),
               headerTitleAlign: 'center',
               headerRight: () => <AddEpicHeaderRight />,
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="ChangeText"
+            component={ChangeText}
+            options={{
+              title: translate('editText'),
+              headerTitleAlign: 'center',
+              headerRight: () => <ChangeTextHeaderRight />,
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),
             }}
