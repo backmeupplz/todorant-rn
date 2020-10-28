@@ -19,6 +19,6 @@ struct TodoTextModifier: ViewModifier {
 }
 
 
-private enum Config {
-  static let textBackgroundColor: Color = .textBackgroundColor
+fileprivate enum Config {
+  static let textBackgroundColor: Color = .textBackground
 }

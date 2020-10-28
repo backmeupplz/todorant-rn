@@ -51,6 +51,7 @@
 		66E864222549D3C500CA2017 /* Todorant-watchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 66E864012549D3C200CA2017 /* Todorant-watchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864652549D8A000CA2017 /* View+Modifiers.swift */; };
 		66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864772549DB6A00CA2017 /* Color+customColors.swift */; };
+		66E8648A2549DD9000CA2017 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
@@ -255,6 +256,7 @@
 		66E864642549D8A000CA2017 /* Todorant-watchOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Todorant-watchOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		66E864652549D8A000CA2017 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
 		66E864772549DB6A00CA2017 /* Color+customColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+customColors.swift"; sourceTree = "<group>"; };
+		66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedProgressBarView.swift; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		7216CF88ED57489E91BB73DC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -496,8 +498,9 @@
 			children = (
 				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
 				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
-				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
 				66E864112549D3C500CA2017 /* DefaultView.swift */,
+				66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */,
+				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
 				66E864152549D3C500CA2017 /* NotificationView.swift */,
 				66E864132549D3C500CA2017 /* NotificationController.swift */,
 				66E864172549D3C500CA2017 /* ComplicationController.swift */,
@@ -1261,6 +1264,7 @@
 			files = (
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
 				66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */,
+				66E8648A2549DD9000CA2017 /* SegmentedProgressBarView.swift in Sources */,
 				66E864122549D3C500CA2017 /* DefaultView.swift in Sources */,
 				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
