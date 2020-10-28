@@ -39,6 +39,16 @@
 		668AFA4A252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		66CD27FC2543D23000C8B643 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */; };
 		66CD27FD2543D23200C8B643 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */; };
+		66E864042549D3C400CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864032549D3C400CA2017 /* Assets.xcassets */; };
+		66E8640B2549D3C500CA2017 /* Todorant-watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8640F2549D3C500CA2017 /* TodorantApp.swift */; };
+		66E864122549D3C500CA2017 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864112549D3C500CA2017 /* ContentView.swift */; };
+		66E864142549D3C500CA2017 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864132549D3C500CA2017 /* NotificationController.swift */; };
+		66E864162549D3C500CA2017 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864152549D3C500CA2017 /* NotificationView.swift */; };
+		66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864172549D3C500CA2017 /* ComplicationController.swift */; };
+		66E8641A2549D3C500CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864192549D3C500CA2017 /* Assets.xcassets */; };
+		66E8641D2549D3C500CA2017 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E8641C2549D3C500CA2017 /* Preview Assets.xcassets */; };
+		66E864222549D3C500CA2017 /* Todorant-watchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 66E864012549D3C200CA2017 /* Todorant-watchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8FAFB12EBC15C3403CAC3D7E /* libPods-Todorant.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AC593398A035CBFDBA3998 /* libPods-Todorant.a */; };
 		A48DCD0E8F0272D0117CCC59 /* libPods-TodorantToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6B36A0C094DE3AE3F5614B0 /* libPods-TodorantToday.a */; };
 		AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DA749505AAF4E6FB4B89E85 /* SF-Pro-Display-Medium.otf */; };
@@ -106,6 +116,20 @@
 			remoteGlobalIDString = 6601C07A252BA062004DF491;
 			remoteInfo = HomeWidgetExtension;
 		};
+		66E8640C2549D3C500CA2017 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66E864092549D3C500CA2017;
+			remoteInfo = "Todorant-watchOS Extension";
+		};
+		66E864202549D3C500CA2017 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66E864002549D3C200CA2017;
+			remoteInfo = "Todorant-watchOS";
+		};
 		BB1695F525251B64006190F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -137,6 +161,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		66E864232549D3C500CA2017 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				66E864222549D3C500CA2017 /* Todorant-watchOS.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66E864262549D3C500CA2017 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				66E8640B2549D3C500CA2017 /* Todorant-watchOS Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB3A79C12425AF000014DE92 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -191,6 +237,19 @@
 		668AFA4B252E40A20046205C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		668AFA53252E40B00046205C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
+		66E864012549D3C200CA2017 /* Todorant-watchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Todorant-watchOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66E864032549D3C400CA2017 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66E864052549D3C400CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Todorant-watchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66E8640F2549D3C500CA2017 /* TodorantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodorantApp.swift; sourceTree = "<group>"; };
+		66E864112549D3C500CA2017 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		66E864132549D3C500CA2017 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		66E864152549D3C500CA2017 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		66E864172549D3C500CA2017 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		66E864192549D3C500CA2017 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66E8641C2549D3C500CA2017 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		66E8641E2549D3C500CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66E8641F2549D3C500CA2017 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		67DB0FE9D3636433AFAE4FC7 /* Pods-Todorant-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todorant-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Todorant-tvOSTests/Pods-Todorant-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6FA1C91862BD4E658FB511A8 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		7216CF88ED57489E91BB73DC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -320,6 +379,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		66E864072549D3C500CA2017 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB1695EA25251B64006190F8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -411,6 +477,39 @@
 			path = TodorantHomescreen;
 			sourceTree = "<group>";
 		};
+		66E864022549D3C200CA2017 /* Todorant-watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				66E864032549D3C400CA2017 /* Assets.xcassets */,
+				66E864052549D3C400CA2017 /* Info.plist */,
+			);
+			path = "Todorant-watchOS";
+			sourceTree = "<group>";
+		};
+		66E8640E2549D3C500CA2017 /* Todorant-watchOS Extension */ = {
+			isa = PBXGroup;
+			children = (
+				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
+				66E864112549D3C500CA2017 /* ContentView.swift */,
+				66E864132549D3C500CA2017 /* NotificationController.swift */,
+				66E864152549D3C500CA2017 /* NotificationView.swift */,
+				66E864172549D3C500CA2017 /* ComplicationController.swift */,
+				66E864192549D3C500CA2017 /* Assets.xcassets */,
+				66E8641E2549D3C500CA2017 /* Info.plist */,
+				66E8641F2549D3C500CA2017 /* PushNotificationPayload.apns */,
+				66E8641B2549D3C500CA2017 /* Preview Content */,
+			);
+			path = "Todorant-watchOS Extension";
+			sourceTree = "<group>";
+		};
+		66E8641B2549D3C500CA2017 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				66E8641C2549D3C500CA2017 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		7A4B3C2623464B8A9D35439F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -466,6 +565,8 @@
 				BB3A79F72426933F0014DE92 /* TodorantUITests */,
 				BBDD6A7825239A8F0064DE60 /* TodorantIntents */,
 				BB1695EE25251B64006190F8 /* TodorantShare */,
+				66E864022549D3C200CA2017 /* Todorant-watchOS */,
+				66E8640E2549D3C500CA2017 /* Todorant-watchOS Extension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C62ED693B06A801A76FE692D /* Pods */,
@@ -485,6 +586,8 @@
 				BBDD6A7725239A8F0064DE60 /* TodorantIntents.appex */,
 				BB1695ED25251B64006190F8 /* TodorantShare.appex */,
 				6601C07B252BA062004DF491 /* TodorantHomescreen.appex */,
+				66E864012549D3C200CA2017 /* Todorant-watchOS.app */,
+				66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -600,6 +703,7 @@
 				EE93B69F5966211D2E5AE328 /* [CP] Copy Pods Resources */,
 				0966A6C3BB55C15FB19C003A /* [CP-User] [RNFB] Core Configuration */,
 				BB3A79C12425AF000014DE92 /* Embed App Extensions */,
+				66E864232549D3C500CA2017 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -608,6 +712,7 @@
 				BBDD6A7D25239A8F0064DE60 /* PBXTargetDependency */,
 				BB1695F625251B64006190F8 /* PBXTargetDependency */,
 				6601C087252BA065004DF491 /* PBXTargetDependency */,
+				66E864212549D3C500CA2017 /* PBXTargetDependency */,
 			);
 			name = Todorant;
 			productName = Todorant;
@@ -631,6 +736,40 @@
 			productName = HomeWidgetExtension;
 			productReference = 6601C07B252BA062004DF491 /* TodorantHomescreen.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		66E864002549D3C200CA2017 /* Todorant-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66E8642A2549D3C500CA2017 /* Build configuration list for PBXNativeTarget "Todorant-watchOS" */;
+			buildPhases = (
+				66E863FF2549D3C200CA2017 /* Resources */,
+				66E864262549D3C500CA2017 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66E8640D2549D3C500CA2017 /* PBXTargetDependency */,
+			);
+			name = "Todorant-watchOS";
+			productName = "Todorant-watchOS";
+			productReference = 66E864012549D3C200CA2017 /* Todorant-watchOS.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		66E864092549D3C500CA2017 /* Todorant-watchOS Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66E864292549D3C500CA2017 /* Build configuration list for PBXNativeTarget "Todorant-watchOS Extension" */;
+			buildPhases = (
+				66E864062549D3C500CA2017 /* Sources */,
+				66E864072549D3C500CA2017 /* Frameworks */,
+				66E864082549D3C500CA2017 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Todorant-watchOS Extension";
+			productName = "Todorant-watchOS Extension";
+			productReference = 66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
 		};
 		BB1695EC25251B64006190F8 /* TodorantShare */ = {
 			isa = PBXNativeTarget;
@@ -709,7 +848,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1210;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
@@ -721,6 +860,16 @@
 					6601C07A252BA062004DF491 = {
 						CreatedOnToolsVersion = 12.0.1;
 						DevelopmentTeam = ACWP4F58HZ;
+						ProvisioningStyle = Automatic;
+					};
+					66E864002549D3C200CA2017 = {
+						CreatedOnToolsVersion = 12.1;
+						DevelopmentTeam = ACWP4F58HZ;
+						ProvisioningStyle = Automatic;
+					};
+					66E864092549D3C500CA2017 = {
+						CreatedOnToolsVersion = 12.1;
+						DevelopmentTeam = DZTZ7KUUBK;
 						ProvisioningStyle = Automatic;
 					};
 					BB1695EC25251B64006190F8 = {
@@ -771,6 +920,8 @@
 				BBDD6A7625239A8F0064DE60 /* TodorantIntents */,
 				BB1695EC25251B64006190F8 /* TodorantShare */,
 				6601C07A252BA062004DF491 /* TodorantHomescreen */,
+				66E864002549D3C200CA2017 /* Todorant-watchOS */,
+				66E864092549D3C500CA2017 /* Todorant-watchOS Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -811,6 +962,23 @@
 				BB6DF19D252BB13200CAAE17 /* customColorControl.xcassets in Resources */,
 				668AFA4A252E40A20046205C /* Localizable.strings in Resources */,
 				6601C084252BA065004DF491 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66E863FF2549D3C200CA2017 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66E864042549D3C400CA2017 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66E864082549D3C500CA2017 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66E8641D2549D3C500CA2017 /* Preview Assets.xcassets in Resources */,
+				66E8641A2549D3C500CA2017 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1078,6 +1246,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		66E864062549D3C500CA2017 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
+				66E864122549D3C500CA2017 /* ContentView.swift in Sources */,
+				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
+				66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */,
+				66E864162549D3C500CA2017 /* NotificationView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB1695E925251B64006190F8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1136,6 +1316,16 @@
 			isa = PBXTargetDependency;
 			target = 6601C07A252BA062004DF491 /* TodorantHomescreen */;
 			targetProxy = 6601C086252BA065004DF491 /* PBXContainerItemProxy */;
+		};
+		66E8640D2549D3C500CA2017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66E864092549D3C500CA2017 /* Todorant-watchOS Extension */;
+			targetProxy = 66E8640C2549D3C500CA2017 /* PBXContainerItemProxy */;
+		};
+		66E864212549D3C500CA2017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66E864002549D3C200CA2017 /* Todorant-watchOS */;
+			targetProxy = 66E864202549D3C500CA2017 /* PBXContainerItemProxy */;
 		};
 		BB1695F625251B64006190F8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1351,6 +1541,134 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		66E864242549D3C500CA2017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = Todorant_watchOS_Extension;
+				INFOPLIST_FILE = "Todorant-watchOS/Info.plist";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Debug;
+		};
+		66E864252549D3C500CA2017 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ACWP4F58HZ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = Todorant_watchOS_Extension;
+				INFOPLIST_FILE = "Todorant-watchOS/Info.plist";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Release;
+		};
+		66E864272549D3C500CA2017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"Todorant-watchOS Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = DZTZ7KUUBK;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Todorant-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Debug;
+		};
+		66E864282549D3C500CA2017 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"Todorant-watchOS Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = DZTZ7KUUBK;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Todorant-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Release;
 		};
@@ -1721,6 +2039,24 @@
 			buildConfigurations = (
 				6601C089252BA065004DF491 /* Debug */,
 				6601C08A252BA065004DF491 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66E864292549D3C500CA2017 /* Build configuration list for PBXNativeTarget "Todorant-watchOS Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66E864272549D3C500CA2017 /* Debug */,
+				66E864282549D3C500CA2017 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66E8642A2549D3C500CA2017 /* Build configuration list for PBXNativeTarget "Todorant-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66E864242549D3C500CA2017 /* Debug */,
+				66E864252549D3C500CA2017 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
