@@ -13,12 +13,17 @@ struct TodoTextModifier: ViewModifier {
     content
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(Config.textBackgroundColor)
-      .clipShape(ContainerRelativeShape())
-      .padding()
+      .cornerRadius(Config.textFrameCornerRadius)
   }
 }
 
+extension View {
+  func todoTextStyle() -> some View {
+    modifier(TodoTextModifier())
+  }
+}
 
 fileprivate enum Config {
   static let textBackgroundColor: Color = .textBackground
+  static let textFrameCornerRadius: CGFloat = 10
 }

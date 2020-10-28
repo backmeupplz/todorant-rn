@@ -10,10 +10,10 @@ import SwiftUI
 
 extension Color {
   static var textBackground: Color {
-    Color("TextBackgroundColor")
+    Color("TextBackgroudColor")
   }
   
   static var progressBar: Color {
-    Color("progressBarColor")
+    Color("ProgressBarColor")
   }
 }

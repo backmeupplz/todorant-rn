@@ -42,7 +42,7 @@
 		66E864042549D3C400CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864032549D3C400CA2017 /* Assets.xcassets */; };
 		66E8640B2549D3C500CA2017 /* Todorant-watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8640F2549D3C500CA2017 /* TodorantApp.swift */; };
-		66E864122549D3C500CA2017 /* DefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864112549D3C500CA2017 /* DefaultView.swift */; };
+		66E864122549D3C500CA2017 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864112549D3C500CA2017 /* TodoView.swift */; };
 		66E864142549D3C500CA2017 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864132549D3C500CA2017 /* NotificationController.swift */; };
 		66E864162549D3C500CA2017 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864152549D3C500CA2017 /* NotificationView.swift */; };
 		66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E864172549D3C500CA2017 /* ComplicationController.swift */; };
@@ -245,7 +245,7 @@
 		66E864052549D3C400CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Todorant-watchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66E8640F2549D3C500CA2017 /* TodorantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodorantApp.swift; sourceTree = "<group>"; };
-		66E864112549D3C500CA2017 /* DefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultView.swift; sourceTree = "<group>"; };
+		66E864112549D3C500CA2017 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		66E864132549D3C500CA2017 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		66E864152549D3C500CA2017 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		66E864172549D3C500CA2017 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -498,7 +498,7 @@
 			children = (
 				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
 				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
-				66E864112549D3C500CA2017 /* DefaultView.swift */,
+				66E864112549D3C500CA2017 /* TodoView.swift */,
 				66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */,
 				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
 				66E864152549D3C500CA2017 /* NotificationView.swift */,
@@ -1265,7 +1265,7 @@
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
 				66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */,
 				66E8648A2549DD9000CA2017 /* SegmentedProgressBarView.swift in Sources */,
-				66E864122549D3C500CA2017 /* DefaultView.swift in Sources */,
+				66E864122549D3C500CA2017 /* TodoView.swift in Sources */,
 				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
 				66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */,
