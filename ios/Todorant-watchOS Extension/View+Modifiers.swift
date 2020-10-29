@@ -17,10 +17,11 @@ struct TodoTextModifier: ViewModifier {
   }
 }
 
-struct BackgroundBlurModifier: ViewModifier {
+struct ConditionalBackgroundBlurModifier: ViewModifier {
+  let condition: Bool
   func body(content: Content) -> some View {
     content
-      .blur(radius: Config.backgroundBlurRadius)
+      .blur(radius: condition ? Config.backgroundBlurRadius : 0)
   }
 }
 
@@ -29,14 +30,14 @@ extension View {
     modifier(TodoTextModifier())
   }
   
-  func backgroundBlurStyle() -> some View {
-    modifier(BackgroundBlurModifier())
+  func conditionalBackgroundBlurStyle(condition: Bool) -> some View {
+    modifier(ConditionalBackgroundBlurModifier(condition: condition))
   }
 }
 
 fileprivate enum Config {
   static let textBackgroundColor: Color = .textBackground
-  static let textFrameCornerRadius: CGFloat = 10
+  static let textFrameCornerRadius: CGFloat = 15
   static let actionButtonBackground: Color = .actionButtonBackground
   static let actionButtonFrameCorenrRadius: CGFloat = 22
   static let backgroundBlurRadius: CGFloat = 20
