@@ -36,6 +36,7 @@
 		6601C0DA252BA231004DF491 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
 		6601C0DB252BA234004DF491 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
 		6651249E254B1F0E00BBFDDF /* SwipableNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */; };
+		665124C1254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */; };
 		665C1789254A26A900786973 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C1788254A26A900786973 /* ButtonsView.swift */; };
 		665C1793254A323900786973 /* ButtonEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C1792254A323900786973 /* ButtonEntryView.swift */; };
 		665C17A4254A377C00786973 /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
@@ -243,6 +244,7 @@
 		6601C092252BA157004DF491 /* TodoEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEntryView.swift; sourceTree = "<group>"; };
 		6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetContent.swift; sourceTree = "<group>"; };
 		6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipableNavigationView.swift; sourceTree = "<group>"; };
+		665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwipableNavigationView+SwipeRecognizer.swift"; sourceTree = "<group>"; };
 		665C1788254A26A900786973 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
 		665C1792254A323900786973 /* ButtonEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEntryView.swift; sourceTree = "<group>"; };
 		668AFA4B252E40A20046205C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -507,6 +509,7 @@
 				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
 				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
 				6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */,
+				665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */,
 				66E864112549D3C500CA2017 /* TodoView.swift */,
 				66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */,
 				665C1788254A26A900786973 /* ButtonsView.swift */,
@@ -1283,6 +1286,7 @@
 				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
 				66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */,
+				665124C1254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift in Sources */,
 				66E864162549D3C500CA2017 /* NotificationView.swift in Sources */,
 				665C1789254A26A900786973 /* ButtonsView.swift in Sources */,
 				6651249E254B1F0E00BBFDDF /* SwipableNavigationView.swift in Sources */,

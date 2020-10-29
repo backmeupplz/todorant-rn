@@ -9,25 +9,39 @@
 import SwiftUI
 
 struct SwipableNavigationView: View {
-  @State private var isShowingButtons: Bool = false
+  @State private var isShowingButtonsView: Bool = false
+  @State private var buttonsViewVerticalOffset = CGSize.zero
 
   var body: some View {
     ZStack {
       TodoView()
-        .conditionalBackgroundBlurStyle(condition: isShowingButtons)
-        .onTapGesture {
-          withAnimation {
-            isShowingButtons.toggle()
-          }
+        .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
+        .gesture(SwipeRecognizer.defaultDragGesture
+          .onEnded { value in
+            if SwipeRecognizer.isDownSwipe(value: value) {
+              withAnimation {
+                isShowingButtonsView.toggle()
+              }
+            }
+          })
+      if isShowingButtonsView {
+        VStack {
+          ButtonsView()
         }
-      if isShowingButtons {
-        ButtonsView()
-          .buttonsViewAnimationStyle()
-          .onTapGesture {
-            withAnimation {
-              isShowingButtons.toggle()
+        .offset(y: buttonsViewVerticalOffset.height)
+        .buttonsViewAnimationStyle()
+        .gesture(SwipeRecognizer.defaultDragGesture
+          .onChanged { value in
+            buttonsViewVerticalOffset = value.translation
           }
-        }
+          .onEnded { value in
+            if SwipeRecognizer.isUpSwipe(value: value) {
+              withAnimation {
+                isShowingButtonsView.toggle()
+              }
+            }
+            buttonsViewVerticalOffset = CGSize.zero
+          })
       }
     }
   }
