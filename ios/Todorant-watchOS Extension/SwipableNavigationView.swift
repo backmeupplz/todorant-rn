@@ -15,7 +15,6 @@ struct SwipableNavigationView: View {
     ZStack {
       TodoView()
         .conditionalBackgroundBlurStyle(condition: isShowingButtons)
-        .transition(.scale)
         .onTapGesture {
           withAnimation {
             isShowingButtons.toggle()
@@ -23,7 +22,7 @@ struct SwipableNavigationView: View {
         }
       if isShowingButtons {
         ButtonsView()
-          .transition(.move(edge: .top))
+          .buttonsViewAnimationStyle()
           .onTapGesture {
             withAnimation {
               isShowingButtons.toggle()
@@ -31,11 +30,5 @@ struct SwipableNavigationView: View {
         }
       }
     }
-  }
-}
-
-struct SwipableNavigationView_Previews: PreviewProvider {
-  static var previews: some View {
-    SwipableNavigationView()
   }
 }

@@ -22,6 +22,15 @@ struct ConditionalBackgroundBlurModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .blur(radius: condition ? Config.backgroundBlurRadius : 0)
+      .scaleEffect(condition ? Config.backgroundDownscaleAmount : 1)
+  }
+}
+
+struct ButtonsViewAnimationModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .transition(.move(edge: .top))
+      .animation(.spring())
   }
 }
 
@@ -33,6 +42,10 @@ extension View {
   func conditionalBackgroundBlurStyle(condition: Bool) -> some View {
     modifier(ConditionalBackgroundBlurModifier(condition: condition))
   }
+  
+  func buttonsViewAnimationStyle() -> some View {
+    modifier(ButtonsViewAnimationModifier())
+  }
 }
 
 fileprivate enum Config {
@@ -41,4 +54,5 @@ fileprivate enum Config {
   static let actionButtonBackground: Color = .actionButtonBackground
   static let actionButtonFrameCorenrRadius: CGFloat = 22
   static let backgroundBlurRadius: CGFloat = 20
+  static let backgroundDownscaleAmount: CGFloat = 0.85
 }
