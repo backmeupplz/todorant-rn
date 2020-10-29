@@ -10,18 +10,12 @@ import SwiftUI
 
 struct TodoView: View {
     var body: some View {
-      ZStack {
-        
-        VStack {
-          SegmentedProgressBarView(currentProgress: 1, maximumProgress: 3)
-          Text("Достаточно длинный текст таска")
-            .todoTextStyle()
-        }
-        .backgroundBlurStyle()
-        
-        ButtonsView()
-      }
+      VStack {
+        SegmentedProgressBarView(currentProgress: 1, maximumProgress: 3)
+        Text("Достаточно длинный текст таска")
+          .todoTextStyle()
     }
+  }
 }
 
 struct TodoView_Previews: PreviewProvider {
