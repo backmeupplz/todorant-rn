@@ -7,7 +7,7 @@
 //
 
 import Intents
-import SwiftKeychainWrapper
+import KeychainAccess
 
 enum Key: String {
   case accessToken
@@ -15,8 +15,7 @@ enum Key: String {
 
 final class UserSession {
   static var accessToken: String? {
-    return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-      .string(forKey: Key.accessToken.rawValue)
+    try? Keychain(service: "com.todorant.app", accessGroup: "ACWP4F58HZ.shared").getString(Key.accessToken.rawValue)
   }
 }
 

@@ -139,6 +139,7 @@ PODS:
     - GTMSessionFetcher/Core (= 1.4.0)
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
+  - KeychainAccess (4.2.1)
   - nanopb (1.30905.0):
     - nanopb/decode (= 1.30905.0)
     - nanopb/encode (= 1.30905.0)
@@ -462,7 +463,6 @@ PODS:
   - RNVectorIcons (6.6.0):
     - React
   - SSZipArchive (2.2.3)
-  - SwiftKeychainWrapper (4.0.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -477,6 +477,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - KeychainAccess
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - Permission-Siri (from `../node_modules/react-native-permissions/ios/Siri.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -531,7 +532,6 @@ DEPENDENCIES:
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - SwiftKeychainWrapper
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -558,10 +558,10 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - JWT
+    - KeychainAccess
     - nanopb
     - PromisesObjC
     - SSZipArchive
-    - SwiftKeychainWrapper
 
 EXTERNAL SOURCES:
   appcenter-analytics:
@@ -724,6 +724,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
+  KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
   Permission-Siri: 782f6152006ace9ea1103160104f2f9fff4193c2
@@ -779,9 +780,8 @@ SPEC CHECKSUMS:
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: 5dc8332eb0d05185bf5c316c08211ba00d7edc40
+PODFILE CHECKSUM: 09a3c8d8753401547cae68832c69407303eb2b59
 
 COCOAPODS: 1.9.3
