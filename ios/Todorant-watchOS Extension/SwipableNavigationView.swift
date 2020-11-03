@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct SwipableNavigationView: View {
+  @EnvironmentObject var store: Store
+  
   @State private var isShowingButtonsView: Bool = false
   @State private var buttonsViewVerticalOffset = CGSize.zero
 

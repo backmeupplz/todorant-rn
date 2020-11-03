@@ -1,13 +1,13 @@
 //
 //  Store.swift
-//  TodorantToday
+//  Todorant
 //
-//  Created by Nikita Kolmogorov on 2019-10-09.
-//  Copyright © 2019 Todorant. All rights reserved.
+//  Created by Яков Карпов on 03.11.2020.
+//  Copyright © 2020 Facebook. All rights reserved.
 //
 
 import Foundation
-import SwiftKeychainWrapper
+import KeychainAccess
 
 enum Key: String {
   case accessToken
@@ -16,14 +16,14 @@ enum Key: String {
 
 final class UserSession {
   
+  static private let keychain = Keychain(service: "com.todorant.app", accessGroup: "ACWP4F58HZ.shared")
+  
   static var accessToken: String? {
-    return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-          .string(forKey: Key.accessToken.rawValue)
+    try? keychain.getString(Key.accessToken.rawValue)
   }
   
   static var password: String? {
-    return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-          .string(forKey: Key.password.rawValue)
+    try? keychain.getString(Key.password.rawValue)
   }
 }
 

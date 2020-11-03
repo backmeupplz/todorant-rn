@@ -25,20 +25,21 @@ end
 
 target 'TodorantToday' do
   pod 'Alamofire', '~> 5.0'
-  pod 'KeychainAccess'
+  pod 'SwiftKeychainWrapper'
 end
 
 target 'TodorantHomescreen' do
   pod 'Alamofire', '~> 5.0'
-  pod 'KeychainAccess'
+  pod 'SwiftKeychainWrapper'
 end
 
 target 'TodorantIntents' do
   pod 'Alamofire', '~> 5.0'
-  pod 'KeychainAccess'
+  pod 'SwiftKeychainWrapper'
 end
 
 target 'Todorant-watchOS Extension' do
+  platform :watchos, '7.0'
   pod 'Alamofire', '~> 5.0'
   pod 'KeychainAccess'
 end
