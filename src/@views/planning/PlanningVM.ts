@@ -17,6 +17,7 @@ export class PlanningVM {
 
   @computed get allTodosFiltered() {
     return sharedTodoStore.allTodos
+      .filtered('userName = null')
       .filtered('deleted = false')
       .filtered('delegateAccepted != false')
       .filtered(

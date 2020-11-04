@@ -13,6 +13,10 @@ import { FailCircle } from './FailCircle'
 import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
+import {
+  sharedDelegateStateStore,
+  DelegateSectionType,
+} from '@stores/DelegateScreenStateStore'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -142,9 +146,14 @@ export class TodoCardContent extends Component<{
                   vm={this.props.vm}
                 />
               )}
-            {this.props.type === CardType.delegation && (
-              <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
-            )}
+            {this.props.type === CardType.delegation &&
+              sharedDelegateStateStore.todoSection ===
+                DelegateSectionType.toMe && (
+                <DelegateCardActions
+                  vm={this.props.vm}
+                  todo={this.props.todo}
+                />
+              )}
           </View>
           {!this.props.active && this.props.type !== CardType.current && (
             <Divider color={sharedColors.dividerColor} marginVertical={0} />

@@ -29,6 +29,7 @@ export class Todo {
       date: { type: 'string?', indexed: true },
       time: 'string?',
 
+      userName: { type: 'string?', indexed: true },
       delegatorName: { type: 'string?', indexed: true },
       delegateAccepted: { type: 'bool?', indexed: true },
     },
@@ -49,6 +50,7 @@ export class Todo {
   @observable date?: string
   @observable time?: string
 
+  @observable userName?: string
   @observable delegatorName?: string
   @observable delegateAccepted?: boolean
 

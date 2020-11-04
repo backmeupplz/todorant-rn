@@ -272,6 +272,7 @@
     "noDelegators": "You don't have any delegators yet. Share the invite link with the people who you want to make delegators",
     "noDelegates": "You don't have any delegates yet. Ask for an invite link to become someone's delegator.",
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
+    "noDelegatedTasksTo": "You haven't delegated tasks yet.",
     "link": "Delegate invite link",
     "linkDescription": "Share this link only with the people you trust. People can become your delegators by following this link. Delegators will only see the tasks that they delegated to you.",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
@@ -285,7 +286,9 @@
     "info": "This is the page with the tasks delegated to you. You have options to delete or accept tasks that your delegators send your way.",
     "signupTitle": "Oopsie",
     "signupDescription": "You need to log in before you can use delegation",
-    "resetLink": "Reset the link"
+    "resetLink": "Reset the link",
+    "toMe": "To me",
+    "byMe": "By me"
   },
   "errors": {
     "delegate": {

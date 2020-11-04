@@ -21,6 +21,14 @@ class TodoStore {
 
   @persist recalculatedExactDates = false
 
+  @computed get usualTodos() {
+    return this.allTodos.filtered('userName = null')
+  }
+
+  @computed get delegatedTodos() {
+    return this.allTodos.filtered('userName != null')
+  }
+
   @computed get todayTodos() {
     const now = new Date()
     const today = new Date()
@@ -38,7 +46,7 @@ class TodoStore {
   }
 
   todosForDate = (title: string) => {
-    return this.allTodos
+    return this.usualTodos
       .filtered('deleted = false')
       .filtered('delegateAccepted != false')
       .filtered(
@@ -63,7 +71,7 @@ class TodoStore {
   }
 
   @computed get unacceptedTodos() {
-    return this.allTodos
+    return this.usualTodos
       .filtered('deleted = false')
       .filtered('delegateAccepted = false')
   }
@@ -97,7 +105,7 @@ class TodoStore {
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
       1
     }:000`
-    const todos = this.allTodos.filtered(
+    const todos = this.usualTodos.filtered(
       `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
     )
     return !!todos.length
@@ -123,6 +131,9 @@ class TodoStore {
     todosChangedOnServer.forEach((todo) => {
       todo.updatedAt = new Date(todo.updatedAt)
       todo.createdAt = new Date(todo.createdAt)
+      if ((todo as any).user && (todo as any).user.name) {
+        todo.userName = (todo as any).user.name
+      }
       if ((todo as any).delegator && (todo as any).delegator.name) {
         todo.delegateAccepted = !!todo.delegateAccepted
         todo.delegatorName = (todo as any).delegator.name
@@ -262,7 +273,7 @@ class TodoStore {
     if (!id) {
       return undefined
     }
-    const todos = this.allTodos.filtered(
+    const todos = this.usualTodos.filtered(
       `_id = "${id}" || _tempSyncId = "${id}"`
     )
     return todos.length ? todos[0] : undefined
