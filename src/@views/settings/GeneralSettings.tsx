@@ -213,6 +213,13 @@ export class GeneralSettings extends Component {
             }
           }}
         />
+        <TextAndSwitch
+          title="settingsActions.swipeActions"
+          value={sharedSettingsStore.swipeActions}
+          onValueChange={(val) => {
+            sharedSettingsStore.swipeActions = val
+          }}
+        />
       </>
     )
   }

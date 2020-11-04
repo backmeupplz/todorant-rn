@@ -19,6 +19,7 @@ class TagsVM {
     const isEpic = !!tag.epic
     const options = [
       translate('changeColor'),
+      translate('editText'),
       translate('delete'),
       translate('cancel'),
     ]
@@ -49,6 +50,8 @@ class TagsVM {
           this.changeColor(tag)
         } else if (!isEpic && buttonIndex === 1) {
           this.makeAnEpic(tag)
+        } else if (buttonIndex === options.length - 3) {
+          this.editText(tag)
         } else {
           this.changeColorToDefault(tag)
         }
@@ -87,6 +90,9 @@ class TagsVM {
   }
   makeAnEpic(tag: Tag) {
     navigate('AddEpic', { tag: { ...cloneTag(tag) } })
+  }
+  editText(tag: Tag) {
+    navigate('ChangeText', { tag: { ...cloneTag(tag) } })
   }
 }
 

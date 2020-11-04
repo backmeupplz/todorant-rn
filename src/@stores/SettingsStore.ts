@@ -50,6 +50,7 @@ class SettingsStore {
   @persist @observable gamificationOn = true
   @persist @observable badgeIconCurrentCount = false
   @persist @observable planningReminderTime?: string
+  @persist @observable swipeActions = true
 
   @computed get firstDayOfWeekSafe() {
     return this.firstDayOfWeek === undefined

@@ -17,6 +17,7 @@ import {
   sharedDelegateStateStore,
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class TodoCardContent extends Component<{
@@ -31,6 +32,7 @@ export class TodoCardContent extends Component<{
     return (
       <View>
         <Swipeable
+          enabled={sharedSettingsStore.swipeActions}
           ref={(ref) => (row = ref)}
           leftThreshold={100}
           rightThreshold={100}
