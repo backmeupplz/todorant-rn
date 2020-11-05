@@ -18,7 +18,8 @@ final class UserSession {
   
 //  static private let keychain = Keychain(service: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
   
-  static var accessToken: String? =  
+  static var accessToken: String? =
+
   
   static var password: String? {
 //    try? keychain.getString(Key.password.rawValue)

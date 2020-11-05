@@ -20,10 +20,13 @@ struct TodoView: View {
       } else if store.errorShown {
         TodoComplicationView(complication: .error)
       } else {
-        if let todo = store.currentState?.todo {
-            SegmentedProgressBarView(currentProgress: 1, maximumProgress: 3)
-            Text(todo.text.stringWithLinksTruncated())
-              .todoTextStyle()
+        if let currentState = store.currentState {
+          if let todo = store.currentState?.todo {
+              SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+                                       maximumProgress: currentState.todosCount)
+              Text(todo.text.stringWithLinksTruncated())
+                .todoTextStyle()
+          }
         }
       }
     }

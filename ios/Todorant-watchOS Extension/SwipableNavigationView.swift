@@ -30,8 +30,9 @@ struct SwipableNavigationView: View {
             }
           })
       if isShowingButtonsView {
+        if let todo = store.currentState?.todo {
         VStack {
-          ButtonsView()
+            ButtonsView(todo: todo)
         }
         .offset(y: buttonsViewVerticalOffset.height)
         .buttonsViewAnimationStyle()
@@ -47,6 +48,7 @@ struct SwipableNavigationView: View {
             }
             buttonsViewVerticalOffset = CGSize.zero
           })
+        }
       }
     }
   }
