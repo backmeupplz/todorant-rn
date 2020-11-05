@@ -16,23 +16,14 @@ struct SwipableNavigationView: View {
 
   var body: some View {
     ZStack {
-      TodoView()
+      TodoView(isShowingButtonsView: $isShowingButtonsView)
         .onAppear {
           store.updateCurrent()
         }
-        .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
-        .gesture(SwipeRecognizer.defaultDragGesture
-          .onEnded { value in
-            if SwipeRecognizer.isDownSwipe(value: value) {
-              withAnimation {
-                isShowingButtonsView.toggle()
-              }
-            }
-          })
       if isShowingButtonsView {
-        if let todo = store.currentState?.todo {
+        if let todo = store.currentState?.todo, !store.errorShown {
         VStack {
-            ButtonsView(todo: todo)
+            ButtonsView(todo: todo, isShowingButtonsView: $isShowingButtonsView)
         }
         .offset(y: buttonsViewVerticalOffset.height)
         .buttonsViewAnimationStyle()

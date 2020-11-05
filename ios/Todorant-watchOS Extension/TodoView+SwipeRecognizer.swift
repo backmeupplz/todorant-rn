@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-extension SwipableNavigationView {
-  
   struct SwipeRecognizer {
     
     static func isDownSwipe(value: DragGesture.Value) -> Bool {
@@ -22,4 +20,4 @@ extension SwipableNavigationView {
     
     static let defaultDragGesture = DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
   }
-}
+

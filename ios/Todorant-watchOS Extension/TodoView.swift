@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TodoView: View {
   @EnvironmentObject var store: Store
+  @Binding var isShowingButtonsView: Bool
 
   var body: some View {
     VStack {
@@ -22,19 +23,30 @@ struct TodoView: View {
       } else {
         if let currentState = store.currentState {
           if let todo = store.currentState?.todo {
+            VStack {
               SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
                                        maximumProgress: currentState.todosCount)
               Text(todo.text.stringWithLinksTruncated())
                 .todoTextStyle()
+            }
+            .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
+            .gesture(SwipeRecognizer.defaultDragGesture
+              .onEnded { value in
+                if SwipeRecognizer.isDownSwipe(value: value) {
+                  withAnimation {
+                    isShowingButtonsView.toggle()
+                  }
+                }
+              })
+          } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+            SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+                                     maximumProgress: currentState.todosCount)
+            ClearView()
+          } else {
+            EmptyView()
           }
         }
       }
     }
-  }
-}
-
-struct TodoView_Previews: PreviewProvider {
-  static var previews: some View {
-    TodoView()
   }
 }
