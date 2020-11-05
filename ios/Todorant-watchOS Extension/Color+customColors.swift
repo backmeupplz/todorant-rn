@@ -12,11 +12,11 @@ extension Color {
   static var textBackground: Color {
     Color("TextBackgroudColor")
   }
-  
+
   static var progressBar: Color {
     Color("ProgressBarColor")
   }
-  
+
   static var actionButtonBackground: Color {
     Color("ActionButtonBackgroundColor")
   }

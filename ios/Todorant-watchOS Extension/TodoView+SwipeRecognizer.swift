@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-  struct SwipeRecognizer {
-    
-    static func isDownSwipe(value: DragGesture.Value) -> Bool {
-      value.translation.height > 0 && value.translation.width < 100 && value.translation.width > -100
-    }
-    
-    static func isUpSwipe(value: DragGesture.Value) -> Bool {
-      value.translation.height < 0 && value.translation.width < 100 && value.translation.width > -100
-    }
-    
-    static let defaultDragGesture = DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
+struct SwipeRecognizer {
+  static func isDownSwipe(value: DragGesture.Value) -> Bool {
+    value.translation.height > 0 && value.translation.width < 100 && value.translation
+      .width > -100
   }
 
+  static func isUpSwipe(value: DragGesture.Value) -> Bool {
+    value.translation.height < 0 && value.translation.width < 100 && value.translation
+      .width > -100
+  }
+
+  static let defaultDragGesture = DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
+}

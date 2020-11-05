@@ -12,7 +12,7 @@ struct TodoComplicationView: View {
   let complication: Complications
   var body: some View {
     SegmentedProgressBarView(currentProgress: 1, maximumProgress: 1)
-    
+
     Group {
       if complication == .notAuthenticated {
         Text("authenticate")
@@ -23,7 +23,6 @@ struct TodoComplicationView: View {
       }
     }
     .todoTextStyle()
-    
   }
 }
 

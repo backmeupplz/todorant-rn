@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct ClearView: View {
-    var body: some View {
-      VStack{
-        Text("🎉")
-          .font(.title)
-        Text("clear.subtitle")
-      }
-      .todoTextStyle()
+  var body: some View {
+    VStack {
+      Text("🎉")
+        .font(.title)
+      Text("clear.subtitle")
     }
+    .todoTextStyle()
+  }
 }

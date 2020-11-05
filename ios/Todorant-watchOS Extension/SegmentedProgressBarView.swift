@@ -18,10 +18,11 @@ struct SegmentedProgressBarView: View {
         .font(.headline)
         .foregroundColor(.progressBar)
 
-      maximumProgress < Config.segmetThreshold ? AnyView(SegmentedProgressBarView.SegmentedProgressBar(
-        currentProgress: currentProgress,
-        maximumProgress: maximumProgress
-      )) :
+      maximumProgress < Config
+        .segmetThreshold ? AnyView(SegmentedProgressBarView.SegmentedProgressBar(
+          currentProgress: currentProgress,
+          maximumProgress: maximumProgress
+        )) :
         AnyView(SegmentedProgressBarView.LinearProgressBar(
           currentProgress: currentProgress,
           maximumProgress: maximumProgress
@@ -71,9 +72,9 @@ private extension SegmentedProgressBarView {
   }
 }
 
-fileprivate enum Config {
+private enum Config {
   static let selectedColor: Color = .progressBar
-  static let unselectedColor: Color = Color.secondary.opacity(0.3)
+  static let unselectedColor = Color.secondary.opacity(0.3)
   static let segmentSpacing: CGFloat = 3
   static let segmetThreshold = 10
   static let progressBarHeight: CGFloat = 2

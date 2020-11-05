@@ -24,8 +24,10 @@ struct TodoView: View {
         if let currentState = store.currentState {
           if let todo = store.currentState?.todo {
             VStack {
-              SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-                                       maximumProgress: currentState.todosCount)
+              SegmentedProgressBarView(
+                currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+                maximumProgress: currentState.todosCount
+              )
               Text(todo.text.stringWithLinksTruncated())
                 .todoTextStyle()
             }
@@ -39,8 +41,10 @@ struct TodoView: View {
                 }
               })
           } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-            SegmentedProgressBarView(currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-                                     maximumProgress: currentState.todosCount)
+            SegmentedProgressBarView(
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
             ClearView()
           } else {
             EmptyView()

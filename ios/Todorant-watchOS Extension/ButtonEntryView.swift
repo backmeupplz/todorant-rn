@@ -11,14 +11,12 @@ import SwiftUI
 struct ButtonEntryView: View {
   let buttonImage: UIImage
   let buttonText: String
-  
-    var body: some View {
-      VStack {
-        Image(uiImage: buttonImage)
-        Text(buttonText)
-      }
-      .padding()
+
+  var body: some View {
+    VStack {
+      Image(uiImage: buttonImage)
+      Text(buttonText)
     }
+    .padding()
+  }
 }
-
-

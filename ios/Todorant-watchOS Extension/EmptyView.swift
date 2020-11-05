@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct EmptyView: View {
-    var body: some View {
-      VStack {
-        Text("🐝")
-          .font(.title)
-        Text("empty.subtitle")
-      }
-      .todoTextStyle()
+  var body: some View {
+    VStack {
+      Text("🐝")
+        .font(.title)
+      Text("empty.subtitle")
     }
+    .todoTextStyle()
+  }
 }

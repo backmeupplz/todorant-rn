@@ -15,12 +15,11 @@ enum Key: String {
 }
 
 final class UserSession {
-  
 //  static private let keychain = Keychain(service: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-  
+
   static var accessToken: String? =
-    
-  
+   
+
   static var password: String? {
 //    try? keychain.getString(Key.password.rawValue)
     "password"
@@ -70,19 +69,19 @@ class Store: ObservableObject {
   @Published var expanded = false
 
   func updateCurrent(completion: (() -> Void)? = nil) {
-    self.loading = true
+    loading = true
     TodoRoute<CurrentState>(route: .current, parameters: ["date": String.today])
-    .execute { result in
-      self.loading = false
-      switch result {
-      case .success(let currentState):
-        // Update state
-        self.currentState = currentState
-        self.errorShown = false
-      case .failure:
-        self.errorShown = true
+      .execute { result in
+        self.loading = false
+        switch result {
+        case let .success(currentState):
+          // Update state
+          self.currentState = currentState
+          self.errorShown = false
+        case .failure:
+          self.errorShown = true
+        }
+        completion?()
       }
-      completion?()
-    }
   }
 }

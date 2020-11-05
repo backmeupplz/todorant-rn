@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SwipableNavigationView: View {
   @EnvironmentObject var store: Store
-  
+
   @State private var isShowingButtonsView: Bool = false
   @State private var buttonsViewVerticalOffset = CGSize.zero
 
@@ -22,23 +22,23 @@ struct SwipableNavigationView: View {
         }
       if isShowingButtonsView {
         if let todo = store.currentState?.todo, !store.errorShown {
-        VStack {
+          VStack {
             ButtonsView(todo: todo, isShowingButtonsView: $isShowingButtonsView)
-        }
-        .offset(y: buttonsViewVerticalOffset.height)
-        .buttonsViewAnimationStyle()
-        .gesture(SwipeRecognizer.defaultDragGesture
-          .onChanged { value in
-            buttonsViewVerticalOffset = value.translation
           }
-          .onEnded { value in
-            if SwipeRecognizer.isUpSwipe(value: value) {
-              withAnimation {
-                isShowingButtonsView.toggle()
-              }
+          .offset(y: buttonsViewVerticalOffset.height)
+          .buttonsViewAnimationStyle()
+          .gesture(SwipeRecognizer.defaultDragGesture
+            .onChanged { value in
+              buttonsViewVerticalOffset = value.translation
             }
-            buttonsViewVerticalOffset = CGSize.zero
-          })
+            .onEnded { value in
+              if SwipeRecognizer.isUpSwipe(value: value) {
+                withAnimation {
+                  isShowingButtonsView.toggle()
+                }
+              }
+              buttonsViewVerticalOffset = CGSize.zero
+            })
         }
       }
     }

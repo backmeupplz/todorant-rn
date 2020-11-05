@@ -10,16 +10,15 @@ import SwiftUI
 
 @main
 struct TodorantApp: App {
-  
   let store = Store()
-    @SceneBuilder var body: some Scene {
-        WindowGroup {
-            NavigationView {
-              SwipableNavigationView()
-                .environmentObject(store)
-            }
-        }
-
-        WKNotificationScene(controller: NotificationController.self, category: "myCategory")
+  @SceneBuilder var body: some Scene {
+    WindowGroup {
+      NavigationView {
+        SwipableNavigationView()
+          .environmentObject(store)
+      }
     }
+
+    WKNotificationScene(controller: NotificationController.self, category: "myCategory")
+  }
 }

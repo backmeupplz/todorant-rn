@@ -38,17 +38,17 @@ extension View {
   func todoTextStyle() -> some View {
     modifier(TodoTextModifier())
   }
-  
+
   func conditionalBackgroundBlurStyle(condition: Bool) -> some View {
     modifier(ConditionalBackgroundBlurModifier(condition: condition))
   }
-  
+
   func buttonsViewAnimationStyle() -> some View {
     modifier(ButtonsViewAnimationModifier())
   }
 }
 
-fileprivate enum Config {
+private enum Config {
   static let textBackgroundColor: Color = .textBackground
   static let textFrameCornerRadius: CGFloat = 15
   static let actionButtonBackground: Color = .actionButtonBackground
