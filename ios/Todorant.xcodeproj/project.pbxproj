@@ -42,6 +42,7 @@
 		6602C8172550E04900821524 /* DateFormatter+AppFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79DF2425B0660014DE92 /* DateFormatter+AppFormat.swift */; };
 		6602C8182550E04C00821524 /* Date+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CE2425B0470014DE92 /* Date+Today.swift */; };
 		6602C8312550E1FE00821524 /* String+truncateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */; };
+		662B7AC42554908D0088C06A /* TodoComplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662B7AC32554908D0088C06A /* TodoComplicationView.swift */; };
 		6651249E254B1F0E00BBFDDF /* SwipableNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */; };
 		665124C1254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */; };
 		665C1789254A26A900786973 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C1788254A26A900786973 /* ButtonsView.swift */; };
@@ -255,6 +256,8 @@
 		6601C0A1252BA1AA004DF491 /* TodoWidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetContent.swift; sourceTree = "<group>"; };
 		6602C7E92550DED900821524 /* Todorant-watchOS Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todorant-watchOS Extension.entitlements"; sourceTree = "<group>"; };
 		6602C7F22550DF2800821524 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		6602C83A2550EAF900821524 /* Todorant-watchOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todorant-watchOS.entitlements"; sourceTree = "<group>"; };
+		662B7AC32554908D0088C06A /* TodoComplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoComplicationView.swift; sourceTree = "<group>"; };
 		6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipableNavigationView.swift; sourceTree = "<group>"; };
 		665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwipableNavigationView+SwipeRecognizer.swift"; sourceTree = "<group>"; };
 		665C1788254A26A900786973 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
@@ -518,6 +521,7 @@
 		66E864022549D3C200CA2017 /* Todorant-watchOS */ = {
 			isa = PBXGroup;
 			children = (
+				6602C83A2550EAF900821524 /* Todorant-watchOS.entitlements */,
 				66E864032549D3C400CA2017 /* Assets.xcassets */,
 				66E864052549D3C400CA2017 /* Info.plist */,
 			);
@@ -538,6 +542,7 @@
 				665124C0254B688D00BBFDDF /* SwipableNavigationView+SwipeRecognizer.swift */,
 				6651249D254B1F0E00BBFDDF /* SwipableNavigationView.swift */,
 				66E864112549D3C500CA2017 /* TodoView.swift */,
+				662B7AC32554908D0088C06A /* TodoComplicationView.swift */,
 				66E864892549DD9000CA2017 /* SegmentedProgressBarView.swift */,
 				665C1788254A26A900786973 /* ButtonsView.swift */,
 				665C1792254A323900786973 /* ButtonEntryView.swift */,
@@ -1327,6 +1332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6602C80E2550E04500821524 /* String+Today.swift in Sources */,
+				662B7AC42554908D0088C06A /* TodoComplicationView.swift in Sources */,
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
 				665C1793254A323900786973 /* ButtonEntryView.swift in Sources */,
 				66E864662549D8A000CA2017 /* View+Modifiers.swift in Sources */,
@@ -1647,6 +1653,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Todorant-watchOS/Todorant-watchOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1683,6 +1690,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Todorant-watchOS/Todorant-watchOS.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;

@@ -17,6 +17,9 @@ struct SwipableNavigationView: View {
   var body: some View {
     ZStack {
       TodoView()
+        .onAppear {
+          store.updateCurrent()
+        }
         .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
         .gesture(SwipeRecognizer.defaultDragGesture
           .onEnded { value in

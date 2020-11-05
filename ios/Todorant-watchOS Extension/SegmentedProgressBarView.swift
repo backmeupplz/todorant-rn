@@ -47,7 +47,7 @@ private extension SegmentedProgressBarView {
               .unselectedColor)
         }
       }
-      .frame(maxHeight: 2)
+      .frame(maxHeight: Config.progressBarHeight)
     }
   }
 
@@ -66,7 +66,7 @@ private extension SegmentedProgressBarView {
             .foregroundColor(Config.selectedColor)
         }
       }
-      .frame(maxHeight: 2)
+      .frame(maxHeight: Config.progressBarHeight)
     }
   }
 }
@@ -76,4 +76,5 @@ fileprivate enum Config {
   static let unselectedColor: Color = Color.secondary.opacity(0.3)
   static let segmentSpacing: CGFloat = 3
   static let segmetThreshold = 10
+  static let progressBarHeight: CGFloat = 2
 }
