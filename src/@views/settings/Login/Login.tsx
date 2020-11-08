@@ -1,24 +1,23 @@
-import React, { Component } from 'react'
-import { Container, Content, Text, View, Input } from 'native-base'
+import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
+import appleAuth, {
+  appleAuthAndroid,
+  AppleButton,
+} from '@invertase/react-native-apple-authentication'
 import { GoogleSignin } from '@react-native-community/google-signin'
-import { alertError } from '@utils/alert'
-import * as rest from '@utils/rest'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { alertError } from '@utils/alert'
+import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
+import * as rest from '@utils/rest'
+import { sharedColors } from '@utils/sharedColors'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
-import { AccessToken, LoginManager } from 'react-native-fbsdk'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
+import { Container, Content, Input, Text, View } from 'native-base'
+import React, { Component } from 'react'
 import { Platform, StyleProp, TextStyle } from 'react-native'
-import appleAuth, {
-  AppleButton,
-  appleAuthAndroid,
-} from '@invertase/react-native-apple-authentication'
-import { syncEventEmitter } from '@utils/sockets'
-import { Button } from '@components/Button'
+import { AccessToken, LoginManager } from 'react-native-fbsdk'
 import { v4 as uuid } from 'uuid'
 
 class LoginVM {

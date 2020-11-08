@@ -1,3 +1,4 @@
+import { alertError } from '@utils/alert'
 import { sockets } from '@utils/sockets'
 
 const hydratedStores = {
@@ -19,6 +20,10 @@ export function hydrateStore(name: string) {
   hydratedStores[name] = true
   const needsSync = isHydrated()
   if (needsSync) {
-    sockets.globalSync()
+    try {
+      sockets.globalSync()
+    } catch (err) {
+      alertError(err)
+    }
   }
 }

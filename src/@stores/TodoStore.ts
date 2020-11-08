@@ -1,16 +1,15 @@
-import { syncEventEmitter } from '@utils/sockets'
+import { cloneTodo, compareTodos, getTitle, Todo } from '@models/Todo'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { decrypt, encrypt } from '@utils/encryption'
+import { hydrate } from '@utils/hydrate'
+import { hydrateStore } from '@utils/hydrated'
 import { realm } from '@utils/realm'
-import { observable, computed } from 'mobx'
-import { Todo, getTitle, compareTodos, cloneTodo } from '@models/Todo'
+import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
+import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
+import { getDateString } from '@utils/time'
+import { computed, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
-import { getDateString } from '@utils/time'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
-import { decrypt, encrypt } from '@utils/encryption'
-import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 
 class TodoStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -114,10 +113,11 @@ class TodoStore {
 
   onObjectsFromServer = async (
     todosChangedOnServer: Todo[],
-    pushBack: (objects: Todo[]) => Promise<Todo[]>
+    pushBack: (objects: Todo[]) => Promise<Todo[]>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     // Modify dates
     todosChangedOnServer.forEach((todo) => {
@@ -188,10 +188,9 @@ class TodoStore {
       }
     })
     if (!todosToPush.length) {
-      sharedTodoStore.lastSyncDate = new Date()
-      // Refresh
+      // Complete sync
+      completeSync()
       this.refreshTodos()
-      syncEventEmitter.emit(`todos_synced`)
       return
     }
     realm.write(() => {
@@ -233,7 +232,8 @@ class TodoStore {
         }
       }
     })
-    // Refresh
+    // Complete sync
+    completeSync()
     this.refreshTodos()
   }
 
