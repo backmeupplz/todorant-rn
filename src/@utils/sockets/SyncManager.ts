@@ -184,6 +184,7 @@ export class SyncManager<T> {
       return this.sync()
     } else if (this.setLastSyncDate) {
       this.setLastSyncDate(new Date())
+      this.isSyncing = false
     }
   }
 
