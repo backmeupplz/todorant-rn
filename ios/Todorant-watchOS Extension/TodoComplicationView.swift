@@ -15,9 +15,11 @@ struct TodoComplicationView: View {
 
     Group {
       if complication == .notAuthenticated {
-        Text("authenticate")
+        Text(UserSession.accessToken ?? "no token")
+          .padding(.horizontal)
       } else if complication == .error {
         Text("error")
+          .padding(.horizontal)
       } else {
         ProgressView()
       }
