@@ -98,7 +98,7 @@ export class SyncManager<T> {
   sync = async () => {
     // Check if authorized
     if (!socketIO.connected) {
-      return Promise.reject('Not connected to the sockets')
+      return Promise.reject('Not connected to sockets')
     }
     if (!sharedSessionStore.user?.token || !sharedSocketStore.authorized) {
       return Promise.reject('Not authorized')

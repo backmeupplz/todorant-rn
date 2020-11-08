@@ -120,18 +120,27 @@ class SocketManager {
         this.pendingAuthorization = undefined
       }
     }, 1000)
+
+    // Check connection
+    setInterval(() => {
+      this.connect()
+    }, 1000)
   }
 
   connect = () => {
     if (socketIO.connected) {
       return
     }
-    socketIO.connect()
+    try {
+      socketIO.connect()
+    } catch (err) {
+      console.warn('Socket connection error', err)
+    }
   }
   authorize = () => {
     return new Promise((res, rej) => {
       if (!sharedSessionStore.user?.token || !socketIO.connected) {
-        return rej('No Internet connection')
+        return rej('Not connected to sockets')
       }
       if (sharedSocketStore.authorized) {
         return res()
@@ -165,8 +174,8 @@ class SocketManager {
   onConnectTimeout = () => {
     console.warn('ws connect timeout')
   }
-  onError = () => {
-    console.warn('ws error')
+  onError = (err: any) => {
+    console.warn('ws error', err)
   }
 
   onAuthorized = () => {
