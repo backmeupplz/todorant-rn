@@ -1,16 +1,16 @@
-import { navigate } from '@utils/navigation'
-import { translate } from '@utils/i18n'
-import { Alert } from 'react-native'
-import { sockets } from '@utils/sockets'
-import { fixOrder } from '@utils/fixOrder'
-import { SectionHeaderOrTodo } from '@views/planning/SectionHeaderOrTodo'
-import { getDateString, isDateTooOld } from '@utils/time'
-import { Todo, compareTodos, getTitle, isTodoOld } from '@models/Todo'
+import { compareTodos, getTitle, isTodoOld, Todo } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { computed, observable } from 'mobx'
-import { realm } from '@utils/realm'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { fixOrder } from '@utils/fixOrder'
+import { translate } from '@utils/i18n'
+import { navigate } from '@utils/navigation'
+import { realm } from '@utils/realm'
+import { sockets } from '@utils/sockets'
+import { getDateString, isDateTooOld } from '@utils/time'
+import { SectionHeaderOrTodo } from '@views/planning/SectionHeaderOrTodo'
+import { computed, observable } from 'mobx'
+import { Alert } from 'react-native'
 
 export class PlanningVM {
   @observable collapsedTitles = [] as string[]
@@ -49,7 +49,7 @@ export class PlanningVM {
         } else {
           prev[date] = [cur]
         }
-      } else {
+      } else if (cur.monthAndYear) {
         const month = cur.monthAndYear
         if (prev[month]) {
           prev[month].push(cur)
