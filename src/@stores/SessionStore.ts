@@ -65,10 +65,11 @@ class SessionStore {
 
   hydrated = false
 
-  login(user: User) {
+  async login(user: User) {
     this.user = user
-    sockets.authorize()
+    await sockets.authorize()
     setToken(user.token)
+    await sockets.globalSync()
     logEvent('login_success')
   }
 

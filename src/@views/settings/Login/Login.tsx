@@ -25,20 +25,6 @@ class LoginVM {
   @observable syncLoading = false
   @observable debugToken = ''
 
-  constructor() {
-    syncEventEmitter.addListener('todos_synced', () => {
-      this.syncLoading = false
-      syncEventEmitter.removeAllListeners()
-      goBack()
-    })
-    syncEventEmitter.addListener('todos_sync_errored', (error) => {
-      this.syncLoading = false
-      syncEventEmitter.removeAllListeners()
-      goBack()
-      alertError(error)
-    })
-  }
-
   loginWithGoogle = async () => {
     this.loading = true
     try {
@@ -55,10 +41,12 @@ class LoginVM {
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
       todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
       this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
+      await sharedSessionStore.login(todorantUserInfo)
+      goBack()
     } catch (error) {
       alertError(error)
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -82,10 +70,12 @@ class LoginVM {
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
       todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
       this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
+      await sharedSessionStore.login(todorantUserInfo)
+      goBack()
     } catch (error) {
       alertError(error)
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -110,13 +100,15 @@ class LoginVM {
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
         todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
         this.syncLoading = true
-        sharedSessionStore.login(todorantUserInfo)
+        await sharedSessionStore.login(todorantUserInfo)
+        goBack()
       } else {
         throw new Error()
       }
     } catch (error) {
       alertError(translate('appleSigninError'))
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -149,11 +141,13 @@ class LoginVM {
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
         todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
         this.syncLoading = true
-        sharedSessionStore.login(todorantUserInfo)
+        await sharedSessionStore.login(todorantUserInfo)
+        goBack()
       }
     } catch (err) {
       alertError(translate('appleSigninError'))
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -165,10 +159,12 @@ class LoginVM {
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
       todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
       this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
+      await sharedSessionStore.login(todorantUserInfo)
+      goBack()
     } catch (error) {
       alertError(error)
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }

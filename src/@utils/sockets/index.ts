@@ -22,6 +22,12 @@ class SocketManager {
   userSyncManager: SyncManager<User>
   delegationSyncManager: SyncManager<any>
 
+  pendingAuthorization?: {
+    res: () => void
+    rej: (reason: string) => void
+    createdAt: number
+  }
+
   constructor() {
     this.connect()
 
@@ -102,6 +108,18 @@ class SocketManager {
         return sharedDelegationStore.onObjectsFromServer(objects, completeSync)
       }
     )
+
+    // Check authorization promise timeout
+    setInterval(() => {
+      if (!this.pendingAuthorization) {
+        return
+      }
+      const timeout = 20
+      if (Date.now() - this.pendingAuthorization.createdAt > timeout * 1000) {
+        this.pendingAuthorization.rej('Operation timed out')
+        this.pendingAuthorization = undefined
+      }
+    }, 1000)
   }
 
   connect = () => {
@@ -111,14 +129,16 @@ class SocketManager {
     socketIO.connect()
   }
   authorize = () => {
-    if (
-      !sharedSessionStore.user?.token ||
-      !socketIO.connected ||
-      sharedSocketStore.authorized
-    ) {
-      return
-    }
-    socketIO.emit('authorize', sharedSessionStore.user.token)
+    return new Promise((res, rej) => {
+      if (!sharedSessionStore.user?.token || !socketIO.connected) {
+        return rej('No Internet connection')
+      }
+      if (sharedSocketStore.authorized) {
+        return res()
+      }
+      this.pendingAuthorization = { res, rej, createdAt: Date.now() }
+      socketIO.emit('authorize', sharedSessionStore.user.token)
+    })
   }
   logout = () => {
     if (!socketIO.connected) {
@@ -151,6 +171,8 @@ class SocketManager {
 
   onAuthorized = () => {
     sharedSocketStore.authorized = true
+    this.pendingAuthorization?.res()
+    this.pendingAuthorization = undefined
   }
 
   hardSync = () => {
