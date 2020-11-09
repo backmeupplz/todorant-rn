@@ -15,9 +15,17 @@ let keychainWrapper = KeychainWrapper(
 
 @objc(KeychainManager)
 class KeychainManager: NSObject {
+  
+  let tokenSender = TokenSender()
+  
   @objc(setToken:)
   func setToken(token: String) -> Void {
     keychainWrapper.set(token, forKey: "accessToken")
+    
+    self.tokenSender.session.sendMessage(["accessToken": token], replyHandler: nil) { (error) in
+      print(error.localizedDescription)
+    }
+    
   }
   
   @objc
@@ -28,6 +36,11 @@ class KeychainManager: NSObject {
   @objc(setPassword:)
   func setPassword(password: String) -> Void {
     keychainWrapper.set(password, forKey: "password")
+    
+    self.tokenSender.session.sendMessage(["password": password], replyHandler: nil) { (error) in
+      print(error.localizedDescription)
+    }
+    
   }
   
   @objc

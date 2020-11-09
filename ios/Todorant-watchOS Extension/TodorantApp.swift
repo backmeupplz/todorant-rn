@@ -11,6 +11,9 @@ import SwiftUI
 @main
 struct TodorantApp: App {
   let store = Store()
+  
+  let session = TokenReceiver()
+  
   @SceneBuilder var body: some Scene {
     WindowGroup {
       NavigationView {
