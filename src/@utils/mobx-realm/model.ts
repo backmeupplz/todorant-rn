@@ -1,10 +1,13 @@
 import { mobxRealmCollection } from '@utils/mobx-realm/collection'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { createAtom, IAtom, observable } from 'mobx'
+import { createAtom, IAtom, IObservableArray, observable } from 'mobx'
 import Realm from 'realm'
 
 class MobxRealmModel extends Realm.Object {
   atom: IAtom
+  __mobxCollections: { [index: string]: IObservableArray<Realm.Object> }
+  __mobxObject: any
+
   constructor() {
     super()
     const objectName = this.objectSchema().name
@@ -12,41 +15,42 @@ class MobxRealmModel extends Realm.Object {
 
     const atomName = primaryKey
       ? `${objectName}:${(this as any)[primaryKey]}`
-      : undefined
+      : `${objectName}:${this._objectId}`
     this.atom = createAtom(atomName)
     this.__mobxCollections = {}
     this.__mobxObject = mobxRealmObject(this)
     setTimeout(
       () =>
-        this.addListener((object, changes) => {
-          if (changes.length > 0) this.atom.reportChanged()
-          if (changes.length > 0)
+        this.addListener((_, changes) => {
+          if (changes.changedProperties.length > 0) {
+            this.atom.reportChanged()
             console.log('changes in ' + this.atom.name, changes)
+          }
         }),
       0
     )
   }
 
-  __mobxReadProperty(propertyName) {
+  __mobxReadProperty(propertyName: string) {
     if (this.objectSchema().properties[propertyName]) {
       if (
-        this[propertyName] !== null &&
-        this[propertyName].hasOwnProperty('__mobxObject')
+        (this as any)[propertyName] !== null &&
+        (this as any)[propertyName].hasOwnProperty('__mobxObject')
       ) {
         try {
-          return this[propertyName].__mobxObject
+          return (this as any)[propertyName].__mobxObject
         } catch (error) {
           return null
         }
       } else if (
-        this[propertyName] !== null &&
-        typeof this[propertyName][Symbol.iterator] === 'function' &&
-        typeof this[propertyName] !== 'string'
+        (this as any)[propertyName] !== null &&
+        typeof (this as any)[propertyName][Symbol.iterator] === 'function' &&
+        typeof (this as any)[propertyName] !== 'string'
       ) {
         try {
           if (!this.__mobxCollections[propertyName]) {
             this.__mobxCollections[propertyName] = mobxRealmCollection(
-              this[propertyName]
+              (this as any)[propertyName]
             )
           }
           return this.__mobxCollections[propertyName]
@@ -57,7 +61,7 @@ class MobxRealmModel extends Realm.Object {
         this.atom.reportObserved()
       }
     }
-    return this[propertyName]
+    return (this as any)[propertyName]
   }
 }
 
