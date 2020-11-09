@@ -21,6 +21,7 @@ struct TodoView: View {
       } else if store.errorShown {
         TodoComplicationView(complication: .error)
       } else {
+        
         if let currentState = store.currentState {
           if let todo = store.currentState?.todo {
             VStack {
@@ -31,7 +32,6 @@ struct TodoView: View {
               Text(todo.text.stringWithLinksTruncated())
                 .todoTextStyle()
             }
-            .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
             .gesture(SwipeRecognizer.defaultDragGesture
               .onEnded { value in
                 if SwipeRecognizer.isDownSwipe(value: value) {

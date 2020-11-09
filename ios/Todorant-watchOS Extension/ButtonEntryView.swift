@@ -10,13 +10,12 @@ import SwiftUI
 
 struct ButtonEntryView: View {
   let buttonImage: UIImage
-  let buttonText: String
 
   var body: some View {
-    VStack {
       Image(uiImage: buttonImage)
-      Text(buttonText)
-    }
-    .padding()
+        .renderingMode(.template)
+        .foregroundColor(Color(.white))
+        .scaledToFill()
+        .padding()
   }
 }

@@ -23,10 +23,7 @@ struct ButtonsView: View {
             isShowingButtonsView = false
           }
         }) {
-          ButtonEntryView(
-            buttonImage: #imageLiteral(resourceName: "refresh"),
-            buttonText: "Reload"
-          )
+          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "refresh"))
         }
 
         Button(action: {
@@ -46,10 +43,7 @@ struct ButtonsView: View {
             isShowingButtonsView = false
           }
         }) {
-          ButtonEntryView(
-            buttonImage: #imageLiteral(resourceName: "delete"),
-            buttonText: "Delete"
-          )
+          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "delete"))
         }
       }
 
@@ -71,7 +65,7 @@ struct ButtonsView: View {
             isShowingButtonsView = false
           }
         }) {
-          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "skip"), buttonText: "Skip")
+          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "skip"))
         }
         Button(action: {
           self.store.loading = true
@@ -90,7 +84,7 @@ struct ButtonsView: View {
             isShowingButtonsView = false
           }
         }) {
-          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "done"), buttonText: "Done")
+          ButtonEntryView(buttonImage: #imageLiteral(resourceName: "done"))
         }
       }
     }
