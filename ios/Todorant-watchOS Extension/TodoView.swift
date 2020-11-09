@@ -15,11 +15,11 @@ struct TodoView: View {
   var body: some View {
     VStack {
       if !store.authenticated {
-        TodoComplicationView(complication: .notAuthenticated)
+        TodoMediateView(condition: .notAuthenticated)
       } else if store.loading {
-        TodoComplicationView(complication: .loading)
+        TodoMediateView(condition: .loading)
       } else if store.errorShown {
-        TodoComplicationView(complication: .error)
+        TodoMediateView(condition: .error)
       } else {
         
         if let currentState = store.currentState {

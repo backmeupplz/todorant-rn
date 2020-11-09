@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-struct TodoComplicationView: View {
-  let complication: Complications
+struct TodoMediateView: View {
+  let condition: Conditions
   var body: some View {
     VStack {
       PlaceholderProgressBarView()
 
       Group {
-        if complication == .notAuthenticated {
-          Text(UserSession.accessToken ?? "no token")
+        if condition == .notAuthenticated {
+          Text("authenticate")
             .padding(.horizontal)
-        } else if complication == .error {
+        } else if condition == .error {
           Text("error")
             .padding(.horizontal)
         } else {
@@ -30,6 +30,6 @@ struct TodoComplicationView: View {
   }
 }
 
-enum Complications {
+enum Conditions {
   case notAuthenticated, error, loading
 }
