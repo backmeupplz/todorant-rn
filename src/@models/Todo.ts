@@ -1,11 +1,11 @@
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
-  getDateString,
-  getDateStringFromTodo,
   getDateDateString,
   getDateMonthAndYearString,
+  getDateString,
+  getDateStringFromTodo,
 } from '@utils/time'
 import { observable } from 'mobx'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 
 export class Todo {
   public static schema = {
