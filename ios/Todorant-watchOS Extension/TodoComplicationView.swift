@@ -11,20 +11,22 @@ import SwiftUI
 struct TodoComplicationView: View {
   let complication: Complications
   var body: some View {
-    SegmentedProgressBarView(currentProgress: 1, maximumProgress: 1)
+    VStack {
+      PlaceholderProgressBarView()
 
-    Group {
-      if complication == .notAuthenticated {
-        Text(UserSession.accessToken ?? "no token")
-          .padding(.horizontal)
-      } else if complication == .error {
-        Text("error")
-          .padding(.horizontal)
-      } else {
-        ProgressView()
+      Group {
+        if complication == .notAuthenticated {
+          Text(UserSession.accessToken ?? "no token")
+            .padding(.horizontal)
+        } else if complication == .error {
+          Text("error")
+            .padding(.horizontal)
+        } else {
+          ProgressView()
+        }
       }
+      .todoTextStyle()
     }
-    .todoTextStyle()
   }
 }
 

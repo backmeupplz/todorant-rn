@@ -66,6 +66,7 @@ private extension SegmentedProgressBarView {
             .frame(width: CGFloat(Int(geometry.size.width) / maximumProgress * currentProgress))
             .foregroundColor(Config.selectedColor)
         }
+        .clipShape(Capsule())
       }
       .frame(maxHeight: Config.progressBarHeight)
     }
