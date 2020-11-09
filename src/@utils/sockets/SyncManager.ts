@@ -74,7 +74,8 @@ export class SyncManager<T> {
       this.setSyncStage(syncId, SyncStage.gotPushedBackObjectsFromServer)
       console.warn(
         `${this.name}: pushed`,
-        Array.isArray(objects) ? objects.length : 1
+        Array.isArray(objects) ? objects.length : 1,
+        syncId
       )
       this.pendingPushes[syncId]?.res(objects)
       delete this.pendingPushes[syncId]
@@ -181,8 +182,11 @@ export class SyncManager<T> {
   private checkIfNeedsAnotherSync() {
     if (this.queuedSyncPromise) {
       return this.sync()
-    } else if (this.setLastSyncDate) {
-      this.setLastSyncDate(new Date())
+    } else {
+      if (this.setLastSyncDate) {
+        this.setLastSyncDate(new Date())
+      }
+      console.warn(`${this.name} sync completed!`)
       this.isSyncing = false
     }
   }

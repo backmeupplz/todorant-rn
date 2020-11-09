@@ -13,6 +13,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { isHydrated } from '@utils/hydrated'
 import { socketIO } from '@utils/sockets/socketIO'
 import { SyncManager } from '@utils/sockets/SyncManager'
+import { computed } from 'mobx'
 
 class SocketManager {
   todoSyncManager: SyncManager<Todo[]>
@@ -26,6 +27,17 @@ class SocketManager {
     res: () => void
     rej: (reason: string) => void
     createdAt: number
+  }
+
+  @computed get isSyncing() {
+    return (
+      this.todoSyncManager.isSyncing ||
+      this.tagsSyncManager.isSyncing ||
+      this.settingsSyncManager.isSyncing ||
+      this.heroSyncManager.isSyncing ||
+      this.userSyncManager.isSyncing ||
+      this.delegationSyncManager.isSyncing
+    )
   }
 
   constructor() {
@@ -121,7 +133,7 @@ class SocketManager {
       }
     }, 1000)
 
-    // Check connection
+    // Check connection (if not dev)
     setInterval(() => {
       this.connect()
     }, 1000)
