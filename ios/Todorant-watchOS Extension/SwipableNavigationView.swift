@@ -18,6 +18,9 @@ struct SwipableNavigationView: View {
     ZStack {
       TodoView(isShowingButtonsView: $isShowingButtonsView)
         .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
+        .onTapGesture {
+          store.updateCurrent()
+        }
         .onAppear {
           store.updateCurrent()
         }
