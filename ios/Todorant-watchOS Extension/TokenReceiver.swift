@@ -21,20 +21,25 @@ class TokenReceiver: NSObject, WCSessionDelegate {
   }
   
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-      
   }
   
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-    
       DispatchQueue.main.async {
         let keychain = Keychain(service: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-        
-        keychain["accessToken"] = message["accessToken"] as? String ?? "Unknown"
-        
-        keychain["password"] = message["password"] as? String ?? "Unknown"
+        if let accessToken = message["accessToken"] as? String {
+          if (accessToken == "delete") {
+            keychain["accessToken"] = nil
+          } else {
+            keychain["accessToken"] = accessToken
+          }
+        }
+        if let password = message["password"] as? String {
+          if (password == "delete") {
+            keychain["password"] = nil
+          } else {
+            keychain["password"] = password
+          }
+        }
       }
   }
-  
-  
-  
 }
