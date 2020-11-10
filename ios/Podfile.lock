@@ -139,6 +139,7 @@ PODS:
     - GTMSessionFetcher/Core (= 1.4.0)
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
+  - KeychainAccess (4.2.1)
   - nanopb (1.30905.0):
     - nanopb/decode (= 1.30905.0)
     - nanopb/encode (= 1.30905.0)
@@ -477,6 +478,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - KeychainAccess
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - Permission-Siri (from `../node_modules/react-native-permissions/ios/Siri.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -558,6 +560,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - JWT
+    - KeychainAccess
     - nanopb
     - PromisesObjC
     - SSZipArchive
@@ -724,6 +727,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
+  KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
   Permission-Siri: 782f6152006ace9ea1103160104f2f9fff4193c2
@@ -782,6 +786,6 @@ SPEC CHECKSUMS:
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: 5dc8332eb0d05185bf5c316c08211ba00d7edc40
+PODFILE CHECKSUM: 0aa3207ed2384b0d46849643e78c5f3b43f6b395
 
 COCOAPODS: 1.10.0
