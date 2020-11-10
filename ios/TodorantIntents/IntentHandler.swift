@@ -16,7 +16,7 @@ enum Key: String {
 final class UserSession {
   static var accessToken: String? {
     return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-      .string(forKey: Key.accessToken.rawValue)
+          .string(forKey: Key.accessToken.rawValue)
   }
 }
 
