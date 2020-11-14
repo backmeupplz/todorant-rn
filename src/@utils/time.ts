@@ -1,3 +1,5 @@
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { observable } from 'mobx'
 import moment from 'moment'
 
 export function getDateMonthAndYearString(date: Date | string) {
@@ -68,3 +70,31 @@ export function getDateStringFromTodo(todo: {
 }) {
   return `${todo.monthAndYear}${todo.date ? `-${todo.date}` : ''}`
 }
+
+export function getTodayWithStartOfDay() {
+  const now = new Date()
+  const today = new Date()
+  const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
+  today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
+  today.setMinutes(parseInt(startTimeOfDay.substr(3)))
+
+  if (now < today) {
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    return yesterday
+  } else {
+    return now
+  }
+}
+
+class ObservableNow {
+  @observable now = new Date()
+
+  constructor() {
+    setInterval(() => {
+      this.now = new Date()
+    }, 1000)
+  }
+}
+
+export const observableNow = new ObservableNow()

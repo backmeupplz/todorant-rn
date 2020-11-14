@@ -1,8 +1,9 @@
-import { cloneTodo, compareTodos, getTitle, Todo } from '@models/Todo'
+import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { decrypt, encrypt } from '@utils/encryption'
 import { hydrate } from '@utils/hydrate'
 import { hydrateStore } from '@utils/hydrated'
+import { mobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
@@ -16,24 +17,34 @@ class TodoStore {
 
   hydrated = false
 
-  @observable allTodos = realm.objects<Todo>('Todo')
+  @observable allTodos = realm.objects(Todo)
 
   @persist recalculatedExactDates = false
 
-  @computed get todayTodos() {
-    const now = new Date()
-    const today = new Date()
-    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-    today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-    today.setMinutes(parseInt(startTimeOfDay.substr(3)))
+  @observable todayUncompletedTodos = mobxRealmCollection(
+    this.getObservableTodayUncompletedTodos()
+  )
+  // todayUncompletedTodos = this.getObservableTodayUncompletedTodos()
 
-    if (now < today) {
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      return this.todosForDate(getDateString(yesterday))
-    } else {
-      return this.todosForDate(getDateString(now))
-    }
+  getObservableTodayUncompletedTodos() {
+    const title = getDateString(new Date())
+    return realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
+      .filtered('completed = false')
+      .filtered(
+        title.length === 10
+          ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
+              8,
+              2
+            )}"`
+          : `monthAndYear = "${title.substr(
+              0,
+              7
+            )}" && (date == "" || date == null)`
+      )
+      .sorted('order')
   }
 
   todosForDate = (title: string) => {
@@ -55,10 +66,9 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    const todayTodos = Array.from(
-      this.todayTodos.filtered('completed = false')
-    ).sort(compareTodos(false))
-    return todayTodos.length ? todayTodos[0] : undefined
+    return this.todayUncompletedTodos.length
+      ? this.todayUncompletedTodos[0]
+      : undefined
   }
 
   @computed get unacceptedTodos() {
@@ -69,8 +79,8 @@ class TodoStore {
 
   @computed get progress() {
     return {
-      count: this.todayTodos.length,
-      completed: this.todayTodos.filtered('completed = true').length,
+      count: this.todayUncompletedTodos.length,
+      completed: 0,
     }
   }
 
@@ -171,7 +181,7 @@ class TodoStore {
           newTodo.text = decrypt(newTodo.text)
         }
         realm.write(() => {
-          realm.create('Todo', newTodo)
+          realm.create(Todo, newTodo as Todo)
         })
       }
     }
@@ -238,7 +248,7 @@ class TodoStore {
   }
 
   refreshTodos = () => {
-    this.allTodos = realm.objects<Todo>('Todo')
+    // this.allTodos = realm.objects(Todo)
     refreshWidgetAndBadge()
   }
 
@@ -250,7 +260,7 @@ class TodoStore {
   }
 
   recalculateExactDates() {
-    const todos = realm.objects<Todo>('Todo')
+    const todos = realm.objects(Todo)
     realm.write(() => {
       for (const todo of todos) {
         todo._exactDate = new Date(getTitle(todo))

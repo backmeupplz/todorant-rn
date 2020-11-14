@@ -1,4 +1,4 @@
-import Realm from 'realm'
+import { MobxRealmModel } from '@utils/mobx-realm/model'
 
 const proxyHandler = {
   get: (target: any, property: any) => {
@@ -6,14 +6,9 @@ const proxyHandler = {
   },
 }
 
-export function mobxRealmObject<T>(
-  realmObject: (Realm.Object & T) | undefined
-) {
-  if (!realmObject) {
-    return realmObject
-  }
-  if (realmObject.hasOwnProperty('__mobxObject')) {
+export function mobxRealmObject<T extends MobxRealmModel>(realmObject: T): T {
+  if (realmObject.hasOwnProperty('__mobxObject') && realmObject.__mobxObject) {
     return (realmObject as any).__mobxObject
   }
-  return new Proxy(realmObject, proxyHandler)
+  return new Proxy<T>(realmObject, proxyHandler)
 }

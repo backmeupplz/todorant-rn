@@ -6317,10 +6317,10 @@ readable-stream@^3.4.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-realm@6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-6.1.2.tgz#9716c16e6f30a0a3a957d5cefe38283ecbd07625"
-  integrity sha512-hv2FcsqRew6r3mH82eFcYfcxJcA68l6O27bVMUYtWqwosdPL7fZCDyFExlN65OvhAyNCd0qufEWSQw3Hq1S9tQ==
+realm@6.1.5:
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-6.1.5.tgz#17656b4ba545c1df10f0c707f2966af150056df6"
+  integrity sha512-YOu0PUwFss+mEivlkpX1GsAuJZtbuNrwM2DYaZUevYQuinSQgFIHMh8OQUXw02XWz3OUtNoaIEhgRka0PbSqSA==
   dependencies:
     command-line-args "^4.0.6"
     deepmerge "2.1.0"

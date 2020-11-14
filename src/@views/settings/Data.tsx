@@ -55,7 +55,7 @@ export class Data extends Component {
           <Row
             title={translate('todoCount')}
             subtitle={`${
-              realm.objects<Todo>('Todo').filtered('deleted = false').length
+              realm.objects(Todo).filtered('deleted = false').length
             }`}
           />
           <Row

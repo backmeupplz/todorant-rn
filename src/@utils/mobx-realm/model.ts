@@ -3,7 +3,7 @@ import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { createAtom, IAtom, IObservableArray, observable } from 'mobx'
 import Realm from 'realm'
 
-class MobxRealmModel extends Realm.Object {
+export class MobxRealmModel extends Realm.Object {
   atom: IAtom
   __mobxCollections: { [index: string]: IObservableArray<Realm.Object> }
   __mobxObject: any
@@ -24,7 +24,6 @@ class MobxRealmModel extends Realm.Object {
         this.addListener((_, changes) => {
           if (changes.changedProperties.length > 0) {
             this.atom.reportChanged()
-            console.log('changes in ' + this.atom.name, changes)
           }
         }),
       0
@@ -33,24 +32,28 @@ class MobxRealmModel extends Realm.Object {
 
   __mobxReadProperty(propertyName: string) {
     if (this.objectSchema().properties[propertyName]) {
+      const propertyValue = (this as any)[propertyName]
       if (
-        (this as any)[propertyName] !== null &&
-        (this as any)[propertyName].hasOwnProperty('__mobxObject')
+        propertyValue !== undefined &&
+        propertyValue !== null &&
+        propertyValue.hasOwnProperty('__mobxObject') &&
+        !!propertyValue.__mobxObject
       ) {
         try {
-          return (this as any)[propertyName].__mobxObject
+          return propertyValue.__mobxObject
         } catch (error) {
           return null
         }
       } else if (
-        (this as any)[propertyName] !== null &&
-        typeof (this as any)[propertyName][Symbol.iterator] === 'function' &&
-        typeof (this as any)[propertyName] !== 'string'
+        propertyValue !== undefined &&
+        propertyValue !== null &&
+        typeof propertyValue[Symbol.iterator] === 'function' &&
+        typeof propertyValue !== 'string'
       ) {
         try {
           if (!this.__mobxCollections[propertyName]) {
             this.__mobxCollections[propertyName] = mobxRealmCollection(
-              (this as any)[propertyName]
+              propertyValue
             )
           }
           return this.__mobxCollections[propertyName]
@@ -64,5 +67,3 @@ class MobxRealmModel extends Realm.Object {
     return (this as any)[propertyName]
   }
 }
-
-export default MobxRealmModel

@@ -3,7 +3,7 @@ import { Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
 
 export function gatherData() {
-  const todos = realm.objects<Todo>('Todo')
+  const todos = realm.objects(Todo)
   const tags = realm.objects<Tag>('Tag')
   return { todos, tags }
 }
