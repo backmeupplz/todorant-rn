@@ -13,6 +13,10 @@ class AppStateStore {
 
   @observable searchEnabled = false
   @observable searchQuery: string[] = []
+
+  @observable calendarEnabled = false
+  @observable activeCoordinates = { x: 0, y: 0 }
+  @observable activeDay = 0
 }
 
 export const sharedAppStateStore = new AppStateStore()
