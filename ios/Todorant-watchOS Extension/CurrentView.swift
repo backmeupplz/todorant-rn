@@ -16,8 +16,9 @@ struct CurrentView: View {
     VStack {
       if !store.authenticated {
         TodoMediateView(condition: .notAuthenticated)
-      } else if store.loading {
-        TodoMediateView(condition: .loading)
+//      }
+//      else if store.loading {
+//        TodoMediateView(condition: .loading)
       } else if store.errorShown {
         TodoMediateView(condition: .error)
       } else {
