@@ -80,6 +80,7 @@ struct ButtonsView: View {
                 self.store.errorShown = true
               }
             }
+          WKInterfaceDevice.current().play(.success)
           withAnimation {
             isShowingButtonsView = false
           }
