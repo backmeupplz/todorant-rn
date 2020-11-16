@@ -12,7 +12,7 @@ import SwiftUI
 struct TodorantApp: App {
   let store = Store()
   
-  let session = TokenReceiver()
+  var session = TokenReceiver()
   
   @SceneBuilder var body: some Scene {
     WindowGroup {

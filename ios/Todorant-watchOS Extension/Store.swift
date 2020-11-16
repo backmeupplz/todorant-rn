@@ -74,12 +74,12 @@ class Store: ObservableObject {
       .execute { result in
         self.loading = false
         switch result {
-        case let .success(currentState):
-          // Update state
-          self.currentState = currentState
-          self.errorShown = false
-        case .failure:
-          self.errorShown = true
+          case let .success(currentState):
+            // Update state
+            self.currentState = currentState
+            self.errorShown = false
+          case .failure:
+            self.errorShown = true
         }
         completion?()
       }
