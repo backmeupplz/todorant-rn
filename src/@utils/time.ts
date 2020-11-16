@@ -88,12 +88,19 @@ export function getTodayWithStartOfDay() {
 }
 
 class ObservableNow {
-  @observable now = new Date()
+  @observable todayTitle = getDateString(getTodayWithStartOfDay())
 
   constructor() {
     setInterval(() => {
-      this.now = new Date()
+      this.updateNow()
     }, 1000)
+  }
+
+  private updateNow() {
+    const newTodayTitle = getDateString(getTodayWithStartOfDay())
+    if (this.todayTitle !== newTodayTitle) {
+      this.todayTitle = newTodayTitle
+    }
   }
 }
 
