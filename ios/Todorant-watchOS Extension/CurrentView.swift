@@ -25,11 +25,7 @@ struct CurrentView: View {
           if let todo = store.currentState?.todo {
             TodoView(currentState: currentState, todo: todo, isShowingButtonsView: $isShowingButtonsView)
           } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-            SegmentedProgressBarView(
-              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-              maximumProgress: currentState.todosCount
-            )
-            ClearView()
+            ClearView(currentState: currentState)
           } else {
             EmptyView()
           }

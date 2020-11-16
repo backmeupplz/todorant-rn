@@ -9,12 +9,21 @@
 import SwiftUI
 
 struct ClearView: View {
+  
+  let currentState: CurrentState
+  
   var body: some View {
     VStack {
-      Text("🎉")
-        .font(.title)
-      Text("clear.subtitle")
+      SegmentedProgressBarView(
+        currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+        maximumProgress: currentState.todosCount
+      )
+      VStack {
+        Text("🎉")
+          .font(.title)
+        Text("clear.subtitle")
+      }
+        .todoTextStyle()
     }
-    .todoTextStyle()
   }
 }
