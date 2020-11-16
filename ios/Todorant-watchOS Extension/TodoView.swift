@@ -9,13 +9,28 @@
 import SwiftUI
 
 struct TodoView: View {
+  
+  let currentState: CurrentState
+  let todo: Todo
+  @Binding var isShowingButtonsView: Bool
+  
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+      VStack {
+        SegmentedProgressBarView(
+          currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+          maximumProgress: currentState.todosCount
+        )
+        Text(todo.text.stringWithLinksTruncated())
+          .todoTextStyle()
+      }
+      .gesture(SwipeRecognizer.defaultDragGesture
+        .onEnded { value in
+          if SwipeRecognizer.isDownSwipe(value: value) {
+            withAnimation {
+              isShowingButtonsView.toggle()
+            }
+          }
+        })
     }
 }
 
-struct TodoView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoView()
-    }
-}

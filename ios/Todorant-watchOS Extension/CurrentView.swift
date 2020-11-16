@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TodoView: View {
+struct CurrentView: View {
   @EnvironmentObject var store: Store
   @Binding var isShowingButtonsView: Bool
 
@@ -21,25 +21,9 @@ struct TodoView: View {
       } else if store.errorShown {
         TodoMediateView(condition: .error)
       } else {
-        
         if let currentState = store.currentState {
           if let todo = store.currentState?.todo {
-            VStack {
-              SegmentedProgressBarView(
-                currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-                maximumProgress: currentState.todosCount
-              )
-              Text(todo.text.stringWithLinksTruncated())
-                .todoTextStyle()
-            }
-            .gesture(SwipeRecognizer.defaultDragGesture
-              .onEnded { value in
-                if SwipeRecognizer.isDownSwipe(value: value) {
-                  withAnimation {
-                    isShowingButtonsView.toggle()
-                  }
-                }
-              })
+            TodoView(currentState: currentState, todo: todo, isShowingButtonsView: $isShowingButtonsView)
           } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
             SegmentedProgressBarView(
               currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
