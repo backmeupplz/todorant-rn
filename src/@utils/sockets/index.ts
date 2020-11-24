@@ -158,7 +158,7 @@ class SocketManager {
         return res()
       }
       this.pendingAuthorization = { res, rej, createdAt: Date.now() }
-      socketIO.emit('authorize', sharedSessionStore.user.token)
+      socketIO.emit('authorize', sharedSessionStore.user.token, '1')
     })
   }
   logout = () => {

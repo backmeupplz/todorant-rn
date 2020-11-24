@@ -11,13 +11,13 @@ import fonts from '@utils/fonts'
 import moment from 'moment'
 import i18n from 'i18n-js'
 import { capitalizeSentence } from '@utils/capitalizeSentence'
-import { PlanningVM } from '@views/planning/PlanningVM'
+import { PlanningVM, TodoSection } from '@views/planning/PlanningVM'
+import { SectionListData } from 'react-native'
+import { Todo } from '@models/Todo'
 
 @observer
 export class PlanningDateHeader extends Component<{
-  drag: () => void
-  isActive: boolean
-  item: SectionHeaderOrTodo
+  item: SectionListData<Todo>
   vm: PlanningVM
 }> {
   render() {
@@ -32,45 +32,37 @@ export class PlanningDateHeader extends Component<{
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity
-            onLongPress={
-              sharedAppStateStore.todoSection === TodoSectionType.planning
-                ? this.props.drag
-                : undefined
-            }
+          <View
+            style={{
+              backgroundColor: 'rgba(255, 100, 26, 0.06)',
+              borderTopRightRadius: 6,
+              borderBottomRightRadius: 6,
+            }}
           >
-            <View
+            <Text
               style={{
-                backgroundColor: 'rgba(255, 100, 26, 0.06)',
-                borderTopRightRadius: 6,
-                borderBottomRightRadius: 6,
+                color: sharedColors.primaryColor,
+                marginVertical: 4,
+                marginLeft: 16,
+                marginRight: 12,
+                fontFamily: fonts.SFProRoundedRegular,
               }}
             >
-              <Text
-                style={{
-                  color: sharedColors.primaryColor,
-                  marginVertical: 4,
-                  marginLeft: this.props.isActive ? 30 : 16,
-                  marginRight: 12,
-                  fontFamily: fonts.SFProRoundedRegular,
-                }}
-              >
-                {this.props.item.title}
-                {(this.props.item.title?.length || 0) === 10 &&
-                  `, ${capitalizeSentence(
-                    moment(this.props.item.title!)
-                      .locale(i18n.locale)
-                      .format('dddd')
-                  )}`}
-                {/* Comment out for better times */}
-                {/* {this.props.vm.collapsedTitles.indexOf(
+              {this.props.item.title}
+              {(this.props.item.title?.length || 0) === 10 &&
+                `, ${capitalizeSentence(
+                  moment(this.props.item.title!)
+                    .locale(i18n.locale)
+                    .format('dddd')
+                )}`}
+              {/* Comment out for better times */}
+              {/* {this.props.vm.collapsedTitles.indexOf(
                   this.props.item.title || ''
                 ) > -1
                   ? ` (${this.props.item.numberOfItems})`
                   : ''} */}
-              </Text>
-            </View>
-          </TouchableOpacity>
+            </Text>
+          </View>
           <IconButton
             onPress={() => {
               navigate('AddTodo', { date: this.props.item.title })
