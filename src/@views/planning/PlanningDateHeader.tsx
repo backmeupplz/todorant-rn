@@ -19,6 +19,8 @@ import { Todo } from '@models/Todo'
 export class PlanningDateHeader extends Component<{
   item: SectionListData<Todo>
   vm: PlanningVM
+  drag: () => void
+  isActive: boolean
 }> {
   render() {
     return (
@@ -32,40 +34,48 @@ export class PlanningDateHeader extends Component<{
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View
-            style={{
-              backgroundColor: 'rgba(255, 100, 26, 0.06)',
-              borderTopRightRadius: 6,
-              borderBottomRightRadius: 6,
-            }}
+          <TouchableOpacity
+            onLongPress={
+              sharedAppStateStore.todoSection === TodoSectionType.planning
+                ? this.props.drag
+                : undefined
+            }
           >
-            <Text
+            <View
               style={{
-                color: sharedColors.primaryColor,
-                marginVertical: 4,
-                marginLeft: 16,
-                marginRight: 12,
-                fontFamily: fonts.SFProRoundedRegular,
+                backgroundColor: 'rgba(255, 100, 26, 0.06)',
+                borderTopRightRadius: 6,
+                borderBottomRightRadius: 6,
               }}
             >
-              {this.props.item.title}
-              {(this.props.item.title?.length || 0) === 10 &&
-                `, ${capitalizeSentence(
-                  moment(this.props.item.title!)
-                    .locale(i18n.locale)
-                    .format('dddd')
-                )}`}
-              {/* Comment out for better times */}
-              {/* {this.props.vm.collapsedTitles.indexOf(
-                  this.props.item.title || ''
+              <Text
+                style={{
+                  color: sharedColors.primaryColor,
+                  marginVertical: 4,
+                  marginLeft: this.props.isActive ? 30 : 16,
+                  marginRight: 12,
+                  fontFamily: fonts.SFProRoundedRegular,
+                }}
+              >
+                {this.props.item.section}
+                {(this.props.item.section?.length || 0) === 10 &&
+                  `, ${capitalizeSentence(
+                    moment(this.props.item.section!)
+                      .locale(i18n.locale)
+                      .format('dddd')
+                  )}`}
+                {/* Comment out for better times */}
+                {/* {this.props.vm.collapsedsections.indexOf(
+                  this.props.item.section || ''
                 ) > -1
                   ? ` (${this.props.item.numberOfItems})`
                   : ''} */}
-            </Text>
-          </View>
+              </Text>
+            </View>
+          </TouchableOpacity>
           <IconButton
             onPress={() => {
-              navigate('AddTodo', { date: this.props.item.title })
+              navigate('AddTodo', { date: this.props.item.section })
             }}
             size={20}
             name="add_outline_28"
@@ -76,16 +86,16 @@ export class PlanningDateHeader extends Component<{
         {/* <TouchableOpacity
           onPress={() => {
             if (
-              this.props.vm.collapsedTitles.indexOf(
-                this.props.item.title || ''
+              this.props.vm.collapsedsections.indexOf(
+                this.props.item.section || ''
               ) < 0
             ) {
-              if (this.props.item.title) {
-                this.props.vm.collapsedTitles.push(this.props.item.title)
+              if (this.props.item.section) {
+                this.props.vm.collapsedsections.push(this.props.item.section)
               }
             } else {
-              this.props.vm.collapsedTitles = this.props.vm.collapsedTitles.filter(
-                (t) => t !== this.props.item.title
+              this.props.vm.collapsedsections = this.props.vm.collapsedsections.filter(
+                (t) => t !== this.props.item.section
               )
             }
           }}
@@ -94,8 +104,8 @@ export class PlanningDateHeader extends Component<{
           <Icon
             type="MaterialIcons"
             name={
-              this.props.vm.collapsedTitles.indexOf(
-                this.props.item.title || ''
+              this.props.vm.collapsedsections.indexOf(
+                this.props.item.section || ''
               ) < 0
                 ? 'keyboard-arrow-down'
                 : 'keyboard-arrow-up'

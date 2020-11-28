@@ -13,7 +13,7 @@
     "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
     "upload-translations": "node scripts/upload.js",
     "download-translations": "node scripts/download.js",
-    "adb": "adb reverse tcp:3000 tcp:3000 && adb reverse tcp:1337 tcp:1337",
+    "adb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:1337 tcp:1337",
     "upload-to-appgallery": "cd android && sudo bundle exec fastlane release_appgallery",
     "release": "cd android && fastlane release && cd .. && yarn upload-to-appgallery && cd ios && fastlane release"
   },
@@ -46,6 +46,7 @@
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.7",
+    "@upacyxou/react-native-draggable-sectionlist": "0.0.9994",
     "appcenter": "^3.0.1",
     "appcenter-analytics": "^3.0.1",
     "appcenter-crashes": "^3.0.1",
