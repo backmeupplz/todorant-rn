@@ -18,11 +18,9 @@
 #import <CodePush/CodePush.h>
 
 #import <AppCenterReactNative.h>
-#import <AppCenterReactNativeAnalytics.h>
 #import <AppCenterReactNativeCrashes.h>
 
 #import <AppCenterReactNative.h>
-#import <AppCenterReactNativeAnalytics.h>
 #import <AppCenterReactNativeCrashes.h>
 #import "RNSplashScreen.h"
 
@@ -56,7 +54,6 @@
   [self.window makeKeyAndVisible];
   
   [AppCenterReactNative register];
-  [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];
   [AppCenterReactNativeCrashes registerWithAutomaticProcessing];
   
   [RNSplashScreen show];
