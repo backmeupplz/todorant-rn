@@ -68,7 +68,10 @@ class TodoStore {
 
   @computed get currentTodo() {
     return this.todayUncompletedTodos.length
-      ? this.todayUncompletedTodos[0]
+      ? this.todayUncompletedTodos.slice().sort((a, b) => {
+          if (a.frog) return -1
+          return 1
+        })[0]
       : undefined
   }
 

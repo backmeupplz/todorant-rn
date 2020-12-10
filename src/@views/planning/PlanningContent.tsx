@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react'
-import { Button, Container, Text, View } from 'native-base'
+import { Button, Container, Text, View, Spinner } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
@@ -12,15 +12,8 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import { PlanningDateHeader } from './PlanningDateHeader'
-class TestClass extends PureComponent<{ text: string }> {
-  render() {
-    return (
-      <View>
-        <Text>{this.props.text}</Text>
-      </View>
-    )
-  }
-}
+import { SectionList } from 'react-native'
+import uuid from 'uuid'
 
 @observer
 export class PlanningContent extends Component {
@@ -41,50 +34,81 @@ export class PlanningContent extends Component {
               {translate('planningText')}
             </Text>
           )}
-        {Object.keys(this.vm.uncompletedTodosMap).length ? (
-          <DraggableSectionList
-            contentContainerStyle={{ paddingBottom: 100 }}
-            autoscrollSpeed={200}
-            data={this.vm.uncompletedTodosArray}
-            keyExtractor={(item, index) => {
-              return `${index}-${item._id || item._tempSyncId || item}`
-            }}
-            onDragEnd={this.vm.onDragEnd}
-            isSectionHeader={(a: any) => {
-              return !a.atom
-            }}
-            renderItem={({ item, index, drag, isActive }) => {
-              if (!item.item) return
-              return (
-                <View style={{ padding: isActive ? 10 : 0 }} key={index}>
-                  <TodoCard
-                    todo={item.item}
-                    type={
-                      sharedAppStateStore.todoSection ===
-                      TodoSectionType.planning
-                        ? CardType.planning
-                        : CardType.done
-                    }
+        {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
+          this.vm.uncompletedTodosArray.length ? (
+            <DraggableSectionList
+              initialNumToRender={10}
+              contentContainerStyle={{ paddingBottom: 100 }}
+              autoscrollSpeed={200}
+              data={
+                sharedAppStateStore.hash.length
+                  ? this.vm.allTodosAndHash
+                  : this.vm.uncompletedTodosArray
+              }
+              layoutInvalidationKey={this.vm.theoreticalKey}
+              keyExtractor={(item, index) => {
+                return `${index}-${item._tempSyncId || item}`
+              }}
+              onDragEnd={this.vm.onDragEnd}
+              isSectionHeader={(a: any) => {
+                if (a === undefined) {
+                  return false
+                }
+                return !a.text
+              }}
+              renderItem={({ item, index, drag, isActive }) => {
+                if (!item.item) return
+                return (
+                  <View style={{ padding: isActive ? 10 : 0 }} key={index}>
+                    <TodoCard
+                      todo={item.item}
+                      type={
+                        sharedAppStateStore.todoSection ===
+                        TodoSectionType.planning
+                          ? CardType.planning
+                          : CardType.done
+                      }
+                      drag={drag}
+                      active={isActive}
+                    />
+                  </View>
+                )
+              }}
+              renderSectionHeader={({ item, drag, index, isActive }) => {
+                return (
+                  <PlanningDateHeader
                     drag={drag}
-                    active={isActive}
+                    isActive={isActive}
+                    item={item}
+                    key={index}
+                    vm={this.vm}
                   />
-                </View>
-              )
-            }}
-            renderSectionHeader={({ item, drag, index, isActive }) => {
-              return (
-                <PlanningDateHeader
-                  drag={drag}
-                  isActive={isActive}
-                  item={item}
-                  key={index}
-                  vm={this.vm}
-                />
-              )
-            }}
-          />
+                )
+              }}
+            />
+          ) : (
+            <NoTodosPlaceholder />
+            // Completed Tasks
+          )
         ) : (
-          <NoTodosPlaceholder />
+          <SectionList
+            initialNumToRender={10}
+            keyExtractor={uuid}
+            sections={this.vm.completedTodosArray}
+            renderItem={({ item }) => (
+              <TodoCard
+                todo={item}
+                type={
+                  sharedAppStateStore.todoSection === TodoSectionType.planning
+                    ? CardType.planning
+                    : CardType.done
+                }
+              />
+            )}
+            renderSectionHeader={({ section }) => (
+              <PlanningDateHeader item={section} vm={this.vm} />
+            )}
+          />
         )}
         <PlusButton />
       </Container>

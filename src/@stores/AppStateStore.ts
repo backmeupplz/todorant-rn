@@ -11,6 +11,7 @@ class AppStateStore {
 
   @observable languageTag = 'en'
 
+  @observable skipping = false
   @observable searchEnabled = false
   @observable searchQuery: string[] = []
 }

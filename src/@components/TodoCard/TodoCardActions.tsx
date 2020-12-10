@@ -7,6 +7,7 @@ import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
 import { IconButton } from '@components/IconButton'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 export class TodoCardActions extends Component<{
@@ -76,6 +77,7 @@ export class TodoCardActions extends Component<{
             this.props.vm.isSkippable(this.props.todo) && (
               <IconButton
                 onPress={() => {
+                  sharedAppStateStore.skipping = true
                   this.props.vm.skip(this.props.todo)
                 }}
                 name="arrow_right_outline_28--forward"

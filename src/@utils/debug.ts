@@ -20,9 +20,9 @@ class TodoSample {
   frogFails: number = 0
   skipped: boolean = false
   order: number = 0
-  monthAndYear: string = '2020-11'
+  monthAndYear: string = '2020-12'
   deleted: boolean = false
-  date: string = getDateDateString(new Date())
+  date: string = '10'
   time: string | undefined = undefined
   text: string = uuid()
   _exactDate = new Date(getTitle(this))
@@ -33,12 +33,12 @@ class TodoSample {
 export function add5000Todos() {
   let todos: any[] = []
 
-  for (let i = 0; i < 100; i++) {
-    date.setFullYear(2020)
-    date.setMonth(new Date().getMonth())
+  for (let i = 0; i < 250; i++) {
     if (i % 2 === 0) {
       date.setDate(date.getDate() + 1)
     }
+    date.setFullYear(2020)
+    date.setMonth(new Date().getMonth())
     todos.push(new TodoSample())
   }
 
