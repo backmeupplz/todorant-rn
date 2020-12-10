@@ -1,10 +1,10 @@
-import { sockets } from '@utils/sockets'
-import { sharedColors } from '@utils/sharedColors'
 import { Hero } from '@models/Hero'
-import { persist } from 'mobx-persist'
-import { observable, computed } from 'mobx'
-import { hydrateStore } from '@utils/hydrated'
 import { hydrate } from '@utils/hydrate'
+import { hydrateStore } from '@utils/hydrated'
+import { sharedColors } from '@utils/sharedColors'
+import { sockets } from '@utils/sockets'
+import { computed, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 export const ranks = [
   0,
@@ -93,10 +93,11 @@ class HeroStore {
 
   onObjectsFromServer = async (
     hero: Hero,
-    pushBack: (objects: Hero) => Promise<Hero>
+    pushBack: (objects: Hero) => Promise<Hero>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     // Modify settings
     hero.updatedAt = hero.updatedAt ? new Date(hero.updatedAt) : undefined
@@ -140,6 +141,7 @@ class HeroStore {
         ? new Date(pushedHero.updatedAt)
         : undefined
     }
+    completeSync()
   }
 }
 

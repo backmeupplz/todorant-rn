@@ -1,26 +1,24 @@
-import { sharedAppStateStore } from './../@stores/AppStateStore'
-import { translate } from '@utils/i18n'
-import { daysAgo } from '@utils/plusButtonAction'
-import { navigate } from '@utils/navigation'
+import { getTitle, Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
-import { getTitle, Todo } from '@models/Todo'
+import { translate } from '@utils/i18n'
+import { navigate } from '@utils/navigation'
+import { daysAgo } from '@utils/plusButtonAction'
 import { realm } from '@utils/realm'
-import { Linking } from 'react-native'
-import QueryString from 'query-string'
-import uuid from 'uuid'
+import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { Toast } from 'native-base'
+import QueryString from 'query-string'
+import { Linking } from 'react-native'
+import uuid from 'uuid'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
   if (initialUrl) {
-    console.log('initial')
     handleUrl(initialUrl)
   }
   Linking.addEventListener('url', ({ url }) => {
-    console.log('consequent')
     handleUrl(url)
   })
 }
@@ -100,7 +98,7 @@ function addTodo(text: string) {
   todo._exactDate = new Date(getTitle(todo))
 
   realm.write(() => {
-    realm.create<Todo>('Todo', todo)
+    realm.create(Todo, todo)
   })
   // Sync todos
   fixOrder(

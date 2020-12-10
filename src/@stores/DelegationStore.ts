@@ -1,6 +1,6 @@
-import { observable, computed } from 'mobx'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
+import { computed, observable } from 'mobx'
 
 class DelegationStore {
   @observable allDelegationUsers = realm.objects<DelegationUser>(
@@ -19,7 +19,7 @@ class DelegationStore {
     )
   }
 
-  onObjectsFromServer = async (objects: any) => {
+  onObjectsFromServer = async (objects: any, completeSync: () => void) => {
     // Remove all
     realm.write(() => {
       realm.delete(this.allDelegationUsers)
@@ -42,7 +42,8 @@ class DelegationStore {
         })
       }
     })
-    // Refresh
+    // Complete sync
+    completeSync()
     this.refreshDelegationUsers()
   }
 

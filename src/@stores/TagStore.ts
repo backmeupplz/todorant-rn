@@ -1,14 +1,14 @@
+import { cloneTag, Tag } from '@models/Tag'
+import { hydrate } from '@utils/hydrate'
+import { hydrateStore } from '@utils/hydrated'
+import { l } from '@utils/linkify'
+import { realm } from '@utils/realm'
+import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { sockets } from '@utils/sockets'
 import { TodoVM } from '@views/add/TodoVM'
-import { Tag, cloneTag } from '@models/Tag'
-import { realm } from '@utils/realm'
-import { observable, computed } from 'mobx'
+import { computed, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
-import { l } from '@utils/linkify'
-import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 
 class TagStore {
   @persist('date') @observable lastSyncDate?: Date
@@ -36,10 +36,11 @@ class TagStore {
 
   onObjectsFromServer = async (
     tagsChangedOnServer: Tag[],
-    pushBack: (objects: Tag[]) => Promise<Tag[]>
+    pushBack: (objects: Tag[]) => Promise<Tag[]>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     // Modify dates
     tagsChangedOnServer.forEach((tag) => {
@@ -94,8 +95,8 @@ class TagStore {
       }
     })
     if (!tagsToPush.length) {
-      sharedTagStore.lastSyncDate = new Date()
-      // Refresh
+      // Complete sync
+      completeSync()
       this.refreshTags()
       return
     }
@@ -125,7 +126,8 @@ class TagStore {
         }
       }
     })
-    // Refresh
+    // Complete sync
+    completeSync()
     this.refreshTags()
   }
 

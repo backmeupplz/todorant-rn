@@ -1,8 +1,9 @@
-import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { realm } from '@utils/realm'
+import { sockets } from '@utils/sockets'
+import { InteractionManager } from 'react-native'
 
 export async function fixOrder(
   titlesInvolved: string[],
@@ -59,7 +60,9 @@ export async function fixOrder(
   sharedTodoStore.refreshTodos()
   // Sync
   if (sync) {
-    sockets.todoSyncManager.sync()
+    InteractionManager.runAfterInteractions(() => {
+      sockets.todoSyncManager.sync()
+    })
   }
 }
 
