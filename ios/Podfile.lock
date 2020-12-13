@@ -5,18 +5,6 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - appcenter-core (3.0.1):
-    - AppCenterReactNativeShared
-    - React
-  - appcenter-crashes (3.0.1):
-    - AppCenter/Crashes
-    - AppCenterReactNativeShared
-    - React
-  - AppCenter/Core (3.3.4)
-  - AppCenter/Crashes (3.3.4):
-    - AppCenter/Core
-  - AppCenterReactNativeShared (3.1.2):
-    - AppCenter/Core (= 3.3.4)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
@@ -374,8 +362,6 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.0)
-  - appcenter-core (from `../node_modules/appcenter/ios`)
-  - appcenter-crashes (from `../node_modules/appcenter-crashes/ios`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CodePush (from `../node_modules/react-native-code-push`)
   - CountlyReactNative (from `../node_modules/countly-sdk-react-native-bridge`)
@@ -443,8 +429,6 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - AppAuth
-    - AppCenter
-    - AppCenterReactNativeShared
     - Base64
     - boost-for-react-native
     - CountlyPod
@@ -458,10 +442,6 @@ SPEC REPOS:
     - SwiftKeychainWrapper
 
 EXTERNAL SOURCES:
-  appcenter-core:
-    :path: "../node_modules/appcenter/ios"
-  appcenter-crashes:
-    :path: "../node_modules/appcenter-crashes/ios"
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
   CodePush:
@@ -582,10 +562,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  AppCenter: 0487be185c038ed2ecc5ed38219af1dcd280af23
-  appcenter-core: 765878f5c300907bb70dbb8e956c5a74df7ca23d
-  appcenter-crashes: 66b533f4e2a2278ddbd9369614fe18f0d7f58e47
-  AppCenterReactNativeShared: 66667cd2dfad295b84bbf0f462e0e139e2128284
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872

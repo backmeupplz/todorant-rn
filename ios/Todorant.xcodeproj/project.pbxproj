@@ -108,7 +108,6 @@
 		BB3A79F12425B9530014DE92 /* KeychainManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */; };
 		BB3A79F92426933F0014DE92 /* TodorantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79F82426933F0014DE92 /* TodorantUITests.swift */; };
 		BB3A7A03242694A70014DE92 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */; };
-		BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB5F405C2436349300236BCD /* AppCenter-Config.plist */; };
 		BB6DF11B252BAB6800CAAE17 /* WidgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DF11A252BAB6800CAAE17 /* WidgetManager.swift */; };
 		BB6DF18F252BB12600CAAE17 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
 		BB6DF196252BB13100CAAE17 /* customColorControl.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */; };
@@ -354,7 +353,6 @@
 		BB47AC0A2523D2E5000475E6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "pt-BR"; path = "pt-BR.lproj/AppIntentVocabulary.plist"; sourceTree = "<group>"; };
 		BB47AC0B2523D2E6000475E6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB47AC0C2523D2E7000475E6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = uk; path = uk.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
-		BB5F405C2436349300236BCD /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		BB6DF11A252BAB6800CAAE17 /* WidgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetManager.swift; sourceTree = "<group>"; };
 		BB6DF1B7252BB51C00CAAE17 /* WidgetManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetManagerBridge.m; sourceTree = "<group>"; };
 		BB781739245CE04A004EF3E5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -490,7 +488,6 @@
 				BB3A79EC2425B71F0014DE92 /* KeychainManager.swift */,
 				668D80422558B5AD004F6709 /* TokenSender.swift */,
 				BB3A79F02425B9530014DE92 /* KeychainManagerBridge.m */,
-				BB5F405C2436349300236BCD /* AppCenter-Config.plist */,
 				BBDD6B0F2523A00A0064DE60 /* AppIntentVocabulary.plist */,
 				BB78173A245CE04A004EF3E5 /* InfoPlist.strings */,
 				BB6DF11A252BAB6800CAAE17 /* WidgetManager.swift */,
@@ -1008,7 +1005,6 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				BB5F405D2436349300236BCD /* AppCenter-Config.plist in Resources */,
 				35C472DA5F424C548513FFF9 /* Roboto_medium.ttf in Resources */,
 				E6828DC3EA76487CA755817B /* Roboto.ttf in Resources */,
 				4C7FD743CE1D4768853FC1E0 /* rubicon-icon-font.ttf in Resources */,

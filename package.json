@@ -43,8 +43,6 @@
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.7",
-    "appcenter": "^3.0.1",
-    "appcenter-crashes": "^3.0.1",
     "axios": "^0.19.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "color-scheme": "^1.0.1",

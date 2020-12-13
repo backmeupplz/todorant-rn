@@ -13,11 +13,6 @@
 
 #import <CodePush/CodePush.h>
 
-#import <AppCenterReactNative.h>
-#import <AppCenterReactNativeCrashes.h>
-
-#import <AppCenterReactNative.h>
-#import <AppCenterReactNativeCrashes.h>
 #import "RNSplashScreen.h"
 
 #import <UserNotifications/UserNotifications.h>
@@ -41,9 +36,6 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
-  [AppCenterReactNative register];
-  [AppCenterReactNativeCrashes registerWithAutomaticProcessing];
   
   [RNSplashScreen show];
   
