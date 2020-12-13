@@ -11,8 +11,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-
 #import <CodePush/CodePush.h>
 
 #import <AppCenterReactNative.h>
@@ -30,10 +28,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  [[FBSDKApplicationDelegate sharedInstance] application:application
-    didFinishLaunchingWithOptions:launchOptions];
-  
+{ 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"Todorant"
@@ -68,15 +63,11 @@
 #endif
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBSDKAppEvents activateApp];
-}
-
 - (BOOL)application:(UIApplication *)application 
             openURL:(NSURL *)url 
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
   // Add any custom logic here.
-  return [RCTLinkingManager application:application openURL:url options:options] || [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options];
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 // Notifications

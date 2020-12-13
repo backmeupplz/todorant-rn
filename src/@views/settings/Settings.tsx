@@ -44,6 +44,7 @@ import { AddEpic, AddEpicHeaderRight } from '@views/epics/AddEpic'
 import { DelegationSettings } from './DelegationSettings'
 import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
+import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 
 const Stack = createStackNavigator()
 
@@ -290,6 +291,16 @@ export function Settings() {
             component={LoginTelegram}
             options={{
               title: translate('loginTelegram'),
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+            }}
+          />
+          <Stack.Screen
+            name="LoginFacebook"
+            component={LoginFacebook}
+            options={{
+              title: translate('loginFacebook'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),

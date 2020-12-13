@@ -81,6 +81,7 @@
                 <data
                     android:host="search"
                     android:scheme="todorant" />
+                <data android:scheme="todorant" />
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />

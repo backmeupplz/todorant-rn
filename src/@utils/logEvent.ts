@@ -6,10 +6,12 @@ export function logEvent(name: string) {
 
 async function asyncLogEvent(name: string) {
   try {
-    await Countly.sendEvent({
-      eventName: name,
-      eventCount: 1,
-    })
+    if (await Countly.isInitialized()) {
+      await Countly.sendEvent({
+        eventName: name,
+        eventCount: 1,
+      })
+    }
   } catch (err) {
     // Do nothing
   }
