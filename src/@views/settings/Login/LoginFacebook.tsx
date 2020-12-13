@@ -20,6 +20,7 @@ class LoginFacebookContent extends Component<{
   >
 }> {
   @observable gotToken = false
+  @observable initialLoad = true
 
   getAccessToken(url: string) {
     const match = RegExp('access_token=([^&.]+)&').exec(url)
@@ -27,41 +28,49 @@ class LoginFacebookContent extends Component<{
   }
 
   render() {
-    return this.gotToken ? (
-      <View style={{ backgroundColor: sharedColors.backgroundColor, flex: 1 }}>
-        <Spinner />
-      </View>
-    ) : (
-      <WebView
-        source={{
-          uri: `https://www.facebook.com/dialog/oauth?client_id=640750769753434&redirect_uri=https://facebook.com/connect/login_success.html&scope=email,public_profile&response_type=token`,
-        }}
-        style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
-        onLoadStart={async (e) => {
-          try {
-            const url = e.nativeEvent.url
-            console.log(url)
-            if (url.includes('login_success') && !url.includes('oauth')) {
-              const token = this.getAccessToken(url)
-              if (!token) {
-                throw new Error(translate('facebookPermissionsError'))
+    return (
+      <>
+        {this.initialLoad && <Spinner />}
+        {this.gotToken ? (
+          <View
+            style={{ backgroundColor: sharedColors.backgroundColor, flex: 1 }}
+          >
+            <Spinner />
+          </View>
+        ) : (
+          <WebView
+            source={{
+              uri: `https://www.facebook.com/dialog/oauth?client_id=640750769753434&redirect_uri=https://facebook.com/connect/login_success.html&scope=email,public_profile&response_type=token&auth_type=rerequest`,
+            }}
+            style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+            onLoadStart={async (e) => {
+              try {
+                const url = e.nativeEvent.url
+                console.log(url)
+                if (url.includes('login_success') && !url.includes('oauth')) {
+                  const token = this.getAccessToken(url)
+                  if (!token) {
+                    throw new Error(translate('facebookPermissionsError'))
+                  }
+                  this.gotToken = true
+                  const userInfo = (await rest.loginFacebook(token)).data
+                  userInfo.createdAt = new Date(userInfo.createdAt)
+                  userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  sharedSessionStore.login(userInfo)
+                  goBack()
+                  this.props.route.params?.setLoadingToTrue()
+                }
+              } catch (err) {
+                goBack()
+                alertError(err)
               }
-              this.gotToken = true
-              const userInfo = (await rest.loginFacebook(token)).data
-              userInfo.createdAt = new Date(userInfo.createdAt)
-              userInfo.updatedAt = new Date(userInfo.updatedAt)
-              sharedSessionStore.login(userInfo)
-              goBack()
-              this.props.route.params?.setLoadingToTrue()
-            } else if (url.includes('error')) {
-              throw new Error(translate('facebookPermissionsError'))
-            }
-          } catch (err) {
-            goBack()
-            alertError(err)
-          }
-        }}
-      />
+            }}
+            onLoadEnd={() => {
+              this.initialLoad = false
+            }}
+          />
+        )}
+      </>
     )
   }
 }
