@@ -336,25 +336,6 @@ export class PlanningVM {
     from: number
     to: number
   }) => {
-    // const todo = dataArr[to] as Todo
-
-    // if (todo && todo._tempSyncId && sharedAppStateStore.activeDay) {
-    //   if (!todo._tempSyncId) return
-    //   sharedAppStateStore.editedTodo.tempSync = todo._tempSyncId
-    //   sharedAppStateStore.editedTodo.beforeEdit = '20'
-    //   realm.write(() => {
-    //     todo.date = '20'
-    //     todo.monthAndYear = '2020-12'
-    //     todo.updatedAt = new Date()
-    //   })
-    //   sharedAppStateStore.editedTodo.afterEdit = '2020-12'
-    // }
-    // if (sharedAppStateStore.activeDay) {
-    //   sharedAppStateStore.activeDay = 0
-    //   sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
-    //   // return
-    // }
-
     sharedAppStateStore.changeLoading(true)
     let lastSection: string
     let map = {} as { [index: string]: TodoSection }

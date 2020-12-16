@@ -1,4 +1,4 @@
-import { observableNow } from './../@utils/time'
+import { observableNow } from '@utils/time'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { decrypt, encrypt } from '@utils/encryption'

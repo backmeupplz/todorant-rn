@@ -28,17 +28,6 @@ import { getDateMonthAndYearString } from '@utils/time'
 export class PlanningContent extends Component {
   vm = new PlanningVM()
 
-  // @observable currentMonth = new Date().getMonth()
-  // @observable currentYear = new Date().getUTCFullYear()
-
-  // @observable currentDate = new Date()
-
-  // todoHeight = 0
-
-  // setCoordinates(yAx: number, xAx: number) {
-  //   sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
-  // }
-
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
@@ -54,105 +43,12 @@ export class PlanningContent extends Component {
               {translate('planningText')}
             </Text>
           )}
-        {/* {!!sharedAppStateStore.calendarEnabled && (
-          <View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 12,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.currentMonth <= 0) {
-                    this.currentYear--
-                    this.currentMonth = 11
-                  } else {
-                    this.currentMonth--
-                  }
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name={'keyboard-arrow-left'}
-                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
-                />
-              </TouchableOpacity>
-              <Text style={{ color: sharedColors.textColor }}>
-                {moment(this.currentMonth + 1, 'MM')
-                  .locale(
-                    sharedSettingsStore.language
-                      ? sharedSettingsStore.language
-                      : 'en'
-                  )
-                  .format('MMMM')}{' '}
-                {this.currentYear}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.currentMonth >= 11) {
-                    this.currentYear++
-                    this.currentMonth = 0
-                  } else {
-                    this.currentMonth++
-                  }
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name={'keyboard-arrow-right'}
-                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
-                />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Month
-                onActiveDayChange={(day: Date) => {
-                  this.currentDate = day
-                  sharedAppStateStore.activeDay = day.getDate()
-                }}
-                dark={sharedSettingsStore.colorMode === 'dark'}
-                onPress={(day: Date) => {}}
-                emptyDays={(emptyDays: any) => {}}
-                activeCoordinates={sharedAppStateStore.activeCoordinates}
-                month={this.currentMonth}
-                year={this.currentYear}
-                showWeekdays
-                locale="en"
-              />
-            </View>
-          </View>
-        )} */}
-        {/* {sharedAppStateStore.activeDay ? (
-          <View
-            style={{
-              ...styles.circle,
-              transform: [
-                {
-                  translateX: sharedAppStateStore.activeCoordinates.x,
-                },
-                {
-                  translateY:
-                    sharedAppStateStore.activeCoordinates.y - this.todoHeight,
-                },
-              ],
-            }}
-          />
-        ) : (
-          <View></View>
-        )} */}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosArray.length ? (
             <DraggableSectionListWithLoader
               onViewableItemsChanged={() => {
                 sharedAppStateStore.changeLoading(false)
               }}
-              // onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
-              //   this.setCoordinates(absoluteY, absoluteX)
-              // }}
               contentContainerStyle={{ paddingBottom: 100 }}
               autoscrollSpeed={200}
               data={

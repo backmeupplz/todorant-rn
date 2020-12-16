@@ -32,18 +32,6 @@ export class PlanningHeaderRight extends Component {
           </View>
         ) : (
           InfoButton('infoPlanning')()
-          // <TouchableOpacity
-          //   onPress={() => {
-          //     sharedAppStateStore.calendarEnabled = !sharedAppStateStore.calendarEnabled
-          //   }}
-          // >
-          //   <CustomIcon
-          //     name={'calendar_outline_28--event'}
-          //     color={sharedColors.textColor}
-          //     size={28}
-          //     style={{ opacity: 0.5, marginRight: 12 }}
-          //   />
-          // </TouchableOpacity>
         )}
       </View>
     )
