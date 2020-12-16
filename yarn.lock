@@ -1442,16 +1442,24 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@upacyxou/react-native-draggable-sectionlist@0.0.999996":
-  version "0.0.999996"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.0.999996.tgz#9132ea3a5231af37732f80e05ab69037059de21d"
-  integrity sha512-L1ei/ESHTcElpeC3ZRnZAHqaKfEc7U3VQXu8DDfTaWHeklynfkNOX/Br4UVKIwJ7xdTtp2W47wmZ0cC3qT8jsQ==
+"@upacyxou/react-native-draggable-sectionlist@0.0.999997":
+  version "0.0.999997"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.0.999997.tgz#5151ca956cdedcf3a63f1b11ba0d749a6f16eb26"
+  integrity sha512-g+BnhM2OytGtBG2RZdwElhQ1/Xh3kDDTGhkiDfL2IugmgGCVWkqtYfzNDCw7JPz7DLUuYQz9L/YIpKC4aUNgvw==
   dependencies:
     "@types/lodash.isequal" "^4.5.5"
     "@types/object-hash" "^1.3.4"
     cycle "^1.0.3"
     lodash.isequal "^4.5.0"
     object-hash "^2.0.3"
+
+"@upacyxou/react-native-month@^1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.1.9.tgz#b4c8c73eb750c1b3fead36a18e8fc517d7e80e46"
+  integrity sha512-dM5ztJJrgBHYi2LwSeBXXt0m+4DNqDZzKpTP93G7ENTPjiEpQ1KHHY5TSdopfMMyTXphdQWDefg74lu3d2b96w==
+  dependencies:
+    react-native-intersection-observer "^0.0.7"
+    react-native-reanimated "^1.13.1"
 
 abbrev@1:
   version "1.1.1"
@@ -4291,6 +4299,11 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
+json-cycle@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/json-cycle/-/json-cycle-1.3.0.tgz#c4f6f7d926c2979012cba173b06f9cae9e866d3f"
+  integrity sha512-FD/SedD78LCdSvJaOUQAXseT8oQBb5z6IVYaQaCrVUlu9zOAr1BDdKyVYQaSD/GDsAMrXpKcOyBD4LIl8nfjHw==
+
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
@@ -6097,6 +6110,13 @@ react-native-indicators@^0.17.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-intersection-observer@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-intersection-observer/-/react-native-intersection-observer-0.0.7.tgz#cb386eb076f85ea2eba214b8ed9cb08fabae430c"
+  integrity sha512-sbRYH/K23ta9o0FE9+cP3mR+UlLS4UdiM5mKZ3r5dWVDDAZF3uMBog98hYsZO6L8Bjwj/TW7ZR+kh2UbrcvE6Q==
+  dependencies:
+    lodash "^4.0.0"
+
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
@@ -6160,6 +6180,13 @@ react-native-reanimated@^1.10.2:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.10.2.tgz#012fd0ddb5f64c82b5df66d4d0e19cb9e95e4b41"
   integrity sha512-Bg/FvpK3todfdW8u77M6xKR/n0f6h/z3FVdVbYJR3j47Xibb5BKlrWkG/tc5IE4syePrxK8Nkq0Ja2+tscnUlQ==
+  dependencies:
+    fbjs "^1.0.0"
+
+react-native-reanimated@^1.13.1:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
+  integrity sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ==
   dependencies:
     fbjs "^1.0.0"
 

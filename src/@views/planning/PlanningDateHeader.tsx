@@ -64,12 +64,6 @@ export class PlanningDateHeader extends Component<{
                       .locale(i18n.locale)
                       .format('dddd')
                   )}`}
-                {/* Comment out for better times */}
-                {/* {this.props.vm.collapsedsections.indexOf(
-                  this.props.item.section || ''
-                ) > -1
-                  ? ` (${this.props.item.numberOfItems})`
-                  : ''} */}
               </Text>
             </View>
           </TouchableOpacity>
@@ -82,37 +76,6 @@ export class PlanningDateHeader extends Component<{
             color={sharedColors.primaryColor}
           />
         </View>
-        {/* Comment out for better times */}
-        {/* <TouchableOpacity
-          onPress={() => {
-            if (
-              this.props.vm.collapsedsections.indexOf(
-                this.props.item.section || ''
-              ) < 0
-            ) {
-              if (this.props.item.section) {
-                this.props.vm.collapsedsections.push(this.props.item.section)
-              }
-            } else {
-              this.props.vm.collapsedsections = this.props.vm.collapsedsections.filter(
-                (t) => t !== this.props.item.section
-              )
-            }
-          }}
-          style={{ marginRight: 12 }}
-        >
-          <Icon
-            type="MaterialIcons"
-            name={
-              this.props.vm.collapsedsections.indexOf(
-                this.props.item.section || ''
-              ) < 0
-                ? 'keyboard-arrow-down'
-                : 'keyboard-arrow-up'
-            }
-            style={{ color: sharedColors.primaryColor }}
-          />
-        </TouchableOpacity> */}
       </View>
     )
   }

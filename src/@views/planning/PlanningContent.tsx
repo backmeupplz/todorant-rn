@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react'
-import { Button, Container, Text, View, Spinner } from 'native-base'
+import { Button, Container, Text, View, Spinner, Icon } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
@@ -12,12 +12,32 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import { PlanningDateHeader } from './PlanningDateHeader'
-import { SectionList } from 'react-native'
+import { SectionList, StyleSheet, TouchableOpacity } from 'react-native'
 import uuid from 'uuid'
+import { Month } from '@upacyxou/react-native-month'
+import { observable } from 'mobx'
+import { getTitle, Todo } from '@models/Todo'
+import { realm } from '@utils/realm'
+import { sockets } from '@utils/sockets'
+import moment from 'moment'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { alertConfirm, alertMessage } from '@utils/alert'
+import { getDateMonthAndYearString } from '@utils/time'
 
 @observer
 export class PlanningContent extends Component {
   vm = new PlanningVM()
+
+  // @observable currentMonth = new Date().getMonth()
+  // @observable currentYear = new Date().getUTCFullYear()
+
+  // @observable currentDate = new Date()
+
+  // todoHeight = 0
+
+  // setCoordinates(yAx: number, xAx: number) {
+  //   sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
+  // }
 
   render() {
     return (
@@ -34,14 +54,110 @@ export class PlanningContent extends Component {
               {translate('planningText')}
             </Text>
           )}
+        {/* {!!sharedAppStateStore.calendarEnabled && (
+          <View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                padding: 12,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.currentMonth <= 0) {
+                    this.currentYear--
+                    this.currentMonth = 11
+                  } else {
+                    this.currentMonth--
+                  }
+                }}
+              >
+                <Icon
+                  type="MaterialIcons"
+                  name={'keyboard-arrow-left'}
+                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
+                />
+              </TouchableOpacity>
+              <Text style={{ color: sharedColors.textColor }}>
+                {moment(this.currentMonth + 1, 'MM')
+                  .locale(
+                    sharedSettingsStore.language
+                      ? sharedSettingsStore.language
+                      : 'en'
+                  )
+                  .format('MMMM')}{' '}
+                {this.currentYear}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.currentMonth >= 11) {
+                    this.currentYear++
+                    this.currentMonth = 0
+                  } else {
+                    this.currentMonth++
+                  }
+                }}
+              >
+                <Icon
+                  type="MaterialIcons"
+                  name={'keyboard-arrow-right'}
+                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View>
+              <Month
+                onActiveDayChange={(day: Date) => {
+                  this.currentDate = day
+                  sharedAppStateStore.activeDay = day.getDate()
+                }}
+                dark={sharedSettingsStore.colorMode === 'dark'}
+                onPress={(day: Date) => {}}
+                emptyDays={(emptyDays: any) => {}}
+                activeCoordinates={sharedAppStateStore.activeCoordinates}
+                month={this.currentMonth}
+                year={this.currentYear}
+                showWeekdays
+                locale="en"
+              />
+            </View>
+          </View>
+        )} */}
+        {/* {sharedAppStateStore.activeDay ? (
+          <View
+            style={{
+              ...styles.circle,
+              transform: [
+                {
+                  translateX: sharedAppStateStore.activeCoordinates.x,
+                },
+                {
+                  translateY:
+                    sharedAppStateStore.activeCoordinates.y - this.todoHeight,
+                },
+              ],
+            }}
+          />
+        ) : (
+          <View></View>
+        )} */}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosArray.length ? (
-            <DraggableSectionList
-              initialNumToRender={10}
+            <DraggableSectionListWithLoader
+              onViewableItemsChanged={() => {
+                sharedAppStateStore.changeLoading(false)
+              }}
+              // onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+              //   this.setCoordinates(absoluteY, absoluteX)
+              // }}
               contentContainerStyle={{ paddingBottom: 100 }}
               autoscrollSpeed={200}
               data={
-                sharedAppStateStore.hash.length
+                sharedAppStateStore.hash.length ||
+                sharedAppStateStore.searchQuery[0]
                   ? this.vm.allTodosAndHash
                   : this.vm.uncompletedTodosArray
               }
@@ -88,12 +204,17 @@ export class PlanningContent extends Component {
             />
           ) : (
             <NoTodosPlaceholder />
-            // Completed Tasks
           )
         ) : (
-          <SectionList
+          <SectionListWithLoader
+            onViewableItemsChanged={() => {
+              sharedAppStateStore.changeLoading(false)
+            }}
+            refreshing={true}
             initialNumToRender={10}
-            keyExtractor={uuid}
+            keyExtractor={(item, index) => {
+              return `${index}-${item._tempSyncId || item}`
+            }}
             sections={this.vm.completedTodosArray}
             renderItem={({ item }) => (
               <TodoCard
@@ -115,3 +236,30 @@ export class PlanningContent extends Component {
     )
   }
 }
+class DraggableSectionListWithLoader<T> extends DraggableSectionList<T> {
+  componentWillUpdate() {
+    sharedAppStateStore.changeLoading(false)
+  }
+  componentDidMount() {
+    sharedAppStateStore.changeLoading(false)
+  }
+}
+
+class SectionListWithLoader extends SectionList {
+  componentDidMount() {
+    sharedAppStateStore.changeLoading(false)
+  }
+  componentWillUpdate() {
+    sharedAppStateStore.changeLoading(false)
+  }
+}
+
+let styles = StyleSheet.create({
+  circle: {
+    position: 'absolute',
+    backgroundColor: sharedColors.primaryColor,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+})

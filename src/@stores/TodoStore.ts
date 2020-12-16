@@ -27,6 +27,13 @@ class TodoStore {
     return mobxRealmCollection(this.getRealmTodos(title, true))
   }
 
+  @computed get allTodos() {
+    return realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
+  }
+
   getRealmTodos(title: string, completed: boolean) {
     return realm
       .objects(Todo)
@@ -69,9 +76,9 @@ class TodoStore {
   @computed get currentTodo() {
     return this.todayUncompletedTodos.length
       ? this.todayUncompletedTodos.slice().sort((a, b) => {
-          if (a.frog) return -1
+          if (a.frog && !b.frog) return -1
           return 1
-        })[0]
+        })[0] || undefined
       : undefined
   }
 

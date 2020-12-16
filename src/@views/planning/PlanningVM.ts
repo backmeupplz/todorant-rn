@@ -1,12 +1,14 @@
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { omit } from 'lodash'
+import { clone, cloneDeep, omit } from 'lodash'
 import { getTitle, Todo } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { computed, observable } from 'mobx'
-
-let key = {}
+import { sockets } from '@utils/sockets'
+import { Alert } from 'react-native'
+import { translate } from '@utils/i18n'
+import { navigate } from '@utils/navigation'
 
 export const getRealmTodos = (completed: boolean) => {
   return realm
@@ -62,13 +64,15 @@ export class PlanningVM {
     return this.key
   }
 
+  todosAndIndexes = {} as any
+
   @computed get uncompletedTodosMap() {
     console.log('Got uncompletedTodosMap')
     if (!this.listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
-          this.lastArray = [...todos]
+          this.lastArray = todos.slice()
         }
 
         if (this.draggingEdit) {
@@ -76,14 +80,17 @@ export class PlanningVM {
           return
         }
 
+        let skipDeletion = false
+        let skipInsertion = false
+
         const insertions = changes.insertions
         const deletions = changes.deletions
+        const modifications = changes.modifications
 
         if (sharedAppStateStore.skipping) {
           // task skip
-          const titleDate = new Date()
-          const title = titleDate.toISOString().slice(0, 10)
-          const tempTodayDataArr = this.initializedMap[title].data.slice(0)
+          const title = new Date().toISOString().slice(0, 10)
+          const tempTodayDataArr = [...this.initializedMap[title].data]
           const firstTodo = tempTodayDataArr[0]
           this.initializedMap[title].data.splice(0, 1)
           this.initializedMap[title].data.splice(
@@ -94,7 +101,57 @@ export class PlanningVM {
           sharedAppStateStore.skipping = false
         }
 
-        if (insertions.length) {
+        if (Object.keys(sharedAppStateStore.editedTodo).length) {
+          skipInsertion = true
+          skipDeletion = true
+          const tempSyncId = sharedAppStateStore.editedTodo.tempSync
+          const beforeEditTitle = sharedAppStateStore.editedTodo.beforeEdit
+          const afterEditTitle = sharedAppStateStore.editedTodo.afterEdit
+          const todoIndexInBeforeSection = this.initializedMap[
+            beforeEditTitle
+          ].data.findIndex((todo) => todo._tempSyncId === tempSyncId)
+          const frog = this.initializedMap[beforeEditTitle].data[
+            todoIndexInBeforeSection
+          ].frog
+          this.initializedMap[beforeEditTitle].data.splice(
+            todoIndexInBeforeSection,
+            1
+          )
+          if (!this.initializedMap[afterEditTitle]) {
+            this.initializedMap[afterEditTitle] = {
+              order: 0,
+              section: afterEditTitle,
+              data: [mobxRealmObject(todos[modifications[0] || insertions[0]])],
+            }
+          } else {
+            if (frog) {
+              for (const todoIndex in this.initializedMap[afterEditTitle]
+                .data) {
+                const indexInNumber = Number(todoIndex)
+                if (
+                  this.initializedMap[afterEditTitle].data[indexInNumber].frog
+                )
+                  continue
+                this.initializedMap[afterEditTitle].data.splice(
+                  indexInNumber,
+                  0,
+                  todos[modifications[0] || insertions[0]]
+                )
+                break
+              }
+            } else {
+              this.initializedMap[afterEditTitle].data.push(
+                todos[modifications[0] || insertions[0]]
+              )
+            }
+          }
+          if (!this.initializedMap[beforeEditTitle].data.length) {
+            this.initializedMap = omit(this.initializedMap, [beforeEditTitle])
+          }
+          sharedAppStateStore.editedTodo = {} as any
+        }
+
+        if (insertions.length && !skipInsertion) {
           // insertions
           for (const insertIndex of insertions) {
             const todo = todos[insertIndex]
@@ -108,6 +165,7 @@ export class PlanningVM {
               continue
             }
             if (todo.frog) {
+              // frogs
               let lastOrder = -1
               const length = this.initializedMap[title].data.length
               for (let i = 0; i < length; i++) {
@@ -116,18 +174,38 @@ export class PlanningVM {
                   lastOrder = lastTodo.order
                   continue
                 }
+                if (todo._tempSyncId) {
+                  this.todosAndIndexes[todo._tempSyncId] = i
+                }
                 this.initializedMap[title].data.splice(i, 0, todo)
                 break
               }
             } else {
-              this.initializedMap[title].data.push(mobxRealmObject(todo))
+              if (sharedAppStateStore.todosToTop.length) {
+                const todoIndexInStore = sharedAppStateStore.todosToTop.findIndex(
+                  (tempTodo) => tempTodo._tempSyncId === todo._tempSyncId
+                )
+                let firstNonFrog = 0
+                for (let frogCounter in this.initializedMap[title].data) {
+                  if (!this.initializedMap[title].data[frogCounter].frog) {
+                    firstNonFrog = Number(frogCounter)
+                    break
+                  }
+                }
+                this.initializedMap[title].data.splice(firstNonFrog, 0, todo)
+                sharedAppStateStore.todosToTop.splice(todoIndexInStore, 1)
+                skipDeletion = true
+              } else {
+                const length = this.initializedMap[title].data.length
+                this.initializedMap[title].data.splice(length, 0, todo)
+              }
             }
           }
         }
 
-        if (deletions.length) {
+        if (deletions.length && !skipDeletion) {
           for (const deletedIndex of deletions) {
-            if (!this.lastArray) return
+            if (!this.lastArray) break
             const todo = this.lastArray[deletedIndex]
             const title = getTitle(todo)
             let todoIndexInMap: number | undefined
@@ -144,7 +222,7 @@ export class PlanningVM {
             }
           }
         }
-        this.lastArray = [...todos]
+        this.lastArray = todos.slice()
         this.key = String(Date.now())
       })
       this.listenerInitialized = true
@@ -176,17 +254,35 @@ export class PlanningVM {
 
   @observable loadingHashes = false
 
-  @computed get allTodosAndHash() {
-    const hashes = sharedAppStateStore.hash
-      .map((hash) => `text CONTAINS[c] "${hash}"`)
-      .join(' AND ')
-    const neededTodos = this.mapFromRealmTodos(
-      this.uncompletedRealmTodos.filtered(hashes),
-      false,
-      true
-    )
-    const hashTodosMap = Object.keys(neededTodos).map((key) => neededTodos[key])
-    return hashTodosMap
+  get allTodosAndHash() {
+    if (sharedAppStateStore.hash.length) {
+      const hashes = sharedAppStateStore.hash
+        .map((hash) => `text CONTAINS[c] "${hash}"`)
+        .join(' AND ')
+      const neededTodos = this.mapFromRealmTodos(
+        this.uncompletedRealmTodos.filtered(hashes),
+        false,
+        true
+      )
+      const hashTodosMap = Object.keys(neededTodos).map(
+        (key) => neededTodos[key]
+      )
+      return hashTodosMap
+    } else if (sharedAppStateStore.searchQuery) {
+      sharedAppStateStore.changeLoading(true)
+      const neededQueryTodos = this.mapFromRealmTodos(
+        this.uncompletedRealmTodos.filtered(
+          `${`text CONTAINS[c] "${sharedAppStateStore.searchQuery}"`}`
+        ),
+        false,
+        true
+      )
+      const queryTodosMap = Object.keys(neededQueryTodos).map(
+        (key) => neededQueryTodos[key]
+      )
+      setTimeout(() => sharedAppStateStore.changeLoading(false))
+      return queryTodosMap
+    }
   }
 
   mapFromRealmTodos(
@@ -240,7 +336,26 @@ export class PlanningVM {
     from: number
     to: number
   }) => {
-    const startTIme = Date.now()
+    // const todo = dataArr[to] as Todo
+
+    // if (todo && todo._tempSyncId && sharedAppStateStore.activeDay) {
+    //   if (!todo._tempSyncId) return
+    //   sharedAppStateStore.editedTodo.tempSync = todo._tempSyncId
+    //   sharedAppStateStore.editedTodo.beforeEdit = '20'
+    //   realm.write(() => {
+    //     todo.date = '20'
+    //     todo.monthAndYear = '2020-12'
+    //     todo.updatedAt = new Date()
+    //   })
+    //   sharedAppStateStore.editedTodo.afterEdit = '2020-12'
+    // }
+    // if (sharedAppStateStore.activeDay) {
+    //   sharedAppStateStore.activeDay = 0
+    //   sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+    //   // return
+    // }
+
+    sharedAppStateStore.changeLoading(true)
     let lastSection: string
     let map = {} as { [index: string]: TodoSection }
 
@@ -248,15 +363,41 @@ export class PlanningVM {
     let randomOtherCounter = 0
 
     const draggingFrogs = dataArr[from].frog && dataArr[to].frog
-    const halfFrog = dataArr[from].frog || dataArr[to].frog
+    const halfFrog = dataArr[from].frog || dataArr[to].frog || dataArr[to + 1]
 
     if (!draggingFrogs && halfFrog) {
-      this.key = String(Date.now())
-      return
+      if (dataArr[to + 1].frog && !dataArr[to].frog) {
+        this.key = String(Date.now())
+        return
+      }
+      if (dataArr[to].frog) {
+        if (!dataArr[to - 1].frog && !dataArr[to + 1].frog) {
+          this.key = String(Date.now())
+          return
+        }
+        if (dataArr[to - 1].frog) {
+          this.key = String(Date.now())
+          return
+        }
+      }
+      if (dataArr[from].frog) {
+        if (dataArr[from - 1].frog) {
+          this.key = String(Date.now())
+          return
+        }
+        if (dataArr[to - 1].frog) {
+          this.key = String(Date.now())
+          return
+        }
+      }
     }
 
     const lo = Math.min(from, to)
     const hi = Math.max(from, to)
+
+    const today = Number(
+      new Date().toISOString().slice(0, 10).split('-').join('')
+    )
 
     realm.write(() => {
       dataArr.forEach((dataArrItem, globalIndex) => {
@@ -271,16 +412,53 @@ export class PlanningVM {
           }
           return
         }
-
-        if (globalIndex >= lo && globalIndex <= hi) {
-          randomOtherCounter++
+        if (
+          globalIndex >= lo &&
+          globalIndex <= hi &&
+          dataArrItem.frogFails < 3
+        ) {
+          if (
+            (globalIndex === to || globalIndex === from) &&
+            Number(getTitle(dataArrItem).split('-').join('')) < today
+          ) {
+            dataArrItem.frogFails++
+            if (dataArrItem.frogFails > 1) {
+              dataArrItem.frog = true
+            }
+          }
           dataArrItem.date = getDateDateString(lastSection)
           dataArrItem.monthAndYear = getDateMonthAndYearString(lastSection)
           dataArrItem._exactDate = new Date(lastSection)
           dataArrItem.updatedAt = new Date()
-          dataArrItem.order = randomOtherCounter
         }
-        map[lastSection].data.push(dataArrItem)
+
+        if (dataArrItem.frogFails >= 3) {
+          if (
+            (globalIndex === to || globalIndex === from) &&
+            dataArrItem.frogFails >= 3
+          ) {
+            Alert.alert(translate('error'), translate('breakdownRequest'), [
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+              {
+                text: translate('breakdownButton'),
+                onPress: () => {
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: dataArrItem,
+                  })
+                },
+              },
+            ])
+            map[getTitle(dataArrItem)].data.splice(0, 0, dataArrItem)
+            dataArrItem.order = -1000
+          }
+        } else {
+          dataArrItem.order = randomOtherCounter
+          map[lastSection].data.push(dataArrItem)
+        }
+        randomOtherCounter++
       })
     })
 
@@ -292,7 +470,9 @@ export class PlanningVM {
     })
     this.initializedMap = map
     this.key = String(Date.now())
-    const timeEnd = Date.now()
+    this.key = String(Date.now())
     this.draggingEdit = true
+    sharedAppStateStore.changeLoading(false)
+    sockets.todoSyncManager.sync()
   }
 }
