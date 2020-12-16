@@ -17,7 +17,6 @@ import { observer } from 'mobx-react'
 import { Container, Content, Input, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Platform, StyleProp, TextStyle } from 'react-native'
-import { AccessToken, LoginManager } from 'react-native-fbsdk'
 import { v4 as uuid } from 'uuid'
 
 class LoginVM {
@@ -37,35 +36,6 @@ class LoginVM {
         throw new Error(translate('googleTokenError'))
       }
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
-        .data
-      todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
-      this.syncLoading = true
-      await sharedSessionStore.login(todorantUserInfo)
-      goBack()
-    } catch (error) {
-      alertError(error)
-    } finally {
-      this.syncLoading = false
-      this.loading = false
-    }
-  }
-
-  loginWithFacebook = async () => {
-    this.loading = true
-    try {
-      const facebookUserInfo = await LoginManager.logInWithPermissions([
-        'public_profile',
-        'email',
-      ])
-      if (!facebookUserInfo.grantedPermissions) {
-        throw new Error(translate('facebookPermissionsError'))
-      }
-      const token = await AccessToken.getCurrentAccessToken()
-      if (!token) {
-        throw new Error(translate('facebookTokenError'))
-      }
-      const todorantUserInfo = (await rest.loginFacebook(token.accessToken))
         .data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
       todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
@@ -232,7 +202,13 @@ export class LoginContent extends Component<{
                 marginBottom: 10,
                 borderRadius: 10,
               }}
-              onPress={this.vm.loginWithFacebook}
+              onPress={() => {
+                navigate('LoginFacebook', {
+                  setLoadingToTrue: () => {
+                    this.vm.syncLoading = true
+                  },
+                })
+              }}
               disabled={this.vm.loading}
               textStyle={textStyle}
             >
