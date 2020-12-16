@@ -7,7 +7,7 @@ import { getLanguageTag } from '@utils/i18n'
 import { computed, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import RNRestart from 'react-native-restart'
-import { GoogleCalendarCredentials } from './../@models/GoogleCalendarCredentials'
+import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 
 export enum Language {
   auto = 'auto',

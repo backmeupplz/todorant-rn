@@ -53,35 +53,35 @@ class ChangeTextContent extends Component<{
   }
 
   save() {
-    // const dbtag = sharedTagStore.getTagById(
-    //   this.tag?._id || this.tag?._tempSyncId
-    // )
-    // if (!dbtag || !this.newName || !this.newName.match(/^[\S]+$/)) {
-    //   return
-    // }
-    // realm.write(() => {
-    //   for (const todo of sharedTodoStore.allTodos) {
-    //     todo.text = todo.text
-    //       .split(' ')
-    //       .map((word) => {
-    //         if (word !== `#${dbtag.tag}`) {
-    //           return word
-    //         }
-    //         return `#${this.newName}`
-    //       })
-    //       .join(' ')
-    //     todo.updatedAt = new Date()
-    //   }
-    // })
-    // realm.write(() => {
-    //   dbtag.tag = this.newName
-    //   dbtag.updatedAt = new Date()
-    // })
-    // goBack()
-    // sharedTagStore.refreshTags()
-    // sharedTodoStore.refreshTodos()
-    // sockets.tagsSyncManager.sync()
-    // sockets.todoSyncManager.sync()
+    const dbtag = sharedTagStore.getTagById(
+      this.tag?._id || this.tag?._tempSyncId
+    )
+    if (!dbtag || !this.newName || !this.newName.match(/^[\S]+$/)) {
+      return
+    }
+    realm.write(() => {
+      for (const todo of sharedTodoStore.allTodos) {
+        todo.text = todo.text
+          .split(' ')
+          .map((word) => {
+            if (word !== `#${dbtag.tag}`) {
+              return word
+            }
+            return `#${this.newName}`
+          })
+          .join(' ')
+        todo.updatedAt = new Date()
+      }
+    })
+    realm.write(() => {
+      dbtag.tag = this.newName
+      dbtag.updatedAt = new Date()
+    })
+    goBack()
+    sharedTagStore.refreshTags()
+    sharedTodoStore.refreshTodos()
+    sockets.tagsSyncManager.sync()
+    sockets.todoSyncManager.sync()
   }
   render() {
     return (

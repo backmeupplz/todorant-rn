@@ -1,4 +1,4 @@
-import { observableNow } from './../@utils/time'
+import { observableNow } from '@utils/time'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { decrypt, encrypt } from '@utils/encryption'
@@ -25,6 +25,13 @@ class TodoStore {
   @computed get todayCompletedTodos() {
     const title = observableNow.todayTitle
     return mobxRealmCollection(this.getRealmTodos(title, true))
+  }
+
+  @computed get allTodos() {
+    return realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
   }
 
   getRealmTodos(title: string, completed: boolean) {
@@ -68,7 +75,10 @@ class TodoStore {
 
   @computed get currentTodo() {
     return this.todayUncompletedTodos.length
-      ? this.todayUncompletedTodos[0]
+      ? this.todayUncompletedTodos.slice().sort((a, b) => {
+          if (a.frog && !b.frog) return -1
+          return 1
+        })[0] || undefined
       : undefined
   }
 

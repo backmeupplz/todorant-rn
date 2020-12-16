@@ -13,6 +13,7 @@ export class PlanningHeaderLeft extends Component {
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <TouchableOpacity
           onPress={() => {
+            sharedAppStateStore.changeLoading(false)
             sharedAppStateStore.searchEnabled = !sharedAppStateStore.searchEnabled
           }}
           style={{ marginLeft: 12 }}

@@ -10,6 +10,55 @@ export function deleteAllTodos() {
   sharedTodoStore.refreshTodos()
 }
 
+const date = new Date()
+
+class TodoSample {
+  updatedAt: Date = date
+  createdAt: Date = date
+  completed: boolean = false
+  frog: boolean = false
+  frogFails: number = 0
+  skipped: boolean = false
+  order: number = 0
+  monthAndYear: string = date.toISOString().slice(0, 7)
+  deleted: boolean = false
+  date: string = String(date.getDate())
+  time: string | undefined = undefined
+  text: string = uuid()
+  _exactDate = new Date(getTitle(this))
+
+  _tempSyncId: string = uuid()
+}
+
+export function add5000Todos() {
+  let todos: any[] = []
+
+  for (let i = 0; i < 1000; i++) {
+    console.log(date)
+    console.log(date.toISOString().slice(0, 7))
+    if (i % 30 === 0) {
+      if (date.getDate() >= 27) {
+        if (date.getMonth() >= 11) {
+          date.setFullYear(date.getFullYear() + 1)
+        } else {
+          date.setMonth(date.getMonth() + 1)
+        }
+      } else {
+        date.setDate(date.getDate() + 1)
+      }
+    }
+    todos.push(new TodoSample())
+  }
+
+  realm.write(() => {
+    for (const todo of todos) {
+      realm.create(Todo, todo)
+    }
+  })
+
+  sharedTodoStore.refreshTodos()
+}
+
 export function addTodosRu() {
   const template = {
     updatedAt: new Date(),
