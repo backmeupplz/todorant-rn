@@ -3,7 +3,11 @@ import { clone, cloneDeep, omit } from 'lodash'
 import { getTitle, Todo } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { realm } from '@utils/realm'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import {
+  getDateDateString,
+  getDateMonthAndYearString,
+  getDateString,
+} from '@utils/time'
 import { computed, observable } from 'mobx'
 import { sockets } from '@utils/sockets'
 import { Alert } from 'react-native'
@@ -54,22 +58,10 @@ export class PlanningVM {
     [index: string]: TodoSection
   }
 
-  @observable key = ''
-
-  @computed get completedTodosMap() {
-    return this.mapFromRealmTodos(this.completedRealmTodos, true)
-  }
-
-  @computed get theoreticalKey() {
-    return this.key
-  }
-
-  todosAndIndexes = {} as any
-
-  @computed get uncompletedTodosMap() {
-    console.log('Got uncompletedTodosMap')
+  constructor() {
     if (!this.listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
+        if (!changes || !todos) return
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
           this.lastArray = todos.slice()
@@ -227,6 +219,22 @@ export class PlanningVM {
       })
       this.listenerInitialized = true
     }
+  }
+
+  @observable key = ''
+
+  @computed get completedTodosMap() {
+    return this.mapFromRealmTodos(this.completedRealmTodos, true)
+  }
+
+  @computed get theoreticalKey() {
+    return this.key
+  }
+
+  todosAndIndexes = {} as any
+
+  @computed get uncompletedTodosMap() {
+    console.log('Got uncompletedTodosMap')
     const key = this.theoreticalKey
     return this.initialized
       ? this.initializedMap
@@ -325,7 +333,7 @@ export class PlanningVM {
     return map
   }
 
-  onDragEnd = async ({
+  onDragEnd = ({
     data,
     from,
     to,
@@ -337,122 +345,143 @@ export class PlanningVM {
     to: number
   }) => {
     sharedAppStateStore.changeLoading(true)
-    let lastSection: string
-    let map = {} as { [index: string]: TodoSection }
-
-    let sectionCounter = -1
-    let randomOtherCounter = 0
-
-    const draggingFrogs = dataArr[from].frog && dataArr[to].frog
-    const halfFrog = dataArr[from].frog || dataArr[to].frog || dataArr[to + 1]
-
-    if (!draggingFrogs && halfFrog) {
-      if (dataArr[to + 1].frog && !dataArr[to].frog) {
-        this.key = String(Date.now())
-        return
+    if (sharedAppStateStore.activeDay) {
+      const todo = dataArr[to] as Todo
+      if (todo && todo._tempSyncId && sharedAppStateStore.activeDay) {
+        sharedAppStateStore.editedTodo.tempSync = todo._tempSyncId
+        sharedAppStateStore.editedTodo.beforeEdit = getTitle(todo)
+        realm.write(() => {
+          todo.date = getDateDateString(sharedAppStateStore.activeDay!)
+          todo.monthAndYear = getDateMonthAndYearString(
+            sharedAppStateStore.activeDay!
+          )
+          todo._exactDate = new Date(getTitle(todo))
+          todo.updatedAt = new Date()
+        })
+        sharedAppStateStore.editedTodo.afterEdit = getDateString(
+          sharedAppStateStore.activeDay!
+        )
       }
-      if (dataArr[to].frog) {
-        if (!dataArr[to - 1].frog && !dataArr[to + 1].frog) {
-          this.key = String(Date.now())
-          return
-        }
-        if (dataArr[to - 1].frog) {
-          this.key = String(Date.now())
-          return
-        }
-      }
-      if (dataArr[from].frog) {
-        if (dataArr[from - 1].frog) {
-          this.key = String(Date.now())
-          return
-        }
-        if (dataArr[to - 1].frog) {
-          this.key = String(Date.now())
-          return
-        }
-      }
-    }
+      sharedAppStateStore.activeDay = undefined
+      sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+    } else {
+      let lastSection: string
+      let map = {} as { [index: string]: TodoSection }
 
-    const lo = Math.min(from, to)
-    const hi = Math.max(from, to)
+      let sectionCounter = -1
+      let randomOtherCounter = 0
 
-    const today = Number(
-      new Date().toISOString().slice(0, 10).split('-').join('')
-    )
+      const draggingFrogs = dataArr[from].frog && dataArr[to].frog
+      const halfFrog = dataArr[from].frog || dataArr[to].frog || dataArr[to + 1]
 
-    realm.write(() => {
-      dataArr.forEach((dataArrItem, globalIndex) => {
-        if (!dataArrItem.text) {
-          randomOtherCounter = 0
-          sectionCounter++
-          lastSection = dataArrItem
-          map[lastSection] = {
-            order: sectionCounter,
-            section: dataArrItem,
-            data: [],
+      if (!draggingFrogs && halfFrog) {
+        if (dataArr[to + 1].frog && !dataArr[to].frog) {
+          this.key = String(Date.now())
+          return
+        }
+        if (dataArr[to].frog) {
+          if (!dataArr[to - 1].frog && !dataArr[to + 1].frog) {
+            this.key = String(Date.now())
+            return
           }
-          return
+          if (dataArr[to - 1].frog) {
+            this.key = String(Date.now())
+            return
+          }
         }
-        if (
-          globalIndex >= lo &&
-          globalIndex <= hi &&
-          dataArrItem.frogFails < 3
-        ) {
-          if (
-            (globalIndex === to || globalIndex === from) &&
-            Number(getTitle(dataArrItem).split('-').join('')) < today
-          ) {
-            dataArrItem.frogFails++
-            if (dataArrItem.frogFails > 1) {
-              dataArrItem.frog = true
+        if (dataArr[from].frog) {
+          if (dataArr[from - 1].frog) {
+            this.key = String(Date.now())
+            return
+          }
+          if (dataArr[to - 1].frog) {
+            this.key = String(Date.now())
+            return
+          }
+        }
+      }
+
+      const lo = Math.min(from, to)
+      const hi = Math.max(from, to)
+
+      const today = Number(
+        new Date().toISOString().slice(0, 10).split('-').join('')
+      )
+
+      realm.write(() => {
+        dataArr.forEach((dataArrItem, globalIndex) => {
+          if (!dataArrItem.text) {
+            randomOtherCounter = 0
+            sectionCounter++
+            lastSection = dataArrItem
+            map[lastSection] = {
+              order: sectionCounter,
+              section: dataArrItem,
+              data: [],
             }
+            return
           }
-          dataArrItem.date = getDateDateString(lastSection)
-          dataArrItem.monthAndYear = getDateMonthAndYearString(lastSection)
-          dataArrItem._exactDate = new Date(lastSection)
-          dataArrItem.updatedAt = new Date()
-        }
-
-        if (dataArrItem.frogFails >= 3) {
           if (
-            (globalIndex === to || globalIndex === from) &&
-            dataArrItem.frogFails >= 3
+            globalIndex >= lo &&
+            globalIndex <= hi &&
+            dataArrItem.frogFails < 3
           ) {
-            Alert.alert(translate('error'), translate('breakdownRequest'), [
-              {
-                text: translate('cancel'),
-                style: 'cancel',
-              },
-              {
-                text: translate('breakdownButton'),
-                onPress: () => {
-                  navigate('BreakdownTodo', {
-                    breakdownTodo: dataArrItem,
-                  })
-                },
-              },
-            ])
-            map[getTitle(dataArrItem)].data.splice(0, 0, dataArrItem)
-            dataArrItem.order = -1000
+            if (
+              (globalIndex === to || globalIndex === from) &&
+              Number(getTitle(dataArrItem).split('-').join('')) < today
+            ) {
+              dataArrItem.frogFails++
+              if (dataArrItem.frogFails > 1) {
+                dataArrItem.frog = true
+              }
+            }
+            dataArrItem.date = getDateDateString(lastSection)
+            dataArrItem.monthAndYear = getDateMonthAndYearString(lastSection)
+            dataArrItem._exactDate = new Date(lastSection)
+            dataArrItem.updatedAt = new Date()
           }
-        } else {
-          dataArrItem.order = randomOtherCounter
-          map[lastSection].data.push(dataArrItem)
-        }
-        randomOtherCounter++
-      })
-    })
 
-    // remove section if there's no more todos
-    Object.keys(map).forEach((key) => {
-      if (!map[key].data.length) {
-        map = omit(map, [key])
-      }
-    })
-    this.initializedMap = map
+          if (dataArrItem.frogFails >= 3) {
+            if (
+              (globalIndex === to || globalIndex === from) &&
+              dataArrItem.frogFails >= 3
+            ) {
+              Alert.alert(translate('error'), translate('breakdownRequest'), [
+                {
+                  text: translate('cancel'),
+                  style: 'cancel',
+                },
+                {
+                  text: translate('breakdownButton'),
+                  onPress: () => {
+                    navigate('BreakdownTodo', {
+                      breakdownTodo: dataArrItem,
+                    })
+                  },
+                },
+              ])
+              map[getTitle(dataArrItem)].data.splice(0, 0, dataArrItem)
+              dataArrItem.order = -1000
+            }
+          } else {
+            dataArrItem.order = randomOtherCounter
+            map[lastSection].data.push(dataArrItem)
+          }
+          randomOtherCounter++
+        })
+      })
+
+      // remove section if there's no more todos
+      Object.keys(map).forEach((key) => {
+        if (!map[key].data.length) {
+          map = omit(map, [key])
+        }
+      })
+      this.initializedMap = map
+      this.draggingEdit = true
+    }
     this.key = String(Date.now())
     this.key = String(Date.now())
-    this.draggingEdit = true
     sharedAppStateStore.changeLoading(false)
     sockets.todoSyncManager.sync()
   }

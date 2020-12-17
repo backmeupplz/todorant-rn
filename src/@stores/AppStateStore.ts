@@ -39,7 +39,7 @@ class AppStateStore {
 
   @observable calendarEnabled = false
   @observable activeCoordinates = { x: 0, y: 0 }
-  @observable activeDay = 0
+  @observable activeDay: Date | undefined = undefined
 }
 
 export const sharedAppStateStore = new AppStateStore()
