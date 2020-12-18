@@ -576,6 +576,7 @@ export class AddTodoForm extends Component<{
                     }}
                   />
                 }
+                initialView={moment().add(1, 'month')}
               />
             )}
             {this.props.vm.showMore && <TimeRow vm={this.props.vm} />}
