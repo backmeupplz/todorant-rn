@@ -110,10 +110,12 @@ export class PlanningVM {
             1
           )
           if (!this.initializedMap[afterEditTitle]) {
+            const todoToAddIndex =
+              modifications[0] !== undefined ? modifications[0] : insertions[0]
             this.initializedMap[afterEditTitle] = {
               order: 0,
               section: afterEditTitle,
-              data: [mobxRealmObject(todos[modifications[0] || insertions[0]])],
+              data: [todos[todoToAddIndex]],
             }
           } else {
             if (frog) {
@@ -124,16 +126,24 @@ export class PlanningVM {
                   this.initializedMap[afterEditTitle].data[indexInNumber].frog
                 )
                   continue
+                const todoToAddIndex =
+                  modifications[0] !== undefined
+                    ? modifications[0]
+                    : insertions[0]
                 this.initializedMap[afterEditTitle].data.splice(
                   indexInNumber,
                   0,
-                  todos[modifications[0] || insertions[0]]
+                  todos[todoToAddIndex]
                 )
                 break
               }
             } else {
+              const todoToAddIndex =
+                modifications[0] !== undefined
+                  ? modifications[0]
+                  : insertions[0]
               this.initializedMap[afterEditTitle].data.push(
-                todos[modifications[0] || insertions[0]]
+                todos[todoToAddIndex]
               )
             }
           }

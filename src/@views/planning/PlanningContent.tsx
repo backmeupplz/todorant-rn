@@ -23,6 +23,7 @@ import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { alertConfirm, alertMessage } from '@utils/alert'
 import { getDateMonthAndYearString } from '@utils/time'
+import Animated, { Value } from 'react-native-reanimated'
 
 @observer
 export class PlanningContent extends Component {
@@ -31,10 +32,29 @@ export class PlanningContent extends Component {
   @observable currentMonth = new Date().getMonth()
   @observable currentYear = new Date().getUTCFullYear()
 
+  currentX = new Value(0)
+  currentY = new Value(0)
+
   todoHeight = 0
 
+  lastTimeY = 0
+  lastTimeX = 0
+
   setCoordinates(yAx: number, xAx: number) {
-    sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
+    if (!this.lastTimeX || !this.lastTimeY) {
+      this.lastTimeY = yAx
+      this.lastTimeX = xAx
+    }
+    if (
+      Math.abs(this.lastTimeX - xAx) > 30 ||
+      Math.abs(this.lastTimeY - yAx) > 40
+    ) {
+      this.lastTimeX = xAx
+      this.lastTimeY = yAx
+      sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
+    }
+    this.currentX.setValue(xAx)
+    this.currentY.setValue(yAx - this.todoHeight)
   }
 
   render() {
@@ -124,16 +144,15 @@ export class PlanningContent extends Component {
           </View>
         )}
         {sharedAppStateStore.activeDay && (
-          <View
+          <Animated.View
             style={{
               ...styles.circle,
               transform: [
                 {
-                  translateX: sharedAppStateStore.activeCoordinates.x,
+                  translateX: this.currentX,
                 },
                 {
-                  translateY:
-                    sharedAppStateStore.activeCoordinates.y - this.todoHeight,
+                  translateY: this.currentY,
                 },
               ],
             }}
