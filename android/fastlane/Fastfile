@@ -87,7 +87,8 @@ platform :android do
     supply(
       skip_upload_apk: true,
       aab: './app/build/outputs/bundle/release/app.aab',
-      skip_upload_screenshots: true
+      skip_upload_screenshots: true,
+      rollout: '0.01'
     )
     commit_and_push_android_release
   end
