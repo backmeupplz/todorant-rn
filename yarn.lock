@@ -1432,10 +1432,10 @@
     lodash.isequal "^4.5.0"
     object-hash "^2.0.3"
 
-"@upacyxou/react-native-month@^1.1.9":
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.1.9.tgz#b4c8c73eb750c1b3fead36a18e8fc517d7e80e46"
-  integrity sha512-dM5ztJJrgBHYi2LwSeBXXt0m+4DNqDZzKpTP93G7ENTPjiEpQ1KHHY5TSdopfMMyTXphdQWDefg74lu3d2b96w==
+"@upacyxou/react-native-month@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.3.tgz#8c5ae39632f1acdddd201b03b3a6e107c5648202"
+  integrity sha512-qYd65+OUQowUpsP08yQdBnc63tQnGBK5vzOBfr5bb9yuPYXFhJRod4YsVwubEkBPSkbmYIttLYp4wx7BehzO2w==
   dependencies:
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"

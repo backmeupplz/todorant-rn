@@ -23,10 +23,39 @@ import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { alertConfirm, alertMessage } from '@utils/alert'
 import { getDateMonthAndYearString } from '@utils/time'
+import Animated, { Value } from 'react-native-reanimated'
 
 @observer
 export class PlanningContent extends Component {
   vm = new PlanningVM()
+
+  @observable currentMonth = new Date().getMonth()
+  @observable currentYear = new Date().getUTCFullYear()
+
+  currentX = new Value(0)
+  currentY = new Value(0)
+
+  todoHeight = 0
+
+  lastTimeY = 0
+  lastTimeX = 0
+
+  setCoordinates(yAx: number, xAx: number) {
+    if (!this.lastTimeX || !this.lastTimeY) {
+      this.lastTimeY = yAx
+      this.lastTimeX = xAx
+    }
+    if (
+      Math.abs(this.lastTimeX - xAx) > 30 ||
+      Math.abs(this.lastTimeY - yAx) > 40
+    ) {
+      this.lastTimeX = xAx
+      this.lastTimeY = yAx
+      sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
+    }
+    this.currentX.setValue(xAx)
+    this.currentY.setValue(yAx - this.todoHeight)
+  }
 
   render() {
     return (
@@ -43,6 +72,92 @@ export class PlanningContent extends Component {
               {translate('planningText')}
             </Text>
           )}
+        {!!sharedAppStateStore.calendarEnabled && (
+          <View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                padding: 12,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.currentMonth <= 0) {
+                    this.currentYear--
+                    this.currentMonth = 11
+                  } else {
+                    this.currentMonth--
+                  }
+                }}
+              >
+                <Icon
+                  type="MaterialIcons"
+                  name={'keyboard-arrow-left'}
+                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
+                />
+              </TouchableOpacity>
+              <Text style={{ color: sharedColors.textColor }}>
+                {moment(this.currentMonth + 1, 'MM')
+                  .locale(
+                    sharedSettingsStore.language
+                      ? sharedSettingsStore.language
+                      : 'en'
+                  )
+                  .format('MMMM')}{' '}
+                {this.currentYear}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.currentMonth >= 11) {
+                    this.currentYear++
+                    this.currentMonth = 0
+                  } else {
+                    this.currentMonth++
+                  }
+                }}
+              >
+                <Icon
+                  type="MaterialIcons"
+                  name={'keyboard-arrow-right'}
+                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View>
+              <Month
+                onActiveDayChange={(day: Date) => {
+                  sharedAppStateStore.activeDay = day
+                }}
+                dark={sharedSettingsStore.colorMode === 'dark'}
+                onPress={(day: Date) => {}}
+                emptyDays={(emptyDays: any) => {}}
+                activeCoordinates={sharedAppStateStore.activeCoordinates}
+                month={this.currentMonth}
+                year={this.currentYear}
+                showWeekdays
+                locale="en"
+              />
+            </View>
+          </View>
+        )}
+        {sharedAppStateStore.activeDay && (
+          <Animated.View
+            style={{
+              ...styles.circle,
+              transform: [
+                {
+                  translateX: this.currentX,
+                },
+                {
+                  translateY: this.currentY,
+                },
+              ],
+            }}
+          />
+        )}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosArray.length ? (
             <DraggableSectionListWithLoader
@@ -50,6 +165,9 @@ export class PlanningContent extends Component {
                 sharedAppStateStore.changeLoading(false)
               }}
               contentContainerStyle={{ paddingBottom: 100 }}
+              onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+                this.setCoordinates(absoluteY, absoluteX)
+              }}
               autoscrollSpeed={200}
               data={
                 sharedAppStateStore.hash.length ||
@@ -71,7 +189,14 @@ export class PlanningContent extends Component {
               renderItem={({ item, index, drag, isActive }) => {
                 if (!item.item) return
                 return (
-                  <View style={{ padding: isActive ? 10 : 0 }} key={index}>
+                  <View
+                    style={{ padding: isActive ? 10 : 0 }}
+                    key={index}
+                    onLayout={(e) => {
+                      if (!index) return
+                      this.todoHeight = e.nativeEvent.layout.height
+                    }}
+                  >
                     <TodoCard
                       todo={item.item}
                       type={
