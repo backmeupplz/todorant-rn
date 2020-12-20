@@ -22,14 +22,7 @@ export function hydrateStore(name: string) {
   const needsSync = isHydrated()
   if (needsSync) {
     try {
-      if (!sharedSocketStore.connected) {
-        const timerInterval = setInterval(() => {
-          if (sharedSocketStore.connected) {
-            clearInterval(timerInterval)
-          }
-          sockets.globalSync()
-        }, 5 * 1000)
-      } else {
+      if (sharedSocketStore.connected && sharedSocketStore.authorized) {
         sockets.globalSync()
       }
     } catch (err) {

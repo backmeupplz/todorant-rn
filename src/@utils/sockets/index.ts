@@ -150,7 +150,7 @@ class SocketManager {
     }
   }
   authorize = () => {
-    return new Promise((res, rej) => {
+    return new Promise<void>((res, rej) => {
       if (!sharedSessionStore.user?.token || !socketIO.connected) {
         return rej('Not connected to sockets')
       }
@@ -194,6 +194,7 @@ class SocketManager {
     sharedSocketStore.authorized = true
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
+    this.globalSync()
   }
 
   hardSync = () => {
