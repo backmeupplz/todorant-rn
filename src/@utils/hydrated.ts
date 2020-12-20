@@ -1,3 +1,4 @@
+import { sharedSocketStore } from '@stores/SocketStore'
 import { alertError } from '@utils/alert'
 import { sockets } from '@utils/sockets'
 
@@ -21,7 +22,16 @@ export function hydrateStore(name: string) {
   const needsSync = isHydrated()
   if (needsSync) {
     try {
-      sockets.globalSync()
+      if (!sharedSocketStore.connected) {
+        const timerInterval = setInterval(() => {
+          if (sharedSocketStore.connected) {
+            clearInterval(timerInterval)
+          }
+          sockets.globalSync()
+        }, 5 * 1000)
+      } else {
+        sockets.globalSync()
+      }
     } catch (err) {
       alertError(err)
     }
