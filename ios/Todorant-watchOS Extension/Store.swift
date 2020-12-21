@@ -78,6 +78,7 @@ class Store: ObservableObject {
             // Update state
             self.currentState = currentState
             self.errorShown = false
+            print("Store.swift: State updated")
           case .failure:
             self.errorShown = true
         }

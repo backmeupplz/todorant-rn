@@ -565,12 +565,12 @@
 				6663DF3F25598A5000571F9A /* PlaceholderProgressBarView.swift */,
 				665C1788254A26A900786973 /* ButtonsView.swift */,
 				665C1792254A323900786973 /* ButtonEntryView.swift */,
+				662B7B722554C5DD0088C06A /* ClearView.swift */,
+				662B7B7C2554C5F00088C06A /* EmptyView.swift */,
 				66E8640F2549D3C500CA2017 /* TodorantApp.swift */,
 				66E864152549D3C500CA2017 /* NotificationView.swift */,
 				66E864132549D3C500CA2017 /* NotificationController.swift */,
 				66E864172549D3C500CA2017 /* ComplicationController.swift */,
-				662B7B722554C5DD0088C06A /* ClearView.swift */,
-				662B7B7C2554C5F00088C06A /* EmptyView.swift */,
 			);
 			path = "Todorant-watchOS Extension";
 			sourceTree = "<group>";

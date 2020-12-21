@@ -18,9 +18,6 @@ struct SwipableNavigationView: View {
     ZStack {
       CurrentView(isShowingButtonsView: $isShowingButtonsView)
         .conditionalBackgroundBlurStyle(condition: isShowingButtonsView)
-        .onTapGesture {
-          store.updateCurrent()
-        }
         .onAppear {
           store.updateCurrent()
         }
@@ -45,6 +42,9 @@ struct SwipableNavigationView: View {
             })
         }
       }
+    }
+    .onTapGesture {
+      store.updateCurrent()
     }
   }
 }

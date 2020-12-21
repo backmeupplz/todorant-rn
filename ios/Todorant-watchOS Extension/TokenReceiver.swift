@@ -32,6 +32,7 @@ class TokenReceiver: NSObject, WCSessionDelegate {
             keychain["accessToken"] = nil
           } else {
             keychain["accessToken"] = accessToken
+            print("TokenReceiver.swift: Token received")
           }
         }
         if let password = message["password"] as? String {
