@@ -15,34 +15,6 @@ import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { setToken, removeToken } from '@utils/keychain'
 
-function sendAppleWatchToken() {
-  const token = sharedSessionStore.user?.token
-  if (token) {
-    setToken(token)
-  } else {
-    removeToken()
-  }
-  alertMessage(
-    'Success!',
-    'If Apple Watch is paired to this device, Todorant app on it should be working now. You might need to restart the Apple Watch Todorant app for this to work well.'
-  )
-}
-
-function ConnectAppleWatchTableItem() {
-  if (Platform.OS === 'ios') {
-    return (
-      <TableItem
-        {...sharedColors.listItemExtraStyle}
-        onPress={() => {
-          sendAppleWatchToken()
-        }}
-      >
-        <Text {...sharedColors.textExtraStyle}>Connect Apple Watch</Text>
-      </TableItem>
-    )
-  }
-}
-
 @observer
 export class Integrations extends Component {
   @observable loading = false
@@ -94,6 +66,19 @@ export class Integrations extends Component {
     }
   }
 
+  sendAppleWatchToken() {
+    const token = sharedSessionStore.user?.token
+    if (token) {
+      setToken(token)
+    } else {
+      removeToken()
+    }
+    alertMessage(
+      'Success!',
+      'If Apple Watch is paired to this device, Todorant app on it should be working now. You might need to restart the Apple Watch Todorant app for this to work well.'
+    )
+  }
+
   render() {
     return (
       <Container
@@ -125,7 +110,16 @@ export class Integrations extends Component {
             )}
           </TableItem>
 
-          {ConnectAppleWatchTableItem()}
+          {Platform.OS === 'ios' && (
+            <TableItem
+              {...sharedColors.listItemExtraStyle}
+              onPress={() => {
+                this.sendAppleWatchToken()
+              }}
+            >
+              <Text {...sharedColors.textExtraStyle}>Connect Apple Watch</Text>
+            </TableItem>
+          )}
         </Content>
       </Container>
     )
