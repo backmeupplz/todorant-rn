@@ -1,13 +1,13 @@
-import { GoogleCalendarCredentials } from './../@models/GoogleCalendarCredentials'
 import { Settings } from '@models/Settings'
-import { persist } from 'mobx-persist'
-import { observable, computed } from 'mobx'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
-import { getLanguageTag } from '@utils/i18n'
-import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import RNRestart from 'react-native-restart'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import { hydrate } from '@utils/hydrate'
+import { hydrateStore } from '@utils/hydrated'
+import { getLanguageTag } from '@utils/i18n'
+import { computed, observable } from 'mobx'
+import { persist } from 'mobx-persist'
+import RNRestart from 'react-native-restart'
+import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 
 export enum Language {
   auto = 'auto',
@@ -66,10 +66,11 @@ class SettingsStore {
 
   onObjectsFromServer = async (
     settings: Settings,
-    pushBack: (objects: Settings) => Promise<Settings>
+    pushBack: (objects: Settings) => Promise<Settings>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     // Modify settings
     settings.updatedAt = settings.updatedAt
@@ -176,6 +177,7 @@ class SettingsStore {
         ? new Date(pushedSettings.updatedAt)
         : undefined
     }
+    completeSync()
   }
 
   logout = () => {

@@ -5,24 +5,6 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - appcenter-analytics (3.0.1):
-    - AppCenter/Analytics
-    - AppCenterReactNativeShared
-    - React
-  - appcenter-core (3.0.1):
-    - AppCenterReactNativeShared
-    - React
-  - appcenter-crashes (3.0.1):
-    - AppCenter/Crashes
-    - AppCenterReactNativeShared
-    - React
-  - AppCenter/Analytics (3.3.4):
-    - AppCenter/Core
-  - AppCenter/Core (3.3.4)
-  - AppCenter/Crashes (3.3.4):
-    - AppCenter/Core
-  - AppCenterReactNativeShared (3.1.2):
-    - AppCenter/Core (= 3.3.4)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
@@ -32,6 +14,16 @@ PODS:
     - JWT (~> 3.0.0-beta.7)
     - React
     - SSZipArchive (~> 2.1)
+  - CountlyPod (20.11.0):
+    - CountlyPod/Core (= 20.11.0)
+  - CountlyPod/Core (20.11.0)
+  - CountlyReactNative (20.11.0):
+    - CountlyPod (= 20.11.0)
+    - CountlyReactNative/NotificationService (= 20.11.0)
+    - React
+  - CountlyReactNative/NotificationService (20.11.0):
+    - CountlyPod (= 20.11.0)
+    - React
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.63.3)
   - FBReactNativeSpec (0.63.3):
@@ -41,50 +33,6 @@ PODS:
     - React-Core (= 0.63.3)
     - React-jsi (= 0.63.3)
     - ReactCommon/turbomodule/core (= 0.63.3)
-  - FBSDKCoreKit (5.8.0):
-    - FBSDKCoreKit/Basics (= 5.8.0)
-    - FBSDKCoreKit/Core (= 5.8.0)
-  - FBSDKCoreKit/Basics (5.8.0)
-  - FBSDKCoreKit/Core (5.8.0):
-    - FBSDKCoreKit/Basics
-  - FBSDKLoginKit (5.8.0):
-    - FBSDKLoginKit/Login (= 5.8.0)
-  - FBSDKLoginKit/Login (5.8.0):
-    - FBSDKCoreKit (~> 5.0)
-  - FBSDKShareKit (5.8.0):
-    - FBSDKShareKit/Share (= 5.8.0)
-  - FBSDKShareKit/Share (5.8.0):
-    - FBSDKCoreKit (~> 5.0)
-  - Firebase/Analytics (6.30.0):
-    - Firebase/Core
-  - Firebase/Core (6.30.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (= 6.7.2)
-  - Firebase/CoreOnly (6.30.0):
-    - FirebaseCore (= 6.10.0)
-  - FirebaseAnalytics (6.7.2):
-    - FirebaseCore (~> 6.8)
-    - FirebaseInstallations (~> 1.4)
-    - GoogleAppMeasurement (= 6.7.2)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/MethodSwizzler (~> 6.7)
-    - GoogleUtilities/Network (~> 6.7)
-    - "GoogleUtilities/NSData+zlib (~> 6.7)"
-    - nanopb (~> 1.30905.0)
-  - FirebaseCore (6.10.0):
-    - FirebaseCoreDiagnostics (~> 1.3)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.5.0):
-    - GoogleDataTransport (~> 7.0)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30905.0)
-  - FirebaseInstallations (1.7.0):
-    - FirebaseCore (~> 6.10)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-    - PromisesObjC (~> 1.2)
   - Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -98,37 +46,10 @@ PODS:
     - GCDWebServer/Core (= 3.5.4)
   - GCDWebServer/Core (3.5.4)
   - glog (0.3.5)
-  - GoogleAppMeasurement (6.7.2):
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/MethodSwizzler (~> 6.7)
-    - GoogleUtilities/Network (~> 6.7)
-    - "GoogleUtilities/NSData+zlib (~> 6.7)"
-    - nanopb (~> 1.30905.0)
-  - GoogleDataTransport (7.2.0):
-    - nanopb (~> 1.30905.0)
   - GoogleSignIn (5.0.2):
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.7.2):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.7.2):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.7.2):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.7.2):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.7.2)"
-  - GoogleUtilities/Reachability (6.7.2):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.7.2):
-    - GoogleUtilities/Logger
   - GTMAppAuth (1.1.0):
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher (~> 1.4)
@@ -140,16 +61,10 @@ PODS:
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
   - KeychainAccess (4.2.1)
-  - nanopb (1.30905.0):
-    - nanopb/decode (= 1.30905.0)
-    - nanopb/encode (= 1.30905.0)
-  - nanopb/decode (1.30905.0)
-  - nanopb/encode (1.30905.0)
   - Permission-Camera (2.1.4):
     - RNPermissions
   - Permission-Siri (2.1.4):
     - RNPermissions
-  - PromisesObjC (1.2.11)
   - RCTRequired (0.63.3)
   - RCTRestart (0.0.14):
     - React
@@ -326,20 +241,6 @@ PODS:
     - React
   - react-native-camera/RN (3.23.1):
     - React
-  - react-native-fbsdk (1.1.2):
-    - React
-    - react-native-fbsdk/Core (= 1.1.2)
-    - react-native-fbsdk/Login (= 1.1.2)
-    - react-native-fbsdk/Share (= 1.1.2)
-  - react-native-fbsdk/Core (1.1.2):
-    - FBSDKCoreKit (= 5.8)
-    - React
-  - react-native-fbsdk/Login (1.1.2):
-    - FBSDKLoginKit (= 5.8)
-    - React
-  - react-native-fbsdk/Share (1.1.2):
-    - FBSDKShareKit (= 5.8)
-    - React
   - react-native-netinfo (5.7.0):
     - React
   - react-native-receive-sharing-intent (1.0.4):
@@ -414,7 +315,7 @@ PODS:
     - React-jsi (= 0.63.3)
   - ReactNativeDarkMode (0.2.2):
     - React
-  - RealmJS (6.1.2):
+  - RealmJS (6.1.5):
     - GCDWebServer
     - React
   - RNAppleAuthentication (2.0.1):
@@ -430,13 +331,6 @@ PODS:
   - RNDateTimePicker (3.0.2):
     - React
   - RNDeviceInfo (5.5.4):
-    - React
-  - RNFBAnalytics (7.6.1):
-    - Firebase/Analytics (~> 6.30.0)
-    - React
-    - RNFBApp
-  - RNFBApp (8.4.1):
-    - Firebase/CoreOnly (~> 6.30.0)
     - React
   - RNGestureHandler (1.8.0):
     - React
@@ -468,11 +362,9 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.0)
-  - appcenter-analytics (from `../node_modules/appcenter-analytics/ios`)
-  - appcenter-core (from `../node_modules/appcenter/ios`)
-  - appcenter-crashes (from `../node_modules/appcenter-crashes/ios`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CodePush (from `../node_modules/react-native-code-push`)
+  - CountlyReactNative (from `../node_modules/countly-sdk-react-native-bridge`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
@@ -495,7 +387,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
-  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-receive-sharing-intent (from `../node_modules/react-native-receive-sharing-intent`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -521,8 +412,6 @@ DEPENDENCIES:
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
-  - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
-  - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNIap (from `../node_modules/react-native-iap`)
@@ -540,43 +429,25 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - AppAuth
-    - AppCenter
-    - AppCenterReactNativeShared
     - Base64
     - boost-for-react-native
-    - FBSDKCoreKit
-    - FBSDKLoginKit
-    - FBSDKShareKit
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseInstallations
+    - CountlyPod
     - GCDWebServer
-    - GoogleAppMeasurement
-    - GoogleDataTransport
     - GoogleSignIn
-    - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
     - JWT
     - KeychainAccess
-    - nanopb
-    - PromisesObjC
     - SSZipArchive
     - SwiftKeychainWrapper
 
 EXTERNAL SOURCES:
-  appcenter-analytics:
-    :path: "../node_modules/appcenter-analytics/ios"
-  appcenter-core:
-    :path: "../node_modules/appcenter/ios"
-  appcenter-crashes:
-    :path: "../node_modules/appcenter-crashes/ios"
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
   CodePush:
     :path: "../node_modules/react-native-code-push"
+  CountlyReactNative:
+    :path: "../node_modules/countly-sdk-react-native-bridge"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -615,8 +486,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
-  react-native-fbsdk:
-    :path: "../node_modules/react-native-fbsdk"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-receive-sharing-intent:
@@ -667,10 +536,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
-  RNFBAnalytics:
-    :path: "../node_modules/@react-native-firebase/analytics"
-  RNFBApp:
-    :path: "../node_modules/@react-native-firebase/app"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -697,41 +562,25 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  AppCenter: 0487be185c038ed2ecc5ed38219af1dcd280af23
-  appcenter-analytics: 46b4bb2832834a198ba6c4058b4eb335386c1063
-  appcenter-core: 765878f5c300907bb70dbb8e956c5a74df7ca23d
-  appcenter-crashes: 66b533f4e2a2278ddbd9369614fe18f0d7f58e47
-  AppCenterReactNativeShared: 66667cd2dfad295b84bbf0f462e0e139e2128284
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CodePush: 3285d39e9865e0a37a415417402bf568ce49268a
+  CountlyPod: b3f85ae441a7c05173a2d2e9756a81472612ccde
+  CountlyReactNative: ae5ff6c8648ea4169430ba3e10d0d17920145d1b
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
-  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
-  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
-  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
-  Firebase: 210f41ca352067d83b1ba4fd2e7fb49a0c017397
-  FirebaseAnalytics: a299a86ef70fcc6aa011418bc65a7e101fb9636c
-  FirebaseCore: 9a41e2de78fef10f63cee30ab10e2945266bc1fc
-  FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
-  FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  GoogleAppMeasurement: 3def7652b1f5b5a576178dc332e2a36a260fbef6
-  GoogleDataTransport: 672fb0ce96fe7f7f31d43672fca62ad2c9c86f7b
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
-  nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
   Permission-Siri: 782f6152006ace9ea1103160104f2f9fff4193c2
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTRestart: 3915cac548a37703970941ca33de79a304b8b247
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
@@ -744,7 +593,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-camera: 1b52abea404d04e040edb3e74b7c5523c01a3089
-  react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
   react-native-netinfo: becc6dd2bb2335aa85a8adbaefc8e206125e6177
   react-native-receive-sharing-intent: feba0a332a07977549a85aa58b496eb44368366a
   react-native-safe-area-context: 955ecfce672683b495d9294d2f154a9ad1d9796b
@@ -762,7 +610,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
-  RealmJS: 6eb9fd885c5f3cd609b8b50282a5785cb4b48a18
+  RealmJS: efb0b7b52759192752ef8b6f061e2c3dd0ea14cd
   RNAppleAuthentication: 35162025d279d135a7be78b37d9f3e29dc786cfb
   RNCAsyncStorage: a52e45079e7df6cee380be6af676a8441d38c42a
   RNCClipboard: b238c952b0f8d5a6fa5ff96eacb9898608946540
@@ -770,8 +618,6 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
   RNDateTimePicker: a84d2b439666c9243d42a8396c588d4d1d36e3f3
   RNDeviceInfo: 6a3d16fce033f6979c4a6a41e62244d183e8c765
-  RNFBAnalytics: ffd9149d1fe0ecee0f2571b234d53c25349b9899
-  RNFBApp: e4321cad5dd23b43b3b4f0ca060300b9f85cb7a4
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNIap: 3b6882c6478c4ea3b0f79486566ec01b2c92fd24

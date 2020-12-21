@@ -3,9 +3,14 @@ import { observer } from 'mobx-react'
 import { View, H1, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 export class NoTodosPlaceholder extends Component {
+  componentDidMount() {
+    sharedAppStateStore.changeLoading(false)
+  }
+
   render() {
     return (
       <View

@@ -48,6 +48,7 @@ import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 @observer
 class AddTodoContent extends Component<{
@@ -131,11 +132,15 @@ class AddTodoContent extends Component<{
 
         titlesToFixOrder.push(getTitle(todo))
         if (vm.addOnTop) {
+          sharedAppStateStore.todosToTop.push(todo)
           addTodosOnTop.push(todo)
         } else {
           addTodosToBottom.push(todo)
         }
       } else if (vm.editedTodo) {
+        // first edit
+        sharedAppStateStore.editedTodo.tempSync = vm.editedTodo._tempSyncId!
+        sharedAppStateStore.editedTodo.beforeEdit = getTitle(vm.editedTodo)
         const oldTitle = getTitle(vm.editedTodo)
         const failed =
           isTodoOld(vm.editedTodo) &&
@@ -196,6 +201,7 @@ class AddTodoContent extends Component<{
             }
           }
         })
+        sharedAppStateStore.editedTodo.afterEdit = getTitle(vm.editedTodo)
         involvedTodos.push(vm.editedTodo)
         titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
       }

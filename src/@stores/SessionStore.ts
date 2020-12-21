@@ -1,16 +1,16 @@
-import { logEvent } from '@utils/logEvent'
-import { sharedTagStore } from '@stores/TagStore'
-import { daysBetween } from '@utils/daysBetween'
-import { hydrateStore } from '@utils/hydrated'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sockets } from '@utils/sockets'
-import { User, areUsersPartiallyEqual, SubscriptionStatus } from '@models/User'
-import { persist } from 'mobx-persist'
-import { observable, computed } from 'mobx'
-import { hydrate } from '@utils/hydrate'
+import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { setToken, removeToken, removePassword } from '@utils/keychain'
+import { sharedTagStore } from '@stores/TagStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { daysBetween } from '@utils/daysBetween'
+import { hydrate } from '@utils/hydrate'
+import { hydrateStore } from '@utils/hydrated'
+import { removePassword, removeToken, setToken } from '@utils/keychain'
+import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
+import { sockets } from '@utils/sockets'
+import { computed, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 class SessionStore {
   @persist('date') @observable appInstalled = new Date()
@@ -65,10 +65,11 @@ class SessionStore {
 
   hydrated = false
 
-  login(user: User) {
+  async login(user: User) {
     this.user = user
-    sockets.authorize()
+    await sockets.authorize()
     setToken(user.token)
+    await sockets.globalSync()
     logEvent('login_success')
   }
 
@@ -89,10 +90,11 @@ class SessionStore {
 
   onObjectsFromServer = async (
     user: User,
-    pushBack: (objects: User) => Promise<User>
+    pushBack: (objects: User) => Promise<User>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     user.updatedAt = new Date(user.updatedAt)
     user.createdAt = new Date(user.createdAt)
@@ -118,6 +120,7 @@ class SessionStore {
         this.user.updatedAt = user.updatedAt
       }
     }
+    completeSync()
   }
 }
 

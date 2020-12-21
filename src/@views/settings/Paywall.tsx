@@ -1,29 +1,29 @@
-import React, { Component } from 'react'
-import { Container, Content, Text, View } from 'native-base'
-import { sharedSessionStore } from '@stores/SessionStore'
+import { Button } from '@components/Button'
+import { Divider } from '@components/Divider'
+import { Spinner } from '@components/Spinner'
+import { TableItem } from '@components/TableItem'
 import { SubscriptionStatus } from '@models/User'
-import { observer } from 'mobx-react'
-import { observable } from 'mobx'
-import { Subscription } from 'react-native-iap'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { alertError, alertMessage } from '@utils/alert'
+import { translate } from '@utils/i18n'
+import { logEvent } from '@utils/logEvent'
+import { navigate } from '@utils/navigation'
 import {
   getProducts,
   purchase,
   purchaseListener,
   restorePurchases,
 } from '@utils/purchases'
-import { alertError, alertMessage } from '@utils/alert'
-import { sockets } from '@utils/sockets'
-import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
+import { sockets } from '@utils/sockets'
+import { observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { Container, Content, Text, View } from 'native-base'
+import React, { Component } from 'react'
+import { Linking, Platform } from 'react-native'
+import { Subscription } from 'react-native-iap'
 import RNRestart from 'react-native-restart'
-import { Platform, Linking } from 'react-native'
-import { navigate } from '@utils/navigation'
-import { useRoute, RouteProp } from '@react-navigation/native'
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
-import { TableItem } from '@components/TableItem'
-import { Divider } from '@components/Divider'
-import { logEvent } from '@utils/logEvent'
 
 class PaywallVM {
   @observable products: Subscription[] = []
@@ -52,8 +52,12 @@ class PaywallContent extends Component<{
         }
       )
     }
-    purchaseListener.success = () => {
-      sockets.globalSync()
+    purchaseListener.success = async () => {
+      try {
+        await sockets.globalSync()
+      } catch (err) {
+        alertError(err)
+      }
       alertMessage(
         translate('purchaseThankYou'),
         translate('purchaseThankYouText'),

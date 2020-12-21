@@ -38,6 +38,7 @@ import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
+import { setupAnalytics } from '@utils/logEvent'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -71,6 +72,7 @@ class App extends Component {
     refreshWidgetAndBadge()
     setupLinking()
     checkAndroidLaunchArgs()
+    setupAnalytics()
     AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') {
         checkAndroidLaunchArgs()

@@ -1,7 +1,6 @@
-import { observable } from 'mobx'
-import Realm from 'realm'
+import { MobxRealmModel } from '@utils/mobx-realm/model'
 
-export class Tag extends Realm.Object {
+export class Tag extends MobxRealmModel {
   public static schema = {
     name: 'Tag',
     properties: {
@@ -22,20 +21,24 @@ export class Tag extends Realm.Object {
     },
   }
 
-  @observable _tempSyncId?: string
-  @observable _id?: string
-  @observable createdAt = new Date()
-  @observable updatedAt = new Date()
-  @observable deleted!: boolean
+  objectSchema() {
+    return Tag.schema
+  }
 
-  @observable tag!: string
-  @observable color?: string
-  @observable numberOfUses!: number
+  _tempSyncId?: string
+  _id?: string
+  createdAt = new Date()
+  updatedAt = new Date()
+  deleted!: boolean
 
-  @observable epic?: boolean
-  @observable epicGoal?: number
-  @observable epicCompleted?: boolean
-  @observable epicPoints?: number
+  tag!: string
+  color?: string
+  numberOfUses!: number
+
+  epic?: boolean
+  epicGoal?: number
+  epicCompleted?: boolean
+  epicPoints?: number
 }
 
 export function cloneTag(tag: Tag) {
