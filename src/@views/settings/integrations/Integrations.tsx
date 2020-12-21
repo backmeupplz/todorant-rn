@@ -45,7 +45,7 @@ function ConnectAppleWatchTableItem() {
 
 @observer
 export class Integrations extends Component {
-  @observable googleCalendarLoading = false
+  @observable loading = false
 
   async googleCalendarTapped() {
     if (sharedSettingsStore.googleCalendarCredentials) {
@@ -65,7 +65,7 @@ export class Integrations extends Component {
         }
       )
     } else {
-      this.googleCalendarLoading = true
+      this.loading = true
       try {
         const url = (await rest.calendarAuthenticationURL()).data
         navigate('GoogleCalendar', {
@@ -75,13 +75,13 @@ export class Integrations extends Component {
       } catch (err) {
         alertError(err)
       } finally {
-        this.googleCalendarLoading = false
+        this.loading = false
       }
     }
   }
 
   authorizeGoogleCalendar = async (code: string) => {
-    this.googleCalendarLoading = true
+    this.loading = true
     try {
       const googleCredentials = (await rest.calendarAuthorize(code)).data
       sharedSettingsStore.googleCalendarCredentials = googleCredentials
@@ -90,7 +90,7 @@ export class Integrations extends Component {
     } catch (err) {
       alertError(err)
     } finally {
-      this.googleCalendarLoading = false
+      this.loading = false
     }
   }
 
@@ -112,7 +112,7 @@ export class Integrations extends Component {
             <Text {...sharedColors.textExtraStyle}>
               {translate('googleCalendar')}
             </Text>
-            {this.googleCalendarLoading ? (
+            {this.loading ? (
               <Spinner noPadding maxHeight={25} />
             ) : (
               <Text {...sharedColors.textExtraStyle}>
