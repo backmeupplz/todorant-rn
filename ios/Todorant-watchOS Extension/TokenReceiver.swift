@@ -11,6 +11,7 @@ import WatchConnectivity
 import KeychainAccess
 
 class TokenReceiver: NSObject, WCSessionDelegate {
+  
   var session: WCSession
   
   init(session: WCSession = .default){

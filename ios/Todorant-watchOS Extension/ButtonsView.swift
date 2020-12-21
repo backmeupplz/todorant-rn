@@ -18,9 +18,9 @@ struct ButtonsView: View {
     VStack {
       HStack {
         Button(action: {
-          self.store.updateCurrent()
           withAnimation {
             isShowingButtonsView = false
+            store.updateCurrent()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "refresh"))
@@ -32,11 +32,11 @@ struct ButtonsView: View {
             .execute { result in
               self.store.loading = false
               switch result {
-              case .success:
-                self.store.updateCurrent()
-              case .failure:
-                self.store.updateCurrent()
-                self.store.errorShown = true
+                case .success:
+                  self.store.updateCurrent()
+                case .failure:
+                  self.store.updateCurrent()
+                  self.store.errorShown = true
               }
             }
           withAnimation {
@@ -80,6 +80,7 @@ struct ButtonsView: View {
                 self.store.errorShown = true
               }
             }
+          WKInterfaceDevice.current().play(.success)
           withAnimation {
             isShowingButtonsView = false
           }
@@ -87,6 +88,8 @@ struct ButtonsView: View {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "done"))
         }
       }
+      Spacer()
     }
+    .padding(.top)
   }
 }
