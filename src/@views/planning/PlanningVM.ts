@@ -32,6 +32,38 @@ export interface TodoSection {
   order: number
 }
 
+// {} as {
+//   [index: string]: TodoSection
+// }
+
+function insertBetweenTitles(
+  originalObject: { [index: string]: TodoSection },
+  titleToInsert: string,
+  todoToBeInserted: Todo
+) {
+  const newObject = {} as { [index: string]: TodoSection }
+
+  const titleToInsertDate = new Date(titleToInsert)
+
+  let added = false
+
+  const allTitles = Object.keys(originalObject)
+  for (const titleIndex in allTitles) {
+    const indexedTitleDate = new Date(allTitles[titleIndex])
+
+    if (indexedTitleDate.getTime() > titleToInsertDate.getTime() && !added) {
+      newObject[titleToInsert] = {
+        order: 0,
+        section: titleToInsert,
+        data: [todoToBeInserted],
+      }
+      added = true
+    }
+    newObject[allTitles[titleIndex]] = originalObject[allTitles[titleIndex]]
+  }
+  return newObject
+}
+
 export class PlanningVM {
   @observable collapsedTitles = [] as string[]
 
@@ -112,11 +144,11 @@ export class PlanningVM {
           if (!this.initializedMap[afterEditTitle]) {
             const todoToAddIndex =
               modifications[0] !== undefined ? modifications[0] : insertions[0]
-            this.initializedMap[afterEditTitle] = {
-              order: 0,
-              section: afterEditTitle,
-              data: [todos[todoToAddIndex]],
-            }
+            this.initializedMap = insertBetweenTitles(
+              this.initializedMap,
+              afterEditTitle,
+              todos[todoToAddIndex]
+            )
           } else {
             if (frog) {
               for (const todoIndex in this.initializedMap[afterEditTitle]
@@ -159,11 +191,11 @@ export class PlanningVM {
             const todo = todos[insertIndex]
             const title = getTitle(todos[insertIndex])
             if (!this.initializedMap[title]) {
-              this.initializedMap[title] = {
-                order: 0,
-                section: title,
-                data: [mobxRealmObject(todo)],
-              }
+              this.initializedMap = insertBetweenTitles(
+                this.initializedMap,
+                title,
+                mobxRealmObject(todo)
+              )
               continue
             }
             if (todo.frog) {

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { sharedAppStateStore } from '@stores/AppStateStore'
+import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { Icon, Spinner, View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { InfoButton } from '@components/InfoButton'
@@ -30,7 +30,7 @@ export class PlanningHeaderRight extends Component {
           <View style={{ marginRight: 12, opacity: 0.5 }}>
             <Spinner color={sharedColors.textColor} size={28} />
           </View>
-        ) : (
+        ) : sharedAppStateStore.todoSection === TodoSectionType.planning ? (
           <TouchableOpacity
             onPress={() => {
               sharedAppStateStore.calendarEnabled = !sharedAppStateStore.calendarEnabled
@@ -43,6 +43,8 @@ export class PlanningHeaderRight extends Component {
               style={{ opacity: 0.5, marginRight: 12 }}
             />
           </TouchableOpacity>
+        ) : (
+          InfoButton('infoPlanning')()
         )}
       </View>
     )

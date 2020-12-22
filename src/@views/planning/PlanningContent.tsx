@@ -160,7 +160,7 @@ export class PlanningContent extends Component {
         )}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosArray.length ? (
-            <DraggableSectionListWithLoader
+            <DraggableSectionList
               onViewableItemsChanged={() => {
                 sharedAppStateStore.changeLoading(false)
               }}
@@ -227,7 +227,7 @@ export class PlanningContent extends Component {
             <NoTodosPlaceholder />
           )
         ) : (
-          <SectionListWithLoader
+          <SectionList
             onViewableItemsChanged={() => {
               sharedAppStateStore.changeLoading(false)
             }}
@@ -255,23 +255,6 @@ export class PlanningContent extends Component {
         <PlusButton />
       </Container>
     )
-  }
-}
-class DraggableSectionListWithLoader<T> extends DraggableSectionList<T> {
-  componentWillUpdate() {
-    sharedAppStateStore.changeLoading(false)
-  }
-  componentDidMount() {
-    sharedAppStateStore.changeLoading(false)
-  }
-}
-
-class SectionListWithLoader extends SectionList {
-  componentDidMount() {
-    sharedAppStateStore.changeLoading(false)
-  }
-  componentWillUpdate() {
-    sharedAppStateStore.changeLoading(false)
   }
 }
 
