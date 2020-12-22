@@ -32,10 +32,6 @@ export interface TodoSection {
   order: number
 }
 
-// {} as {
-//   [index: string]: TodoSection
-// }
-
 function insertBetweenTitles(
   originalObject: { [index: string]: TodoSection },
   titleToInsert: string,
@@ -48,8 +44,8 @@ function insertBetweenTitles(
   let added = false
 
   const allTitles = Object.keys(originalObject)
-  for (const titleIndex in allTitles) {
-    const indexedTitleDate = new Date(allTitles[titleIndex])
+  for (const titleIndex of allTitles) {
+    const indexedTitleDate = new Date(titleIndex)
 
     if (indexedTitleDate.getTime() > titleToInsertDate.getTime() && !added) {
       newObject[titleToInsert] = {
@@ -59,7 +55,7 @@ function insertBetweenTitles(
       }
       added = true
     }
-    newObject[allTitles[titleIndex]] = originalObject[allTitles[titleIndex]]
+    newObject[titleIndex] = originalObject[titleIndex]
   }
   return newObject
 }
