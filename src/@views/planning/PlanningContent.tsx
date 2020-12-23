@@ -177,7 +177,7 @@ export class PlanningContent extends Component {
               }
               layoutInvalidationKey={this.vm.theoreticalKey}
               keyExtractor={(item, index) => {
-                return `${index}-${item._tempSyncId || item}`
+                return `${index}-${item._tempSyncId || item._id || item}`
               }}
               onDragEnd={this.vm.onDragEnd}
               isSectionHeader={(a: any) => {
@@ -234,7 +234,7 @@ export class PlanningContent extends Component {
             refreshing={true}
             initialNumToRender={10}
             keyExtractor={(item, index) => {
-              return `${index}-${item._tempSyncId || item}`
+              return `${index}-${item._tempSyncId || item._id || item}`
             }}
             sections={this.vm.completedTodosArray}
             renderItem={({ item }) => (

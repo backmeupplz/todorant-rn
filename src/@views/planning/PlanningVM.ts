@@ -57,6 +57,13 @@ function insertBetweenTitles(
     }
     newObject[titleIndex] = originalObject[titleIndex]
   }
+  if (!added) {
+    newObject[titleToInsert] = {
+      order: 0,
+      section: titleToInsert,
+      data: [todoToBeInserted],
+    }
+  }
   return newObject
 }
 
@@ -88,8 +95,12 @@ export class PlanningVM {
     [index: string]: TodoSection
   }
 
+  arrOfDraggedTodos = {} as {
+    [index: string]: boolean
+  }
+
   private removeTodoFromArray = (todoArr: Todo[], todoId: string) => {
-    return todoArr.filter((todo) => todo._id !== todoId)
+    return todoArr.filter((todo) => (todo._tempSyncId || todo._id) !== todoId)
   }
 
   private insertTodo = (todoArr: Todo[], todoToBeInserted: Todo) => {
@@ -105,7 +116,10 @@ export class PlanningVM {
       }
     } else {
       // prevent inserting non-frog todo at frog place
-      if (todoArr[todoToBeInserted.order].frog) {
+      if (
+        todoArr[todoToBeInserted.order] &&
+        todoArr[todoToBeInserted.order].frog
+      ) {
         for (
           let frogCounter = todoToBeInserted.order;
           frogCounter < todoArr.length;
@@ -125,11 +139,12 @@ export class PlanningVM {
     if (!listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
         if (!changes || !todos) return
+        console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n изменения')
+        console.log(changes)
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
           this.lastArray = parse(stringify(todos))
         }
-
         if (this.draggingEdit) {
           this.draggingEdit = false
           return
@@ -138,11 +153,12 @@ export class PlanningVM {
         const insertions = changes.insertions
         const deletions = changes.deletions
         const modifications = changes.modifications
-
         if (modifications.length) {
           for (const modificactionIndex of modifications) {
             const modifiedTodo = todos[modificactionIndex]
-            const modifiedTempSync = modifiedTodo._id!
+            const modifiedTempSync =
+              modifiedTodo._tempSyncId || modifiedTodo._id
+            if (!modifiedTempSync) continue
             const previousDate = this.mapOfAllDates.get(modifiedTempSync)
             // remove todo if already exists
             if (previousDate) {
@@ -182,7 +198,9 @@ export class PlanningVM {
         if (deletions.length) {
           for (const deletionIndex of deletions) {
             if (!this.lastArray?.length) break
-            const deletedTempSync = this.lastArray[deletionIndex]._id!
+            const deletedTodo = this.lastArray[deletionIndex]
+            const deletedTempSync = deletedTodo._tempSyncId || deletedTodo._id
+            if (!deletedTempSync) continue
             const previousDate = this.mapOfAllDates.get(deletedTempSync)
             if (!previousDate || !this.initializedMap[previousDate]) continue
 
@@ -201,7 +219,9 @@ export class PlanningVM {
           for (const insertionIndex of insertions) {
             const todo = todos[insertionIndex]
             const title = getTitle(todo)
-            this.mapOfAllDates.set(todo._id!, title)
+            const syncId = todo._tempSyncId || todo._id
+            if (!syncId) continue
+            this.mapOfAllDates.set(syncId, title)
             if (!this.initializedMap[title]) {
               this.initializedMap = insertBetweenTitles(
                 this.initializedMap,
@@ -322,7 +342,10 @@ export class PlanningVM {
           data: [mobxRealmObject(realmTodo)],
         }
       }
-      if (realmTodo._id) this.mapOfAllDates.set(realmTodo._id, realmTodoTitle)
+      const id = realmTodo._tempSyncId || realmTodo._id
+      if (id) {
+        this.mapOfAllDates.set(id, realmTodoTitle)
+      }
     }
     if (!hashes) {
       if (completed) {
@@ -350,15 +373,16 @@ export class PlanningVM {
     sharedAppStateStore.changeLoading(true)
     if (sharedAppStateStore.activeDay) {
       const todo = dataArr[to] as Todo
-      if (todo && todo._id && sharedAppStateStore.activeDay) {
-        sharedAppStateStore.editedTodo.tempSync = todo._id
+      if (todo && todo._tempSyncId && sharedAppStateStore.activeDay) {
+        sharedAppStateStore.editedTodo.tempSync = todo._tempSyncId
         sharedAppStateStore.editedTodo.beforeEdit = getTitle(todo)
         realm.write(() => {
           todo.date = getDateDateString(sharedAppStateStore.activeDay!)
           todo.monthAndYear = getDateMonthAndYearString(
             sharedAppStateStore.activeDay!
           )
-          todo._exactDate = new Date(getTitle(todo))
+          const newTitle = getTitle(todo)
+          todo._exactDate = new Date(newTitle)
           todo.updatedAt = new Date()
         })
         sharedAppStateStore.editedTodo.afterEdit = getDateString(
