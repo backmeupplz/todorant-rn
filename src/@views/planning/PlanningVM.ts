@@ -23,6 +23,7 @@ export const getRealmTodos = (completed: boolean) => {
     .filtered(`completed = ${completed ? 'true' : 'false'}`)
     .sorted([
       ['_exactDate', completed],
+      ['frog', true],
       ['order', false],
     ])
 }
@@ -160,25 +161,20 @@ export class PlanningVM {
             const previousDate = this.mapOfAllDates.get(modifiedTempSync)
             // remove todo if already exists
             if (previousDate) {
-              // if there's no more todos in title, we're deleting it at all
-              if (!this.initializedMap[previousDate].data.length) {
-                this.initializedMap = omit(this.initializedMap, [previousDate])
-              } else {
-                // insert todo in title
-                this.initializedMap[
-                  previousDate
-                ].data = this.removeTodoFromArray(
-                  this.initializedMap[previousDate].data,
-                  modifiedTempSync
-                )
-              }
+              // insert todo in title
+              this.initializedMap[previousDate].data = this.removeTodoFromArray(
+                this.initializedMap[previousDate].data,
+                modifiedTempSync
+              )
             }
             // insertion part
             const newDate = getTitle(modifiedTodo)
-            this.initializedMap[newDate].data = this.removeTodoFromArray(
-              this.initializedMap[newDate].data,
-              modifiedTempSync
-            )
+            if (this.initializedMap[newDate]) {
+              this.initializedMap[newDate].data = this.removeTodoFromArray(
+                this.initializedMap[newDate].data,
+                modifiedTempSync
+              )
+            }
             // if title doesnt exist, we're creating a new one
             if (!this.initializedMap[newDate]) {
               this.initializedMap = insertBetweenTitles(
@@ -201,11 +197,6 @@ export class PlanningVM {
             if (!deletedTempSync) continue
             const previousDate = this.mapOfAllDates.get(deletedTempSync)
             if (!previousDate || !this.initializedMap[previousDate]) continue
-
-            if (!this.initializedMap[previousDate].data.length) {
-              this.initializedMap = omit(this.initializedMap, [previousDate])
-              continue
-            }
             this.initializedMap[previousDate].data = this.removeTodoFromArray(
               this.initializedMap[previousDate].data,
               deletedTempSync
@@ -230,6 +221,15 @@ export class PlanningVM {
             }
             this.insertTodo(this.initializedMap[title].data, todo)
           }
+        }
+        const titlesToOmit: string[] = []
+        Object.keys(this.initializedMap).forEach((key) => {
+          if (!this.initializedMap[key].data.length) {
+            titlesToOmit.push(key)
+          }
+        })
+        if (titlesToOmit.length) {
+          this.initializedMap = omit(this.initializedMap, titlesToOmit)
         }
         this.key = String(Date.now())
         this.key = String(Date.now())
@@ -318,10 +318,6 @@ export class PlanningVM {
     completed: boolean,
     hashes?: boolean
   ) {
-    realmTodos = realmTodos.slice().sort((a, b) => {
-      if (a.frog && !b.frog) return -1
-      return 1
-    }) as Todo[]
     const map = {} as { [index: string]: TodoSection }
 
     let currentTitle: string | undefined = undefined

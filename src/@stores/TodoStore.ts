@@ -51,7 +51,10 @@ class TodoStore {
               7
             )}" && (date == "" || date == null)`
       )
-      .sorted('order')
+      .sorted([
+        ['frog', true],
+        ['order', false],
+      ])
   }
 
   todosForDate = (title: string) => {
@@ -74,12 +77,8 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    const todayTodos = this.todayUncompletedTodos
-    return todayTodos.length
-      ? todayTodos.slice().sort((a, b) => {
-          if (a.frog && !b.frog) return -1
-          return 1
-        })[0] || undefined
+    return this.todayUncompletedTodos.length
+      ? this.todayUncompletedTodos[0]
       : undefined
   }
 
@@ -98,7 +97,7 @@ class TodoStore {
     }
   }
 
-  @computed get isPlanningRequired() {
+  get isPlanningRequired() {
     const todayWithTimezoneOffset = new Date()
     todayWithTimezoneOffset.setMinutes(
       todayWithTimezoneOffset.getMinutes() -
@@ -120,11 +119,9 @@ class TodoStore {
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
       1
     }:000`
-    const todos = realm
-      .objects(Todo)
-      .filtered(
-        `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
-      )
+    const todos = this.allTodos.filtered(
+      `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+    )
     return !!todos.length
   }
 
