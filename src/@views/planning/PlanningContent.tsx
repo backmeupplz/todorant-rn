@@ -131,7 +131,7 @@ export class PlanningContent extends Component {
                 onActiveDayChange={(day: Date) => {
                   sharedAppStateStore.activeDay = day
                 }}
-                dark={sharedSettingsStore.colorMode === 'dark'}
+                dark={sharedColors.isDark}
                 onPress={(day: Date) => {}}
                 emptyDays={(emptyDays: any) => {}}
                 activeCoordinates={sharedAppStateStore.activeCoordinates}
