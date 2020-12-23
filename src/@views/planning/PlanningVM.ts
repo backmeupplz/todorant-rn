@@ -88,6 +88,26 @@ export class PlanningVM {
     [index: string]: TodoSection
   }
 
+  private removeTodoFromArray = (todoArr: Todo[], todoId: string) => {
+    return todoArr.filter((todo) => todo._id !== todoId)
+  }
+
+  private insertTodo = (todoArr: Todo[], todoToBeInserted: Todo) => {
+    if (todoToBeInserted.frog) {
+      const length = todoArr.length
+      for (let i = 0; i < length; i++) {
+        const lastTodo = todoArr[i]
+        if (lastTodo.frog) {
+          continue
+        }
+        todoArr.splice(i, 0, todoToBeInserted)
+        break
+      }
+    } else {
+      todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
+    }
+  }
+
   constructor() {
     if (!listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
@@ -106,27 +126,33 @@ export class PlanningVM {
         const deletions = changes.deletions
         const modifications = changes.modifications
 
-        const newModifications = changes.newModifications
-        const oldModifications = changes.oldModifications
-
-        let skipDeleting = false
-        let skipInserting = false
-
         if (modifications.length) {
           for (const modificactionIndex of modifications) {
             const modifiedTodo = todos[modificactionIndex]
             const modifiedTempSync = modifiedTodo._id!
             const previousDate = this.mapOfAllDates.get(modifiedTempSync)
+            // remove todo if already exists
             if (previousDate) {
+              // if there's no more todos in title, we're deleting it at all
               if (!this.initializedMap[previousDate].data.length) {
                 this.initializedMap = omit(this.initializedMap, [previousDate])
               } else {
-                this.initializedMap[previousDate].data = this.initializedMap[
+                // insert todo in title
+                this.initializedMap[
                   previousDate
-                ].data.filter((todo) => todo._id !== modifiedTempSync)
+                ].data = this.removeTodoFromArray(
+                  this.initializedMap[previousDate].data,
+                  modifiedTempSync
+                )
               }
             }
+            // insertion part
             const newDate = getTitle(modifiedTodo)
+            this.initializedMap[newDate].data = this.removeTodoFromArray(
+              this.initializedMap[newDate].data,
+              modifiedTempSync
+            )
+            // if title doesnt exist, we're creating a new one
             if (!this.initializedMap[newDate]) {
               this.initializedMap = insertBetweenTitles(
                 this.initializedMap,
@@ -134,11 +160,7 @@ export class PlanningVM {
                 mobxRealmObject(modifiedTodo)
               )
             } else {
-              this.initializedMap[newDate].data.splice(
-                modifiedTodo.order,
-                0,
-                modifiedTodo
-              )
+              this.insertTodo(this.initializedMap[newDate].data, modifiedTodo)
             }
             this.mapOfAllDates.set(modifiedTempSync, newDate)
           }
@@ -149,15 +171,16 @@ export class PlanningVM {
             if (!this.lastArray?.length) break
             const deletedTempSync = this.lastArray[deletionIndex]._id!
             const previousDate = this.mapOfAllDates.get(deletedTempSync)
-            if (!previousDate) continue
-            if (!this.initializedMap[previousDate]) continue
+            if (!previousDate || !this.initializedMap[previousDate]) continue
+
             if (!this.initializedMap[previousDate].data.length) {
               this.initializedMap = omit(this.initializedMap, [previousDate])
               continue
             }
-            this.initializedMap[previousDate].data = this.initializedMap[
-              previousDate
-            ].data.filter((todo) => todo._id !== deletedTempSync)
+            this.initializedMap[previousDate].data = this.removeTodoFromArray(
+              this.initializedMap[previousDate].data,
+              deletedTempSync
+            )
           }
         }
 
@@ -174,37 +197,7 @@ export class PlanningVM {
               )
               continue
             }
-            if (todo.frog) {
-              // frogs
-              let lastOrder = -1
-              const length = this.initializedMap[title].data.length
-              for (let i = 0; i < length; i++) {
-                const lastTodo = this.initializedMap[title].data[i]
-                if (lastTodo.frog) {
-                  lastOrder = lastTodo.order
-                  continue
-                }
-                this.initializedMap[title].data.splice(i, 0, todo)
-                break
-              }
-            } else {
-              if (sharedAppStateStore.todosToTop.length) {
-                const todoIndexInStore = sharedAppStateStore.todosToTop.findIndex(
-                  (tempTodo) => tempTodo._id === todo._id
-                )
-                let firstNonFrog = 0
-                for (let frogCounter in this.initializedMap[title].data) {
-                  if (!this.initializedMap[title].data[frogCounter].frog) {
-                    firstNonFrog = Number(frogCounter)
-                    break
-                  }
-                }
-                this.initializedMap[title].data.splice(firstNonFrog, 0, todo)
-                sharedAppStateStore.todosToTop.splice(todoIndexInStore, 1)
-              } else {
-                this.initializedMap[title].data.splice(todo.order, 0, todo)
-              }
-            }
+            this.insertTodo(this.initializedMap[title].data, todo)
           }
         }
         this.key = String(Date.now())
@@ -294,8 +287,8 @@ export class PlanningVM {
     completed: boolean,
     hashes?: boolean
   ) {
-    realmTodos = realmTodos.slice().sort((a) => {
-      if (a.frog) return -1
+    realmTodos = realmTodos.slice().sort((a, b) => {
+      if (a.frog && !b.frog) return -1
       return 1
     }) as Todo[]
     const map = {} as { [index: string]: TodoSection }
