@@ -166,14 +166,14 @@ class TodoStore {
           .filtered(`updatedAt > ${realmTimestampFromDate(this.lastSyncDate)}`)
       : realm.objects(Todo)
     // Pull
-    for (const serverTodo of todosChangedOnServer) {
-      if (!serverTodo._id) {
-        continue
-      }
-      let localTodo = this.getTodoById(serverTodo._id)
-      if (localTodo) {
-        if (localTodo.updatedAt < serverTodo.updatedAt) {
-          realm.write(() => {
+    realm.write(() => {
+      for (const serverTodo of todosChangedOnServer) {
+        if (!serverTodo._id) {
+          continue
+        }
+        let localTodo = this.getTodoById(serverTodo._id)
+        if (localTodo) {
+          if (localTodo.updatedAt < serverTodo.updatedAt) {
             if (localTodo) {
               Object.assign(localTodo, serverTodo)
               if (localTodo.encrypted) {
@@ -183,23 +183,21 @@ class TodoStore {
                 ? new Date(getTitle(localTodo))
                 : new Date()
             }
-          })
-        }
-      } else {
-        const newTodo = {
-          ...serverTodo,
-          _exactDate: serverTodo.monthAndYear
-            ? new Date(getTitle(serverTodo))
-            : new Date(),
-        }
-        if (newTodo.encrypted) {
-          newTodo.text = decrypt(newTodo.text)
-        }
-        realm.write(() => {
+          }
+        } else {
+          const newTodo = {
+            ...serverTodo,
+            _exactDate: serverTodo.monthAndYear
+              ? new Date(getTitle(serverTodo))
+              : new Date(),
+          }
+          if (newTodo.encrypted) {
+            newTodo.text = decrypt(newTodo.text)
+          }
           realm.create(Todo, newTodo as Todo)
-        })
+        }
       }
-    }
+    })
     // Push
     const todosToPush = todosChangedLocally.filter((todo) => {
       if (!todo._id) {

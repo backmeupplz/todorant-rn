@@ -1,5 +1,5 @@
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { clone, cloneDeep, omit } from 'lodash'
+import { clone, cloneDeep, last, omit } from 'lodash'
 import { getTitle, Todo } from '@models/Todo'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { realm } from '@utils/realm'
@@ -13,6 +13,7 @@ import { sockets } from '@utils/sockets'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
+import { parse, stringify } from 'flatted'
 
 export const getRealmTodos = (completed: boolean) => {
   return realm
@@ -46,7 +47,6 @@ function insertBetweenTitles(
   const allTitles = Object.keys(originalObject)
   for (const titleIndex of allTitles) {
     const indexedTitleDate = new Date(titleIndex)
-
     if (indexedTitleDate.getTime() > titleToInsertDate.getTime() && !added) {
       newObject[titleToInsert] = {
         order: 0,
@@ -59,6 +59,8 @@ function insertBetweenTitles(
   }
   return newObject
 }
+
+let listenerInitialized = false
 
 export class PlanningVM {
   @observable collapsedTitles = [] as string[]
@@ -87,12 +89,14 @@ export class PlanningVM {
   }
 
   constructor() {
-    if (!this.listenerInitialized) {
+    if (!listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
         if (!changes || !todos) return
+        console.log('\n\n\n\n\n вот изменения. ты доволен, кекесус?')
+        console.log(changes)
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
-          this.lastArray = todos.slice()
+          this.lastArray = parse(stringify(todos))
         }
 
         if (this.draggingEdit) {
@@ -100,92 +104,70 @@ export class PlanningVM {
           return
         }
 
-        let skipDeletion = false
-        let skipInsertion = false
-
         const insertions = changes.insertions
         const deletions = changes.deletions
         const modifications = changes.modifications
 
-        if (sharedAppStateStore.skipping) {
-          // task skip
-          const title = new Date().toISOString().slice(0, 10)
-          const tempTodayDataArr = [...this.initializedMap[title].data]
-          const firstTodo = tempTodayDataArr[0]
-          this.initializedMap[title].data.splice(0, 1)
-          this.initializedMap[title].data.splice(
-            this.initializedMap[title].data.length,
-            0,
-            firstTodo
-          )
-          sharedAppStateStore.skipping = false
-        }
+        const newModifications = changes.newModifications
+        const oldModifications = changes.oldModifications
 
-        if (Object.keys(sharedAppStateStore.editedTodo).length) {
-          skipInsertion = true
-          skipDeletion = true
-          const tempSyncId = sharedAppStateStore.editedTodo.tempSync
-          const beforeEditTitle = sharedAppStateStore.editedTodo.beforeEdit
-          const afterEditTitle = sharedAppStateStore.editedTodo.afterEdit
-          const todoIndexInBeforeSection = this.initializedMap[
-            beforeEditTitle
-          ].data.findIndex((todo) => todo._tempSyncId === tempSyncId)
-          const frog = this.initializedMap[beforeEditTitle].data[
-            todoIndexInBeforeSection
-          ].frog
-          this.initializedMap[beforeEditTitle].data.splice(
-            todoIndexInBeforeSection,
-            1
-          )
-          if (!this.initializedMap[afterEditTitle]) {
-            const todoToAddIndex =
-              modifications[0] !== undefined ? modifications[0] : insertions[0]
-            this.initializedMap = insertBetweenTitles(
-              this.initializedMap,
-              afterEditTitle,
-              todos[todoToAddIndex]
-            )
-          } else {
-            if (frog) {
-              for (const todoIndex in this.initializedMap[afterEditTitle]
-                .data) {
-                const indexInNumber = Number(todoIndex)
-                if (
-                  this.initializedMap[afterEditTitle].data[indexInNumber].frog
-                )
-                  continue
-                const todoToAddIndex =
-                  modifications[0] !== undefined
-                    ? modifications[0]
-                    : insertions[0]
-                this.initializedMap[afterEditTitle].data.splice(
-                  indexInNumber,
-                  0,
-                  todos[todoToAddIndex]
-                )
-                break
+        let skipDeleting = false
+        let skipInserting = false
+
+        if (modifications.length) {
+          for (const modificactionIndex of modifications) {
+            const modifiedTodo = todos[modificactionIndex]
+            const modifiedTempSync = modifiedTodo._id!
+            const previousDate = this.mapOfAllDates.get(modifiedTempSync)
+            if (previousDate) {
+              if (!this.initializedMap[previousDate].data.length) {
+                this.initializedMap = omit(this.initializedMap, [previousDate])
+              } else {
+                this.initializedMap[previousDate].data = this.initializedMap[
+                  previousDate
+                ].data.filter((todo) => todo._id !== modifiedTempSync)
               }
+            }
+            const newDate = getTitle(modifiedTodo)
+            if (!this.initializedMap[newDate]) {
+              this.initializedMap = insertBetweenTitles(
+                this.initializedMap,
+                newDate,
+                mobxRealmObject(modifiedTodo)
+              )
             } else {
-              const todoToAddIndex =
-                modifications[0] !== undefined
-                  ? modifications[0]
-                  : insertions[0]
-              this.initializedMap[afterEditTitle].data.push(
-                todos[todoToAddIndex]
+              this.initializedMap[newDate].data.splice(
+                modifiedTodo.order,
+                0,
+                modifiedTodo
               )
             }
+            this.mapOfAllDates.set(modifiedTempSync, newDate)
           }
-          if (!this.initializedMap[beforeEditTitle].data.length) {
-            this.initializedMap = omit(this.initializedMap, [beforeEditTitle])
-          }
-          sharedAppStateStore.editedTodo = {} as any
         }
 
-        if (insertions.length && !skipInsertion) {
-          // insertions
-          for (const insertIndex of insertions) {
-            const todo = todos[insertIndex]
-            const title = getTitle(todos[insertIndex])
+        if (deletions.length) {
+          for (const deletionIndex of deletions) {
+            if (!this.lastArray?.length) break
+            const deletedTempSync = this.lastArray[deletionIndex]._id!
+            const previousDate = this.mapOfAllDates.get(deletedTempSync)
+            if (!previousDate) continue
+            if (!this.initializedMap[previousDate]) continue
+            if (!this.initializedMap[previousDate].data.length) {
+              this.initializedMap = omit(this.initializedMap, [previousDate])
+              continue
+            }
+            this.initializedMap[previousDate].data = this.initializedMap[
+              previousDate
+            ].data.filter((todo) => todo._id !== deletedTempSync)
+          }
+        }
+
+        if (insertions.length) {
+          for (const insertionIndex of insertions) {
+            const todo = todos[insertionIndex]
+            const title = getTitle(todo)
+            this.mapOfAllDates.set(todo._id!, title)
             if (!this.initializedMap[title]) {
               this.initializedMap = insertBetweenTitles(
                 this.initializedMap,
@@ -204,16 +186,13 @@ export class PlanningVM {
                   lastOrder = lastTodo.order
                   continue
                 }
-                if (todo._tempSyncId) {
-                  this.todosAndIndexes[todo._tempSyncId] = i
-                }
                 this.initializedMap[title].data.splice(i, 0, todo)
                 break
               }
             } else {
               if (sharedAppStateStore.todosToTop.length) {
                 const todoIndexInStore = sharedAppStateStore.todosToTop.findIndex(
-                  (tempTodo) => tempTodo._tempSyncId === todo._tempSyncId
+                  (tempTodo) => tempTodo._id === todo._id
                 )
                 let firstNonFrog = 0
                 for (let frogCounter in this.initializedMap[title].data) {
@@ -224,38 +203,17 @@ export class PlanningVM {
                 }
                 this.initializedMap[title].data.splice(firstNonFrog, 0, todo)
                 sharedAppStateStore.todosToTop.splice(todoIndexInStore, 1)
-                skipDeletion = true
               } else {
-                const length = this.initializedMap[title].data.length
-                this.initializedMap[title].data.splice(length, 0, todo)
+                this.initializedMap[title].data.splice(todo.order, 0, todo)
               }
             }
           }
         }
-
-        if (deletions.length && !skipDeletion) {
-          for (const deletedIndex of deletions) {
-            if (!this.lastArray) break
-            const todo = this.lastArray[deletedIndex]
-            const title = getTitle(todo)
-            let todoIndexInMap: number | undefined
-            this.initializedMap[title].data.find((searchTodo, index) => {
-              if (searchTodo._tempSyncId === todo._tempSyncId)
-                todoIndexInMap = index
-            })
-            if (todoIndexInMap !== undefined) {
-              if (this.initializedMap[title].data.length <= 1) {
-                this.initializedMap = omit(this.initializedMap, [title])
-              } else {
-                this.initializedMap[title].data.splice(todoIndexInMap, 1)
-              }
-            }
-          }
-        }
-        this.lastArray = todos.slice()
         this.key = String(Date.now())
+        this.key = String(Date.now())
+        this.lastArray = parse(stringify(todos))
       })
-      this.listenerInitialized = true
+      listenerInitialized = true
     }
   }
 
@@ -331,6 +289,8 @@ export class PlanningVM {
     }
   }
 
+  mapOfAllDates = new Map<string, string>()
+
   mapFromRealmTodos(
     realmTodos: Realm.Results<Todo> | Todo[],
     completed: boolean,
@@ -358,6 +318,7 @@ export class PlanningVM {
           data: [mobxRealmObject(realmTodo)],
         }
       }
+      if (realmTodo._id) this.mapOfAllDates.set(realmTodo._id, realmTodoTitle)
     }
     if (!hashes) {
       if (completed) {
@@ -385,8 +346,8 @@ export class PlanningVM {
     sharedAppStateStore.changeLoading(true)
     if (sharedAppStateStore.activeDay) {
       const todo = dataArr[to] as Todo
-      if (todo && todo._tempSyncId && sharedAppStateStore.activeDay) {
-        sharedAppStateStore.editedTodo.tempSync = todo._tempSyncId
+      if (todo && todo._id && sharedAppStateStore.activeDay) {
+        sharedAppStateStore.editedTodo.tempSync = todo._id
         sharedAppStateStore.editedTodo.beforeEdit = getTitle(todo)
         realm.write(() => {
           todo.date = getDateDateString(sharedAppStateStore.activeDay!)
