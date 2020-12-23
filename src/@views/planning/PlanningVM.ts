@@ -104,7 +104,20 @@ export class PlanningVM {
         break
       }
     } else {
-      todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
+      // prevent inserting non-frog todo at frog place
+      if (todoArr[todoToBeInserted.order].frog) {
+        for (
+          let frogCounter = todoToBeInserted.order;
+          frogCounter < todoArr.length;
+          frogCounter++
+        ) {
+          if (todoArr[frogCounter].frog) continue
+          todoArr.splice(frogCounter, 0, todoToBeInserted)
+          break
+        }
+      } else {
+        todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
+      }
     }
   }
 
