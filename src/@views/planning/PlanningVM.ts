@@ -92,8 +92,6 @@ export class PlanningVM {
     if (!listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
         if (!changes || !todos) return
-        console.log('\n\n\n\n\n вот изменения. ты доволен, кекесус?')
-        console.log(changes)
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
           this.lastArray = parse(stringify(todos))
