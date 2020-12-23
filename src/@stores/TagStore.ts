@@ -60,28 +60,26 @@ class TagStore {
         )
       : this.allTags
     // Pull
-    for (const serverTag of tagsChangedOnServer) {
-      if (!serverTag._id) {
-        continue
-      }
-      let localTag = this.getTagById(serverTag._id)
-      if (localTag) {
-        if (localTag.updatedAt < serverTag.updatedAt) {
-          realm.write(() => {
+    realm.write(() => {
+      for (const serverTag of tagsChangedOnServer) {
+        if (!serverTag._id) {
+          continue
+        }
+        let localTag = this.getTagById(serverTag._id)
+        if (localTag) {
+          if (localTag.updatedAt < serverTag.updatedAt) {
             if (localTag) {
               Object.assign(localTag, serverTag)
             }
-          })
-        }
-      } else {
-        const newTag = {
-          ...serverTag,
-        }
-        realm.write(() => {
+          }
+        } else {
+          const newTag = {
+            ...serverTag,
+          }
           realm.create('Tag', newTag)
-        })
+        }
       }
-    }
+    })
     // Push
     const tagsToPush = tagsChangedLocally.filter((tag) => {
       if (!tag._id) {
@@ -166,9 +164,9 @@ class TagStore {
     const epics = this.allTags
       .filtered('epic = true')
       .filter((epic) => tagsInTodo.indexOf(epic.tag) > -1)
-    epics.forEach((epic) => {
-      const dbtag = this.getTagById(epic._id)
-      realm.write(() => {
+    realm.write(() => {
+      epics.forEach((epic) => {
+        const dbtag = this.getTagById(epic._id)
         if (!dbtag || !dbtag.epicGoal) {
           return
         }

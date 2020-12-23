@@ -96,92 +96,90 @@ class AddTodoContent extends Component<{
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
-    for (const vm of this.vms) {
-      if (this.screenType === AddTodoScreenType.add) {
-        const todo = {
-          updatedAt: new Date(),
-          createdAt: new Date(),
-          text: vm.text,
-          completed: vm.completed,
-          frog: vm.frog,
-          frogFails: 0,
-          skipped: false,
-          order: vm.order,
-          monthAndYear:
-            vm.monthAndYear || getDateMonthAndYearString(new Date()),
-          deleted: false,
-          date: vm.date,
-          time: vm.time,
-          encrypted: !!sharedSessionStore.encryptionKey,
+    realm.write(() => {
+      for (const vm of this.vms) {
+        if (this.screenType === AddTodoScreenType.add) {
+          const todo = {
+            updatedAt: new Date(),
+            createdAt: new Date(),
+            text: vm.text,
+            completed: vm.completed,
+            frog: vm.frog,
+            frogFails: 0,
+            skipped: false,
+            order: vm.order,
+            monthAndYear:
+              vm.monthAndYear || getDateMonthAndYearString(new Date()),
+            deleted: false,
+            date: vm.date,
+            time: vm.time,
+            encrypted: !!sharedSessionStore.encryptionKey,
 
-          _tempSyncId: uuid(),
-        } as Todo
-        todo._exactDate = new Date(getTitle(todo))
+            _tempSyncId: uuid(),
+          } as Todo
+          todo._exactDate = new Date(getTitle(todo))
 
-        if (todo.completed) {
-          sharedTagStore.incrementEpicPoints(todo.text)
-          // Increment hero store
-          sharedHeroStore.points++
-          sharedHeroStore.updatedAt = new Date()
-        }
+          if (todo.completed) {
+            sharedTagStore.incrementEpicPoints(todo.text)
+            // Increment hero store
+            sharedHeroStore.points++
+            sharedHeroStore.updatedAt = new Date()
+          }
 
-        realm.write(() => {
           const dbtodo = realm.create<Todo>('Todo', todo)
           involvedTodos.push(dbtodo)
-        })
 
-        titlesToFixOrder.push(getTitle(todo))
-        if (vm.addOnTop) {
-          sharedAppStateStore.todosToTop.push(todo)
-          addTodosOnTop.push(todo)
-        } else {
-          addTodosToBottom.push(todo)
-        }
-      } else if (vm.editedTodo) {
-        // first edit
-        sharedAppStateStore.editedTodo.tempSync = vm.editedTodo._tempSyncId!
-        sharedAppStateStore.editedTodo.beforeEdit = getTitle(vm.editedTodo)
-        const oldTitle = getTitle(vm.editedTodo)
-        const failed =
-          isTodoOld(vm.editedTodo) &&
-          (vm.editedTodo.date !== vm.date ||
-            vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
-          !vm.editedTodo.completed
+          titlesToFixOrder.push(getTitle(todo))
+          if (vm.addOnTop) {
+            sharedAppStateStore.todosToTop.push(todo)
+            addTodosOnTop.push(todo)
+          } else {
+            addTodosToBottom.push(todo)
+          }
+        } else if (vm.editedTodo) {
+          // first edit
+          sharedAppStateStore.editedTodo.tempSync = vm.editedTodo._tempSyncId!
+          sharedAppStateStore.editedTodo.beforeEdit = getTitle(vm.editedTodo)
+          const oldTitle = getTitle(vm.editedTodo)
+          const failed =
+            isTodoOld(vm.editedTodo) &&
+            (vm.editedTodo.date !== vm.date ||
+              vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
+            !vm.editedTodo.completed
 
-        if (
-          vm.editedTodo.frogFails > 2 &&
-          (vm.editedTodo.monthAndYear !==
-            (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
-            vm.editedTodo.date !== vm.date)
-        ) {
-          setTimeout(() => {
-            Alert.alert(translate('error'), translate('breakdownRequest'), [
-              {
-                text: translate('cancel'),
-                style: 'cancel',
-              },
-              {
-                text: translate('breakdownButton'),
-                onPress: () => {
-                  goBack()
-                  navigate('BreakdownTodo', {
-                    breakdownTodo: vm.editedTodo,
-                  })
+          if (
+            vm.editedTodo.frogFails > 2 &&
+            (vm.editedTodo.monthAndYear !==
+              (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
+              vm.editedTodo.date !== vm.date)
+          ) {
+            setTimeout(() => {
+              Alert.alert(translate('error'), translate('breakdownRequest'), [
+                {
+                  text: translate('cancel'),
+                  style: 'cancel',
                 },
-              },
-            ])
-          }, 100)
-          return
-        }
+                {
+                  text: translate('breakdownButton'),
+                  onPress: () => {
+                    goBack()
+                    navigate('BreakdownTodo', {
+                      breakdownTodo: vm.editedTodo,
+                    })
+                  },
+                },
+              ])
+            }, 100)
+            return
+          }
 
-        if (vm.completed) {
-          sharedTagStore.incrementEpicPoints(vm.text)
-          // Increment hero store
-          sharedHeroStore.points++
-          sharedHeroStore.updatedAt = new Date()
-        }
+          if (vm.completed) {
+            sharedTagStore.incrementEpicPoints(vm.text)
+            // Increment hero store
+            sharedHeroStore.points++
+            sharedHeroStore.updatedAt = new Date()
+          }
 
-        realm.write(() => {
           if (!vm.editedTodo) {
             return
           }
@@ -200,12 +198,12 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
-        })
-        sharedAppStateStore.editedTodo.afterEdit = getTitle(vm.editedTodo)
-        involvedTodos.push(vm.editedTodo)
-        titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
+          sharedAppStateStore.editedTodo.afterEdit = getTitle(vm.editedTodo)
+          involvedTodos.push(vm.editedTodo)
+          titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
+        }
       }
-    }
+    })
     if (this.breakdownTodo) {
       const breakdownTodoTitle = getTitle(this.breakdownTodo)
 

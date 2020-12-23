@@ -22,40 +22,38 @@ export async function fixOrder(
     .map((t) => t._id || t._tempSyncId)
     .filter((v) => !!v) as string[]
   // Fix every title
-  for (const titleInvolved of titlesInvolvedSet) {
-    const todos = sharedTodoStore.todosForDate(titleInvolved)
-    // Go over completed
-    const orderedCompleted = Array.from(
-      todos.filtered(`completed = true`)
-    ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-    realm.write(() => {
+  realm.write(() => {
+    for (const titleInvolved of titlesInvolvedSet) {
+      const todos = sharedTodoStore.todosForDate(titleInvolved)
+      // Go over completed
+      const orderedCompleted = Array.from(
+        todos.filtered(`completed = true`)
+      ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
       orderedCompleted.forEach((todo, i) => {
         if (todo.order !== i) {
           todo.order = i
           todo.updatedAt = new Date()
         }
       })
-    })
-    // Go over uncompleted
-    const orderedUncompleted = Array.from(
-      todos.filtered(`completed = false`)
-    ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-    // Fix exact times
-    if (sharedSettingsStore.preserveOrderByTime) {
-      while (!isTimeSorted(orderedUncompleted)) {
-        fixOneTodoTime(orderedUncompleted, timeTodosToYield)
+      // Go over uncompleted
+      const orderedUncompleted = Array.from(
+        todos.filtered(`completed = false`)
+      ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
+      // Fix exact times
+      if (sharedSettingsStore.preserveOrderByTime) {
+        while (!isTimeSorted(orderedUncompleted)) {
+          fixOneTodoTime(orderedUncompleted, timeTodosToYield)
+        }
       }
-    }
-    // Save order
-    realm.write(() => {
+      // Save order
       orderedUncompleted.forEach((todo, i) => {
         if (todo.order !== i) {
           todo.order = i
           todo.updatedAt = new Date()
         }
       })
-    })
-  }
+    }
+  })
   // Refresh
   sharedTodoStore.refreshTodos()
   // Sync
