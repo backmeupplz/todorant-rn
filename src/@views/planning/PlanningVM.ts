@@ -37,7 +37,8 @@ export interface TodoSection {
 function insertBetweenTitles(
   originalObject: { [index: string]: TodoSection },
   titleToInsert: string,
-  todoToBeInserted: Todo
+  todoToBeInserted: Todo,
+  completed: boolean
 ) {
   const newObject = {} as { [index: string]: TodoSection }
 
@@ -48,7 +49,12 @@ function insertBetweenTitles(
   const allTitles = Object.keys(originalObject)
   for (const titleIndex of allTitles) {
     const indexedTitleDate = new Date(titleIndex)
-    if (indexedTitleDate.getTime() > titleToInsertDate.getTime() && !added) {
+    if (
+      (completed
+        ? indexedTitleDate.getTime() < titleToInsertDate.getTime()
+        : indexedTitleDate.getTime() > titleToInsertDate.getTime()) &&
+      !added
+    ) {
       newObject[titleToInsert] = {
         order: 0,
         section: titleToInsert,
@@ -80,8 +86,10 @@ export class PlanningVM {
 
   listenerInitialized = false
   lastArray: undefined | Todo[]
+  lastCompletedArray: undefined | Todo[]
 
   lastArrayInitialized = false
+  lastCompletedArrayInitialized = false
 
   draggingEdit = false
 
@@ -146,126 +154,178 @@ export class PlanningVM {
     }
   }
 
-  constructor() {
-    if (!listenerInitialized) {
-      this.uncompletedRealmTodos.addListener((todos, changes) => {
-        if (!changes || !todos) return
-        console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-        console.log(changes)
-        if (!this.lastArrayInitialized) {
-          this.lastArrayInitialized = true
-          this.lastArray = parse(stringify(todos))
-        }
-        if (this.draggingEdit) {
-          this.draggingEdit = false
-          return
-        }
-
-        const insertions = changes.insertions
-        const deletions = changes.deletions
-        const modifications = changes.modifications
-        if (modifications.length) {
-          for (const modificactionIndex of modifications) {
-            const modifiedTodo = todos[modificactionIndex]
-            const modifiedTempSync =
-              modifiedTodo._tempSyncId || modifiedTodo._id
-            if (!modifiedTempSync) continue
-            const previousDate = this.mapOfAllDates.get(modifiedTempSync)
-            // remove todo if already exists
-            if (previousDate && this.initializedMap[previousDate]) {
-              // insert todo in title
-              this.initializedMap[previousDate].data = this.removeTodoFromArray(
-                this.initializedMap[previousDate].data,
-                modifiedTempSync
-              )
-            }
-            // insertion part
-            const newDate = getTitle(modifiedTodo)
-            if (this.initializedMap[newDate]) {
-              this.initializedMap[newDate].data = this.removeTodoFromArray(
-                this.initializedMap[newDate].data,
-                modifiedTempSync
-              )
-            }
-            // if title doesnt exist, we're creating a new one
-            if (!this.initializedMap[newDate]) {
-              this.initializedMap = insertBetweenTitles(
-                this.initializedMap,
-                newDate,
-                mobxRealmObject(modifiedTodo)
-              )
-            } else {
-              this.insertTodo(this.initializedMap[newDate].data, modifiedTodo)
-            }
-            this.mapOfAllDates.set(modifiedTempSync, newDate)
-          }
-        }
-
-        if (deletions.length) {
-          for (const deletionIndex of deletions) {
-            if (!this.lastArray?.length) break
-            const deletedTodo = this.lastArray[deletionIndex]
-            const deletedTempSync = deletedTodo._tempSyncId || deletedTodo._id
-            if (!deletedTempSync) continue
-            const previousDate = this.mapOfAllDates.get(deletedTempSync)
-            if (!previousDate || !this.initializedMap[previousDate]) continue
-            this.initializedMap[previousDate].data = this.removeTodoFromArray(
-              this.initializedMap[previousDate].data,
-              deletedTempSync
-            )
-          }
-        }
-
-        if (insertions.length) {
-          for (const insertionIndex of insertions) {
-            const todo = todos[insertionIndex]
-            const title = getTitle(todo)
-            const syncId = todo._tempSyncId || todo._id
-            if (!syncId) continue
-            this.mapOfAllDates.set(syncId, title)
-            if (!this.initializedMap[title]) {
-              this.initializedMap = insertBetweenTitles(
-                this.initializedMap,
-                title,
-                mobxRealmObject(todo)
-              )
-              continue
-            }
-            this.insertTodo(this.initializedMap[title].data, todo)
-          }
-        }
-        const titlesToOmit: string[] = []
-        Object.keys(this.initializedMap).forEach((key) => {
-          if (!this.initializedMap[key].data.length) {
-            titlesToOmit.push(key)
-          }
-        })
-        if (titlesToOmit.length) {
-          this.initializedMap = omit(this.initializedMap, titlesToOmit)
-        }
-        this.key = String(Date.now())
-        this.key = String(Date.now())
-        this.lastArray = parse(stringify(todos))
-      })
-      listenerInitialized = true
+  private eventChanger = (
+    todos: Realm.Collection<Todo>,
+    changes: Realm.CollectionChangeSet,
+    lastArrayInitName: string,
+    lastArrayName: string,
+    mapOfAllDatesName: string,
+    initializedMapName: string,
+    keyName: string,
+    completed: boolean,
+    thisArg: any
+  ) => {
+    if (!thisArg[lastArrayInitName]) {
+      thisArg[lastArrayInitName] = true
+      thisArg[lastArrayName] = parse(stringify(todos))
     }
+    if (!completed && thisArg['draggingEdit']) {
+      thisArg['draggingEdit'] = false
+      return
+    }
+
+    const { insertions, deletions, modifications } = changes
+
+    if (modifications.length) {
+      for (const modificactionIndex of modifications) {
+        const modifiedTodo = todos[modificactionIndex]
+        const modifiedTempSync = modifiedTodo._tempSyncId || modifiedTodo._id
+        if (!modifiedTempSync) continue
+        const previousDate = thisArg[mapOfAllDatesName].get(modifiedTempSync)
+        // remove todo if already exists
+        if (previousDate && thisArg[initializedMapName][previousDate]) {
+          // insert todo in title
+          thisArg[initializedMapName][
+            previousDate
+          ].data = this.removeTodoFromArray(
+            thisArg[initializedMapName][previousDate].data,
+            modifiedTempSync
+          )
+        }
+        // insertion part
+        const newDate = getTitle(modifiedTodo)
+        if (thisArg[initializedMapName][newDate]) {
+          thisArg[initializedMapName][newDate].data = this.removeTodoFromArray(
+            thisArg[initializedMapName][newDate].data,
+            modifiedTempSync
+          )
+        }
+        // if title doesnt exist, we're creating a new one
+        if (!thisArg[initializedMapName][newDate]) {
+          thisArg[initializedMapName] = insertBetweenTitles(
+            thisArg[initializedMapName],
+            newDate,
+            mobxRealmObject(modifiedTodo),
+            completed
+          )
+        } else {
+          this.insertTodo(
+            thisArg[initializedMapName][newDate].data,
+            modifiedTodo
+          )
+        }
+        thisArg[mapOfAllDatesName].set(modifiedTempSync, newDate)
+      }
+    }
+
+    if (deletions.length) {
+      for (const deletionIndex of deletions) {
+        if (!thisArg[lastArrayName]?.length) break
+        const deletedTodo = thisArg[lastArrayName][deletionIndex]
+        const deletedTempSync = deletedTodo._tempSyncId || deletedTodo._id
+        if (!deletedTempSync) continue
+        const previousDate = thisArg[mapOfAllDatesName].get(deletedTempSync)
+        if (!previousDate || !thisArg[initializedMapName][previousDate])
+          continue
+        thisArg[initializedMapName][
+          previousDate
+        ].data = this.removeTodoFromArray(
+          thisArg[initializedMapName][previousDate].data,
+          deletedTempSync
+        )
+      }
+    }
+
+    if (insertions.length) {
+      for (const insertionIndex of insertions) {
+        const todo = todos[insertionIndex]
+        const title = getTitle(todo)
+        const syncId = todo._tempSyncId || todo._id
+        if (!syncId) continue
+        thisArg[mapOfAllDatesName].set(syncId, title)
+        if (!thisArg[initializedMapName][title]) {
+          thisArg[initializedMapName] = insertBetweenTitles(
+            thisArg[initializedMapName],
+            title,
+            mobxRealmObject(todo),
+            completed
+          )
+          continue
+        }
+        this.insertTodo(thisArg[initializedMapName][title].data, todo)
+      }
+    }
+
+    const titlesToOmit: string[] = []
+    Object.keys(thisArg[initializedMapName]).forEach((key) => {
+      if (!thisArg[initializedMapName][key].data.length) {
+        titlesToOmit.push(key)
+      }
+    })
+    if (titlesToOmit.length) {
+      thisArg[initializedMapName] = omit(
+        thisArg[initializedMapName],
+        titlesToOmit
+      )
+    }
+    thisArg[keyName] = String(Date.now())
+    thisArg[keyName] = String(Date.now())
+    thisArg[lastArrayName] = parse(stringify(todos))
   }
 
-  @observable key = ''
+  constructor() {
+    this.completedRealmTodos.addListener((todos, changes) => {
+      if (!changes || !todos) return
+      if (
+        ![...changes.insertions, ...changes.deletions, ...changes.modifications]
+          .length
+      )
+        return
 
-  @computed get completedTodosMap() {
-    return this.mapFromRealmTodos(this.completedRealmTodos, true)
+      this.eventChanger(
+        todos,
+        changes,
+        'lastCompletedArrayInitialized',
+        'lastCompletedArray',
+        'completedMapOfAllDates',
+        'initializedCompletedMap',
+        'completedKey',
+        true,
+        this
+      )
+    })
+    this.uncompletedRealmTodos.addListener((todos, changes) => {
+      if (!changes || !todos) return
+      this.eventChanger(
+        todos,
+        changes,
+        'lastArrayInitialized',
+        'lastArray',
+        'mapOfAllDates',
+        'initializedMap',
+        'uncompletedKey',
+        false,
+        this
+      )
+    })
   }
 
-  @computed get theoreticalKey() {
-    return this.key
+  @observable uncompletedKey = ''
+  @observable completedKey = ''
+
+  @computed get uncompletedTrackingKey() {
+    return this.uncompletedKey
+  }
+
+  @computed get completedTrackingKey() {
+    return this.completedKey
   }
 
   todosAndIndexes = {} as any
 
   @computed get uncompletedTodosMap() {
     console.log('Got uncompletedTodosMap')
-    const key = this.theoreticalKey
+    const key = this.uncompletedTrackingKey
     return this.initialized
       ? this.initializedMap
       : this.mapFromRealmTodos(this.uncompletedRealmTodos, false)
@@ -273,10 +333,16 @@ export class PlanningVM {
 
   @computed get uncompletedTodosArray() {
     console.log('Got uncompletedTodosArray')
-    const key = this.theoreticalKey
+    const key = this.uncompletedTrackingKey
     return Object.keys(this.uncompletedTodosMap).map(
       (key) => this.uncompletedTodosMap[key]
     )
+  }
+
+  @computed get completedTodosMap() {
+    return this.initializedCompleted
+      ? this.initializedCompletedMap
+      : this.mapFromRealmTodos(this.completedRealmTodos, true)
   }
 
   @computed get completedTodosArray() {
@@ -324,6 +390,7 @@ export class PlanningVM {
   }
 
   mapOfAllDates = new Map<string, string>()
+  completedMapOfAllDates = new Map<string, string>()
 
   mapFromRealmTodos(
     realmTodos: Realm.Results<Todo> | Todo[],
@@ -350,7 +417,11 @@ export class PlanningVM {
       }
       const id = realmTodo._tempSyncId || realmTodo._id
       if (id) {
-        this.mapOfAllDates.set(id, realmTodoTitle)
+        if (completed) {
+          this.completedMapOfAllDates.set(id, realmTodoTitle)
+        } else {
+          this.mapOfAllDates.set(id, realmTodoTitle)
+        }
       }
     }
     if (!hashes) {
@@ -417,8 +488,8 @@ export class PlanningVM {
         (dataArr[from].frog && dataArr[to].frog && !dataArr[to - 1].frog)
 
       if (!draggingFrogs && halfFrog) {
-        this.key = String(Date.now())
-        this.key = String(Date.now())
+        this.uncompletedKey = String(Date.now())
+        this.uncompletedKey = String(Date.now())
         sharedAppStateStore.changeLoading(false)
         return
       }
@@ -502,8 +573,8 @@ export class PlanningVM {
       this.initializedMap = map
       this.draggingEdit = true
     }
-    this.key = String(Date.now())
-    this.key = String(Date.now())
+    this.uncompletedKey = String(Date.now())
+    this.uncompletedKey = String(Date.now())
     sharedAppStateStore.changeLoading(false)
     sockets.todoSyncManager.sync()
   }
