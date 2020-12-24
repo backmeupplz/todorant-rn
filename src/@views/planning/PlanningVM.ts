@@ -107,13 +107,18 @@ export class PlanningVM {
   private insertTodo = (todoArr: Todo[], todoToBeInserted: Todo) => {
     if (todoToBeInserted.frog) {
       const length = todoArr.length
+      let added = false
       for (let i = 0; i < length; i++) {
         const lastTodo = todoArr[i]
         if (lastTodo.frog) {
           continue
         }
         todoArr.splice(i, 0, todoToBeInserted)
+        added = true
         break
+      }
+      if (!added) {
+        todoArr.splice(length, 0, todoToBeInserted)
       }
     } else {
       // prevent inserting non-frog todo at frog place
@@ -140,6 +145,8 @@ export class PlanningVM {
     if (!listenerInitialized) {
       this.uncompletedRealmTodos.addListener((todos, changes) => {
         if (!changes || !todos) return
+        console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+        console.log(changes)
         if (!this.lastArrayInitialized) {
           this.lastArrayInitialized = true
           this.lastArray = parse(stringify(todos))
@@ -392,34 +399,23 @@ export class PlanningVM {
       let sectionCounter = -1
       let randomOtherCounter = 0
 
-      const draggingFrogs = dataArr[from].frog && dataArr[to].frog
-      const halfFrog = dataArr[from].frog || dataArr[to].frog || dataArr[to + 1]
+      const draggingFrogs =
+        dataArr[from].frog &&
+        dataArr[to].frog &&
+        (dataArr[from - 1].frog || !dataArr[from - 1].text)
+
+      const halfFrog =
+        dataArr[from].frog ||
+        dataArr[to].frog ||
+        (dataArr[to + 1] && dataArr[to + 1].frog) ||
+        (dataArr[from - 1] && dataArr[from - 1].frog) ||
+        (dataArr[from].frog && dataArr[to].frog && !dataArr[to - 1].frog)
 
       if (!draggingFrogs && halfFrog) {
-        if (dataArr[to + 1].frog && !dataArr[to].frog) {
-          this.key = String(Date.now())
-          return
-        }
-        if (dataArr[to].frog) {
-          if (!dataArr[to - 1].frog && !dataArr[to + 1].frog) {
-            this.key = String(Date.now())
-            return
-          }
-          if (dataArr[to - 1].frog) {
-            this.key = String(Date.now())
-            return
-          }
-        }
-        if (dataArr[from].frog) {
-          if (dataArr[from - 1].frog) {
-            this.key = String(Date.now())
-            return
-          }
-          if (dataArr[to - 1].frog) {
-            this.key = String(Date.now())
-            return
-          }
-        }
+        this.key = String(Date.now())
+        this.key = String(Date.now())
+        sharedAppStateStore.changeLoading(false)
+        return
       }
 
       const lo = Math.min(from, to)
