@@ -126,6 +126,7 @@ export class PlanningVM {
         todoArr[todoToBeInserted.order] &&
         todoArr[todoToBeInserted.order].frog
       ) {
+        let added = false
         for (
           let frogCounter = todoToBeInserted.order;
           frogCounter < todoArr.length;
@@ -133,7 +134,11 @@ export class PlanningVM {
         ) {
           if (todoArr[frogCounter].frog) continue
           todoArr.splice(frogCounter, 0, todoToBeInserted)
+          added = true
           break
+        }
+        if (!added) {
+          todoArr.splice(todoArr.length, 0, todoToBeInserted)
         }
       } else {
         todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
