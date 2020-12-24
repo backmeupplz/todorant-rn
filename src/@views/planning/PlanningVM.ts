@@ -160,7 +160,7 @@ export class PlanningVM {
             if (!modifiedTempSync) continue
             const previousDate = this.mapOfAllDates.get(modifiedTempSync)
             // remove todo if already exists
-            if (previousDate) {
+            if (previousDate && this.initializedMap[previousDate]) {
               // insert todo in title
               this.initializedMap[previousDate].data = this.removeTodoFromArray(
                 this.initializedMap[previousDate].data,
