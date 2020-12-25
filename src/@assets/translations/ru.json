@@ -262,7 +262,8 @@
     "repeatPassword": "Повторите пароль"
   },
   "settingsObject": {
-    "duplicateTagInBreakdown": "Копировать хештеги при разбивке"
+    "duplicateTagInBreakdown": "Копировать хештеги при разбивке",
+    "showMoreByDefault": "Сразу показывать расширенные настройки добавления задачи"
   },
   "level": "Уровень",
   "points": "очков",

@@ -36,6 +36,7 @@ class SettingsStore {
   @persist @observable newTodosGoFirst?: boolean
   @persist @observable preserveOrderByTime?: boolean
   @persist @observable duplicateTagInBreakdown?: boolean
+  @persist @observable showMoreByDefault?: boolean
   @persist @observable language?: string
   @persist('object', GoogleCalendarCredentials)
   @observable
@@ -84,6 +85,7 @@ class SettingsStore {
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
+      this.showMoreByDefault = settings.showMoreByDefault
       this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       if (settings.updatedAt) {
@@ -96,6 +98,7 @@ class SettingsStore {
           newTodosGoFirst: this.newTodosGoFirst,
           preserveOrderByTime: this.preserveOrderByTime,
           duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+          showMoreByDefault: this.showMoreByDefault,
           language: this.language,
           googleCalendarCredentials: this.googleCalendarCredentials,
         })
@@ -105,6 +108,7 @@ class SettingsStore {
         this.newTodosGoFirst = pushedSettings.newTodosGoFirst
         this.preserveOrderByTime = pushedSettings.preserveOrderByTime
         this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+        this.showMoreByDefault = pushedSettings.showMoreByDefault
         this.language = pushedSettings.language
         this.googleCalendarCredentials =
           pushedSettings.googleCalendarCredentials
@@ -122,6 +126,7 @@ class SettingsStore {
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+        showMoreByDefault: this.showMoreByDefault,
         language: this.language,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
@@ -131,6 +136,7 @@ class SettingsStore {
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+      this.showMoreByDefault = pushedSettings.showMoreByDefault
       this.language = pushedSettings.language
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
@@ -149,6 +155,7 @@ class SettingsStore {
       this.newTodosGoFirst = settings.newTodosGoFirst
       this.preserveOrderByTime = settings.preserveOrderByTime
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
+      this.showMoreByDefault = settings.showMoreByDefault
       this.language = settings.language
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
@@ -162,6 +169,7 @@ class SettingsStore {
         newTodosGoFirst: this.newTodosGoFirst,
         preserveOrderByTime: this.preserveOrderByTime,
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
+        showMoreByDefault: this.showMoreByDefault,
         language: this.language,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
@@ -171,6 +179,7 @@ class SettingsStore {
       this.newTodosGoFirst = pushedSettings.newTodosGoFirst
       this.preserveOrderByTime = pushedSettings.preserveOrderByTime
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
+      this.showMoreByDefault = pushedSettings.showMoreByDefault
       this.language = pushedSettings.language
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
@@ -187,6 +196,7 @@ class SettingsStore {
     this.newTodosGoFirst = undefined
     this.preserveOrderByTime = undefined
     this.duplicateTagInBreakdown = undefined
+    this.showMoreByDefault = undefined
     this.language = undefined
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
