@@ -262,7 +262,8 @@
     "repeatPassword": "Repeat password"
   },
   "settingsObject": {
-    "duplicateTagInBreakdown": "Copy hashtags during a breakdown"
+    "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
+    "showMoreByDefault": "Show more when adding todos by default"
   },
   "level": "Level",
   "points": "points",

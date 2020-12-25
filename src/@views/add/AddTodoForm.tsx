@@ -579,7 +579,8 @@ export class AddTodoForm extends Component<{
                 initialView={moment().add(1, 'month')}
               />
             )}
-            {this.props.vm.showMore && <TimeRow vm={this.props.vm} />}
+            {(sharedSettingsStore.showMoreByDefault ||
+              this.props.vm.showMore) && <TimeRow vm={this.props.vm} />}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
                 textColor={sharedColors.textColor}
@@ -615,16 +616,18 @@ export class AddTodoForm extends Component<{
                 this.props.vm.completed = value
               }}
             />
-            {this.props.vm.showMore && !this.props.vm.editedTodo && (
-              <SwitchRow
-                name={translate('addTodoOnTop')}
-                value={this.props.vm.addOnTop}
-                onValueChange={(value) => {
-                  this.props.vm.addOnTop = value
-                }}
-              />
-            )}
-            {!this.props.vm.showMore && (
+            {(sharedSettingsStore.showMoreByDefault ||
+              this.props.vm.showMore) &&
+              !this.props.vm.editedTodo && (
+                <SwitchRow
+                  name={translate('addTodoOnTop')}
+                  value={this.props.vm.addOnTop}
+                  onValueChange={(value) => {
+                    this.props.vm.addOnTop = value
+                  }}
+                />
+              )}
+            {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
