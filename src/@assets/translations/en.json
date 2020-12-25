@@ -263,7 +263,7 @@
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
-    "showMoreByDefault": "Show more add todo settings by default"
+    "showMoreByDefault": "Show more when adding todos by default"
   },
   "level": "Level",
   "points": "points",
