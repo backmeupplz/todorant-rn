@@ -16,12 +16,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       CLKComplicationDescriptor(
         identifier: "complication",
         displayName: "Todorant",
-        supportedFamilies: CLKComplicationFamily.allCases
+        supportedFamilies: [CLKComplicationFamily.graphicCircular]
       ),
-      // Multiple complication support can be added here with more descriptors
     ]
-
-    // Call the handler with the currently supported complication descriptors
     handler(descriptors)
   }
 
@@ -49,11 +46,36 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
   // MARK: - Timeline Population
 
   func getCurrentTimelineEntry(
-    for _: CLKComplication,
+    for complication: CLKComplication,
     withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void
   ) {
-    // Call the handler with the current timeline entry
-    handler(nil)
+    if let template = getComplicationTemplate(for: complication, using: Date()) {
+      let entry = CLKComplicationTimelineEntry(
+        date: Date(),
+        complicationTemplate: template
+      )
+      handler(entry)
+    } else {
+      handler(nil)
+    }
+  }
+
+  func getComplicationTemplate(for complication: CLKComplication,
+                               using date: Date) -> CLKComplicationTemplate?
+  {
+    switch complication.family {
+    case .graphicCircular:
+      guard let image = UIImage(named: "Complication/Graphic Circular") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicCircularImage(
+        imageProvider: loadedImageProvider
+      )
+      
+    default:
+      return nil
+    }
   }
 
   func getTimelineEntries(
@@ -69,10 +91,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
   // MARK: - Sample Templates
 
   func getLocalizableSampleTemplate(
-    for _: CLKComplication,
+    for complication: CLKComplication,
     withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
   ) {
-    // This method will be called once per supported complication, and the results will be cached
-    handler(nil)
+    let template = getComplicationTemplate(for: complication, using: Date())
+    if let t = template {
+      handler(t)
+    } else {
+      handler(nil)
+    }
   }
 }
