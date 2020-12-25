@@ -96,6 +96,7 @@ class AddTodoContent extends Component<{
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
+    const completedAtCreation: Todo[] = []
     realm.write(() => {
       for (const vm of this.vms) {
         if (this.screenType === AddTodoScreenType.add) {
@@ -120,10 +121,7 @@ class AddTodoContent extends Component<{
           todo._exactDate = new Date(getTitle(todo))
 
           if (todo.completed) {
-            sharedTagStore.incrementEpicPoints(todo.text)
-            // Increment hero store
-            sharedHeroStore.points++
-            sharedHeroStore.updatedAt = new Date()
+            completedAtCreation.push(todo)
           }
 
           const dbtodo = realm.create<Todo>('Todo', todo)
@@ -204,6 +202,13 @@ class AddTodoContent extends Component<{
         }
       }
     })
+    completedAtCreation.forEach((todo) => {
+      sharedTagStore.incrementEpicPoints(todo.text)
+      // Increment hero store
+      sharedHeroStore.points++
+      sharedHeroStore.updatedAt = new Date()
+    })
+    completedAtCreation.splice(0, completedAtCreation.length)
     if (this.breakdownTodo) {
       const breakdownTodoTitle = getTitle(this.breakdownTodo)
 

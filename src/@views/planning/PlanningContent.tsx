@@ -22,8 +22,9 @@ import { sockets } from '@utils/sockets'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { alertConfirm, alertMessage } from '@utils/alert'
-import { getDateMonthAndYearString } from '@utils/time'
+import { getDateMonthAndYearString, getDateString } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class PlanningContent extends Component {
@@ -132,7 +133,9 @@ export class PlanningContent extends Component {
                   sharedAppStateStore.activeDay = day
                 }}
                 dark={sharedColors.isDark}
-                onPress={(day: Date) => {}}
+                onPress={(day: Date) => {
+                  navigate('AddTodo', { date: getDateString(day) })
+                }}
                 emptyDays={(emptyDays: any) => {}}
                 activeCoordinates={sharedAppStateStore.activeCoordinates}
                 month={this.currentMonth}
@@ -175,7 +178,7 @@ export class PlanningContent extends Component {
                   ? this.vm.allTodosAndHash
                   : this.vm.uncompletedTodosArray
               }
-              layoutInvalidationKey={this.vm.theoreticalKey}
+              layoutInvalidationKey={this.vm.uncompletedTrackingKey}
               keyExtractor={(item, index) => {
                 return `${index}-${item._tempSyncId || item._id || item}`
               }}
