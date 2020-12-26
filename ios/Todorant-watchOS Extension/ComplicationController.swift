@@ -16,7 +16,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       CLKComplicationDescriptor(
         identifier: "complication",
         displayName: "Todorant",
-        supportedFamilies: [CLKComplicationFamily.graphicCircular]
+        supportedFamilies: [
+          CLKComplicationFamily.graphicCircular,
+          CLKComplicationFamily.circularSmall,
+          CLKComplicationFamily.graphicCorner,
+          CLKComplicationFamily.graphicExtraLarge,
+          CLKComplicationFamily.utilitarianSmall,
+        ]
       ),
     ]
     handler(descriptors)
@@ -61,7 +67,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
   }
 
   func getComplicationTemplate(for complication: CLKComplication,
-                               using date: Date) -> CLKComplicationTemplate?
+                               using _: Date) -> CLKComplicationTemplate?
   {
     switch complication.family {
     case .graphicCircular:
@@ -73,6 +79,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         imageProvider: loadedImageProvider
       )
       
+    case .graphicExtraLarge:
+      guard let image = UIImage(named: "Complication/Graphic Extra Large") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicExtraLargeCircularImage(
+        imageProvider: loadedImageProvider
+      )
+
     default:
       return nil
     }
