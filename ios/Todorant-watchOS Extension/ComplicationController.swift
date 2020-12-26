@@ -18,10 +18,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         displayName: "Todorant",
         supportedFamilies: [
           CLKComplicationFamily.graphicCircular,
-          CLKComplicationFamily.circularSmall,
-          CLKComplicationFamily.graphicCorner,
+          //CLKComplicationFamily.graphicCorner,
           CLKComplicationFamily.graphicExtraLarge,
-          CLKComplicationFamily.utilitarianSmall,
+          //CLKComplicationFamily.utilitarianSmall,
         ]
       ),
     ]
