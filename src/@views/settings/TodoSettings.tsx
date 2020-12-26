@@ -186,6 +186,15 @@ export class TodoSettings extends Component {
             sockets.settingsSyncManager.sync()
           }}
         />
+        <TextAndSwitch
+          title="settingsObject.showMoreByDefault"
+          value={sharedSettingsStore.showMoreByDefault}
+          onValueChange={(value) => {
+            sharedSettingsStore.showMoreByDefault = value
+            sharedSettingsStore.updatedAt = new Date()
+            sockets.settingsSyncManager.sync()
+          }}
+        />
         <TableItem
           onPress={() => {
             ActionSheet.show(

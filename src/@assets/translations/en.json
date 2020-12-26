@@ -163,8 +163,6 @@
   "sync": "Synchronization",
   "infoTags": "This is the list of all the hashtags you have used. If you don't see anything — go on, create a task with a #hastag in its text, it is the only way to add hashtags to this list.\n\nIf you want to change a hashtags color or to delete it, tap on it. Don't worry, hashtags are separate from todos — doing anything on this screen won't affect your todos. Well, changing colors can make your todos look cooler.",
   "changeColor": "Change color",
-  "editText": "Edit hashtag text",
-  "editName": "New hashtag text",
   "changeColorToDefault": "Reset color",
   "colorMode": "Color mode",
   "dark": "Dark",
@@ -262,7 +260,8 @@
     "repeatPassword": "Repeat password"
   },
   "settingsObject": {
-    "duplicateTagInBreakdown": "Copy hashtags during a breakdown"
+    "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
+    "showMoreByDefault": "Show more when adding todos by default"
   },
   "level": "Level",
   "points": "points",
@@ -348,5 +347,7 @@
   "fixTasksSingular": "Fix task",
   "changeTasksSingular": "Change task",
   "addedTask": "Added task",
-  "edit": "Edit"
+  "edit": "Edit",
+  "editText": "Edit hashtag text",
+  "editName": "New hashtag text"
 }
