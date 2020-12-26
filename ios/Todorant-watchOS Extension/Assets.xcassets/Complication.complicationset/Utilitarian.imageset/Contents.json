@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "todorant-40x40.png",
+      "filename" : "todorant-40.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : "<=145"

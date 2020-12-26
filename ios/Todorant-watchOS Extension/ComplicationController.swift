@@ -17,10 +17,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         identifier: "complication",
         displayName: "Todorant",
         supportedFamilies: [
+          CLKComplicationFamily.circularSmall,
           CLKComplicationFamily.graphicCircular,
-          //CLKComplicationFamily.graphicCorner,
+          CLKComplicationFamily.graphicCorner,
           CLKComplicationFamily.graphicExtraLarge,
-          //CLKComplicationFamily.utilitarianSmall,
+          CLKComplicationFamily.utilitarianSmall,
         ]
       ),
     ]
@@ -69,6 +70,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                                using _: Date) -> CLKComplicationTemplate?
   {
     switch complication.family {
+    
+    case .circularSmall:
+      guard let image = UIImage(named: "Complication/Circular") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
+      return CLKComplicationTemplateCircularSmallSimpleImage(
+        imageProvider: loadedImageProvider
+      )
+      
     case .graphicCircular:
       guard let image = UIImage(named: "Complication/Graphic Circular") else {
         fatalError("Unable to load an image")
@@ -78,12 +89,30 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         imageProvider: loadedImageProvider
       )
       
+    case .graphicCorner:
+      guard let image = UIImage(named: "Complication/Graphic Corner") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicCornerCircularImage(
+        imageProvider: loadedImageProvider
+      )
+      
     case .graphicExtraLarge:
       guard let image = UIImage(named: "Complication/Graphic Extra Large") else {
         fatalError("Unable to load an image")
       }
       let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
       return CLKComplicationTemplateGraphicExtraLargeCircularImage(
+        imageProvider: loadedImageProvider
+      )
+      
+    case .utilitarianSmall:
+      guard let image = UIImage(named: "Complication/Utilitarian") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
+      return CLKComplicationTemplateUtilitarianSmallSquare(
         imageProvider: loadedImageProvider
       )
 
