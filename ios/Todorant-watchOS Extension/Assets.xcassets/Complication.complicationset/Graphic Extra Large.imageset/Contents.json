@@ -1,21 +1,25 @@
 {
   "images" : [
     {
+      "filename" : "todorant-206.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : "<=145"
     },
     {
+      "filename" : "todorant-240.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : ">161"
     },
     {
+      "filename" : "todorant-241.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : ">145"
     },
     {
+      "filename" : "todorant-264.png",
       "idiom" : "watch",
       "scale" : "2x",
       "screen-width" : ">183"
