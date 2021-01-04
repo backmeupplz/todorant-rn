@@ -30,7 +30,11 @@ export class RealmTodosData {
     this.todoSectionMap = todoSectionMap
     this.todoIdToDateMap = todoIdToDateMap
 
-    this.todos.addListener(this.realmListener)
+    this.todos.addListener(
+      (todos: Realm.Collection<Todo>, changes: Realm.CollectionChangeSet) => {
+        this.realmListener.apply(this, [todos, changes])
+      }
+    )
   }
 
   private realmListener(
