@@ -7,6 +7,7 @@ import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
 import { Collection } from 'realm'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 export class RealmTodosData {
   completed: boolean
@@ -22,6 +23,28 @@ export class RealmTodosData {
     return Object.keys(this.todoSectionMap).map(
       (key) => this.todoSectionMap[key]
     )
+  }
+
+  get allTodosAndHash() {
+    if (sharedAppStateStore.hash.length) {
+      const hashes = sharedAppStateStore.hash
+        .map((hash) => `text CONTAINS[c] "${hash}"`)
+        .join(' AND ')
+      const neededTodos = this.todos.filtered(hashes)
+      const { todoSectionMap } = mapsFromRealmTodos(neededTodos)
+      return Object.keys(todoSectionMap).map((key) => todoSectionMap[key])
+    } else if (sharedAppStateStore.searchQuery) {
+      sharedAppStateStore.changeLoading(true)
+      const neededTodos = this.todos.filtered(
+        `${`text CONTAINS[c] "${sharedAppStateStore.searchQuery}"`}`
+      )
+      const { todoSectionMap } = mapsFromRealmTodos(neededTodos)
+      const queryTodosMap = Object.keys(todoSectionMap).map(
+        (key) => todoSectionMap[key]
+      )
+      setTimeout(() => sharedAppStateStore.changeLoading(false))
+      return queryTodosMap
+    }
   }
 
   constructor(completed: boolean) {

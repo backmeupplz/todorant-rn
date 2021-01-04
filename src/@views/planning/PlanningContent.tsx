@@ -182,7 +182,7 @@ export class PlanningContent extends Component {
               data={
                 sharedAppStateStore.hash.length ||
                 sharedAppStateStore.searchQuery[0]
-                  ? this.vm.allTodosAndHash
+                  ? this.vm.uncompletedTodosData.allTodosAndHash
                   : this.vm.uncompletedTodosData.todosArray
               }
               layoutInvalidationKey={
