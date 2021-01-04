@@ -1,5 +1,5 @@
-import React, { Component, PureComponent } from 'react'
-import { Button, Container, Text, View, Spinner, Icon } from 'native-base'
+import React, { Component } from 'react'
+import { Container, Text, View, Icon } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
@@ -13,16 +13,11 @@ import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import { PlanningDateHeader } from './PlanningDateHeader'
 import { SectionList, StyleSheet, TouchableOpacity } from 'react-native'
-import uuid from 'uuid'
 import { Month } from '@upacyxou/react-native-month'
 import { observable } from 'mobx'
-import { getTitle, Todo } from '@models/Todo'
-import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { alertConfirm, alertMessage } from '@utils/alert'
-import { getDateMonthAndYearString, getDateString } from '@utils/time'
+import { getDateString } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
 
@@ -58,94 +53,106 @@ export class PlanningContent extends Component {
     this.currentY.setValue(yAx - this.todoHeight)
   }
 
+  renderPlanningRequiredMessage() {
+    return (
+      sharedTodoStore.isPlanningRequired &&
+      sharedAppStateStore.todoSection !== TodoSectionType.completed && (
+        <Text
+          style={{
+            backgroundColor: 'dodgerblue',
+            color: 'white',
+            padding: 12,
+          }}
+        >
+          {translate('planningText')}
+        </Text>
+      )
+    )
+  }
+
+  renderCalendar() {
+    return (
+      !!sharedAppStateStore.calendarEnabled && (
+        <View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              padding: 12,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                if (this.currentMonth <= 0) {
+                  this.currentYear--
+                  this.currentMonth = 11
+                } else {
+                  this.currentMonth--
+                }
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name={'keyboard-arrow-left'}
+                style={{ color: sharedColors.textColor, opacity: 0.5 }}
+              />
+            </TouchableOpacity>
+            <Text style={{ color: sharedColors.textColor }}>
+              {moment(this.currentMonth + 1, 'MM')
+                .locale(
+                  sharedSettingsStore.language
+                    ? sharedSettingsStore.language
+                    : 'en'
+                )
+                .format('MMMM')}{' '}
+              {this.currentYear}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (this.currentMonth >= 11) {
+                  this.currentYear++
+                  this.currentMonth = 0
+                } else {
+                  this.currentMonth++
+                }
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name={'keyboard-arrow-right'}
+                style={{ color: sharedColors.textColor, opacity: 0.5 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Month
+              onActiveDayChange={(day: Date) => {
+                sharedAppStateStore.activeDay = day
+              }}
+              dark={sharedColors.isDark}
+              onPress={(day: Date) => {
+                navigate('AddTodo', { date: getDateString(day) })
+              }}
+              emptyDays={(emptyDays: any) => {}}
+              activeCoordinates={sharedAppStateStore.activeCoordinates}
+              month={this.currentMonth}
+              year={this.currentYear}
+              showWeekdays
+              locale="en"
+            />
+          </View>
+        </View>
+      )
+    )
+  }
+
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        {sharedTodoStore.isPlanningRequired &&
-          sharedAppStateStore.todoSection !== TodoSectionType.completed && (
-            <Text
-              style={{
-                backgroundColor: 'dodgerblue',
-                color: 'white',
-                padding: 12,
-              }}
-            >
-              {translate('planningText')}
-            </Text>
-          )}
-        {!!sharedAppStateStore.calendarEnabled && (
-          <View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 12,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.currentMonth <= 0) {
-                    this.currentYear--
-                    this.currentMonth = 11
-                  } else {
-                    this.currentMonth--
-                  }
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name={'keyboard-arrow-left'}
-                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
-                />
-              </TouchableOpacity>
-              <Text style={{ color: sharedColors.textColor }}>
-                {moment(this.currentMonth + 1, 'MM')
-                  .locale(
-                    sharedSettingsStore.language
-                      ? sharedSettingsStore.language
-                      : 'en'
-                  )
-                  .format('MMMM')}{' '}
-                {this.currentYear}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.currentMonth >= 11) {
-                    this.currentYear++
-                    this.currentMonth = 0
-                  } else {
-                    this.currentMonth++
-                  }
-                }}
-              >
-                <Icon
-                  type="MaterialIcons"
-                  name={'keyboard-arrow-right'}
-                  style={{ color: sharedColors.textColor, opacity: 0.5 }}
-                />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Month
-                onActiveDayChange={(day: Date) => {
-                  sharedAppStateStore.activeDay = day
-                }}
-                dark={sharedColors.isDark}
-                onPress={(day: Date) => {
-                  navigate('AddTodo', { date: getDateString(day) })
-                }}
-                emptyDays={(emptyDays: any) => {}}
-                activeCoordinates={sharedAppStateStore.activeCoordinates}
-                month={this.currentMonth}
-                year={this.currentYear}
-                showWeekdays
-                locale="en"
-              />
-            </View>
-          </View>
-        )}
+        {this.renderPlanningRequiredMessage()}
+        {this.renderCalendar()}
         {sharedAppStateStore.activeDay && (
           <Animated.View
             style={{
@@ -162,7 +169,7 @@ export class PlanningContent extends Component {
           />
         )}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
-          this.vm.uncompletedTodosArray.length ? (
+          this.vm.uncompletedTodosData.todosArray.length ? (
             <DraggableSectionList
               onViewableItemsChanged={() => {
                 sharedAppStateStore.changeLoading(false)
@@ -176,9 +183,9 @@ export class PlanningContent extends Component {
                 sharedAppStateStore.hash.length ||
                 sharedAppStateStore.searchQuery[0]
                   ? this.vm.allTodosAndHash
-                  : this.vm.uncompletedTodosArray
+                  : this.vm.uncompletedTodosData.todosArray
               }
-              layoutInvalidationKey={this.vm.uncompletedTrackingKey}
+              // layoutInvalidationKey={this.vm.uncompletedTrackingKey}
               keyExtractor={(item, index) => {
                 return `${index}-${item._tempSyncId || item._id || item}`
               }}
@@ -240,7 +247,7 @@ export class PlanningContent extends Component {
             keyExtractor={(item, index) => {
               return `${index}-${item._tempSyncId || item._id || item}`
             }}
-            sections={this.vm.completedTodosArray}
+            sections={this.vm.completedTodosData.todosArray}
             renderItem={({ item }) => (
               <TodoCard
                 todo={item}
