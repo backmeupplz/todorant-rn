@@ -10,16 +10,6 @@ import RNRestart from 'react-native-restart'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 
-export enum Language {
-  auto = 'auto',
-  ru = 'ru',
-  en = 'en',
-  uk = 'uk',
-  it = 'it',
-  es = 'es',
-  'pt-BR' = 'pt-BR',
-}
-
 export enum ColorMode {
   auto = 'auto',
   dark = 'dark',
