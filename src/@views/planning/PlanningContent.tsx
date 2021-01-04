@@ -185,7 +185,9 @@ export class PlanningContent extends Component {
                   ? this.vm.allTodosAndHash
                   : this.vm.uncompletedTodosData.todosArray
               }
-              // layoutInvalidationKey={this.vm.uncompletedTrackingKey}
+              layoutInvalidationKey={
+                this.vm.uncompletedTodosData.invalidationKey
+              }
               keyExtractor={(item, index) => {
                 return `${index}-${item._tempSyncId || item._id || item}`
               }}

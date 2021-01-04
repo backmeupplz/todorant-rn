@@ -16,6 +16,8 @@ export class RealmTodosData {
   private todoIdToDateMap: Map<string, string>
   private lastArray: (string | undefined)[] | undefined
 
+  @observable invalidationKey = ''
+
   @computed get todosArray() {
     return Object.keys(this.todoSectionMap).map(
       (key) => this.todoSectionMap[key]
@@ -159,6 +161,8 @@ export class RealmTodosData {
     if (titlesToOmit.length) {
       this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
     }
+    // Update invalidation key
+    this.invalidationKey = String(Date.now())
     // Update keys and last array
     this.lastArray = getArrayOfTodoIds(todos)
   }
