@@ -1,11 +1,5 @@
-import { sharedSettingsStore } from '@stores/SettingsStore'
 import { MobxRealmModel } from '@utils/mobx-realm/model'
-import {
-  getDateDateString,
-  getDateMonthAndYearString,
-  getDateString,
-  getDateStringFromTodo,
-} from '@utils/time'
+import { getDateString, getDateStringFromTodo } from '@utils/time'
 
 export class Todo extends MobxRealmModel {
   public static schema = {
@@ -63,40 +57,6 @@ export class Todo extends MobxRealmModel {
 
 export function isTodoToday(todo: Todo) {
   return getDateString(new Date()) === getDateStringFromTodo(todo)
-}
-
-export function isTodoOld(todo: Todo) {
-  const now = new Date()
-  const day = getDateDateString(now)
-  const monthAndYear = getDateMonthAndYearString(now)
-
-  const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-  const yesterday = parseInt(day) - 1
-  const todayDate = new Date()
-  todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-  todayDate.setMinutes(parseInt(startTimeOfDay.substr(3)))
-
-  // Exact date exists or not
-  if (todo.date) {
-    if (todo.monthAndYear && todo.monthAndYear < monthAndYear) {
-      return true
-    }
-    if (
-      todo.monthAndYear === monthAndYear &&
-      parseInt(todo.date) == yesterday &&
-      now >= todayDate
-    ) {
-      return true
-    }
-    if (todo.monthAndYear === monthAndYear && parseInt(todo.date) < yesterday) {
-      return true
-    }
-  } else {
-    if (todo.monthAndYear && todo.monthAndYear <= monthAndYear) {
-      return true
-    }
-  }
-  return false
 }
 
 export function compareTodos(completed: Boolean) {

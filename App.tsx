@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import 'mobx-react-lite/batchingForReactNative'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigationRef } from '@utils/navigation'

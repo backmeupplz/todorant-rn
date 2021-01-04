@@ -4,7 +4,7 @@ import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -49,6 +49,7 @@ import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { isTodoOld } from '@utils/isTodoOld'
 
 @observer
 class AddTodoContent extends Component<{

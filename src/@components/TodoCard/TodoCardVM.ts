@@ -1,3 +1,4 @@
+import { isTodoOld } from '@utils/isTodoOld'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -7,7 +8,7 @@ import { alertConfirm } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import {
   getDateStringFromTodo,
   getDateDateString,
