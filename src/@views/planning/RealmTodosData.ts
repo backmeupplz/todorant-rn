@@ -6,7 +6,6 @@ import { computed } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
-import { Collection } from 'realm'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 
 export class RealmTodosData {
@@ -15,7 +14,6 @@ export class RealmTodosData {
   private todos: Realm.Results<Todo>
   @observable private todoSectionMap: TodoSectionMap
   private todoIdToDateMap: Map<string, string>
-  private lastArray: (string | undefined)[] | undefined
 
   @observable invalidationKey = ''
 
@@ -77,14 +75,6 @@ export class RealmTodosData {
     ) {
       return
     }
-    // Save array of todos for future
-    if (!this.lastArray) {
-      this.lastArray = getArrayOfTodoIds(todos)
-    }
-    // A hack to silence the typing issues below when compiler thinks that lastArray can still be undefined
-    if (!this.lastArray) {
-      return
-    }
     // Get changes
     const { insertions, deletions, modifications } = changes
     // Deal with modifications
@@ -126,12 +116,9 @@ export class RealmTodosData {
     }
     // Deal with deletions
     for (const deletionIndex of deletions) {
-      // If there is nothing to delete, just stop
-      if (!this.lastArray.length) {
-        break
-      }
       // Get deleted todo and its id
-      const deletedTodoId = this.lastArray[deletionIndex]
+      const deletedTodo = this.todos[deletionIndex]
+      const deletedTodoId = deletedTodo._tempSyncId || deletedTodo._id
       // Check if id is there
       if (!deletedTodoId) {
         continue
@@ -186,8 +173,6 @@ export class RealmTodosData {
     }
     // Update invalidation key
     this.invalidationKey = String(Date.now())
-    // Update keys and last array
-    this.lastArray = getArrayOfTodoIds(todos)
   }
 
   private removeTodoFromArray(array: Todo[], id: string) {
@@ -319,8 +304,4 @@ function mapsFromRealmTodos(realmTodos: Realm.Results<Todo> | Todo[]) {
     todoSectionMap,
     todoIdToDateMap,
   }
-}
-
-function getArrayOfTodoIds(todoArr: Collection<Todo>) {
-  return todoArr.map((todo) => todo._tempSyncId || todo._id)
 }
