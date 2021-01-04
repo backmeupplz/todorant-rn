@@ -4,9 +4,9 @@ import { realm } from '@utils/realm'
 import { Todo, getTitle } from '@models/Todo'
 import { computed } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { parse, stringify } from 'flatted'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
+import { Collection } from 'realm'
 
 export class RealmTodosData {
   completed: boolean
@@ -14,7 +14,7 @@ export class RealmTodosData {
   private todos: Realm.Results<Todo>
   @observable private todoSectionMap: TodoSectionMap
   private todoIdToDateMap: Map<string, string>
-  private lastArray: Todo[] | undefined
+  private lastArray: (string | undefined)[] | undefined
 
   @computed get todosArray() {
     return Object.keys(this.todoSectionMap).map(
@@ -50,7 +50,7 @@ export class RealmTodosData {
     }
     // Save array of todos for future
     if (!this.lastArray) {
-      this.lastArray = parse(stringify(todos))
+      this.lastArray = getArrayOfTodoIds(todos)
     }
     // A hack to silence the typing issues below when compiler thinks that lastArray can still be undefined
     if (!this.lastArray) {
@@ -102,8 +102,7 @@ export class RealmTodosData {
         break
       }
       // Get deleted todo and its id
-      const deletedTodo = this.lastArray[deletionIndex]
-      const deletedTodoId = deletedTodo._tempSyncId || deletedTodo._id
+      const deletedTodoId = this.lastArray[deletionIndex]
       // Check if id is there
       if (!deletedTodoId) {
         continue
@@ -157,7 +156,7 @@ export class RealmTodosData {
       this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
     }
     // Update keys and last array
-    this.lastArray = parse(stringify(todos))
+    this.lastArray = getArrayOfTodoIds(todos)
   }
 
   private removeTodoFromArray(array: Todo[], id: string) {
@@ -289,4 +288,8 @@ function mapsFromRealmTodos(realmTodos: Realm.Results<Todo> | Todo[]) {
     todoSectionMap,
     todoIdToDateMap,
   }
+}
+
+function getArrayOfTodoIds(todoArr: Collection<Todo>) {
+  return todoArr.map((todo) => todo._tempSyncId || todo._id)
 }
