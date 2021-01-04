@@ -8,6 +8,7 @@ import { computed, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import RNRestart from 'react-native-restart'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
+import { initialMode, eventEmitter } from 'react-native-dark-mode'
 
 export enum Language {
   auto = 'auto',
@@ -63,6 +64,20 @@ class SettingsStore {
 
   @computed get startTimeOfDaySafe() {
     return this.startTimeOfDay ? this.startTimeOfDay : '00:00'
+  }
+
+  @observable mode = initialMode
+  @computed get isDark() {
+    return this.colorMode === ColorMode.auto
+      ? this.mode === 'dark'
+      : this.colorMode === ColorMode.dark
+  }
+
+  constructor() {
+    eventEmitter.on('currentModeChanged', (newMode) => {
+      this.mode = newMode
+      updateAndroidNavigationBarColor(this.isDark)
+    })
   }
 
   onObjectsFromServer = async (
@@ -210,5 +225,5 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   sharedSettingsStore.hydrated = true
   hydrateStore('SettingsStore')
   sharedSettingsStore.language = await getLanguageTag()
-  updateAndroidNavigationBarColor()
+  updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
 })

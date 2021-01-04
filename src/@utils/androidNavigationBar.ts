@@ -1,14 +1,10 @@
-import { sharedColors } from './sharedColors'
 import { Platform } from 'react-native'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 
-export function updateAndroidNavigationBarColor() {
+export function updateAndroidNavigationBarColor(dark: boolean) {
   if (Platform.OS !== 'android') {
     return
   }
-  changeNavigationBarColor(
-    sharedColors.backgroundColor,
-    !sharedColors.isDark,
-    true
-  )
+  // Have to duplicate color hex here to avoid require cycle with colors
+  changeNavigationBarColor(dark ? '#19191A' : '#FCFCFE', !dark, true)
 }

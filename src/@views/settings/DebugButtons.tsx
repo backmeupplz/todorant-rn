@@ -129,7 +129,7 @@ export class DebugButtons extends Component {
           style={{ margin: 2 }}
           onPress={() => {
             sharedSettingsStore.colorMode = ColorMode.dark
-            updateAndroidNavigationBarColor()
+            updateAndroidNavigationBarColor(true)
           }}
           accessible
           accessibilityLabel="turn_dark_on"

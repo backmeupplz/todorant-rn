@@ -117,7 +117,7 @@ export class GeneralSettings extends Component {
               async (i) => {
                 if (i < 3) {
                   sharedSettingsStore.colorMode = options[i].mode
-                  updateAndroidNavigationBarColor()
+                  updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
                 }
               }
             )
