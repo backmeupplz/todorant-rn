@@ -1,8 +1,11 @@
+import {
+  requestSync,
+  SyncRequestEvent,
+} from '@utils/sockets/socketEventEmitter'
 import { Hero } from '@models/Hero'
-import { hydrate } from '@utils/hydrate'
-import { hydrateStore } from '@utils/hydrated'
+import { hydrate } from '@utils/hydration/hydrate'
+import { hydrateStore } from '@utils/hydration/hydrateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@utils/sockets'
 import { computed, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 
@@ -37,7 +40,7 @@ class HeroStore {
   incrementPoints() {
     this.points++
     this.updatedAt = new Date()
-    sockets.heroSyncManager.sync()
+    requestSync(SyncRequestEvent.Hero)
   }
 
   @computed get rank() {

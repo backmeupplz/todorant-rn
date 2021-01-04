@@ -1,6 +1,6 @@
 import { cloneTag, Tag } from '@models/Tag'
-import { hydrate } from '@utils/hydrate'
-import { hydrateStore } from '@utils/hydrated'
+import { hydrate } from '@utils/hydration/hydrate'
+import { hydrateStore } from '@utils/hydration/hydrateStore'
 import { l } from '@utils/linkify'
 import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'

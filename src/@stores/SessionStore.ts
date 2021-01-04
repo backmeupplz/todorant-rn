@@ -1,10 +1,7 @@
 import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTagStore } from '@stores/TagStore'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { daysBetween } from '@utils/daysBetween'
-import { hydrate } from '@utils/hydrate'
-import { hydrateStore } from '@utils/hydrated'
+import { hydrate } from '@utils/hydration/hydrate'
+import { hydrateStore } from '@utils/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
@@ -79,9 +76,6 @@ class SessionStore {
     realm.write(() => {
       realm.deleteAll()
     })
-    sharedTodoStore.logout()
-    sharedSettingsStore.logout()
-    sharedTagStore.logout()
     sockets.logout()
     removeToken()
     removePassword()

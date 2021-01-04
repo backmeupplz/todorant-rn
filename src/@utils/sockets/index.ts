@@ -1,3 +1,7 @@
+import {
+  socketEventEmitter,
+  SyncRequestEvent,
+} from '@utils/sockets/socketEventEmitter'
 import { Hero } from '@models/Hero'
 import { Settings } from '@models/Settings'
 import { Tag } from '@models/Tag'
@@ -10,7 +14,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSocketStore } from '@stores/SocketStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { isHydrated } from '@utils/hydrated'
+import { isHydrated } from '@utils/hydration/hydratedStores'
 import { socketIO } from '@utils/sockets/socketIO'
 import { SyncManager } from '@utils/sockets/SyncManager'
 import { computed } from 'mobx'
@@ -42,6 +46,7 @@ class SocketManager {
 
   constructor() {
     this.connect()
+    this.setupSyncListeners()
 
     socketIO.on('connect', this.onConnect)
     socketIO.on('disconnect', this.onDisconnect)
@@ -139,6 +144,30 @@ class SocketManager {
     }, 1000)
   }
 
+  setupSyncListeners() {
+    socketEventEmitter.on(SyncRequestEvent.All, () => {
+      this.globalSync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.Todo, () => {
+      this.todoSyncManager.sync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.Tag, () => {
+      this.tagsSyncManager.sync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.Settings, () => {
+      this.settingsSyncManager.sync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.User, () => {
+      this.userSyncManager.sync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.Hero, () => {
+      this.heroSyncManager.sync()
+    })
+    socketEventEmitter.on(SyncRequestEvent.Delegation, () => {
+      this.delegationSyncManager.sync()
+    })
+  }
+
   connect = () => {
     if (socketIO.connected) {
       return
@@ -162,6 +191,10 @@ class SocketManager {
     })
   }
   logout = () => {
+    sharedTodoStore.logout()
+    sharedSettingsStore.logout()
+    sharedTagStore.logout()
+
     if (!socketIO.connected) {
       return
     }
