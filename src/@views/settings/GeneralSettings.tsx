@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, ActionSheet } from 'native-base'
-import { sharedSettingsStore, Language, ColorMode } from '@stores/SettingsStore'
+import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -20,6 +20,7 @@ import {
   resetBadgeNumber,
 } from '@utils/notifications'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
+import { Language } from '@models/Language'
 
 const codeToName = {
   en: 'English',
