@@ -1574,10 +1574,10 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
-"@upacyxou/react-native-draggable-sectionlist@0.0.999997":
-  version "0.0.999997"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.0.999997.tgz#5151ca956cdedcf3a63f1b11ba0d749a6f16eb26"
-  integrity sha512-g+BnhM2OytGtBG2RZdwElhQ1/Xh3kDDTGhkiDfL2IugmgGCVWkqtYfzNDCw7JPz7DLUuYQz9L/YIpKC4aUNgvw==
+"@upacyxou/react-native-draggable-sectionlist@0.0.9999991":
+  version "0.0.9999991"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.0.9999991.tgz#8d7925ffaed2ed4377b4b3b03507508c0346d4e7"
+  integrity sha512-7vIoSYeOsmqg3vLqoeCAIAXIrI38JRmKjmr1GHXySsXc3vuMj4HgzgKtxFv89XSf3jZ4Pu99AhB3yNTUTmxazA==
   dependencies:
     "@types/lodash.isequal" "^4.5.5"
     "@types/object-hash" "^1.3.4"

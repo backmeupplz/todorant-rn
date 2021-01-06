@@ -12,6 +12,7 @@ import { sockets } from '@utils/sockets'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
+import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)
@@ -24,7 +25,7 @@ export class PlanningVM {
   }
 
   get allTodosAndHash() {
-    return [] as TodoSection[]
+    return [] as TodoSection<Todo>[]
     // if (sharedAppStateStore.hash.length) {
     //   const hashes = sharedAppStateStore.hash
     //     .map((hash) => `text CONTAINS[c] "${hash}"`)
@@ -55,17 +56,7 @@ export class PlanningVM {
     // }
   }
 
-  onDragEnd = ({
-    data,
-    from,
-    to,
-    dataArr,
-  }: {
-    data: TodoSection[]
-    dataArr: Array<Todo & string>
-    from: number
-    to: number
-  }) => {
+  onDragEnd = <T>(params: DragEndParams<T>) => {
     // sharedAppStateStore.changeLoading(true)
     // if (sharedAppStateStore.activeDay) {
     //   const todo = dataArr[to] as Todo

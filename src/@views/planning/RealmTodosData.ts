@@ -7,6 +7,7 @@ import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { SectionListData } from 'react-native'
 
 export class RealmTodosData {
   completed: boolean
@@ -19,7 +20,7 @@ export class RealmTodosData {
 
   @computed get todosArray() {
     return Object.keys(this.todoSectionMap).map(
-      (key) => this.todoSectionMap[key]
+      (key) => this.todoSectionMap[key] as SectionListData<Todo>
     )
   }
 
@@ -224,7 +225,7 @@ export class RealmTodosData {
   }
 
   private insertBetweenTitles(
-    originalObject: { [index: string]: TodoSection },
+    originalObject: { [index: string]: TodoSection<Todo> },
     titleToInsert: string,
     todoToBeInserted: Todo,
     completed: boolean

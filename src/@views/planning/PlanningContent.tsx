@@ -12,7 +12,12 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import { PlanningDateHeader } from './PlanningDateHeader'
-import { SectionList, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  SectionList,
+  SectionListData,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
 import { makeObservable, observable } from 'mobx'
 import moment from 'moment'
@@ -20,6 +25,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateString } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
+import { Todo } from '@models/Todo'
 
 @observer
 export class PlanningContent extends Component {
@@ -53,8 +59,8 @@ export class PlanningContent extends Component {
       this.lastTimeY = yAx
       sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
     }
-    this.currentX.setValue(xAx)
-    this.currentY.setValue(yAx - this.todoHeight)
+    this.currentX.setValue(xAx as any)
+    this.currentY.setValue((yAx - this.todoHeight) as any)
   }
 
   renderPlanningRequiredMessage() {
@@ -184,16 +190,18 @@ export class PlanningContent extends Component {
               }}
               autoscrollSpeed={200}
               data={
-                sharedAppStateStore.hash.length ||
+                (sharedAppStateStore.hash.length ||
                 sharedAppStateStore.searchQuery[0]
                   ? this.vm.uncompletedTodosData.allTodosAndHash
-                  : this.vm.uncompletedTodosData.todosArray
+                  : this.vm.uncompletedTodosData.todosArray) || []
               }
               layoutInvalidationKey={
                 this.vm.uncompletedTodosData.invalidationKey
               }
               keyExtractor={(item, index) => {
-                return `${index}-${item._tempSyncId || item._id || item}`
+                return `${index}-${
+                  (item as Todo)._tempSyncId || (item as Todo)._id || item
+                }`
               }}
               onDragEnd={this.vm.onDragEnd}
               isSectionHeader={(a: any) => {
@@ -203,7 +211,7 @@ export class PlanningContent extends Component {
                 return !a.text
               }}
               renderItem={({ item, index, drag, isActive }) => {
-                if (!item.item) return
+                if (!item) return
                 return (
                   <View
                     style={{ padding: isActive ? 10 : 0 }}
@@ -214,7 +222,7 @@ export class PlanningContent extends Component {
                     }}
                   >
                     <TodoCard
-                      todo={item.item}
+                      todo={item as Todo}
                       type={
                         sharedAppStateStore.todoSection ===
                         TodoSectionType.planning
@@ -232,7 +240,7 @@ export class PlanningContent extends Component {
                   <PlanningDateHeader
                     drag={drag}
                     isActive={isActive}
-                    item={item}
+                    item={item as SectionListData<Todo>}
                     key={index}
                     vm={this.vm}
                   />
@@ -256,7 +264,7 @@ export class PlanningContent extends Component {
             sections={this.vm.completedTodosData.todosArray}
             renderItem={({ item }) => (
               <TodoCard
-                todo={item}
+                todo={item as Todo}
                 type={
                   sharedAppStateStore.todoSection === TodoSectionType.planning
                     ? CardType.planning
@@ -265,7 +273,12 @@ export class PlanningContent extends Component {
               />
             )}
             renderSectionHeader={({ section }) => (
-              <PlanningDateHeader item={section} vm={this.vm} />
+              <PlanningDateHeader
+                item={section}
+                vm={this.vm}
+                drag={() => {}}
+                isActive={false}
+              />
             )}
           />
         )}
