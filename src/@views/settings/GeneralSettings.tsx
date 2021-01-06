@@ -4,7 +4,7 @@ import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -50,6 +50,10 @@ export class GeneralSettings extends Component {
       default:
         return ''
     }
+  }
+
+  componentWillMount() {
+    makeObservable(this)
   }
 
   render() {

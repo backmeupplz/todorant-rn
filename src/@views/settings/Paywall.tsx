@@ -17,7 +17,7 @@ import {
 } from '@utils/purchases'
 import { sharedColors } from '@utils/sharedColors'
 import { sockets } from '@utils/sockets'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
@@ -29,6 +29,10 @@ class PaywallVM {
   @observable products: Subscription[] = []
 
   @observable loading = false
+
+  constructor() {
+    makeObservable(this)
+  }
 }
 
 @observer

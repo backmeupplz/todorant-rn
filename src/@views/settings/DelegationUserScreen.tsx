@@ -9,13 +9,18 @@ import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { deleteDelegate, deleteDelegator } from '@utils/rest'
 import { sockets } from '@utils/sockets'
 
 @observer
 class Row extends Component<{ delegationUser: DelegationUser }> {
   @observable loading = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     return (
       <TableItem>

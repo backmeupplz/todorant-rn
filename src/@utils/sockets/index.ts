@@ -17,7 +17,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { isHydrated } from '@utils/hydration/hydratedStores'
 import { socketIO } from '@utils/sockets/socketIO'
 import { SyncManager } from '@utils/sockets/SyncManager'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 
 class SocketManager {
   todoSyncManager: SyncManager<Todo[]>
@@ -45,6 +45,7 @@ class SocketManager {
   }
 
   constructor() {
+    makeObservable(this)
     this.connect()
     this.setupSyncListeners()
 

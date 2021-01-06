@@ -7,7 +7,7 @@ import { alertError } from '@utils/alert'
 import { User } from '@models/User'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { useRoute, RouteProp } from '@react-navigation/native'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Spinner } from '@components/Spinner'
 
 const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
@@ -20,6 +20,10 @@ class LoginTelegramContent extends Component<{
   >
 }> {
   @observable initialLoad = true
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   render() {
     return (

@@ -1,6 +1,6 @@
 import { getDateString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export function getTodayWithStartOfDay() {
   const now = new Date()
@@ -22,6 +22,7 @@ class ObservableNow {
   @observable todayTitle = getDateString(getTodayWithStartOfDay())
 
   constructor() {
+    makeObservable(this)
     setInterval(() => {
       this.updateNow()
     }, 1000)

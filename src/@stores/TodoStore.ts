@@ -8,7 +8,7 @@ import { mobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
 
@@ -126,6 +126,7 @@ class TodoStore {
   }
 
   constructor() {
+    makeObservable(this)
     this.refreshTodos()
   }
 

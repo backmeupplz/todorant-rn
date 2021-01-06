@@ -6,7 +6,7 @@ import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { sockets } from '@utils/sockets'
 import { TodoVM } from '@views/add/TodoVM'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import uuid from 'uuid'
 
@@ -26,6 +26,7 @@ class TagStore {
   }
 
   constructor() {
+    makeObservable(this)
     this.refreshTags()
   }
 

@@ -7,7 +7,7 @@ import {
 import { PromiseMap } from '@utils/sockets/PromiseMap'
 import { socketIO } from '@utils/sockets/socketIO'
 import { SyncStage } from '@utils/sockets/SyncStage'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import uuid from 'uuid'
 
 export class SyncManager<T> {
@@ -39,6 +39,8 @@ export class SyncManager<T> {
     ) => Promise<void>,
     setLastSyncDate?: (latestSyncDate: Date) => void
   ) {
+    makeObservable(this)
+
     this.name = name
     this.latestSyncDate = latestSyncDate
     this.onObjectsFromServer = onObjectsFromServer

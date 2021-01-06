@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Tag } from '@models/Tag'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
@@ -44,6 +44,10 @@ class ChangeTextContent extends Component<{
 }> {
   @observable tag?: Tag
   @observable newName: string = ''
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     this.tag = this.props.route.params?.tag

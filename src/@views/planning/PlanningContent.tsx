@@ -14,7 +14,7 @@ import { PlusButton } from '@components/PlusButton'
 import { PlanningDateHeader } from './PlanningDateHeader'
 import { SectionList, StyleSheet, TouchableOpacity } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateString } from '@utils/time'
@@ -35,6 +35,10 @@ export class PlanningContent extends Component {
 
   lastTimeY = 0
   lastTimeX = 0
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   setCoordinates(yAx: number, xAx: number) {
     if (!this.lastTimeX || !this.lastTimeY) {
@@ -131,7 +135,7 @@ export class PlanningContent extends Component {
               onActiveDayChange={(day: Date) => {
                 sharedAppStateStore.activeDay = day
               }}
-              dark={sharedColors.isDark}
+              dark={sharedSettingsStore.isDark}
               onPress={(day: Date) => {
                 navigate('AddTodo', { date: getDateString(day) })
               }}

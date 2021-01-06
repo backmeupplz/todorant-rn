@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Todo } from '@models/Todo'
 import { SwipeRow } from 'react-native-swipe-list-view'
 import { sharedColors } from '@utils/sharedColors'
@@ -16,6 +16,10 @@ export class TodoSwipeRow extends Component<{
 }> {
   @observable direction = 'left'
   acting = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   render() {
     return (

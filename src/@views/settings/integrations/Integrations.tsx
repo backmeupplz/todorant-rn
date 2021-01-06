@@ -8,7 +8,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sockets } from '@utils/sockets'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { alertError, alertMessage } from '@utils/alert'
 import * as rest from '@utils/rest'
 import { Spinner } from '@components/Spinner'
@@ -18,6 +18,10 @@ import { setToken, removeToken } from '@utils/keychain'
 @observer
 export class Integrations extends Component {
   @observable loading = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   async googleCalendarTapped() {
     if (sharedSettingsStore.googleCalendarCredentials) {

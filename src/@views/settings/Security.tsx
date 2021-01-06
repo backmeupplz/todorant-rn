@@ -12,7 +12,7 @@ import { removePassword, setPassword } from '@utils/keychain'
 import { realm } from '@utils/realm'
 import { sharedColors } from '@utils/sharedColors'
 import { sockets } from '@utils/sockets'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
 import React, { Component } from 'react'
@@ -25,6 +25,10 @@ export class Security extends Component {
   @observable encryptionOn = false
   @observable password = ''
   @observable passwordRepeat = ''
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     this.encryptionOn = !!sharedSessionStore.encryptionKey

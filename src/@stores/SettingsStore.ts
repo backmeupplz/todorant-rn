@@ -4,7 +4,7 @@ import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import { hydrate } from '@utils/hydration/hydrate'
 import { hydrateStore } from '@utils/hydration/hydrateStore'
 import { getLanguageTag } from '@utils/i18n'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import RNRestart from 'react-native-restart'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
@@ -64,6 +64,7 @@ class SettingsStore {
   }
 
   constructor() {
+    makeObservable(this)
     eventEmitter.on('currentModeChanged', (newMode) => {
       this.mode = newMode
       updateAndroidNavigationBarColor(this.isDark)

@@ -6,11 +6,15 @@ import { Text, Input, View } from 'native-base'
 import { PlanningHeaderSegment } from '@views/planning/PlanningHeaderSegment'
 import { translate } from '@utils/i18n'
 import { Dimensions } from 'react-native'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 @observer
 export class PlanningHeader extends Component {
   @observable width = Dimensions.get('window').width
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     Dimensions.addEventListener('change', () => {

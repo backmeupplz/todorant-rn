@@ -1,8 +1,12 @@
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 
 class DelegationStore {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable allDelegationUsers = realm.objects<DelegationUser>(
     'DelegationUser'
   )

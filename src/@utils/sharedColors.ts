@@ -1,11 +1,12 @@
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
 import fonts from './fonts'
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
   constructor() {
+    makeObservable(this)
     this.generateColorSchemes()
   }
 

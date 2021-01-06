@@ -10,7 +10,7 @@ import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
 import { Platform } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { observable, computed } from 'mobx'
+import { observable, computed, makeObservable } from 'mobx'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
 import {
   getNotificationPermissions,
@@ -30,6 +30,10 @@ class TimePickerRow extends Component<{
 }> {
   @observable showTimePicker = false
   @observable clearTime = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   render() {
     return (
@@ -101,6 +105,10 @@ class TimePickerRow extends Component<{
 
 @observer
 export class TodoSettings extends Component {
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   @computed get dateFromStartTimeOfDay() {
     const date = new Date()
     const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe

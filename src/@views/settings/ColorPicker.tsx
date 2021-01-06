@@ -4,7 +4,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Tag } from '@models/Tag'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import {
   ColorPicker as ColorPickerComponent,
   fromHsv,
@@ -49,6 +49,10 @@ class ColorPickerContent extends Component<{
 }> {
   @observable tag?: Tag
   @observable color = 'dodgerblue'
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     this.tag = this.props.route.params?.tag

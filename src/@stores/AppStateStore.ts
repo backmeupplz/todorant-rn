@@ -1,5 +1,5 @@
 import { Todo } from '@models/Todo'
-import { action, computed, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 
 export enum TodoSectionType {
   planning = 'planning',
@@ -12,6 +12,10 @@ interface editedTodoData {
 }
 
 class AppStateStore {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable todoSection: TodoSectionType = TodoSectionType.planning
   @observable hash: string[] = []
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { observable, computed } from 'mobx'
+import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
 import { Todo, getTitle } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
@@ -265,6 +265,10 @@ class AddTodoContent extends Component<{
     return this.vms.reduce((prev, cur) => {
       return !cur.isValid ? false : prev
     }, true)
+  }
+
+  componentWillMount() {
+    makeObservable(this)
   }
 
   componentDidMount() {

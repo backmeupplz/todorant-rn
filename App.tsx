@@ -38,6 +38,7 @@ import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -89,7 +90,9 @@ class App extends Component {
         <NavigationContainer ref={navigationRef}>
           <StatusBar
             backgroundColor={sharedColors.backgroundColor}
-            barStyle={sharedColors.isDark ? 'light-content' : 'dark-content'}
+            barStyle={
+              sharedSettingsStore.isDark ? 'light-content' : 'dark-content'
+            }
           />
           <RateModal />
           <StyleProvider style={getTheme()}>

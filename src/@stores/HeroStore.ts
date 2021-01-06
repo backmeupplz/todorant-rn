@@ -6,7 +6,7 @@ import { Hero } from '@models/Hero'
 import { hydrate } from '@utils/hydration/hydrate'
 import { hydrateStore } from '@utils/hydration/hydrateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 
 export const ranks = [
@@ -33,6 +33,10 @@ export const ranks = [
 
 class HeroStore {
   hydrated = false
+
+  constructor() {
+    makeObservable(this)
+  }
 
   @persist('date') @observable updatedAt?: Date
   @persist @observable points = 0

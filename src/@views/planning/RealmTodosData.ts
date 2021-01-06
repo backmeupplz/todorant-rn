@@ -2,7 +2,7 @@ import { TodoSection } from '@views/planning/TodoSection'
 import { TodoSectionMap } from '@views/planning/TodoSectionMap'
 import { realm } from '@utils/realm'
 import { Todo, getTitle } from '@models/Todo'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
@@ -46,6 +46,8 @@ export class RealmTodosData {
   }
 
   constructor(completed: boolean) {
+    makeObservable(this)
+
     this.completed = completed
 
     this.todos = getRealmTodos(this.completed)

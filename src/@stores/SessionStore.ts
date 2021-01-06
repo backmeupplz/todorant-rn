@@ -6,10 +6,14 @@ import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 
 class SessionStore {
+  constructor() {
+    makeObservable(this)
+  }
+
   @persist('date') @observable appInstalled = new Date()
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string

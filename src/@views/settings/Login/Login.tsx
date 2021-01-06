@@ -12,7 +12,7 @@ import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Container, Content, Input, Text, View } from 'native-base'
 import React, { Component } from 'react'
@@ -23,6 +23,10 @@ class LoginVM {
   @observable loading = false
   @observable syncLoading = false
   @observable debugToken = ''
+
+  constructor() {
+    makeObservable(this)
+  }
 
   loginWithGoogle = async () => {
     this.loading = true
