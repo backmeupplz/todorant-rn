@@ -27,13 +27,6 @@ class TodoStore {
     return mobxRealmCollection(this.getRealmTodos(title, true))
   }
 
-  @computed get allTodos() {
-    return realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
-  }
-
   getRealmTodos(title: string, completed: boolean) {
     return realm
       .objects(Todo)
@@ -119,8 +112,14 @@ class TodoStore {
       (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
       1
     }:000`
-    const todos = this.allTodos.filtered(
-      `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+    const todos = mobxRealmCollection(
+      realm
+        .objects(Todo)
+        .filtered('deleted = false')
+        .filtered('delegateAccepted != false')
+        .filtered(
+          `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+        )
     )
     return !!todos.length
   }
