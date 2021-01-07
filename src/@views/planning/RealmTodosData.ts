@@ -15,6 +15,7 @@ export class RealmTodosData {
   private todos: Realm.Results<Todo>
   @observable private todoSectionMap: TodoSectionMap
   private todoIdToDateMap: Map<string, string>
+  private todoIds: string[] | undefined
 
   @observable invalidationKey = ''
 
@@ -59,6 +60,22 @@ export class RealmTodosData {
     this.todos.addListener(
       (todos: Realm.Collection<Todo>, changes: Realm.CollectionChangeSet) => {
         this.realmListener.apply(this, [todos, changes])
+        this.todoIds = getArrayOfTodoIds(todos) as string[]
+
+        // Remove sections without todos
+        const titlesToOmit: string[] = []
+        Object.keys(this.todoSectionMap).forEach((key) => {
+          if (!this.todoSectionMap[key].data.length) {
+            titlesToOmit.push(key)
+          }
+        })
+        if (titlesToOmit.length) {
+          this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
+        }
+
+        // Update invalidation key
+        this.invalidationKey = String(Date.now())
+        this.invalidationKey = String(Date.now())
       }
     )
   }
@@ -119,9 +136,12 @@ export class RealmTodosData {
     }
     // Deal with deletions
     for (const deletionIndex of deletions) {
+      // A hack to silence the typing issues below when compiler thinks that todoIds can still be undefined
+      if (!this.todoIds) {
+        break
+      }
       // Get deleted todo and its id
-      const deletedTodo = this.todos[deletionIndex]
-      const deletedTodoId = deletedTodo._tempSyncId || deletedTodo._id
+      const deletedTodoId = this.todoIds[deletionIndex]
       // Check if id is there
       if (!deletedTodoId) {
         continue
@@ -137,6 +157,7 @@ export class RealmTodosData {
             deletedTodoId
           )
         }
+        this.todoIdToDateMap.delete(deletedTodoId)
       }
     }
     // Deal with insertions
@@ -164,18 +185,6 @@ export class RealmTodosData {
       // Update dates map
       this.todoIdToDateMap.set(insertedTodoId, insertedTodoTitle)
     }
-    // Remove sections without todos
-    const titlesToOmit: string[] = []
-    Object.keys(this.todoSectionMap).forEach((key) => {
-      if (!this.todoSectionMap[key].data.length) {
-        titlesToOmit.push(key)
-      }
-    })
-    if (titlesToOmit.length) {
-      this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
-    }
-    // Update invalidation key
-    this.invalidationKey = String(Date.now())
   }
 
   private removeTodoFromArray(array: Todo[], id: string) {
@@ -307,4 +316,8 @@ function mapsFromRealmTodos(realmTodos: Realm.Results<Todo> | Todo[]) {
     todoSectionMap,
     todoIdToDateMap,
   }
+}
+
+function getArrayOfTodoIds(todoArr: Realm.Collection<Todo>) {
+  return todoArr.map((todo) => todo._tempSyncId || todo._id)
 }
