@@ -39,6 +39,7 @@ import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { configure } from 'mobx'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -46,6 +47,10 @@ const CodePushOptions = {
     ? codePush.InstallMode.ON_NEXT_RESTART
     : codePush.InstallMode.IMMEDIATE,
 }
+
+configure({
+  enforceActions: 'never',
+})
 
 setI18nConfig()
 
