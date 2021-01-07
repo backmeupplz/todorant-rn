@@ -105,8 +105,6 @@ export class TodoCardVM {
             todo.deleted = true
             todo.updatedAt = new Date()
           })
-
-          fixOrder([getTitle(todo)])
         }
       )
     } else {
@@ -114,9 +112,8 @@ export class TodoCardVM {
         todo.deleted = true
         todo.updatedAt = new Date()
       })
-
-      fixOrder([getTitle(todo)])
     }
+    fixOrder([getTitle(todo)])
   }
 
   accept(todo: Todo) {
