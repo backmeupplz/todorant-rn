@@ -97,11 +97,18 @@ export class RealmTodosData {
     }
     // Get changes
     const { insertions, deletions, modifications } = changes
+    // check if there's an item outside of border
+    const containsOrNot = !!modifications.find((index) => index >= todos.length)
     // Deal with modifications
-    for (const modificactionIndex of modifications) {
+    for (let modificactionIndex of modifications) {
+      if (!this.todoIds) break
       // Get todo and its id
-      const modifiedTodo = todos[modificactionIndex]
-      const modifiedTodoId = modifiedTodo._tempSyncId || modifiedTodo._id
+      const modifiedTodo = containsOrNot
+        ? todos[modificactionIndex - 1]
+        : todos[modificactionIndex]
+      const modifiedTodoId = modifiedTodo
+        ? modifiedTodo._tempSyncId || modifiedTodo._id
+        : this.todoIds[modificactionIndex - 1]
       // Check if id is there
       if (!modifiedTodoId) {
         continue
@@ -119,20 +126,22 @@ export class RealmTodosData {
         }
       }
       // Insert todo back
-      const newDate = getTitle(modifiedTodo)
-      const todoSection = this.todoSectionMap[newDate]
-      if (todoSection) {
-        this.insertTodoToArray(todoSection.data, modifiedTodo)
-      } else {
-        this.todoSectionMap = this.insertBetweenTitles(
-          this.todoSectionMap,
-          newDate,
-          mobxRealmObject(modifiedTodo),
-          this.completed
-        )
+      if (modifiedTodo) {
+        const newDate = getTitle(modifiedTodo)
+        const todoSection = this.todoSectionMap[newDate]
+        if (todoSection) {
+          this.insertTodoToArray(todoSection.data, modifiedTodo)
+        } else {
+          this.todoSectionMap = this.insertBetweenTitles(
+            this.todoSectionMap,
+            newDate,
+            mobxRealmObject(modifiedTodo),
+            this.completed
+          )
+        }
+        // Update todo id map
+        this.todoIdToDateMap.set(modifiedTodoId, newDate)
       }
-      // Update todo id map
-      this.todoIdToDateMap.set(modifiedTodoId, newDate)
     }
     // Deal with deletions
     for (const deletionIndex of deletions) {
@@ -162,6 +171,7 @@ export class RealmTodosData {
     }
     // Deal with insertions
     for (const insertionIndex of insertions) {
+      if (!(todos && todos.length) || insertionIndex === undefined) continue
       // Get inserted todo, its title and id
       const insertedTodo = todos[insertionIndex]
       const insertedTodoTitle = getTitle(insertedTodo)
@@ -197,7 +207,7 @@ export class RealmTodosData {
       let added = false
       for (let i = 0; i < length; i++) {
         const lastTodo = todoArr[i]
-        if (lastTodo.frog) {
+        if (lastTodo.frog && lastTodo.order < todoToBeInserted.order) {
           continue
         }
         todoArr.splice(i, 0, todoToBeInserted)
@@ -220,7 +230,11 @@ export class RealmTodosData {
           frogCounter++
         ) {
           if (todoArr[frogCounter].frog) continue
-          todoArr.splice(frogCounter, 0, todoToBeInserted)
+          if (!todoArr[frogCounter - 1].frog) {
+            todoArr.splice(frogCounter - 1, 0, todoToBeInserted)
+          } else {
+            todoArr.splice(frogCounter, 0, todoToBeInserted)
+          }
           added = true
           break
         }
