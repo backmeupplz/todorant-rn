@@ -98,12 +98,14 @@ export class RealmTodosData {
     // Get changes
     const { insertions, deletions, modifications } = changes
     // check if there's an item outside of border
-    const containsOrNot = !!modifications.find((index) => index >= todos.length)
+    const outsideOfBorder = !!modifications.find(
+      (index) => index >= todos.length
+    )
     // Deal with modifications
-    for (let modificactionIndex of modifications) {
+    for (const modificactionIndex of modifications) {
       if (!this.todoIds) break
       // Get todo and its id
-      const modifiedTodo = containsOrNot
+      const modifiedTodo = outsideOfBorder
         ? todos[modificactionIndex - 1]
         : todos[modificactionIndex]
       const modifiedTodoId = modifiedTodo
