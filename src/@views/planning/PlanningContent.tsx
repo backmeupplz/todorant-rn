@@ -191,8 +191,8 @@ export class PlanningContent extends Component {
               autoscrollSpeed={200}
               data={
                 (sharedAppStateStore.hash.length ||
-                sharedAppStateStore.searchQuery[0]
-                  ? this.vm.uncompletedTodosData.allTodosAndHash
+                sharedAppStateStore.searchQuery.length > 0
+                  ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
                   : this.vm.uncompletedTodosData.todosArray) || []
               }
               layoutInvalidationKey={

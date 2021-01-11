@@ -2,7 +2,7 @@ import { TodoSection } from '@views/planning/TodoSection'
 import { TodoSectionMap } from '@views/planning/TodoSectionMap'
 import { realm } from '@utils/realm'
 import { Todo, getTitle } from '@models/Todo'
-import { computed, makeObservable } from 'mobx'
+import { makeObservable } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
 import { omit } from 'lodash'
 import { observable } from 'mobx'
@@ -19,10 +19,15 @@ export class RealmTodosData {
 
   @observable invalidationKey = ''
 
-  @computed get todosArray() {
-    return Object.keys(this.todoSectionMap).map(
-      (key) => this.todoSectionMap[key] as SectionListData<Todo>
-    )
+  get todosArray() {
+    return Object.keys(this.todoSectionMap).map((key) => {
+      const originalSectionData = this.todoSectionMap[
+        key
+      ] as SectionListData<Todo>
+      const copiedSectionData = { ...originalSectionData }
+      copiedSectionData.data = copiedSectionData.data.slice()
+      return copiedSectionData
+    })
   }
 
   get allTodosAndHash() {
@@ -220,8 +225,10 @@ export class RealmTodosData {
         todoArr.splice(length, 0, todoToBeInserted)
       }
     } else {
+      const orderWithinBounds = todoArr.length > todoToBeInserted.order
       // prevent inserting non-frog todo at frog place
       if (
+        orderWithinBounds &&
         todoArr[todoToBeInserted.order] &&
         todoArr[todoToBeInserted.order].frog
       ) {
@@ -244,7 +251,11 @@ export class RealmTodosData {
           todoArr.splice(todoArr.length, 0, todoToBeInserted)
         }
       } else {
-        todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
+        if (orderWithinBounds) {
+          todoArr.splice(todoToBeInserted.order, 0, todoToBeInserted)
+        } else {
+          todoArr.push(todoToBeInserted)
+        }
       }
     }
   }
