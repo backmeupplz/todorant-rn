@@ -280,6 +280,7 @@ export class PlanningContent extends Component {
                 isActive={false}
               />
             )}
+            stickySectionHeadersEnabled={false}
           />
         )}
         <PlusButton />
