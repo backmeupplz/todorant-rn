@@ -12,8 +12,8 @@ struct WidgetTodoTextModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-//      .background(Config.mainColor)
-//      .clipShape(ContainerRelativeShape())
+      .background(Config.mainColor)
+      .clipShape(ContainerRelativeShape())
       .padding([.leading, .trailing, .bottom])
   }
 }
