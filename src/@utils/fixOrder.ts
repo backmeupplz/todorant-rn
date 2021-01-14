@@ -5,7 +5,7 @@ import { realm } from '@utils/realm'
 import { sockets } from '@utils/sockets'
 import { InteractionManager } from 'react-native'
 
-export async function fixOrder(
+export function fixOrder(
   titlesInvolved: string[],
   addTodosOnTop = [] as Todo[],
   addTodosToBottom = [] as Todo[],

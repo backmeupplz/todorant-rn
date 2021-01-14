@@ -1,13 +1,7 @@
 import { RealmTodosData } from '@views/planning/RealmTodosData'
-import { TodoSection } from '@views/planning/TodoSection'
-import { omit } from 'lodash'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
-import {
-  getDateDateString,
-  getDateMonthAndYearString,
-  getDateString,
-} from '@utils/time'
+import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { sockets } from '@utils/sockets'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'

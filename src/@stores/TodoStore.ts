@@ -69,6 +69,18 @@ class TodoStore {
       .sorted('order')
   }
 
+  todosBeforeDate = (title: string) => {
+    const todayWithTimezoneOffset = new Date(title)
+    const todayString = `T${
+      Math.floor(todayWithTimezoneOffset.getTime() / 1000) - 1
+    }:000`
+    return realm
+      .objects(Todo)
+      .filtered(
+        `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+      )
+  }
+
   @computed get currentTodo() {
     return this.todayUncompletedTodos.length
       ? this.todayUncompletedTodos[0]
@@ -90,38 +102,10 @@ class TodoStore {
     }
   }
 
-  get isPlanningRequired() {
-    const todayWithTimezoneOffset = new Date()
-    todayWithTimezoneOffset.setMinutes(
-      todayWithTimezoneOffset.getMinutes() -
-        todayWithTimezoneOffset.getTimezoneOffset()
-    )
-
-    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-    const todayDate = new Date()
-    todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-    todayDate.setMinutes(
-      parseInt(startTimeOfDay.substr(3)) - todayDate.getTimezoneOffset()
-    )
-    if (todayWithTimezoneOffset < todayDate) {
-      todayWithTimezoneOffset.setDate(todayWithTimezoneOffset.getDate() - 1)
-    }
-
-    const todayString = `T${
-      Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
-      (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
-      1
-    }:000`
-    const todos = mobxRealmCollection(
-      realm
-        .objects(Todo)
-        .filtered('deleted = false')
-        .filtered('delegateAccepted != false')
-        .filtered(
-          `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
-        )
-    )
-    return !!todos.length
+  @computed get isPlanningRequired() {
+    const title = observableNow.todayTitle
+    const oldTodos = mobxRealmCollection(this.todosBeforeDate(title))
+    return !!oldTodos.length
   }
 
   constructor() {

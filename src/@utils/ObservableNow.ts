@@ -1,6 +1,12 @@
 import { getDateString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { makeObservable, observable } from 'mobx'
+import { EventEmitter } from 'events'
+
+export enum ObservableNowEventEmitterEvent {
+  ObservableNowChanged = 'ObservableNowChanged',
+}
+export const observableNowEventEmitter = new EventEmitter()
 
 export function getTodayWithStartOfDay() {
   const now = new Date()
@@ -32,6 +38,9 @@ class ObservableNow {
     const newTodayTitle = getDateString(getTodayWithStartOfDay())
     if (this.todayTitle !== newTodayTitle) {
       this.todayTitle = newTodayTitle
+      observableNowEventEmitter.emit(
+        ObservableNowEventEmitterEvent.ObservableNowChanged
+      )
     }
   }
 }

@@ -105,10 +105,7 @@ export class TodoCardVM {
             todo.deleted = true
             todo.updatedAt = new Date()
           })
-          // fix realm crash
-          setTimeout(() => {
-            fixOrder([getTitle(todo)])
-          }, 1)
+          fixOrder([getTitle(todo)])
         }
       )
     } else {
