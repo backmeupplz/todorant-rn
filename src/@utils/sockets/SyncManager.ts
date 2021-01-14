@@ -173,6 +173,7 @@ export class SyncManager<T> {
   }
 
   private completeSync = (syncId: string) => {
+    console.warn(`${this.name}: completeSync called for ${syncId}`)
     if (this.pendingSyncs[syncId]) {
       this.pendingSyncs[syncId].res(this.checkIfNeedsAnotherSync())
       delete this.pendingSyncs[syncId]
@@ -183,6 +184,7 @@ export class SyncManager<T> {
 
   private checkIfNeedsAnotherSync() {
     if (this.queuedSyncPromise) {
+      this.isSyncing = false
       return this.sync()
     } else {
       if (this.setLastSyncDate) {
@@ -194,8 +196,11 @@ export class SyncManager<T> {
   }
 
   private rejectSync(reason: string, syncId: string) {
-    this.pendingSyncs[syncId]?.rej(reason)
-    delete this.pendingSyncs[syncId]
+    console.warn(`${this.name} rejectSync ${reason} ${syncId}`)
+    if (this.pendingSyncs[syncId]?.rej) {
+      this.pendingSyncs[syncId]?.rej(reason)
+      delete this.pendingSyncs[syncId]
+    }
     this.isSyncing = false
     this.checkIfNeedsAnotherSync()
   }

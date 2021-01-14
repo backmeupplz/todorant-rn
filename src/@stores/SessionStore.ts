@@ -24,6 +24,10 @@ class SessionStore {
 
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
+
+  @observable loggingOut = false
+  @observable isInitialSync = false
+
   @computed get needsToRequestRate() {
     return !this.askedToRate && this.numberOfTodosCompleted > 101
   }
@@ -68,22 +72,32 @@ class SessionStore {
 
   async login(user: User) {
     this.user = user
+    this.isInitialSync = true
     await sockets.authorize()
     setToken(user.token)
-    await sockets.globalSync()
+    try {
+      await sockets.globalSync()
+    } finally {
+      this.isInitialSync = false
+    }
     logEvent('login_success')
   }
 
   logout() {
-    this.user = undefined
-    this.encryptionKey = undefined
-    realm.write(() => {
-      realm.deleteAll()
-    })
-    sockets.logout()
-    removeToken()
-    removePassword()
-    logEvent('logout_success')
+    this.loggingOut = true
+    try {
+      this.user = undefined
+      this.encryptionKey = undefined
+      realm.write(() => {
+        realm.deleteAll()
+      })
+      sockets.logout()
+      removeToken()
+      removePassword()
+      logEvent('logout_success')
+    } finally {
+      this.loggingOut = false
+    }
   }
 
   onObjectsFromServer = async (

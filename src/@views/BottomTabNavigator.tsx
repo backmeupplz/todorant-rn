@@ -138,23 +138,28 @@ export default observer(() => {
           },
         }}
       >
-        {!sharedTodoStore.isPlanningRequired && (
-          <Tab.Screen
-            name="Current"
-            component={Current}
-            options={{ title: translate('current') }}
-          />
+        {!sharedSessionStore.loggingOut && !sharedSessionStore.isInitialSync && (
+          <>
+            {!sharedTodoStore.isPlanningRequired && (
+              <Tab.Screen
+                name="Current"
+                component={Current}
+                options={{ title: translate('current') }}
+              />
+            )}
+            <Tab.Screen
+              name="Planning"
+              component={Planning}
+              options={{ title: translate('planning') }}
+            />
+
+            <Tab.Screen
+              name="Delegation"
+              component={Delegation}
+              options={{ title: translate('delegate.title') }}
+            />
+          </>
         )}
-        <Tab.Screen
-          name="Planning"
-          component={Planning}
-          options={{ title: translate('planning') }}
-        />
-        <Tab.Screen
-          name="Delegation"
-          component={Delegation}
-          options={{ title: translate('delegate.title') }}
-        />
         <Tab.Screen
           name="Settings"
           component={Settings}

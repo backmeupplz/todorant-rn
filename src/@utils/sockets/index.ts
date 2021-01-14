@@ -193,8 +193,10 @@ class SocketManager {
   }
   logout = () => {
     sharedTodoStore.logout()
-    sharedSettingsStore.logout()
     sharedTagStore.logout()
+    sharedSettingsStore.logout()
+    sharedHeroStore.logout()
+    sharedDelegationStore.logout()
 
     if (!socketIO.connected) {
       return
@@ -228,7 +230,9 @@ class SocketManager {
     sharedSocketStore.authorized = true
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
-    this.globalSync()
+    if (!sharedSessionStore.isInitialSync) {
+      this.globalSync()
+    }
   }
 
   hardSync = () => {

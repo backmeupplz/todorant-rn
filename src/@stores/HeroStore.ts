@@ -150,6 +150,11 @@ class HeroStore {
     }
     completeSync()
   }
+
+  logout() {
+    this.updatedAt = undefined
+    this.points = 0
+  }
 }
 
 export const sharedHeroStore = new HeroStore()

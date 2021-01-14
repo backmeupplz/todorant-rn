@@ -54,6 +54,10 @@ class DelegationStore {
   refreshDelegationUsers = () => {
     this.allDelegationUsers = realm.objects<DelegationUser>('DelegationUser')
   }
+
+  logout() {
+    this.refreshDelegationUsers()
+  }
 }
 
 export const sharedDelegationStore = new DelegationStore()
