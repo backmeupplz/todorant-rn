@@ -1,10 +1,16 @@
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from './../@utils/ObservableNow'
 import { observableNow } from '@utils/ObservableNow'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 import { decrypt, encrypt } from '@utils/encryption'
 import { hydrate } from '@utils/hydration/hydrate'
 import { hydrateStore } from '@utils/hydration/hydrateStore'
-import { mobxRealmCollection } from '@utils/mobx-realm/collection'
+import {
+  mobxRealmCollection,
+  shallowMobxRealmCollection,
+} from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
@@ -102,15 +108,26 @@ class TodoStore {
     }
   }
 
+  oldTodos = shallowMobxRealmCollection(
+    this.todosBeforeDate(observableNow.todayTitle)
+  )
+
   @computed get isPlanningRequired() {
-    const title = observableNow.todayTitle
-    const oldTodos = mobxRealmCollection(this.todosBeforeDate(title))
-    return !!oldTodos.length
+    return !!this.oldTodos.length
   }
 
   constructor() {
     makeObservable(this)
     this.refreshTodos()
+    // Today date changed
+    observableNowEventEmitter.on(
+      ObservableNowEventEmitterEvent.ObservableNowChanged,
+      () => {
+        this.oldTodos = shallowMobxRealmCollection(
+          this.todosBeforeDate(observableNow.todayTitle)
+        )
+      }
+    )
   }
 
   logout = () => {

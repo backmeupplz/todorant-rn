@@ -23,6 +23,24 @@ export function mobxRealmCollection<T extends MobxRealmModel>(
       )
     }
   })
+  return observableArray
+}
 
+export function shallowMobxRealmCollection<T extends MobxRealmModel>(
+  realmCollection: Realm.Results<T>
+) {
+  const observableArray = observable.array<T>()
+  realmCollection.forEach((realmObject) => {
+    observableArray.push(realmObject)
+  })
+
+  realmCollection.addListener((_, changes) => {
+    for (const deletionIndex of changes.deletions) {
+      observableArray.splice(deletionIndex, 1)
+    }
+    for (const insertionIndex of changes.insertions) {
+      observableArray.splice(insertionIndex, 0, realmCollection[insertionIndex])
+    }
+  })
   return observableArray
 }
