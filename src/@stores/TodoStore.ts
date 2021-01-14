@@ -23,16 +23,6 @@ class TodoStore {
 
   hydrated = false
 
-  @computed get todayUncompletedTodos() {
-    const title = observableNow.todayTitle
-    return mobxRealmCollection(this.getRealmTodos(title, false))
-  }
-
-  @computed get todayCompletedTodos() {
-    const title = observableNow.todayTitle
-    return mobxRealmCollection(this.getRealmTodos(title, true))
-  }
-
   getRealmTodos(title: string, completed: boolean) {
     return realm
       .objects(Todo)
@@ -88,9 +78,10 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    return this.todayUncompletedTodos.length
-      ? this.todayUncompletedTodos[0]
-      : undefined
+    return undefined
+    // return this.todayUncompletedTodos.length
+    //   ? this.todayUncompletedTodos[0]
+    //   : undefined
   }
 
   @computed get unacceptedTodos() {
@@ -100,11 +91,20 @@ class TodoStore {
       .filtered('delegateAccepted = false')
   }
 
+  shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+    this.getRealmTodos(observableNow.todayTitle, false)
+  )
+
+  shallowTodayCompletedTodos = shallowMobxRealmCollection(
+    this.getRealmTodos(observableNow.todayTitle, true)
+  )
+
   @computed get progress() {
     return {
       count:
-        this.todayUncompletedTodos.length + this.todayCompletedTodos.length,
-      completed: this.todayCompletedTodos.length,
+        this.shallowTodayUncompletedTodos.length +
+        this.shallowTodayCompletedTodos.length,
+      completed: this.shallowTodayCompletedTodos.length,
     }
   }
 
@@ -125,6 +125,12 @@ class TodoStore {
       () => {
         this.oldTodos = shallowMobxRealmCollection(
           this.todosBeforeDate(observableNow.todayTitle)
+        )
+        this.shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+          this.getRealmTodos(observableNow.todayTitle, false)
+        )
+        this.shallowTodayCompletedTodos = shallowMobxRealmCollection(
+          this.getRealmTodos(observableNow.todayTitle, true)
         )
       }
     )
