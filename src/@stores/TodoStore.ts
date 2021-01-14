@@ -1,16 +1,14 @@
+import { mobxRealmObject } from '@utils/mobx-realm/object'
 import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
-} from './../@utils/ObservableNow'
+} from '@utils/ObservableNow'
 import { observableNow } from '@utils/ObservableNow'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { decrypt, encrypt } from '@utils/encryption'
 import { hydrate } from '@utils/hydration/hydrate'
 import { hydrateStore } from '@utils/hydration/hydrateStore'
-import {
-  mobxRealmCollection,
-  shallowMobxRealmCollection,
-} from '@utils/mobx-realm/collection'
+import { shallowMobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
@@ -78,10 +76,9 @@ class TodoStore {
   }
 
   @computed get currentTodo() {
-    return undefined
-    // return this.todayUncompletedTodos.length
-    //   ? this.todayUncompletedTodos[0]
-    //   : undefined
+    return this.shallowTodayUncompletedTodos.length
+      ? mobxRealmObject(this.shallowTodayUncompletedTodos[0])
+      : undefined
   }
 
   @computed get unacceptedTodos() {
