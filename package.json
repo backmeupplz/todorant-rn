@@ -96,6 +96,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-svg-uri": "^1.2.3",
     "react-native-swipe-list-view": "^2.5.0",
+    "react-native-threads": "^0.0.19",
     "react-native-todorant-widget": "^0.1.4",
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^8.0.6",

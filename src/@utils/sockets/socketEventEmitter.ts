@@ -1,14 +1,5 @@
 import { EventEmitter } from 'events'
-
-export enum SyncRequestEvent {
-  All = 'requestSync.all',
-  Todo = 'requestSync.todo',
-  Tag = 'requestSync.tag',
-  Settings = 'requestSync.settings',
-  User = 'requestSync.user',
-  Hero = 'requestSync.hero',
-  Delegation = 'requestSync.delegation',
-}
+import { SyncRequestEvent } from '@utils/sockets/SyncRequestEvent'
 
 export const socketEventEmitter = new EventEmitter()
 

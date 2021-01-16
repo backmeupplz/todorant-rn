@@ -1,5 +1,3 @@
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSocketStore } from '@stores/SocketStore'
 import {
   checkPromiseMapForTimeout,
   PromiseMapType,
@@ -7,7 +5,6 @@ import {
 import { PromiseMap } from '@utils/sockets/PromiseMap'
 import { socketIO } from '@utils/sockets/socketIO'
 import { SyncStage } from '@utils/sockets/SyncStage'
-import { makeObservable, observable } from 'mobx'
 import uuid from 'uuid'
 
 export class SyncManager<T> {
@@ -17,7 +14,8 @@ export class SyncManager<T> {
   latestSyncDate: () => Date | undefined
   setLastSyncDate: ((latestSyncDate: Date) => void) | undefined
 
-  @observable isSyncing = false
+  isSyncing = false
+
   queuedSyncPromise:
     | { promise: Promise<unknown>; res?: Function; rej?: Function }
     | undefined = undefined
@@ -39,8 +37,6 @@ export class SyncManager<T> {
     ) => Promise<void>,
     setLastSyncDate?: (latestSyncDate: Date) => void
   ) {
-    makeObservable(this)
-
     this.name = name
     this.latestSyncDate = latestSyncDate
     this.onObjectsFromServer = onObjectsFromServer

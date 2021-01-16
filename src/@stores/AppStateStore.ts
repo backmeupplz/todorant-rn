@@ -6,11 +6,6 @@ export enum TodoSectionType {
   completed = 'completed',
 }
 
-interface editedTodoData {
-  tempSync: string
-  date: string
-}
-
 class AppStateStore {
   constructor() {
     makeObservable(this)

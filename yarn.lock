@@ -6888,6 +6888,11 @@ react-native-swipe-list-view@^2.5.0:
   resolved "https://registry.yarnpkg.com/react-native-swipe-list-view/-/react-native-swipe-list-view-2.5.0.tgz#4740f595aa3253ccd2c8e44131f83bc957f57ddb"
   integrity sha512-HTsVaxA3an6myShlLroTyDZo/AOrZ6HJr+EwCaGRE2YuGdM/cFHoYfsuslOEEig5GenTw8DILUB8kqYWQ5lJtA==
 
+react-native-threads@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/react-native-threads/-/react-native-threads-0.0.19.tgz#17464b60715d774ab60e1ca6a97e31d706aa6125"
+  integrity sha512-VAQB06D+qxGDm3XwNUaDtEh1pKEuRLx4w3/E81z+pK1luMyJhK1W0G+eA0xygcM74dShXCgG10ZNvN+LHfyCLg==
+
 react-native-todorant-widget@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/react-native-todorant-widget/-/react-native-todorant-widget-0.1.4.tgz#c5c1fb9499e9523da86b171d4af4809217371fec"
