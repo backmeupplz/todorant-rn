@@ -1,11 +1,11 @@
-import { requestSync } from '@utils/sockets/socketEventEmitter'
+import { requestSync } from '@sync/syncEventEmitter'
 import { Hero } from '@models/Hero'
-import { hydrate } from '@utils/hydration/hydrate'
-import { hydrateStore } from '@utils/hydration/hydrateStore'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import { SyncRequestEvent } from '@utils/sockets/SyncRequestEvent'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export const ranks = [
   0,

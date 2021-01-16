@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, ActionSheet, View, Icon } from 'native-base'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'

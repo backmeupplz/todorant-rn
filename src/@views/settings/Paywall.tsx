@@ -16,7 +16,7 @@ import {
   restorePurchases,
 } from '@utils/purchases'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'

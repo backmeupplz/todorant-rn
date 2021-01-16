@@ -1,7 +1,7 @@
 import { sharedSocketStore } from '@stores/SocketStore'
 import { alertError } from '@utils/alert'
-import { hydratedStores, isHydrated } from '@utils/hydration/hydratedStores'
-import { requestSync } from '@utils/sockets/socketEventEmitter'
+import { hydratedStores, isHydrated } from '@stores/hydration/hydratedStores'
+import { requestSync } from '@sync/syncEventEmitter'
 
 export function hydrateStore(name: string) {
   hydratedStores[name] = true

@@ -1,4 +1,4 @@
-import { SyncStage } from '@utils/sockets/SyncStage'
+import { SyncStage } from '@sync/sockets/SyncStage'
 
 export type PromiseMap = {
   [index: string]: {

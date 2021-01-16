@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Content, Text } from 'native-base'
 import { CheckOrCross } from '@components/CheckOrCross'
-import { sharedSocketStore } from '@stores/SocketStore'
+import { sharedSocketStore } from '@stores/hydration/node_modules/@stores/SocketStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'

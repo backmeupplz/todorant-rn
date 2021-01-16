@@ -1,15 +1,17 @@
 import { observable, makeObservable } from 'mobx'
 import SocketIO from 'socket.io-client'
+import NetInfo from '@react-native-community/netinfo'
 
 const authorizationTimeout = 20
 
 export class SocketConnection {
   token?: string
+  encryptionKey?: string
   @observable authorized = false
   @observable connected = false
   @observable connectionError?: string = undefined
 
-  private socketIO = SocketIO(
+  socketIO = SocketIO(
     __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
   )
 
@@ -26,6 +28,7 @@ export class SocketConnection {
     this.createSocketListeners()
     this.startAuthorizationTimeoutChecker()
     this.startReconnectionChecker()
+    this.createNetworkListener()
   }
 
   authorize = () => {
@@ -84,6 +87,14 @@ export class SocketConnection {
     setInterval(() => {
       this.connect()
     }, 1000)
+  }
+
+  private createNetworkListener() {
+    NetInfo.addEventListener((state) => {
+      if (state.isInternetReachable) {
+        this.connect()
+      }
+    })
   }
 
   private connect = () => {

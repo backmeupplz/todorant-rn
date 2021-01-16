@@ -11,7 +11,7 @@ import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
 import { deleteDelegate, deleteDelegator } from '@utils/rest'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 
 @observer
 class Row extends Component<{ delegationUser: DelegationUser }> {

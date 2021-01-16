@@ -26,7 +26,7 @@ export class User {
   }
 
   @persist('date') @observable createdAt!: Date
-  @persist('date') @observable updatedAt!: Date
+  @persist('date') @observable updatedAt?: Date
 
   @persist @observable email?: string
   @persist @observable facebookId?: string

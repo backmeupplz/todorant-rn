@@ -2,13 +2,13 @@ import { RealmTodosData } from '@views/planning/RealmTodosData'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
 import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { sharedSocketStore } from '@stores/SocketStore'
+import { sharedSocketStore } from '@stores/hydration/node_modules/@stores/SocketStore'
 
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)

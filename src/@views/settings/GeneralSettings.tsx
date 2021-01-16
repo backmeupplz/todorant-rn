@@ -12,7 +12,7 @@ import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import PushNotification from 'react-native-push-notification'
 import {
   getNotificationPermissions,

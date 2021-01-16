@@ -1,10 +1,9 @@
-import { WorkerMesage, WorkerMessageType } from '@utils/sockets/WorkerMessage'
-import { MainMessage, MainMessageType } from '@utils/sockets/MainMessage'
-import { SocketConnection } from '@utils/sockets/SocketConnection'
+import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
+import { MainMessage, MainMessageType } from '@sync/MainMessage'
+import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { self } from 'react-native-threads'
 
 // TODO: sync logic of realm objects
-// TODO: sync logic of non-realm stores
 
 class SyncWorker {
   private socketConnection = new SocketConnection()

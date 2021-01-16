@@ -2,7 +2,7 @@ import { Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import { InteractionManager } from 'react-native'
 
 export function fixOrder(

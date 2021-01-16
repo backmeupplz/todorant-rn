@@ -13,7 +13,7 @@ import { extraButtonProps } from '@utils/extraButtonProps'
 import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
-import { sockets } from '@utils/sockets'
+import { sockets } from '@sync/Sync'
 import { Button } from '@components/Button'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
