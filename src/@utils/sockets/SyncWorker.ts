@@ -3,7 +3,6 @@ import { MainMessage, MainMessageType } from '@utils/sockets/MainMessage'
 import { SocketConnection } from '@utils/sockets/SocketConnection'
 import { self } from 'react-native-threads'
 
-// TODO: logout logic
 // TODO: sync logic of realm objects
 // TODO: sync logic of non-realm stores
 
@@ -25,6 +24,10 @@ class SyncWorker {
     }
   }
 
+  logout() {
+    this.socketConnection.logout()
+  }
+
   private sendMessageToMain(message: WorkerMesage) {
     self.postMessage(message)
   }
@@ -36,6 +39,9 @@ self.onMessage((event: MainMessage) => {
   switch (event.type) {
     case MainMessageType.AuthorizationRequest:
       syncWorker.authorize(event.token)
+      break
+    case MainMessageType.LogoutRequest:
+      syncWorker.logout()
       break
     default:
       break

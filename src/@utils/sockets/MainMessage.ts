@@ -1,5 +1,6 @@
 export enum MainMessageType {
   AuthorizationRequest = 'AuthorizationRequest',
+  LogoutRequest = 'LogoutRequest',
 }
 
 export interface MainMessage {
