@@ -9,7 +9,7 @@
 import ClockKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-  // MARK: - Complication Configuration
+  // MARK: - Complication Descriptors Configuration
 
   func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {
     let descriptors = [
@@ -26,27 +26,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       ),
     ]
     handler(descriptors)
-  }
-
-  func handleSharedComplicationDescriptors(_: [CLKComplicationDescriptor]) {
-    // Do any necessary work to support these newly shared complication descriptors
-  }
-
-  // MARK: - Timeline Configuration
-
-  func getTimelineEndDate(for _: CLKComplication,
-                          withHandler handler: @escaping (Date?) -> Void)
-  {
-    // Call the handler with the last entry date you can currently provide or nil if you can't support future timelines
-    handler(nil)
-  }
-
-  func getPrivacyBehavior(
-    for _: CLKComplication,
-    withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
-  ) {
-    // Call the handler with your desired behavior when the device is locked
-    handler(.showOnLockScreen)
   }
 
   // MARK: - Timeline Population
@@ -66,60 +45,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
   }
 
-  func getComplicationTemplate(for complication: CLKComplication,
-                               using _: Date) -> CLKComplicationTemplate?
-  {
-    switch complication.family {
-    
-    case .circularSmall:
-      guard let image = UIImage(named: "Complication/Circular") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
-      return CLKComplicationTemplateCircularSmallSimpleImage(
-        imageProvider: loadedImageProvider
-      )
-      
-    case .graphicCircular:
-      guard let image = UIImage(named: "Complication/Graphic Circular") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
-      return CLKComplicationTemplateGraphicCircularImage(
-        imageProvider: loadedImageProvider
-      )
-      
-    case .graphicCorner:
-      guard let image = UIImage(named: "Complication/Graphic Corner") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
-      return CLKComplicationTemplateGraphicCornerCircularImage(
-        imageProvider: loadedImageProvider
-      )
-      
-    case .graphicExtraLarge:
-      guard let image = UIImage(named: "Complication/Graphic Extra Large") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
-      return CLKComplicationTemplateGraphicExtraLargeCircularImage(
-        imageProvider: loadedImageProvider
-      )
-      
-    case .utilitarianSmall:
-      guard let image = UIImage(named: "Complication/Utilitarian") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
-      return CLKComplicationTemplateUtilitarianSmallSquare(
-        imageProvider: loadedImageProvider
-      )
-
-    default:
-      return nil
-    }
-  }
+  // MARK: - Timeline Entries Configuration
 
   func getTimelineEntries(
     for _: CLKComplication,
@@ -131,17 +57,76 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     handler(nil)
   }
 
-  // MARK: - Sample Templates
+  // MARK: - Templates Configuration
 
-  func getLocalizableSampleTemplate(
-    for complication: CLKComplication,
-    withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
-  ) {
-    let template = getComplicationTemplate(for: complication, using: Date())
-    if let t = template {
-      handler(t)
-    } else {
-      handler(nil)
+  func getComplicationTemplate(for complication: CLKComplication,
+                               using _: Date) -> CLKComplicationTemplate?
+  {
+    switch complication.family {
+    case .circularSmall:
+      guard let image = UIImage(named: "Complication/Circular") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
+      return CLKComplicationTemplateCircularSmallSimpleImage(
+        imageProvider: loadedImageProvider
+      )
+    case .graphicCircular:
+      guard let image = UIImage(named: "Complication/Graphic Circular") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicCircularImage(
+        imageProvider: loadedImageProvider
+      )
+    case .graphicCorner:
+      guard let image = UIImage(named: "Complication/Graphic Corner") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicCornerCircularImage(
+        imageProvider: loadedImageProvider
+      )
+    case .graphicExtraLarge:
+      guard let image = UIImage(named: "Complication/Graphic Extra Large") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
+      return CLKComplicationTemplateGraphicExtraLargeCircularImage(
+        imageProvider: loadedImageProvider
+      )
+    case .utilitarianSmall:
+      guard let image = UIImage(named: "Complication/Utilitarian") else {
+        fatalError("Unable to load an image")
+      }
+      let loadedImageProvider = CLKImageProvider(onePieceImage: image)
+      return CLKComplicationTemplateUtilitarianSmallSquare(
+        imageProvider: loadedImageProvider
+      )
+    default:
+      return nil
     }
   }
+  
+    // MARK: - Sample Templates
+
+    func getLocalizableSampleTemplate(
+      for complication: CLKComplication,
+      withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
+    ) {
+      let template = getComplicationTemplate(for: complication, using: Date())
+      if let t = template {
+        handler(t)
+      } else {
+        handler(nil)
+      }
+    }
+
+  // MARK: - Privacy Configuration
+
+  func getPrivacyBehavior(
+    for _: CLKComplication,
+    withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
+  ) { handler(.showOnLockScreen) }
+
 }
