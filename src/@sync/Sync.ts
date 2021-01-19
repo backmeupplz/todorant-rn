@@ -12,6 +12,7 @@ import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { Thread } from 'react-native-threads'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import uuid from 'uuid'
 
 const syncWorker = new Thread(`./SyncWorker.js`)
 
@@ -21,6 +22,9 @@ class Sync {
     res?: () => void
     rej?: (reason: string) => void
   }[] = []
+  private syncPromises: {
+    [index: string]: { res: Function; rej: Function }
+  } = {}
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
@@ -108,18 +112,29 @@ class Sync {
 
   sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
     switch (event) {
+      // All
       case SyncRequestEvent.All:
         return Promise.all([
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
+          this.syncWithWorker(SyncRequestEvent.Todo),
+          this.syncWithWorker(SyncRequestEvent.Tag),
+          this.syncWithWorker(SyncRequestEvent.Delegation),
         ])
+      // Non-realm syncs
       case SyncRequestEvent.Settings:
         return this.settingsSyncManager.sync()
       case SyncRequestEvent.User:
         return this.userSyncManager.sync()
       case SyncRequestEvent.Hero:
         return this.heroSyncManager.sync()
+      // Realm syncs
+      case (SyncRequestEvent.Todo,
+      SyncRequestEvent.Tag,
+      SyncRequestEvent.Delegation):
+        return this.syncWithWorker(event)
+      // Shouldn't happen
       default:
         return Promise.resolve()
     }
@@ -131,6 +146,9 @@ class Sync {
         case WorkerMessageType.AuthorizationCompleted:
           this.authorizationCompleted(message.error)
           break
+        case WorkerMessageType.SyncCompleted:
+          this.syncWithWorkerCompleted(message)
+          break
         default:
           break
       }
@@ -139,13 +157,13 @@ class Sync {
 
   private setupSyncListeners() {
     syncEventEmitter.on(SyncRequestEvent.All, () => {
-      // Todo
+      this.sync(SyncRequestEvent.All)
     })
     syncEventEmitter.on(SyncRequestEvent.Todo, () => {
-      // Todo
+      this.sync(SyncRequestEvent.Todo)
     })
     syncEventEmitter.on(SyncRequestEvent.Tag, () => {
-      // Todo
+      this.sync(SyncRequestEvent.Tag)
     })
     syncEventEmitter.on(SyncRequestEvent.Settings, () => {
       this.sync(SyncRequestEvent.Settings)
@@ -157,7 +175,7 @@ class Sync {
       this.sync(SyncRequestEvent.Hero)
     })
     syncEventEmitter.on(SyncRequestEvent.Delegation, () => {
-      // Todo
+      this.sync(SyncRequestEvent.Delegation)
     })
   }
 
@@ -170,6 +188,30 @@ class Sync {
       }
     })
     this.pendingAuthorizations = []
+  }
+
+  private syncWithWorker(syncRequestEvent: SyncRequestEvent) {
+    const syncId = uuid()
+    return new Promise((res, rej) => {
+      this.syncPromises[syncId] = { res, rej }
+      this.sendMessageToWorker({
+        type: MainMessageType.SyncRequest,
+        syncRequestEvent,
+        syncId,
+      })
+    })
+  }
+
+  private syncWithWorkerCompleted(message: WorkerMesage) {
+    if (!message.syncId || !this.syncPromises[message.syncId]) {
+      return
+    }
+    if (message.error) {
+      this.syncPromises[message.syncId].rej(message.error)
+    } else {
+      this.syncPromises[message.syncId].res()
+    }
+    delete this.syncPromises[message.syncId]
   }
 
   private sendMessageToWorker(message: MainMessage) {
