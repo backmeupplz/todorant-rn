@@ -42,7 +42,9 @@ class LoginVM {
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
         .data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
       await sharedSessionStore.login(todorantUserInfo)
       goBack()
@@ -72,7 +74,9 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
         await sharedSessionStore.login(todorantUserInfo)
         goBack()
@@ -113,7 +117,9 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
         await sharedSessionStore.login(todorantUserInfo)
         goBack()
@@ -131,7 +137,9 @@ class LoginVM {
     try {
       const todorantUserInfo = (await rest.loginToken(token)).data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
       await sharedSessionStore.login(todorantUserInfo)
       goBack()

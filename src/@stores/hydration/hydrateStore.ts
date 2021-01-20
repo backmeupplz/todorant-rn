@@ -1,4 +1,4 @@
-import { sharedSocketStore } from '@stores/SocketStore'
+import { sharedSync } from '@sync/Sync'
 import { alertError } from '@utils/alert'
 import { hydratedStores, isHydrated } from '@stores/hydration/hydratedStores'
 import { requestSync } from '@sync/syncEventEmitter'
@@ -8,7 +8,7 @@ export function hydrateStore(name: string) {
   const needsSync = isHydrated()
   if (needsSync) {
     try {
-      if (sharedSocketStore.connected && sharedSocketStore.authorized) {
+      if (sharedSync.connected && sharedSync.authorized) {
         requestSync()
       }
     } catch (err) {

@@ -7,15 +7,15 @@ import { Todo } from '@models/Todo'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTagStore } from '@stores/TagStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError } from '@utils/alert'
 import { gatherData } from '@utils/gatherData'
 import { translate } from '@utils/i18n'
 import { realm } from '@utils/realm'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@sync/Sync'
 import { observer } from 'mobx-react'
 import moment from 'moment'
 import { Container, Content, Text, Toast } from 'native-base'
@@ -85,7 +85,8 @@ export class Data extends Component {
           {/* Sync */}
           <Divider />
           <SectionHeader title={translate('sync')} />
-          <Row
+          {/* TODO: put real data here */}
+          {/* <Row
             title={translate('todosLastSync')}
             subtitle={`${
               sharedTodoStore.lastSyncDate
@@ -94,8 +95,9 @@ export class Data extends Component {
                   )
                 : translate('notSyncedYet')
             }`}
-          />
-          <Row
+          /> */}
+          {/* TODO: put real data here */}
+          {/* <Row
             title={translate('tags')}
             subtitle={`${
               sharedTagStore.lastSyncDate
@@ -104,7 +106,7 @@ export class Data extends Component {
                   )
                 : translate('notSyncedYet')
             }`}
-          />
+          /> */}
           <Row
             title={translate('settingsLastSync')}
             subtitle={`${
@@ -140,7 +142,7 @@ export class Data extends Component {
           <TableItem
             onPress={async () => {
               try {
-                await sockets.globalSync()
+                await sharedSync.sync(SyncRequestEvent.All)
               } catch (err) {
                 alertError(err)
               }
@@ -153,7 +155,7 @@ export class Data extends Component {
           <TableItem
             onPress={async () => {
               try {
-                await sockets.hardSync()
+                await sharedSync.hardSync()
               } catch (err) {
                 alertError(err)
               }

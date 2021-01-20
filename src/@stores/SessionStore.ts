@@ -1,3 +1,4 @@
+import { sharedSync } from '@sync/Sync'
 import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
 import { daysBetween } from '@utils/daysBetween'
 import { hydrate } from '@stores/hydration/hydrate'
@@ -5,7 +6,6 @@ import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
-import { sockets } from '@sync/Sync'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 
@@ -73,10 +73,10 @@ class SessionStore {
   async login(user: User) {
     this.user = user
     this.isInitialSync = true
-    await sockets.authorize()
+    await sharedSync.login(user.token)
     setToken(user.token)
     try {
-      await sockets.globalSync()
+      await sharedSync.globalSync()
     } finally {
       this.isInitialSync = false
     }
@@ -91,7 +91,7 @@ class SessionStore {
       realm.write(() => {
         realm.deleteAll()
       })
-      sockets.logout()
+      sharedSync.logout()
       removeToken()
       removePassword()
       logEvent('logout_success')
@@ -108,11 +108,14 @@ class SessionStore {
     if (!this.hydrated) {
       throw new Error("Store didn't hydrate yet")
     }
-    user.updatedAt = new Date(user.updatedAt)
+    if (user.updatedAt) {
+      user.updatedAt = new Date(user.updatedAt)
+    }
     user.createdAt = new Date(user.createdAt)
     if (
       !this.user ||
       !this.user.updatedAt ||
+      !user.updatedAt ||
       this.user.updatedAt < user.updatedAt
     ) {
       const token = this.user?.token
@@ -123,8 +126,9 @@ class SessionStore {
     } else {
       if (!areUsersPartiallyEqual(this.user, user)) {
         const userFromServer = await pushBack(this.user)
-
-        userFromServer.updatedAt = new Date(userFromServer.updatedAt)
+        if (userFromServer.updatedAt) {
+          userFromServer.updatedAt = new Date(userFromServer.updatedAt)
+        }
         userFromServer.createdAt = new Date(userFromServer.createdAt)
         Object.assign(this.user, {
           subscriptionId: undefined,
@@ -143,9 +147,9 @@ class SessionStore {
 export const sharedSessionStore = new SessionStore()
 hydrate('SessionStore', sharedSessionStore).then(() => {
   sharedSessionStore.hydrated = true
-  sockets.authorize()
   hydrateStore('SessionStore')
   if (sharedSessionStore.user?.token) {
+    sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
   } else {
     removeToken()

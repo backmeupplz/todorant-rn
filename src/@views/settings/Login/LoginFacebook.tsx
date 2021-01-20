@@ -59,7 +59,9 @@ class LoginFacebookContent extends Component<{
                   this.gotToken = true
                   const userInfo = (await rest.loginFacebook(token)).data
                   userInfo.createdAt = new Date(userInfo.createdAt)
-                  userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  if (userInfo.updatedAt) {
+                    userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  }
                   sharedSessionStore.login(userInfo)
                   goBack()
                   this.props.route.params?.setLoadingToTrue()

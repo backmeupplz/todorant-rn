@@ -13,6 +13,7 @@ import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { Thread } from 'react-native-threads'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import uuid from 'uuid'
+import { observable } from 'mobx'
 
 const syncWorker = new Thread(`./SyncWorker.js`)
 
@@ -29,6 +30,12 @@ class Sync {
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
 
+  // TODO: populate with real data
+  @observable connected = false
+  @observable authorized = false
+  @observable isSyncing = false
+  @observable connectionError?: string = undefined
+
   constructor() {
     this.setupWorkerListeners()
     this.setupSyncListeners()
@@ -36,7 +43,7 @@ class Sync {
     this.settingsSyncManager = new SyncManager<Settings>(
       this.socketConnection,
       'settings',
-      () => sharedSettingsStore.updatedAt,
+      () => Promise.resolve(sharedSettingsStore.updatedAt),
       (objects, pushBack, completeSync) => {
         return sharedSettingsStore.onObjectsFromServer(
           objects,
@@ -48,7 +55,7 @@ class Sync {
     this.userSyncManager = new SyncManager<User>(
       this.socketConnection,
       'user',
-      () => sharedSessionStore.user?.updatedAt,
+      () => Promise.resolve(sharedSessionStore.user?.updatedAt),
       (objects, pushBack, completeSync) => {
         return sharedSessionStore.onObjectsFromServer(
           objects,
@@ -60,7 +67,7 @@ class Sync {
     this.heroSyncManager = new SyncManager<Hero>(
       this.socketConnection,
       'hero',
-      () => sharedHeroStore.updatedAt,
+      () => Promise.resolve(sharedHeroStore.updatedAt),
       (objects, pushBack, completeSync) => {
         return sharedHeroStore.onObjectsFromServer(
           objects,

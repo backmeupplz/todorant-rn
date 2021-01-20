@@ -11,7 +11,8 @@ import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
 import { deleteDelegate, deleteDelegator } from '@utils/rest'
-import { sockets } from '@sync/Sync'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class Row extends Component<{ delegationUser: DelegationUser }> {
@@ -47,7 +48,7 @@ class Row extends Component<{ delegationUser: DelegationUser }> {
                   } else {
                     await deleteDelegator(this.props.delegationUser._id)
                   }
-                  sockets.delegationSyncManager.sync()
+                  sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {
                   alertError(err)
                 } finally {

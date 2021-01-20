@@ -41,7 +41,6 @@ import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
-import { sockets } from '@sync/Sync'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
@@ -50,6 +49,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class AddTodoContent extends Component<{
@@ -258,7 +259,7 @@ class AddTodoContent extends Component<{
       checkDayCompletionRoutine()
     }
     // Sync hero
-    sockets.heroSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Hero)
   }
 
   @computed get isValid() {

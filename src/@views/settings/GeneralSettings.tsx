@@ -12,7 +12,6 @@ import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { sockets } from '@sync/Sync'
 import PushNotification from 'react-native-push-notification'
 import {
   getNotificationPermissions,
@@ -21,6 +20,8 @@ import {
 } from '@utils/notifications'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
 import { Language } from '@models/Language'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const codeToName = {
   en: 'English',
@@ -86,7 +87,7 @@ export class GeneralSettings extends Component {
                 } else if (i < 7) {
                   sharedSettingsStore.language = options[i].code
                   sharedSettingsStore.updatedAt = new Date()
-                  sockets.settingsSyncManager.sync()
+                  sharedSync.sync(SyncRequestEvent.Settings)
                   await AsyncStorage.setItem('languageSelect', options[i].code)
                   RNRestart.Restart()
                 }

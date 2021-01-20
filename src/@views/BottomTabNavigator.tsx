@@ -11,10 +11,10 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
 import fonts from '@utils/fonts'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@sync/Sync'
 import { Current } from '@views/current/Current'
 import { Delegation } from '@views/delegation/Delegation'
 import { Planning } from '@views/planning/Planning'
@@ -49,7 +49,7 @@ class SettingsRotatingIcon extends Component<{
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     })
-    if (sockets.isSyncing) {
+    if (sharedSync.isSyncing) {
       return (
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
           {this.props.focused

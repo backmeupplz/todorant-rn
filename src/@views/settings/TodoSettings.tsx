@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Text, ActionSheet, View, Icon } from 'native-base'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sockets } from '@sync/Sync'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { translate } from '@utils/i18n'
@@ -18,6 +17,8 @@ import {
   stopReminders,
 } from '@utils/notifications'
 import PushNotification from 'react-native-push-notification'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class TimePickerRow extends Component<{
@@ -155,7 +156,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.showTodayOnAddTodo = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TextAndSwitch
@@ -164,7 +165,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.newTodosGoFirst = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TextAndSwitch
@@ -173,7 +174,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.preserveOrderByTime = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TextAndSwitch
@@ -182,7 +183,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.askBeforeDelete = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TextAndSwitch
@@ -191,7 +192,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.duplicateTagInBreakdown = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TextAndSwitch
@@ -200,7 +201,7 @@ export class TodoSettings extends Component {
           onValueChange={(value) => {
             sharedSettingsStore.showMoreByDefault = value
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TableItem
@@ -218,7 +219,7 @@ export class TodoSettings extends Component {
                 if (i < 7) {
                   sharedSettingsStore.firstDayOfWeek = i
                   sharedSettingsStore.updatedAt = new Date()
-                  sockets.settingsSyncManager.sync()
+                  sharedSync.sync(SyncRequestEvent.Settings)
                 }
               }
             )
@@ -239,7 +240,7 @@ export class TodoSettings extends Component {
           onClear={() => {
             sharedSettingsStore.startTimeOfDay = '00:00'
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
           value={sharedSettingsStore.startTimeOfDaySafe}
           pickerValue={this.dateFromStartTimeOfDay}
@@ -249,7 +250,7 @@ export class TodoSettings extends Component {
               date
             )
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
         <TimePickerRow

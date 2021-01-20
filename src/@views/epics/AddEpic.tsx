@@ -5,12 +5,13 @@ import { getTagById, Tag } from '@models/Tag'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { realm } from '@utils/realm'
-import { sockets } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { translate } from '@utils/i18n'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const AddEpicStore = {
   save: () => {},
@@ -70,7 +71,7 @@ class AddEpicContent extends Component<{
     })
     goBack()
     sharedTagStore.refreshTags()
-    sockets.tagsSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Tag)
   }
   render() {
     return (

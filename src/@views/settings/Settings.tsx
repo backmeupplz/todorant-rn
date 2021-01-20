@@ -9,7 +9,6 @@ import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
 import { AccountInfo } from '@views/settings/AccountInfo'
 import { Sockets } from '@views/settings/Sockets'
 import { observer, Observer } from 'mobx-react'
-import { sharedSocketStore } from '@stores/hydration/node_modules/@stores/SocketStore'
 import { CheckOrCross } from '@components/CheckOrCross'
 import { Data } from '@views/settings/Data'
 import DeviceInfo from 'react-native-device-info'
@@ -45,6 +44,7 @@ import { DelegationSettings } from './DelegationSettings'
 import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
+import { sharedSync } from '@sync/Sync'
 
 const Stack = createStackNavigator()
 
@@ -100,7 +100,7 @@ export class SettingsContent extends Component {
               <Text {...sharedColors.regularTextExtraStyle}>
                 {translate('socketsInfo')}
               </Text>
-              <CheckOrCross ok={sharedSocketStore.connected} />
+              <CheckOrCross ok={sharedSync.connected} />
             </TableItem>
           )}
           {!!sharedSessionStore.user && (

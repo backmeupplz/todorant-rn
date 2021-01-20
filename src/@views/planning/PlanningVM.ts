@@ -1,14 +1,14 @@
+import { sharedSync } from '@sync/Sync'
 import { RealmTodosData } from '@views/planning/RealmTodosData'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
-import { sockets } from '@sync/Sync'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
 import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { sharedSocketStore } from '@stores/hydration/node_modules/@stores/SocketStore'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)
@@ -104,8 +104,8 @@ export class PlanningVM {
         })
       })
     }
-    if (sharedSocketStore.authorized && sharedSocketStore.connected) {
-      sockets.todoSyncManager.sync()
+    if (sharedSync.authorized && sharedSync.connected) {
+      sharedSync.sync(SyncRequestEvent.Todo)
     }
   }
 }

@@ -5,6 +5,8 @@ import { TableItem } from '@components/TableItem'
 import { SubscriptionStatus } from '@models/User'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
 import { translate } from '@utils/i18n'
 import { logEvent } from '@utils/logEvent'
@@ -16,7 +18,6 @@ import {
   restorePurchases,
 } from '@utils/purchases'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@sync/Sync'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
@@ -58,7 +59,7 @@ class PaywallContent extends Component<{
     }
     purchaseListener.success = async () => {
       try {
-        await sockets.globalSync()
+        await sharedSync.sync(SyncRequestEvent.All)
       } catch (err) {
         alertError(err)
       }

@@ -5,13 +5,15 @@ import { getTagById, Tag } from '@models/Tag'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { realm } from '@utils/realm'
-import { sockets } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { translate } from '@utils/i18n'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { Todo } from '@models/Todo'
 
 const ChangeTextStore = {
   save: () => {},
@@ -62,7 +64,7 @@ class ChangeTextContent extends Component<{
       return
     }
     realm.write(() => {
-      for (const todo of sharedTodoStore.allTodos) {
+      for (const todo of realm.objects(Todo).filtered('deleted = false')) {
         todo.text = todo.text
           .split(' ')
           .map((word) => {
@@ -82,8 +84,7 @@ class ChangeTextContent extends Component<{
     goBack()
     sharedTagStore.refreshTags()
     sharedTodoStore.refreshTodos()
-    sockets.tagsSyncManager.sync()
-    sockets.todoSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.All)
   }
   render() {
     return (

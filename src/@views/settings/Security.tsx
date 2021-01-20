@@ -5,13 +5,14 @@ import { TableItem } from '@components/TableItem'
 import { Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertConfirm, alertError } from '@utils/alert'
 import { _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
 import { realm } from '@utils/realm'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@sync/Sync'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
@@ -46,7 +47,7 @@ export class Security extends Component {
           todo.updatedAt = new Date()
         }
       })
-      sockets.todoSyncManager.sync()
+      sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
       alertError(err)
     } finally {
@@ -67,7 +68,7 @@ export class Security extends Component {
           }
         }
       })
-      sockets.todoSyncManager.sync()
+      sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
       alertError(err)

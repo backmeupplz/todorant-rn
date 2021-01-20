@@ -13,8 +13,9 @@ import { extraButtonProps } from '@utils/extraButtonProps'
 import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
-import { sockets } from '@sync/Sync'
 import { Button } from '@components/Button'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 
@@ -75,7 +76,7 @@ class ColorPickerContent extends Component<{
     })
     goBack()
     sharedTagStore.refreshTags()
-    sockets.tagsSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Tag)
   }
 
   render() {

@@ -8,10 +8,11 @@ import { Tag, cloneTag } from '@models/Tag'
 import { translate } from '@utils/i18n'
 import { alertConfirm } from '@utils/alert'
 import { realm } from '@utils/realm'
-import { sockets } from '@sync/Sync'
 import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
 import { Alert } from 'react-native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { sharedSync } from '@sync/Sync'
 
 class TagsVM {
   onTap(tag: Tag) {
@@ -71,7 +72,7 @@ class TagsVM {
           tag.updatedAt = new Date()
         })
         sharedTagStore.refreshTags()
-        sockets.tagsSyncManager.sync()
+        sharedSync.sync(SyncRequestEvent.Tag)
       }
     )
   }
@@ -86,7 +87,7 @@ class TagsVM {
       tag.updatedAt = new Date()
     })
     sharedTagStore.refreshTags()
-    sockets.tagsSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Tag)
   }
   makeAnEpic(tag: Tag) {
     navigate('AddEpic', { tag: { ...cloneTag(tag) } })
@@ -115,7 +116,7 @@ class DeleteAllTagsButton extends Component {
                     }
                   })
                   sharedTagStore.refreshTags()
-                  sockets.tagsSyncManager.sync()
+                  sharedSync.sync(SyncRequestEvent.Tag)
                 },
                 style: 'destructive',
               },
