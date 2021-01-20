@@ -1,62 +1,29 @@
+import { mobxRealmCollection } from '@utils/mobx-realm/collection'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
-import { computed, makeObservable, observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 class DelegationStore {
   constructor() {
     makeObservable(this)
   }
 
-  @observable allDelegationUsers = realm.objects<DelegationUser>(
-    'DelegationUser'
+  @observable delegators = mobxRealmCollection(
+    realm
+      .objects<DelegationUser>('DelegationUser')
+      .filtered(`delegationType = "${DelegationUserType.delegator}"`)
   )
 
-  @computed get delegators() {
-    return this.allDelegationUsers.filtered(
-      `delegationType = "${DelegationUserType.delegator}"`
-    )
-  }
-
-  @computed get delegates() {
-    return this.allDelegationUsers.filtered(
-      `delegationType = "${DelegationUserType.delegate}"`
-    )
-  }
-
-  onObjectsFromServer = async (objects: any, completeSync: () => void) => {
-    // Remove all
-    realm.write(() => {
-      realm.delete(this.allDelegationUsers)
-    })
-    // Sync delegates
-    realm.write(() => {
-      for (const delegate of objects.delegates) {
-        realm.create('DelegationUser', {
-          ...delegate,
-          delegationType: DelegationUserType.delegate,
-        })
-      }
-    })
-    // Sync delegators
-    realm.write(() => {
-      for (const delegator of objects.delegators) {
-        realm.create('DelegationUser', {
-          ...delegator,
-          delegationType: DelegationUserType.delegator,
-        })
-      }
-    })
-    // Complete sync
-    completeSync()
-    this.refreshDelegationUsers()
-  }
-
-  refreshDelegationUsers = () => {
-    this.allDelegationUsers = realm.objects<DelegationUser>('DelegationUser')
-  }
+  @observable delegates = mobxRealmCollection(
+    realm
+      .objects<DelegationUser>('DelegationUser')
+      .filtered(`delegationType = "${DelegationUserType.delegate}"`)
+  )
 
   logout() {
-    this.refreshDelegationUsers()
+    realm.write(() => {
+      realm.delete(realm.objects<DelegationUser>('DelegationUser'))
+    })
   }
 }
 

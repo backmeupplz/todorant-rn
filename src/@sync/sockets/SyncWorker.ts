@@ -1,58 +1,63 @@
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { Tag } from '@models/Tag'
-import { Todo } from '@models/Todo'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { SyncManager } from '@sync/SyncManager'
 import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { MainMessage, MainMessageType } from '@sync/MainMessage'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { self } from 'react-native-threads'
+import {
+  getLastSyncDate,
+  LastSyncDateType,
+  onDelegationObjectsFromServer,
+  onTagsObjectsFromServer,
+  updateLastSyncDate,
+} from '@sync/SyncObjectHandlers'
 
 // TODO: extract last sync date and on objects from server away from stores
 
 class SyncWorker {
   private socketConnection = new SocketConnection()
 
-  private todoSyncManager: SyncManager<Todo[]>
+  // private todoSyncManager: SyncManager<Todo[]>
   private tagsSyncManager: SyncManager<Tag[]>
   private delegationSyncManager: SyncManager<any>
 
   constructor() {
-    this.todoSyncManager = new SyncManager<Todo[]>(
-      this.socketConnection,
-      'todos',
-      () => sharedTodoStore.lastSyncDate,
-      (objects, pushBack, completeSync) => {
-        return sharedTodoStore.onObjectsFromServer(
-          objects,
-          pushBack as () => Promise<Todo[]>,
-          completeSync
-        )
-      },
-      (lastSyncDate) => {
-        sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
-      }
-    )
+    // this.todoSyncManager = new SyncManager<Todo[]>(
+    //   this.socketConnection,
+    //   'todos',
+    //   () => sharedTodoStore.lastSyncDate,
+    //   (objects, pushBack, completeSync) => {
+    //     return sharedTodoStore.onObjectsFromServer(
+    //       objects,
+    //       pushBack as () => Promise<Todo[]>,
+    //       completeSync
+    //     )
+    //   },
+    //   (lastSyncDate) => {
+    //     sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
+    //   }
+    // )
     this.tagsSyncManager = new SyncManager<Tag[]>(
       this.socketConnection,
       'tags',
-      () => sharedTagStore.lastSyncDate,
+      () => getLastSyncDate(LastSyncDateType.Tags),
       (objects, pushBack, completeSync) => {
-        return sharedTagStore.onObjectsFromServer(
+        return onTagsObjectsFromServer(
           objects,
           pushBack as () => Promise<Tag[]>,
           completeSync
         )
       },
-      (lastSyncDate) => {
-        sharedTagStore.lastSyncDate = new Date(lastSyncDate)
-      }
+      async (lastSyncDate) =>
+        updateLastSyncDate(LastSyncDateType.Tags, lastSyncDate)
     )
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => undefined,
+      () => Promise.resolve(undefined),
       (objects, _, completeSync) => {
-        return sharedDelegationStore.onObjectsFromServer(objects, completeSync)
+        return onDelegationObjectsFromServer(objects, completeSync)
       }
     )
   }
@@ -82,9 +87,9 @@ class SyncWorker {
     }
     try {
       switch (message.syncRequestEvent) {
-        case SyncRequestEvent.Todo:
-          await this.todoSyncManager.sync()
-          break
+        // case SyncRequestEvent.Todo:
+        //   await this.todoSyncManager.sync()
+        //   break
         case SyncRequestEvent.Tag:
           await this.tagsSyncManager.sync()
           break

@@ -12,8 +12,8 @@ export class SyncManager<T> {
   private name: string
   private pendingSyncs: PromiseMap = {}
   private pendingPushes: PromiseMap = {}
-  private latestSyncDate: () => Date | undefined
-  private setLastSyncDate: ((latestSyncDate: Date) => void) | undefined
+  private latestSyncDate: () => Promise<Date | undefined>
+  private setLastSyncDate: ((latestSyncDate: Date) => Promise<void>) | undefined
 
   private isSyncing = false
 
@@ -31,13 +31,13 @@ export class SyncManager<T> {
   constructor(
     socketConnection: SocketConnection,
     name: string,
-    latestSyncDate: () => Date | undefined,
+    latestSyncDate: () => Promise<Date | undefined>,
     onObjectsFromServer: (
       objects: T,
       pushBack: (objects: T) => Promise<T>,
       completeSync: () => void
     ) => Promise<void>,
-    setLastSyncDate?: (latestSyncDate: Date) => void
+    setLastSyncDate?: (latestSyncDate: Date) => Promise<void>
   ) {
     this.socketConnection = socketConnection
     this.name = name
@@ -140,7 +140,11 @@ export class SyncManager<T> {
     if (this.queuedSyncPromise) {
       const queuedSyncPromise = this.queuedSyncPromise
       this.queuedSyncPromise = undefined
-      console.warn(`${this.name}: sync (queued)`, this.latestSyncDate(), syncId)
+      console.warn(
+        `${this.name}: sync (queued)`,
+        await this.latestSyncDate(),
+        syncId
+      )
       this.pendingSyncs[syncId] = {
         // Res and rej should be there right away after the promise is created
         res: queuedSyncPromise.res!,
@@ -150,13 +154,13 @@ export class SyncManager<T> {
       }
       this.socketConnection.socketIO.emit(
         `sync_${this.name}`,
-        this.latestSyncDate(),
+        await this.latestSyncDate(),
         syncId
       )
       return queuedSyncPromise.promise
     } else {
-      console.warn(`${this.name}: sync`, this.latestSyncDate(), syncId)
-      return new Promise((res, rej) => {
+      console.warn(`${this.name}: sync`, await this.latestSyncDate(), syncId)
+      return new Promise(async (res, rej) => {
         this.pendingSyncs[syncId] = {
           res,
           rej,
@@ -165,7 +169,7 @@ export class SyncManager<T> {
         }
         this.socketConnection.socketIO.emit(
           `sync_${this.name}`,
-          this.latestSyncDate(),
+          await this.latestSyncDate(),
           syncId
         )
       })
@@ -201,13 +205,13 @@ export class SyncManager<T> {
     }
   }
 
-  private checkIfNeedsAnotherSync() {
+  private async checkIfNeedsAnotherSync() {
     if (this.queuedSyncPromise) {
       this.isSyncing = false
       return this.sync()
     } else {
       if (this.setLastSyncDate) {
-        this.setLastSyncDate(new Date())
+        await this.setLastSyncDate(new Date())
       }
       console.warn(`${this.name} sync completed!`)
       this.isSyncing = false

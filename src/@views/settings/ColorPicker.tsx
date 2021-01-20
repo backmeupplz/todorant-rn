@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, H1, View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { Tag } from '@models/Tag'
+import { getTagById, Tag } from '@models/Tag'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { makeObservable, observable } from 'mobx'
 import {
@@ -65,9 +65,7 @@ class ColorPickerContent extends Component<{
   }
 
   save() {
-    const dbtag = sharedTagStore.getTagById(
-      this.tag?._id || this.tag?._tempSyncId
-    )
+    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
     if (!dbtag) {
       return
     }

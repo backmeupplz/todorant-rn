@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
-import { Tag } from '@models/Tag'
+import { getTagById, Tag } from '@models/Tag'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { realm } from '@utils/realm'
@@ -57,9 +57,7 @@ class ChangeTextContent extends Component<{
   }
 
   save() {
-    const dbtag = sharedTagStore.getTagById(
-      this.tag?._id || this.tag?._tempSyncId
-    )
+    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
     if (!dbtag || !this.newName || !this.newName.match(/^[\S]+$/)) {
       return
     }
