@@ -4,9 +4,12 @@ import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'uuid'
+import { cloneTodo, getTitle, getTodoById, Todo } from '@models/Todo'
+import { decrypt, encrypt } from '@utils/encryption'
 
 export enum LastSyncDateType {
   Tags = 'Tags',
+  Todos = 'Todos',
 }
 
 export async function getLastSyncDate(type: LastSyncDateType) {
@@ -134,6 +137,126 @@ export async function onTagsObjectsFromServer(
       const localTag = getTagById(tag._tempSyncId)
       if (localTag) {
         Object.assign(localTag, tag)
+      }
+    }
+  })
+  // Complete sync
+  completeSync()
+}
+
+export async function onTodosObjectsFromServer(
+  todosChangedOnServer: Todo[],
+  pushBack: (objects: Todo[]) => Promise<Todo[]>,
+  completeSync: () => void
+) {
+  // Modify dates
+  todosChangedOnServer.forEach((todo) => {
+    todo.updatedAt = new Date(todo.updatedAt)
+    todo.createdAt = new Date(todo.createdAt)
+    if ((todo as any).delegator && (todo as any).delegator.name) {
+      todo.delegateAccepted = !!todo.delegateAccepted
+      todo.delegatorName = (todo as any).delegator.name
+    }
+  })
+  // Get variables
+  const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
+    if (c._id) {
+      p[c._id] = c
+    }
+    return p
+  }, {} as { [index: string]: Todo })
+  const lastSyncDate = await getLastSyncDate(LastSyncDateType.Todos)
+  const todosChangedLocally = lastSyncDate
+    ? realm
+        .objects(Todo)
+        .filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
+    : realm.objects(Todo)
+  // Pull
+  realm.write(() => {
+    for (const serverTodo of todosChangedOnServer) {
+      if (!serverTodo._id) {
+        continue
+      }
+      let localTodo = getTodoById(serverTodo._id)
+      if (localTodo) {
+        if (localTodo.updatedAt < serverTodo.updatedAt) {
+          if (localTodo) {
+            Object.assign(localTodo, serverTodo)
+            if (localTodo.encrypted) {
+              localTodo.text = decrypt(localTodo.text)
+            }
+            localTodo._exactDate = localTodo.monthAndYear
+              ? new Date(getTitle(localTodo))
+              : new Date()
+          }
+        }
+      } else {
+        const newTodo = {
+          ...serverTodo,
+          _exactDate: serverTodo.monthAndYear
+            ? new Date(getTitle(serverTodo))
+            : new Date(),
+        }
+        if (newTodo.encrypted) {
+          newTodo.text = decrypt(newTodo.text)
+        }
+        realm.create(Todo, newTodo as Todo)
+      }
+    }
+  })
+  // Push
+  const todosToPush = todosChangedLocally.filter((todo) => {
+    if (!todo._id) {
+      return true
+    }
+    const serverTodo = serverTodosMap[todo._id]
+    if (serverTodo) {
+      return todo.updatedAt > serverTodo.updatedAt
+    } else {
+      return true
+    }
+  })
+  if (!todosToPush.length) {
+    // Complete sync
+    completeSync()
+    return
+  }
+  realm.write(() => {
+    for (const todoToPush of todosToPush) {
+      if (!todoToPush._tempSyncId) {
+        todoToPush._tempSyncId = uuid()
+      }
+    }
+  })
+  const savedPushedTodos = await pushBack(
+    todosToPush
+      .map((v) => ({ ...cloneTodo(v) }))
+      .map((v) => {
+        if (v.encrypted) {
+          v.text = encrypt(v.text)
+        }
+        return v
+      }) as any
+  )
+  // Modify dates
+  savedPushedTodos.forEach((todo) => {
+    todo.updatedAt = new Date(todo.updatedAt)
+    todo.createdAt = new Date(todo.createdAt)
+  })
+  realm.write(() => {
+    for (const todo of savedPushedTodos) {
+      if (!todo._tempSyncId) {
+        continue
+      }
+      const localTodo = getTodoById(todo._tempSyncId)
+      if (localTodo) {
+        Object.assign(localTodo, todo)
+        if (localTodo.encrypted) {
+          localTodo.text = decrypt(localTodo.text)
+        }
+        localTodo._exactDate = localTodo.monthAndYear
+          ? new Date(getTitle(localTodo))
+          : new Date()
       }
     }
   })

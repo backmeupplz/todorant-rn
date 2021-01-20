@@ -10,34 +10,33 @@ import {
   LastSyncDateType,
   onDelegationObjectsFromServer,
   onTagsObjectsFromServer,
+  onTodosObjectsFromServer,
   updateLastSyncDate,
 } from '@sync/SyncObjectHandlers'
-
-// TODO: extract last sync date and on objects from server away from stores
+import { Todo } from '@models/Todo'
 
 class SyncWorker {
   private socketConnection = new SocketConnection()
 
-  // private todoSyncManager: SyncManager<Todo[]>
+  private todoSyncManager: SyncManager<Todo[]>
   private tagsSyncManager: SyncManager<Tag[]>
   private delegationSyncManager: SyncManager<any>
 
   constructor() {
-    // this.todoSyncManager = new SyncManager<Todo[]>(
-    //   this.socketConnection,
-    //   'todos',
-    //   () => sharedTodoStore.lastSyncDate,
-    //   (objects, pushBack, completeSync) => {
-    //     return sharedTodoStore.onObjectsFromServer(
-    //       objects,
-    //       pushBack as () => Promise<Todo[]>,
-    //       completeSync
-    //     )
-    //   },
-    //   (lastSyncDate) => {
-    //     sharedTodoStore.lastSyncDate = new Date(lastSyncDate)
-    //   }
-    // )
+    this.todoSyncManager = new SyncManager<Todo[]>(
+      this.socketConnection,
+      'todos',
+      () => getLastSyncDate(LastSyncDateType.Todos),
+      (objects, pushBack, completeSync) => {
+        return onTodosObjectsFromServer(
+          objects,
+          pushBack as () => Promise<Todo[]>,
+          completeSync
+        )
+      },
+      async (lastSyncDate) =>
+        updateLastSyncDate(LastSyncDateType.Todos, lastSyncDate)
+    )
     this.tagsSyncManager = new SyncManager<Tag[]>(
       this.socketConnection,
       'tags',
@@ -87,9 +86,9 @@ class SyncWorker {
     }
     try {
       switch (message.syncRequestEvent) {
-        // case SyncRequestEvent.Todo:
-        //   await this.todoSyncManager.sync()
-        //   break
+        case SyncRequestEvent.Todo:
+          await this.todoSyncManager.sync()
+          break
         case SyncRequestEvent.Tag:
           await this.tagsSyncManager.sync()
           break

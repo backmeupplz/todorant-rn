@@ -1,5 +1,4 @@
 export const hydratedStores = {
-  TodoStore: false,
   SettingsStore: false,
   HeroStore: false,
   SessionStore: false,
