@@ -112,22 +112,23 @@ class SyncWorker {
   }
 
   private sendMessageToMain(message: WorkerMesage) {
-    self.postMessage(message)
+    self.postMessage(JSON.stringify(message))
   }
 }
 
 const syncWorker = new SyncWorker()
 
-self.onMessage((event: MainMessage) => {
-  switch (event.type) {
+self.onMessage((message: string) => {
+  const parsedMessage = JSON.parse(message) as MainMessage
+  switch (parsedMessage.type) {
     case MainMessageType.AuthorizationRequest:
-      syncWorker.authorize(event.token)
+      syncWorker.authorize(parsedMessage.token)
       break
     case MainMessageType.LogoutRequest:
       syncWorker.logout()
       break
     case MainMessageType.SyncRequest:
-      syncWorker.sync(event)
+      syncWorker.sync(parsedMessage)
       break
     default:
       break

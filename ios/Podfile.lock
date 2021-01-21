@@ -354,6 +354,8 @@ PODS:
     - React
   - RNSVG (12.1.0):
     - React
+  - RNThread (0.0.19):
+    - React
   - RNVectorIcons (6.6.0):
     - React
   - SSZipArchive (2.2.3)
@@ -421,6 +423,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNThread (from `../node_modules/react-native-threads/ios`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - SwiftKeychainWrapper
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -554,6 +557,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNThread:
+    :path: "../node_modules/react-native-threads/ios"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -627,6 +632,7 @@ SPEC CHECKSUMS:
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  RNThread: dfc202533c6687316c2f026820c791a8bc2a5042
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c

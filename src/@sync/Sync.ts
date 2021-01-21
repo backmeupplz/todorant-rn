@@ -15,7 +15,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import uuid from 'uuid'
 import { observable } from 'mobx'
 
-const syncWorker = new Thread(`./SyncWorker.js`)
+const syncWorker = new Thread(`src/@sync/sockets/SyncWorker.js`)
 
 class Sync {
   private socketConnection = new SocketConnection()
@@ -94,8 +94,8 @@ class Sync {
 
   logout = () => {
     this.socketConnection.logout()
-    syncWorker.sendMessage({
-      name: MainMessageType.LogoutRequest,
+    this.sendMessageToWorker({
+      type: MainMessageType.LogoutRequest,
     })
   }
 
@@ -148,13 +148,14 @@ class Sync {
   }
 
   private setupWorkerListeners() {
-    syncWorker.onmessage = (message: WorkerMesage) => {
-      switch (message.type) {
+    syncWorker.onmessage = (message: string) => {
+      const parsedMessage = JSON.parse(message) as WorkerMesage
+      switch (parsedMessage.type) {
         case WorkerMessageType.AuthorizationCompleted:
-          this.authorizationCompleted(message.error)
+          this.authorizationCompleted(parsedMessage.error)
           break
         case WorkerMessageType.SyncCompleted:
-          this.syncWithWorkerCompleted(message)
+          this.syncWithWorkerCompleted(parsedMessage)
           break
         default:
           break
@@ -222,7 +223,7 @@ class Sync {
   }
 
   private sendMessageToWorker(message: MainMessage) {
-    syncWorker.postMessage(message)
+    syncWorker.postMessage(JSON.stringify(message))
   }
 }
 
