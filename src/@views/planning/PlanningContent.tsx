@@ -180,7 +180,7 @@ export class PlanningContent extends Component {
         )}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosData.todosArray.length ? (
-            <DraggableSectionList
+            <DraggableSectionList<Todo, SectionListData<Todo>>
               onViewableItemsChanged={() => {
                 sharedAppStateStore.changeLoading(false)
               }}
@@ -240,7 +240,7 @@ export class PlanningContent extends Component {
                   <PlanningDateHeader
                     drag={drag}
                     isActive={isActive}
-                    item={item as SectionListData<Todo>}
+                    item={item}
                     key={index}
                     vm={this.vm}
                   />

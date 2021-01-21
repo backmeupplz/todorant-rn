@@ -21,9 +21,7 @@ export class RealmTodosData {
 
   get todosArray() {
     return Object.keys(this.todoSectionMap).map((key) => {
-      const originalSectionData = this.todoSectionMap[
-        key
-      ] as SectionListData<Todo>
+      const originalSectionData = this.todoSectionMap[key] as TodoSection
       const copiedSectionData = { ...originalSectionData }
       copiedSectionData.data = copiedSectionData.data.slice()
       return copiedSectionData
@@ -261,7 +259,7 @@ export class RealmTodosData {
   }
 
   private insertBetweenTitles(
-    originalObject: { [index: string]: TodoSection<Todo> },
+    originalObject: { [index: string]: TodoSection },
     titleToInsert: string,
     todoToBeInserted: Todo,
     completed: boolean

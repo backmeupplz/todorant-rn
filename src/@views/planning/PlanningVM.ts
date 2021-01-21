@@ -20,7 +20,7 @@ export class PlanningVM {
     [index: string]: boolean
   }
 
-  onDragEnd = (params: DragEndParams<Todo | string>) => {
+  onDragEnd = (params: DragEndParams<Todo>) => {
     const { dataArr, to, from } = params
     // enable loader
     sharedAppStateStore.changeLoading(true)

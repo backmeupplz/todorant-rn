@@ -43,7 +43,7 @@
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.7",
-    "@upacyxou/react-native-draggable-sectionlist": "0.0.9999991",
+    "@upacyxou/react-native-draggable-sectionlist": "0.0.9999992",
     "@upacyxou/react-native-month": "^1.2.3",
     "axios": "^0.19.2",
     "babel-plugin-module-resolver": "^4.0.0",

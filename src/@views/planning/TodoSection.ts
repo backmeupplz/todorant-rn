@@ -1,8 +1,7 @@
 import { Todo } from '@models/Todo'
-import { SectionListData } from 'react-native'
 
-export interface TodoSection<T> {
+export interface TodoSection {
   section: string
-  data: (Todo | SectionListData<T>)[]
+  data: Todo[]
   order: number
 }
