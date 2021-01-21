@@ -9,6 +9,9 @@
 import ClockKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
+  
+  let store = Store()
+  
   // MARK: - Complication Descriptors Configuration
 
   func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {

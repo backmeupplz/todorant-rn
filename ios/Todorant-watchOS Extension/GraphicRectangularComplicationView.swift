@@ -10,14 +10,15 @@ import SwiftUI
 import ClockKit
 
 struct GraphicRectangularComplicationView: View {
-  let maximumTodos: Float
-  let completeTodos: Float
-  let todoText: String
+  let complicationData: GraphicRectangularData
   
-    var body: some View {
+  var body: some View {
+    let currentProgress = complicationData.completeTodos
+    let maximumProgress = complicationData.maximumTodos
       VStack {
-        SegmentedProgressBarView(currentProgress: 3, maximumProgress: 5)
-        Text(todoText)
+        //SegmentedProgressBarView(currentProgress: complicationData.completeTodos, maximumProgress: complicationData.maximumTodos)
+        SegmentedProgressBarView(currentProgress: Int(currentProgress), maximumProgress: Int(maximumProgress))
+        Text(complicationData.todoText)
           .todoTextStyle()
           .font(.callout)
           .lineLimit(2)
@@ -29,7 +30,7 @@ struct GraphicRectangularComplicationView: View {
 struct GraphicRectangularComplicationView_Previews: PreviewProvider {
     static var previews: some View {
       CLKComplicationTemplateGraphicRectangularFullView(
-      GraphicRectangularComplicationView(maximumTodos: 10, completeTodos: 4, todoText: "Buy oat milk, tofu and tempeh")
+      GraphicRectangularComplicationView(complicationData: GraphicRectangularData(maximumTodos: 14, completeTodos: 3, todoText: "Buy oat milk"))
       )
       .previewContext()
     }

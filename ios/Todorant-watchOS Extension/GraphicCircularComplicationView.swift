@@ -10,29 +10,28 @@ import ClockKit
 import SwiftUI
 
 struct GraphicCircularComplicationView: View {
-  let maximumTodos: Float
-  let completeTodos: Float
+  let complicationData: GraphicCircularData
 
   var body: some View {
-      Gauge(value: completeTodos, in: 0 ... maximumTodos) {
-        Text("Todos")
-      } currentValueLabel: {
-        Text("\(Int(completeTodos))")
-          .foregroundColor(Color.progressBar)
-          .complicationForeground()
-      } minimumValueLabel: {
-        Text("\(Int(0))")
-      } maximumValueLabel: {
-        Text("\(Int(maximumTodos))")
-      }
-      .gaugeStyle(CircularGaugeStyle(tint: Color.progressBar))
+    Gauge(value: complicationData.completeTodos, in: 0 ... complicationData.maximumTodos) {
+      Text("Todos")
+    } currentValueLabel: {
+      Text("\(Int(complicationData.completeTodos))")
+        .foregroundColor(Color.progressBar)
+        .complicationForeground()
+    } minimumValueLabel: {
+      Text("\(Int(0))")
+    } maximumValueLabel: {
+      Text("\(Int(complicationData.maximumTodos))")
+    }
+    .gaugeStyle(CircularGaugeStyle(tint: Color.progressBar))
   }
 }
 
 struct GraphicCircularComplicationView_Previews: PreviewProvider {
   static var previews: some View {
     CLKComplicationTemplateGraphicCircularView(
-      GraphicCircularComplicationView(maximumTodos: 7, completeTodos: 4)
+      GraphicCircularComplicationView(complicationData: GraphicCircularData(maximumTodos: 12, completeTodos: 3))
     )
     .previewContext()
   }
