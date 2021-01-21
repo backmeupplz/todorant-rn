@@ -26,7 +26,7 @@ struct GraphicRectangularData: ComplicationData { // TODO: Add Mediate Views
 
 struct ComplicationDataOperator {
   
-  func getGraphicCircularData(store: Store) -> GraphicCircularData? {
+  func getGraphicCircularData(store: Store) -> GraphicCircularData {
     if store.authenticated, !store.loading, !store.errorShown {
       if let currentState = store.currentState {
         return GraphicCircularData(
@@ -35,10 +35,10 @@ struct ComplicationDataOperator {
         )
       }
     }
-    return nil
+    return GraphicCircularData(maximumTodos: 0, completeTodos: 0)
   }
 
-  func getGraphicRectangularData(store: Store) -> GraphicRectangularData? {
+  func getGraphicRectangularData(store: Store) -> GraphicRectangularData {
     if store.authenticated, !store.loading, !store.errorShown {
       if let currentState = store.currentState {
         if let todo = store.currentState?.todo {
@@ -50,6 +50,6 @@ struct ComplicationDataOperator {
         }
       }
     }
-    return nil
+    return GraphicRectangularData(maximumTodos: 1, completeTodos: 1, todoText: "Something went wrong")
   }
 }
