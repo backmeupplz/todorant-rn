@@ -38,17 +38,20 @@ export class RateModal extends Component {
           sharedSessionStore.askedToRate = true
           sendFeedback(state)
         }}
-        containerStyle={{ backgroundColor: sharedColors.backgroundColor }}
-        titleStyle={{ color: sharedColors.textColor }}
-        cancelButtonTextStyle={{ color: sharedColors.textColor }}
-        cancelButtonContainerStyle={{ borderColor: sharedColors.textColor }}
-        rateButtonTextStyle={{ color: sharedColors.backgroundColor }}
-        rateButtonContainerStyle={{
-          backgroundColor: sharedColors.primaryColor,
+        styles={{
+          modalContainer: { backgroundColor: sharedColors.backgroundColor },
+          title: { color: sharedColors.textColor },
+          button: { backgroundColor: sharedColors.primaryColor },
+          buttonText: { color: sharedColors.backgroundColor },
+          buttonCancel: {
+            borderColor: sharedColors.textColor,
+            backgroundColor: sharedColors.backgroundColor,
+          },
+          buttonCancelText: { color: sharedColors.textColor },
+          ...({ textBox: { color: sharedColors.textColor } } as any),
+          placeholderTextColor: sharedColors.placeholderColor,
+          errorText: { color: 'tomato' },
         }}
-        placeholderTextColor={sharedColors.placeholderColor}
-        errorTextStyle={{ color: 'tomato' }}
-        {...({ textBoxStyle: { color: sharedColors.textColor } } as any)}
         onRated={() => {
           setTimeout(() => {
             Alert.alert(
