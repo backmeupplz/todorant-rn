@@ -225,6 +225,7 @@ export class PlanningContent extends Component {
                   />
                 )
               }}
+              stickySectionHeadersEnabled={false}
             />
           ) : (
             <NoTodosPlaceholder />
