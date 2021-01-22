@@ -31,7 +31,6 @@
     "@react-navigation/bottom-tabs": "^5.0.0",
     "@react-navigation/native": "^5.0.0",
     "@react-navigation/stack": "^5.0.0",
-    "@tasumaniadiabori/react-native-store-rating": "^1.1.10",
     "@types/axios": "^0.14.0",
     "@types/crypto-js": "^3.1.45",
     "@types/i18n-js": "^3.0.1",
