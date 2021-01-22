@@ -1310,6 +1310,14 @@
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
 
+"@tasumaniadiabori/react-native-store-rating@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@tasumaniadiabori/react-native-store-rating/-/react-native-store-rating-1.1.10.tgz#9270ea5896b1d3ff636eda3a3e121e8ef899e420"
+  integrity sha512-HV3K605ZfP4ccXbheQtNKXf6u2gIsbhBMPwEwfS+ymLoG3KZicG1/BKyILhWH0k1TrwY9oozxo+8atgF2VmvNA==
+  dependencies:
+    lodash.times "^4.3.2"
+    react-native-ratings "^6.5.0"
+
 "@types/axios@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
@@ -6798,7 +6806,7 @@ react-native-qrcode-scanner@^1.4.0:
     prop-types "^15.5.10"
     react-native-permissions "^2.0.2"
 
-react-native-ratings@^6.3.1:
+react-native-ratings@^6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
   integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==
@@ -6856,12 +6864,12 @@ react-native-splash-screen@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
   integrity sha512-Ls9qiNZzW/OLFoI25wfjjAcrf2DZ975hn2vr6U9gyuxi2nooVbzQeFoQS5vQcbCt9QX5NY8ASEEAtlLdIa6KVg==
 
-react-native-store-rating@backmeupplz/react-native-store-rating#83d1c9188597cf02ec20f447b60d6b431d4a1e11:
+react-native-store-rating@backmeupplz/react-native-store-rating#803b83b701a4f926fcacfe5e775d57cf69c72088:
   version "1.0.1"
-  resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/83d1c9188597cf02ec20f447b60d6b431d4a1e11"
+  resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/803b83b701a4f926fcacfe5e775d57cf69c72088"
   dependencies:
     lodash.times "^4.3.2"
-    react-native-ratings "^6.3.1"
+    react-native-ratings "^6.5.0"
 
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
