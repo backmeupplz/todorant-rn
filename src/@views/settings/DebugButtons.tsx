@@ -150,6 +150,17 @@ export class DebugButtons extends Component {
             reset rating
           </Text>
         </Button>
+        <Button
+          style={{ margin: 2 }}
+          onPress={() => {
+            sharedSessionStore.numberOfTodosCompleted = 102
+            sharedSessionStore.askedToRate = false
+          }}
+        >
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            open rate modal
+          </Text>
+        </Button>
       </>
     ) : null
   }
