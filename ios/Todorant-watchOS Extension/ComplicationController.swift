@@ -11,8 +11,8 @@ import SwiftUI
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
   
-  private let dataOperator = ComplicationDataOperator()
-  var store = Store()
+  private let dataProvider = ComplicationDataProvider()
+  var store = Store.shared
   
   // MARK: - Complication Descriptors Configuration
 
@@ -78,11 +78,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     switch complication.family {
     
     case .graphicCircular:
-      let data = dataOperator.getGraphicCircularData(store: store)
+      let data = dataProvider.getGraphicCircularData(store: store)
       return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(complicationData: data))
       
     case .graphicRectangular:
-      let data = dataOperator.getGraphicRectangularData(store: store)
+      let data = dataProvider.getGraphicRectangularData(store: store)
       return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(complicationData: data))
     
     case .circularSmall:
@@ -147,8 +147,4 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
   ) { handler(.showOnLockScreen) }
   
-  // MARK: - Private Functions
-  
-  
-
 }

@@ -24,7 +24,7 @@ struct GraphicRectangularData: ComplicationData { // TODO: Add Mediate Views
   var todoText: String
 }
 
-struct ComplicationDataOperator {
+struct ComplicationDataProvider {
   
   func getGraphicCircularData(store: Store) -> GraphicCircularData {
     if store.authenticated, !store.loading, !store.errorShown {

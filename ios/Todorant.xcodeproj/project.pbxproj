@@ -43,7 +43,7 @@
 		6602C8182550E04C00821524 /* Date+Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3A79CE2425B0470014DE92 /* Date+Today.swift */; };
 		6602C8312550E1FE00821524 /* String+truncateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF65C252FBF5700E69129 /* String+truncateLinks.swift */; };
 		660F918825B63E9A00A03380 /* GraphicRectangularComplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660F918725B63E9A00A03380 /* GraphicRectangularComplicationView.swift */; };
-		661950AC25B9C9AA00FFE227 /* ComplicationDataOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661950AB25B9C9AA00FFE227 /* ComplicationDataOperator.swift */; };
+		661950AC25B9C9AA00FFE227 /* ComplicationDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661950AB25B9C9AA00FFE227 /* ComplicationDataProvider.swift */; };
 		662B7AC42554908D0088C06A /* TodoMediateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662B7AC32554908D0088C06A /* TodoMediateView.swift */; };
 		662B7B602554C3750088C06A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		662B7B692554C3750088C06A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
@@ -270,7 +270,7 @@
 		6602C7F22550DF2800821524 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6602C83A2550EAF900821524 /* Todorant-watchOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todorant-watchOS.entitlements"; sourceTree = "<group>"; };
 		660F918725B63E9A00A03380 /* GraphicRectangularComplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicRectangularComplicationView.swift; sourceTree = "<group>"; };
-		661950AB25B9C9AA00FFE227 /* ComplicationDataOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationDataOperator.swift; sourceTree = "<group>"; };
+		661950AB25B9C9AA00FFE227 /* ComplicationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationDataProvider.swift; sourceTree = "<group>"; };
 		662B7AC32554908D0088C06A /* TodoMediateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoMediateView.swift; sourceTree = "<group>"; };
 		662B7B722554C5DD0088C06A /* ClearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearView.swift; sourceTree = "<group>"; };
 		662B7B7C2554C5F00088C06A /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
@@ -562,7 +562,7 @@
 				662B7B722554C5DD0088C06A /* ClearView.swift */,
 				66E864772549DB6A00CA2017 /* Color+customColors.swift */,
 				66E864172549D3C500CA2017 /* ComplicationController.swift */,
-				661950AB25B9C9AA00FFE227 /* ComplicationDataOperator.swift */,
+				661950AB25B9C9AA00FFE227 /* ComplicationDataProvider.swift */,
 				66E864112549D3C500CA2017 /* CurrentView.swift */,
 				662B7B7C2554C5F00088C06A /* EmptyView.swift */,
 				66B4589625966D3C00B37158 /* GraphicCircularComplicationView.swift */,
@@ -1361,7 +1361,7 @@
 				668D80442558B5AD004F6709 /* TokenSender.swift in Sources */,
 				66E8648A2549DD9000CA2017 /* SegmentedProgressBarView.swift in Sources */,
 				660F918825B63E9A00A03380 /* GraphicRectangularComplicationView.swift in Sources */,
-				661950AC25B9C9AA00FFE227 /* ComplicationDataOperator.swift in Sources */,
+				661950AC25B9C9AA00FFE227 /* ComplicationDataProvider.swift in Sources */,
 				66E864122549D3C500CA2017 /* CurrentView.swift in Sources */,
 				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
 				6661E4DC25BC7976003CD52A /* reloadActiveComplications.swift in Sources */,

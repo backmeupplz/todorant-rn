@@ -11,9 +11,9 @@ import ClockKit
 
 func reloadActiveComplications() {
   let server = CLKComplicationServer.sharedInstance()
-
-  for complication in server.activeComplications ?? [] {
-    server.reloadTimeline(for: complication)
-    print("Timline reload")
+  
+  server.activeComplications?.forEach { complication in
+      server.reloadTimeline(for: complication)
+      print("Timline reload at \(Date())")
   }
 }

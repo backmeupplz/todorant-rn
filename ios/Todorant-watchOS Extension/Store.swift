@@ -68,7 +68,9 @@ class Store: ObservableObject {
 
   @Published var expanded = false
   
-  public init() {
+  static let shared = Store()
+  
+  private init() {
     updateCurrent()
     reloadActiveComplications()
   }
