@@ -54,34 +54,34 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
   // MARK: - Timeline Entries Configuration
 
   func getTimelineEntries(
-    for complication: CLKComplication,
+    for _: CLKComplication,
     after _: Date,
     limit _: Int,
     withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void
   ) {
-    if let template = getComplicationTemplate(for: complication, using: Date()) {
-      let entry = CLKComplicationTimelineEntry(
-        date: Date(),
-        complicationTemplate: template
-      )
-      handler([entry])
-    } else {
-      handler(nil)
-    }
+    handler(nil)
   }
 
   // MARK: - Templates Configuration
 
   func getComplicationTemplate(for complication: CLKComplication,
-                               using _: Date) -> CLKComplicationTemplate?
+                               using _: Date, snapshot: Bool = false) -> CLKComplicationTemplate?
   {
     switch complication.family {
     
     case .graphicCircular:
+      if snapshot {
+        let data = GraphicCircularData(maximumTodos: 3, completeTodos: 1)
+        return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(complicationData: data))
+      }
       let data = dataProvider.getGraphicCircularData(store: store)
       return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(complicationData: data))
       
     case .graphicRectangular:
+      if snapshot {
+        let data = GraphicRectangularData(maximumTodos: 3, completeTodos: 1, todoText: "Buy oat milk")
+        return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(complicationData: data))
+      }
       let data = dataProvider.getGraphicRectangularData(store: store)
       return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(complicationData: data))
     
@@ -132,7 +132,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       for complication: CLKComplication,
       withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
     ) {
-      let template = getComplicationTemplate(for: complication, using: Date())
+      let template = getComplicationTemplate(for: complication, using: Date(), snapshot: true)
       if let t = template {
         handler(t)
       } else {
