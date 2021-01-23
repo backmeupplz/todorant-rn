@@ -5,8 +5,6 @@
 //  Created by Яков Карпов on 29.10.2020.
 //  Copyright © 2020 Facebook. All rights reserved.
 //
-
-import ClockKit
 import SwiftUI
 
 struct ButtonsView: View {
@@ -43,6 +41,7 @@ struct ButtonsView: View {
             }
           withAnimation {
             isShowingButtonsView = false
+            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "delete"))
@@ -65,6 +64,7 @@ struct ButtonsView: View {
             }
           withAnimation {
             isShowingButtonsView = false
+            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "skip"))
@@ -85,6 +85,7 @@ struct ButtonsView: View {
           WKInterfaceDevice.current().play(.success)
           withAnimation {
             isShowingButtonsView = false
+            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "done"))
@@ -93,14 +94,5 @@ struct ButtonsView: View {
       Spacer()
     }
     .padding(.top)
-  }
-}
-
-private func reloadActiveComplications() {
-  let server = CLKComplicationServer.sharedInstance()
-
-  for complication in server.activeComplications ?? [] {
-    server.reloadTimeline(for: complication)
-    print("Timline reload")
   }
 }

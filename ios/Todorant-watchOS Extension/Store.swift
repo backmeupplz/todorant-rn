@@ -8,6 +8,7 @@
 
 import Foundation
 import KeychainAccess
+import ClockKit
 
 enum Key: String {
   case accessToken
@@ -70,6 +71,7 @@ class Store: ObservableObject {
   
   public init() {
     updateCurrent()
+    reloadActiveComplications()
   }
   
   func updateCurrent(completion: (() -> Void)? = nil) {

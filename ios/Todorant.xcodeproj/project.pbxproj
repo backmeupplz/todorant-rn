@@ -56,6 +56,7 @@
 		665C17A4254A377C00786973 /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
 		665C17AD254A377D00786973 /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
 		665C92A52562BE7300E09910 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C92A42562BE7300E09910 /* TodoView.swift */; };
+		6661E4DC25BC7976003CD52A /* reloadActiveComplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6661E4DB25BC7976003CD52A /* reloadActiveComplications.swift */; };
 		6663DF4025598A5000571F9A /* PlaceholderProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6663DF3F25598A5000571F9A /* PlaceholderProgressBarView.swift */; };
 		668AFA49252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
 		668AFA4A252E40A20046205C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 668AFA4C252E40A20046205C /* Localizable.strings */; };
@@ -278,6 +279,7 @@
 		665C1788254A26A900786973 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
 		665C1792254A323900786973 /* ButtonEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEntryView.swift; sourceTree = "<group>"; };
 		665C92A42562BE7300E09910 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
+		6661E4DB25BC7976003CD52A /* reloadActiveComplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reloadActiveComplications.swift; sourceTree = "<group>"; };
 		6663DF3F25598A5000571F9A /* PlaceholderProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderProgressBarView.swift; sourceTree = "<group>"; };
 		668AFA4B252E40A20046205C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		668AFA53252E40B00046205C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 				665C92A42562BE7300E09910 /* TodoView.swift */,
 				668D804D2558B845004F6709 /* TokenReceiver.swift */,
 				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
+				6661E4DB25BC7976003CD52A /* reloadActiveComplications.swift */,
 			);
 			path = "Todorant-watchOS Extension";
 			sourceTree = "<group>";
@@ -1361,6 +1364,7 @@
 				661950AC25B9C9AA00FFE227 /* ComplicationDataOperator.swift in Sources */,
 				66E864122549D3C500CA2017 /* CurrentView.swift in Sources */,
 				66E864782549DB6A00CA2017 /* Color+customColors.swift in Sources */,
+				6661E4DC25BC7976003CD52A /* reloadActiveComplications.swift in Sources */,
 				6602C8172550E04900821524 /* DateFormatter+AppFormat.swift in Sources */,
 				66E864182549D3C500CA2017 /* ComplicationController.swift in Sources */,
 				6602C8052550E03400821524 /* Request.swift in Sources */,
