@@ -8,7 +8,6 @@
 
 import Foundation
 import KeychainAccess
-import ClockKit
 
 enum Key: String {
   case accessToken

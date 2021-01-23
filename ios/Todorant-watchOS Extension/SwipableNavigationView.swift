@@ -45,6 +45,7 @@ struct SwipableNavigationView: View {
     }
     .onTapGesture {
       store.updateCurrent()
+      reloadActiveComplications()
     }
   }
 }
