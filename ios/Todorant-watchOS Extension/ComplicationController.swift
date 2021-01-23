@@ -12,7 +12,7 @@ import SwiftUI
 class ComplicationController: NSObject, CLKComplicationDataSource {
   
   private let dataOperator = ComplicationDataOperator()
-  @State var store = Store()
+  var store = Store()
   
   // MARK: - Complication Descriptors Configuration
 
@@ -54,13 +54,20 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
   // MARK: - Timeline Entries Configuration
 
   func getTimelineEntries(
-    for _: CLKComplication,
+    for complication: CLKComplication,
     after _: Date,
     limit _: Int,
     withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void
   ) {
-    // Call the handler with the timeline entries after the given date
-    handler(nil)
+    if let template = getComplicationTemplate(for: complication, using: Date()) {
+      let entry = CLKComplicationTimelineEntry(
+        date: Date(),
+        complicationTemplate: template
+      )
+      handler([entry])
+    } else {
+      handler(nil)
+    }
   }
 
   // MARK: - Templates Configuration
@@ -139,5 +146,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     for _: CLKComplication,
     withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
   ) { handler(.showOnLockScreen) }
+  
+  // MARK: - Private Functions
+  
+  
 
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Facebook. All rights reserved.
 //
 
+import ClockKit
 import SwiftUI
 
 struct ButtonsView: View {
@@ -21,6 +22,7 @@ struct ButtonsView: View {
           withAnimation {
             isShowingButtonsView = false
             store.updateCurrent()
+            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "refresh"))
@@ -32,11 +34,11 @@ struct ButtonsView: View {
             .execute { result in
               self.store.loading = false
               switch result {
-                case .success:
-                  self.store.updateCurrent()
-                case .failure:
-                  self.store.updateCurrent()
-                  self.store.errorShown = true
+              case .success:
+                self.store.updateCurrent()
+              case .failure:
+                self.store.updateCurrent()
+                self.store.errorShown = true
               }
             }
           withAnimation {
@@ -91,5 +93,14 @@ struct ButtonsView: View {
       Spacer()
     }
     .padding(.top)
+  }
+}
+
+private func reloadActiveComplications() {
+  let server = CLKComplicationServer.sharedInstance()
+
+  for complication in server.activeComplications ?? [] {
+    server.reloadTimeline(for: complication)
+    print("Timline reload")
   }
 }
