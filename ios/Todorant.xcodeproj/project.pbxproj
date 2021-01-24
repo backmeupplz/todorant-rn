@@ -66,6 +66,7 @@
 		66B4589725966D3C00B37158 /* GraphicCircularComplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B4589625966D3C00B37158 /* GraphicCircularComplicationView.swift */; };
 		66CD27FC2543D23000C8B643 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */; };
 		66CD27FD2543D23200C8B643 /* View+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */; };
+		66DC1C6325BE323E00E550BB /* WatchProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DC1C6225BE323E00E550BB /* WatchProgressView.swift */; };
 		66E864042549D3C400CA2017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E864032549D3C400CA2017 /* Assets.xcassets */; };
 		66E8640B2549D3C500CA2017 /* Todorant-watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66E8640A2549D3C500CA2017 /* Todorant-watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66E864102549D3C500CA2017 /* TodorantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E8640F2549D3C500CA2017 /* TodorantApp.swift */; };
@@ -287,6 +288,7 @@
 		668D804D2558B845004F6709 /* TokenReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReceiver.swift; sourceTree = "<group>"; };
 		66B4589625966D3C00B37158 /* GraphicCircularComplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicCircularComplicationView.swift; sourceTree = "<group>"; };
 		66CD27E82543CEBD00C8B643 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
+		66DC1C6225BE323E00E550BB /* WatchProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchProgressView.swift; sourceTree = "<group>"; };
 		66E864012549D3C200CA2017 /* Todorant-watchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Todorant-watchOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66E864032549D3C400CA2017 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66E864052549D3C400CA2017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				668D804D2558B845004F6709 /* TokenReceiver.swift */,
 				66E864652549D8A000CA2017 /* View+Modifiers.swift */,
 				6661E4DB25BC7976003CD52A /* reloadActiveComplications.swift */,
+				66DC1C6225BE323E00E550BB /* WatchProgressView.swift */,
 			);
 			path = "Todorant-watchOS Extension";
 			sourceTree = "<group>";
@@ -1354,6 +1357,7 @@
 				6602C80E2550E04500821524 /* String+Today.swift in Sources */,
 				662B7AC42554908D0088C06A /* TodoMediateView.swift in Sources */,
 				665C92A52562BE7300E09910 /* TodoView.swift in Sources */,
+				66DC1C6325BE323E00E550BB /* WatchProgressView.swift in Sources */,
 				662B7B7D2554C5F00088C06A /* EmptyView.swift in Sources */,
 				66E864142549D3C500CA2017 /* NotificationController.swift in Sources */,
 				665C1793254A323900786973 /* ButtonEntryView.swift in Sources */,
