@@ -26,10 +26,6 @@ struct TodoMediateView: View {
         } else if condition == .watchLoading {
           Text("Loading")
             .padding(.horizontal)
-        } else if condition == .empty {
-          EmptyView()
-        } else if let cur = currentProgress, let max = maximumProgress, condition == .clear {
-          ClearView(currentProgress: cur, maximumProgress: max)
         } else {
           ProgressView()
         }
@@ -40,5 +36,5 @@ struct TodoMediateView: View {
 }
 
 enum MediateConditions {
-  case notAuthenticated, error, loading, watchLoading, clear, empty
+  case notAuthenticated, error, loading, watchLoading
 }

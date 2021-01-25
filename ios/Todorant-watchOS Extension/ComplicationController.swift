@@ -10,8 +10,6 @@ import ClockKit
 import SwiftUI
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-  
-  private let dataProvider = ComplicationDataProvider()
   var store = Store.shared
   
   // MARK: - Complication Descriptors Configuration
@@ -71,19 +69,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     case .graphicCircular:
       if snapshot {
-        let data = GraphicCircularData(maximumTodos: 3, completeTodos: 1)
-        return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(complicationData: data))
+        return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(store: store, snapshot: true))
       }
-      let data = dataProvider.getGraphicCircularData(store: store)
-      return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(complicationData: data))
+      return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(store: store))
       
     case .graphicRectangular:
       if snapshot {
-        let data = GraphicRectangularData(maximumTodos: 3, completeTodos: 1, todoText: "Buy oat milk")
-        return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(complicationData: data))
+        return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(store: store, snapshot: true))
       }
-      let data = dataProvider.getGraphicRectangularData(store: store)
-      return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(complicationData: data))
+      return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(store: store))
     
     case .circularSmall:
       guard let image = UIImage(named: "Complication/Circular") else {

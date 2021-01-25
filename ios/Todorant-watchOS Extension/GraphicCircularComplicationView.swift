@@ -10,10 +10,12 @@ import ClockKit
 import SwiftUI
 
 struct GraphicCircularComplicationView: View {
-  let complicationData: GraphicCircularData
-
+  let store: Store
+  var snapshot = false
+  
   var body: some View {
-    Gauge(value: complicationData.completeTodos, in: 0 ... complicationData.maximumTodos) {
+    let complicationData = getComplicationData(store: store, snapshot: snapshot)
+    return Gauge(value: complicationData.completeTodos, in: 0 ... complicationData.maximumTodos) {
       Text("Todos")
     } currentValueLabel: {
       Text("\(Int(complicationData.completeTodos))")
@@ -25,14 +27,31 @@ struct GraphicCircularComplicationView: View {
       Text("\(Int(complicationData.maximumTodos))")
     }
     .gaugeStyle(CircularGaugeStyle(tint: Color.progressBar))
+  
   }
 }
 
-struct GraphicCircularComplicationView_Previews: PreviewProvider {
-  static var previews: some View {
-    CLKComplicationTemplateGraphicCircularView(
-      GraphicCircularComplicationView(complicationData: GraphicCircularData(maximumTodos: 12, completeTodos: 3))
-    )
-    .previewContext()
+struct GraphicCircularComplicationData {
+  var maximumTodos: Float
+  var completeTodos: Float
+}
+
+private func getComplicationData(store: Store, snapshot: Bool = false) -> GraphicCircularComplicationData {
+  if snapshot {
+    return GraphicCircularComplicationData(maximumTodos: 3, completeTodos: 1)
+  }
+  if let currentState = store.currentState {
+    return GraphicCircularComplicationData(maximumTodos: Float(currentState.todosCount), completeTodos: Float(currentState.todosCount - currentState.incompleteTodosCount))
+  } else {
+    return GraphicCircularComplicationData(maximumTodos: 0, completeTodos: 0)
   }
 }
+
+//struct GraphicCircularComplicationView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    CLKComplicationTemplateGraphicCircularView(
+//      GraphicCircularComplicationView(complicationData: GraphicCircularData(maximumTodos: 12, completeTodos: 3))
+//    )
+//    .previewContext()
+//  }
+//}

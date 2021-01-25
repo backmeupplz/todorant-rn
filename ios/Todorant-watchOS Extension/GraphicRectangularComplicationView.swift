@@ -6,44 +6,66 @@
 //  Copyright © 2021 Facebook. All rights reserved.
 //
 
-import SwiftUI
 import ClockKit
+import SwiftUI
 
 struct GraphicRectangularComplicationView: View {
-  let complicationData: GraphicRectangularData
-  
+  let store: Store
+  var snapshot = false
+
   var body: some View {
     VStack {
-      if complicationData.condition == .clear, let max = complicationData.maxiumumTodos, let cur = complicationData.completeTodos {
-        TodoMediateView(
-          condition: .clear,
-          currentProgress: cur,
-          maximumProgress: max
+      if snapshot {
+        SegmentedProgressBarView(
+          currentProgress: 1,
+          maximumProgress: 3
         )
-      }
-      if let condition = complicationData.condition {
-        TodoMediateView(condition: condition)
-      } else if let text = complicationData.todoText {
-        SegmentedProgressBarView(currentProgress: Int(complicationData.completeTodos), maximumProgress: Int(complicationData.maximumTodos))
-        Text(text)
-                  .todoTextStyle()
-                  .font(.callout)
-                  .lineLimit(2)
+        Text("Buy oat milk")
+          .todoTextStyle()
+          .font(.callout)
+          .lineLimit(2)
+      } else if !store.authenticated {
+        TodoMediateView(condition: .notAuthenticated)
+      } else if store.loading {
+        TodoMediateView(condition: .loading)
+      } else if store.errorShown {
+        TodoMediateView(condition: .error)
+      } else {
+        if let currentState = store.currentState {
+          if let todo = store.currentState?.todo {
+            SegmentedProgressBarView(
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
+            Text(todo.text.stringWithLinksTruncated())
+              .todoTextStyle()
+              .font(.callout)
+              .lineLimit(2)
+          } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+            ClearView(
+              complication: true,
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
+          } else {
+            EmptyView(complication: true)
+          }
+        }
       }
     }
     .edgesIgnoringSafeArea(.all)
   }
 }
 
-struct GraphicRectangularComplicationView_Previews: PreviewProvider {
-    static var previews: some View {
-      CLKComplicationTemplateGraphicRectangularFullView(
-      GraphicRectangularComplicationView(complicationData: GraphicRectangularData(maximumTodos: 14, completeTodos: 3, todoText: "Buy oat milk"))
-      )
-      .previewContext()
-      CLKComplicationTemplateGraphicRectangularFullView(
-        GraphicRectangularComplicationView(complicationData: GraphicRectangularData(condition: .watchLoading))
-      )
-      .previewContext()
-    }
-}
+// struct GraphicRectangularComplicationView_Previews: PreviewProvider {
+//    static var previews: some View {
+//      CLKComplicationTemplateGraphicRectangularFullView(
+//      GraphicRectangularComplicationView(complicationData: GraphicRectangularData(maximumTodos: 14, completeTodos: 3, todoText: "Buy oat milk"))
+//      )
+//      .previewContext()
+//      CLKComplicationTemplateGraphicRectangularFullView(
+//        GraphicRectangularComplicationView(complicationData: GraphicRectangularData(condition: .watchLoading))
+//      )
+//      .previewContext()
+//    }
+// }

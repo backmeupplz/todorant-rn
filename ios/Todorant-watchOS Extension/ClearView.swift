@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ClearView: View {
   
+  var complication = false
+  
   let currentProgress: Int
   let maximumProgress: Int
   
@@ -20,9 +22,14 @@ struct ClearView: View {
         maximumProgress: maximumProgress
       )
       VStack {
-        Text("🎉")
-          .font(.title)
-        Text("clear.subtitle")
+        if complication {
+          Text(NSLocalizedString("clear.subtitle", comment: "") + " 🎉")
+            .font(.callout)
+        } else {
+          Text("🎉")
+            .font(.title)
+          Text("clear.subtitle")
+        }
       }
         .todoTextStyle()
     }

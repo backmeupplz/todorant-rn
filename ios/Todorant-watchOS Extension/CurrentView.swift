@@ -29,13 +29,12 @@ struct CurrentView: View {
               isShowingButtonsView: $isShowingButtonsView
             )
           } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-            TodoMediateView(
-              condition: .clear,
+            ClearView(
               currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
               maximumProgress: currentState.todosCount
             )
           } else {
-            TodoMediateView(condition: .empty)
+            EmptyView()
           }
         }
       }
