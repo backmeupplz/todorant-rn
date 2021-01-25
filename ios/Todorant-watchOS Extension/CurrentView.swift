@@ -23,11 +23,19 @@ struct CurrentView: View {
       } else {
         if let currentState = store.currentState {
           if let todo = store.currentState?.todo {
-            TodoView(currentState: currentState, todo: todo, isShowingButtonsView: $isShowingButtonsView)
+            TodoView(
+              currentState: currentState,
+              todo: todo,
+              isShowingButtonsView: $isShowingButtonsView
+            )
           } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-            ClearView(currentState: currentState)
+            TodoMediateView(
+              condition: .clear,
+              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+              maximumProgress: currentState.todosCount
+            )
           } else {
-            EmptyView()
+            TodoMediateView(condition: .empty)
           }
         }
       }

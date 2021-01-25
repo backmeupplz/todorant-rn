@@ -10,13 +10,14 @@ import SwiftUI
 
 struct ClearView: View {
   
-  let currentState: CurrentState
+  let currentProgress: Int
+  let maximumProgress: Int
   
   var body: some View {
     VStack {
       SegmentedProgressBarView(
-        currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-        maximumProgress: currentState.todosCount
+        currentProgress: currentProgress,
+        maximumProgress: maximumProgress
       )
       VStack {
         Text("🎉")

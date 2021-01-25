@@ -8,38 +8,6 @@
 
 import Foundation
 
-private protocol ComplicationData {
-  var maximumTodos: Float? { get }
-  var completeTodos: Float? { get }
-}
-
-struct GraphicCircularData: ComplicationData {
-  var maximumTodos: Float?
-  var completeTodos: Float?
-  
-  public init(maximumTodos: Float, completeTodos: Float) {
-    self.maximumTodos = maximumTodos
-    self.completeTodos = completeTodos
-  }
-}
-
-struct GraphicRectangularData: ComplicationData { // TODO: Add Mediate Views
-  var maximumTodos: Float?
-  var completeTodos: Float?
-  var todoText: String?
-  var condition: MediateConditions?
-  
-  public init(maximumTodos: Float, completeTodos: Float, todoText: String) {
-    self.maximumTodos = maximumTodos
-    self.completeTodos = completeTodos
-    self.todoText = todoText
-  }
-  
-  public init(condition: MediateConditions) {
-    self.condition = condition
-  }
-}
-
 struct ComplicationDataProvider {
   
   func getGraphicCircularData(store: Store) -> GraphicCircularData {
@@ -66,8 +34,43 @@ struct ComplicationDataProvider {
           completeTodos: Float(currentState.todosCount - currentState.incompleteTodosCount),
           todoText: todo.text
         )
+      } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+        return GraphicRectangularData(condition: .clear,
+                                      maximumTodos: Float(currentState.todosCount),
+                                      completeTodos: Float(currentState.todosCount - currentState.incompleteTodosCount))
+      } else {
+        return GraphicRectangularData(condition: .empty)
       }
     }
     return GraphicRectangularData(condition: .error)
+  }
+}
+
+private protocol ComplicationData {
+  var maximumTodos: Float { get }
+  var completeTodos: Float { get }
+}
+
+struct GraphicCircularData: ComplicationData {
+  var maximumTodos: Float
+  var completeTodos: Float
+}
+
+struct GraphicRectangularData: ComplicationData {
+  var maximumTodos: Float
+  var completeTodos: Float
+  var todoText: String?
+  var condition: MediateConditions?
+  
+  public init(maximumTodos: Float, completeTodos: Float, todoText: String) {
+    self.maximumTodos = maximumTodos
+    self.completeTodos = completeTodos
+    self.todoText = todoText
+  }
+  
+  public init(condition: MediateConditions, maximumTodos: Float = 0, completeTodos: Float = 0) {
+    self.condition = condition
+    self.maximumTodos = maximumTodos
+    self.completeTodos = completeTodos
   }
 }
