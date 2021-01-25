@@ -20,7 +20,6 @@ struct ButtonsView: View {
           withAnimation {
             isShowingButtonsView = false
             store.updateCurrent()
-            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "refresh"))
@@ -41,7 +40,6 @@ struct ButtonsView: View {
             }
           withAnimation {
             isShowingButtonsView = false
-            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "delete"))
@@ -64,7 +62,6 @@ struct ButtonsView: View {
             }
           withAnimation {
             isShowingButtonsView = false
-            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "skip"))
@@ -85,7 +82,6 @@ struct ButtonsView: View {
           WKInterfaceDevice.current().play(.success)
           withAnimation {
             isShowingButtonsView = false
-            reloadActiveComplications()
           }
         }) {
           ButtonEntryView(buttonImage: #imageLiteral(resourceName: "done"))
