@@ -56,16 +56,3 @@ struct GraphicRectangularComplicationView: View {
     .edgesIgnoringSafeArea(.all)
   }
 }
-
-// struct GraphicRectangularComplicationView_Previews: PreviewProvider {
-//    static var previews: some View {
-//      CLKComplicationTemplateGraphicRectangularFullView(
-//      GraphicRectangularComplicationView(complicationData: GraphicRectangularData(maximumTodos: 14, completeTodos: 3, todoText: "Buy oat milk"))
-//      )
-//      .previewContext()
-//      CLKComplicationTemplateGraphicRectangularFullView(
-//        GraphicRectangularComplicationView(complicationData: GraphicRectangularData(condition: .watchLoading))
-//      )
-//      .previewContext()
-//    }
-// }

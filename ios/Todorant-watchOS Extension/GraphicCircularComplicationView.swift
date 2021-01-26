@@ -46,12 +46,3 @@ private func getComplicationData(store: Store, snapshot: Bool = false) -> Graphi
     return GraphicCircularComplicationData(maximumTodos: 0, completeTodos: 0)
   }
 }
-
-//struct GraphicCircularComplicationView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    CLKComplicationTemplateGraphicCircularView(
-//      GraphicCircularComplicationView(complicationData: GraphicCircularData(maximumTodos: 12, completeTodos: 3))
-//    )
-//    .previewContext()
-//  }
-//}
