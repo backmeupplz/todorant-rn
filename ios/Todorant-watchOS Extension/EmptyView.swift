@@ -9,11 +9,19 @@
 import SwiftUI
 
 struct EmptyView: View {
+  
+  var complication = false
+  
   var body: some View {
     VStack {
-      Text("🐝")
-        .font(.title)
-      Text("empty.subtitle")
+      if complication {
+        Text(NSLocalizedString("empty.subtitle", comment: "") + " 🐝")
+          .font(.callout)
+      } else {
+        Text("🐝")
+          .font(.title)
+        Text("empty.subtitle")
+      }
     }
     .todoTextStyle()
   }

@@ -10,7 +10,7 @@ import SwiftUI
 
 @main
 struct TodorantApp: App {
-  let store = Store()
+  let store = Store.shared
   
   var session = TokenReceiver()
   

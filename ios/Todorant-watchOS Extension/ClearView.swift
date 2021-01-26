@@ -10,18 +10,26 @@ import SwiftUI
 
 struct ClearView: View {
   
-  let currentState: CurrentState
+  var complication = false
+  
+  let currentProgress: Int
+  let maximumProgress: Int
   
   var body: some View {
     VStack {
       SegmentedProgressBarView(
-        currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-        maximumProgress: currentState.todosCount
+        currentProgress: currentProgress,
+        maximumProgress: maximumProgress
       )
       VStack {
-        Text("🎉")
-          .font(.title)
-        Text("clear.subtitle")
+        if complication {
+          Text(NSLocalizedString("clear.subtitle", comment: "") + " 🎉")
+            .font(.callout)
+        } else {
+          Text("🎉")
+            .font(.title)
+          Text("clear.subtitle")
+        }
       }
         .todoTextStyle()
     }

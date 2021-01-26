@@ -5,7 +5,6 @@
 //  Created by Яков Карпов on 29.10.2020.
 //  Copyright © 2020 Facebook. All rights reserved.
 //
-
 import SwiftUI
 
 struct ButtonsView: View {
@@ -32,11 +31,11 @@ struct ButtonsView: View {
             .execute { result in
               self.store.loading = false
               switch result {
-                case .success:
-                  self.store.updateCurrent()
-                case .failure:
-                  self.store.updateCurrent()
-                  self.store.errorShown = true
+              case .success:
+                self.store.updateCurrent()
+              case .failure:
+                self.store.updateCurrent()
+                self.store.errorShown = true
               }
             }
           withAnimation {

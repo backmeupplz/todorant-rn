@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ClockKit
 import KeychainAccess
 
 enum Key: String {
@@ -67,7 +68,13 @@ class Store: ObservableObject {
   @Published var errorShown = false
 
   @Published var expanded = false
-
+  
+  static let shared = Store()
+  
+  private init() {
+    self.updateCurrent()
+  }
+  
   func updateCurrent(completion: (() -> Void)? = nil) {
     loading = true
     TodoRoute<CurrentState>(route: .current, parameters: ["date": String.today])
@@ -77,11 +84,21 @@ class Store: ObservableObject {
           case let .success(currentState):
             // Update state
             self.currentState = currentState
+            self.reloadActiveComplications()
             self.errorShown = false
           case .failure:
             self.errorShown = true
         }
         completion?()
       }
+  }
+  
+  private func reloadActiveComplications() {
+    let server = CLKComplicationServer.sharedInstance()
+    
+    server.activeComplications?.forEach { complication in
+        server.reloadTimeline(for: complication)
+        print("Timline reload at \(Date())")
+    }
   }
 }

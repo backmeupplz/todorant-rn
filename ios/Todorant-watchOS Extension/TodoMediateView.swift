@@ -9,17 +9,22 @@
 import SwiftUI
 
 struct TodoMediateView: View {
-  let condition: Conditions
+  let condition: MediateConditions
+  var currentProgress: Int?
+  var maximumProgress: Int?
   var body: some View {
     VStack {
       PlaceholderProgressBarView()
-
+      
       Group {
         if condition == .notAuthenticated {
           Text("authenticate")
             .padding(.horizontal)
         } else if condition == .error {
           Text("error")
+            .padding(.horizontal)
+        } else if condition == .watchLoading {
+          Text("Loading")
             .padding(.horizontal)
         } else {
           ProgressView()
@@ -30,6 +35,6 @@ struct TodoMediateView: View {
   }
 }
 
-enum Conditions {
-  case notAuthenticated, error, loading
+enum MediateConditions {
+  case notAuthenticated, error, loading, watchLoading
 }

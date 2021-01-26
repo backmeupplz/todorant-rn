@@ -7,9 +7,12 @@
 //
 
 import ClockKit
+import SwiftUI
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-  // MARK: - Complication Configuration
+  var store = Store.shared
+  
+  // MARK: - Complication Descriptors Configuration
 
   func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {
     let descriptors = [
@@ -22,31 +25,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
           CLKComplicationFamily.graphicCorner,
           CLKComplicationFamily.graphicExtraLarge,
           CLKComplicationFamily.utilitarianSmall,
+          CLKComplicationFamily.graphicRectangular
         ]
       ),
     ]
     handler(descriptors)
-  }
-
-  func handleSharedComplicationDescriptors(_: [CLKComplicationDescriptor]) {
-    // Do any necessary work to support these newly shared complication descriptors
-  }
-
-  // MARK: - Timeline Configuration
-
-  func getTimelineEndDate(for _: CLKComplication,
-                          withHandler handler: @escaping (Date?) -> Void)
-  {
-    // Call the handler with the last entry date you can currently provide or nil if you can't support future timelines
-    handler(nil)
-  }
-
-  func getPrivacyBehavior(
-    for _: CLKComplication,
-    withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
-  ) {
-    // Call the handler with your desired behavior when the device is locked
-    handler(.showOnLockScreen)
   }
 
   // MARK: - Timeline Population
@@ -66,10 +49,35 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
   }
 
+  // MARK: - Timeline Entries Configuration
+
+  func getTimelineEntries(
+    for _: CLKComplication,
+    after _: Date,
+    limit _: Int,
+    withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void
+  ) {
+    handler(nil)
+  }
+
+  // MARK: - Templates Configuration
+
   func getComplicationTemplate(for complication: CLKComplication,
-                               using _: Date) -> CLKComplicationTemplate?
+                               using _: Date, snapshot: Bool = false) -> CLKComplicationTemplate?
   {
     switch complication.family {
+    
+    case .graphicCircular:
+      if snapshot {
+        return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(store: store, snapshot: true))
+      }
+      return CLKComplicationTemplateGraphicCircularView(GraphicCircularComplicationView(store: store))
+      
+    case .graphicRectangular:
+      if snapshot {
+        return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(store: store, snapshot: true))
+      }
+      return CLKComplicationTemplateGraphicRectangularFullView(GraphicRectangularComplicationView(store: store))
     
     case .circularSmall:
       guard let image = UIImage(named: "Complication/Circular") else {
@@ -77,15 +85,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       }
       let loadedImageProvider = CLKImageProvider(onePieceImage: image)
       return CLKComplicationTemplateCircularSmallSimpleImage(
-        imageProvider: loadedImageProvider
-      )
-      
-    case .graphicCircular:
-      guard let image = UIImage(named: "Complication/Graphic Circular") else {
-        fatalError("Unable to load an image")
-      }
-      let loadedImageProvider = CLKFullColorImageProvider(fullColorImage: image)
-      return CLKComplicationTemplateGraphicCircularImage(
         imageProvider: loadedImageProvider
       )
       
@@ -115,33 +114,31 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       return CLKComplicationTemplateUtilitarianSmallSquare(
         imageProvider: loadedImageProvider
       )
-
+      
     default:
       return nil
     }
   }
+  
+    // MARK: - Sample Templates
 
-  func getTimelineEntries(
-    for _: CLKComplication,
-    after _: Date,
-    limit _: Int,
-    withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void
-  ) {
-    // Call the handler with the timeline entries after the given date
-    handler(nil)
-  }
-
-  // MARK: - Sample Templates
-
-  func getLocalizableSampleTemplate(
-    for complication: CLKComplication,
-    withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
-  ) {
-    let template = getComplicationTemplate(for: complication, using: Date())
-    if let t = template {
-      handler(t)
-    } else {
-      handler(nil)
+    func getLocalizableSampleTemplate(
+      for complication: CLKComplication,
+      withHandler handler: @escaping (CLKComplicationTemplate?) -> Void
+    ) {
+      let template = getComplicationTemplate(for: complication, using: Date(), snapshot: true)
+      if let t = template {
+        handler(t)
+      } else {
+        handler(nil)
+      }
     }
-  }
+
+  // MARK: - Privacy Configuration
+
+  func getPrivacyBehavior(
+    for _: CLKComplication,
+    withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void
+  ) { handler(.showOnLockScreen) }
+  
 }
