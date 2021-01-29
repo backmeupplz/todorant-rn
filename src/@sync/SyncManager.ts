@@ -6,16 +6,17 @@ import {
 import { PromiseMap } from '@sync/sockets/PromiseMap'
 import { SyncStage } from '@sync/sockets/SyncStage'
 import uuid from 'uuid'
+import { observable } from 'mobx'
 
 export class SyncManager<T> {
+  @observable isSyncing = false
+
   private socketConnection: SocketConnection
   private name: string
   private pendingSyncs: PromiseMap = {}
   private pendingPushes: PromiseMap = {}
   private latestSyncDate: () => Promise<Date | undefined>
   private setLastSyncDate: ((latestSyncDate: Date) => Promise<void>) | undefined
-
-  private isSyncing = false
 
   private queuedSyncPromise:
     | { promise: Promise<unknown>; res?: Function; rej?: Function }

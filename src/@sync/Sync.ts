@@ -7,47 +7,42 @@ import { Hero } from '@models/Hero'
 import { User } from '@models/User'
 import { Settings } from '@models/Settings'
 import { SyncManager } from '@sync/SyncManager'
-import { MainMessage, MainMessageType } from '@sync/MainMessage'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
-import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import uuid from 'uuid'
-import { observable } from 'mobx'
+import { computed } from 'mobx'
 import { Todo } from '@models/Todo'
 import { Tag } from '@models/Tag'
 import {
   getLastSyncDate,
   LastSyncDateType,
+  onDelegationObjectsFromServer,
   onTagsObjectsFromServer,
   onTodosObjectsFromServer,
   updateLastSyncDate,
-} from './SyncObjectHandlers'
-import { alertConfirm } from '@utils/alert'
+} from '@sync/SyncObjectHandlers'
 
 class Sync {
   private socketConnection = new SocketConnection()
-  private pendingAuthorizations: {
-    res?: () => void
-    rej?: (reason: string) => void
-  }[] = []
-  private syncPromises: {
-    [index: string]: { res: Function; rej: Function }
-  } = {}
+
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
   private todoSyncManager: SyncManager<Todo[]>
   private tagsSyncManager: SyncManager<Tag[]>
-  // private delegationSyncManager: SyncManager<any>
+  private delegationSyncManager: SyncManager<any>
 
-  // TODO: populate with real data
-  @observable connected = false
-  @observable authorized = false
-  @observable isSyncing = false
-  @observable connectionError?: string = undefined
+  @computed isSyncing() {
+    return (
+      this.settingsSyncManager.isSyncing ||
+      this.userSyncManager.isSyncing ||
+      this.heroSyncManager.isSyncing ||
+      this.todoSyncManager.isSyncing ||
+      this.tagsSyncManager.isSyncing ||
+      this.delegationSyncManager.isSyncing
+    )
+  }
 
   constructor() {
-    // this.setupWorkerListeners()
     this.setupSyncListeners()
     // Setup sync managers
     this.settingsSyncManager = new SyncManager<Settings>(
@@ -114,6 +109,14 @@ class Sync {
       async (lastSyncDate) =>
         updateLastSyncDate(LastSyncDateType.Tags, lastSyncDate)
     )
+    this.delegationSyncManager = new SyncManager<any>(
+      this.socketConnection,
+      'delegate',
+      () => Promise.resolve(undefined),
+      (objects, _, completeSync) => {
+        return onDelegationObjectsFromServer(objects, completeSync)
+      }
+    )
   }
 
   login = (token: string) => {
@@ -122,19 +125,12 @@ class Sync {
       this.socketConnection.token = token
       await this.socketConnection.authorize()
       // Worker socket connection
-      this.pendingAuthorizations.push({ res, rej })
-      this.sendMessageToWorker({
-        type: MainMessageType.AuthorizationRequest,
-        token: token,
-      })
+      await this.sync()
     })
   }
 
   logout = () => {
     this.socketConnection.logout()
-    this.sendMessageToWorker({
-      type: MainMessageType.LogoutRequest,
-    })
   }
 
   hardSync = () => {
@@ -165,9 +161,7 @@ class Sync {
           this.heroSyncManager.sync(),
           this.todoSyncManager.sync(),
           this.tagsSyncManager.sync(),
-          // this.syncWithWorker(SyncRequestEvent.Todo),
-          // this.syncWithWorker(SyncRequestEvent.Tag),
-          // this.syncWithWorker(SyncRequestEvent.Delegation),
+          this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:
@@ -179,28 +173,11 @@ class Sync {
       // Realm syncs
       case SyncRequestEvent.Todo:
         return this.todoSyncManager.sync()
-      // Shouldn't happen
       case SyncRequestEvent.Tag:
         return this.tagsSyncManager.sync()
-      default:
-        return Promise.resolve()
+      case SyncRequestEvent.Delegation:
+        return this.delegationSyncManager.sync()
     }
-  }
-
-  private setupWorkerListeners() {
-    // sharedSyncWorker.onmessage = (message: string) => {
-    //   const parsedMessage = JSON.parse(message) as WorkerMesage
-    //   switch (parsedMessage.type) {
-    //     case WorkerMessageType.AuthorizationCompleted:
-    //       this.authorizationCompleted(parsedMessage.error)
-    //       break
-    //     case WorkerMessageType.SyncCompleted:
-    //       this.syncWithWorkerCompleted(parsedMessage)
-    //       break
-    //     default:
-    //       break
-    //   }
-    // }
   }
 
   private setupSyncListeners() {
@@ -225,45 +202,6 @@ class Sync {
     syncEventEmitter.on(SyncRequestEvent.Delegation, () => {
       this.sync(SyncRequestEvent.Delegation)
     })
-  }
-
-  private authorizationCompleted(error?: string) {
-    this.pendingAuthorizations.forEach((authorization) => {
-      if (error && authorization.rej) {
-        authorization.rej(error)
-      } else if (!error && authorization.res) {
-        authorization.res()
-      }
-    })
-    this.pendingAuthorizations = []
-  }
-
-  private syncWithWorker(syncRequestEvent: SyncRequestEvent) {
-    const syncId = uuid()
-    return new Promise((res, rej) => {
-      this.syncPromises[syncId] = { res, rej }
-      this.sendMessageToWorker({
-        type: MainMessageType.SyncRequest,
-        syncRequestEvent,
-        syncId,
-      })
-    })
-  }
-
-  private syncWithWorkerCompleted(message: WorkerMesage) {
-    if (!message.syncId || !this.syncPromises[message.syncId]) {
-      return
-    }
-    if (message.error) {
-      this.syncPromises[message.syncId].rej(message.error)
-    } else {
-      this.syncPromises[message.syncId].res()
-    }
-    delete this.syncPromises[message.syncId]
-  }
-
-  private sendMessageToWorker(message: MainMessage) {
-    // sharedSyncWorker.postMessage(JSON.stringify(message))
   }
 }
 
