@@ -4,7 +4,6 @@ import { SyncManager } from '@sync/SyncManager'
 import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { MainMessage, MainMessageType } from '@sync/MainMessage'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
-import { self } from 'react-native-threads'
 import {
   getLastSyncDate,
   LastSyncDateType,
@@ -14,6 +13,8 @@ import {
   updateLastSyncDate,
 } from '@sync/SyncObjectHandlers'
 import { Todo } from '@models/Todo'
+
+reactotron.warn('Initialized')
 
 class SyncWorker {
   private socketConnection = new SocketConnection()
@@ -59,6 +60,7 @@ class SyncWorker {
         return onDelegationObjectsFromServer(objects, completeSync)
       }
     )
+    self.postMessage(JSON.stringify({ noice: 'yeah' }))
   }
 
   async authorize(token?: string) {
@@ -118,7 +120,8 @@ class SyncWorker {
 
 const syncWorker = new SyncWorker()
 
-self.onMessage((message: string) => {
+self.onmessage = (message: string) => {
+  self.postMessage(JSON.stringify({ noice: 'yeah' }))
   const parsedMessage = JSON.parse(message) as MainMessage
   switch (parsedMessage.type) {
     case MainMessageType.AuthorizationRequest:
@@ -133,4 +136,4 @@ self.onMessage((message: string) => {
     default:
       break
   }
-})
+}

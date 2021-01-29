@@ -1,4 +1,3 @@
-import { realm } from '@utils/realm'
 import { MobxRealmModel } from '@utils/mobx-realm/model'
 
 export class Tag extends MobxRealmModel {
@@ -59,14 +58,4 @@ export function cloneTag(tag: Tag) {
     epicCompleted: tag.epicCompleted,
     epicPoints: tag.epicPoints,
   }
-}
-
-export function getTagById(id?: string) {
-  if (!id) {
-    return undefined
-  }
-  const tags = realm
-    .objects<Tag>('Tag')
-    .filtered(`_id = "${id}" || _tempSyncId = "${id}"`)
-  return tags.length ? tags[0] : undefined
 }

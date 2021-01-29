@@ -1,10 +1,12 @@
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
-import { Tag, cloneTag, getTagById } from '@models/Tag'
+import { Tag, cloneTag } from '@models/Tag'
+import { getTagById } from '@utils/getTagById'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'uuid'
-import { cloneTodo, getTitle, getTodoById, Todo } from '@models/Todo'
+import { cloneTodo, getTitle, Todo } from '@models/Todo'
+import { getTodoById } from '@utils/getTodoById'
 import { decrypt, encrypt } from '@utils/encryption'
 
 export enum LastSyncDateType {

@@ -1,5 +1,6 @@
 import { sharedSync } from '@sync/Sync'
-import { getTagById, Tag } from '@models/Tag'
+import { getTagById } from '@utils/getTagById'
+import { Tag } from '@models/Tag'
 import { l } from '@utils/linkify'
 import { realm } from '@utils/realm'
 import { TodoVM } from '@views/add/TodoVM'

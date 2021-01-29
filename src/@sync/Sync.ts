@@ -1,5 +1,5 @@
 import { isHydrated } from '@stores/hydration/hydratedStores'
-import { syncEventEmitter } from './syncEventEmitter'
+import { syncEventEmitter } from '@sync/syncEventEmitter'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -10,12 +10,9 @@ import { SyncManager } from '@sync/SyncManager'
 import { MainMessage, MainMessageType } from '@sync/MainMessage'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
-import { Thread } from 'react-native-threads'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import uuid from 'uuid'
 import { observable } from 'mobx'
-
-const syncWorker = new Thread(`src/@sync/sockets/SyncWorker.js`)
 
 class Sync {
   private socketConnection = new SocketConnection()
@@ -148,7 +145,7 @@ class Sync {
   }
 
   private setupWorkerListeners() {
-    syncWorker.onmessage = (message: string) => {
+    sharedSyncWorker.onmessage = (message: string) => {
       const parsedMessage = JSON.parse(message) as WorkerMesage
       switch (parsedMessage.type) {
         case WorkerMessageType.AuthorizationCompleted:
@@ -223,7 +220,7 @@ class Sync {
   }
 
   private sendMessageToWorker(message: MainMessage) {
-    syncWorker.postMessage(JSON.stringify(message))
+    sharedSyncWorker.postMessage(JSON.stringify(message))
   }
 }
 

@@ -1,4 +1,3 @@
-import { realm } from '@utils/realm'
 import { MobxRealmModel } from '@utils/mobx-realm/model'
 import { getDateString, getDateStringFromTodo } from '@utils/time'
 
@@ -128,14 +127,4 @@ export function cloneTodo(todo: Todo) {
     delegatorName: todo.delegatorName,
     delegateAccepted: todo.delegateAccepted,
   }
-}
-
-export function getTodoById(id?: string) {
-  if (!id) {
-    return undefined
-  }
-  const todos = realm
-    .objects(Todo)
-    .filtered(`_id = "${id}" || _tempSyncId = "${id}"`)
-  return todos.length ? todos[0] : undefined
 }
