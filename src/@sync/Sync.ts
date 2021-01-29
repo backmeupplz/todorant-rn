@@ -13,6 +13,16 @@ import { WorkerMesage, WorkerMessageType } from '@sync/WorkerMessage'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import uuid from 'uuid'
 import { observable } from 'mobx'
+import { Todo } from '@models/Todo'
+import { Tag } from '@models/Tag'
+import {
+  getLastSyncDate,
+  LastSyncDateType,
+  onTagsObjectsFromServer,
+  onTodosObjectsFromServer,
+  updateLastSyncDate,
+} from './SyncObjectHandlers'
+import { alertConfirm } from '@utils/alert'
 
 class Sync {
   private socketConnection = new SocketConnection()
@@ -26,6 +36,9 @@ class Sync {
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
+  private todoSyncManager: SyncManager<Todo[]>
+  private tagsSyncManager: SyncManager<Tag[]>
+  // private delegationSyncManager: SyncManager<any>
 
   // TODO: populate with real data
   @observable connected = false
@@ -34,7 +47,7 @@ class Sync {
   @observable connectionError?: string = undefined
 
   constructor() {
-    this.setupWorkerListeners()
+    // this.setupWorkerListeners()
     this.setupSyncListeners()
     // Setup sync managers
     this.settingsSyncManager = new SyncManager<Settings>(
@@ -72,6 +85,34 @@ class Sync {
           completeSync
         )
       }
+    )
+    this.todoSyncManager = new SyncManager<Todo[]>(
+      this.socketConnection,
+      'todos',
+      () => getLastSyncDate(LastSyncDateType.Todos),
+      (objects, pushBack, completeSync) => {
+        return onTodosObjectsFromServer(
+          objects,
+          pushBack as () => Promise<Todo[]>,
+          completeSync
+        )
+      },
+      async (lastSyncDate) =>
+        updateLastSyncDate(LastSyncDateType.Todos, lastSyncDate)
+    )
+    this.tagsSyncManager = new SyncManager<Tag[]>(
+      this.socketConnection,
+      'tags',
+      () => getLastSyncDate(LastSyncDateType.Tags),
+      (objects, pushBack, completeSync) => {
+        return onTagsObjectsFromServer(
+          objects,
+          pushBack as () => Promise<Tag[]>,
+          completeSync
+        )
+      },
+      async (lastSyncDate) =>
+        updateLastSyncDate(LastSyncDateType.Tags, lastSyncDate)
     )
   }
 
@@ -122,9 +163,11 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
-          this.syncWithWorker(SyncRequestEvent.Todo),
-          this.syncWithWorker(SyncRequestEvent.Tag),
-          this.syncWithWorker(SyncRequestEvent.Delegation),
+          this.todoSyncManager.sync(),
+          this.tagsSyncManager.sync(),
+          // this.syncWithWorker(SyncRequestEvent.Todo),
+          // this.syncWithWorker(SyncRequestEvent.Tag),
+          // this.syncWithWorker(SyncRequestEvent.Delegation),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:
@@ -134,30 +177,30 @@ class Sync {
       case SyncRequestEvent.Hero:
         return this.heroSyncManager.sync()
       // Realm syncs
-      case (SyncRequestEvent.Todo,
-      SyncRequestEvent.Tag,
-      SyncRequestEvent.Delegation):
-        return this.syncWithWorker(event)
+      case SyncRequestEvent.Todo:
+        return this.todoSyncManager.sync()
       // Shouldn't happen
+      case SyncRequestEvent.Tag:
+        return this.tagsSyncManager.sync()
       default:
         return Promise.resolve()
     }
   }
 
   private setupWorkerListeners() {
-    sharedSyncWorker.onmessage = (message: string) => {
-      const parsedMessage = JSON.parse(message) as WorkerMesage
-      switch (parsedMessage.type) {
-        case WorkerMessageType.AuthorizationCompleted:
-          this.authorizationCompleted(parsedMessage.error)
-          break
-        case WorkerMessageType.SyncCompleted:
-          this.syncWithWorkerCompleted(parsedMessage)
-          break
-        default:
-          break
-      }
-    }
+    // sharedSyncWorker.onmessage = (message: string) => {
+    //   const parsedMessage = JSON.parse(message) as WorkerMesage
+    //   switch (parsedMessage.type) {
+    //     case WorkerMessageType.AuthorizationCompleted:
+    //       this.authorizationCompleted(parsedMessage.error)
+    //       break
+    //     case WorkerMessageType.SyncCompleted:
+    //       this.syncWithWorkerCompleted(parsedMessage)
+    //       break
+    //     default:
+    //       break
+    //   }
+    // }
   }
 
   private setupSyncListeners() {
@@ -220,7 +263,7 @@ class Sync {
   }
 
   private sendMessageToWorker(message: MainMessage) {
-    sharedSyncWorker.postMessage(JSON.stringify(message))
+    // sharedSyncWorker.postMessage(JSON.stringify(message))
   }
 }
 

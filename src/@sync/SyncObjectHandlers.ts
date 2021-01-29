@@ -15,15 +15,15 @@ export enum LastSyncDateType {
 }
 
 export async function getLastSyncDate(type: LastSyncDateType) {
-  const lastSyncTimestamp = AsyncStorage.getItem(type)
-  return lastSyncTimestamp ? new Date(lastSyncTimestamp) : undefined
+  const lastSyncTimestamp = await AsyncStorage.getItem(type)
+  return lastSyncTimestamp ? new Date(parseInt(lastSyncTimestamp)) : undefined
 }
 
 export async function updateLastSyncDate(
   type: LastSyncDateType,
   date = new Date()
 ) {
-  return AsyncStorage.setItem(type, date.getTime())
+  return AsyncStorage.setItem(type, String(date.getTime()))
 }
 
 export async function onDelegationObjectsFromServer(
