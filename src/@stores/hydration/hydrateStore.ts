@@ -7,7 +7,10 @@ export function hydrateStore(name: string) {
   const needsSync = isHydrated()
   if (needsSync) {
     try {
-      if (sharedSync.connected && sharedSync.authorized) {
+      if (
+        sharedSync.socketConnection.connected &&
+        sharedSync.socketConnection.authorized
+      ) {
         requestSync()
       }
     } catch (err) {

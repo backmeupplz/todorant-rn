@@ -100,7 +100,7 @@ export class SettingsContent extends Component {
               <Text {...sharedColors.regularTextExtraStyle}>
                 {translate('socketsInfo')}
               </Text>
-              <CheckOrCross ok={sharedSync.connected} />
+              <CheckOrCross ok={sharedSync.socketConnection.connected} />
             </TableItem>
           )}
           {!!sharedSessionStore.user && (

@@ -104,7 +104,10 @@ export class PlanningVM {
         })
       })
     }
-    if (sharedSync.authorized && sharedSync.connected) {
+    if (
+      sharedSync.socketConnection.authorized &&
+      sharedSync.socketConnection.connected
+    ) {
       sharedSync.sync(SyncRequestEvent.Todo)
     }
   }

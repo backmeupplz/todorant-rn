@@ -22,7 +22,7 @@ import {
 } from '@sync/SyncObjectHandlers'
 
 class Sync {
-  private socketConnection = new SocketConnection()
+  socketConnection = new SocketConnection()
 
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>

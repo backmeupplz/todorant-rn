@@ -30,15 +30,21 @@ export class Sockets extends Component {
             paddingTop: 16,
           }}
         >
-          <Row title={translate('connected')} ok={sharedSync.connected} />
-          <Row title={translate('authorized')} ok={sharedSync.authorized} />
-          {sharedSync.connectionError && (
+          <Row
+            title={translate('connected')}
+            ok={sharedSync.socketConnection.connected}
+          />
+          <Row
+            title={translate('authorized')}
+            ok={sharedSync.socketConnection.authorized}
+          />
+          {sharedSync.socketConnection.connectionError && (
             <TableItem>
               <Text {...sharedColors.textExtraStyle}>
                 {translate('socketError')}
               </Text>
               <Text {...sharedColors.textExtraStyle}>
-                {sharedSync.connectionError}
+                {sharedSync.socketConnection.connectionError}
               </Text>
             </TableItem>
           )}
