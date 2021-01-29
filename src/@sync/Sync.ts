@@ -1,3 +1,5 @@
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedTagStore } from '@stores/TagStore'
 import { isHydrated } from '@stores/hydration/hydratedStores'
 import { syncEventEmitter } from '@sync/syncEventEmitter'
 import { sharedHeroStore } from '@stores/HeroStore'
@@ -13,12 +15,9 @@ import { computed } from 'mobx'
 import { Todo } from '@models/Todo'
 import { Tag } from '@models/Tag'
 import {
-  getLastSyncDate,
-  LastSyncDateType,
   onDelegationObjectsFromServer,
   onTagsObjectsFromServer,
   onTodosObjectsFromServer,
-  updateLastSyncDate,
 } from '@sync/SyncObjectHandlers'
 
 class Sync {
@@ -48,7 +47,7 @@ class Sync {
     this.settingsSyncManager = new SyncManager<Settings>(
       this.socketConnection,
       'settings',
-      () => Promise.resolve(sharedSettingsStore.updatedAt),
+      () => sharedSettingsStore.updatedAt,
       (objects, pushBack, completeSync) => {
         return sharedSettingsStore.onObjectsFromServer(
           objects,
@@ -60,7 +59,7 @@ class Sync {
     this.userSyncManager = new SyncManager<User>(
       this.socketConnection,
       'user',
-      () => Promise.resolve(sharedSessionStore.user?.updatedAt),
+      () => sharedSessionStore.user?.updatedAt,
       (objects, pushBack, completeSync) => {
         return sharedSessionStore.onObjectsFromServer(
           objects,
@@ -72,7 +71,7 @@ class Sync {
     this.heroSyncManager = new SyncManager<Hero>(
       this.socketConnection,
       'hero',
-      () => Promise.resolve(sharedHeroStore.updatedAt),
+      () => sharedHeroStore.updatedAt,
       (objects, pushBack, completeSync) => {
         return sharedHeroStore.onObjectsFromServer(
           objects,
@@ -84,7 +83,7 @@ class Sync {
     this.todoSyncManager = new SyncManager<Todo[]>(
       this.socketConnection,
       'todos',
-      () => getLastSyncDate(LastSyncDateType.Todos),
+      () => sharedTodoStore.updatedAt,
       (objects, pushBack, completeSync) => {
         return onTodosObjectsFromServer(
           objects,
@@ -92,13 +91,14 @@ class Sync {
           completeSync
         )
       },
-      async (lastSyncDate) =>
-        updateLastSyncDate(LastSyncDateType.Todos, lastSyncDate)
+      async (lastSyncDate) => {
+        sharedTodoStore.updatedAt = lastSyncDate
+      }
     )
     this.tagsSyncManager = new SyncManager<Tag[]>(
       this.socketConnection,
       'tags',
-      () => getLastSyncDate(LastSyncDateType.Tags),
+      () => sharedTagStore.updatedAt,
       (objects, pushBack, completeSync) => {
         return onTagsObjectsFromServer(
           objects,
@@ -106,13 +106,14 @@ class Sync {
           completeSync
         )
       },
-      async (lastSyncDate) =>
-        updateLastSyncDate(LastSyncDateType.Tags, lastSyncDate)
+      async (lastSyncDate) => {
+        sharedTagStore.updatedAt = lastSyncDate
+      }
     )
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => Promise.resolve(undefined),
+      () => undefined,
       (objects, _, completeSync) => {
         return onDelegationObjectsFromServer(objects, completeSync)
       }

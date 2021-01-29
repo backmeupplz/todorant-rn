@@ -1,3 +1,5 @@
+import { hydrateStore } from '@stores/hydration/hydrateStore'
+import { hydrate } from '@stores/hydration/hydrate'
 import { sharedSync } from '@sync/Sync'
 import { getTagById } from '@utils/getTagById'
 import { Tag } from '@models/Tag'
@@ -7,8 +9,12 @@ import { TodoVM } from '@views/add/TodoVM'
 import { computed, makeObservable, observable } from 'mobx'
 import uuid from 'uuid'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { persist } from 'mobx-persist'
 
 class TagStore {
+  hydrated = false
+  @persist('date') @observable updatedAt?: Date
+
   @observable allTags = realm.objects<Tag>('Tag')
   @observable tagColorMap = {} as { [index: string]: string }
 
@@ -132,3 +138,7 @@ class TagStore {
 }
 
 export const sharedTagStore = new TagStore()
+hydrate('TagStore', sharedTagStore).then(async () => {
+  sharedTagStore.hydrated = true
+  hydrateStore('TagStore')
+})

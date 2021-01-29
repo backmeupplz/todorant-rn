@@ -15,7 +15,7 @@ export class SyncManager<T> {
   private name: string
   private pendingSyncs: PromiseMap = {}
   private pendingPushes: PromiseMap = {}
-  private latestSyncDate: () => Promise<Date | undefined>
+  private latestSyncDate: () => Date | undefined
   private setLastSyncDate: ((latestSyncDate: Date) => Promise<void>) | undefined
 
   private queuedSyncPromise:
@@ -32,7 +32,7 @@ export class SyncManager<T> {
   constructor(
     socketConnection: SocketConnection,
     name: string,
-    latestSyncDate: () => Promise<Date | undefined>,
+    latestSyncDate: () => Date | undefined,
     onObjectsFromServer: (
       objects: T,
       pushBack: (objects: T) => Promise<T>,
@@ -141,11 +141,7 @@ export class SyncManager<T> {
     if (this.queuedSyncPromise) {
       const queuedSyncPromise = this.queuedSyncPromise
       this.queuedSyncPromise = undefined
-      console.warn(
-        `${this.name}: sync (queued)`,
-        await this.latestSyncDate(),
-        syncId
-      )
+      console.warn(`${this.name}: sync (queued)`, this.latestSyncDate(), syncId)
       this.pendingSyncs[syncId] = {
         // Res and rej should be there right away after the promise is created
         res: queuedSyncPromise.res!,
@@ -155,12 +151,12 @@ export class SyncManager<T> {
       }
       this.socketConnection.socketIO.emit(
         `sync_${this.name}`,
-        await this.latestSyncDate(),
+        this.latestSyncDate(),
         syncId
       )
       return queuedSyncPromise.promise
     } else {
-      console.warn(`${this.name}: sync`, await this.latestSyncDate(), syncId)
+      console.warn(`${this.name}: sync`, this.latestSyncDate(), syncId)
       return new Promise(async (res, rej) => {
         this.pendingSyncs[syncId] = {
           res,
@@ -170,7 +166,7 @@ export class SyncManager<T> {
         }
         this.socketConnection.socketIO.emit(
           `sync_${this.name}`,
-          await this.latestSyncDate(),
+          this.latestSyncDate(),
           syncId
         )
       })
@@ -212,7 +208,7 @@ export class SyncManager<T> {
       return this.sync()
     } else {
       if (this.setLastSyncDate) {
-        await this.setLastSyncDate(new Date())
+        this.setLastSyncDate(new Date())
       }
       console.warn(`${this.name} sync completed!`)
       this.isSyncing = false

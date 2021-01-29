@@ -1,30 +1,14 @@
+import { sharedTagStore } from '@stores/TagStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { Tag, cloneTag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { realm } from '@utils/realm'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'uuid'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { getTodoById } from '@utils/getTodoById'
 import { decrypt, encrypt } from '@utils/encryption'
-
-export enum LastSyncDateType {
-  Tags = 'Tags',
-  Todos = 'Todos',
-}
-
-export async function getLastSyncDate(type: LastSyncDateType) {
-  const lastSyncTimestamp = await AsyncStorage.getItem(type)
-  return lastSyncTimestamp ? new Date(parseInt(lastSyncTimestamp)) : undefined
-}
-
-export async function updateLastSyncDate(
-  type: LastSyncDateType,
-  date = new Date()
-) {
-  return AsyncStorage.setItem(type, String(date.getTime()))
-}
 
 export async function onDelegationObjectsFromServer(
   objects: any,
@@ -74,7 +58,7 @@ export async function onTagsObjectsFromServer(
     return p
   }, {} as { [index: string]: Tag })
   const allTags = realm.objects<Tag>('Tag')
-  const lastSyncDate = await getLastSyncDate(LastSyncDateType.Tags)
+  const lastSyncDate = sharedTagStore.updatedAt
   const tagsChangedLocally = lastSyncDate
     ? allTags.filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
     : allTags
@@ -167,7 +151,7 @@ export async function onTodosObjectsFromServer(
     }
     return p
   }, {} as { [index: string]: Todo })
-  const lastSyncDate = await getLastSyncDate(LastSyncDateType.Todos)
+  const lastSyncDate = sharedTodoStore.updatedAt
   const todosChangedLocally = lastSyncDate
     ? realm
         .objects(Todo)

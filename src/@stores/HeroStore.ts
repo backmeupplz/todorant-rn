@@ -32,12 +32,12 @@ export const ranks = [
 class HeroStore {
   hydrated = false
 
+  @persist('date') @observable updatedAt?: Date
+  @persist @observable points = 0
+
   constructor() {
     makeObservable(this)
   }
-
-  @persist('date') @observable updatedAt?: Date
-  @persist @observable points = 0
 
   incrementPoints() {
     this.points++

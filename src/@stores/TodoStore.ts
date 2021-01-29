@@ -1,3 +1,5 @@
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
 import {
   observableNowEventEmitter,
@@ -8,10 +10,13 @@ import { getTitle, Todo } from '@models/Todo'
 import { shallowMobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
-import { computed, makeObservable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 class TodoStore {
   hydrated = false
+
+  @persist('date') @observable updatedAt?: Date
 
   getRealmTodos(title: string, completed: boolean) {
     return realm
@@ -144,3 +149,7 @@ class TodoStore {
 }
 
 export const sharedTodoStore = new TodoStore()
+hydrate('TodoStore', sharedTodoStore).then(async () => {
+  sharedTodoStore.hydrated = true
+  hydrateStore('HeroStore')
+})
