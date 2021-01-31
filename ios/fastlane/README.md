@@ -21,14 +21,29 @@ or alternatively using `brew install fastlane`
 fastlane ios commit_and_push_ios_release
 ```
 
+### ios commit_and_push_ios_release_beta
+```
+fastlane ios commit_and_push_ios_release_beta
+```
+
 ### ios frame
 ```
 fastlane ios frame
 ```
 
+### ios build_for_sumbission
+```
+fastlane ios build_for_sumbission
+```
+
 ### ios release
 ```
 fastlane ios release
+```
+
+### ios release_beta
+```
+fastlane ios release_beta
 ```
 
 ### ios upload_screenshots
