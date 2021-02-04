@@ -59,6 +59,7 @@
     "moment": "^2.24.0",
     "native-base": "^2.13.14",
     "number-shortener": "^1.0.1",
+    "object-assign-deep": "^0.4.0",
     "prettier": "^2.2.1",
     "query-string": "^6.13.5",
     "randomcolor": "^0.5.4",

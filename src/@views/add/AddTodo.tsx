@@ -131,15 +131,11 @@ class AddTodoContent extends Component<{
 
           titlesToFixOrder.push(getTitle(todo))
           if (vm.addOnTop) {
-            sharedAppStateStore.todosToTop.push(todo)
             addTodosOnTop.push(todo)
           } else {
             addTodosToBottom.push(todo)
           }
         } else if (vm.editedTodo) {
-          // first edit
-          sharedAppStateStore.editedTodo.tempSync = vm.editedTodo._tempSyncId!
-          sharedAppStateStore.editedTodo.beforeEdit = getTitle(vm.editedTodo)
           const oldTitle = getTitle(vm.editedTodo)
           const failed =
             isTodoOld(vm.editedTodo) &&
@@ -198,7 +194,6 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
-          sharedAppStateStore.editedTodo.afterEdit = getTitle(vm.editedTodo)
           involvedTodos.push(vm.editedTodo)
           titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
         }

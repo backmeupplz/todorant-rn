@@ -42,6 +42,8 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
+  @observable offset = 10
+
   componentWillMount() {
     makeObservable(this)
   }
@@ -181,6 +183,11 @@ export class PlanningContent extends Component {
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm.uncompletedTodosData.todosArray.length ? (
             <DraggableSectionList<Todo, SectionListData<Todo>>
+              onEndReached={() => {
+                sharedAppStateStore.changeLoading(true)
+                setTimeout(() => (this.vm.uncompletedTodosData.offset += 50))
+              }}
+              onEndReachedThreshold={0.3}
               onViewableItemsChanged={() => {
                 sharedAppStateStore.changeLoading(false)
               }}
@@ -256,12 +263,18 @@ export class PlanningContent extends Component {
             onViewableItemsChanged={() => {
               sharedAppStateStore.changeLoading(false)
             }}
+            onEndReached={() => {
+              this.vm.completedTodosData.offset += 5
+            }}
+            onEndReachedThreshold={0.1}
             refreshing={true}
-            initialNumToRender={10}
             keyExtractor={(item, index) => {
               return `${index}-${item._tempSyncId || item._id || item}`
             }}
-            sections={this.vm.completedTodosData.todosArray}
+            sections={this.vm.completedTodosData.todosArray.slice(
+              0,
+              this.offset
+            )}
             renderItem={({ item }) => (
               <TodoCard
                 todo={item as Todo}

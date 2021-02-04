@@ -21,13 +21,6 @@ class AppStateStore {
   @observable searchQuery: string[] = []
   @observable loading = false
 
-  @observable todosToTop: Todo[] = []
-  @observable editedTodo = {} as {
-    tempSync: string
-    beforeEdit: string
-    afterEdit: string
-  }
-
   @action changeLoading = (state: boolean) => {
     this.loading = state
   }

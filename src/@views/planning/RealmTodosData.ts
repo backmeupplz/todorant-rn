@@ -2,9 +2,9 @@ import { TodoSection } from '@views/planning/TodoSection'
 import { TodoSectionMap } from '@views/planning/TodoSectionMap'
 import { realm } from '@utils/realm'
 import { Todo, getTitle } from '@models/Todo'
-import { makeObservable } from 'mobx'
+import { makeObservable, reaction } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { omit } from 'lodash'
+import { intersection, omit } from 'lodash'
 import { observable } from 'mobx'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SectionListData } from 'react-native'
@@ -13,13 +13,16 @@ export class RealmTodosData {
   completed: boolean
 
   private todos: Realm.Results<Todo>
-  @observable private todoSectionMap: TodoSectionMap
+  private todoSectionMap: TodoSectionMap
   private todoIdToDateMap: Map<string, string>
   private todoIds: string[] | undefined
 
   @observable invalidationKey = ''
 
+  @observable offset = 50
+
   get todosArray() {
+    const kek = this.invalidationKey
     return Object.keys(this.todoSectionMap).map((key) => {
       const originalSectionData = this.todoSectionMap[key] as TodoSection
       const copiedSectionData = { ...originalSectionData }
@@ -50,41 +53,114 @@ export class RealmTodosData {
     }
   }
 
+  private mergeWithOffset = (
+    intersectionArr: string[],
+    itemsToAdd: TodoSectionMap,
+    toAddTo: TodoSectionMap
+  ) => {
+    intersectionArr.forEach((title) => {
+      toAddTo[title].data = [...toAddTo[title].data, ...itemsToAdd[title].data]
+    })
+  }
+
   constructor(completed: boolean) {
     makeObservable(this)
 
     this.completed = completed
 
     this.todos = getRealmTodos(this.completed)
-    const { todoSectionMap, todoIdToDateMap } = mapsFromRealmTodos(this.todos)
+    const { todoSectionMap, todoIdToDateMap } = mapsFromRealmTodos(
+      this.todos.slice(0, this.offset)
+    )
     this.todoSectionMap = todoSectionMap
     this.todoIdToDateMap = todoIdToDateMap
 
-    this.todos.addListener(
-      (todos: Realm.Collection<Todo>, changes: Realm.CollectionChangeSet) => {
-        this.realmListener.apply(this, [todos, changes])
-        this.todoIds = getArrayOfTodoIds(todos) as string[]
-
-        // Remove sections without todos
-        const titlesToOmit: string[] = []
-        Object.keys(this.todoSectionMap).forEach((key) => {
-          if (!this.todoSectionMap[key].data.length) {
-            titlesToOmit.push(key)
-          }
-        })
-        if (titlesToOmit.length) {
-          this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
+    // Trigger when offset is changed
+    reaction(
+      () => this.offset,
+      () => {
+        // Get new map with offset
+        const { todoSectionMap, todoIdToDateMap } = mapsFromRealmTodos(
+          this.todos.slice(this.offset - 50, this.offset)
+        )
+        this.todoIdToDateMap = new Map([
+          ...this.todoIdToDateMap,
+          ...todoIdToDateMap,
+        ])
+        const todoSectionKeys = Object.keys(todoSectionMap)
+        // Get intersections between current and new map to check if we need deep merge
+        const intersectedTitles = intersection(
+          todoSectionKeys,
+          Object.keys(this.todoSectionMap)
+        )
+        // Shallow merge if no intesections (we just dont need deep merge)
+        if (!intersectedTitles.length && todoSectionKeys.length) {
+          Object.assign(this.todoSectionMap, todoSectionMap)
+        } else if (intersectedTitles.length !== todoSectionKeys.length) {
+          // Check if we need to do both, deep merge for one part and shallow for another
+          const omittedObject = omit(todoSectionMap, intersectedTitles)
+          this.mergeWithOffset(
+            intersectedTitles,
+            todoSectionMap,
+            this.todoSectionMap
+          )
+          Object.assign(this.todoSectionMap, omittedObject)
+        } else {
+          // If we need only deep merge
+          this.mergeWithOffset(
+            intersectedTitles,
+            todoSectionMap,
+            this.todoSectionMap
+          )
         }
-
+        // Check if todoIds is undefined
+        if (!this.todoIds) {
+          this.todoIds = [
+            ...getArrayOfTodoIds(
+              this.todos.slice(this.offset - 50, this.offset)
+            ),
+          ]
+        } else {
+          // If todoIds if not undefined
+          this.todoIds = [
+            ...getArrayOfTodoIds(
+              this.todos.slice(this.offset - 50, this.offset)
+            ),
+            ...this.todoIds,
+          ]
+        }
         // Update invalidation key
         this.invalidationKey = String(Date.now())
         this.invalidationKey = String(Date.now())
       }
     )
+
+    this.todos.addListener((_, changes) => {
+      this.realmListener.apply(this, [
+        this.todos.slice(0, this.offset),
+        changes,
+      ])
+      this.todoIds = getArrayOfTodoIds(
+        this.todos.slice(0, this.offset)
+      ) as string[]
+      // Remove sections without todos
+      const titlesToOmit: string[] = []
+      Object.keys(this.todoSectionMap).forEach((key) => {
+        if (!this.todoSectionMap[key].data.length) {
+          titlesToOmit.push(key)
+        }
+      })
+      if (titlesToOmit.length) {
+        this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
+      }
+      // Update invalidation key
+      this.invalidationKey = String(Date.now())
+      this.invalidationKey = String(Date.now())
+    })
   }
 
-  private realmListener(
-    todos: Realm.Collection<Todo>,
+  private async realmListener(
+    todos: Todo[],
     changes: Realm.CollectionChangeSet
   ) {
     // Check if there are no changes
@@ -94,18 +170,23 @@ export class RealmTodosData {
     if (
       !changes.insertions.length &&
       !changes.deletions.length &&
-      !changes.modifications.length
+      !changes.modifications.length &&
+      !changes.newModifications.length
     ) {
       return
     }
     // Get changes
-    const { insertions, deletions, modifications } = changes
+    const { insertions, deletions, modifications, newModifications } = changes
     // check if there's an item outside of border
     const outsideOfBorder = !!modifications.find(
       (index) => index >= todos.length
     )
+    const modificationsTogether = new Set([
+      ...modifications,
+      ...newModifications,
+    ])
     // Deal with modifications
-    for (const modificactionIndex of modifications) {
+    for (const modificactionIndex of modificationsTogether) {
       if (!this.todoIds) break
       // Get todo and its id
       const modifiedTodo = outsideOfBorder
@@ -343,6 +424,8 @@ function mapsFromRealmTodos(realmTodos: Realm.Results<Todo> | Todo[]) {
   }
 }
 
-function getArrayOfTodoIds(todoArr: Realm.Collection<Todo>) {
-  return todoArr.map((todo) => todo._tempSyncId || todo._id)
+function getArrayOfTodoIds(todoArr: Todo[]) {
+  return (todoArr.map(
+    (todo) => todo._tempSyncId || todo._id
+  ) as any) as string[]
 }

@@ -10,19 +10,19 @@ export function deleteAllTodos() {
   sharedTodoStore.refreshTodos()
 }
 
-const date = new Date()
+const dateS = new Date()
 
 class TodoSample {
-  updatedAt: Date = date
-  createdAt: Date = date
+  updatedAt: Date = new Date()
+  createdAt: Date = new Date()
   completed: boolean = false
   frog: boolean = false
   frogFails: number = 0
   skipped: boolean = false
   order: number = 0
-  monthAndYear: string = date.toISOString().slice(0, 7)
+  monthAndYear: string = getDateMonthAndYearString(dateS)
   deleted: boolean = false
-  date: string = String(date.getDate())
+  date: string = getDateDateString(dateS)
   time: string | undefined = undefined
   text: string = uuid()
   _exactDate = new Date(getTitle(this))
@@ -32,21 +32,13 @@ class TodoSample {
 
 export function add5000Todos() {
   let todos: any[] = []
-
-  for (let i = 0; i < 1000; i++) {
-    console.log(date)
-    console.log(date.toISOString().slice(0, 7))
-    if (i % 30 === 0) {
-      if (date.getDate() >= 27) {
-        if (date.getMonth() >= 11) {
-          date.setFullYear(date.getFullYear() + 1)
-        } else {
-          date.setMonth(date.getMonth() + 1)
-        }
-      } else {
-        date.setDate(date.getDate() + 1)
-      }
+  let counter = 0
+  for (let i = 0; i < 10000; i++) {
+    if (counter++ >= 27) {
+      counter = 0
     }
+    dateS.setDate(counter)
+    console.log(dateS)
     todos.push(new TodoSample())
   }
 

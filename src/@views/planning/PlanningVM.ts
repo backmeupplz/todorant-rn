@@ -20,7 +20,7 @@ export class PlanningVM {
     [index: string]: boolean
   }
 
-  onDragEnd = (params: DragEndParams<Todo>) => {
+  onDragEnd = (params: DragEndParams<Todo | string>) => {
     const { dataArr, to, from } = params
     // enable loader
     sharedAppStateStore.changeLoading(true)
@@ -44,11 +44,61 @@ export class PlanningVM {
     } else {
       let lastSection: string
       let todoIndexInSection = 0
+      // const findClosestSection = (index: number) => {
+      //   let closestSection: undefined | string
+      //   for (let i = index; i > 0; i--) {
+      //     if (typeof dataArr[i] === 'string') {
+      //       closestSection = dataArr[i] as string
+      //       break
+      //     }
+      //   }
+      //   return closestSection
+      // // }
+      const findClosestSection = (index: number) => {
+        let closestSection: undefined | number
+        for (let i = index; i > 0; i--) {
+          if (typeof dataArr[i] === 'string') {
+            closestSection = i
+            break
+          }
+        }
+        return closestSection
+      }
       const lo = Math.min(from, to)
       const hi = Math.max(from, to)
       const today = Number(
         new Date().toISOString().slice(0, 10).split('-').join('')
       )
+      const goingDown = from < to ? true : false
+      const movingBetweenDays = dataArr
+        .slice(lo, hi)
+        .some((item) => typeof item === 'string')
+      // realm.write(() => {
+      //   if (movingBetweenDays) {
+      //     // if drag in one day
+      //   } else {
+      //     // if dragging from top to bottom
+      //     if (goingDown) {
+      //       let lastOrder = dataArr[from - 1].order + 1 || 0
+      //       for (let i = lo; i <= hi; i++) {
+      //         // if (typeof dataArr[i] === 'string') return
+      //         ;(dataArr[i] as Todo).order = lastOrder
+      //         lastOrder++
+      //       }
+      //       // if from bottom to top
+      //     } else {
+      //       let lastOrder = dataArr[to].order
+      //       for (let i = hi; i >= lo; i--) {
+      //         // if (typeof dataArr[i] === 'string') return
+      //         ;(dataArr[i] as Todo).order = lastOrder
+      //         lastOrder--
+      //       }
+      //     }
+      //   }
+      // })
+
+      const startTime = Date.now()
+
       realm.write(() => {
         dataArr.forEach((dataArrItem, globalIndex) => {
           // if section
@@ -103,6 +153,8 @@ export class PlanningVM {
           todoIndexInSection++
         })
       })
+      console.log('\n\n\n\n\n')
+      console.log(Date.now() - startTime)
     }
     if (
       sharedSync.socketConnection.authorized &&
