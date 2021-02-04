@@ -32,10 +32,13 @@ class TodoSample {
 
 export function add5000Todos() {
   let todos: any[] = []
-
-  for (let i = 0; i < 4000; i++) {
+  let counter = 0
+  for (let i = 0; i < 10000; i++) {
+    if (counter++ >= 27) {
+      counter = 0
+    }
+    dateS.setDate(counter)
     console.log(dateS)
-    console.log(dateS.toISOString().slice(0, 7))
     todos.push(new TodoSample())
   }
 

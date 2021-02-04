@@ -42,19 +42,19 @@ export function fixOrder(
         todos.filtered(`completed = false`)
       ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
       console.log(Date.now() - startTime)
-      //   // Fix exact times
-      //   if (sharedSettingsStore.preserveOrderByTime) {
-      //     while (!isTimeSorted(orderedUncompleted)) {
-      //       fixOneTodoTime(orderedUncompleted, timeTodosToYield)
-      //     }
-      //   }
-      //   // Save order
-      //   orderedUncompleted.forEach((todo, i) => {
-      //     if (todo.order !== i) {
-      //       todo.order = i
-      //       todo.updatedAt = new Date()
-      //     }
-      //   })
+      // Fix exact times
+      if (sharedSettingsStore.preserveOrderByTime) {
+        while (!isTimeSorted(orderedUncompleted)) {
+          fixOneTodoTime(orderedUncompleted, timeTodosToYield)
+        }
+      }
+      // Save order
+      orderedUncompleted.forEach((todo, i) => {
+        if (todo.order !== i) {
+          todo.order = i
+          todo.updatedAt = new Date()
+        }
+      })
     }
   })
   // Refresh

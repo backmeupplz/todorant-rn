@@ -19,15 +19,6 @@ export class MobxRealmModel extends Realm.Object {
     this.atom = createAtom(atomName)
     this.__mobxCollections = {}
     this.__mobxObject = mobxRealmObject(this)
-    setTimeout(
-      () =>
-        this.addListener((_, changes) => {
-          if (changes.changedProperties.length > 0) {
-            this.atom.reportChanged()
-          }
-        }),
-      0
-    )
   }
 
   __mobxReadProperty(propertyName: string) {
