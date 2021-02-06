@@ -153,8 +153,6 @@ export class PlanningVM {
           todoIndexInSection++
         })
       })
-      console.log('\n\n\n\n\n')
-      console.log(Date.now() - startTime)
     }
     if (
       sharedSync.socketConnection.authorized &&

@@ -41,7 +41,6 @@ export function fixOrder(
       const orderedUncompleted = Array.from(
         todos.filtered(`completed = false`)
       ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-      console.log(Date.now() - startTime)
       // Fix exact times
       if (sharedSettingsStore.preserveOrderByTime) {
         while (!isTimeSorted(orderedUncompleted)) {

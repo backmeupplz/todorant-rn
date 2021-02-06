@@ -38,7 +38,6 @@ export function add5000Todos() {
       counter = 0
     }
     dateS.setDate(counter)
-    console.log(dateS)
     todos.push(new TodoSample())
   }
 
