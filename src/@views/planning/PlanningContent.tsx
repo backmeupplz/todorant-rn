@@ -42,8 +42,6 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
-  @observable offset = 10
-
   componentWillMount() {
     makeObservable(this)
   }
@@ -260,21 +258,19 @@ export class PlanningContent extends Component {
           )
         ) : (
           <SectionList
+            onEndReached={() => {
+              sharedAppStateStore.changeLoading(true)
+              setTimeout(() => (this.vm.completedTodosData.offset += 50))
+            }}
+            onEndReachedThreshold={0.3}
             onViewableItemsChanged={() => {
               sharedAppStateStore.changeLoading(false)
             }}
-            onEndReached={() => {
-              this.vm.completedTodosData.offset += 5
-            }}
-            onEndReachedThreshold={0.1}
             refreshing={true}
             keyExtractor={(item, index) => {
               return `${index}-${item._tempSyncId || item._id || item}`
             }}
-            sections={this.vm.completedTodosData.todosArray.slice(
-              0,
-              this.offset
-            )}
+            sections={this.vm.completedTodosData.todosArray}
             renderItem={({ item }) => (
               <TodoCard
                 todo={item as Todo}

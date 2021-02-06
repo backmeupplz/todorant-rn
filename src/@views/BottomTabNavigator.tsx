@@ -49,7 +49,7 @@ class SettingsRotatingIcon extends Component<{
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     })
-    if (sharedSync.isSyncing) {
+    if (sharedSync.isSyncing()) {
       return (
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
           {this.props.focused

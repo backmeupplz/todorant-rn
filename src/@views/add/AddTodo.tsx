@@ -169,7 +169,7 @@ class AddTodoContent extends Component<{
             return
           }
 
-          if (vm.completed) {
+          if (vm.completed && !vm.editedTodo.completed) {
             sharedTagStore.incrementEpicPoints(vm.text)
             // Increment hero store
             sharedHeroStore.points++

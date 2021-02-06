@@ -122,11 +122,16 @@ class Sync {
 
   login = (token: string) => {
     return new Promise<void>(async (res, rej) => {
-      // Main socket connection
-      this.socketConnection.token = token
-      await this.socketConnection.authorize()
-      // Worker socket connection
-      await this.sync()
+      try {
+        // Main socket connection
+        this.socketConnection.token = token
+        await this.socketConnection.authorize()
+        // Worker socket connection
+        await this.sync()
+        res()
+      } catch (err) {
+        rej(err)
+      }
     })
   }
 

@@ -113,22 +113,7 @@ export class RealmTodosData {
             this.todoSectionMap
           )
         }
-        // Check if todoIds is undefined
-        if (!this.todoIds) {
-          this.todoIds = [
-            ...getArrayOfTodoIds(
-              this.todos.slice(this.offset - 50, this.offset)
-            ),
-          ]
-        } else {
-          // If todoIds if not undefined
-          this.todoIds = [
-            ...getArrayOfTodoIds(
-              this.todos.slice(this.offset - 50, this.offset)
-            ),
-            ...this.todoIds,
-          ]
-        }
+        this.todoIds = getArrayOfTodoIds(this.todos.slice(0, this.offset))
         // Update invalidation key
         this.invalidationKey = String(Date.now())
         this.invalidationKey = String(Date.now())

@@ -4,6 +4,7 @@ import * as RNLocalize from 'react-native-localize'
 import { Language } from '@models/Language'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { configCalendar } from '@utils/configCalendar'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),
@@ -15,6 +16,12 @@ const translationGetters = {
 } as { [index: string]: any }
 
 export const translate = (key: any, config?: any) => {
+  if (
+    i18n.locale !== sharedSettingsStore.language &&
+    sharedSettingsStore.language
+  ) {
+    i18n.locale = sharedSettingsStore.language
+  }
   return i18n.t(key, config)
 }
 

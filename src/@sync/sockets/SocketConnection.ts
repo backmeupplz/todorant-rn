@@ -1,6 +1,7 @@
 import { observable, makeObservable } from 'mobx'
 import SocketIO from 'socket.io-client'
 import NetInfo from '@react-native-community/netinfo'
+import { sharedSync } from '@sync/Sync'
 
 const authorizationTimeout = 20
 
@@ -108,10 +109,11 @@ export class SocketConnection {
     }
   }
 
-  private onConnect = () => {
+  private onConnect = async () => {
     this.connected = true
     this.connectionError = undefined
-    this.authorize()
+    await this.authorize()
+    sharedSync.sync()
   }
 
   private onDisconnect = () => {

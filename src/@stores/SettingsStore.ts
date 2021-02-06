@@ -153,7 +153,6 @@ class SettingsStore {
     else if (this.updatedAt < settings.updatedAt) {
       if (settings.language !== this.language && settings.language) {
         await AsyncStorage.setItem('languageSelect', settings.language)
-        RNRestart.Restart()
       }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek

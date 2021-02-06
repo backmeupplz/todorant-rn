@@ -83,13 +83,11 @@ export class GeneralSettings extends Component {
               async (i) => {
                 if (i === 0) {
                   await AsyncStorage.setItem('languageSelect', Language.auto)
-                  RNRestart.Restart()
                 } else if (i < 7) {
                   sharedSettingsStore.language = options[i].code
                   sharedSettingsStore.updatedAt = new Date()
-                  sharedSync.sync(SyncRequestEvent.Settings)
+                  await sharedSync.sync(SyncRequestEvent.Settings)
                   await AsyncStorage.setItem('languageSelect', options[i].code)
-                  RNRestart.Restart()
                 }
               }
             )

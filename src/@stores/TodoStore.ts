@@ -151,5 +151,5 @@ class TodoStore {
 export const sharedTodoStore = new TodoStore()
 hydrate('TodoStore', sharedTodoStore).then(async () => {
   sharedTodoStore.hydrated = true
-  hydrateStore('HeroStore')
+  hydrateStore('TodoStore')
 })
