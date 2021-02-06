@@ -37,6 +37,8 @@ export class TodoVM {
 
   @observable showTags = false
 
+  @observable cursorPosition = this.text.length
+
   todoTextField = React.createRef<TextInput>()
   todoTextView?: Animatable.View
   handleTodoTextViewRef = (ref: any) => (this.todoTextView = ref)
@@ -50,9 +52,9 @@ export class TodoVM {
     if (emptyMatches.length) {
       return sharedTagStore.undeletedTags
     }
-    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
+    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+/g) || []
     if (!matches.length) {
-      return []
+      return sharedSettingsStore.showMoreByDefault || this.showMore ? sharedTagStore.undeletedTags : []
     }
     const match = matches[0]
     return sharedTagStore.undeletedTags.filtered(
@@ -61,20 +63,26 @@ export class TodoVM {
   }
 
   applyTag(tag: Tag) {
+    const insertText = `#${tag.tag}`
+    const text = this.text
+    const len = text.length
+    const before = text.substr(0, this.cursorPosition)
+    const after = text.substr(this.cursorPosition, len)
+
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
-      this.text = `${this.text}${tag.tag} `
+      this.text = `${before}${tag.tag}${after} `
       ;(this.todoTextField.current as any)._root.focus()
       return
     }
-    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
+    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+/g) || []
     if (!matches.length) {
+      this.text = `${before}${insertText}${after} `
+      ;(this.todoTextField.current as any)._root.focus()
       return
     }
     const match = matches[0]
-    this.text = `${this.text.substr(0, this.text.length - match.length)}#${
-      tag.tag
-    } `
+    this.text = `${before.substr(0, before.length - match.length)}${insertText}${after} `
     ;(this.todoTextField.current as any)._root.focus()
   }
 
