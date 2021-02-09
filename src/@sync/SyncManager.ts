@@ -6,7 +6,7 @@ import {
 import { PromiseMap } from '@sync/sockets/PromiseMap'
 import { SyncStage } from '@sync/sockets/SyncStage'
 import uuid from 'uuid'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export class SyncManager<T> {
   @observable isSyncing = false
@@ -40,6 +40,7 @@ export class SyncManager<T> {
     ) => Promise<void>,
     setLastSyncDate?: (latestSyncDate: Date) => Promise<void>
   ) {
+    makeObservable(this)
     this.socketConnection = socketConnection
     this.name = name
     this.latestSyncDate = latestSyncDate

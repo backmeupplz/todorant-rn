@@ -11,7 +11,7 @@ import { Settings } from '@models/Settings'
 import { SyncManager } from '@sync/SyncManager'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { Todo } from '@models/Todo'
 import { Tag } from '@models/Tag'
 import {
@@ -30,7 +30,7 @@ class Sync {
   private tagsSyncManager: SyncManager<Tag[]>
   private delegationSyncManager: SyncManager<any>
 
-  @computed isSyncing() {
+  @computed get isSyncing() {
     return (
       this.settingsSyncManager.isSyncing ||
       this.userSyncManager.isSyncing ||
@@ -42,6 +42,7 @@ class Sync {
   }
 
   constructor() {
+    makeObservable(this)
     this.setupSyncListeners()
     // Setup sync managers
     this.settingsSyncManager = new SyncManager<Settings>(
