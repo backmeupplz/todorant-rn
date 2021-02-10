@@ -183,7 +183,7 @@ export class PlanningContent extends Component {
             <DraggableSectionList<Todo, SectionListData<Todo>>
               onEndReached={() => {
                 sharedAppStateStore.changeLoading(true)
-                setTimeout(() => (this.vm.uncompletedTodosData.offset += 50))
+                setTimeout(() => this.vm.uncompletedTodosData.increaseOffset())
               }}
               onEndReachedThreshold={0.3}
               onViewableItemsChanged={() => {
@@ -260,7 +260,7 @@ export class PlanningContent extends Component {
           <SectionList
             onEndReached={() => {
               sharedAppStateStore.changeLoading(true)
-              setTimeout(() => (this.vm.completedTodosData.offset += 50))
+              setTimeout(() => this.vm.completedTodosData.increaseOffset())
             }}
             onEndReachedThreshold={0.3}
             onViewableItemsChanged={() => {

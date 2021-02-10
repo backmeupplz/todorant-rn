@@ -9,6 +9,10 @@ import uuid from 'uuid'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { getTodoById } from '@utils/getTodoById'
 import { decrypt, encrypt } from '@utils/encryption'
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from '@utils/ObservableNow'
 
 export async function onDelegationObjectsFromServer(
   objects: any,
@@ -205,6 +209,9 @@ export async function onTodosObjectsFromServer(
   if (!todosToPush.length) {
     // Complete sync
     completeSync()
+    observableNowEventEmitter.emit(
+      ObservableNowEventEmitterEvent.ObservableNowChanged
+    )
     return
   }
   realm.write(() => {

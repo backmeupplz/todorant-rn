@@ -22,7 +22,7 @@ export class RealmTodosData {
   @observable offset = 50
 
   get todosArray() {
-    const kek = this.invalidationKey
+    const observableKey = this.invalidationKey
     return Object.keys(this.todoSectionMap).map((key) => {
       const originalSectionData = this.todoSectionMap[key] as TodoSection
       const copiedSectionData = { ...originalSectionData }
@@ -144,10 +144,7 @@ export class RealmTodosData {
     })
   }
 
-  private async realmListener(
-    todos: Todo[],
-    changes: Realm.CollectionChangeSet
-  ) {
+  private realmListener(todos: Todo[], changes: Realm.CollectionChangeSet) {
     // Check if there are no changes
     if (!changes || !todos) {
       return
@@ -196,22 +193,25 @@ export class RealmTodosData {
           )
         }
       }
-      // Insert todo back
-      if (modifiedTodo) {
-        const newDate = getTitle(modifiedTodo)
-        const todoSection = this.todoSectionMap[newDate]
-        if (todoSection) {
-          this.insertTodoToArray(todoSection.data, modifiedTodo)
-        } else {
-          this.todoSectionMap = this.insertBetweenTitles(
-            this.todoSectionMap,
-            newDate,
-            mobxRealmObject(modifiedTodo),
-            this.completed
-          )
+      // Check insertions to prevent double-insert
+      if (insertions && !insertions.includes(modificactionIndex)) {
+        // Insert todo back
+        if (modifiedTodo) {
+          const newDate = getTitle(modifiedTodo)
+          const todoSection = this.todoSectionMap[newDate]
+          if (todoSection) {
+            this.insertTodoToArray(todoSection.data, modifiedTodo)
+          } else {
+            this.todoSectionMap = this.insertBetweenTitles(
+              this.todoSectionMap,
+              newDate,
+              mobxRealmObject(modifiedTodo),
+              this.completed
+            )
+          }
+          // Update todo id map
+          this.todoIdToDateMap.set(modifiedTodoId, newDate)
         }
-        // Update todo id map
-        this.todoIdToDateMap.set(modifiedTodoId, newDate)
       }
     }
     // Deal with deletions
@@ -321,6 +321,12 @@ export class RealmTodosData {
           todoArr.push(todoToBeInserted)
         }
       }
+    }
+  }
+
+  increaseOffset() {
+    if (this.offset < this.todos.length) {
+      this.offset += 50
     }
   }
 
