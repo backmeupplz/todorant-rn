@@ -49,10 +49,12 @@ class EpicText extends Component<{
 @observer
 export class EpicProgress extends Component<{
   epic: Tag
+  drag?: () => void
 }> {
   render() {
     return (
-      <View
+      <TouchableOpacity
+        onLongPress={this.props.drag}
         style={{
           flex: 1,
           flexDirection: 'row',
@@ -102,7 +104,7 @@ export class EpicProgress extends Component<{
             />
           </View>
         )}
-      </View>
+      </TouchableOpacity>
     )
   }
 }
