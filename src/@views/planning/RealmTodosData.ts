@@ -4,7 +4,7 @@ import { realm } from '@utils/realm'
 import { Todo, getTitle } from '@models/Todo'
 import { makeObservable, reaction } from 'mobx'
 import { mobxRealmObject } from '@utils/mobx-realm/object'
-import { intersection, omit } from 'lodash'
+import { debounce, intersection, omit } from 'lodash'
 import { observable } from 'mobx'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SectionListData } from 'react-native'
@@ -62,6 +62,16 @@ export class RealmTodosData {
       toAddTo[title].data = [...toAddTo[title].data, ...itemsToAdd[title].data]
     })
   }
+
+  updateInvalidationKeys() {
+    // Update invalidation key
+    this.invalidationKey = String(Date.now())
+    this.invalidationKey = String(Date.now())
+  }
+
+  debouncedUpdateKeys = debounce(this.updateInvalidationKeys, 50, {
+    maxWait: 250,
+  })
 
   constructor(completed: boolean) {
     makeObservable(this)
@@ -139,8 +149,7 @@ export class RealmTodosData {
         this.todoSectionMap = omit(this.todoSectionMap, titlesToOmit)
       }
       // Update invalidation key
-      this.invalidationKey = String(Date.now())
-      this.invalidationKey = String(Date.now())
+      this.debouncedUpdateKeys()
     })
   }
 
@@ -242,7 +251,12 @@ export class RealmTodosData {
     }
     // Deal with insertions
     for (const insertionIndex of insertions) {
-      if (!(todos && todos.length) || insertionIndex === undefined) continue
+      if (
+        !(todos && todos.length) ||
+        insertionIndex === undefined ||
+        insertionIndex > todos.length
+      )
+        continue
       // Get inserted todo, its title and id
       const insertedTodo = todos[insertionIndex]
       const insertedTodoTitle = getTitle(insertedTodo)
