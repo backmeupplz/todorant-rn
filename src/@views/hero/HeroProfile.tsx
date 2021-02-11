@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, Content } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedHeroStore, ranks } from '@stores/HeroStore'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { sharedColors } from '@utils/sharedColors'
 import { RankCard } from '@views/hero/RankCard'
 import { Divider } from '@components/Divider'
@@ -10,6 +10,10 @@ import { translate } from '@utils/i18n'
 
 @observer
 export class HeroProfile extends Component {
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   @computed get previousRanks() {
     if (sharedHeroStore.rank === -1) {
       return [...ranks].splice(0, ranks.length - 1)

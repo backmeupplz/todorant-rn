@@ -9,13 +9,19 @@ import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { deleteDelegate, deleteDelegator } from '@utils/rest'
-import { sockets } from '@utils/sockets'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class Row extends Component<{ delegationUser: DelegationUser }> {
   @observable loading = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     return (
       <TableItem>
@@ -42,7 +48,7 @@ class Row extends Component<{ delegationUser: DelegationUser }> {
                   } else {
                     await deleteDelegator(this.props.delegationUser._id)
                   }
-                  sockets.delegationSyncManager.sync()
+                  sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {
                   alertError(err)
                 } finally {

@@ -1,11 +1,12 @@
+import { sharedSync } from '@sync/Sync'
 import { Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
 import { InteractionManager } from 'react-native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
-export async function fixOrder(
+export function fixOrder(
   titlesInvolved: string[],
   addTodosOnTop = [] as Todo[],
   addTodosToBottom = [] as Todo[],
@@ -35,6 +36,7 @@ export async function fixOrder(
           todo.updatedAt = new Date()
         }
       })
+      const startTime = Date.now()
       // Go over uncompleted
       const orderedUncompleted = Array.from(
         todos.filtered(`completed = false`)
@@ -58,9 +60,7 @@ export async function fixOrder(
   sharedTodoStore.refreshTodos()
   // Sync
   if (sync) {
-    InteractionManager.runAfterInteractions(() => {
-      sockets.todoSyncManager.sync()
-    })
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 }
 

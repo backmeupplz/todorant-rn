@@ -7,17 +7,22 @@ import { translate } from '@utils/i18n'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
-import { sockets } from '@utils/sockets'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { alertError, alertMessage } from '@utils/alert'
 import * as rest from '@utils/rest'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { setToken, removeToken } from '@utils/keychain'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 export class Integrations extends Component {
   @observable loading = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   async googleCalendarTapped() {
     if (sharedSettingsStore.googleCalendarCredentials) {
@@ -32,7 +37,7 @@ export class Integrations extends Component {
           if (i === 0) {
             sharedSettingsStore.googleCalendarCredentials = undefined
             sharedSettingsStore.updatedAt = new Date()
-            sockets.settingsSyncManager.sync()
+            sharedSync.sync(SyncRequestEvent.Settings)
           }
         }
       )
@@ -58,7 +63,7 @@ export class Integrations extends Component {
       const googleCredentials = (await rest.calendarAuthorize(code)).data
       sharedSettingsStore.googleCalendarCredentials = googleCredentials
       sharedSettingsStore.updatedAt = new Date()
-      sockets.settingsSyncManager.sync()
+      sharedSync.sync(SyncRequestEvent.Settings)
     } catch (err) {
       alertError(err)
     } finally {

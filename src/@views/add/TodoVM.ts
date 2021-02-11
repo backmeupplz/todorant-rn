@@ -8,7 +8,7 @@ import {
   getDateDateString,
 } from '@utils/time'
 import { Todo } from '@models/Todo'
-import { observable, computed } from 'mobx'
+import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
@@ -148,6 +148,8 @@ export class TodoVM {
   }
 
   constructor() {
+    makeObservable(this)
+
     if (sharedSettingsStore.showTodayOnAddTodo) {
       this.date = getDateDateString(new Date())
       this.monthAndYear = getDateMonthAndYearString(new Date())

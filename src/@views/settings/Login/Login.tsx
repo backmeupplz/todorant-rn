@@ -12,7 +12,7 @@ import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Container, Content, Input, Text, View } from 'native-base'
 import React, { Component } from 'react'
@@ -23,6 +23,10 @@ class LoginVM {
   @observable loading = false
   @observable syncLoading = false
   @observable debugToken = ''
+
+  constructor() {
+    makeObservable(this)
+  }
 
   loginWithGoogle = async () => {
     this.loading = true
@@ -38,7 +42,9 @@ class LoginVM {
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
         .data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
       await sharedSessionStore.login(todorantUserInfo)
       goBack()
@@ -68,7 +74,9 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
         await sharedSessionStore.login(todorantUserInfo)
         goBack()
@@ -109,7 +117,9 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
         await sharedSessionStore.login(todorantUserInfo)
         goBack()
@@ -127,7 +137,9 @@ class LoginVM {
     try {
       const todorantUserInfo = (await rest.loginToken(token)).data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
       await sharedSessionStore.login(todorantUserInfo)
       goBack()

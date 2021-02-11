@@ -1,53 +1,43 @@
-import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
-import { initialMode, eventEmitter } from 'react-native-dark-mode'
-import { observable, computed } from 'mobx'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { computed, makeObservable } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
-import { updateAndroidNavigationBarColor } from './androidNavigationBar'
 import fonts from './fonts'
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {
-  @observable mode = initialMode
-  @computed get isDark() {
-    return sharedSettingsStore.colorMode === ColorMode.auto
-      ? this.mode === 'dark'
-      : sharedSettingsStore.colorMode === ColorMode.dark
-  }
-
   constructor() {
-    eventEmitter.on('currentModeChanged', (newMode) => {
-      this.mode = newMode
-      updateAndroidNavigationBarColor()
-    })
+    makeObservable(this)
     this.generateColorSchemes()
   }
 
   @computed get textColor() {
-    return this.isDark ? '#f9f9f9' : '#060606'
+    return sharedSettingsStore.isDark ? '#f9f9f9' : '#060606'
   }
   @computed get invertedTextColor() {
-    return !this.isDark ? '#f9f9f9' : '#060606'
+    return !sharedSettingsStore.isDark ? '#f9f9f9' : '#060606'
   }
   @computed get primaryColor() {
-    return this.isDark ? '#FF641A' : '#eb6a52'
+    return sharedSettingsStore.isDark ? '#FF641A' : '#eb6a52'
   }
   @computed get backgroundColor() {
-    return this.isDark ? '#19191A' : '#FCFCFE'
+    return sharedSettingsStore.isDark ? '#19191A' : '#FCFCFE'
   }
   @computed get cardBackgroundColor() {
-    return this.isDark ? '#1F1F1F' : '#FFFFFF'
+    return sharedSettingsStore.isDark ? '#1F1F1F' : '#FFFFFF'
   }
   @computed get borderColor() {
-    return this.isDark ? 'rgba(243, 243, 246, 0.3)' : 'rgba(0, 0, 0, 0.3)'
+    return sharedSettingsStore.isDark
+      ? 'rgba(243, 243, 246, 0.3)'
+      : 'rgba(0, 0, 0, 0.3)'
   }
   @computed get dividerColor() {
-    return this.isDark ? 'rgba(234, 237, 241, 0.2)' : '#D7D8D9'
+    return sharedSettingsStore.isDark ? 'rgba(234, 237, 241, 0.2)' : '#D7D8D9'
   }
   @computed get headerExtraStyle() {
     return {
       headerStyle: {
         backgroundColor: this.backgroundColor,
-        shadowColor: this.isDark ? this.borderColor : undefined,
+        shadowColor: sharedSettingsStore.isDark ? this.borderColor : undefined,
       },
       headerTitleStyle: {
         color: this.textColor,
@@ -87,32 +77,36 @@ export class ColorModeManager {
     }
   }
   @computed get defaultIconColor() {
-    return this.isDark ? 'rgb(51, 102, 255)' : 'rgb(51, 102, 255)'
+    return sharedSettingsStore.isDark
+      ? 'rgb(51, 102, 255)'
+      : 'rgb(51, 102, 255)'
   }
   @computed get destructIconColor() {
-    return this.isDark ? '#E64646' : '#E64646'
+    return sharedSettingsStore.isDark ? '#E64646' : '#E64646'
   }
   @computed get successIconColor() {
-    return this.isDark ? '#4BB34B' : '#4BB34B'
+    return sharedSettingsStore.isDark ? '#4BB34B' : '#4BB34B'
   }
   @computed get placeholderColor() {
     return 'grey'
   }
   @computed get specialSeparatorColor() {
-    return this.isDark ? 'steelblue' : 'lightsteelblue'
+    return sharedSettingsStore.isDark ? 'steelblue' : 'lightsteelblue'
   }
   @computed get oldTodoBackground() {
-    return this.isDark ? 'maroon' : 'lavenderblush'
+    return sharedSettingsStore.isDark ? 'maroon' : 'lavenderblush'
   }
   @computed get done() {
-    return this.isDark ? 'forestgreen' : 'limegreen'
+    return sharedSettingsStore.isDark ? 'forestgreen' : 'limegreen'
   }
   @computed get delete() {
-    return this.isDark ? 'firebrick' : 'orangered'
+    return sharedSettingsStore.isDark ? 'firebrick' : 'orangered'
   }
 
   @computed get progressBarBackground() {
-    return this.isDark ? 'rgba(249, 249, 249, 0.2)' : 'rgba(6, 6, 6, 0.2)'
+    return sharedSettingsStore.isDark
+      ? 'rgba(249, 249, 249, 0.2)'
+      : 'rgba(6, 6, 6, 0.2)'
   }
 
   colorSchemes = [] as string[][]

@@ -22,7 +22,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
 
 const fontSize = 18
@@ -482,6 +482,10 @@ export class AddTodoForm extends Component<{
     }
   }
 
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     const languageTag = sharedAppStateStore.languageTag
     return (
@@ -637,7 +641,7 @@ export class AddTodoForm extends Component<{
                   justifyContent: 'space-between',
                   paddingVertical: verticalSpacing,
                   alignItems: 'center',
-                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                  opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
                   this.props.vm.showMore = true
@@ -666,7 +670,7 @@ export class AddTodoForm extends Component<{
                   justifyContent: 'space-between',
                   paddingVertical: verticalSpacing,
                   alignItems: 'center',
-                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                  opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
                   if (this.props.deleteTodo) {

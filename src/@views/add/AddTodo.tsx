@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { observable, computed } from 'mobx'
+import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -41,7 +41,6 @@ import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
-import { sockets } from '@utils/sockets'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
@@ -49,6 +48,9 @@ import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { isTodoOld } from '@utils/isTodoOld'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class AddTodoContent extends Component<{
@@ -129,15 +131,11 @@ class AddTodoContent extends Component<{
 
           titlesToFixOrder.push(getTitle(todo))
           if (vm.addOnTop) {
-            sharedAppStateStore.todosToTop.push(todo)
             addTodosOnTop.push(todo)
           } else {
             addTodosToBottom.push(todo)
           }
         } else if (vm.editedTodo) {
-          // first edit
-          sharedAppStateStore.editedTodo.tempSync = vm.editedTodo._tempSyncId!
-          sharedAppStateStore.editedTodo.beforeEdit = getTitle(vm.editedTodo)
           const oldTitle = getTitle(vm.editedTodo)
           const failed =
             isTodoOld(vm.editedTodo) &&
@@ -171,7 +169,7 @@ class AddTodoContent extends Component<{
             return
           }
 
-          if (vm.completed) {
+          if (vm.completed && !vm.editedTodo.completed) {
             sharedTagStore.incrementEpicPoints(vm.text)
             // Increment hero store
             sharedHeroStore.points++
@@ -196,7 +194,6 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
-          sharedAppStateStore.editedTodo.afterEdit = getTitle(vm.editedTodo)
           involvedTodos.push(vm.editedTodo)
           titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
         }
@@ -257,13 +254,17 @@ class AddTodoContent extends Component<{
       checkDayCompletionRoutine()
     }
     // Sync hero
-    sockets.heroSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Hero)
   }
 
   @computed get isValid() {
     return this.vms.reduce((prev, cur) => {
       return !cur.isValid ? false : prev
     }, true)
+  }
+
+  componentWillMount() {
+    makeObservable(this)
   }
 
   componentDidMount() {

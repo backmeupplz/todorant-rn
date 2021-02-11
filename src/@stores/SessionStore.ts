@@ -1,18 +1,24 @@
+import { sharedSync } from '@sync/Sync'
 import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTagStore } from '@stores/TagStore'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { daysBetween } from '@utils/daysBetween'
-import { hydrate } from '@utils/hydrate'
-import { hydrateStore } from '@utils/hydrated'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
+import { sharedSettingsStore } from './SettingsStore'
+import { sharedTodoStore } from './TodoStore'
+import { sharedDelegationStore } from './DelegationStore'
+import { sharedHeroStore } from './HeroStore'
+import AsyncStorage from '@react-native-community/async-storage'
 
 class SessionStore {
+  constructor() {
+    makeObservable(this)
+  }
+
   @persist('date') @observable appInstalled = new Date()
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
@@ -23,6 +29,10 @@ class SessionStore {
 
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
+
+  @observable loggingOut = false
+  @observable isInitialSync = false
+
   @computed get needsToRequestRate() {
     return !this.askedToRate && this.numberOfTodosCompleted > 101
   }
@@ -67,25 +77,39 @@ class SessionStore {
 
   async login(user: User) {
     this.user = user
-    await sockets.authorize()
+    this.isInitialSync = true
+    await sharedSync.login(user.token)
     setToken(user.token)
-    await sockets.globalSync()
+    try {
+      await sharedSync.globalSync()
+    } finally {
+      this.isInitialSync = false
+    }
     logEvent('login_success')
   }
 
-  logout() {
-    this.user = undefined
-    this.encryptionKey = undefined
-    realm.write(() => {
-      realm.deleteAll()
-    })
-    sharedTodoStore.logout()
-    sharedSettingsStore.logout()
-    sharedTagStore.logout()
-    sockets.logout()
-    removeToken()
-    removePassword()
-    logEvent('logout_success')
+  async logout() {
+    this.loggingOut = true
+    try {
+      this.user = undefined
+      this.encryptionKey = undefined
+      realm.write(() => {
+        realm.deleteAll()
+      })
+      await AsyncStorage.clear()
+      sharedSync.logout()
+      sharedSettingsStore.logout()
+      sharedTodoStore.logout()
+      sharedDelegationStore.logout()
+      sharedHeroStore.logout()
+      sharedTodoStore.logout()
+      sharedSync.logout()
+      removeToken()
+      removePassword()
+      logEvent('logout_success')
+    } finally {
+      this.loggingOut = false
+    }
   }
 
   onObjectsFromServer = async (
@@ -96,9 +120,16 @@ class SessionStore {
     if (!this.hydrated) {
       throw new Error("Store didn't hydrate yet")
     }
-    user.updatedAt = new Date(user.updatedAt)
+    if (user.updatedAt) {
+      user.updatedAt = new Date(user.updatedAt)
+    }
     user.createdAt = new Date(user.createdAt)
-    if (!this.user || this.user.updatedAt < user.updatedAt) {
+    if (
+      !this.user ||
+      !this.user.updatedAt ||
+      !user.updatedAt ||
+      this.user.updatedAt < user.updatedAt
+    ) {
       const token = this.user?.token
       this.user = user
       if (token) {
@@ -107,8 +138,9 @@ class SessionStore {
     } else {
       if (!areUsersPartiallyEqual(this.user, user)) {
         const userFromServer = await pushBack(this.user)
-
-        userFromServer.updatedAt = new Date(userFromServer.updatedAt)
+        if (userFromServer.updatedAt) {
+          userFromServer.updatedAt = new Date(userFromServer.updatedAt)
+        }
         userFromServer.createdAt = new Date(userFromServer.createdAt)
         Object.assign(this.user, {
           subscriptionId: undefined,
@@ -127,9 +159,9 @@ class SessionStore {
 export const sharedSessionStore = new SessionStore()
 hydrate('SessionStore', sharedSessionStore).then(() => {
   sharedSessionStore.hydrated = true
-  sockets.authorize()
   hydrateStore('SessionStore')
   if (sharedSessionStore.user?.token) {
+    sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
   } else {
     removeToken()

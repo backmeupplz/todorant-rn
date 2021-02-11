@@ -61,9 +61,19 @@ fastlane android increment_android_versions
 fastlane android commit_and_push_android_release
 ```
 
+### android commit_and_push_android_release_beta
+```
+fastlane android commit_and_push_android_release_beta
+```
+
 ### android release
 ```
 fastlane android release
+```
+
+### android release_beta
+```
+fastlane android release_beta
 ```
 
 ### android release_appgallery

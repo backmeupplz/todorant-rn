@@ -6,7 +6,7 @@ import { goBack } from '@utils/navigation'
 import { alertError } from '@utils/alert'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import * as rest from '@utils/rest'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { translate } from '@utils/i18n'
 import { Spinner } from '@components/Spinner'
 import { View } from 'native-base'
@@ -21,6 +21,10 @@ class LoginFacebookContent extends Component<{
 }> {
   @observable gotToken = false
   @observable initialLoad = true
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   getAccessToken(url: string) {
     const match = RegExp('access_token=([^&.]+)&').exec(url)
@@ -55,7 +59,9 @@ class LoginFacebookContent extends Component<{
                   this.gotToken = true
                   const userInfo = (await rest.loginFacebook(token)).data
                   userInfo.createdAt = new Date(userInfo.createdAt)
-                  userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  if (userInfo.updatedAt) {
+                    userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  }
                   sharedSessionStore.login(userInfo)
                   goBack()
                   this.props.route.params?.setLoadingToTrue()

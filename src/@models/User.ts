@@ -1,5 +1,5 @@
 import { persist } from 'mobx-persist'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 class Settings {
   @persist showTodayOnAddTodo?: boolean
@@ -21,8 +21,12 @@ export enum SubscriptionStatus {
 }
 
 export class User {
+  constructor() {
+    makeObservable(this)
+  }
+
   @persist('date') @observable createdAt!: Date
-  @persist('date') @observable updatedAt!: Date
+  @persist('date') @observable updatedAt?: Date
 
   @persist @observable email?: string
   @persist @observable facebookId?: string

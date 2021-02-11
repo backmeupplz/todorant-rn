@@ -1,10 +1,11 @@
+import { requestSync } from '@sync/syncEventEmitter'
 import { Hero } from '@models/Hero'
-import { hydrate } from '@utils/hydrate'
-import { hydrateStore } from '@utils/hydrated'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { sockets } from '@utils/sockets'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export const ranks = [
   0,
@@ -34,10 +35,14 @@ class HeroStore {
   @persist('date') @observable updatedAt?: Date
   @persist @observable points = 0
 
+  constructor() {
+    makeObservable(this)
+  }
+
   incrementPoints() {
     this.points++
     this.updatedAt = new Date()
-    sockets.heroSyncManager.sync()
+    requestSync(SyncRequestEvent.Hero)
   }
 
   @computed get rank() {
@@ -142,6 +147,11 @@ class HeroStore {
         : undefined
     }
     completeSync()
+  }
+
+  logout() {
+    this.updatedAt = undefined
+    this.points = 0
   }
 }
 

@@ -78,6 +78,15 @@ platform :android do
     push_to_git_remote
   end
 
+  lane :commit_and_push_android_release_beta do
+    git_add
+    git_commit(
+      message: "android beta release",
+      path: "."
+    )
+    push_to_git_remote
+  end
+
   lane :release do
     increment_android_versions
     gradle(
@@ -90,6 +99,21 @@ platform :android do
       skip_upload_screenshots: true
     )
     commit_and_push_android_release
+  end
+
+  lane :release_beta do
+    increment_version_code
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    supply(
+      skip_upload_apk: true,
+      aab: './app/build/outputs/bundle/release/app.aab',
+      skip_upload_screenshots: true,
+      track: 'beta',
+    )
+    commit_and_push_android_release_beta
   end
 
   lane :release_appgallery do

@@ -6,13 +6,17 @@ import RNIap, {
   SubscriptionPurchase,
   PurchaseError,
 } from 'react-native-iap'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import * as rest from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 
 class PurchaseListener {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable isPurchasing = false
 
   success?: () => void

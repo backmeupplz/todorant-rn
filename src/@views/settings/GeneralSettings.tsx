@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Text, ActionSheet } from 'native-base'
-import { sharedSettingsStore, Language, ColorMode } from '@stores/SettingsStore'
+import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -12,7 +12,6 @@ import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { sockets } from '@utils/sockets'
 import PushNotification from 'react-native-push-notification'
 import {
   getNotificationPermissions,
@@ -20,6 +19,9 @@ import {
   resetBadgeNumber,
 } from '@utils/notifications'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
+import { Language } from '@models/Language'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const codeToName = {
   en: 'English',
@@ -51,6 +53,10 @@ export class GeneralSettings extends Component {
     }
   }
 
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     return (
       <>
@@ -77,13 +83,11 @@ export class GeneralSettings extends Component {
               async (i) => {
                 if (i === 0) {
                   await AsyncStorage.setItem('languageSelect', Language.auto)
-                  RNRestart.Restart()
                 } else if (i < 7) {
                   sharedSettingsStore.language = options[i].code
                   sharedSettingsStore.updatedAt = new Date()
-                  sockets.settingsSyncManager.sync()
+                  await sharedSync.sync(SyncRequestEvent.Settings)
                   await AsyncStorage.setItem('languageSelect', options[i].code)
-                  RNRestart.Restart()
                 }
               }
             )
@@ -117,7 +121,7 @@ export class GeneralSettings extends Component {
               async (i) => {
                 if (i < 3) {
                   sharedSettingsStore.colorMode = options[i].mode
-                  updateAndroidNavigationBarColor()
+                  updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
                 }
               }
             )

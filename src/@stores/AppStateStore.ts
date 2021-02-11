@@ -1,17 +1,16 @@
 import { Todo } from '@models/Todo'
-import { action, computed, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 
 export enum TodoSectionType {
   planning = 'planning',
   completed = 'completed',
 }
 
-interface editedTodoData {
-  tempSync: string
-  date: string
-}
-
 class AppStateStore {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable todoSection: TodoSectionType = TodoSectionType.planning
   @observable hash: string[] = []
 
@@ -21,13 +20,6 @@ class AppStateStore {
   @observable searchEnabled = false
   @observable searchQuery: string[] = []
   @observable loading = false
-
-  @observable todosToTop: Todo[] = []
-  @observable editedTodo = {} as {
-    tempSync: string
-    beforeEdit: string
-    afterEdit: string
-  }
 
   @action changeLoading = (state: boolean) => {
     this.loading = state

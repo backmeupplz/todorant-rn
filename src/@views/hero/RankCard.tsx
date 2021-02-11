@@ -7,6 +7,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { sharedHeroStore } from '@stores/HeroStore'
 import fonts from '@utils/fonts'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 class CircleWithText extends Component<{
@@ -71,7 +72,7 @@ export class RankCard extends Component<{
             style={{
               width: 2,
               height: '100%',
-              backgroundColor: sharedColors.isDark
+              backgroundColor: sharedSettingsStore.isDark
                 ? 'rgba(255, 255, 255, 0.2)'
                 : 'rgba(0, 0, 0, 0.2)',
               marginHorizontal: 9,
@@ -113,11 +114,13 @@ export class RankCard extends Component<{
             )}
             <View
               style={{
-                backgroundColor: sharedColors.isDark ? '#1F1F1F' : '#FFFFFF',
+                backgroundColor: sharedSettingsStore.isDark
+                  ? '#1F1F1F'
+                  : '#FFFFFF',
                 padding: 16,
                 borderRadius: 14,
                 borderWidth: 1,
-                borderColor: sharedColors.isDark
+                borderColor: sharedSettingsStore.isDark
                   ? 'rgba(255, 255, 255, 0.1)'
                   : 'rgba(0, 0, 0, 0.01)',
                 elevation: 1,

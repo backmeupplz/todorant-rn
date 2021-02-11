@@ -3,8 +3,9 @@ import { Container, H1, View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Tag } from '@models/Tag'
+import { getTagById } from '@utils/getTagById'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import {
   ColorPicker as ColorPickerComponent,
   fromHsv,
@@ -13,8 +14,9 @@ import { extraButtonProps } from '@utils/extraButtonProps'
 import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
-import { sockets } from '@utils/sockets'
 import { Button } from '@components/Button'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 
@@ -50,6 +52,10 @@ class ColorPickerContent extends Component<{
   @observable tag?: Tag
   @observable color = 'dodgerblue'
 
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   componentDidMount() {
     this.tag = this.props.route.params?.tag
     if (this.tag?.color) {
@@ -61,9 +67,7 @@ class ColorPickerContent extends Component<{
   }
 
   save() {
-    const dbtag = sharedTagStore.getTagById(
-      this.tag?._id || this.tag?._tempSyncId
-    )
+    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
     if (!dbtag) {
       return
     }
@@ -73,7 +77,7 @@ class ColorPickerContent extends Component<{
     })
     goBack()
     sharedTagStore.refreshTags()
-    sockets.tagsSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Tag)
   }
 
   render() {

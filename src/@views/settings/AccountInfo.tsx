@@ -9,7 +9,7 @@ import { Clipboard, Platform } from 'react-native'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { setUserName } from '@utils/rest'
 import { alertError } from '@utils/alert'
@@ -47,6 +47,11 @@ export class AccountInfo extends Component {
   @observable loading = false
   @observable name = ''
   @observable nameChangingMenu = false
+
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     return !sharedSessionStore.user ? (
       <>

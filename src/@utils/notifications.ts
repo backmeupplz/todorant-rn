@@ -39,9 +39,7 @@ export function updateBadgeNumber() {
   }
 }
 
-export function getNotificationPermissions(): Promise<
-  PushNotificationPermissions
-> {
+export function getNotificationPermissions(): Promise<PushNotificationPermissions> {
   return new Promise((res) => {
     PushNotification.checkPermissions((permissions) => {
       res(permissions)

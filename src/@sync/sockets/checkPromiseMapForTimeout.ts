@@ -1,4 +1,4 @@
-import { PromiseMap } from '@utils/sockets/PromiseMap'
+import { PromiseMap } from '@sync/sockets/PromiseMap'
 
 const timeouts = {
   syncRequested: 30,
