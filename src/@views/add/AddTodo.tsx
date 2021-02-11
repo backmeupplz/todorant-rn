@@ -78,6 +78,8 @@ class AddTodoContent extends Component<{
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
+  completed = false
+
   addButtonView?: Animatable.View
   hangleAddButtonViewRef = (ref: any) => (this.addButtonView = ref)
 
@@ -238,7 +240,7 @@ class AddTodoContent extends Component<{
         (p, c) => (c.editedTodo && c.editedTodo.frog) || c.frog || p,
         false as boolean
       )
-    if (hasCompletedTodos) {
+    if (hasCompletedTodos && !this.completed) {
       if (hasFrog) {
         playFrogComplete()
       } else {
@@ -277,6 +279,7 @@ class AddTodoContent extends Component<{
     }
     this.addTodo()
     if (this.props.route.params?.editedTodo) {
+      this.completed = this.props.route.params?.editedTodo.completed
       this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
       this.screenType = AddTodoScreenType.edit
     }
