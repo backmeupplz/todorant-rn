@@ -8,6 +8,11 @@ import { logEvent } from '@utils/logEvent'
 import { realm } from '@utils/realm'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
+import { sharedSettingsStore } from './SettingsStore'
+import { sharedTodoStore } from './TodoStore'
+import { sharedDelegationStore } from './DelegationStore'
+import { sharedHeroStore } from './HeroStore'
+import AsyncStorage from '@react-native-community/async-storage'
 
 class SessionStore {
   constructor() {
@@ -83,7 +88,7 @@ class SessionStore {
     logEvent('login_success')
   }
 
-  logout() {
+  async logout() {
     this.loggingOut = true
     try {
       this.user = undefined
@@ -91,6 +96,13 @@ class SessionStore {
       realm.write(() => {
         realm.deleteAll()
       })
+      await AsyncStorage.clear()
+      sharedSync.logout()
+      sharedSettingsStore.logout()
+      sharedTodoStore.logout()
+      sharedDelegationStore.logout()
+      sharedHeroStore.logout()
+      sharedTodoStore.logout()
       sharedSync.logout()
       removeToken()
       removePassword()

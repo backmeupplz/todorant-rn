@@ -131,6 +131,7 @@ class TodoStore {
   }
 
   logout = () => {
+    this.updatedAt = undefined
     this.refreshTodos()
   }
 

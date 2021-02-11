@@ -31,6 +31,7 @@ class TagStore {
   }
 
   logout = () => {
+    this.updatedAt = undefined
     this.refreshTags()
   }
 
