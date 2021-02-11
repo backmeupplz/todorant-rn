@@ -18,6 +18,7 @@ export class Tag extends MobxRealmModel {
       epicGoal: 'int?',
       epicCompleted: 'bool?',
       epicPoints: 'int?',
+      epicOrder: 'int?',
     },
   }
 
@@ -39,6 +40,7 @@ export class Tag extends MobxRealmModel {
   epicGoal?: number
   epicCompleted?: boolean
   epicPoints?: number
+  epicOrder?: number
 }
 
 export function cloneTag(tag: Tag) {
@@ -57,5 +59,6 @@ export function cloneTag(tag: Tag) {
     epicGoal: tag.epicGoal,
     epicCompleted: tag.epicCompleted,
     epicPoints: tag.epicPoints,
+    epicOrder: tag.epicOrder,
   }
 }

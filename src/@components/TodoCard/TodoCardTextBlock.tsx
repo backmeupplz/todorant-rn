@@ -11,6 +11,7 @@ import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
 import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { navigate } from '@utils/navigation'
 
 const debug = false
 
@@ -88,6 +89,7 @@ export class TodoCardTextBlock extends Component<{
                   setTimeout(() => {
                     if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
                       sharedAppStateStore.hash.push(p.value)
+                      navigate('Planning')
                     }
                   })
                 }
