@@ -1594,6 +1594,11 @@
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"
 
+"@upacyxou/react-native-todorant-widget@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-todorant-widget/-/react-native-todorant-widget-0.2.2.tgz#efdcee9777c65a482ef8a05b8637b71d007e0b11"
+  integrity sha512-4z0YO03Wp98//7c4Bbm5SA5Vv5tbMtTJP+MbIcD3hFos059Uo8XO47BTkl6HR1gNl5O+D/oph47qnG1G2Ws84g==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -6851,7 +6856,7 @@ react-native-qrcode-scanner@^1.4.0:
     prop-types "^15.5.10"
     react-native-permissions "^2.0.2"
 
-react-native-ratings@^6.5.0:
+react-native-ratings@^6.3.1:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
   integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==
@@ -6905,7 +6910,7 @@ react-native-store-rating@backmeupplz/react-native-store-rating#803b83b701a4f926
   resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/803b83b701a4f926fcacfe5e775d57cf69c72088"
   dependencies:
     lodash.times "^4.3.2"
-    react-native-ratings "^6.5.0"
+    react-native-ratings "^6.3.1"
 
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
@@ -6931,11 +6936,6 @@ react-native-swipe-list-view@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-native-swipe-list-view/-/react-native-swipe-list-view-2.5.0.tgz#4740f595aa3253ccd2c8e44131f83bc957f57ddb"
   integrity sha512-HTsVaxA3an6myShlLroTyDZo/AOrZ6HJr+EwCaGRE2YuGdM/cFHoYfsuslOEEig5GenTw8DILUB8kqYWQ5lJtA==
-
-react-native-todorant-widget@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-todorant-widget/-/react-native-todorant-widget-0.1.4.tgz#c5c1fb9499e9523da86b171d4af4809217371fec"
-  integrity sha512-/qf7GS9He9J1Z9WTkeP4PBwQ1QWdTrIMw04a8/EG3TloBIhmfMt5ZTX8UJbP4+ZKQVUIId7GDsBnZmF5d1Vq8w==
 
 react-native-vector-icons@^6.6.0:
   version "6.6.0"

@@ -1,4 +1,4 @@
-import TodorantWidget from 'react-native-todorant-widget'
+import TodorantWidget from '@upacyxou/react-native-todorant-widget'
 import { Platform, NativeModules } from 'react-native'
 import { updateBadgeNumber } from '@utils/notifications'
 
