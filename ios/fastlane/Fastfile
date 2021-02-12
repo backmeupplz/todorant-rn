@@ -43,7 +43,6 @@ platform :ios do
     upload_to_app_store(
       submit_for_review: true,
       skip_screenshots: true,
-      automatic_release: false,
       submission_information: {
         add_id_info_uses_idfa: true,
         add_id_info_limits_tracking: false,
