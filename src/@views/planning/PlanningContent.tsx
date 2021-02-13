@@ -256,7 +256,7 @@ export class PlanningContent extends Component {
           ) : (
             <NoTodosPlaceholder />
           )
-        ) : (
+        ) : this.vm.completedTodosData.todosArray.length ? (
           <SectionList
             onEndReached={() => {
               sharedAppStateStore.changeLoading(true)
@@ -291,6 +291,8 @@ export class PlanningContent extends Component {
             )}
             stickySectionHeadersEnabled={false}
           />
+        ) : (
+          sharedAppStateStore.changeLoading(false)
         )}
         <PlusButton />
       </Container>
