@@ -12,7 +12,7 @@
 "authenticate" = "Please, login to Todorant";
 "authenticate.button" = "Login";
 "loading" = "Loading...";
-"error" = "Connection error";
+"error" = "Error getting data";
 "retry" = "Try again";
 "snapshot" = "Buy oat milk";
 "title" = "Todorant widget";
