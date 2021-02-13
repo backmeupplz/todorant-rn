@@ -1594,10 +1594,10 @@
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"
 
-"@upacyxou/react-native-todorant-widget@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-todorant-widget/-/react-native-todorant-widget-0.2.2.tgz#efdcee9777c65a482ef8a05b8637b71d007e0b11"
-  integrity sha512-4z0YO03Wp98//7c4Bbm5SA5Vv5tbMtTJP+MbIcD3hFos059Uo8XO47BTkl6HR1gNl5O+D/oph47qnG1G2Ws84g==
+"@upacyxou/react-native-todorant-widget@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-todorant-widget/-/react-native-todorant-widget-0.3.0.tgz#bab2c2aa4beac380cb6a966aa5ea2aa8dcd30d99"
+  integrity sha512-JJDEVbzOrKl4nse2ZYX165JqwmuJsll8cy2vKPNXd1cpyEGCF1YDAN70UR2KDCKLEuXtsxdZszyA6NYcyx1VPw==
 
 abbrev@1:
   version "1.1.1"
@@ -6871,9 +6871,9 @@ react-native-reanimated@^1.13.1, react-native-reanimated@^1.13.2:
   dependencies:
     fbjs "^1.0.0"
 
-react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-intent:
-  version "1.0.4"
-  resolved "https://codeload.github.com/backmeupplz/react-native-receive-sharing-intent/tar.gz/41b66b203dc93dde70b6827e70ff2a2a14b72511"
+react-native-receive-sharing-intent@ajith-ab/react-native-receive-sharing-intent:
+  version "1.1.0"
+  resolved "https://codeload.github.com/ajith-ab/react-native-receive-sharing-intent/tar.gz/0c4a6e82e4060749a6beec1bd195d78aeebcb3c0"
 
 react-native-restart@^0.0.14:
   version "0.0.14"
