@@ -40,7 +40,9 @@ export class Security extends Component {
   changeEncrypted(encrypted: boolean) {
     this.loading = true
     try {
-      const todos = realm.objects(Todo).filtered(`encrypted = ${!encrypted}`)
+      const todos = realm
+        .objects(Todo)
+        .filtered(`encrypted = ${!encrypted} && deleted = false`)
       realm.write(() => {
         for (const todo of todos) {
           todo.encrypted = encrypted
@@ -58,7 +60,9 @@ export class Security extends Component {
   encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = realm.objects(Todo).filtered(`encrypted = true`)
+      const todos = realm
+        .objects(Todo)
+        .filtered(`encrypted = true && deleted = false`)
       realm.write(() => {
         for (const todo of todos) {
           if (encrypt) {
@@ -176,7 +180,7 @@ export class Security extends Component {
                           () => {
                             const encrytedTodos = realm
                               .objects(Todo)
-                              .filtered('encrypted = true')
+                              .filtered('encrypted = true && deleted = false')
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
                               const decryptedText = _d(
@@ -250,7 +254,9 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects(Todo).filtered('encrypted = false').length
+                !realm
+                  .objects(Todo)
+                  .filtered('encrypted = false && deleted = false').length
               }
             >
               <Text>{translate('encryptAllButton')}</Text>
@@ -270,7 +276,9 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects(Todo).filtered('encrypted = true').length
+                !realm
+                  .objects(Todo)
+                  .filtered('encrypted = true && deleted = false').length
               }
             >
               <Text>{translate('decryptAllButton')}</Text>
