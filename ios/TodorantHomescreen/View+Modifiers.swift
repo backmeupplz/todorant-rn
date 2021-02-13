@@ -34,6 +34,15 @@ struct WidgetTopElementModifier: ViewModifier {
   }
 }
 
+struct WidgetWarningTextModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .font(.footnote)
+      .padding(.top, -15)
+      .padding(.bottom, 5)
+  }
+}
+
 extension View {
   func widgetTextStyle() -> some View {
     modifier(WidgetTodoTextModifier())
@@ -45,6 +54,10 @@ extension View {
   
   func widgetTopElementPadding() -> some View {
     modifier(WidgetTopElementModifier())
+  }
+  
+  func widgetWarningTextModifier() -> some View {
+    modifier(WidgetWarningTextModifier())
   }
 }
 
