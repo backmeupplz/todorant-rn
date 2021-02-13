@@ -87,7 +87,7 @@
     "react-native-push-notification": "^5.1.1",
     "react-native-qrcode-scanner": "^1.4.0",
     "react-native-reanimated": "^1.13.2",
-    "react-native-receive-sharing-intent": "ajith-ab/react-native-receive-sharing-intent",
+    "react-native-receive-sharing-intent": "backmeupplz/react-native-receive-sharing-intent",
     "react-native-restart": "^0.0.14",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.15.2",
