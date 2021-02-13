@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Tag } from '@models/Tag'
+import { getTagById } from '@utils/getTagById'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { realm } from '@utils/realm'
-import { sockets } from '@utils/sockets'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { extraButtonProps } from '@utils/extraButtonProps'
 import { translate } from '@utils/i18n'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 const AddEpicStore = {
   save: () => {},
@@ -44,6 +46,10 @@ class AddEpicContent extends Component<{
   @observable tag?: Tag
   @observable epicGoal: number | undefined
 
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   componentDidMount() {
     this.tag = this.props.route.params?.tag
     AddEpicStore.save = () => {
@@ -52,9 +58,7 @@ class AddEpicContent extends Component<{
   }
 
   save() {
-    const dbtag = sharedTagStore.getTagById(
-      this.tag?._id || this.tag?._tempSyncId
-    )
+    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
     if (!dbtag) {
       return
     }
@@ -68,7 +72,7 @@ class AddEpicContent extends Component<{
     })
     goBack()
     sharedTagStore.refreshTags()
-    sockets.tagsSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Tag)
   }
   render() {
     return (

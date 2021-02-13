@@ -17,6 +17,10 @@ import { PlusButton } from '@components/PlusButton'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { EpicProgress } from './EpicProgress'
+import DraggableFlatList from 'react-native-draggable-flatlist'
+import { realm } from '@utils/realm'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 export class CurrentContent extends Component {
@@ -45,11 +49,28 @@ export class CurrentContent extends Component {
         >
           {!!sharedTagStore.undeletedTags.filter((tag) => tag.epic).length && (
             <View style={{ marginTop: 16 }}>
-              {sharedTagStore.undeletedTags
-                .filter((tag) => tag.epic)
-                .map((tag, i) => (
-                  <EpicProgress epic={tag} key={i} />
-                ))}
+              <DraggableFlatList
+                data={sharedTagStore.undeletedTags
+                  .filter((tag) => tag.epic)
+                  .sort((a, b) => {
+                    if ((a.epicOrder ?? 0) < (b.epicOrder ?? 0)) return -1
+                    return 1
+                  })}
+                renderItem={({ item, index, drag, isActive }) => {
+                  return <EpicProgress epic={item} key={index} drag={drag} />
+                }}
+                keyExtractor={(_, index) => `draggable-epic-${index}`}
+                onDragEnd={(epics) => {
+                  realm.write(() => {
+                    epics.data.map((epic, index) => {
+                      epic.epicOrder = index
+                      epic.updatedAt = new Date()
+                    })
+                    sharedTagStore.refreshTags()
+                    sharedSync.sync(SyncRequestEvent.Tag)
+                  })
+                }}
+              />
             </View>
           )}
           {!!sharedTodoStore.progress.count && (

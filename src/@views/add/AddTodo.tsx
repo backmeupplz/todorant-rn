@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { observable, computed } from 'mobx'
+import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -41,13 +41,16 @@ import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
-import { sockets } from '@utils/sockets'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { isTodoOld } from '@utils/isTodoOld'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 class AddTodoContent extends Component<{
@@ -75,6 +78,8 @@ class AddTodoContent extends Component<{
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
+  completed = false
+
   addButtonView?: Animatable.View
   hangleAddButtonViewRef = (ref: any) => (this.addButtonView = ref)
 
@@ -95,88 +100,84 @@ class AddTodoContent extends Component<{
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
-    for (const vm of this.vms) {
-      if (this.screenType === AddTodoScreenType.add) {
-        const todo = {
-          updatedAt: new Date(),
-          createdAt: new Date(),
-          text: vm.text,
-          completed: vm.completed,
-          frog: vm.frog,
-          frogFails: 0,
-          skipped: false,
-          order: vm.order,
-          monthAndYear:
-            vm.monthAndYear || getDateMonthAndYearString(new Date()),
-          deleted: false,
-          date: vm.date,
-          time: vm.time,
-          encrypted: !!sharedSessionStore.encryptionKey,
+    const completedAtCreation: Todo[] = []
+    realm.write(() => {
+      for (const vm of this.vms) {
+        if (this.screenType === AddTodoScreenType.add) {
+          const todo = {
+            updatedAt: new Date(),
+            createdAt: new Date(),
+            text: vm.text,
+            completed: vm.completed,
+            frog: vm.frog,
+            frogFails: 0,
+            skipped: false,
+            order: vm.order,
+            monthAndYear:
+              vm.monthAndYear || getDateMonthAndYearString(new Date()),
+            deleted: false,
+            date: vm.date,
+            time: vm.time,
+            encrypted: !!sharedSessionStore.encryptionKey,
 
-          _tempSyncId: uuid(),
-        } as Todo
-        todo._exactDate = new Date(getTitle(todo))
+            _tempSyncId: uuid(),
+          } as Todo
+          todo._exactDate = new Date(getTitle(todo))
 
-        if (todo.completed) {
-          sharedTagStore.incrementEpicPoints(todo.text)
-          // Increment hero store
-          sharedHeroStore.points++
-          sharedHeroStore.updatedAt = new Date()
-        }
+          if (todo.completed) {
+            completedAtCreation.push(todo)
+          }
 
-        realm.write(() => {
           const dbtodo = realm.create<Todo>('Todo', todo)
           involvedTodos.push(dbtodo)
-        })
 
-        titlesToFixOrder.push(getTitle(todo))
-        if (vm.addOnTop) {
-          addTodosOnTop.push(todo)
-        } else {
-          addTodosToBottom.push(todo)
-        }
-      } else if (vm.editedTodo) {
-        const oldTitle = getTitle(vm.editedTodo)
-        const failed =
-          isTodoOld(vm.editedTodo) &&
-          (vm.editedTodo.date !== vm.date ||
-            vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
-          !vm.editedTodo.completed
+          titlesToFixOrder.push(getTitle(todo))
+          if (vm.addOnTop) {
+            addTodosOnTop.push(todo)
+          } else {
+            addTodosToBottom.push(todo)
+          }
+        } else if (vm.editedTodo) {
+          const oldTitle = getTitle(vm.editedTodo)
+          const failed =
+            isTodoOld(vm.editedTodo) &&
+            (vm.editedTodo.date !== vm.date ||
+              vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
+            !vm.editedTodo.completed
 
-        if (
-          vm.editedTodo.frogFails > 2 &&
-          (vm.editedTodo.monthAndYear !==
-            (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
-            vm.editedTodo.date !== vm.date)
-        ) {
-          setTimeout(() => {
-            Alert.alert(translate('error'), translate('breakdownRequest'), [
-              {
-                text: translate('cancel'),
-                style: 'cancel',
-              },
-              {
-                text: translate('breakdownButton'),
-                onPress: () => {
-                  goBack()
-                  navigate('BreakdownTodo', {
-                    breakdownTodo: vm.editedTodo,
-                  })
+          if (
+            vm.editedTodo.frogFails > 2 &&
+            (vm.editedTodo.monthAndYear !==
+              (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
+              vm.editedTodo.date !== vm.date)
+          ) {
+            setTimeout(() => {
+              Alert.alert(translate('error'), translate('breakdownRequest'), [
+                {
+                  text: translate('cancel'),
+                  style: 'cancel',
                 },
-              },
-            ])
-          }, 100)
-          return
-        }
+                {
+                  text: translate('breakdownButton'),
+                  onPress: () => {
+                    goBack()
+                    navigate('BreakdownTodo', {
+                      breakdownTodo: vm.editedTodo,
+                    })
+                  },
+                },
+              ])
+            }, 100)
+            return
+          }
 
-        if (vm.completed) {
-          sharedTagStore.incrementEpicPoints(vm.text)
-          // Increment hero store
-          sharedHeroStore.points++
-          sharedHeroStore.updatedAt = new Date()
-        }
+          if (vm.completed && !vm.editedTodo.completed) {
+            sharedTagStore.incrementEpicPoints(vm.text)
+            // Increment hero store
+            sharedHeroStore.points++
+            sharedHeroStore.updatedAt = new Date()
+          }
 
-        realm.write(() => {
           if (!vm.editedTodo) {
             return
           }
@@ -195,11 +196,18 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
-        })
-        involvedTodos.push(vm.editedTodo)
-        titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
+          involvedTodos.push(vm.editedTodo)
+          titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
+        }
       }
-    }
+    })
+    completedAtCreation.forEach((todo) => {
+      sharedTagStore.incrementEpicPoints(todo.text)
+      // Increment hero store
+      sharedHeroStore.points++
+      sharedHeroStore.updatedAt = new Date()
+    })
+    completedAtCreation.splice(0, completedAtCreation.length)
     if (this.breakdownTodo) {
       const breakdownTodoTitle = getTitle(this.breakdownTodo)
 
@@ -232,7 +240,7 @@ class AddTodoContent extends Component<{
         (p, c) => (c.editedTodo && c.editedTodo.frog) || c.frog || p,
         false as boolean
       )
-    if (hasCompletedTodos) {
+    if (hasCompletedTodos && !this.completed) {
       if (hasFrog) {
         playFrogComplete()
       } else {
@@ -248,13 +256,17 @@ class AddTodoContent extends Component<{
       checkDayCompletionRoutine()
     }
     // Sync hero
-    sockets.heroSyncManager.sync()
+    sharedSync.sync(SyncRequestEvent.Hero)
   }
 
   @computed get isValid() {
     return this.vms.reduce((prev, cur) => {
       return !cur.isValid ? false : prev
     }, true)
+  }
+
+  componentWillMount() {
+    makeObservable(this)
   }
 
   componentDidMount() {
@@ -267,6 +279,7 @@ class AddTodoContent extends Component<{
     }
     this.addTodo()
     if (this.props.route.params?.editedTodo) {
+      this.completed = this.props.route.params?.editedTodo.completed
       this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
       this.screenType = AddTodoScreenType.edit
     }

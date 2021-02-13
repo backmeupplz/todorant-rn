@@ -1,13 +1,7 @@
-import {
-  getDateString,
-  getDateStringFromTodo,
-  getDateDateString,
-  getDateMonthAndYearString,
-} from '@utils/time'
-import { observable } from 'mobx'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { MobxRealmModel } from '@utils/mobx-realm/model'
+import { getDateString, getDateStringFromTodo } from '@utils/time'
 
-export class Todo {
+export class Todo extends MobxRealmModel {
   public static schema = {
     name: 'Todo',
     properties: {
@@ -35,66 +29,36 @@ export class Todo {
     },
   }
 
-  @observable _id?: string
-  @observable createdAt = new Date()
-  @observable updatedAt = new Date()
-  @observable text!: string
-  @observable completed!: boolean
-  @observable frog!: boolean
-  @observable frogFails!: number
-  @observable skipped!: boolean
-  @observable order!: number
-  @observable monthAndYear?: string
-  @observable deleted!: boolean
-  @observable encrypted!: boolean
-  @observable date?: string
-  @observable time?: string
+  objectSchema() {
+    return Todo.schema
+  }
 
-  @observable userName?: string
-  @observable delegatorName?: string
-  @observable delegateAccepted?: boolean
+  _id?: string
+  createdAt = new Date()
+  updatedAt = new Date()
+  text!: string
+  completed!: boolean
+  frog!: boolean
+  frogFails!: number
+  skipped!: boolean
+  order!: number
+  monthAndYear?: string
+  deleted!: boolean
+  encrypted!: boolean
+  date?: string
+  time?: string
+
+  userName?: string
+  delegatorName?: string
+  delegateAccepted?: boolean
 
   // Local values
-  @observable _tempSyncId?: string
+  _tempSyncId?: string
   _exactDate!: Date
 }
 
 export function isTodoToday(todo: Todo) {
   return getDateString(new Date()) === getDateStringFromTodo(todo)
-}
-
-export function isTodoOld(todo: Todo) {
-  const now = new Date()
-  const day = getDateDateString(now)
-  const monthAndYear = getDateMonthAndYearString(now)
-
-  const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-  const yesterday = parseInt(day) - 1
-  const todayDate = new Date()
-  todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-  todayDate.setMinutes(parseInt(startTimeOfDay.substr(3)))
-
-  // Exact date exists or not
-  if (todo.date) {
-    if (todo.monthAndYear && todo.monthAndYear < monthAndYear) {
-      return true
-    }
-    if (
-      todo.monthAndYear === monthAndYear &&
-      parseInt(todo.date) == yesterday &&
-      now >= todayDate
-    ) {
-      return true
-    }
-    if (todo.monthAndYear === monthAndYear && parseInt(todo.date) < yesterday) {
-      return true
-    }
-  } else {
-    if (todo.monthAndYear && todo.monthAndYear <= monthAndYear) {
-      return true
-    }
-  }
-  return false
 }
 
 export function compareTodos(completed: Boolean) {

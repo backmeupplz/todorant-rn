@@ -6,7 +6,7 @@ import CodePush from 'react-native-code-push'
 import { BottomControls } from '@views/settings/intro/BottomControls'
 import { Dimensions, ScrollView } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { ImageAndTextIntroPage } from '@views/settings/intro/ImageAndTextIntroPage'
 import { translate } from '@utils/i18n'
 import { goBack, navigate } from '@utils/navigation'
@@ -64,6 +64,10 @@ export class IntroMessage extends Component {
   @observable width = Dimensions.get('window').width
 
   scrollViewRef = React.createRef<ScrollView>()
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   async componentDidMount() {
     try {

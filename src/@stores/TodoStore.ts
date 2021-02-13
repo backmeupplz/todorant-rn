@@ -1,52 +1,49 @@
-import { syncEventEmitter } from '@utils/sockets'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
+import { mobxRealmObject } from '@utils/mobx-realm/object'
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from '@utils/ObservableNow'
+import { observableNow } from '@utils/ObservableNow'
+import { getTitle, Todo } from '@models/Todo'
+import { shallowMobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
-import { observable, computed } from 'mobx'
-import { Todo, getTitle, compareTodos, cloneTodo } from '@models/Todo'
-import { persist } from 'mobx-persist'
-import uuid from 'uuid'
-import { getDateString } from '@utils/time'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
-import { decrypt, encrypt } from '@utils/encryption'
-import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
+import { computed, makeObservable, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 class TodoStore {
-  @persist('date') @observable lastSyncDate?: Date
-
   hydrated = false
 
-  @observable allTodos = realm.objects<Todo>('Todo')
+  @persist('date') @observable updatedAt?: Date
 
-  @persist recalculatedExactDates = false
-
-  @computed get usualTodos() {
-    return this.allTodos.filtered('userName = null')
-  }
-
-  @computed get delegatedTodos() {
-    return this.allTodos.filtered('userName != null')
-  }
-
-  @computed get todayTodos() {
-    const now = new Date()
-    const today = new Date()
-    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-    today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-    today.setMinutes(parseInt(startTimeOfDay.substr(3)))
-
-    if (now < today) {
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      return this.todosForDate(getDateString(yesterday))
-    } else {
-      return this.todosForDate(getDateString(now))
-    }
+  getRealmTodos(title: string, completed: boolean) {
+    return realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != false')
+      .filtered(`completed = ${completed ? 'true' : 'false'}`)
+      .filtered(
+        title.length === 10
+          ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
+              8,
+              2
+            )}"`
+          : `monthAndYear = "${title.substr(
+              0,
+              7
+            )}" && (date == "" || date == null)`
+      )
+      .sorted([
+        ['frog', true],
+        ['order', false],
+      ])
   }
 
   todosForDate = (title: string) => {
-    return this.usualTodos
+    return realm
+      .objects(Todo)
       .filtered('deleted = false')
       .filtered('delegateAccepted != false')
       .filtered(
@@ -63,226 +60,97 @@ class TodoStore {
       .sorted('order')
   }
 
+  todosBeforeDate = (title: string) => {
+    const todayWithTimezoneOffset = new Date(title)
+    const todayString = `T${
+      Math.floor(todayWithTimezoneOffset.getTime() / 1000) - 1
+    }:000`
+    return realm
+      .objects(Todo)
+      .filtered(
+        `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+      )
+  }
+
   @computed get currentTodo() {
-    const todayTodos = Array.from(
-      this.todayTodos.filtered('completed = false')
-    ).sort(compareTodos(false))
-    return todayTodos.length ? todayTodos[0] : undefined
+    return this.shallowTodayUncompletedTodos.length
+      ? mobxRealmObject(this.shallowTodayUncompletedTodos[0])
+      : undefined
   }
 
   @computed get unacceptedTodos() {
-    return this.usualTodos
+    return realm
+      .objects(Todo)
       .filtered('deleted = false')
       .filtered('delegateAccepted = false')
   }
 
+  shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+    this.getRealmTodos(observableNow.todayTitle, false)
+  )
+
+  shallowTodayCompletedTodos = shallowMobxRealmCollection(
+    this.getRealmTodos(observableNow.todayTitle, true)
+  )
+
   @computed get progress() {
     return {
-      count: this.todayTodos.length,
-      completed: this.todayTodos.filtered('completed = true').length,
+      count:
+        this.shallowTodayUncompletedTodos.length +
+        this.shallowTodayCompletedTodos.length,
+      completed: this.shallowTodayCompletedTodos.length,
     }
   }
 
+  oldTodos = shallowMobxRealmCollection(
+    this.todosBeforeDate(observableNow.todayTitle)
+  )
+
   @computed get isPlanningRequired() {
-    const todayWithTimezoneOffset = new Date()
-    todayWithTimezoneOffset.setMinutes(
-      todayWithTimezoneOffset.getMinutes() -
-        todayWithTimezoneOffset.getTimezoneOffset()
-    )
-
-    const startTimeOfDay = sharedSettingsStore.startTimeOfDaySafe
-    const todayDate = new Date()
-    todayDate.setHours(parseInt(startTimeOfDay.substr(0, 2)))
-    todayDate.setMinutes(
-      parseInt(startTimeOfDay.substr(3)) - todayDate.getTimezoneOffset()
-    )
-    if (todayWithTimezoneOffset < todayDate) {
-      todayWithTimezoneOffset.setDate(todayWithTimezoneOffset.getDate() - 1)
-    }
-
-    const todayString = `T${
-      Math.floor(todayWithTimezoneOffset.getTime() / 1000) -
-      (Math.floor(todayWithTimezoneOffset.getTime() / 1000) % (24 * 60 * 60)) -
-      1
-    }:000`
-    const todos = this.usualTodos.filtered(
-      `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
-    )
-    return !!todos.length
+    return !!this.oldTodos.length
   }
 
   constructor() {
+    makeObservable(this)
     this.refreshTodos()
+    // Today date changed
+    observableNowEventEmitter.on(
+      ObservableNowEventEmitterEvent.ObservableNowChanged,
+      () => {
+        this.oldTodos = shallowMobxRealmCollection(
+          this.todosBeforeDate(observableNow.todayTitle)
+        )
+        this.shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+          this.getRealmTodos(observableNow.todayTitle, false)
+        )
+        this.shallowTodayCompletedTodos = shallowMobxRealmCollection(
+          this.getRealmTodos(observableNow.todayTitle, true)
+        )
+      }
+    )
   }
 
   logout = () => {
-    this.lastSyncDate = undefined
-    this.refreshTodos()
-  }
-
-  onObjectsFromServer = async (
-    todosChangedOnServer: Todo[],
-    pushBack: (objects: Todo[]) => Promise<Todo[]>
-  ) => {
-    if (!this.hydrated) {
-      return
-    }
-    // Modify dates
-    todosChangedOnServer.forEach((todo) => {
-      todo.updatedAt = new Date(todo.updatedAt)
-      todo.createdAt = new Date(todo.createdAt)
-      if ((todo as any).user && (todo as any).user.name) {
-        todo.userName = (todo as any).user.name
-      }
-      if ((todo as any).delegator && (todo as any).delegator.name) {
-        todo.delegateAccepted = !!todo.delegateAccepted
-        todo.delegatorName = (todo as any).delegator.name
-      }
-    })
-    // Get variables
-    const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
-      if (c._id) {
-        p[c._id] = c
-      }
-      return p
-    }, {} as { [index: string]: Todo })
-    const todosChangedLocally = this.lastSyncDate
-      ? this.allTodos.filtered(
-          `updatedAt > ${realmTimestampFromDate(this.lastSyncDate)}`
-        )
-      : this.allTodos
-    // Pull
-    for (const serverTodo of todosChangedOnServer) {
-      if (!serverTodo._id) {
-        continue
-      }
-      let localTodo = this.getTodoById(serverTodo._id)
-      if (localTodo) {
-        if (localTodo.updatedAt < serverTodo.updatedAt) {
-          realm.write(() => {
-            if (localTodo) {
-              Object.assign(localTodo, serverTodo)
-              if (localTodo.encrypted) {
-                localTodo.text = decrypt(localTodo.text)
-              }
-              localTodo._exactDate = localTodo.monthAndYear
-                ? new Date(getTitle(localTodo))
-                : new Date()
-            }
-          })
-        }
-      } else {
-        const newTodo = {
-          ...serverTodo,
-          _exactDate: serverTodo.monthAndYear
-            ? new Date(getTitle(serverTodo))
-            : new Date(),
-        }
-        if (newTodo.encrypted) {
-          newTodo.text = decrypt(newTodo.text)
-        }
-        realm.write(() => {
-          realm.create('Todo', newTodo)
-        })
-      }
-    }
-    // Push
-    const todosToPush = todosChangedLocally.filter((todo) => {
-      if (!todo._id) {
-        return true
-      }
-      const serverTodo = serverTodosMap[todo._id]
-      if (serverTodo) {
-        return todo.updatedAt > serverTodo.updatedAt
-      } else {
-        return true
-      }
-    })
-    if (!todosToPush.length) {
-      sharedTodoStore.lastSyncDate = new Date()
-      // Refresh
-      this.refreshTodos()
-      syncEventEmitter.emit(`todos_synced`)
-      return
-    }
-    realm.write(() => {
-      for (const todoToPush of todosToPush) {
-        if (!todoToPush._tempSyncId) {
-          todoToPush._tempSyncId = uuid()
-        }
-      }
-    })
-    const savedPushedTodos = await pushBack(
-      todosToPush
-        .map((v) => ({ ...cloneTodo(v) }))
-        .map((v) => {
-          if (v.encrypted) {
-            v.text = encrypt(v.text)
-          }
-          return v
-        }) as any
-    )
-    // Modify dates
-    savedPushedTodos.forEach((todo) => {
-      todo.updatedAt = new Date(todo.updatedAt)
-      todo.createdAt = new Date(todo.createdAt)
-    })
-    realm.write(() => {
-      for (const todo of savedPushedTodos) {
-        if (!todo._tempSyncId) {
-          continue
-        }
-        const localTodo = this.getTodoById(todo._tempSyncId)
-        if (localTodo) {
-          Object.assign(localTodo, todo)
-          if (localTodo.encrypted) {
-            localTodo.text = decrypt(localTodo.text)
-          }
-          localTodo._exactDate = localTodo.monthAndYear
-            ? new Date(getTitle(localTodo))
-            : new Date()
-        }
-      }
-    })
-    // Refresh
+    this.updatedAt = undefined
     this.refreshTodos()
   }
 
   refreshTodos = () => {
-    this.allTodos = realm.objects<Todo>('Todo')
     refreshWidgetAndBadge()
   }
 
-  recalculateExactDatesIfNeeded() {
-    if (!this.recalculatedExactDates) {
-      this.recalculateExactDates()
-    }
-    this.recalculatedExactDates = true
-  }
-
   recalculateExactDates() {
-    const todos = realm.objects<Todo>('Todo')
+    const todos = realm.objects(Todo)
     realm.write(() => {
       for (const todo of todos) {
         todo._exactDate = new Date(getTitle(todo))
       }
     })
   }
-
-  private getTodoById = (id?: string) => {
-    if (!id) {
-      return undefined
-    }
-    const todos = this.usualTodos.filtered(
-      `_id = "${id}" || _tempSyncId = "${id}"`
-    )
-    return todos.length ? todos[0] : undefined
-  }
 }
 
 export const sharedTodoStore = new TodoStore()
-hydrate('TodoStore', sharedTodoStore).then(() => {
+hydrate('TodoStore', sharedTodoStore).then(async () => {
   sharedTodoStore.hydrated = true
-  sharedTodoStore.recalculateExactDatesIfNeeded()
   hydrateStore('TodoStore')
 })

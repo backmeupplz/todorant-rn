@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { resetDelegateToken } from '@utils/rest'
 import { TableItem } from '@components/TableItem'
 import { Clipboard } from 'react-native'
@@ -18,6 +18,10 @@ export class DelegationSettings extends Component {
   @observable reset = false
   async resetDelegateToken() {
     sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken()
+  }
+
+  componentWillMount() {
+    makeObservable(this)
   }
 
   render() {

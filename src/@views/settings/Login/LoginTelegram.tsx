@@ -7,6 +7,8 @@ import { alertError } from '@utils/alert'
 import { User } from '@models/User'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { makeObservable, observable } from 'mobx'
+import { Spinner } from '@components/Spinner'
 
 const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 
@@ -17,30 +19,46 @@ class LoginTelegramContent extends Component<{
     string
   >
 }> {
+  @observable initialLoad = true
+
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     return (
-      <WebView
-        source={{ uri: `${base}/mobile-login/telegram` }}
-        style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
-        onLoadStart={(e) => {
-          try {
-            const url = e.nativeEvent.url
-            if (url.includes('mobile_login_success')) {
-              const userInfo = JSON.parse(
-                decodeURI(url.replace(`${base}/mobile_login_success?data=`, ''))
-              ) as User
-              userInfo.createdAt = new Date(userInfo.createdAt)
-              userInfo.updatedAt = new Date(userInfo.updatedAt)
-              sharedSessionStore.login(userInfo)
+      <>
+        {this.initialLoad && <Spinner />}
+        <WebView
+          source={{ uri: `${base}/mobile-login/telegram` }}
+          style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+          onLoadStart={(e) => {
+            try {
+              const url = e.nativeEvent.url
+              if (url.includes('mobile_login_success')) {
+                const userInfo = JSON.parse(
+                  decodeURI(
+                    url.replace(`${base}/mobile_login_success?data=`, '')
+                  )
+                ) as User
+                userInfo.createdAt = new Date(userInfo.createdAt)
+                if (userInfo.updatedAt) {
+                  userInfo.updatedAt = new Date(userInfo.updatedAt)
+                }
+                sharedSessionStore.login(userInfo)
+                goBack()
+                this.props.route.params?.setLoadingToTrue()
+              }
+            } catch (err) {
               goBack()
-              this.props.route.params?.setLoadingToTrue()
+              alertError(err)
             }
-          } catch (err) {
-            goBack()
-            alertError(err)
-          }
-        }}
-      />
+          }}
+          onLoadEnd={() => {
+            this.initialLoad = false
+          }}
+        />
+      </>
     )
   }
 }

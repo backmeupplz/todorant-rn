@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import { View, Text, Icon } from 'native-base'
+import { View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import { SectionHeaderOrTodo } from '@views/planning/SectionHeaderOrTodo'
 import { IconButton } from '@components/IconButton'
 import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
@@ -12,13 +11,15 @@ import moment from 'moment'
 import i18n from 'i18n-js'
 import { capitalizeSentence } from '@utils/capitalizeSentence'
 import { PlanningVM } from '@views/planning/PlanningVM'
+import { SectionListData } from 'react-native'
+import { Todo } from '@models/Todo'
 
 @observer
 export class PlanningDateHeader extends Component<{
+  item: SectionListData<Todo>
+  vm: PlanningVM
   drag: () => void
   isActive: boolean
-  item: SectionHeaderOrTodo
-  vm: PlanningVM
 }> {
   render() {
     return (
@@ -55,62 +56,25 @@ export class PlanningDateHeader extends Component<{
                   fontFamily: fonts.SFProRoundedRegular,
                 }}
               >
-                {this.props.item.title}
-                {(this.props.item.title?.length || 0) === 10 &&
+                {this.props.item.section}
+                {(this.props.item.section?.length || 0) === 10 &&
                   `, ${capitalizeSentence(
-                    moment(this.props.item.title!)
+                    moment(this.props.item.section!)
                       .locale(i18n.locale)
                       .format('dddd')
                   )}`}
-                {/* Comment out for better times */}
-                {/* {this.props.vm.collapsedTitles.indexOf(
-                  this.props.item.title || ''
-                ) > -1
-                  ? ` (${this.props.item.numberOfItems})`
-                  : ''} */}
               </Text>
             </View>
           </TouchableOpacity>
           <IconButton
             onPress={() => {
-              navigate('AddTodo', { date: this.props.item.title })
+              navigate('AddTodo', { date: this.props.item.section })
             }}
             size={20}
             name="add_outline_28"
             color={sharedColors.primaryColor}
           />
         </View>
-        {/* Comment out for better times */}
-        {/* <TouchableOpacity
-          onPress={() => {
-            if (
-              this.props.vm.collapsedTitles.indexOf(
-                this.props.item.title || ''
-              ) < 0
-            ) {
-              if (this.props.item.title) {
-                this.props.vm.collapsedTitles.push(this.props.item.title)
-              }
-            } else {
-              this.props.vm.collapsedTitles = this.props.vm.collapsedTitles.filter(
-                (t) => t !== this.props.item.title
-              )
-            }
-          }}
-          style={{ marginRight: 12 }}
-        >
-          <Icon
-            type="MaterialIcons"
-            name={
-              this.props.vm.collapsedTitles.indexOf(
-                this.props.item.title || ''
-              ) < 0
-                ? 'keyboard-arrow-down'
-                : 'keyboard-arrow-up'
-            }
-            style={{ color: sharedColors.primaryColor }}
-          />
-        </TouchableOpacity> */}
       </View>
     )
   }

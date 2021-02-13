@@ -1,24 +1,22 @@
-import React, { Component } from 'react'
-import { Container, Content, Text, View, Input } from 'native-base'
-import { Spinner } from '@components/Spinner'
-import { GoogleSignin } from '@react-native-community/google-signin'
-import { alertError } from '@utils/alert'
-import * as rest from '@utils/rest'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { goBack, navigate } from '@utils/navigation'
-import { observable } from 'mobx'
-import { observer } from 'mobx-react'
-import { AccessToken, LoginManager } from 'react-native-fbsdk'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { Platform, StyleProp, TextStyle } from 'react-native'
-import appleAuth, {
-  AppleButton,
-  appleAuthAndroid,
-} from '@invertase/react-native-apple-authentication'
-import { syncEventEmitter } from '@utils/sockets'
 import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import appleAuth, {
+  appleAuthAndroid,
+  AppleButton,
+} from '@invertase/react-native-apple-authentication'
+import { GoogleSignin } from '@react-native-community/google-signin'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { alertError } from '@utils/alert'
+import { translate } from '@utils/i18n'
+import { goBack, navigate } from '@utils/navigation'
+import * as rest from '@utils/rest'
+import { sharedColors } from '@utils/sharedColors'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { Container, Content, Input, Text, View } from 'native-base'
+import React, { Component } from 'react'
+import { Platform, StyleProp, TextStyle } from 'react-native'
 import { v4 as uuid } from 'uuid'
 
 class LoginVM {
@@ -27,17 +25,7 @@ class LoginVM {
   @observable debugToken = ''
 
   constructor() {
-    syncEventEmitter.addListener('todos_synced', () => {
-      this.syncLoading = false
-      syncEventEmitter.removeAllListeners()
-      goBack()
-    })
-    syncEventEmitter.addListener('todos_sync_errored', (error) => {
-      this.syncLoading = false
-      syncEventEmitter.removeAllListeners()
-      goBack()
-      alertError(error)
-    })
+    makeObservable(this)
   }
 
   loginWithGoogle = async () => {
@@ -54,39 +42,16 @@ class LoginVM {
       const todorantUserInfo = (await rest.loginGoogle(googleUserInfo.idToken))
         .data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
+      await sharedSessionStore.login(todorantUserInfo)
+      goBack()
     } catch (error) {
       alertError(error)
     } finally {
-      this.loading = false
-    }
-  }
-
-  loginWithFacebook = async () => {
-    this.loading = true
-    try {
-      const facebookUserInfo = await LoginManager.logInWithPermissions([
-        'public_profile',
-        'email',
-      ])
-      if (!facebookUserInfo.grantedPermissions) {
-        throw new Error(translate('facebookPermissionsError'))
-      }
-      const token = await AccessToken.getCurrentAccessToken()
-      if (!token) {
-        throw new Error(translate('facebookTokenError'))
-      }
-      const todorantUserInfo = (await rest.loginFacebook(token.accessToken))
-        .data
-      todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
-      this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
-    } catch (error) {
-      alertError(error)
-    } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -109,15 +74,19 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
-        sharedSessionStore.login(todorantUserInfo)
+        await sharedSessionStore.login(todorantUserInfo)
+        goBack()
       } else {
         throw new Error()
       }
     } catch (error) {
       alertError(translate('appleSigninError'))
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -148,13 +117,17 @@ class LoginVM {
           )
         ).data
         todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        if (todorantUserInfo.updatedAt) {
+          todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+        }
         this.syncLoading = true
-        sharedSessionStore.login(todorantUserInfo)
+        await sharedSessionStore.login(todorantUserInfo)
+        goBack()
       }
     } catch (err) {
       alertError(translate('appleSigninError'))
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -164,12 +137,16 @@ class LoginVM {
     try {
       const todorantUserInfo = (await rest.loginToken(token)).data
       todorantUserInfo.createdAt = new Date(todorantUserInfo.createdAt)
-      todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      if (todorantUserInfo.updatedAt) {
+        todorantUserInfo.updatedAt = new Date(todorantUserInfo.updatedAt)
+      }
       this.syncLoading = true
-      sharedSessionStore.login(todorantUserInfo)
+      await sharedSessionStore.login(todorantUserInfo)
+      goBack()
     } catch (error) {
       alertError(error)
     } finally {
+      this.syncLoading = false
       this.loading = false
     }
   }
@@ -237,7 +214,13 @@ export class LoginContent extends Component<{
                 marginBottom: 10,
                 borderRadius: 10,
               }}
-              onPress={this.vm.loginWithFacebook}
+              onPress={() => {
+                navigate('LoginFacebook', {
+                  setLoadingToTrue: () => {
+                    this.vm.syncLoading = true
+                  },
+                })
+              }}
               disabled={this.vm.loading}
               textStyle={textStyle}
             >

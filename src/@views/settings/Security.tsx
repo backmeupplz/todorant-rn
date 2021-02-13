@@ -1,22 +1,23 @@
-import React, { Component } from 'react'
-import { sharedColors } from '@utils/sharedColors'
-import { Container, Text, Switch, Button, Input, Content } from 'native-base'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { observable } from 'mobx'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
-import { alertConfirm, alertError } from '@utils/alert'
-import { sockets } from '@utils/sockets'
-import { _e, _d } from '@utils/encryption'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { Spinner } from '@components/Spinner'
-import { TableItem } from '@components/TableItem'
 import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
-import { Platform } from 'react-native'
+import { Spinner } from '@components/Spinner'
+import { TableItem } from '@components/TableItem'
+import { Todo } from '@models/Todo'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { alertConfirm, alertError } from '@utils/alert'
+import { _d, _e } from '@utils/encryption'
+import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
+import { realm } from '@utils/realm'
+import { sharedColors } from '@utils/sharedColors'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { Button, Container, Content, Input, Switch, Text } from 'native-base'
+import React, { Component } from 'react'
+import { Platform } from 'react-native'
 
 @observer
 export class Security extends Component {
@@ -25,6 +26,10 @@ export class Security extends Component {
   @observable encryptionOn = false
   @observable password = ''
   @observable passwordRepeat = ''
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     this.encryptionOn = !!sharedSessionStore.encryptionKey
@@ -35,16 +40,14 @@ export class Security extends Component {
   changeEncrypted(encrypted: boolean) {
     this.loading = true
     try {
-      const todos = realm
-        .objects<Todo>('Todo')
-        .filtered(`encrypted = ${!encrypted}`)
+      const todos = realm.objects(Todo).filtered(`encrypted = ${!encrypted}`)
       realm.write(() => {
         for (const todo of todos) {
           todo.encrypted = encrypted
           todo.updatedAt = new Date()
         }
       })
-      sockets.todoSyncManager.sync()
+      sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
       alertError(err)
     } finally {
@@ -55,7 +58,7 @@ export class Security extends Component {
   encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = realm.objects<Todo>('Todo').filtered(`encrypted = true`)
+      const todos = realm.objects(Todo).filtered(`encrypted = true`)
       realm.write(() => {
         for (const todo of todos) {
           if (encrypt) {
@@ -65,7 +68,7 @@ export class Security extends Component {
           }
         }
       })
-      sockets.todoSyncManager.sync()
+      sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
       alertError(err)
@@ -172,7 +175,7 @@ export class Security extends Component {
                           translate('save'),
                           () => {
                             const encrytedTodos = realm
-                              .objects<Todo>('Todo')
+                              .objects(Todo)
                               .filtered('encrypted = true')
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
@@ -208,7 +211,7 @@ export class Security extends Component {
             <Text {...sharedColors.regularTextExtraStyle}>
               {
                 realm
-                  .objects<Todo>('Todo')
+                  .objects(Todo)
                   .filtered('encrypted = true && deleted = false').length
               }
             </Text>
@@ -220,7 +223,7 @@ export class Security extends Component {
             <Text {...sharedColors.regularTextExtraStyle}>
               {
                 realm
-                  .objects<Todo>('Todo')
+                  .objects(Todo)
                   .filtered('encrypted = false && deleted = false').length
               }
             </Text>
@@ -247,8 +250,7 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects<Todo>('Todo').filtered('encrypted = false')
-                  .length
+                !realm.objects(Todo).filtered('encrypted = false').length
               }
             >
               <Text>{translate('encryptAllButton')}</Text>
@@ -268,7 +270,7 @@ export class Security extends Component {
               }}
               disabled={
                 !sharedSessionStore.encryptionKey ||
-                !realm.objects<Todo>('Todo').filtered('encrypted = true').length
+                !realm.objects(Todo).filtered('encrypted = true').length
               }
             >
               <Text>{translate('decryptAllButton')}</Text>

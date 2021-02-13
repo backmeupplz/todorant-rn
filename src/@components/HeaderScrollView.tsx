@@ -14,7 +14,7 @@ import { observer } from 'mobx-react'
 import { InfoButton } from '@components/InfoButton'
 import { HeroButton } from '@components/HeroButton'
 import { sharedColors } from '@utils/sharedColors'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import fonts from '@utils/fonts'
 
@@ -33,6 +33,10 @@ export class HeaderScrollView extends Component<{
   @observable isHeaderScrolled = false
 
   scrollAnimatedValue = new Animated.Value(0)
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   render() {
     const fontSize = 34
@@ -65,7 +69,7 @@ export class HeaderScrollView extends Component<{
                 alignItems: 'center',
                 justifyContent: 'flex-end',
                 paddingBottom: 12,
-                borderBottomColor: sharedColors.isDark
+                borderBottomColor: sharedSettingsStore.isDark
                   ? 'rgba(255, 255, 255, 0.1)'
                   : 'rgba(0, 0, 0, 0.1)',
                 borderBottomWidth: 1,

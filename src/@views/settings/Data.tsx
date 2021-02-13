@@ -1,24 +1,25 @@
-import React, { Component } from 'react'
-import { Container, Content, Text, Toast } from 'native-base'
-import { observer } from 'mobx-react'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedTagStore } from '@stores/TagStore'
-import moment from 'moment'
-import { sockets } from '@utils/sockets'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { Tag } from '@models/Tag'
-import { sharedHeroStore } from '@stores/HeroStore'
-import { gatherData } from '@utils/gatherData'
-import * as rest from '@utils/rest'
+import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
-import { Divider } from '@components/Divider'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
+import { Tag } from '@models/Tag'
+import { Todo } from '@models/Todo'
+import { sharedHeroStore } from '@stores/HeroStore'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { alertError } from '@utils/alert'
+import { gatherData } from '@utils/gatherData'
+import { translate } from '@utils/i18n'
+import { realm } from '@utils/realm'
+import * as rest from '@utils/rest'
+import { sharedColors } from '@utils/sharedColors'
+import { observer } from 'mobx-react'
+import moment from 'moment'
+import { Container, Content, Text, Toast } from 'native-base'
+import React, { Component } from 'react'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -54,7 +55,7 @@ export class Data extends Component {
           <Row
             title={translate('todoCount')}
             subtitle={`${
-              realm.objects<Todo>('Todo').filtered('deleted = false').length
+              realm.objects(Todo).filtered('deleted = false').length
             }`}
           />
           <Row
@@ -84,7 +85,8 @@ export class Data extends Component {
           {/* Sync */}
           <Divider />
           <SectionHeader title={translate('sync')} />
-          <Row
+          {/* TODO: put real data here */}
+          {/* <Row
             title={translate('todosLastSync')}
             subtitle={`${
               sharedTodoStore.lastSyncDate
@@ -93,8 +95,9 @@ export class Data extends Component {
                   )
                 : translate('notSyncedYet')
             }`}
-          />
-          <Row
+          /> */}
+          {/* TODO: put real data here */}
+          {/* <Row
             title={translate('tags')}
             subtitle={`${
               sharedTagStore.lastSyncDate
@@ -103,7 +106,7 @@ export class Data extends Component {
                   )
                 : translate('notSyncedYet')
             }`}
-          />
+          /> */}
           <Row
             title={translate('settingsLastSync')}
             subtitle={`${
@@ -137,8 +140,12 @@ export class Data extends Component {
           {/* Actions */}
           <Divider />
           <TableItem
-            onPress={() => {
-              sockets.globalSync()
+            onPress={async () => {
+              try {
+                await sharedSync.sync(SyncRequestEvent.All)
+              } catch (err) {
+                alertError(err)
+              }
             }}
           >
             <Text {...sharedColors.textExtraStyle}>
@@ -146,8 +153,12 @@ export class Data extends Component {
             </Text>
           </TableItem>
           <TableItem
-            onPress={() => {
-              sockets.hardSync()
+            onPress={async () => {
+              try {
+                await sharedSync.hardSync()
+              } catch (err) {
+                alertError(err)
+              }
             }}
           >
             <Text {...sharedColors.textExtraStyle}>

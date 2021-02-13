@@ -51,7 +51,10 @@ export class ImageAndTextIntroPage extends Component<{
 }> {
   render() {
     return (
-      <ScrollView style={{ flex: 1, padding: 20 }}>
+      <ScrollView
+        style={{ flex: 1, padding: 20 }}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
         <View style={{ alignItems: 'center', marginBottom: 20 }}>
           <CircledView>
             {!!this.props.image && (

@@ -11,6 +11,7 @@ import { translate } from '@utils/i18n'
 import { CardType } from '@components/TodoCard/CardType'
 import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { navigate } from '@utils/navigation'
 
 const debug = false
 
@@ -49,7 +50,7 @@ export class TodoCardTextBlock extends Component<{
         }}
       >
         {this.props.isOld && <Text style={{ color: 'tomato' }}>! </Text>}
-        {__DEV__ && debug && (
+        {__DEV__ && (
           <Text
             style={{ ...sharedColors.textExtraStyle.style }}
           >{`(${this.props.todo.order}) `}</Text>
@@ -84,9 +85,13 @@ export class TodoCardTextBlock extends Component<{
                 if (p.type === 'link' && p.url) {
                   Linking.openURL(p.url)
                 } else if (p.type === 'hash') {
-                  if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
-                    sharedAppStateStore.hash.push(p.value)
-                  }
+                  sharedAppStateStore.changeLoading(true)
+                  setTimeout(() => {
+                    if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
+                      sharedAppStateStore.hash.push(p.value)
+                      navigate('Planning')
+                    }
+                  })
                 }
               }}
               style={{

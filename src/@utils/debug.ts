@@ -1,12 +1,52 @@
-import { sharedSessionStore } from './../@stores/SessionStore'
-import { Todo, getTitle } from '@models/Todo'
-import { realm } from '@utils/realm'
+import { getTitle, Todo } from '@models/Todo'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { getDateMonthAndYearString, getDateDateString } from '@utils/time'
+import { realm } from '@utils/realm'
+import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import uuid from 'uuid'
 
 export function deleteAllTodos() {
   sharedSessionStore.logout()
+  sharedTodoStore.refreshTodos()
+}
+
+const dateS = new Date()
+
+class TodoSample {
+  updatedAt: Date = new Date()
+  createdAt: Date = new Date()
+  completed: boolean = false
+  frog: boolean = false
+  frogFails: number = 0
+  skipped: boolean = false
+  order: number = 0
+  monthAndYear: string = getDateMonthAndYearString(dateS)
+  deleted: boolean = false
+  date: string = getDateDateString(dateS)
+  time: string | undefined = undefined
+  text: string = uuid()
+  _exactDate = new Date(getTitle(this))
+
+  _tempSyncId: string = uuid()
+}
+
+export function add5000Todos() {
+  let todos: any[] = []
+  let counter = 0
+  for (let i = 0; i < 10000; i++) {
+    if (counter++ >= 27) {
+      counter = 0
+    }
+    dateS.setDate(counter)
+    todos.push(new TodoSample())
+  }
+
+  realm.write(() => {
+    for (const todo of todos) {
+      realm.create(Todo, todo)
+    }
+  })
+
   sharedTodoStore.refreshTodos()
 }
 
@@ -68,7 +108,7 @@ export function addTodosRu() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 
@@ -133,7 +173,7 @@ export function addTodosUk() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 
@@ -198,7 +238,7 @@ export function addTodosEn() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 
@@ -263,7 +303,7 @@ export function addTodosIt() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 
@@ -328,7 +368,7 @@ export function addTodosEs() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 
@@ -393,7 +433,7 @@ export function addTodosPtBR() {
 
   realm.write(() => {
     for (const todo of todos) {
-      realm.create('Todo', todo)
+      realm.create(Todo, todo)
     }
   })
 

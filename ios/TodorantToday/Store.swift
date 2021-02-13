@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftKeychainWrapper
+import WidgetKit
 
 enum Key: String {
   case accessToken
@@ -15,13 +16,15 @@ enum Key: String {
 }
 
 final class UserSession {
+  
   static var accessToken: String? {
     return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-      .string(forKey: Key.accessToken.rawValue)
+          .string(forKey: Key.accessToken.rawValue)
   }
+  
   static var password: String? {
     return KeychainWrapper(serviceName: "todorant", accessGroup: "ACWP4F58HZ.com.todorant.app")
-      .string(forKey: Key.password.rawValue)
+          .string(forKey: Key.password.rawValue)
   }
 }
 
@@ -66,7 +69,7 @@ class Store: ObservableObject {
   @Published var errorShown = false
 
   @Published var expanded = false
-
+  
   func updateCurrent(completion: (() -> Void)? = nil) {
     self.loading = true
     TodoRoute<CurrentState>(route: .current, parameters: ["date": String.today])
@@ -76,6 +79,9 @@ class Store: ObservableObject {
       case .success(let currentState):
         // Update state
         self.currentState = currentState
+        if #available(iOS 14.0, *) {
+          WidgetCenter.shared.reloadTimelines(ofKind: "TodorantWidget")
+        }
         self.errorShown = false
       case .failure:
         self.errorShown = true

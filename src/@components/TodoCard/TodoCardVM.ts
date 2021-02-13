@@ -1,3 +1,4 @@
+import { isTodoOld } from '@utils/isTodoOld'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -7,7 +8,7 @@ import { alertConfirm } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle, isTodoOld } from '@models/Todo'
+import { Todo, getTitle } from '@models/Todo'
 import {
   getDateStringFromTodo,
   getDateDateString,
@@ -17,10 +18,14 @@ import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export class TodoCardVM {
   @observable expanded = false
+
+  constructor() {
+    makeObservable(this)
+  }
 
   skip(todo: Todo) {
     const neighbours = sharedTodoStore
@@ -100,7 +105,6 @@ export class TodoCardVM {
             todo.deleted = true
             todo.updatedAt = new Date()
           })
-
           fixOrder([getTitle(todo)])
         }
       )
@@ -109,7 +113,6 @@ export class TodoCardVM {
         todo.deleted = true
         todo.updatedAt = new Date()
       })
-
       fixOrder([getTitle(todo)])
     }
   }

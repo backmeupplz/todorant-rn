@@ -1,12 +1,11 @@
-import { observable } from 'mobx'
-import Realm from 'realm'
+import { MobxRealmModel } from '@utils/mobx-realm/model'
 
 export enum DelegationUserType {
   delegate = 'delegate',
   delegator = 'delegator',
 }
 
-export class DelegationUser extends Realm.Object {
+export class DelegationUser extends MobxRealmModel {
   public static schema = {
     name: 'DelegationUser',
     properties: {
@@ -16,7 +15,11 @@ export class DelegationUser extends Realm.Object {
     },
   }
 
-  @observable _id!: string
-  @observable name!: string
-  @observable delegationType!: DelegationUserType
+  objectSchema() {
+    return DelegationUser.schema
+  }
+
+  _id!: string
+  name!: string
+  delegationType!: DelegationUserType
 }

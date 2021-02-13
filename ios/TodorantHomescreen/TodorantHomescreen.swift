@@ -16,11 +16,12 @@ let descriptionText = NSLocalizedString("description", comment: "")
 let snapshotEntry = TodoWidgetContent(
   currentProgress: 1,
   maximumProgress: 3,
-  text: snapshotText
+  text: snapshotText,
+  warning: nil
 )
 
 struct TodoStatusProvider: TimelineProvider {
-  let store = Store()
+  let store = Store.shared
 
   func placeholder(in _: Context) -> TodoWidgetContent {
     snapshotEntry
@@ -36,7 +37,28 @@ struct TodoStatusProvider: TimelineProvider {
     store.updateCurrent {
       var entries: [TodoWidgetContent] = []
 
-      if !store.authenticated {
+      
+      if let currentState = store.currentState {
+        
+        let warning = store.errorShown ? NSLocalizedString("error", comment: "") : nil
+        
+        if let todo = currentState.todo {
+          let todoEntry = TodoWidgetContent(
+            currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
+            maximumProgress: currentState.todosCount,
+            text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "") " : "")\(todo.text.stringWithLinksTruncated())", warning: warning
+          )
+          entries.append(todoEntry)
+        } else if currentState.todosCount <= 0{
+          let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
+          let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText, warning: warning)
+          entries.append(todoEntry)
+        } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
+          let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
+          let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText, warning: warning)
+          entries.append(todoEntry)
+        }
+      } else if !store.authenticated {
         let authenticateText = NSLocalizedString("authenticate", comment: "")
         let todoEntry = TodoWidgetContent(text: authenticateText)
         entries.append(todoEntry)
@@ -44,26 +66,6 @@ struct TodoStatusProvider: TimelineProvider {
         let errorText = NSLocalizedString("error", comment: "")
         let todoEntry = TodoWidgetContent(text: errorText)
         entries.append(todoEntry)
-      } else {
-        store.currentState.map { currentState in
-          currentState.todo.map { todo in
-            let todoEntry = TodoWidgetContent(
-              currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
-              maximumProgress: currentState.todosCount,
-              text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "") " : "")\(todo.text.stringWithLinksTruncated())"
-            )
-            entries.append(todoEntry)
-          }
-          if currentState.todosCount <= 0 {
-            let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
-            let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText)
-            entries.append(todoEntry)
-          } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
-            let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
-            let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText)
-            entries.append(todoEntry)
-          }
-        }
       }
 
       let timeline = Timeline(entries: entries, policy: .atEnd)

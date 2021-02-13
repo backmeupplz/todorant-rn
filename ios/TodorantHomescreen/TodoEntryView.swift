@@ -18,8 +18,12 @@ struct TodoEntryView: View {
           Text(title)
             .widgetTitleStyle()
           Text(model.text)
+            .widgetTextStyle()
+          if let warning = model.warning {
+            Text(warning)
+              .widgetWarningTextModifier()
+          }
         }
-        .widgetTextStyle()
       } else if let currentProgress = model.currentProgress,
         let maximumProgress = model.maximumProgress
       {
@@ -30,11 +34,23 @@ struct TodoEntryView: View {
         .widgetTopElementPadding()
         Text(model.text)
           .widgetTextStyle()
+        if let warning = model.warning {
+          Text(warning)
+            .widgetWarningTextModifier()
+        }
       } else {
       Text(model.text)
         .widgetTextStyle()
       }
     }
+  }
+}
+
+struct TodoEntryView_Previews: PreviewProvider {
+  static let model = TodoWidgetContent(currentProgress: 1, maximumProgress: 3, text: "Buy oat milk", warning: "Error getting data")
+  static var previews: some View {
+    TodoEntryView(model: model)
+      .frame(height: 200)
   }
 }
 

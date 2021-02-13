@@ -1,10 +1,11 @@
-import { sockets } from '@utils/sockets'
-import { sharedColors } from '@utils/sharedColors'
+import { requestSync } from '@sync/syncEventEmitter'
 import { Hero } from '@models/Hero'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
+import { sharedColors } from '@utils/sharedColors'
+import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import { observable, computed } from 'mobx'
-import { hydrateStore } from '@utils/hydrated'
-import { hydrate } from '@utils/hydrate'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export const ranks = [
   0,
@@ -34,10 +35,14 @@ class HeroStore {
   @persist('date') @observable updatedAt?: Date
   @persist @observable points = 0
 
+  constructor() {
+    makeObservable(this)
+  }
+
   incrementPoints() {
     this.points++
     this.updatedAt = new Date()
-    sockets.heroSyncManager.sync()
+    requestSync(SyncRequestEvent.Hero)
   }
 
   @computed get rank() {
@@ -93,10 +98,11 @@ class HeroStore {
 
   onObjectsFromServer = async (
     hero: Hero,
-    pushBack: (objects: Hero) => Promise<Hero>
+    pushBack: (objects: Hero) => Promise<Hero>,
+    completeSync: () => void
   ) => {
     if (!this.hydrated) {
-      return
+      throw new Error("Store didn't hydrate yet")
     }
     // Modify settings
     hero.updatedAt = hero.updatedAt ? new Date(hero.updatedAt) : undefined
@@ -140,6 +146,12 @@ class HeroStore {
         ? new Date(pushedHero.updatedAt)
         : undefined
     }
+    completeSync()
+  }
+
+  logout() {
+    this.updatedAt = undefined
+    this.points = 0
   }
 }
 

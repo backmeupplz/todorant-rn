@@ -2,12 +2,16 @@ import React, { Component } from 'react'
 import { WebView } from 'react-native-webview'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Spinner } from '@components/Spinner'
 
 @observer
 export class TermsOfUse extends Component {
   @observable loading = true
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   render() {
     return (

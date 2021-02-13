@@ -8,13 +8,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ProgressView } from './ProgressView'
 import fonts from '@utils/fonts'
 import { Platform } from 'react-native'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 const shortNum = require('number-shortener')
 
 @observer
 export class HeroButton extends Component {
   render() {
-    const tintColor = sharedHeroStore.rankColor[sharedColors.isDark ? 2 : 3]
-    const trackColor = sharedHeroStore.rankColor[sharedColors.isDark ? 3 : 2]
+    const tintColor =
+      sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 2 : 3]
+    const trackColor =
+      sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 3 : 2]
 
     return (
       <TouchableOpacity

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Content, Text } from 'native-base'
 import { CheckOrCross } from '@components/CheckOrCross'
-import { sharedSocketStore } from '@stores/SocketStore'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { TableItem } from '@components/TableItem'
+import { sharedSync } from '@sync/Sync'
 
 @observer
 class Row extends Component<{ title: string; ok: boolean }> {
@@ -32,19 +32,19 @@ export class Sockets extends Component {
         >
           <Row
             title={translate('connected')}
-            ok={sharedSocketStore.connected}
+            ok={sharedSync.socketConnection.connected}
           />
           <Row
             title={translate('authorized')}
-            ok={sharedSocketStore.authorized}
+            ok={sharedSync.socketConnection.authorized}
           />
-          {sharedSocketStore.connectionError && (
+          {sharedSync.socketConnection.connectionError && (
             <TableItem>
               <Text {...sharedColors.textExtraStyle}>
                 {translate('socketError')}
               </Text>
               <Text {...sharedColors.textExtraStyle}>
-                {sharedSocketStore.connectionError.message}
+                {sharedSync.socketConnection.connectionError}
               </Text>
             </TableItem>
           )}

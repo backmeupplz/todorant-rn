@@ -8,6 +8,7 @@ import {
   addTodosIt,
   addTodosEs,
   addTodosPtBR,
+  add5000Todos,
 } from '@utils/debug'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
@@ -31,6 +32,19 @@ export class DebugButtons extends Component {
         >
           <Text style={{ color: sharedColors.invertedTextColor }}>
             delete all todos
+          </Text>
+        </Button>
+        <Button
+          style={{ margin: 2 }}
+          onPress={() => {
+            add5000Todos()
+          }}
+          accessible
+          accessibilityLabel="add_5000"
+          testID="add_5000"
+        >
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            add 100 todos
           </Text>
         </Button>
         <Button
@@ -115,7 +129,7 @@ export class DebugButtons extends Component {
           style={{ margin: 2 }}
           onPress={() => {
             sharedSettingsStore.colorMode = ColorMode.dark
-            updateAndroidNavigationBarColor()
+            updateAndroidNavigationBarColor(true)
           }}
           accessible
           accessibilityLabel="turn_dark_on"
@@ -134,6 +148,17 @@ export class DebugButtons extends Component {
         >
           <Text style={{ color: sharedColors.invertedTextColor }}>
             reset rating
+          </Text>
+        </Button>
+        <Button
+          style={{ margin: 2 }}
+          onPress={() => {
+            sharedSessionStore.numberOfTodosCompleted = 102
+            sharedSessionStore.askedToRate = false
+          }}
+        >
+          <Text style={{ color: sharedColors.invertedTextColor }}>
+            open rate modal
           </Text>
         </Button>
       </>

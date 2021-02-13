@@ -22,7 +22,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
 
 const fontSize = 18
@@ -179,6 +179,9 @@ class TextRow extends Component<{
           selectionColor={sharedColors.primaryColor}
           keyboardType={Platform.OS === 'ios' ? 'twitter' : undefined}
           ref={this.props.vm.todoTextField}
+          onSelectionChange={({ nativeEvent: { selection } }) =>
+            (this.props.vm.cursorPosition = selection.start)
+          }
         />
         {!!this.props.vm.text && this.props.showCross && (
           <TouchableOpacityIcon
@@ -479,6 +482,10 @@ export class AddTodoForm extends Component<{
     }
   }
 
+  componentWillMount() {
+    makeObservable(this)
+  }
+
   render() {
     const languageTag = sharedAppStateStore.languageTag
     return (
@@ -576,9 +583,11 @@ export class AddTodoForm extends Component<{
                     }}
                   />
                 }
+                initialView={moment().add(1, 'month')}
               />
             )}
-            {this.props.vm.showMore && <TimeRow vm={this.props.vm} />}
+            {(sharedSettingsStore.showMoreByDefault ||
+              this.props.vm.showMore) && <TimeRow vm={this.props.vm} />}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
                 textColor={sharedColors.textColor}
@@ -614,23 +623,25 @@ export class AddTodoForm extends Component<{
                 this.props.vm.completed = value
               }}
             />
-            {this.props.vm.showMore && !this.props.vm.editedTodo && (
-              <SwitchRow
-                name={translate('addTodoOnTop')}
-                value={this.props.vm.addOnTop}
-                onValueChange={(value) => {
-                  this.props.vm.addOnTop = value
-                }}
-              />
-            )}
-            {!this.props.vm.showMore && (
+            {(sharedSettingsStore.showMoreByDefault ||
+              this.props.vm.showMore) &&
+              !this.props.vm.editedTodo && (
+                <SwitchRow
+                  name={translate('addTodoOnTop')}
+                  value={this.props.vm.addOnTop}
+                  onValueChange={(value) => {
+                    this.props.vm.addOnTop = value
+                  }}
+                />
+              )}
+            {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingVertical: verticalSpacing,
                   alignItems: 'center',
-                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                  opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
                   this.props.vm.showMore = true
@@ -659,7 +670,7 @@ export class AddTodoForm extends Component<{
                   justifyContent: 'space-between',
                   paddingVertical: verticalSpacing,
                   alignItems: 'center',
-                  opacity: sharedColors.isDark ? 0.8 : undefined,
+                  opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
                   if (this.props.deleteTodo) {
