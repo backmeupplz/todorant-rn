@@ -4,6 +4,7 @@ import appleAuth, {
   appleAuthAndroid,
   AppleButton,
 } from '@invertase/react-native-apple-authentication'
+import { User } from '@models/User'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -261,8 +262,17 @@ export class LoginContent extends Component<{
               }}
               onPress={() => {
                 navigate('LoginTelegram', {
-                  setLoadingToTrue: () => {
-                    this.vm.syncLoading = true
+                  setLoadingToTrue: (user: User) => {
+                    try {
+                      this.vm.syncLoading = true
+                      sharedSessionStore.login(user)
+                    } catch (err) {
+                      // Do nothing
+                    } finally {
+                      this.vm.syncLoading = false
+                      goBack()
+                      goBack()
+                    }
                   },
                 })
               }}
