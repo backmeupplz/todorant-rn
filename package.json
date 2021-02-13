@@ -45,7 +45,7 @@
     "@types/uuid": "^3.4.7",
     "@upacyxou/react-native-draggable-sectionlist": "0.1.1",
     "@upacyxou/react-native-month": "^1.2.3",
-    "@upacyxou/react-native-todorant-widget": "^0.2.3",
+    "@upacyxou/react-native-todorant-widget": "^0.3.0",
     "axios": "^0.19.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "color-scheme": "^1.0.1",
