@@ -1,9 +1,9 @@
 //
 //  Store.swift
-//  TodorantToday
+//  TodorantHomescreen
 //
-//  Created by Nikita Kolmogorov on 2019-10-09.
-//  Copyright © 2019 Todorant. All rights reserved.
+//  Created by Яков Карпов on 13.02.2021.
+//  Copyright © 2021 Facebook. All rights reserved.
 //
 
 import Foundation
@@ -70,6 +70,12 @@ class Store: ObservableObject {
 
   @Published var expanded = false
   
+  static let shared = Store()
+  
+  private init() {
+    self.updateCurrent()
+  }
+
   func updateCurrent(completion: (() -> Void)? = nil) {
     self.loading = true
     TodoRoute<CurrentState>(route: .current, parameters: ["date": String.today])
@@ -79,9 +85,6 @@ class Store: ObservableObject {
       case .success(let currentState):
         // Update state
         self.currentState = currentState
-        if #available(iOS 14.0, *) {
-          WidgetCenter.shared.reloadTimelines(ofKind: "TodorantWidget")
-        }
         self.errorShown = false
       case .failure:
         self.errorShown = true

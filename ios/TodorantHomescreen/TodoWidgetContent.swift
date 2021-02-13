@@ -13,22 +13,27 @@ struct TodoWidgetContent: TimelineEntry {
 
   var currentProgress: Int?
   var maximumProgress: Int?
+  var warning: String?
   let text: String
   
   var title: String?
   
-  
-  init(currentProgress: Int, maximumProgress: Int, text: String) {
+  // Regular view / Regular + warning view
+  init(currentProgress: Int, maximumProgress: Int, text: String, warning: String?) {
     self.currentProgress = currentProgress
     self.maximumProgress = maximumProgress
     self.text = text
+    self.warning = warning
   }
   
-  init(title: String, text: String) {
+  // Clear / Empty view
+  init(title: String, text: String, warning: String?) {
     self.title = title
     self.text = text
+    self.warning = warning
   }
   
+  // Error view
   init(text: String) {
     self.text = text
   }

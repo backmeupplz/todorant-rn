@@ -23,9 +23,11 @@ struct CurrentView: View {
       } else if store.loading {
         CurrentTodoView(extensionContext: extensionContext, isLoading: true)
       } else if store.errorShown {
-        Text("error")
-        Button("retry") {
-          self.store.updateCurrent()
+        VStack {
+          Text("error")
+          Button("retry") {
+            self.store.updateCurrent()
+          }
         }
       } else {
         self.store.currentState.map { currentState in
