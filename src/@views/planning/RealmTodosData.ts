@@ -388,6 +388,7 @@ export class RealmTodosData {
 function getRealmTodos(completed: boolean) {
   return realm
     .objects(Todo)
+    .filtered('userName = null')
     .filtered('deleted = false')
     .filtered('delegateAccepted != false')
     .filtered(`completed = ${completed ? 'true' : 'false'}`)

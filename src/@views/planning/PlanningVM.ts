@@ -13,19 +13,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)
   completedTodosData = new RealmTodosData(true)
-
-  @computed get allTodosFiltered() {
-    return sharedTodoStore.allTodos
-      .filtered('userName = null')
-      .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
-      .filtered(
-        `completed = ${!(
-          sharedAppStateStore.todoSection === TodoSectionType.planning ||
-          !!sharedAppStateStore.hash.length
-        )}`
-      )
-  }
+  
   draggingEdit = false
 
   arrOfDraggedTodos = {} as {

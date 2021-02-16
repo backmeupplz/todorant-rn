@@ -148,14 +148,9 @@ export class TodoCardContent extends Component<{
                   vm={this.props.vm}
                 />
               )}
-            {this.props.type === CardType.delegation &&
-              sharedDelegateStateStore.todoSection ===
-                DelegateSectionType.toMe && (
-                <DelegateCardActions
-                  vm={this.props.vm}
-                  todo={this.props.todo}
-                />
-              )}
+            {this.props.type === CardType.delegation && (
+              <DelegateCardActions vm={this.props.vm} todo={this.props.todo} />
+            )}
           </View>
           {!this.props.active && this.props.type !== CardType.current && (
             <Divider color={sharedColors.dividerColor} marginVertical={0} />

@@ -159,6 +159,7 @@ export class TodoCardVM {
     return (
       type !== CardType.done &&
       todo.delegateAccepted !== false &&
+      !todo.userName &&
       isTodoOld(todo)
     )
   }

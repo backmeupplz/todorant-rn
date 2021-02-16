@@ -3,11 +3,15 @@ import { observer } from 'mobx-react'
 import { View } from 'native-base'
 import { DelegationHeaderSegment } from './DelegationHeaderSegment'
 import { Dimensions } from 'react-native'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 @observer
 export class DelegationHeader extends Component {
   @observable width = Dimensions.get('window').width
+
+  componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
     Dimensions.addEventListener('change', () => {

@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export enum DelegateSectionType {
   toMe = 'toMe',
@@ -6,6 +6,9 @@ export enum DelegateSectionType {
 }
 
 class DelegateStateStore {
+  constructor() {
+    makeObservable(this)
+  }
   @observable todoSection: DelegateSectionType = DelegateSectionType.toMe
 
   @observable languageTag = 'en'

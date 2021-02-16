@@ -21,6 +21,7 @@ class TodoStore {
   getRealmTodos(title: string, completed: boolean) {
     return realm
       .objects(Todo)
+      .filtered('userName = null')
       .filtered('deleted = false')
       .filtered('delegateAccepted != false')
       .filtered(`completed = ${completed ? 'true' : 'false'}`)
@@ -44,6 +45,7 @@ class TodoStore {
   todosForDate = (title: string) => {
     return realm
       .objects(Todo)
+      .filtered('userName = null')
       .filtered('deleted = false')
       .filtered('delegateAccepted != false')
       .filtered(
@@ -67,6 +69,7 @@ class TodoStore {
     }:000`
     return realm
       .objects(Todo)
+      .filtered('userName = null')
       .filtered(
         `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
       )
@@ -81,8 +84,15 @@ class TodoStore {
   @computed get unacceptedTodos() {
     return realm
       .objects(Todo)
+      .filtered('userName = null')
       .filtered('deleted = false')
       .filtered('delegateAccepted = false')
+  }
+
+  @computed get delegatedTodos() {
+    return realm
+      .objects(Todo)
+      .filtered('userName != null')
   }
 
   shallowTodayUncompletedTodos = shallowMobxRealmCollection(

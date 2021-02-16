@@ -9,6 +9,7 @@ import SegmentedControl from '@react-native-community/segmented-control'
 import { sharedColors } from '@utils/sharedColors'
 import { Platform } from 'react-native'
 import fonts from '@utils/fonts'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class DelegationHeaderSegment extends Component {
@@ -28,15 +29,15 @@ export class DelegationHeaderSegment extends Component {
             sharedDelegateStateStore.todoSection = DelegateSectionType.byMe
           }
         }}
-        appearance={sharedColors.isDark ? 'dark' : 'light'}
+        appearance={sharedSettingsStore.isDark ? 'dark' : 'light'}
         backgroundColor={
-          sharedColors.isDark && Platform.OS === 'android'
+          sharedSettingsStore.isDark && Platform.OS === 'android'
             ? '#2f2f33'
             : undefined
         }
         tintColor={
           Platform.OS === 'android'
-            ? sharedColors.isDark
+            ? sharedSettingsStore.isDark
               ? '#68686d'
               : '#6e7185'
             : undefined
@@ -45,7 +46,9 @@ export class DelegationHeaderSegment extends Component {
           Platform.OS === 'android'
             ? {
                 fontFamily: fonts.SFProRoundedRegular,
-                color: sharedColors.isDark ? undefined : sharedColors.textColor,
+                color: sharedSettingsStore.isDark
+                  ? undefined
+                  : sharedColors.textColor,
               }
             : undefined
         }
@@ -53,7 +56,7 @@ export class DelegationHeaderSegment extends Component {
           Platform.OS === 'android'
             ? {
                 fontFamily: fonts.SFProRoundedBold,
-                color: sharedColors.isDark
+                color: sharedSettingsStore.isDark
                   ? undefined
                   : sharedColors.invertedTextColor,
               }

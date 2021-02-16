@@ -11,31 +11,29 @@ import { DelegationHeader } from './DelegationHeader'
 const Stack = createStackNavigator()
 
 @observer
-export class DelegationHeaderRight extends Component {
+class DelegationHeaderRight extends Component {
   render() {
     return <View>{InfoButton('delegate.info')()}</View>
   }
 }
 
-export function Delegation() {
-  return (
-    <Observer>
-      {() => (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Delegation"
-            component={DelegateContent}
-            options={{
-              headerTitle: () => <DelegationHeader />,
-              headerRight: () => <DelegationHeaderRight />,
-              headerTitleAlign: 'center',
-              ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
-              headerLeft: undefined,
-            }}
-          />
-        </Stack.Navigator>
-      )}
-    </Observer>
-  )
+export class Delegation extends Component {
+  render() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Delegation"
+          component={DelegateContent}
+          options={{
+            headerTitle: () => <DelegationHeader />,
+            headerRight: () => <DelegationHeaderRight />,
+            headerTitleAlign: 'center',
+            ...sharedColors.headerExtraStyle,
+            ...headerBackButtonProps(),
+            headerLeft: undefined,
+          }}
+        />
+      </Stack.Navigator>
+    )
+  }
 }

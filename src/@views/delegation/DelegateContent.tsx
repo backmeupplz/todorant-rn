@@ -12,12 +12,13 @@ import {
   sharedDelegateStateStore,
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
+import { sharedColors } from '@utils/sharedColors'
 
 @observer
 export class DelegateContent extends Component {
   render() {
     return (
-      <Container>
+      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         {!sharedSessionStore.user && <SignupPlaceholder />}
         {!!sharedSessionStore.user &&
           (sharedDelegateStateStore.todoSection === DelegateSectionType.toMe ? (
