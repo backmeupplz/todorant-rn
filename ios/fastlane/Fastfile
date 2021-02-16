@@ -58,6 +58,7 @@ platform :ios do
         export_compliance_encryption_updated: false,
         uses_non_exempt_encryption: false
       },
+      force: true,
     )
     commit_and_push_ios_release
   end

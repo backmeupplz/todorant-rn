@@ -15,7 +15,7 @@ const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 @observer
 class LoginTelegramContent extends Component<{
   route: RouteProp<
-    Record<string, { setLoadingToTrue: () => void } | undefined>,
+    Record<string, { setLoadingToTrue: (user: User) => void } | undefined>,
     string
   >
 }> {
@@ -45,9 +45,7 @@ class LoginTelegramContent extends Component<{
                 if (userInfo.updatedAt) {
                   userInfo.updatedAt = new Date(userInfo.updatedAt)
                 }
-                sharedSessionStore.login(userInfo)
-                goBack()
-                this.props.route.params?.setLoadingToTrue()
+                this.props.route.params?.setLoadingToTrue(userInfo)
               }
             } catch (err) {
               goBack()

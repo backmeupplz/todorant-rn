@@ -8,6 +8,10 @@ import { debounce, intersection, omit } from 'lodash'
 import { observable } from 'mobx'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SectionListData } from 'react-native'
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from '@utils/ObservableNow'
 
 export class RealmTodosData {
   completed: boolean
@@ -75,6 +79,10 @@ export class RealmTodosData {
 
   constructor(completed: boolean) {
     makeObservable(this)
+
+    observableNowEventEmitter.on(ObservableNowEventEmitterEvent.Logout, () => {
+      this.logout()
+    })
 
     this.completed = completed
 
@@ -342,6 +350,13 @@ export class RealmTodosData {
     if (this.offset < this.todos.length) {
       this.offset += 50
     }
+  }
+
+  logout() {
+    this.todos.removeAllListeners()
+    this.todos = [] as any
+    this.todoSectionMap = {}
+    this.invalidationKey = String(Date.now())
   }
 
   private insertBetweenTitles(
