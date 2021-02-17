@@ -33,11 +33,14 @@ class TodoSample {
 export function add5000Todos() {
   let todos: any[] = []
   let counter = 0
-  for (let i = 0; i < 10000; i++) {
-    if (counter++ >= 27) {
+  let lastYear = 2021
+  for (let i = 0; i < 50000; i++) {
+    if (counter++ >= 30) {
       counter = 0
+      dateS.setUTCFullYear(lastYear)
+      lastYear++
     }
-    dateS.setDate(counter)
+    // dateS.set(counter)
     todos.push(new TodoSample())
   }
 

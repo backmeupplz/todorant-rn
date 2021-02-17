@@ -9,10 +9,20 @@ import { navigate } from '@utils/navigation'
 import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { getTodayWithStartOfDay } from '@utils/ObservableNow'
+import { EventEmitter } from 'events'
+
+export const planningEventEmitter = new EventEmitter()
+
+export enum PlanningEventEmitter {
+  ResolveHoverState = 'ResolveHoverState',
+}
 
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)
   completedTodosData = new RealmTodosData(true)
+
+  resetHoverState = () => {}
 
   draggingEdit = false
 
@@ -20,8 +30,15 @@ export class PlanningVM {
     [index: string]: boolean
   }
 
+  constructor() {
+    planningEventEmitter.on(PlanningEventEmitter.ResolveHoverState, () => {
+      this.resetHoverState()
+      this.resetHoverState = () => {}
+    })
+  }
+
   onDragEnd = (params: DragEndParams<Todo | string>) => {
-    const { dataArr, to, from } = params
+    const { beforeChangesArr, dataArr, to, from, promise } = params
     // enable loader
     sharedAppStateStore.changeLoading(true)
     // check is calendar dragging
@@ -42,117 +59,97 @@ export class PlanningVM {
       sharedAppStateStore.activeDay = undefined
       sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
     } else {
-      let lastSection: string
-      let todoIndexInSection = 0
-      // const findClosestSection = (index: number) => {
-      //   let closestSection: undefined | string
-      //   for (let i = index; i > 0; i--) {
-      //     if (typeof dataArr[i] === 'string') {
-      //       closestSection = dataArr[i] as string
-      //       break
-      //     }
-      //   }
-      //   return closestSection
-      // // }
-      const findClosestSection = (index: number) => {
-        let closestSection: undefined | number
-        for (let i = index; i > 0; i--) {
-          if (typeof dataArr[i] === 'string') {
+      // we are saving promise for reseting hover state in future
+      this.resetHoverState = promise
+      // help us to find closest section (looks from bottom to the top)
+      const findClosestSection = (
+        index: number,
+        arrToSearch: (string | Todo)[]
+      ) => {
+        let closestSection = 0
+        for (let i = index; i >= 0; --i) {
+          if (typeof arrToSearch[i] === 'string') {
             closestSection = i
             break
           }
         }
         return closestSection
       }
-      const lo = Math.min(from, to)
-      const hi = Math.max(from, to)
-      const today = Number(
-        new Date().toISOString().slice(0, 10).split('-').join('')
-      )
-      const goingDown = from < to ? true : false
-      const movingBetweenDays = dataArr
-        .slice(lo, hi)
-        .some((item) => typeof item === 'string')
-      // realm.write(() => {
-      //   if (movingBetweenDays) {
-      //     // if drag in one day
-      //   } else {
-      //     // if dragging from top to bottom
-      //     if (goingDown) {
-      //       let lastOrder = dataArr[from - 1].order + 1 || 0
-      //       for (let i = lo; i <= hi; i++) {
-      //         // if (typeof dataArr[i] === 'string') return
-      //         ;(dataArr[i] as Todo).order = lastOrder
-      //         lastOrder++
-      //       }
-      //       // if from bottom to top
-      //     } else {
-      //       let lastOrder = dataArr[to].order
-      //       for (let i = hi; i >= lo; i--) {
-      //         // if (typeof dataArr[i] === 'string') return
-      //         ;(dataArr[i] as Todo).order = lastOrder
-      //         lastOrder--
-      //       }
-      //     }
-      //   }
-      // })
 
-      const startTime = Date.now()
-
-      realm.write(() => {
-        dataArr.forEach((dataArrItem, globalIndex) => {
-          // if section
-          if (typeof dataArrItem === 'string') {
-            todoIndexInSection = 0
-            lastSection = dataArrItem
-            return
+      const closestFrom = findClosestSection(from, beforeChangesArr)
+      const closestTo = findClosestSection(to, dataArr)
+      if (closestFrom === closestTo) {
+        realm.write(() => {
+          let lastOrder = 0
+          for (let i = closestTo + 1; ; i++) {
+            const item = dataArr[i]
+            if (item === undefined) break
+            if (typeof item === 'string') break
+            item.order = lastOrder
+            item.updatedAt = new Date()
+            lastOrder++
           }
-          // if todo within modified indexes and shouldn't be breakdown
-          if (
-            globalIndex >= lo &&
-            globalIndex <= hi &&
-            dataArrItem.frogFails < 3
-          ) {
-            // check is todo overdue
-            if (
-              (globalIndex === to || globalIndex === from) &&
-              Number(getTitle(dataArrItem).split('-').join('')) < today
-            ) {
-              dataArrItem.frogFails++
-              if (dataArrItem.frogFails > 1) {
-                dataArrItem.frog = true
+        })
+      } else {
+        const today = getTodayWithStartOfDay().getTime()
+        const lowerDay = Math.min(closestFrom, closestTo)
+        const maxDay = Math.max(closestFrom, closestTo)
+        realm.write(() => {
+          let lastOrder = 0
+          let lastSection = dataArr[lowerDay] as string
+          for (let i = lowerDay + 1; ; i++) {
+            const item = dataArr[i]
+            if (item === undefined) break
+            if (typeof item === 'string') {
+              // if new section, outside of our draggable items begin
+              if (
+                new Date(item).getTime() >
+                new Date(dataArr[maxDay] as string).getTime()
+              )
+                break
+              lastOrder = 0
+              lastSection = item
+              continue
+            }
+            if (i === from || i === to) {
+              if (new Date(getTitle(item)).getTime() < today) {
+                if (item.frogFails < 3) {
+                  item.frogFails++
+                  item.frog = true
+                  item.updatedAt = new Date()
+                } else {
+                  Alert.alert(
+                    translate('error'),
+                    translate('breakdownRequest'),
+                    [
+                      {
+                        text: translate('cancel'),
+                        style: 'cancel',
+                      },
+                      {
+                        text: translate('breakdownButton'),
+                        onPress: () => {
+                          navigate('BreakdownTodo', {
+                            breakdownTodo: item,
+                          })
+                        },
+                      },
+                    ]
+                  )
+                  lastOrder++
+                  continue
+                }
               }
             }
-            dataArrItem.date = getDateDateString(lastSection)
-            dataArrItem.monthAndYear = getDateMonthAndYearString(lastSection)
-            dataArrItem._exactDate = new Date(lastSection)
-            dataArrItem.updatedAt = new Date()
+            item.date = getDateDateString(lastSection)
+            item.monthAndYear = getDateMonthAndYearString(lastSection)
+            item._exactDate = new Date(lastSection)
+            item.order = lastOrder
+            item.updatedAt = new Date()
+            lastOrder++
           }
-          // if should breakdown
-          if (dataArrItem.frogFails >= 3) {
-            // if it is dragged todo
-            if (globalIndex === to || globalIndex === from) {
-              Alert.alert(translate('error'), translate('breakdownRequest'), [
-                {
-                  text: translate('cancel'),
-                  style: 'cancel',
-                },
-                {
-                  text: translate('breakdownButton'),
-                  onPress: () => {
-                    navigate('BreakdownTodo', {
-                      breakdownTodo: dataArrItem,
-                    })
-                  },
-                },
-              ])
-            }
-          } else {
-            dataArrItem.order = todoIndexInSection
-          }
-          todoIndexInSection++
         })
-      })
+      }
     }
     if (
       sharedSync.socketConnection.authorized &&

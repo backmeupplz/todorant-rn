@@ -51,6 +51,10 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from '@utils/ObservableNow'
 
 @observer
 class AddTodoContent extends Component<{
@@ -100,7 +104,7 @@ class AddTodoContent extends Component<{
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
-    const completedAtCreation: Todo[] = []
+    const completedAtCreation: string[] = []
     realm.write(() => {
       for (const vm of this.vms) {
         if (this.screenType === AddTodoScreenType.add) {
@@ -125,7 +129,7 @@ class AddTodoContent extends Component<{
           todo._exactDate = new Date(getTitle(todo))
 
           if (todo.completed) {
-            completedAtCreation.push(todo)
+            completedAtCreation.push(todo.text)
           }
 
           const dbtodo = realm.create<Todo>('Todo', todo)
@@ -172,10 +176,7 @@ class AddTodoContent extends Component<{
           }
 
           if (vm.completed && !vm.editedTodo.completed) {
-            sharedTagStore.incrementEpicPoints(vm.text)
-            // Increment hero store
-            sharedHeroStore.points++
-            sharedHeroStore.updatedAt = new Date()
+            completedAtCreation.push(vm.text)
           }
 
           if (!vm.editedTodo) {
@@ -201,8 +202,8 @@ class AddTodoContent extends Component<{
         }
       }
     })
-    completedAtCreation.forEach((todo) => {
-      sharedTagStore.incrementEpicPoints(todo.text)
+    completedAtCreation.forEach((todoText) => {
+      sharedTagStore.incrementEpicPoints(todoText)
       // Increment hero store
       sharedHeroStore.points++
       sharedHeroStore.updatedAt = new Date()
@@ -249,6 +250,9 @@ class AddTodoContent extends Component<{
     }
     // Add tags
     sharedTagStore.addTags(this.vms)
+    observableNowEventEmitter.emit(
+      ObservableNowEventEmitterEvent.ObservableNowChanged
+    )
     // Sync todos
     fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
