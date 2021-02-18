@@ -102,7 +102,7 @@ class TodoStore {
     }
   }
 
-  oldTodos = shallowMobxRealmCollection(
+  @observable oldTodos = shallowMobxRealmCollection(
     this.todosBeforeDate(observableNow.todayTitle)
   )
 
