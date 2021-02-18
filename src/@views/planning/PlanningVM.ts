@@ -11,6 +11,7 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 import { EventEmitter } from 'events'
+import { isTodoOld } from '@utils/isTodoOld'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -112,7 +113,7 @@ export class PlanningVM {
               continue
             }
             if (i === from || i === to) {
-              if (new Date(getTitle(item)).getTime() < today) {
+              if (isTodoOld(item)) {
                 if (item.frogFails < 3) {
                   item.frogFails++
                   item.frog = true
