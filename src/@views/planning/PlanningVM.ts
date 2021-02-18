@@ -13,7 +13,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 export class PlanningVM {
   uncompletedTodosData = new RealmTodosData(false)
   completedTodosData = new RealmTodosData(true)
-  
+
   draggingEdit = false
 
   arrOfDraggedTodos = {} as {

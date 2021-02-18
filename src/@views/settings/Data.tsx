@@ -57,7 +57,7 @@ export class Data extends Component {
             subtitle={`${
               realm
                 .objects(Todo)
-                .filtered('userName = null')
+                .filtered('delegateName = null')
                 .filtered('deleted = false').length
             }`}
           />

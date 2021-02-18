@@ -16,52 +16,24 @@ export class DelegationHeaderSegment extends Component {
   render() {
     return (
       <SegmentedControl
-        values={[translate('delegate.toMe'), translate('delegate.byMe')]}
+        values={[translate('delegate.ToMe'), translate('delegate.ByMe')]}
         selectedIndex={
-          sharedDelegateStateStore.todoSection === DelegateSectionType.toMe
+          sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe
             ? 0
             : 1
         }
         onChange={(event) => {
           if (event.nativeEvent.selectedSegmentIndex === 0) {
-            sharedDelegateStateStore.todoSection = DelegateSectionType.toMe
+            sharedDelegateStateStore.todoSection = DelegateSectionType.ToMe
           } else {
-            sharedDelegateStateStore.todoSection = DelegateSectionType.byMe
+            sharedDelegateStateStore.todoSection = DelegateSectionType.ByMe
           }
         }}
         appearance={sharedSettingsStore.isDark ? 'dark' : 'light'}
-        backgroundColor={
-          sharedSettingsStore.isDark && Platform.OS === 'android'
-            ? '#2f2f33'
-            : undefined
-        }
-        tintColor={
-          Platform.OS === 'android'
-            ? sharedSettingsStore.isDark
-              ? '#68686d'
-              : '#6e7185'
-            : undefined
-        }
-        fontStyle={
-          Platform.OS === 'android'
-            ? {
-                fontFamily: fonts.SFProRoundedRegular,
-                color: sharedSettingsStore.isDark
-                  ? undefined
-                  : sharedColors.textColor,
-              }
-            : undefined
-        }
-        activeFontStyle={
-          Platform.OS === 'android'
-            ? {
-                fontFamily: fonts.SFProRoundedBold,
-                color: sharedSettingsStore.isDark
-                  ? undefined
-                  : sharedColors.invertedTextColor,
-              }
-            : undefined
-        }
+        backgroundColor={sharedColors.headerSegmentExtraStyle?.backgroundColor}
+        tintColor={sharedColors.headerSegmentExtraStyle?.tintColor}
+        fontStyle={sharedColors.headerSegmentExtraStyle?.fontStyle}
+        activeFontStyle={sharedColors.headerSegmentExtraStyle?.activeFontStyle}
       />
     )
   }

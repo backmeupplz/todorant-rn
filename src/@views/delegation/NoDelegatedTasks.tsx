@@ -42,7 +42,7 @@ export class NoDelegatedTasks extends Component {
             marginHorizontal: 24,
           }}
         >
-          {sharedDelegateStateStore.todoSection === DelegateSectionType.toMe
+          {sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe
             ? translate('delegate.noDelegatedTasks')
             : translate('delegate.noDelegatedTasksTo')}
         </Text>

@@ -26,7 +26,7 @@ export class DelegateCardActions extends Component<{
           backgroundColor: 'transparent',
         }}
       >
-        {sharedDelegateStateStore.todoSection === DelegateSectionType.toMe ? (
+        {sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
           <>
             {this.props.todo.monthAndYear && (
               <TouchableOpacity
@@ -79,7 +79,7 @@ export class DelegateCardActions extends Component<{
               color: sharedColors.borderColor,
             }}
           >
-            {translate('delegate.to')}: {this.props.todo.userName}
+            {translate('delegate.to')}: {this.props.todo.delegateName}
           </Text>
         )}
       </CardItem>

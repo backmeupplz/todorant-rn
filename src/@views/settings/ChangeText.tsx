@@ -67,7 +67,7 @@ class ChangeTextContent extends Component<{
     realm.write(() => {
       for (const todo of realm
         .objects(Todo)
-        .filtered('userName = null')
+        .filtered('delegateName = null')
         .filtered('deleted = false')) {
         todo.text = todo.text
           .split(' ')

@@ -21,7 +21,7 @@ export class DelegateContent extends Component {
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         {!sharedSessionStore.user && <SignupPlaceholder />}
         {!!sharedSessionStore.user &&
-          (sharedDelegateStateStore.todoSection === DelegateSectionType.toMe ? (
+          (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
             <>
               {!sharedTodoStore.unacceptedTodos.length && <NoDelegatedTasks />}
               {!!sharedTodoStore.unacceptedTodos.length && (

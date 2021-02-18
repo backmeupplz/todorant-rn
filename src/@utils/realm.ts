@@ -5,5 +5,5 @@ import Realm from 'realm'
 
 export const realm = new Realm({
   schema: [Todo, Tag, DelegationUser],
-  schemaVersion: 11,
+  schemaVersion: 12,
 })

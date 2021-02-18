@@ -31,36 +31,12 @@ export class PlanningHeaderSegment extends Component {
           }}
           appearance={sharedSettingsStore.isDark ? 'dark' : 'light'}
           backgroundColor={
-            sharedSettingsStore.isDark && Platform.OS === 'android'
-              ? '#2f2f33'
-              : undefined
+            sharedColors.headerSegmentExtraStyle?.backgroundColor
           }
-          tintColor={
-            Platform.OS === 'android'
-              ? sharedSettingsStore.isDark
-                ? '#68686d'
-                : '#6e7185'
-              : undefined
-          }
-          fontStyle={
-            Platform.OS === 'android'
-              ? {
-                  fontFamily: fonts.SFProRoundedRegular,
-                  color: sharedSettingsStore.isDark
-                    ? undefined
-                    : sharedColors.textColor,
-                }
-              : undefined
-          }
+          tintColor={sharedColors.headerSegmentExtraStyle?.tintColor}
+          fontStyle={sharedColors.headerSegmentExtraStyle?.fontStyle}
           activeFontStyle={
-            Platform.OS === 'android'
-              ? {
-                  fontFamily: fonts.SFProRoundedBold,
-                  color: sharedSettingsStore.isDark
-                    ? undefined
-                    : sharedColors.invertedTextColor,
-                }
-              : undefined
+            sharedColors.headerSegmentExtraStyle?.activeFontStyle
           }
         />
       </View>

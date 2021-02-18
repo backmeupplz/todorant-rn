@@ -13,10 +13,6 @@ import { FailCircle } from './FailCircle'
 import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
-import {
-  sharedDelegateStateStore,
-  DelegateSectionType,
-} from '@stores/DelegateScreenStateStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer

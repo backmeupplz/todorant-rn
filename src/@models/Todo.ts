@@ -23,7 +23,7 @@ export class Todo extends MobxRealmModel {
       date: { type: 'string?', indexed: true },
       time: 'string?',
 
-      userName: { type: 'string?', indexed: true },
+      delegateName: { type: 'string?', indexed: true },
       delegatorName: { type: 'string?', indexed: true },
       delegateAccepted: { type: 'bool?', indexed: true },
     },
@@ -48,7 +48,7 @@ export class Todo extends MobxRealmModel {
   date?: string
   time?: string
 
-  userName?: string
+  delegateName?: string
   delegatorName?: string
   delegateAccepted?: boolean
 

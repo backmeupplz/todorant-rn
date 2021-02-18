@@ -42,7 +42,7 @@ export class Security extends Component {
     try {
       const todos = realm
         .objects(Todo)
-        .filtered('userName = null')
+        .filtered('delegateName = null')
         .filtered(`encrypted = ${!encrypted}`)
       realm.write(() => {
         for (const todo of todos) {
@@ -63,7 +63,7 @@ export class Security extends Component {
     try {
       const todos = realm
         .objects(Todo)
-        .filtered('userName = null')
+        .filtered('delegateName = null')
         .filtered(`encrypted = true`)
       realm.write(() => {
         for (const todo of todos) {
@@ -230,7 +230,7 @@ export class Security extends Component {
               {
                 realm
                   .objects(Todo)
-                  .filtered('userName = null')
+                  .filtered('delegateName = null')
                   .filtered('encrypted = false && deleted = false').length
               }
             </Text>
@@ -259,7 +259,7 @@ export class Security extends Component {
                 !sharedSessionStore.encryptionKey ||
                 !realm
                   .objects(Todo)
-                  .filtered('userName = null')
+                  .filtered('delegateName = null')
                   .filtered('encrypted = false').length
               }
             >

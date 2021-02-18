@@ -148,7 +148,7 @@ export async function onTodosObjectsFromServer(
       todo.delegatorName = (todo as any).delegator.name
     }
     if ((todo as any).user && (todo as any).user.name) {
-      todo.userName = (todo as any).user.name
+      todo.delegateName = (todo as any).user.name
     }
   })
   // Get variables
