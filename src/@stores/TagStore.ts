@@ -72,14 +72,14 @@ class TagStore {
       .filter((epic) => tagsInTodo.indexOf(epic.tag) > -1)
     realm.write(() => {
       epics.forEach((epic) => {
-        const dbtag = getTagById(epic._id)
+        const dbtag = getTagById(epic._id || epic._tempSyncId)
         if (!dbtag || !dbtag.epicGoal) {
           return
         }
         if (!dbtag.epicPoints) {
           dbtag.epicPoints = 0
         }
-        if (dbtag.epicPoints < dbtag.epicGoal) dbtag.epicPoints!++
+        if (dbtag.epicPoints < dbtag.epicGoal) dbtag.epicPoints++
         dbtag.updatedAt = new Date()
       })
     })

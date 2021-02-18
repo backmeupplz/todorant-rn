@@ -12,6 +12,7 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
+import { PlanningEventEmitter, planningEventEmitter } from './PlanningVM'
 
 export class RealmTodosData {
   completed: boolean
@@ -28,10 +29,7 @@ export class RealmTodosData {
   get todosArray() {
     const observableKey = this.invalidationKey
     return Object.keys(this.todoSectionMap).map((key) => {
-      const originalSectionData = this.todoSectionMap[key] as TodoSection
-      const copiedSectionData = { ...originalSectionData }
-      copiedSectionData.data = copiedSectionData.data.slice()
-      return copiedSectionData
+      return this.todoSectionMap[key] as TodoSection
     })
   }
 
@@ -71,6 +69,7 @@ export class RealmTodosData {
     // Update invalidation key
     this.invalidationKey = String(Date.now())
     this.invalidationKey = String(Date.now())
+    planningEventEmitter.emit(PlanningEventEmitter.ResolveHoverState)
   }
 
   debouncedUpdateKeys = debounce(this.updateInvalidationKeys, 50, {
@@ -210,25 +209,22 @@ export class RealmTodosData {
           )
         }
       }
-      // Check insertions to prevent double-insert
-      if (insertions && !insertions.includes(modificactionIndex)) {
-        // Insert todo back
-        if (modifiedTodo) {
-          const newDate = getTitle(modifiedTodo)
-          const todoSection = this.todoSectionMap[newDate]
-          if (todoSection) {
-            this.insertTodoToArray(todoSection.data, modifiedTodo)
-          } else {
-            this.todoSectionMap = this.insertBetweenTitles(
-              this.todoSectionMap,
-              newDate,
-              mobxRealmObject(modifiedTodo),
-              this.completed
-            )
-          }
-          // Update todo id map
-          this.todoIdToDateMap.set(modifiedTodoId, newDate)
+      // Insert todo back
+      if (modifiedTodo) {
+        const newDate = getTitle(modifiedTodo)
+        const todoSection = this.todoSectionMap[newDate]
+        if (todoSection) {
+          this.insertTodoToArray(todoSection.data, modifiedTodo)
+        } else {
+          this.todoSectionMap = this.insertBetweenTitles(
+            this.todoSectionMap,
+            newDate,
+            mobxRealmObject(modifiedTodo),
+            this.completed
+          )
         }
+        // Update todo id map
+        this.todoIdToDateMap.set(modifiedTodoId, newDate)
       }
     }
     // Deal with deletions
