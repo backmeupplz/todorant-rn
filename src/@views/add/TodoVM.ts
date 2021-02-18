@@ -52,9 +52,11 @@ export class TodoVM {
     if (emptyMatches.length) {
       return sharedTagStore.undeletedTags
     }
-    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+/g) || []
+    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
     if (!matches.length) {
-      return sharedSettingsStore.showMoreByDefault || this.showMore ? sharedTagStore.undeletedTags : []
+      return sharedSettingsStore.showMoreByDefault || this.showMore
+        ? sharedTagStore.undeletedTags
+        : []
     }
     const match = matches[0]
     return sharedTagStore.undeletedTags.filtered(
@@ -75,14 +77,17 @@ export class TodoVM {
       ;(this.todoTextField.current as any)._root.focus()
       return
     }
-    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+/g) || []
+    const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
     if (!matches.length) {
       this.text = `${before}${insertText}${after} `
       ;(this.todoTextField.current as any)._root.focus()
       return
     }
     const match = matches[0]
-    this.text = `${before.substr(0, before.length - match.length)}${insertText}${after} `
+    this.text = `${before.substr(
+      0,
+      before.length - match.length
+    )}${insertText}${after} `
     ;(this.todoTextField.current as any)._root.focus()
   }
 
