@@ -40,7 +40,6 @@ export function add5000Todos() {
       dateS.setUTCFullYear(lastYear)
       lastYear++
     }
-    // dateS.set(counter)
     todos.push(new TodoSample())
   }
 
