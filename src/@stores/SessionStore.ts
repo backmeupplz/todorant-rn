@@ -13,6 +13,10 @@ import { sharedTodoStore } from './TodoStore'
 import { sharedDelegationStore } from './DelegationStore'
 import { sharedHeroStore } from './HeroStore'
 import AsyncStorage from '@react-native-community/async-storage'
+import {
+  observableNowEventEmitter,
+  ObservableNowEventEmitterEvent,
+} from '@utils/ObservableNow'
 
 class SessionStore {
   constructor() {
@@ -93,17 +97,19 @@ class SessionStore {
     try {
       this.user = undefined
       this.encryptionKey = undefined
+      observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       realm.write(() => {
         realm.deleteAll()
       })
+      observableNowEventEmitter.emit(
+        ObservableNowEventEmitterEvent.ObservableNowChanged
+      )
       await AsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()
       sharedDelegationStore.logout()
       sharedHeroStore.logout()
-      sharedTodoStore.logout()
-      sharedSync.logout()
       removeToken()
       removePassword()
       logEvent('logout_success')

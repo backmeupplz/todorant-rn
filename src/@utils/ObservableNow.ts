@@ -5,6 +5,7 @@ import { EventEmitter } from 'events'
 
 export enum ObservableNowEventEmitterEvent {
   ObservableNowChanged = 'ObservableNowChanged',
+  Logout = 'Logout',
 }
 export const observableNowEventEmitter = new EventEmitter()
 
