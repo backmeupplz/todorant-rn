@@ -85,11 +85,11 @@ class TodoStore {
       .filtered('delegateAccepted = false')
   }
 
-  shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+  @observable shallowTodayUncompletedTodos = shallowMobxRealmCollection(
     this.getRealmTodos(observableNow.todayTitle, false)
   )
 
-  shallowTodayCompletedTodos = shallowMobxRealmCollection(
+  @observable shallowTodayCompletedTodos = shallowMobxRealmCollection(
     this.getRealmTodos(observableNow.todayTitle, true)
   )
 
@@ -102,7 +102,7 @@ class TodoStore {
     }
   }
 
-  oldTodos = shallowMobxRealmCollection(
+  @observable oldTodos = shallowMobxRealmCollection(
     this.todosBeforeDate(observableNow.todayTitle)
   )
 
