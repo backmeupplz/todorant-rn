@@ -90,16 +90,14 @@ class TodoStore {
   }
 
   @computed get delegatedTodos() {
-    return realm
-      .objects(Todo)
-      .filtered('delegateName != null')
+    return realm.objects(Todo).filtered('delegateName != null')
   }
 
-  shallowTodayUncompletedTodos = shallowMobxRealmCollection(
+  @observable shallowTodayUncompletedTodos = shallowMobxRealmCollection(
     this.getRealmTodos(observableNow.todayTitle, false)
   )
 
-  shallowTodayCompletedTodos = shallowMobxRealmCollection(
+  @observable shallowTodayCompletedTodos = shallowMobxRealmCollection(
     this.getRealmTodos(observableNow.todayTitle, true)
   )
 
@@ -112,7 +110,7 @@ class TodoStore {
     }
   }
 
-  oldTodos = shallowMobxRealmCollection(
+  @observable oldTodos = shallowMobxRealmCollection(
     this.todosBeforeDate(observableNow.todayTitle)
   )
 
