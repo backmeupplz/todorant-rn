@@ -210,7 +210,15 @@ export function Settings() {
   return (
     <Observer>
       {() => (
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            cardStyleInterpolator: () => ({
+              cardStyle: {
+                opacity: 1,
+              },
+            }),
+          }}
+        >
           <Stack.Screen
             name="Settings"
             component={SettingsContent}

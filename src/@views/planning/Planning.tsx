@@ -14,7 +14,15 @@ const Stack = createStackNavigator()
 export class Planning extends Component {
   render() {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          cardStyleInterpolator: () => ({
+            cardStyle: {
+              opacity: 1,
+            },
+          }),
+        }}
+      >
         <Stack.Screen
           name="Planning"
           component={PlanningContent}

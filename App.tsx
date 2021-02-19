@@ -100,7 +100,15 @@ class App extends Component {
           />
           <RateModal />
           <StyleProvider style={getTheme()}>
-            <Stack.Navigator>
+            <Stack.Navigator
+              screenOptions={{
+                cardStyleInterpolator: () => ({
+                  cardStyle: {
+                    opacity: 1,
+                  },
+                }),
+              }}
+            >
               <Stack.Screen
                 name="BottomTabNavigator"
                 component={BottomTabNavigator}
