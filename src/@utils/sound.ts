@@ -7,39 +7,45 @@ Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
-const iosSounds = {
-  level_up: require('@assets/audio/level_up.mp3'),
-  nice: require('@assets/audio/nice.mp3'),
-  day_complete: require('@assets/audio/day_complete.mp3'),
-  task_done: require('@assets/audio/task_done.mp3'),
-} as { [index: string]: any }
-
-function getSound(name: string, callback: (error: unknown) => void) {
-  return Platform.OS === 'android'
-    ? new Sound(`${name}.mp3`, Sound.MAIN_BUNDLE, callback)
-    : new Sound(iosSounds[name], callback)
-}
-
-const level_up = getSound('level_up', (error) => {
+const level_up =
+  Platform.OS === 'android'
+    ? new Sound('level_up.mp3', Sound.MAIN_BUNDLE, setLevelUp)
+    : new Sound(require('@assets/audio/level_up.mp3'), setLevelUp)
+function setLevelUp(error: any) {
   if (!error) {
     sounds.level_up = level_up
   }
-})
-const nice = getSound('nice', (error) => {
+}
+
+const nice =
+  Platform.OS === 'android'
+    ? new Sound('nice.mp3', Sound.MAIN_BUNDLE, setNice)
+    : new Sound(require('@assets/audio/nice.mp3'), setNice)
+function setNice(error: any) {
   if (!error) {
     sounds.nice = nice
   }
-})
-const day_complete = getSound('day_compele', (error) => {
+}
+
+const day_complete =
+  Platform.OS === 'android'
+    ? new Sound('day_compele.mp3', Sound.MAIN_BUNDLE, setDayComplete)
+    : new Sound(require('@assets/audio/day_compele.mp3'), setDayComplete)
+function setDayComplete(error: any) {
   if (!error) {
     sounds.day_complete = day_complete
   }
-})
-const task_done = getSound('task_done.mp3', (error) => {
+}
+
+const task_done =
+  Platform.OS === 'android'
+    ? new Sound('task_done.mp3', Sound.MAIN_BUNDLE, setTaskDone)
+    : new Sound(require('@assets/audio/task_done.mp3'), setTaskDone)
+function setTaskDone(error: any) {
   if (!error) {
     sounds.task_done = task_done
   }
-})
+}
 
 export function playFrogComplete(overrideSound?: string) {
   const shouldBeNice = Math.floor(Math.random() * 10) === 0
