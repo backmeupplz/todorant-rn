@@ -115,7 +115,7 @@ export class PlanningVM {
             if (i === from || i === to) {
               if (isTodoOld(item)) {
                 if (item.frogFails < 3) {
-                  if (item.frogFails > 1) {
+                  if (item.frogFails >= 1) {
                     item.frog = true
                   }
                   item.frogFails++
