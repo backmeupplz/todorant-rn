@@ -2,10 +2,6 @@
 
 default_platform :ios
 
-before_all do
-  update_fastlane
-end
-
 platform :ios do
   lane :commit_and_push_ios_release do
     git_add

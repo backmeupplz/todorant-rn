@@ -14,8 +14,8 @@
     "upload-translations": "node scripts/upload.js",
     "download-translations": "node scripts/download.js",
     "adb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:1337 tcp:1337 && adb reverse tcp:3000 tcp:3000",
-    "upload-to-appgallery": "cd android && sudo bundle exec fastlane release_appgallery",
-    "release": "cd android && sudo bundle exec fastlane release && sudo bundle exec fastlane release_appgallery && cd ../ios && sudo bundle exec fastlane release"
+    "upload-to-appgallery": "cd android && bundle exec fastlane release_appgallery",
+    "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
