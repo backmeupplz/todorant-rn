@@ -6,34 +6,33 @@ Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
-const level_up = new Sound('level_up.mp3', Sound.MAIN_BUNDLE, (error) => {
+const level_up = new Sound(require('@assets/audio/level_up.mp3'), (error) => {
   if (!error) {
     sounds.level_up = level_up
   }
 })
-const nice = new Sound('nice.mp3', Sound.MAIN_BUNDLE, (error) => {
+const nice = new Sound(require('@assets/audio/nice.mp3'), (error) => {
   if (!error) {
     sounds.nice = nice
   }
 })
 const day_complete = new Sound(
-  'day_compele.mp3',
-  Sound.MAIN_BUNDLE,
+  require('@assets/audio/day_compele.mp3'),
   (error) => {
     if (!error) {
       sounds.day_complete = day_complete
     }
   }
 )
-const task_done = new Sound('task_done.mp3', Sound.MAIN_BUNDLE, (error) => {
+const task_done = new Sound(require('@assets/audio/task_done.mp3'), (error) => {
   if (!error) {
     sounds.task_done = task_done
   }
 })
 
-export function playFrogComplete() {
+export function playFrogComplete(overrideSound?: string) {
   const shouldBeNice = Math.floor(Math.random() * 10) === 0
-  playSound(shouldBeNice ? 'nice' : 'level_up')
+  playSound(overrideSound || (shouldBeNice ? 'nice' : 'level_up'))
 }
 
 export function playTaskComplete() {
