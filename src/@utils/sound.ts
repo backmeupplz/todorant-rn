@@ -7,10 +7,17 @@ Sound.setCategory('Ambient', true)
 
 const sounds = {} as { [index: string]: Sound }
 
+const iosSounds = {
+  level_up: require(`@assets/audio/level_up.mp3`),
+  nice: require(`@assets/audio/nice.mp3`),
+  day_complete: require(`@assets/audio/day_complete.mp3`),
+  task_done: require(`@assets/audio/task_done.mp3`),
+} as { [index: string]: any }
+
 function getSound(name: string, callback: (error: unknown) => void) {
   return Platform.OS === 'android'
     ? new Sound(`${name}.mp3`, Sound.MAIN_BUNDLE, callback)
-    : new Sound(require(`@assets/audio/${name}.mp3`), callback)
+    : new Sound(iosSounds[name], callback)
 }
 
 const level_up = getSound('level_up', (error) => {
