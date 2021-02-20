@@ -85,8 +85,6 @@
 		B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7DB7BB28CCFD45EB9E738C2C /* SF-Pro-Text-Regular.otf */; };
 		BB00A88125225FC400456571 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
 		BB00A88225225FC400456571 /* SegmentedProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */; };
-		BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75424E0496100FDD0AE /* day_compele.mp3 */; };
-		BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB13C75524E0496200FDD0AE /* task_done.mp3 */; };
 		BB1695F025251B64006190F8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1695EF25251B64006190F8 /* ShareViewController.swift */; };
 		BB1695F325251B64006190F8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB1695F125251B64006190F8 /* MainInterface.storyboard */; };
 		BB1695F725251B64006190F8 /* TodorantShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BB1695ED25251B64006190F8 /* TodorantShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -118,8 +116,6 @@
 		BB6DF1A4252BB14400CAAE17 /* Color+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A87F25225FC400456571 /* Color+customColors.swift */; };
 		BB6DF1B8252BB51C00CAAE17 /* WidgetManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6DF1B7252BB51C00CAAE17 /* WidgetManagerBridge.m */; };
 		BB781738245CE04A004EF3E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB78173A245CE04A004EF3E5 /* InfoPlist.strings */; };
-		BB8BAE69252CD5EE009E2F91 /* nice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB8BAE67252CD5ED009E2F91 /* nice.mp3 */; };
-		BB8BAE6A252CD5EE009E2F91 /* level_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */; };
 		BBC0BDED2527CBB800B6C41D /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDEC2527CBB800B6C41D /* icons.xcassets */; };
 		BBC0BDF42527CBC300B6C41D /* customColorControl.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */; };
 		BBDD6A7A25239A8F0064DE60 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD6A7925239A8F0064DE60 /* IntentHandler.swift */; };
@@ -321,8 +317,6 @@
 		BB00A88025225FC400456571 /* SegmentedProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedProgressBarView.swift; sourceTree = "<group>"; };
 		BB0401A5252D46C900CFE5E3 /* TodorantHomescreen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodorantHomescreen.entitlements; sourceTree = "<group>"; };
 		BB093AB424508A14007616A5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		BB13C75424E0496100FDD0AE /* day_compele.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = day_compele.mp3; path = ../android/app/src/main/res/raw/day_compele.mp3; sourceTree = "<group>"; };
-		BB13C75524E0496200FDD0AE /* task_done.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = task_done.mp3; path = ../android/app/src/main/res/raw/task_done.mp3; sourceTree = "<group>"; };
 		BB1695ED25251B64006190F8 /* TodorantShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodorantShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB1695EF25251B64006190F8 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		BB1695F225251B64006190F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -366,8 +360,6 @@
 		BB78173B245CE04D004EF3E5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173C245CE050004EF3E5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB78173D245CE051004EF3E5 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		BB8BAE67252CD5ED009E2F91 /* nice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = nice.mp3; path = ../android/app/src/main/res/raw/nice.mp3; sourceTree = "<group>"; };
-		BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = level_up.mp3; path = ../android/app/src/main/res/raw/level_up.mp3; sourceTree = "<group>"; };
 		BBC0BDEC2527CBB800B6C41D /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = customColorControl.xcassets; sourceTree = "<group>"; };
 		BBC0EFFD24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -591,10 +583,6 @@
 		7A4B3C2623464B8A9D35439F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BB8BAE68252CD5ED009E2F91 /* level_up.mp3 */,
-				BB8BAE67252CD5ED009E2F91 /* nice.mp3 */,
-				BB13C75424E0496100FDD0AE /* day_compele.mp3 */,
-				BB13C75524E0496200FDD0AE /* task_done.mp3 */,
 				B77D05043B6041AEAAC0BE11 /* AntDesign.ttf */,
 				A056F2E4FD1844908BD001DA /* Entypo.ttf */,
 				8F6115BA7FF0406CA017557A /* EvilIcons.ttf */,
@@ -1022,17 +1010,13 @@
 				BBEE5D6723F4E9B20041BA38 /* GoogleService-Info.plist in Resources */,
 				177207248B224A388D087D40 /* SF-Pro-Display-Bold.otf in Resources */,
 				BBDD6B0D2523A00A0064DE60 /* AppIntentVocabulary.plist in Resources */,
-				BB8BAE6A252CD5EE009E2F91 /* level_up.mp3 in Resources */,
 				B6573FC3EBA94DC698237411 /* icomoon.ttf in Resources */,
 				1199FFFB71BB46BBA418AEE6 /* SF-Pro-Rounded-Bold.otf in Resources */,
 				64C433B88FAD423E943F44B3 /* SF-Pro-Rounded-Regular.otf in Resources */,
 				BB6DF196252BB13100CAAE17 /* customColorControl.xcassets in Resources */,
-				BB13C75824E0496200FDD0AE /* task_done.mp3 in Resources */,
 				B8B5EEC028FD47E398AA83F1 /* SF-Pro-Text-Regular.otf in Resources */,
 				627DAD75B9444C10A8BB1568 /* SF-Pro-Text-Medium.otf in Resources */,
 				AD0D19090CE24114A7C135EE /* SF-Pro-Display-Medium.otf in Resources */,
-				BB8BAE69252CD5EE009E2F91 /* nice.mp3 in Resources */,
-				BB13C75724E0496200FDD0AE /* day_compele.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
