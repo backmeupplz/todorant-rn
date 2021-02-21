@@ -27,6 +27,7 @@ import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
+import { Overlay } from '@views/onboarding/Overlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
@@ -248,6 +249,7 @@ class App extends Component {
           <DayCompleteOverlay />
           <ConfettiView />
         </NavigationContainer>
+        <Overlay />
       </Root>
     )
   }

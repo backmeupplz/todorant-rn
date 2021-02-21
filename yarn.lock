@@ -1247,9 +1247,9 @@
   integrity sha512-76FhtnQllErTLFVKTLqmnoHvDM8nK1IPl4p0enEW6F0ScsfA8gMx9o8KMPAUr7BZpcSQpIsFc+EXOh+LldyOWg==
 
 "@react-native-community/masked-view@^0.1.6":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.8.tgz#05c9c800f258274a34abd584596464b86fbd92dc"
-  integrity sha512-y+mnsPPC4Etzs/waHIC9Pj3DwhVQGqVru0n1KSqHZc0moKNAZ0NRBWYVat9awLIjjVrnepUva/+/bi31T4hR4A==
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
+  integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
 "@react-native-community/netinfo@^5.5.0":
   version "5.7.0"
@@ -6778,6 +6778,11 @@ react-native-gesture-handler@^1.9.0:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-hole-view@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-hole-view/-/react-native-hole-view-2.0.1.tgz#43177ff71348749e18ef139a28783db47e726e3f"
+  integrity sha512-VCcTCKFOBokppR9ULZcnhnx0ByfIrdEC+zLVS4+1LTwurdLxtwyqqTJAUmu3x0vfDw2miUPlVD8UYCkZz/4gXA==
 
 react-native-iap@^4.4.2:
   version "4.4.3"
