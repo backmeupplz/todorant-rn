@@ -18,9 +18,8 @@ let descriptionText = NSLocalizedString("description", comment: "")
 struct TodoStatusProvider: TimelineProvider {
   let store = Store.shared
 
-  func placeholder(in context: Context) -> TodoWidgetContent {
+  func placeholder(in _: Context) -> TodoWidgetContent {
     TodoWidgetContent(
-      family: context.family,
       currentProgress: 1,
       maximumProgress: 3,
       text: snapshotText,
@@ -28,10 +27,9 @@ struct TodoStatusProvider: TimelineProvider {
     )
   }
 
-  func getSnapshot(in context: Context, completion: @escaping (TodoWidgetContent) -> Void) {
+  func getSnapshot(in _: Context, completion: @escaping (TodoWidgetContent) -> Void) {
     store.updateCurrent()
     let entry = TodoWidgetContent(
-      family: context.family,
       currentProgress: 1,
       maximumProgress: 3,
       text: snapshotText,
@@ -40,7 +38,7 @@ struct TodoStatusProvider: TimelineProvider {
     completion(entry)
   }
 
-  func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+  func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
     store.updateCurrent {
       var entries: [TodoWidgetContent] = []
 
@@ -51,7 +49,6 @@ struct TodoStatusProvider: TimelineProvider {
         
         if let todo = currentState.todo {
           let todoEntry = TodoWidgetContent(
-            family: context.family,
             currentProgress: currentState.todosCount - currentState.incompleteTodosCount,
             maximumProgress: currentState.todosCount,
             text: "\(todo.frog ? "🐸 " : "")\(todo.time != nil ? "\(todo.time ?? "") " : "")\(todo.text.stringWithLinksTruncated())", warning: warning
@@ -59,20 +56,20 @@ struct TodoStatusProvider: TimelineProvider {
           entries.append(todoEntry)
         } else if currentState.todosCount <= 0{
           let emptyViewText = NSLocalizedString("empty.subtitle", comment: "")
-          let todoEntry = TodoWidgetContent(family: context.family, title: "🐝", text: emptyViewText, warning: warning)
+          let todoEntry = TodoWidgetContent(title: "🐝", text: emptyViewText, warning: warning)
           entries.append(todoEntry)
         } else if currentState.todosCount > 0 && currentState.incompleteTodosCount == 0 {
           let clearViewText = NSLocalizedString("clear.subtitle", comment: "")
-          let todoEntry = TodoWidgetContent(family: context.family, title: "🎉", text: clearViewText, warning: warning)
+          let todoEntry = TodoWidgetContent(title: "🎉", text: clearViewText, warning: warning)
           entries.append(todoEntry)
         }
       } else if !store.authenticated {
         let authenticateText = NSLocalizedString("authenticate", comment: "")
-        let todoEntry = TodoWidgetContent(family: context.family, text: authenticateText)
+        let todoEntry = TodoWidgetContent(text: authenticateText)
         entries.append(todoEntry)
       } else if store.errorShown {
         let errorText = NSLocalizedString("error", comment: "")
-        let todoEntry = TodoWidgetContent(family: context.family, text: errorText)
+        let todoEntry = TodoWidgetContent(text: errorText)
         entries.append(todoEntry)
       }
 
