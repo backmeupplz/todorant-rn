@@ -32,12 +32,25 @@ struct TodoEntryView: View {
           maximumProgress: maximumProgress
         )
         .widgetTopElementPadding()
+        
         Text(model.text)
           .widgetTextStyle()
+        
+        if model.family != .systemSmall {
+          HStack {
+            Button(action: {}, label: {
+              Image(uiImage: #imageLiteral(resourceName: "skip"))
+            })
+            .widgetTextStyle()
+            .aspectRatio(1, contentMode: .fill)
+          }
+        }
+        
         if let warning = model.warning {
           Text(warning)
             .widgetWarningTextModifier()
         }
+        
       } else {
       Text(model.text)
         .widgetTextStyle()
@@ -48,7 +61,7 @@ struct TodoEntryView: View {
 }
 
 struct TodoEntryView_Previews: PreviewProvider {
-  static let model = TodoWidgetContent(currentProgress: 1, maximumProgress: 3, text: "Buy oat milk", warning: "Error getting data")
+  static let model = TodoWidgetContent(family: .systemMedium, currentProgress: 1, maximumProgress: 3, text: "Buy oat milk", warning: "Error getting data")
   static var previews: some View {
 
     TodoEntryView(model: model)

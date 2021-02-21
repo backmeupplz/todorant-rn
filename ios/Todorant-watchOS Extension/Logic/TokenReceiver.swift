@@ -41,6 +41,11 @@ class TokenReceiver: NSObject, WCSessionDelegate {
             keychain["password"] = password
           }
         }
+        if let storeUpdatedAt = message["storeUpdatedAt"] as? Date {
+          if Store.shared.storeUpdatedAt < storeUpdatedAt {
+            Store.shared.updateCurrent()
+          }
+        }
       }
   }
 }

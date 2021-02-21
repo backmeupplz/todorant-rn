@@ -10,6 +10,8 @@ import WidgetKit
 
 struct TodoWidgetContent: TimelineEntry {
   var date = Date()
+  
+  let family: WidgetFamily
 
   var currentProgress: Int?
   var maximumProgress: Int?
@@ -19,23 +21,26 @@ struct TodoWidgetContent: TimelineEntry {
   var title: String?
   
   // Regular view / Regular + warning view
-  init(currentProgress: Int, maximumProgress: Int, text: String, warning: String?) {
+  init(family: WidgetFamily, currentProgress: Int, maximumProgress: Int, text: String, warning: String?) {
     self.currentProgress = currentProgress
     self.maximumProgress = maximumProgress
     self.text = text
     self.warning = warning
+    self.family = family
   }
   
   // Clear / Empty view
-  init(title: String, text: String, warning: String?) {
+  init(family: WidgetFamily, title: String, text: String, warning: String?) {
     self.title = title
     self.text = text
     self.warning = warning
+    self.family = family
   }
   
   // Error view
-  init(text: String) {
+  init(family: WidgetFamily, text: String) {
     self.text = text
+    self.family = family
   }
 
 }
