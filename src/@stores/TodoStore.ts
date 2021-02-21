@@ -9,7 +9,7 @@ import { observableNow } from '@utils/ObservableNow'
 import { getTitle, Todo } from '@models/Todo'
 import { shallowMobxRealmCollection } from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
-import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadge'
+import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 
@@ -136,7 +136,7 @@ class TodoStore {
   }
 
   refreshTodos = () => {
-    refreshWidgetAndBadge()
+    refreshWidgetAndBadgeAndWatch()
   }
 
   recalculateExactDates() {

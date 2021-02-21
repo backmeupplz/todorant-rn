@@ -32,12 +32,15 @@ struct TodoEntryView: View {
           maximumProgress: maximumProgress
         )
         .widgetTopElementPadding()
+        
         Text(model.text)
           .widgetTextStyle()
+        
         if let warning = model.warning {
           Text(warning)
             .widgetWarningTextModifier()
         }
+        
       } else {
       Text(model.text)
         .widgetTextStyle()
