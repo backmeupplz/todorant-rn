@@ -3,15 +3,13 @@ import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
 import { View } from 'react-native'
-import { Avatar } from '@views/onboarding/Avatar'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
 
 @observer
 export class MessageBox extends Component {
   render() {
     return (
-      <View style={{ alignItems: 'center' }}>
-        <Avatar />
+      <View style={{ alignItems: 'center', width: '100%' }}>
         <View
           style={{
             backgroundColor: sharedColors.backgroundColor,

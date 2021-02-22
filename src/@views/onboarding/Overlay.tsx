@@ -1,12 +1,34 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { Animated } from 'react-native'
 import { MessageBox } from '@views/onboarding/MessageBox'
 import { RNHoleView } from 'react-native-hole-view'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { Avatar } from '@views/onboarding/Avatar'
+
+export let tutorialOverlayRef: Overlay
 
 export class Overlay extends Component {
+  opacityAnimationValue = new Animated.Value(0)
+
+  componentDidMount() {
+    tutorialOverlayRef = this
+
+    if (!sharedOnboardingStore.tutorialWasShown) {
+      this.trigger(true)
+    }
+  }
+
+  trigger(show = true) {
+    Animated.timing(this.opacityAnimationValue, {
+      toValue: show ? 1 : 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start()
+  }
+
   render() {
     return (
-      <View
+      <Animated.View
         style={{
           position: 'absolute',
           top: 0,
@@ -14,10 +36,11 @@ export class Overlay extends Component {
           bottom: 0,
           left: 0,
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           padding: 12,
+          opacity: this.opacityAnimationValue,
         }}
       >
         <RNHoleView
@@ -29,9 +52,13 @@ export class Overlay extends Component {
             left: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
           }}
+          holes={[
+            { x: 315, y: 700, width: 120, height: 120, borderRadius: 60 },
+          ]}
         />
+        <Avatar />
         <MessageBox />
-      </View>
+      </Animated.View>
     )
   }
 }

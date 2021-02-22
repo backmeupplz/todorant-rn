@@ -5,8 +5,6 @@ import { translate } from '@utils/i18n'
 
 export let dayCompleteOverlayRef: any
 
-export function startDayCompleteAnimation() {}
-
 export class DayCompleteOverlay extends Component {
   componentDidMount() {
     dayCompleteOverlayRef = this
