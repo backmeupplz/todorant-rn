@@ -4,9 +4,14 @@ import { Text } from 'native-base'
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import Animated from 'react-native-reanimated'
+import { OnboardingVM } from './OnboardingVM'
 
 @observer
 export class MessageBox extends Component {
+  onboardingVM = new OnboardingVM()
+
   render() {
     return (
       <View style={{ alignItems: 'center', width: '100%' }}>
@@ -19,14 +24,17 @@ export class MessageBox extends Component {
             marginVertical: 9,
           }}
         >
-          <Text {...sharedColors.textExtraStyle}>
-            Hey there! It's Nikita, I created Todorant.
-          </Text>
-          <Text style={{ ...sharedColors.textExtraStyle.style, marginTop: 12 }}>
-            Users understand Todorant better when I show them how to use it.
-            Would you like me to show you the correct way of using Todorant to
-            achieve insane levels of productivity?
-          </Text>
+          <Animated.View
+            style={{ opacity: sharedOnboardingStore.animatedOpacity }}
+          >
+            <Text
+              style={{
+                ...sharedColors.textExtraStyle.style,
+              }}
+            >
+              {this.onboardingVM.currentBoxBody}
+            </Text>
+          </Animated.View>
         </View>
         <View
           style={{
@@ -35,8 +43,21 @@ export class MessageBox extends Component {
             width: '100%',
           }}
         >
-          <OnboardingButton preferred title="Sure thing!" />
-          <OnboardingButton title="Nah, I don't need manuals" />
+          {sharedOnboardingStore.nextButtonRequired && (
+            <OnboardingButton
+              preferred
+              title={this.onboardingVM.nextStepButtonText}
+              onPress={() => {
+                this.onboardingVM.changeBoxMessage()
+              }}
+            />
+          )}
+          <OnboardingButton
+            title={this.onboardingVM.closeButtonText}
+            onPress={() => {
+              sharedOnboardingStore.tutorialWasShown = true
+            }}
+          />
         </View>
       </View>
     )

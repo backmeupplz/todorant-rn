@@ -6,7 +6,15 @@ import { View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
-import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
+import {
+  Platform,
+  Clipboard,
+  ViewStyle,
+  StyleProp,
+  UIManager,
+  findNodeHandle,
+  TextInput,
+} from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -24,6 +32,8 @@ import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { rootRef } from '../../../App'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -139,6 +149,8 @@ class CollapsedTodo extends Component<{
   }
 }
 
+export let TextRowNodeId: number
+
 @observer
 class TextRow extends Component<{
   vm: TodoVM
@@ -148,6 +160,10 @@ class TextRow extends Component<{
     return (
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
+        onLayout={({ nativeEvent }) => {
+          TextRowNodeId = (nativeEvent as any).target as number
+          sharedOnboardingStore.nextStep()
+        }}
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -171,7 +187,7 @@ class TextRow extends Component<{
             padding: 0,
             paddingLeft: Platform.OS === 'android' ? 1 : undefined,
           }}
-          autoFocus
+          autoFocus={sharedOnboardingStore.tutorialWasShown}
           disabled={
             this.props.vm.editedTodo?.encrypted &&
             !sharedSessionStore.encryptionKey
@@ -500,7 +516,9 @@ export class AddTodoForm extends Component<{
           <View
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
-            <TextRow vm={this.props.vm} showCross={this.props.showCross} />
+            <TouchableOpacity onPress={() => this.props.vm.focus()}>
+              <TextRow vm={this.props.vm} showCross={this.props.showCross} />
+            </TouchableOpacity>
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <DateRow vm={this.props.vm} />
             {this.props.vm.showDatePicker && (

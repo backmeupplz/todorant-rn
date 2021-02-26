@@ -324,6 +324,26 @@
   "readRulesFirst": "I'll read how to use Todorant first!",
   "iAdmireYourBravery": "I admire your bravery!",
   "iAdmireYourSpirit": "I admire your spirit!",
+  "onboarding": {
+    "closeButtonText": "Nah, I don’t read manuals",
+    "Intro": {
+      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you the correct way of using Todorant to achieve insane levels of productivity?",
+      "nextStepButton": "Sure! Show me how it works"
+    },
+    "Explain": {
+      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. All restrictions here are carefully crafted to make your brain complete tasks and not just mindlessly add them to endless list of todos.",
+      "nextStepButton": "Continue"
+    },
+    "AddTask": {
+      "messageBoxBody": "Let’s add your first task. Click on the plus button below"
+    },
+    "AddText": {
+      "messageBoxBody": "Every todo starts with text. Think of something that you need to do. Now add it in a very short and actionable format like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable."
+    },
+    "SelectDate": {
+      "messageBoxBody": "Every todo should either have an exact date or an exact month when you want to complete it. You cannot select current month for a todo. if you could, what would you do when the month ends and you still have undone todos?"
+    }
+  },
   "introText0": "Hi there! It's Nikita, the creator of Todorant. I'm so glad you've downloaded Todorant because it means that you too will soon benefit from unlimited productivity.",
   "introText1": "Most of the people who end up here are like me: tried what feels like all productivity tools but none of them were just right.",
   "introText2": "Let me show you how Todorant became the last and the only productivity tool for me and what will happen to you in the next 3-4 weeks. Just scroll or use the buttons on the bottom!",

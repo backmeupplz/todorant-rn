@@ -1,18 +1,22 @@
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import Animated from 'react-native-reanimated'
 
 @observer
 export class OnboardingButton extends Component<{
   title: string
   preferred?: boolean
+  onPress: () => void
 }> {
   render() {
     return (
       <TouchableOpacity
+        onPress={this.props.onPress}
         style={{
           marginHorizontal: 8,
           marginVertical: 9,
@@ -35,13 +39,17 @@ export class OnboardingButton extends Component<{
             opacity: this.props.preferred ? 1 : 0.7,
           }}
         >
-          <Text
-            style={{
-              color: this.props.preferred ? 'white' : sharedColors.textColor,
-            }}
+          <Animated.View
+            style={{ opacity: sharedOnboardingStore.animatedOpacity }}
           >
-            {this.props.title}
-          </Text>
+            <Text
+              style={{
+                color: this.props.preferred ? 'white' : sharedColors.textColor,
+              }}
+            >
+              {this.props.title}
+            </Text>
+          </Animated.View>
         </LinearGradient>
       </TouchableOpacity>
     )

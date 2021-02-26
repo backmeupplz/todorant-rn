@@ -12,7 +12,10 @@ import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { TextInput } from 'react-native'
+import { findNodeHandle, Keyboard, TextInput } from 'react-native'
+import { focusInput } from 'react-native/Libraries/Components/TextInput/TextInputState'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+// const TextInputState = require('react-native/lib/TextInputState')
 
 export class TodoVM {
   @observable text = ''
@@ -62,6 +65,12 @@ export class TodoVM {
     return sharedTagStore.undeletedTags.filtered(
       `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
     )
+  }
+
+  focus() {
+    focusInput({})
+    this.todoTextField.current._root.focus()
+    // Drop currentFocusedItem inside React-Native
   }
 
   applyTag(tag: Tag) {
@@ -154,6 +163,12 @@ export class TodoVM {
 
   constructor() {
     makeObservable(this)
+
+    Keyboard.addListener('keyboardDidHide', () => {
+      if (this.text) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
 
     if (sharedSettingsStore.showTodayOnAddTodo) {
       this.date = getDateDateString(new Date())

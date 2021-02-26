@@ -4,6 +4,7 @@ export const hydratedStores = {
   SessionStore: false,
   TodoStore: false,
   TagStore: false,
+  OnboardingStore: false,
 } as { [index: string]: boolean }
 
 export function isHydrated() {

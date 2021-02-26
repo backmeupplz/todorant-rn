@@ -1,33 +1,119 @@
 import React, { Component } from 'react'
-import { Animated } from 'react-native'
+import Animated, { Easing } from 'react-native-reanimated'
 import { MessageBox } from '@views/onboarding/MessageBox'
-import { RNHoleView } from 'react-native-hole-view'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import {
+  ERNHoleViewTimingFunction,
+  IRNHoleViewAnimation,
+  RNHole,
+  RNHoleView,
+} from 'react-native-hole-view'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { Avatar } from '@views/onboarding/Avatar'
+import { makeObservable, observable, reaction } from 'mobx'
+import { observer } from 'mobx-react'
+import {
+  Button,
+  Dimensions,
+  Keyboard,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 export let tutorialOverlayRef: Overlay
 
+@observer
 export class Overlay extends Component {
+  state = {
+    animation: undefined,
+    holes: [{ x: 0, y: 0, width: 0, height: 0, borderRadius: 60 }],
+  }
+
   opacityAnimationValue = new Animated.Value(0)
+  messageBoxOpacity = new Animated.Value(1)
+
+  infoBoxY = new Animated.Value(0)
+  infoBoxX = new Animated.Value(0)
+
+  @observable shouldRender = true
+
+  messageBoxNodeId: number | undefined
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+  }
 
   componentDidMount() {
+    Keyboard.addListener('keyboardDidShow', () => {
+      Animated.timing(this.messageBoxOpacity, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.linear,
+      }).start()
+    })
+    Keyboard.addListener('keyboardDidHide', () => {
+      Animated.timing(this.messageBoxOpacity, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.linear,
+      }).start()
+    })
+    setTimeout(() => {
+      this.setState({
+        animation: {
+          timingFunction: ERNHoleViewTimingFunction.EASE_IN_OUT,
+          duration: 500,
+        },
+      })
+    })
+    reaction(
+      () => sharedOnboardingStore.tutorialWasShown,
+      () => {
+        this.trigger(!sharedOnboardingStore.tutorialWasShown)
+      }
+    )
+
+    reaction(
+      () => sharedOnboardingStore.step,
+      (step) => {
+        this.setState(
+          {
+            holes: [sharedOnboardingStore.currentHole],
+          },
+          () => {
+            Animated.timing(this.infoBoxY, {
+              toValue: -this.state.holes[0].height,
+              duration: 500,
+              easing: Easing.ease,
+            }).start()
+          }
+        )
+        this.setState({
+          animation: {
+            timingFunction: ERNHoleViewTimingFunction.EASE_IN_OUT,
+            duration: 500,
+          },
+        })
+      }
+    )
+
     tutorialOverlayRef = this
 
-    if (!sharedOnboardingStore.tutorialWasShown) {
-      this.trigger(true)
-    }
+    this.trigger(!sharedOnboardingStore.tutorialWasShown)
   }
 
   trigger(show = true) {
     Animated.timing(this.opacityAnimationValue, {
       toValue: show ? 1 : 0,
       duration: 500,
-      useNativeDriver: true,
-    }).start()
+      easing: Easing.linear,
+    }).start(() => {
+      this.shouldRender = !sharedOnboardingStore.tutorialWasShown
+    })
   }
 
   render() {
-    return (
+    return this.shouldRender ? (
       <Animated.View
         style={{
           position: 'absolute',
@@ -43,22 +129,49 @@ export class Overlay extends Component {
           opacity: this.opacityAnimationValue,
         }}
       >
-        <RNHoleView
+        {sharedOnboardingStore.messageBoxAppear && (
+          <Animated.View
+            pointerEvents="box-none"
+            style={{
+              opacity: this.messageBoxOpacity,
+              width: '100%',
+              zIndex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transform: [{ translateY: this.infoBoxY }],
+            }}
+          >
+            {/* <Avatar /> */}
+            <MessageBox />
+          </Animated.View>
+        )}
+        <Animated.View
+          pointerEvents="box-only"
           style={{
             position: 'absolute',
             top: 0,
             right: 0,
             bottom: 0,
             left: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            opacity: this.opacityAnimationValue,
           }}
-          holes={[
-            { x: 315, y: 700, width: 120, height: 120, borderRadius: 60 },
-          ]}
-        />
-        <Avatar />
-        <MessageBox />
+        >
+          <RNHoleView
+            animation={this.state.animation}
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            }}
+            holes={this.state.holes}
+          />
+        </Animated.View>
       </Animated.View>
-    )
+    ) : null
   }
 }

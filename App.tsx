@@ -4,12 +4,12 @@ import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/purchases'
-import { Root, StyleProvider, View } from 'native-base'
+import { Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
-import { StatusBar, LogBox, AppState } from 'react-native'
+import { StatusBar, LogBox, AppState, TouchableOpacity } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -33,13 +33,15 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
-import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadgeAndWatch'
+// import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
+
+export let rootRef: any
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -74,7 +76,7 @@ class App extends Component {
     SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
-    refreshWidgetAndBadge()
+    // refreshWidgetAndBadge()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
@@ -91,7 +93,7 @@ class App extends Component {
     languageTag = `${languageTag}`
 
     return (
-      <Root>
+      <Root ref={(e) => (rootRef = e)}>
         <NavigationContainer ref={navigationRef}>
           <StatusBar
             backgroundColor={sharedColors.backgroundColor}
@@ -100,7 +102,7 @@ class App extends Component {
             }
           />
           <RateModal />
-          <StyleProvider style={getTheme()}>
+          <StyleProvider style={{ ...getTheme(), pointerEvent: 'box-none' }}>
             <Stack.Navigator
               screenOptions={{
                 cardStyleInterpolator: () => ({

@@ -4,11 +4,18 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import LinearGradient from 'react-native-linear-gradient'
 import CustomIcon from '@components/CustomIcon'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { findNodeHandle, LayoutRectangle, UIManager } from 'react-native'
+
+export let PlusButtonLayout = {}
 
 export class PlusButton extends Component {
   render() {
     return (
       <View
+        onLayout={({ nativeEvent }) => {
+          PlusButtonLayout = nativeEvent.target
+        }}
         style={{
           width: 48,
           height: 64,
