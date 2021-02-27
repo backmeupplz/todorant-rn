@@ -13,23 +13,28 @@ let snapshotText = NSLocalizedString("snapshot", comment: "")
 let titleText = NSLocalizedString("title", comment: "")
 let descriptionText = NSLocalizedString("description", comment: "")
 
-let snapshotEntry = TodoWidgetContent(
-  currentProgress: 1,
-  maximumProgress: 3,
-  text: snapshotText,
-  warning: nil
-)
+
 
 struct TodoStatusProvider: TimelineProvider {
   let store = Store.shared
 
   func placeholder(in _: Context) -> TodoWidgetContent {
-    snapshotEntry
+    TodoWidgetContent(
+      currentProgress: 1,
+      maximumProgress: 3,
+      text: snapshotText,
+      warning: nil
+    )
   }
 
   func getSnapshot(in _: Context, completion: @escaping (TodoWidgetContent) -> Void) {
     store.updateCurrent()
-    let entry = snapshotEntry
+    let entry = TodoWidgetContent(
+      currentProgress: 1,
+      maximumProgress: 3,
+      text: snapshotText,
+      warning: nil
+    )
     completion(entry)
   }
 

@@ -15,152 +15,156 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import {
+  playDayComplete,
+  playFrogComplete,
+  playTaskComplete,
+} from '@utils/sound'
+
+@observer
+class DebugButton extends Component<{
+  text: string
+  onPress: () => void
+  testId: string
+}> {
+  render() {
+    return (
+      <Button
+        style={{ margin: 2 }}
+        onPress={this.props.onPress}
+        accessible
+        accessibilityLabel={this.props.testId}
+        testID={this.props.testId}
+      >
+        <Text style={{ color: sharedColors.invertedTextColor }}>
+          {this.props.text}
+        </Text>
+      </Button>
+    )
+  }
+}
 
 @observer
 export class DebugButtons extends Component {
   render() {
     return __DEV__ ? (
       <>
-        <Button
-          style={{ margin: 2 }}
+        <DebugButton
           onPress={() => {
             deleteAllTodos()
           }}
-          accessible
-          accessibilityLabel="delete"
-          testID="delete"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            delete all todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="delete all todos"
+          testId="delete"
+        />
+        <DebugButton
           onPress={() => {
             add5000Todos()
           }}
-          accessible
-          accessibilityLabel="add_5000"
-          testID="add_5000"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add 100 todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add 5000 todos"
+          testId="add_5000"
+        />
+        <DebugButton
           onPress={() => {
             addTodosRu()
           }}
-          accessible
-          accessibilityLabel="add_ru"
-          testID="add_ru"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add ru todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add ru todos"
+          testId="add_ru"
+        />
+        <DebugButton
           onPress={() => {
             addTodosEn()
           }}
-          accessible
-          accessibilityLabel="add_en"
-          testID="add_en"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add en todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add en todos"
+          testId="add_en"
+        />
+        <DebugButton
           onPress={() => {
             addTodosUk()
           }}
-          accessible
-          accessibilityLabel="add_uk"
-          testID="add_uk"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add uk todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add uk todos"
+          testId="add_uk"
+        />
+        <DebugButton
           onPress={() => {
             addTodosIt()
           }}
-          accessible
-          accessibilityLabel="add_it"
-          testID="add_it"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add it todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add it todos"
+          testId="add_it"
+        />
+        <DebugButton
           onPress={() => {
             addTodosEs()
           }}
-          accessible
-          accessibilityLabel="add_es"
-          testID="add_es"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add es todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add es todos"
+          testId="add_es"
+        />
+        <DebugButton
           onPress={() => {
             addTodosPtBR()
           }}
-          accessible
-          accessibilityLabel="add_pt_br"
-          testID="add_pt_br"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            add pt-BR todos
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="add pt-BR todos"
+          testId="add_pt_br"
+        />
+        <DebugButton
           onPress={() => {
             sharedSettingsStore.colorMode = ColorMode.dark
             updateAndroidNavigationBarColor(true)
           }}
-          accessible
-          accessibilityLabel="turn_dark_on"
-          testID="turn_dark_on"
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            turn dark on
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="turn dark on"
+          testId="turn_dark_on"
+        />
+        <DebugButton
           onPress={() => {
             sharedSessionStore.numberOfTodosCompleted = 0
             sharedSessionStore.askedToRate = false
           }}
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            reset rating
-          </Text>
-        </Button>
-        <Button
-          style={{ margin: 2 }}
+          text="reset rating"
+          testId="reset_rating"
+        />
+        <DebugButton
           onPress={() => {
             sharedSessionStore.numberOfTodosCompleted = 102
             sharedSessionStore.askedToRate = false
           }}
-        >
-          <Text style={{ color: sharedColors.invertedTextColor }}>
-            open rate modal
-          </Text>
-        </Button>
+          text="open rate modal"
+          testId="open_rating"
+        />
+        <DebugButton
+          onPress={() => {
+            sharedSessionStore.numberOfTodosCompleted = 102
+            sharedSessionStore.askedToRate = false
+          }}
+          text="open rate modal"
+          testId="open_rating"
+        />
+        <DebugButton
+          onPress={() => {
+            playFrogComplete('nice')
+          }}
+          text="play nice sound"
+          testId="play_nice"
+        />
+        <DebugButton
+          onPress={() => {
+            playFrogComplete('level_up')
+          }}
+          text="play level up sound"
+          testId="play_level_up"
+        />
+        <DebugButton
+          onPress={() => {
+            playDayComplete()
+          }}
+          text="play day complete sound"
+          testId="play_day_complete"
+        />
+        <DebugButton
+          onPress={() => {
+            playTaskComplete()
+          }}
+          text="play task complete sound"
+          testId="play_task_complete"
+        />
       </>
     ) : null
   }

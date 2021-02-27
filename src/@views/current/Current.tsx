@@ -11,6 +11,13 @@ export function Current() {
     <Observer>
       {() => (
         <Stack.Navigator
+          screenOptions={{
+            cardStyleInterpolator: () => ({
+              cardStyle: {
+                opacity: 1,
+              },
+            }),
+          }}
           {...({ language: sharedSettingsStore.language } as any)}
         >
           <Stack.Screen

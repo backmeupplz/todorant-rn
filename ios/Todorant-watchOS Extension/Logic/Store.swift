@@ -70,8 +70,10 @@ class Store: ObservableObject {
   @Published var expanded = false
   
   static let shared = Store()
+  private(set) var storeUpdatedAt: Date
   
   private init() {
+    self.storeUpdatedAt = Date()
     self.updateCurrent()
   }
   
@@ -85,6 +87,7 @@ class Store: ObservableObject {
             // Update state
             self.currentState = currentState
             self.reloadActiveComplications()
+            self.storeUpdatedAt = Date()
             self.errorShown = false
           case .failure:
             self.errorShown = true

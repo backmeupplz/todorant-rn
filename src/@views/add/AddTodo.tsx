@@ -276,7 +276,9 @@ class AddTodoContent extends Component<{
   componentDidMount() {
     logEvent('add_todo_opened')
     backButtonStore.back = this.onBackPress
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return this.onBackPress(true)
+    })
     if (this.props.route.params?.breakdownTodo) {
       this.breakdownTodo = this.props.route.params?.breakdownTodo
       this.isBreakdown = true
@@ -361,9 +363,13 @@ class AddTodoContent extends Component<{
     return false
   }
 
-  onBackPress = () => {
+  onBackPress = (isHardware = false) => {
     if (!this.isDirty()) {
-      goBack()
+      if (isHardware) {
+        // Do nothing
+      } else {
+        goBack()
+      }
     } else {
       const options = [
         translate(
