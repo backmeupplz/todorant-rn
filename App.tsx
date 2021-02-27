@@ -9,7 +9,7 @@ import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { observer } from 'mobx-react'
-import { StatusBar, LogBox, AppState } from 'react-native'
+import { StatusBar, LogBox, AppState, Alert, Linking } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -39,6 +39,7 @@ import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
+import { checkVersion } from 'react-native-check-version'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -82,6 +83,24 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
+    const version = await checkVersion()
+    if (version.needsUpdate) {
+      Alert.alert(
+        `${translate('updateVersionTitle')} ${version.version}!`,
+        translate('updateVersionMsg'),
+        [
+          {
+            text: translate('ok'),
+            style: 'cancel',
+          },
+          {
+            text: translate('update'),
+            onPress: () => Linking.openURL(version.url),
+          },
+        ],
+        { cancelable: false }
+      )
+    }
   }
 
   render() {

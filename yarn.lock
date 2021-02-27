@@ -6706,6 +6706,11 @@ react-native-camera@^3.23.1:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-check-version@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-check-version/-/react-native-check-version-1.0.8.tgz#e2fb7d0688980b8e3df5d4f7905985181fc5a250"
+  integrity sha512-M8WCJ5yVtJdRBtey1pCE+mlpfkxTPMgRoEJeX3bZ2s+7CjKhEXDjw6kyyI5IFaonwQV3cUDisnlHVLDnFnPqZQ==
+
 react-native-code-push@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-6.2.0.tgz#43274d9d01e998be1358b5bedc534e8edddb2dc2"
@@ -6743,10 +6748,10 @@ react-native-dark-mode@^0.2.2:
     events "^3.0.0"
     toolkit.ts "^0.0.2"
 
-react-native-device-info@^5.5.3:
-  version "5.5.4"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.5.4.tgz#470770db4e8a35c55b8269473d81790102074057"
-  integrity sha512-koR7ZvL4V+34GwhjQxb3PNZLElpEzAvDG5AE4KIc70ufKMEHJL9VCpRXBMelihlA0u9PlYzuMgBs7tovNRAzFw==
+react-native-device-info@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.0.2.tgz#edefb8538412bf33e12a7ba1b80fbd804f69580b"
+  integrity sha512-5X5sMO2N9WpnqA4BXHlby0ml0WKlHconLhgf8fCiXDELf7DIjOMX8z6iYZ7WDgmn0E/6Psubq9yb5D2Qdc30Wg==
 
 react-native-draggable-flatlist@^2.4.0:
   version "2.4.0"
