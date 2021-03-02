@@ -3,6 +3,14 @@ import { translate } from '@utils/i18n'
 import { computed } from 'mobx'
 import Animated, { Easing } from 'react-native-reanimated'
 
+const withoutButton = [
+  TutorialStep.AddTask,
+  TutorialStep.AddTodoComplete,
+  TutorialStep.AddText,
+  TutorialStep.Breakdown,
+  TutorialStep.BreakdownTodoAction,
+]
+
 //
 export class OnboardingVM {
   get closeButtonText() {
@@ -17,6 +25,10 @@ export class OnboardingVM {
     return (
       translate(`onboarding.${sharedOnboardingStore.step}.messageBoxBody`) || ''
     )
+  }
+
+  @computed get isButtonRequired() {
+    return !withoutButton.includes(sharedOnboardingStore.step)
   }
 
   changeBoxMessage() {

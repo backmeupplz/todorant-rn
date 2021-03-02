@@ -14,6 +14,9 @@ import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+
+export let CurrentTodoNodeId: number
 
 @observer
 export class TodoCardContent extends Component<{
@@ -26,7 +29,16 @@ export class TodoCardContent extends Component<{
   render() {
     let row: any
     return (
-      <View>
+      <View
+        onLayout={(e) => {
+          if (!CurrentTodoNodeId) {
+            CurrentTodoNodeId = e.nativeEvent.target
+            if (sharedOnboardingStore.step !== TutorialStep.Intro) {
+              sharedOnboardingStore.nextStep()
+            }
+          }
+        }}
+      >
         <Swipeable
           enabled={sharedSettingsStore.swipeActions}
           ref={(ref) => (row = ref)}

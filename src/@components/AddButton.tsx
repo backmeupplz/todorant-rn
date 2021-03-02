@@ -8,11 +8,16 @@ export const addButtonStore = {
   add: () => {},
 }
 
+export let AddButonNodeId: number
+
 @observer
 export class AddButton extends Component {
   render() {
     return (
       <TouchableOpacity
+        onLayout={(e) => {
+          AddButonNodeId = e.nativeEvent.target
+        }}
         onPress={() => {
           addButtonStore.add()
         }}

@@ -21,6 +21,9 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 import { realm } from '@utils/realm'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+
+export let CurrentTodoNodeId: number
 
 @observer
 export class CurrentContent extends Component {

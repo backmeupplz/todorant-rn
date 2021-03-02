@@ -8,11 +8,17 @@ import { Platform, View } from 'react-native'
 import fonts from '@utils/fonts'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
+export let PlanningHeaderNodeId: number
+
 @observer
 export class PlanningHeaderSegment extends Component {
   render() {
     return (
-      <View>
+      <View
+        onLayout={(e) => {
+          PlanningHeaderNodeId = e.nativeEvent.target
+        }}
+      >
         <SegmentedControl
           values={[translate('planning'), translate('completed')]}
           selectedIndex={

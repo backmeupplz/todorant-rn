@@ -150,6 +150,10 @@ class CollapsedTodo extends Component<{
 }
 
 export let TextRowNodeId: number
+export let DateRowNodeId: number
+export let FrogRowNodeId: number
+export let CompletedRowNodeId: number
+export let ShowMoreRowNodeId: number
 
 @observer
 class TextRow extends Component<{
@@ -161,8 +165,10 @@ class TextRow extends Component<{
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
         onLayout={({ nativeEvent }) => {
-          TextRowNodeId = (nativeEvent as any).target as number
-          sharedOnboardingStore.nextStep()
+          if (!TextRowNodeId) {
+            TextRowNodeId = (nativeEvent as any).target as number
+            sharedOnboardingStore.nextStep()
+          }
         }}
         style={{
           flexDirection: 'row',
@@ -520,7 +526,14 @@ export class AddTodoForm extends Component<{
               <TextRow vm={this.props.vm} showCross={this.props.showCross} />
             </TouchableOpacity>
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
-            <DateRow vm={this.props.vm} />
+            <View
+              onLayout={({ nativeEvent }) => {
+                DateRowNodeId = (nativeEvent as any).target as number
+                // sharedOnboardingStore.nextStep()
+              }}
+            >
+              <DateRow vm={this.props.vm} />
+            </View>
             {this.props.vm.showDatePicker && (
               <Calendar
                 minDate={__DEV__ ? undefined : getDateString(this.minDate)}
@@ -627,20 +640,32 @@ export class AddTodoForm extends Component<{
                 }}
               />
             )}
-            <SwitchRow
-              name={translate('todo.create.frog')}
-              value={this.props.vm.frog}
-              onValueChange={(value) => {
-                this.props.vm.frog = value
+            <View
+              onLayout={(e) => {
+                FrogRowNodeId = e.nativeEvent.target
               }}
-            />
-            <SwitchRow
-              name={translate('completed')}
-              value={this.props.vm.completed}
-              onValueChange={(value) => {
-                this.props.vm.completed = value
+            >
+              <SwitchRow
+                name={translate('todo.create.frog')}
+                value={this.props.vm.frog}
+                onValueChange={(value) => {
+                  this.props.vm.frog = value
+                }}
+              />
+            </View>
+            <View
+              onLayout={(e) => {
+                CompletedRowNodeId = e.nativeEvent.target
               }}
-            />
+            >
+              <SwitchRow
+                name={translate('completed')}
+                value={this.props.vm.completed}
+                onValueChange={(value) => {
+                  this.props.vm.completed = value
+                }}
+              />
+            </View>
             {(sharedSettingsStore.showMoreByDefault ||
               this.props.vm.showMore) &&
               !this.props.vm.editedTodo && (
@@ -654,6 +679,9 @@ export class AddTodoForm extends Component<{
               )}
             {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
+                onLayout={(e) => {
+                  ShowMoreRowNodeId = e.nativeEvent.target
+                }}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',

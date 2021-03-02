@@ -55,6 +55,10 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+
+export let SaveButtonNodeId: number
+export let BreakdownTodoNodeId: number
 
 @observer
 class AddTodoContent extends Component<{
@@ -258,6 +262,15 @@ class AddTodoContent extends Component<{
     goBack()
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
+    }
+    if (
+      !sharedOnboardingStore.tutorialWasShown &&
+      sharedOnboardingStore.step !== TutorialStep.BreakdownTodoAction
+    ) {
+      sharedOnboardingStore.nextStep()
+    }
+    if (this.vms.length >= 2 && this.isBreakdown) {
+      sharedOnboardingStore.nextStep()
     }
     // Sync hero
     sharedSync.sync(SyncRequestEvent.Hero)
@@ -465,10 +478,19 @@ class AddTodoContent extends Component<{
             renderItem={({ item, index, drag, isActive }) => {
               return index == 0 ? (
                 this.isBreakdown && !!this.breakdownTodo && (
-                  <TodoCard
-                    todo={this.breakdownTodo}
-                    type={CardType.breakdown}
-                  />
+                  <View
+                    onLayout={(e) => {
+                      if (!BreakdownTodoNodeId) {
+                        BreakdownTodoNodeId = e.nativeEvent.target
+                        sharedOnboardingStore.nextStep()
+                      }
+                    }}
+                  >
+                    <TodoCard
+                      todo={this.breakdownTodo}
+                      type={CardType.breakdown}
+                    />
+                  </View>
                 )
               ) : (
                 <View
@@ -518,13 +540,7 @@ class AddTodoContent extends Component<{
               }}
               ref={this.hangleAddButtonViewRef}
             >
-              <Button
-                style={{
-                  borderRadius: 10,
-                  justifyContent: 'center',
-                  backgroundColor:
-                    !this.isValid || this.savingTodo ? 'grey' : undefined,
-                }}
+              <TouchableOpacity
                 onPress={() => {
                   if (!this.isValid || this.savingTodo) {
                     if (this.addButtonView && this.addButtonView.shake) {
@@ -553,14 +569,53 @@ class AddTodoContent extends Component<{
                   })
                 }}
               >
-                <Text>
-                  {this.screenType === AddTodoScreenType.add
-                    ? this.vms.length > 1
-                      ? translate('addTodoPlural')
-                      : translate('addTodoSingular')
-                    : translate('saveTodo')}
-                </Text>
-              </Button>
+                <Button
+                  onLayout={(e) => {
+                    SaveButtonNodeId = e.nativeEvent.target
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    backgroundColor:
+                      !this.isValid || this.savingTodo ? 'grey' : undefined,
+                  }}
+                  onPress={() => {
+                    if (!this.isValid || this.savingTodo) {
+                      if (this.addButtonView && this.addButtonView.shake) {
+                        this.vms.forEach((vm) => {
+                          if (!vm.isValid) {
+                            vm.collapsed = false
+                          }
+                        })
+                        this.vms.forEach((vm) => {
+                          if (!vm.isValid) {
+                            vm.shakeInvalid()
+                          }
+                        })
+                        this.addButtonView.shake(1000)
+                      }
+                    } else {
+                      this.saveTodo()
+                    }
+                  }}
+                  onLongPress={() => {
+                    Clipboard.setString(
+                      JSON.stringify(this.props.route.params?.editedTodo)
+                    )
+                    Toast.show({
+                      text: translate('copied'),
+                    })
+                  }}
+                >
+                  <Text>
+                    {this.screenType === AddTodoScreenType.add
+                      ? this.vms.length > 1
+                        ? translate('addTodoPlural')
+                        : translate('addTodoSingular')
+                      : translate('saveTodo')}
+                  </Text>
+                </Button>
+              </TouchableOpacity>
             </Animatable.View>
             {this.screenType === AddTodoScreenType.add && (
               <View

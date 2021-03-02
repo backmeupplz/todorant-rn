@@ -14,15 +14,17 @@ import * as Animatable from 'react-native-animatable'
 import React from 'react'
 import { findNodeHandle, Keyboard, TextInput } from 'react-native'
 import { focusInput } from 'react-native/Libraries/Components/TextInput/TextInputState'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 // const TextInputState = require('react-native/lib/TextInputState')
 
 export class TodoVM {
   @observable text = ''
   @observable completed = false
   @observable frog = false
-  @observable monthAndYear?: string
-  @observable date?: string
+  @observable
+  monthAndYear?: string = getDateMonthAndYearString(getTodayWithStartOfDay())
+  @observable date?: string = getDateDateString(getTodayWithStartOfDay())
   @observable time?: string
 
   @observable showDatePicker = false
@@ -165,7 +167,7 @@ export class TodoVM {
     makeObservable(this)
 
     Keyboard.addListener('keyboardDidHide', () => {
-      if (this.text) {
+      if (this.text && sharedOnboardingStore.step === TutorialStep.AddText) {
         sharedOnboardingStore.nextStep()
       }
     })

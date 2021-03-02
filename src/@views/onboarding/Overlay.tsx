@@ -22,6 +22,18 @@ import {
 
 export let tutorialOverlayRef: Overlay
 
+const skip = [
+  TutorialStep.Explain,
+  TutorialStep.Intro,
+  TutorialStep.ExplainSettings,
+]
+const above = [
+  TutorialStep.AddTask,
+  TutorialStep.ShowMore,
+  TutorialStep.AddTodoComplete,
+  TutorialStep.BreakdownTodoAction,
+]
+
 @observer
 export class Overlay extends Component {
   state = {
@@ -81,11 +93,31 @@ export class Overlay extends Component {
             holes: [sharedOnboardingStore.currentHole],
           },
           () => {
-            Animated.timing(this.infoBoxY, {
-              toValue: -this.state.holes[0].height,
-              duration: 500,
-              easing: Easing.ease,
-            }).start()
+            const messageBoxHeight = sharedOnboardingStore.messageBoxId
+            // if (!skip.includes(step)) {
+            //   Animated.timing(this.infoBoxY, {
+            //     toValue: above.includes(step)
+            //       ? this.state.holes[0].y -
+            //         messageBoxHeight -
+            //         this.state.holes[0].height
+            //       : this.state.holes[0].y,
+            //     duration: 500,
+            //     easing: Easing.ease,
+            //   }).start()
+            // }
+            if (!skip.includes(step)) {
+              Animated.timing(this.infoBoxY, {
+                toValue: above.includes(step)
+                  ? this.state.holes[0].y -
+                    messageBoxHeight -
+                    this.state.holes[0].height -
+                    this.state.holes[0].height -
+                    this.state.holes[0].height
+                  : this.state.holes[0].y - this.state.holes[0].height,
+                duration: 500,
+                easing: Easing.ease,
+              }).start()
+            }
           }
         )
         this.setState({

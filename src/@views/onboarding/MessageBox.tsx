@@ -14,7 +14,13 @@ export class MessageBox extends Component {
 
   render() {
     return (
-      <View style={{ alignItems: 'center', width: '100%' }}>
+      <View
+        style={{ alignItems: 'center', width: '100%' }}
+        onLayout={(e) => {
+          // sharedOnboardingStore.messageBoxId = e.nativeEvent.target
+          sharedOnboardingStore.messageBoxId = e.nativeEvent.layout.height
+        }}
+      >
         <View
           style={{
             backgroundColor: sharedColors.backgroundColor,
@@ -43,7 +49,7 @@ export class MessageBox extends Component {
             width: '100%',
           }}
         >
-          {sharedOnboardingStore.nextButtonRequired && (
+          {this.onboardingVM.isButtonRequired && (
             <OnboardingButton
               preferred
               title={this.onboardingVM.nextStepButtonText}
