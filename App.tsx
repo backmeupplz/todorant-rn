@@ -32,7 +32,7 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
-import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadgeAndWatch'
+import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
@@ -74,7 +74,7 @@ class App extends Component {
     SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
-    refreshWidgetAndBadge()
+    refreshWidgetAndBadgeAndWatch()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()

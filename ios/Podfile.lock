@@ -330,8 +330,8 @@ PODS:
     - React
   - RNDateTimePicker (3.0.2):
     - React
-  - RNDeviceInfo (5.5.4):
-    - React
+  - RNDeviceInfo (8.0.2):
+    - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
   - RNGoogleSignin (3.0.4):
@@ -617,7 +617,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 4383c3140f1235391fd6029968c166f09ddd0973
   RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
   RNDateTimePicker: a84d2b439666c9243d42a8396c588d4d1d36e3f3
-  RNDeviceInfo: 6a3d16fce033f6979c4a6a41e62244d183e8c765
+  RNDeviceInfo: a9601119924a67d2479d3facf04cec7b658f44ed
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNIap: 3b6882c6478c4ea3b0f79486566ec01b2c92fd24
@@ -634,4 +634,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0aa3207ed2384b0d46849643e78c5f3b43f6b395
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
