@@ -39,6 +39,7 @@ import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
+import { checkupVersion } from '@utils/checkupVersion'
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -77,6 +78,7 @@ class App extends Component {
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
+    checkupVersion()
     AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') {
         checkAndroidLaunchArgs()
