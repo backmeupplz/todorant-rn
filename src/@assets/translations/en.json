@@ -350,7 +350,7 @@
   "edit": "Edit",
   "editText": "Edit hashtag text",
   "editName": "New hashtag text",
-  "updateVersionTitle": "Hey! A new version of Todorant is available —",
+  "updateVersionTitle": "Hey there! A new version of Todorant is available",
   "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
   "update": "Update"
 }
