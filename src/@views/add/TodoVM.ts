@@ -6,6 +6,7 @@ import {
   getDateFromString,
   getDateMonthAndYearString,
   getDateDateString,
+  getTodayWithStartOfDay,
 } from '@utils/time'
 import { Todo } from '@models/Todo'
 import { observable, computed, makeObservable } from 'mobx'
@@ -156,8 +157,9 @@ export class TodoVM {
     makeObservable(this)
 
     if (sharedSettingsStore.showTodayOnAddTodo) {
-      this.date = getDateDateString(new Date())
-      this.monthAndYear = getDateMonthAndYearString(new Date())
+      const now = getTodayWithStartOfDay()
+      this.date = getDateDateString(now)
+      this.monthAndYear = getDateMonthAndYearString(now)
     }
     if (sharedSettingsStore.newTodosGoFirst) {
       this.addOnTop = true
