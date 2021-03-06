@@ -98,7 +98,18 @@ class OnboardingStore {
   tutorialStepAsArray = Array.from(Object.values(TutorialStep))
   currentHole: undefined | RNHole = undefined
 
-  @observable stepObject: Step = {}
+  @observable stepObject: Step = {
+    messageBoxPosition: 'center',
+    notShowClose: true,
+    additionalButtons: [
+      {
+        message: 'closeButtonText',
+        action: () => {
+          sharedOnboardingStore.nextStep(TutorialStep.Close)
+        },
+      },
+    ],
+  }
 
   @observable messageBoxAppear = true
   @observable step = TutorialStep.Intro
@@ -451,7 +462,17 @@ export const AllStages = {
     }
   },
   [TutorialStep.Intro]: async () => {
-    return { messageBoxPosition: 'center' }
+    const closeButton = {
+      message: 'closeButtonText',
+      action: () => {
+        sharedOnboardingStore.nextStep(TutorialStep.Close)
+      },
+    }
+    return {
+      messageBoxPosition: 'center',
+      notShowClose: true,
+      additionalButtons: [closeButton],
+    }
   },
 } as { [step in TutorialStep]: (() => Promise<Step | undefined>) | undefined }
 
