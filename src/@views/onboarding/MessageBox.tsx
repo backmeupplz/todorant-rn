@@ -4,14 +4,60 @@ import { Text } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, View } from 'react-native'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
-import Animated from 'react-native-reanimated'
+import {
+  measurePosition,
+  sharedOnboardingStore,
+  TutorialStep,
+} from '@stores/OnboardingStore'
+import Animated, { Easing } from 'react-native-reanimated'
 import { OnboardingVM } from './OnboardingVM'
 import { translate } from '@utils/i18n'
+import { reaction } from 'mobx'
+
+const avatar = require('@assets/images/nikita.jpg')
 
 @observer
 export class MessageBox extends Component {
   onboardingVM = new OnboardingVM()
+
+  animatedValue = new Animated.Value(1)
+
+  widthPosition = new Animated.Value(0)
+  heightPosition = new Animated.Value(0)
+
+  componentDidMount() {
+    reaction(
+      () => sharedOnboardingStore.step,
+      async (newValue) => {
+        if (!sharedOnboardingStore.messageBoxId) return
+        if (
+          newValue === TutorialStep.Intro ||
+          newValue === TutorialStep.Explain
+        )
+          return
+        const messageBox = await measurePosition(
+          sharedOnboardingStore.messageBoxId
+        )
+
+        Animated.timing(this.heightPosition, {
+          toValue: 52,
+          duration: 500,
+          easing: Easing.ease,
+        }).start()
+        Animated.timing(this.animatedValue, {
+          toValue: 0.5,
+          duration: 500,
+          easing: Easing.ease,
+        }).start()
+        console.log(messageBox.x - messageBox.width)
+        Animated.timing(this.widthPosition, {
+          toValue: -(messageBox.width - 52),
+          duration: 500,
+          easing: Easing.ease,
+        }).start()
+      }
+    )
+  }
 
   render() {
     return (
@@ -21,13 +67,42 @@ export class MessageBox extends Component {
           sharedOnboardingStore.messageBoxId = target
         }}
       >
+        <Animated.View
+          style={{
+            width: 104,
+            height: 104,
+            borderRadius: 52,
+            borderColor: sharedColors.backgroundColor,
+            borderWidth: 2,
+            transform: [
+              {
+                scaleX: this.animatedValue,
+              },
+              {
+                scaleY: this.animatedValue,
+              },
+              { translateX: this.widthPosition },
+              { translateY: this.heightPosition },
+            ],
+          }}
+        >
+          <Animated.Image
+            source={avatar}
+            resizeMode="cover"
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'cover',
+              borderRadius: 50,
+            }}
+          />
+        </Animated.View>
         <View
           style={{
             backgroundColor: sharedColors.backgroundColor,
             padding: 18,
             borderRadius: 28,
             width: '100%',
-            marginVertical: 9,
           }}
         >
           <Animated.View

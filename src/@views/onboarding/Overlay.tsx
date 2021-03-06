@@ -104,6 +104,9 @@ export class Overlay extends Component {
                 const messageBoxPosition = await measurePosition(
                   messageBoxNodeId
                 )
+                const avatarPadding = 52
+                messageBoxPosition.height -= avatarPadding
+                messageBoxPosition.y += avatarPadding
                 const totalPosition =
                   messageBoxPosition.y + messageBoxPosition.height
                 const idk =

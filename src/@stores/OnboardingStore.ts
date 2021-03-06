@@ -60,6 +60,24 @@ export enum TutorialStep {
   Congratulations = 'Congratulations',
 }
 
+class StepParams {
+  @persist nodeId?: number
+  @persist additionalButtons?: MessageBoxButton[]
+  @persist messageBoxPosition?: 'above' | 'below' | 'center'
+  @persist notShowContinue?: boolean
+  @persist notShowClose?: boolean
+  @persist predefined?: number
+  @persist divider?: number
+}
+
+class RNHoleParams {
+  @persist height?: number
+  @persist width?: number
+  @persist x?: number
+  @persist y?: number
+  @persist borderRadius?: number
+}
+
 class OnboardingStore {
   constructor() {
     makeObservable(this)
@@ -81,8 +99,6 @@ class OnboardingStore {
   currentHole: undefined | RNHole = undefined
 
   @observable stepObject: Step = {}
-
-  @observable additionalButtons: MessageBoxButton[] = []
 
   @observable messageBoxAppear = true
   @observable step = TutorialStep.Intro
@@ -233,30 +249,37 @@ export const AllStages = {
     return { nodeId, notShowContinue: true }
   },
   [TutorialStep.AddText]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
     return { nodeId, notShowContinue: true, divider: 16 }
   },
   [TutorialStep.SelectDate]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
     return { nodeId, divider: 16 }
   },
   [TutorialStep.SelectFrog]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).FrogRowNodeId
     return { nodeId, divider: 16 }
   },
   [TutorialStep.SelectCompleted]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).CompletedRowNodeId
     return { nodeId, divider: 16 }
   },
   [TutorialStep.ShowMore]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).ShowMoreRowNodeId
     return { nodeId, notShowContinue: true, divider: 16 }
   },
   [TutorialStep.AddAnotherTask]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@components/AddButton')).AddButonNodeId
     return { nodeId }
   },
   [TutorialStep.AddTodoComplete]: async () => {
+    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodo')).SaveButtonNodeId
     return { nodeId, notShowContinue: true, divider: 12 }
   },
@@ -291,6 +314,7 @@ export const AllStages = {
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainSearchAndCompleted]: async () => {
+    navigate('Planning')
     const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
       .PlanningHeaderNodeId
     return { nodeId, messageBoxPosition: 'center' }
@@ -318,6 +342,7 @@ export const AllStages = {
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainNotifications]: async () => {
+    navigate('Settings')
     if (!!sharedSessionStore.user) {
       // Highlight integration button
     } else {

@@ -33,9 +33,9 @@ export class TodoCardContent extends Component<{
         onLayout={({ nativeEvent: { target } }: any) => {
           if (!CurrentTodoNodeId) {
             CurrentTodoNodeId = target
-            // if (sharedOnboardingStore.step === TutorialStep.Intro) {
-            //   sharedOnboardingStore.nextStep()
-            // }
+            if (sharedOnboardingStore.step !== TutorialStep.Intro) {
+              sharedOnboardingStore.nextStep()
+            }
           }
         }}
       >
