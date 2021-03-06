@@ -13,20 +13,6 @@ const withoutButton = [
 
 //
 export class OnboardingVM {
-  get closeButtonText() {
-    return translate(`onboarding.closeButtonText`)
-  }
-
-  @computed get nextStepButtonText() {
-    return translate(`onboarding.${sharedOnboardingStore.step}.nextStepButton`)
-  }
-
-  @computed get currentBoxBody() {
-    return (
-      translate(`onboarding.${sharedOnboardingStore.step}.messageBoxBody`) || ''
-    )
-  }
-
   @computed get isButtonRequired() {
     return !withoutButton.includes(sharedOnboardingStore.step)
   }

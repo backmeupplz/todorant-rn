@@ -17,6 +17,9 @@ import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import fonts from '@utils/fonts'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+
+export let InfoButtonNodeId: number
 
 const headerHeight = ifIphoneX(88, 60)
 const { height } = Dimensions.get('window')
@@ -27,6 +30,7 @@ export class HeaderScrollView extends Component<{
   showsHeroButton?: boolean
   infoTitle: string
   contentContainerStyle?: StyleProp<ViewStyle>
+  onScrollViewRef?: (ref: ScrollView | null) => void
 }> {
   @observable headerHeight = 0
   @observable headerY = 0
@@ -55,7 +59,15 @@ export class HeaderScrollView extends Component<{
     })
 
     return (
-      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+      <View
+        style={{ flex: 1, backgroundColor: 'transparent' }}
+        pointerEvents={
+          sharedOnboardingStore.tutorialWasShown ||
+          sharedOnboardingStore.step === TutorialStep.Breakdown
+            ? 'auto'
+            : 'none'
+        }
+      >
         <View
           style={{
             height: headerHeight,
@@ -106,6 +118,7 @@ export class HeaderScrollView extends Component<{
           </Fade>
         </View>
         <ScrollView
+          ref={this.props.onScrollViewRef}
           onScroll={Animated.event(
             [
               {
@@ -139,6 +152,9 @@ export class HeaderScrollView extends Component<{
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
+            pointerEvents={
+              sharedOnboardingStore.tutorialWasShown ? 'auto' : 'none'
+            }
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Animated.Text
@@ -149,17 +165,22 @@ export class HeaderScrollView extends Component<{
                     color: sharedColors.textColor,
                   },
                 ]}
-                onLayout={(event: any) => {
+                onLayout={(event) => {
                   this.headerHeight = event.nativeEvent.layout.height
                   this.headerY = event.nativeEvent.layout.y
                 }}
               >
                 {this.props.title}
               </Animated.Text>
-
               {!!this.props.infoTitle && (
                 <View style={{ marginHorizontal: 12 }}>
-                  {InfoButton(this.props.infoTitle)()}
+                  <View
+                    onLayout={({ nativeEvent: { target } }: any) => {
+                      InfoButtonNodeId = target
+                    }}
+                  >
+                    {InfoButton(this.props.infoTitle)()}
+                  </View>
                 </View>
               )}
             </View>

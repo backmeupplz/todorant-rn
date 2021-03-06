@@ -3,6 +3,8 @@ import { Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View } from 'react-native'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export const addButtonStore = {
   add: () => {},
@@ -15,22 +17,25 @@ export class AddButton extends Component {
   render() {
     return (
       <TouchableOpacity
-        onLayout={(e) => {
-          AddButonNodeId = e.nativeEvent.target
-        }}
         onPress={() => {
           addButtonStore.add()
         }}
       >
-        <Icon
-          type="MaterialIcons"
-          name="add"
+        <View
           style={{
-            color: sharedColors.textColor,
             opacity: 0.5,
             marginHorizontal: 12,
           }}
-        />
+          onLayout={({ nativeEvent: { target } }: any) => {
+            AddButonNodeId = target
+          }}
+        >
+          <Icon
+            type="MaterialIcons"
+            name="add"
+            style={{ color: sharedColors.textColor }}
+          />
+        </View>
       </TouchableOpacity>
     )
   }

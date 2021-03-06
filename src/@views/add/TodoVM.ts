@@ -13,7 +13,9 @@ import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
 import { findNodeHandle, Keyboard, TextInput } from 'react-native'
-import { focusInput } from 'react-native/Libraries/Components/TextInput/TextInputState'
+const {
+  focusInput,
+} = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 // const TextInputState = require('react-native/lib/TextInputState')
@@ -70,9 +72,11 @@ export class TodoVM {
   }
 
   focus() {
-    focusInput({})
-    this.todoTextField.current._root.focus()
     // Drop currentFocusedItem inside React-Native
+    focusInput({})
+    if (this.todoTextField.current) {
+      ;(this.todoTextField.current as any)._root.focus()
+    }
   }
 
   applyTag(tag: Tag) {

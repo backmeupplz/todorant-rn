@@ -2,11 +2,12 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import Animated from 'react-native-reanimated'
 import { OnboardingVM } from './OnboardingVM'
+import { translate } from '@utils/i18n'
 
 @observer
 export class MessageBox extends Component {
@@ -16,9 +17,8 @@ export class MessageBox extends Component {
     return (
       <View
         style={{ alignItems: 'center', width: '100%' }}
-        onLayout={(e) => {
-          // sharedOnboardingStore.messageBoxId = e.nativeEvent.target
-          sharedOnboardingStore.messageBoxId = e.nativeEvent.layout.height
+        onLayout={({ nativeEvent: { target } }: any) => {
+          sharedOnboardingStore.messageBoxId = target
         }}
       >
         <View
@@ -38,7 +38,7 @@ export class MessageBox extends Component {
                 ...sharedColors.textExtraStyle.style,
               }}
             >
-              {this.onboardingVM.currentBoxBody}
+              {sharedOnboardingStore.currentBoxBody}
             </Text>
           </Animated.View>
         </View>
@@ -49,21 +49,41 @@ export class MessageBox extends Component {
             width: '100%',
           }}
         >
-          {this.onboardingVM.isButtonRequired && (
+          {!sharedOnboardingStore.stepObject.notShowContinue && (
             <OnboardingButton
               preferred
-              title={this.onboardingVM.nextStepButtonText}
+              title={sharedOnboardingStore.nextStepButtonText}
               onPress={() => {
                 this.onboardingVM.changeBoxMessage()
               }}
             />
           )}
-          <OnboardingButton
-            title={this.onboardingVM.closeButtonText}
-            onPress={() => {
-              sharedOnboardingStore.tutorialWasShown = true
-            }}
-          />
+          {!!sharedOnboardingStore.stepObject.additionalButtons &&
+            sharedOnboardingStore.stepObject.additionalButtons.map(
+              (button, index) => {
+                return (
+                  <OnboardingButton
+                    key={index}
+                    preferred={button.preferred}
+                    title={translate(
+                      `${sharedOnboardingStore.prefixText}.${button.message}`
+                    )}
+                    onPress={() => {
+                      button.action()
+                    }}
+                  />
+                )
+              }
+            )}
+          {!sharedOnboardingStore.stepObject.notShowClose && (
+            <OnboardingButton
+              title={sharedOnboardingStore.closeButtonText}
+              onPress={() => {
+                sharedOnboardingStore.nextStep(TutorialStep.Close)
+                // sharedOnboardingStore.tutorialWasShown = true
+              }}
+            />
+          )}
         </View>
       </View>
     )

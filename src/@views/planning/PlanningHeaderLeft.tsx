@@ -4,6 +4,7 @@ import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 @observer
 export class PlanningHeaderLeft extends Component {
@@ -12,6 +13,7 @@ export class PlanningHeaderLeft extends Component {
       !sharedAppStateStore.hash.length &&
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <TouchableOpacity
+          disabled={!sharedOnboardingStore.tutorialWasShown}
           onPress={() => {
             sharedAppStateStore.changeLoading(false)
             sharedAppStateStore.searchEnabled = !sharedAppStateStore.searchEnabled

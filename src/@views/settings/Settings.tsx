@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Container, Text } from 'native-base'
+import { Container, Text, View } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
@@ -45,113 +45,138 @@ import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
+import { ScrollView } from 'react-native'
+
+export let ScrollViewRef: ScrollView
+export let SupportButtonNodeId: number
+export let SettingsRootRef: Container
+export let idk: number
+export let HowToUseNodeId: number
 
 const Stack = createStackNavigator()
 
 const codePushVersion = require('@utils/version.json').version.split('.')[0]
-
+// Посчитать высоту начиная с самого верха до элемента перед Settings. Как-то вычесть? что-то с этим сдлеать? вообще я понятия не имею, но что-то такое нужно.
 @observer
 export class SettingsContent extends Component {
   render() {
     return (
       <Container>
         <HeaderScrollView
+          onScrollViewRef={(ref) => {
+            if (!ref) return
+            ScrollViewRef = ref
+          }}
           title={translate('settings')}
           infoTitle="infoSettings"
         >
-          <DebugButtons />
-          {/* Important */}
-          <Divider />
-          <SectionHeader title={translate('important')} />
-          <TableItem
-            onPress={() => {
-              navigate('Rules')
+          <View
+            onLayout={({ nativeEvent: { target } }: any) => {
+              idk = target
             }}
           >
-            <Text {...sharedColors.regularTextExtraStyle}>
-              {translate('howToUse')}
-            </Text>
-          </TableItem>
-          {/* Account */}
-          <Divider />
-          <AccountInfo />
-          <LoginLogoutButtons />
-          {/* Todos */}
-          <Divider />
-          <SectionHeader title={translate('todos')} />
-          <TodoSettings />
-          {/* Delegation */}
-          {!!sharedSessionStore.user && (
-            <>
-              <Divider />
-              <SectionHeader title={translate('delegate.title')} />
-              <DelegationSettings />
-            </>
-          )}
-          {/* General */}
-          <Divider />
-          <SectionHeader title={translate('general')} />
-          {!!sharedSessionStore.user && (
+            <DebugButtons />
+            {/* Important */}
+            <Divider />
+            <SectionHeader title={translate('important')} />
             <TableItem
               onPress={() => {
-                navigate('Sockets')
+                navigate('Rules')
               }}
             >
-              <Text {...sharedColors.regularTextExtraStyle}>
-                {translate('socketsInfo')}
+              <Text
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  HowToUseNodeId = target
+                }}
+                {...sharedColors.regularTextExtraStyle}
+              >
+                {translate('howToUse')}
               </Text>
-              <CheckOrCross ok={sharedSync.socketConnection.connected} />
             </TableItem>
-          )}
-          {!!sharedSessionStore.user && (
+            {/* Account */}
+            <Divider />
+            <AccountInfo />
+            <LoginLogoutButtons />
+            {/* Todos */}
+            <Divider />
+            <SectionHeader title={translate('todos')} />
+            <TodoSettings />
+            {/* Delegation */}
+            {!!sharedSessionStore.user && (
+              <>
+                <Divider />
+                <SectionHeader title={translate('delegate.title')} />
+                <DelegationSettings />
+              </>
+            )}
+            {/* General */}
+            <Divider />
+            <SectionHeader title={translate('general')} />
+            {!!sharedSessionStore.user && (
+              <TableItem
+                onPress={() => {
+                  navigate('Sockets')
+                }}
+              >
+                <Text {...sharedColors.regularTextExtraStyle}>
+                  {translate('socketsInfo')}
+                </Text>
+                <CheckOrCross ok={sharedSync.socketConnection.connected} />
+              </TableItem>
+            )}
+            {!!sharedSessionStore.user && (
+              <TableItem
+                onPress={() => {
+                  navigate('Data')
+                }}
+              >
+                <Text {...sharedColors.regularTextExtraStyle}>
+                  {translate('dataInfo')}
+                </Text>
+              </TableItem>
+            )}
+            <GeneralSettings />
+            {/* Information */}
+            <Divider />
+            <SectionHeader title={translate('info')} />
             <TableItem
               onPress={() => {
-                navigate('Data')
+                navigate('Intro')
               }}
             >
-              <Text {...sharedColors.regularTextExtraStyle}>
-                {translate('dataInfo')}
+              <Text
+                style={{
+                  color: sharedColors.textColor,
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                {translate('introButton')}
               </Text>
             </TableItem>
-          )}
-          <GeneralSettings />
-          {/* Information */}
-          <Divider />
-          <SectionHeader title={translate('info')} />
-          <TableItem
-            onPress={() => {
-              navigate('Intro')
-            }}
-          >
-            <Text
-              style={{
-                color: sharedColors.textColor,
-                fontFamily: fonts.SFProTextRegular,
+            <TableItem
+              onPress={() => {
+                navigate('Terms')
               }}
             >
-              {translate('introButton')}
-            </Text>
-          </TableItem>
-          <TableItem
-            onPress={() => {
-              navigate('Terms')
-            }}
-          >
-            <Text
-              style={{
-                color: sharedColors.textColor,
-                fontFamily: fonts.SFProTextRegular,
-              }}
-            >
-              {translate('termsOfUse')}
-            </Text>
-          </TableItem>
+              <Text
+                style={{
+                  color: sharedColors.textColor,
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                {translate('termsOfUse')}
+              </Text>
+            </TableItem>
+          </View>
           <TableItem
             onPress={() => {
               navigate('Privacy')
             }}
           >
             <Text
+              onLayout={({ nativeEvent: { target } }: any) => {
+                SupportButtonNodeId = target
+              }}
               style={{
                 color: sharedColors.textColor,
                 fontFamily: fonts.SFProTextRegular,

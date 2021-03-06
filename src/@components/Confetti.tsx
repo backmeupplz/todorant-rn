@@ -27,6 +27,7 @@ export class ConfettiView extends Component {
           bottom: 0,
           left: 0,
           right: 0,
+          zIndex: 99999,
         }}
         pointerEvents="none"
       >

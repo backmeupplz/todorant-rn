@@ -32,7 +32,7 @@ import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { rootRef } from '../../../App'
 
 const fontSize = 18
@@ -282,6 +282,7 @@ class DateRow extends Component<{
   render() {
     return (
       <TouchableOpacity
+        disabled={!sharedOnboardingStore.tutorialWasShown}
         onPress={() => {
           this.props.vm.showDatePicker = !this.props.vm.showDatePicker
           if (!this.props.vm.date) {
@@ -331,6 +332,7 @@ class MonthRow extends Component<{
   render() {
     return (
       <TouchableOpacity
+        disabled={!sharedOnboardingStore.tutorialWasShown}
         onPress={() => {
           this.props.vm.showMonthAndYearPicker = !this.props.vm
             .showMonthAndYearPicker
@@ -641,21 +643,27 @@ export class AddTodoForm extends Component<{
               />
             )}
             <View
-              onLayout={(e) => {
-                FrogRowNodeId = e.nativeEvent.target
+              onLayout={({ nativeEvent: { target } }: any) => {
+                FrogRowNodeId = target
               }}
             >
               <SwitchRow
                 name={translate('todo.create.frog')}
                 value={this.props.vm.frog}
                 onValueChange={(value) => {
+                  if (sharedOnboardingStore.step === TutorialStep.SelectFrog) {
+                    sharedOnboardingStore.nextStep()
+                  }
                   this.props.vm.frog = value
                 }}
               />
             </View>
             <View
-              onLayout={(e) => {
-                CompletedRowNodeId = e.nativeEvent.target
+              pointerEvents={
+                sharedOnboardingStore.tutorialWasShown ? 'auto' : 'none'
+              }
+              onLayout={({ nativeEvent: { target } }: any) => {
+                CompletedRowNodeId = target
               }}
             >
               <SwitchRow
@@ -679,8 +687,16 @@ export class AddTodoForm extends Component<{
               )}
             {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
-                onLayout={(e) => {
-                  ShowMoreRowNodeId = e.nativeEvent.target
+                disabled={
+                  !sharedOnboardingStore.tutorialWasShown &&
+                  !(
+                    sharedOnboardingStore.step === TutorialStep.ShowMore ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                  )
+                }
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  ShowMoreRowNodeId = target
                 }}
                 style={{
                   flexDirection: 'row',
@@ -690,6 +706,9 @@ export class AddTodoForm extends Component<{
                   opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
+                  if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
+                    sharedOnboardingStore.nextStep()
+                  }
                   this.props.vm.showMore = true
                 }}
               >

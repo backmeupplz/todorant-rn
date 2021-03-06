@@ -30,17 +30,20 @@ export class TodoCardContent extends Component<{
     let row: any
     return (
       <View
-        onLayout={(e) => {
+        onLayout={({ nativeEvent: { target } }: any) => {
           if (!CurrentTodoNodeId) {
-            CurrentTodoNodeId = e.nativeEvent.target
-            if (sharedOnboardingStore.step !== TutorialStep.Intro) {
-              sharedOnboardingStore.nextStep()
-            }
+            CurrentTodoNodeId = target
+            // if (sharedOnboardingStore.step === TutorialStep.Intro) {
+            //   sharedOnboardingStore.nextStep()
+            // }
           }
         }}
       >
         <Swipeable
-          enabled={sharedSettingsStore.swipeActions}
+          enabled={
+            sharedSettingsStore.swipeActions &&
+            !sharedOnboardingStore.tutorialWasShown
+          }
           ref={(ref) => (row = ref)}
           leftThreshold={100}
           rightThreshold={100}
@@ -140,7 +143,8 @@ export class TodoCardContent extends Component<{
               todo={this.props.todo}
               type={this.props.type}
               drag={
-                this.props.type === CardType.planning
+                this.props.type === CardType.planning &&
+                sharedOnboardingStore.tutorialWasShown
                   ? this.props.drag
                   : undefined
               }

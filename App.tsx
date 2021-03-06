@@ -8,8 +8,14 @@ import { Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
-import { observer } from 'mobx-react'
-import { StatusBar, LogBox, AppState, TouchableOpacity } from 'react-native'
+import { Observer, observer } from 'mobx-react'
+import {
+  StatusBar,
+  LogBox,
+  AppState,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -40,6 +46,8 @@ import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
+import Animated from 'react-native-reanimated'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 export let rootRef: any
 
@@ -127,12 +135,21 @@ class App extends Component {
                   title: translate('addTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: () => (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <AddButton />
-                      {InfoButton('infoAdd')()}
-                    </View>
+                    <Observer>
+                      {() => (
+                        <View
+                          pointerEvents={
+                            sharedOnboardingStore.tutorialWasShown
+                              ? 'auto'
+                              : 'none'
+                          }
+                          style={{ flexDirection: 'row', alignItems: 'center' }}
+                        >
+                          <AddButton />
+                          {InfoButton('infoAdd')()}
+                        </View>
+                      )}
+                    </Observer>
                   ),
                   ...headerBackButtonProps(true),
                 }}

@@ -15,8 +15,8 @@ export class PlanningHeaderSegment extends Component {
   render() {
     return (
       <View
-        onLayout={(e) => {
-          PlanningHeaderNodeId = e.nativeEvent.target
+        onLayout={({ nativeEvent: { target } }: any) => {
+          PlanningHeaderNodeId = target
         }}
       >
         <SegmentedControl

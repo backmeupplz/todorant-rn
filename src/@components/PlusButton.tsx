@@ -4,17 +4,19 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { plusButtonAction } from '@utils/plusButtonAction'
 import LinearGradient from 'react-native-linear-gradient'
 import CustomIcon from '@components/CustomIcon'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { findNodeHandle, LayoutRectangle, UIManager } from 'react-native'
+import { observer } from 'mobx-react'
 
 export let PlusButtonLayout = {}
 
+@observer
 export class PlusButton extends Component {
   render() {
     return (
       <View
-        onLayout={({ nativeEvent }) => {
-          PlusButtonLayout = nativeEvent.target
+        onLayout={({ nativeEvent: { target } }: any) => {
+          PlusButtonLayout = target
         }}
         style={{
           width: 48,
@@ -24,7 +26,13 @@ export class PlusButton extends Component {
           right: 16,
         }}
       >
-        <TouchableOpacity onPress={plusButtonAction}>
+        <TouchableOpacity
+          onPress={plusButtonAction}
+          disabled={
+            !sharedOnboardingStore.tutorialWasShown &&
+            sharedOnboardingStore.step !== TutorialStep.AddTask
+          }
+        >
           <LinearGradient
             colors={['#1148B9', '#5C9BFF']}
             start={{ x: 0, y: 0 }}

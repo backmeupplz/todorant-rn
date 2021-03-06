@@ -7,7 +7,11 @@ import {
   RNHole,
   RNHoleView,
 } from 'react-native-hole-view'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import {
+  measurePosition,
+  sharedOnboardingStore,
+  TutorialStep,
+} from '@stores/OnboardingStore'
 import { Avatar } from '@views/onboarding/Avatar'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
@@ -21,18 +25,6 @@ import {
 } from 'react-native'
 
 export let tutorialOverlayRef: Overlay
-
-const skip = [
-  TutorialStep.Explain,
-  TutorialStep.Intro,
-  TutorialStep.ExplainSettings,
-]
-const above = [
-  TutorialStep.AddTask,
-  TutorialStep.ShowMore,
-  TutorialStep.AddTodoComplete,
-  TutorialStep.BreakdownTodoAction,
-]
 
 @observer
 export class Overlay extends Component {
@@ -93,31 +85,52 @@ export class Overlay extends Component {
             holes: [sharedOnboardingStore.currentHole],
           },
           () => {
-            const messageBoxHeight = sharedOnboardingStore.messageBoxId
-            // if (!skip.includes(step)) {
-            //   Animated.timing(this.infoBoxY, {
-            //     toValue: above.includes(step)
-            //       ? this.state.holes[0].y -
-            //         messageBoxHeight -
-            //         this.state.holes[0].height
-            //       : this.state.holes[0].y,
-            //     duration: 500,
-            //     easing: Easing.ease,
-            //   }).start()
-            // }
-            if (!skip.includes(step)) {
-              Animated.timing(this.infoBoxY, {
-                toValue: above.includes(step)
-                  ? this.state.holes[0].y -
-                    messageBoxHeight -
-                    this.state.holes[0].height -
-                    this.state.holes[0].height -
-                    this.state.holes[0].height
-                  : this.state.holes[0].y - this.state.holes[0].height,
-                duration: 500,
-                easing: Easing.ease,
-              }).start()
-            }
+            setTimeout(async () => {
+              const messageBoxNodeId = sharedOnboardingStore.messageBoxId
+              if (!messageBoxNodeId) return
+
+              if (
+                sharedOnboardingStore.stepObject.messageBoxPosition === 'center'
+              ) {
+                Animated.timing(this.infoBoxY, {
+                  toValue: 0,
+                  duration: 500,
+                  easing: Easing.ease,
+                }).start()
+              } else if (
+                sharedOnboardingStore.currentHole &&
+                sharedOnboardingStore.currentHole.y
+              ) {
+                const messageBoxPosition = await measurePosition(
+                  messageBoxNodeId
+                )
+                const totalPosition =
+                  messageBoxPosition.y + messageBoxPosition.height
+                const idk =
+                  Math.abs(
+                    sharedOnboardingStore.currentHole.y - totalPosition
+                  ) + Math.abs(totalPosition)
+                if (idk < Dimensions.get('window').height) {
+                  Animated.timing(this.infoBoxY, {
+                    toValue:
+                      sharedOnboardingStore.currentHole.y - totalPosition,
+                    duration: 500,
+                    easing: Easing.ease,
+                  }).start()
+                  //
+                } else {
+                  Animated.timing(this.infoBoxY, {
+                    toValue:
+                      sharedOnboardingStore.currentHole.y -
+                      messageBoxPosition.y +
+                      sharedOnboardingStore.currentHole.height,
+                    duration: 500,
+                    easing: Easing.ease,
+                  }).start()
+                }
+                sharedOnboardingStore.currentHole
+              }
+            })
           }
         )
         this.setState({
@@ -167,6 +180,7 @@ export class Overlay extends Component {
             style={{
               opacity: this.messageBoxOpacity,
               width: '100%',
+              maxWidth: 400,
               zIndex: 1,
               display: 'flex',
               flexDirection: 'column',

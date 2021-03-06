@@ -9,7 +9,7 @@ import { navigate } from '@utils/navigation'
 import { IconButton } from '@components/IconButton'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export let TodoActionsNodeId: number
 export let BrakdownNodeId: number
@@ -56,8 +56,8 @@ export class TodoCardActions extends Component<{
           }}
         >
           <View
-            onLayout={(e) => {
-              TodoActionsNodeId = e.nativeEvent.target
+            onLayout={({ nativeEvent: { target } }: any) => {
+              TodoActionsNodeId = target
             }}
             style={{
               flexDirection: 'row',
@@ -66,6 +66,7 @@ export class TodoCardActions extends Component<{
             }}
           >
             <IconButton
+              disabled={!sharedOnboardingStore.tutorialWasShown}
               onPress={() => {
                 this.props.vm.delete(this.props.todo)
               }}
@@ -83,6 +84,7 @@ export class TodoCardActions extends Component<{
                 />
               )}
             <IconButton
+              disabled={!sharedOnboardingStore.tutorialWasShown}
               onPress={() => {
                 navigate('EditTodo', { editedTodo: this.props.todo })
               }}
@@ -91,6 +93,7 @@ export class TodoCardActions extends Component<{
             {this.props.type === CardType.current &&
               this.props.vm.isSkippable(this.props.todo) && (
                 <IconButton
+                  disabled={!sharedOnboardingStore.tutorialWasShown}
                   onPress={() => {
                     sharedAppStateStore.skipping = true
                     this.props.vm.skip(this.props.todo)
@@ -101,11 +104,15 @@ export class TodoCardActions extends Component<{
             {(this.props.type === CardType.current ||
               this.props.type === CardType.planning) && (
               <View
-                onLayout={(e) => {
-                  BrakdownNodeId = e.nativeEvent.target
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  BrakdownNodeId = target
                 }}
               >
                 <IconButton
+                  disabled={
+                    !sharedOnboardingStore.tutorialWasShown &&
+                    sharedOnboardingStore.step !== TutorialStep.Breakdown
+                  }
                   onPress={() => {
                     navigate('BreakdownTodo', {
                       breakdownTodo: this.props.todo,
@@ -126,6 +133,7 @@ export class TodoCardActions extends Component<{
               />
             ) : (
               <IconButton
+                disabled={!sharedOnboardingStore.tutorialWasShown}
                 onPress={() => {
                   this.props.vm.complete(this.props.todo)
                 }}

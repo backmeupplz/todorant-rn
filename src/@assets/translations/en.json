@@ -326,6 +326,13 @@
   "iAdmireYourSpirit": "I admire your spirit!",
   "onboarding": {
     "closeButtonText": "Nah, I don’t read manuals",
+    "Close": {
+      "messageBoxBody": "Are you sure you want to skip this tutorial? It is pretty difficult to unleash Todorant’s potential if you don’t know what to do! Maybe you could at least read a small article about the main Todorant principles instead?",
+      "changedMyMind": "I changed my mind, continue the tutorial",
+      "article": "Let’s stop the tutorial, but show me the article",
+      "closeEverything": "I know what I am doing, close the tutorial",
+      "toast": "I admire your bravery"
+    },
     "Intro": {
       "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you the correct way of using Todorant to achieve insane levels of productivity?",
       "nextStepButton": "Sure! Show me how it works"
@@ -348,7 +355,7 @@
     },
     "SelectFrog": {
       "messageBoxBody": "You can mark the todo as a frog. Frogs are special kind of truly unpleasant tasks. You have to complete them first thing in the morning, they always appear at the top of the list. I recommend to have at most 2 frogs a day.",
-      "nextStepButton": "Continue"
+      "nextStepButton": "It's not a frog"
     },
     "SelectCompleted": {
       "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to todorant right after you complete them. This will help to build positive connection between completing tasks and satisfaction.",
@@ -403,7 +410,8 @@
       "nextStepButton": "Continue"
     },
     "ExplainReccuring": {
-      "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the plants and set the next task”. You can read more on the purpose and solutions in the article I wrote [Read the article]",
+      "article": "Read the article",
+      "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the plants and set the next task”. You can read more on the purpose and solutions in the article I wrote",
       "nextStepButton": "Continue"
     },
     "ExplainSettings": {
@@ -415,6 +423,7 @@
       "nextStepButton": "Continue"
     },
     "ExplainMultiplatform": {
+      "website": "Go to todorant.com",
       "messageBoxBody": "Todorant is available on iOS, Android, Web, as Chrome and Firefox extensions, as a Telegram bot, on macOS, Windows and Linux. See the full list of integrations on todorant.com",
       "nextStepButton": "Continue"
     },
@@ -432,7 +441,15 @@
     },
     "Congratulations": {
       "messageBoxBody": "Congratulations! You have finished the tutorial. I hope it is now clear how to use Todorant.\n\nLet’s jump straight to it. I recommend you to move all of your todos to Todorant now. You will have to make them short and actionable as well as assign them specific dates or months. It might feel tedious, but I assure you: it will pay off in the long run!",
-      "nextStepButton": "End tutorial"
+      "nextStepButton": "Hooray!"
+    },
+    "BreakdownLessThanTwo": {
+      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two tasks that are still incomplete.",
+      "nextStepButton": "Got it!"
+    },
+    "Info": {
+      "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner, most of the time, they’ll provide you with useful insight.",
+      "nextStepButton": "Continue"
     }
   },
   "introText0": "Hi there! It's Nikita, the creator of Todorant. I'm so glad you've downloaded Todorant because it means that you too will soon benefit from unlimited productivity.",

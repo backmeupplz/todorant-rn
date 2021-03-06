@@ -47,7 +47,7 @@ class DebugButton extends Component<{
 @observer
 export class DebugButtons extends Component {
   render() {
-    return __DEV__ ? (
+    return false ? (
       <>
         <DebugButton
           onPress={() => {

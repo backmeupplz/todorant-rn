@@ -7,6 +7,8 @@ import { observer } from 'mobx-react'
 import CustomIcon from '@components/CustomIcon'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+export let InfoButtonNodeId: number
+
 @observer
 export class InfoButtonContent extends Component<{
   message: string
@@ -16,6 +18,9 @@ export class InfoButtonContent extends Component<{
   render() {
     return (
       <TouchableOpacity
+        onLayout={({ nativeEvent: { target } }: any) => {
+          InfoButtonNodeId = target
+        }}
         style={{
           marginRight: 12,
         }}

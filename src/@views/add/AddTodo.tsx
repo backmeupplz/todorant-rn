@@ -28,6 +28,7 @@ import {
   StatusBar,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
+//
 import { Button } from '@components/Button'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { startConfetti } from '@components/Confetti'
@@ -96,6 +97,14 @@ class AddTodoContent extends Component<{
       Toast.show({
         text: '🤔',
       })
+      return
+    }
+    if (
+      this.breakdownTodo &&
+      !sharedOnboardingStore.tutorialWasShown &&
+      this.vms.length < 2
+    ) {
+      sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
       return
     }
     this.savingTodo = true
@@ -263,13 +272,7 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
-    if (
-      !sharedOnboardingStore.tutorialWasShown &&
-      sharedOnboardingStore.step !== TutorialStep.BreakdownTodoAction
-    ) {
-      sharedOnboardingStore.nextStep()
-    }
-    if (this.vms.length >= 2 && this.isBreakdown) {
+    if (!sharedOnboardingStore.tutorialWasShown) {
       sharedOnboardingStore.nextStep()
     }
     // Sync hero
@@ -479,9 +482,9 @@ class AddTodoContent extends Component<{
               return index == 0 ? (
                 this.isBreakdown && !!this.breakdownTodo && (
                   <View
-                    onLayout={(e) => {
+                    onLayout={({ nativeEvent: { target } }: any) => {
                       if (!BreakdownTodoNodeId) {
-                        BreakdownTodoNodeId = e.nativeEvent.target
+                        BreakdownTodoNodeId = target
                         sharedOnboardingStore.nextStep()
                       }
                     }}
@@ -533,6 +536,9 @@ class AddTodoContent extends Component<{
             }}
           >
             <Animatable.View
+              onLayout={({ nativeEvent: { target } }: any) => {
+                SaveButtonNodeId = target
+              }}
               style={{
                 marginRight: 10,
                 marginVertical: 10,
@@ -541,6 +547,15 @@ class AddTodoContent extends Component<{
               ref={this.hangleAddButtonViewRef}
             >
               <TouchableOpacity
+                disabled={
+                  !sharedOnboardingStore.tutorialWasShown &&
+                  !(
+                    sharedOnboardingStore.step ===
+                      TutorialStep.AddTodoComplete ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                  )
+                }
                 onPress={() => {
                   if (!this.isValid || this.savingTodo) {
                     if (this.addButtonView && this.addButtonView.shake) {
@@ -570,9 +585,6 @@ class AddTodoContent extends Component<{
                 }}
               >
                 <Button
-                  onLayout={(e) => {
-                    SaveButtonNodeId = e.nativeEvent.target
-                  }}
                   style={{
                     borderRadius: 10,
                     justifyContent: 'center',
@@ -626,6 +638,7 @@ class AddTodoContent extends Component<{
                 }}
               >
                 <TouchableOpacity
+                  disabled={!sharedOnboardingStore.tutorialWasShown}
                   onPress={() => {
                     this.addTodo()
                   }}
