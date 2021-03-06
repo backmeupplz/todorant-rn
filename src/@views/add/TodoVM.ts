@@ -18,15 +18,18 @@ const {
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { getTodayWithStartOfDay } from '@utils/ObservableNow'
-// const TextInputState = require('react-native/lib/TextInputState')
 
 export class TodoVM {
   @observable text = ''
   @observable completed = false
   @observable frog = false
   @observable
-  monthAndYear?: string = getDateMonthAndYearString(getTodayWithStartOfDay())
-  @observable date?: string = getDateDateString(getTodayWithStartOfDay())
+  monthAndYear?: string = !sharedOnboardingStore.tutorialWasShown
+    ? getDateMonthAndYearString(getTodayWithStartOfDay())
+    : undefined
+  @observable date?: string = !sharedOnboardingStore.tutorialWasShown
+    ? getDateDateString(getTodayWithStartOfDay())
+    : undefined
   @observable time?: string
 
   @observable showDatePicker = false

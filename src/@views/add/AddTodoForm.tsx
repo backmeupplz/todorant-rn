@@ -531,7 +531,6 @@ export class AddTodoForm extends Component<{
             <View
               onLayout={({ nativeEvent }) => {
                 DateRowNodeId = (nativeEvent as any).target as number
-                // sharedOnboardingStore.nextStep()
               }}
             >
               <DateRow vm={this.props.vm} />

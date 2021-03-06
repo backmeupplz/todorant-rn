@@ -3,20 +3,8 @@ import { translate } from '@utils/i18n'
 import { computed } from 'mobx'
 import Animated, { Easing } from 'react-native-reanimated'
 
-const withoutButton = [
-  TutorialStep.AddTask,
-  TutorialStep.AddTodoComplete,
-  TutorialStep.AddText,
-  TutorialStep.Breakdown,
-  TutorialStep.BreakdownTodoAction,
-]
-
 //
 export class OnboardingVM {
-  @computed get isButtonRequired() {
-    return !withoutButton.includes(sharedOnboardingStore.step)
-  }
-
   changeBoxMessage() {
     Animated.timing(sharedOnboardingStore.animatedOpacity, {
       toValue: 0,

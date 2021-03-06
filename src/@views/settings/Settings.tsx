@@ -50,13 +50,12 @@ import { ScrollView } from 'react-native'
 export let ScrollViewRef: ScrollView
 export let SupportButtonNodeId: number
 export let SettingsRootRef: Container
-export let idk: number
+export let SettingsBeforeFeedbackButton: number
 export let HowToUseNodeId: number
 
 const Stack = createStackNavigator()
 
 const codePushVersion = require('@utils/version.json').version.split('.')[0]
-// Посчитать высоту начиная с самого верха до элемента перед Settings. Как-то вычесть? что-то с этим сдлеать? вообще я понятия не имею, но что-то такое нужно.
 @observer
 export class SettingsContent extends Component {
   render() {
@@ -72,7 +71,7 @@ export class SettingsContent extends Component {
         >
           <View
             onLayout={({ nativeEvent: { target } }: any) => {
-              idk = target
+              SettingsBeforeFeedbackButton = target
             }}
           >
             <DebugButtons />

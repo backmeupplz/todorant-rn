@@ -49,7 +49,6 @@ export class MessageBox extends Component {
           duration: 500,
           easing: Easing.ease,
         }).start()
-        console.log(messageBox.x - messageBox.width)
         Animated.timing(this.widthPosition, {
           toValue: -(messageBox.width - 52),
           duration: 500,
@@ -155,7 +154,6 @@ export class MessageBox extends Component {
               title={sharedOnboardingStore.closeButtonText}
               onPress={() => {
                 sharedOnboardingStore.nextStep(TutorialStep.Close)
-                // sharedOnboardingStore.tutorialWasShown = true
               }}
             />
           )}

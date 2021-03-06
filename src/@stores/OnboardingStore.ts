@@ -174,7 +174,6 @@ class OnboardingStore {
   }
 
   @computed get currentBoxBody() {
-    console.log('меняю сообщение')
     return translate(`onboarding.${this.step}.messageBoxBody`) || ''
   }
 }
@@ -418,15 +417,19 @@ export const AllStages = {
     const feedButton = (await import('@views/settings/Settings'))
       .SupportButtonNodeId
     const feedButtonPosition = await measurePosition(feedButton)
-    const idk = (await import('@views/settings/Settings')).idk
-    const idkMeasure = await measurePosition(idk)
+    const SettingsBeforeFeedbackButton = (
+      await import('@views/settings/Settings')
+    ).SettingsBeforeFeedbackButton
+    const measuredSettingsBeforeFeedback = await measurePosition(
+      SettingsBeforeFeedbackButton
+    )
     scrollView.scrollToEnd()
     return {
       nodeId: feedButton,
       messageBoxPosition: 'center',
       predefined:
         Dimensions.get('window').height -
-        (feedButtonPosition.y - idkMeasure.height) -
+        (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
         feedButtonPosition.height * 2,
     }
   },
