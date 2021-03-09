@@ -24,6 +24,7 @@ import { sharedSessionStore } from './SessionStore'
 import { Toast } from 'native-base'
 import { Link } from '@react-navigation/native'
 import { startConfetti } from '@components/Confetti'
+import { logEvent } from '@utils/logEvent'
 
 export enum TutorialStep {
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
@@ -130,6 +131,7 @@ class OnboardingStore {
   }
 
   changeStepAndHole(step: TutorialStep, hole: RNHole = this.defaultHole) {
+    logEvent(step)
     this.currentHole = hole
     Animated.timing(this.animatedOpacity, {
       toValue: 0,
