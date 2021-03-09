@@ -529,8 +529,8 @@ export class AddTodoForm extends Component<{
             </TouchableOpacity>
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <View
-              onLayout={({ nativeEvent }) => {
-                DateRowNodeId = (nativeEvent as any).target as number
+              onLayout={({ nativeEvent: { target } }: any) => {
+                DateRowNodeId = target as number
               }}
             >
               <DateRow vm={this.props.vm} />

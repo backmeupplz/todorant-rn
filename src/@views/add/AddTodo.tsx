@@ -28,7 +28,6 @@ import {
   StatusBar,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
-//
 import { Button } from '@components/Button'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { startConfetti } from '@components/Confetti'

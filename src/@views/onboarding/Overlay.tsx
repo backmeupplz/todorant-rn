@@ -88,7 +88,6 @@ export class Overlay extends Component {
             setTimeout(async () => {
               const messageBoxNodeId = sharedOnboardingStore.messageBoxId
               if (!messageBoxNodeId) return
-
               if (
                 sharedOnboardingStore.stepObject.messageBoxPosition === 'center'
               ) {
@@ -107,16 +106,14 @@ export class Overlay extends Component {
                 const avatarPadding = 52
                 messageBoxPosition.height -= avatarPadding
                 messageBoxPosition.y += avatarPadding
-                const totalPosition =
+                const totalSize =
                   messageBoxPosition.y + messageBoxPosition.height
-                const idk =
-                  Math.abs(
-                    sharedOnboardingStore.currentHole.y - totalPosition
-                  ) + Math.abs(totalPosition)
-                if (idk < Dimensions.get('window').height) {
+                const totalPosition =
+                  Math.abs(sharedOnboardingStore.currentHole.y - totalSize) +
+                  Math.abs(totalSize)
+                if (totalPosition < Dimensions.get('window').height) {
                   Animated.timing(this.infoBoxY, {
-                    toValue:
-                      sharedOnboardingStore.currentHole.y - totalPosition,
+                    toValue: sharedOnboardingStore.currentHole.y - totalSize,
                     duration: 500,
                     easing: Easing.ease,
                   }).start()

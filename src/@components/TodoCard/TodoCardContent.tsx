@@ -62,8 +62,9 @@ export class TodoCardContent extends Component<{
           }}
           renderLeftActions={() => {
             if (
-              this.props.type === 'current' ||
-              this.props.type === 'planning'
+              (this.props.type === 'current' ||
+                this.props.type === 'planning') &&
+              !sharedOnboardingStore.tutorialWasShown
             ) {
               return (
                 <View
@@ -89,8 +90,9 @@ export class TodoCardContent extends Component<{
           }}
           renderRightActions={() => {
             if (
-              this.props.type === 'current' ||
-              this.props.type === 'planning'
+              (this.props.type === 'current' ||
+                this.props.type === 'planning') &&
+              !sharedOnboardingStore.tutorialWasShown
             ) {
               return (
                 <View
