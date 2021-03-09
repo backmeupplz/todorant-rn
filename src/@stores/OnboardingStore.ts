@@ -129,6 +129,22 @@ class OnboardingStore {
     return { height, width, x, y, borderRadius }
   }
 
+  changeStepAndHole(step: TutorialStep, hole: RNHole = this.defaultHole) {
+    this.currentHole = hole
+    Animated.timing(this.animatedOpacity, {
+      toValue: 0,
+      duration: 250,
+      easing: Easing.linear,
+    }).start(() => {
+      this.step = step
+      Animated.timing(this.animatedOpacity, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.linear,
+      }).start()
+    })
+  }
+
   async nextStep(
     nextStep = this.tutorialStepAsArray[
       this.tutorialStepAsArray.indexOf(this.step) + 1
@@ -152,24 +168,17 @@ class OnboardingStore {
               holePosition,
               currentStep.divider
             )
-            this.currentHole = buildedHole
-            this.step = nextStep
+            this.changeStepAndHole(nextStep, buildedHole)
+            return
           } catch (err) {
             // Do nothing
           }
-        } else {
-          this.currentHole = this.defaultHole
-          this.step = nextStep
         }
-      } else {
-        this.currentHole = this.defaultHole
-        this.step = nextStep
       }
     } else {
-      this.currentHole = this.defaultHole
-      this.step = nextStep
       this.stepObject = {}
     }
+    this.changeStepAndHole(nextStep)
   }
 
   get closeButtonText() {

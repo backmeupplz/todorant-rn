@@ -10,7 +10,6 @@ import {
   TutorialStep,
 } from '@stores/OnboardingStore'
 import Animated, { Easing } from 'react-native-reanimated'
-import { OnboardingVM } from './OnboardingVM'
 import { translate } from '@utils/i18n'
 import { reaction } from 'mobx'
 
@@ -18,8 +17,6 @@ const avatar = require('@assets/images/nikita.jpg')
 
 @observer
 export class MessageBox extends Component {
-  onboardingVM = new OnboardingVM()
-
   animatedValue = new Animated.Value(1)
 
   widthPosition = new Animated.Value(0)
@@ -128,7 +125,7 @@ export class MessageBox extends Component {
               preferred
               title={sharedOnboardingStore.nextStepButtonText}
               onPress={() => {
-                this.onboardingVM.changeBoxMessage()
+                sharedOnboardingStore.nextStep()
               }}
             />
           )}
