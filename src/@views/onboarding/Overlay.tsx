@@ -12,7 +12,6 @@ import {
   sharedOnboardingStore,
   TutorialStep,
 } from '@stores/OnboardingStore'
-import { Avatar } from '@views/onboarding/Avatar'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import {
@@ -103,22 +102,26 @@ export class Overlay extends Component {
                 const messageBoxPosition = await measurePosition(
                   messageBoxNodeId
                 )
-                const avatarPadding = 52
-                messageBoxPosition.height -= avatarPadding
-                messageBoxPosition.y += avatarPadding
                 const totalSize =
                   messageBoxPosition.y + messageBoxPosition.height
                 const totalPosition =
                   Math.abs(sharedOnboardingStore.currentHole.y - totalSize) +
                   Math.abs(totalSize)
-                if (totalPosition < Dimensions.get('window').height) {
+                if (
+                  totalPosition < Dimensions.get('window').height &&
+                  messageBoxPosition.height -
+                    sharedOnboardingStore.currentHole.y <=
+                    0
+                ) {
                   Animated.timing(this.infoBoxY, {
                     toValue: sharedOnboardingStore.currentHole.y - totalSize,
                     duration: 500,
                     easing: Easing.ease,
                   }).start()
-                  //
                 } else {
+                  const avatarPadding = 16
+                  messageBoxPosition.height += avatarPadding
+                  messageBoxPosition.y -= avatarPadding
                   Animated.timing(this.infoBoxY, {
                     toValue:
                       sharedOnboardingStore.currentHole.y -
@@ -128,7 +131,6 @@ export class Overlay extends Component {
                     easing: Easing.ease,
                   }).start()
                 }
-                sharedOnboardingStore.currentHole
               }
             })
           }

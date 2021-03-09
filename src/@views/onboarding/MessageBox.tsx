@@ -17,10 +17,11 @@ const avatar = require('@assets/images/nikita.jpg')
 
 @observer
 export class MessageBox extends Component {
-  animatedValue = new Animated.Value(1)
+  avatarOpacity = new Animated.Value(1)
 
-  widthPosition = new Animated.Value(0)
-  heightPosition = new Animated.Value(0)
+  showAvatar =
+    sharedOnboardingStore.step === TutorialStep.Intro ||
+    sharedOnboardingStore.step === TutorialStep.Explain
 
   componentDidMount() {
     reaction(
@@ -32,25 +33,13 @@ export class MessageBox extends Component {
           newValue === TutorialStep.Explain
         )
           return
-        const messageBox = await measurePosition(
-          sharedOnboardingStore.messageBoxId
-        )
-
-        Animated.timing(this.heightPosition, {
-          toValue: 52,
+        Animated.timing(this.avatarOpacity, {
+          toValue: 0,
           duration: 500,
-          easing: Easing.ease,
-        }).start()
-        Animated.timing(this.animatedValue, {
-          toValue: 0.5,
-          duration: 500,
-          easing: Easing.ease,
-        }).start()
-        Animated.timing(this.widthPosition, {
-          toValue: -(messageBox.width - 52),
-          duration: 500,
-          easing: Easing.ease,
-        }).start()
+          easing: Easing.linear,
+        }).start(() => {
+          this.showAvatar = false
+        })
       }
     )
   }
@@ -63,36 +52,29 @@ export class MessageBox extends Component {
           sharedOnboardingStore.messageBoxId = target
         }}
       >
-        <Animated.View
-          style={{
-            width: 104,
-            height: 104,
-            borderRadius: 52,
-            borderColor: sharedColors.backgroundColor,
-            borderWidth: 2,
-            transform: [
-              {
-                scaleX: this.animatedValue,
-              },
-              {
-                scaleY: this.animatedValue,
-              },
-              { translateX: this.widthPosition },
-              { translateY: this.heightPosition },
-            ],
-          }}
-        >
-          <Animated.Image
-            source={avatar}
-            resizeMode="cover"
+        {this.showAvatar && (
+          <Animated.View
             style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'cover',
-              borderRadius: 50,
+              width: 104,
+              height: 104,
+              borderRadius: 52,
+              borderColor: sharedColors.backgroundColor,
+              borderWidth: 2,
+              opacity: this.avatarOpacity,
             }}
-          />
-        </Animated.View>
+          >
+            <Animated.Image
+              source={avatar}
+              resizeMode="cover"
+              style={{
+                width: 100,
+                height: 100,
+                resizeMode: 'cover',
+                borderRadius: 50,
+              }}
+            />
+          </Animated.View>
+        )}
         <View
           style={{
             backgroundColor: sharedColors.backgroundColor,
