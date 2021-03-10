@@ -1586,6 +1586,11 @@
     lodash.isequal "^4.5.0"
     object-hash "^2.0.3"
 
+"@upacyxou/react-native-hole-view@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-hole-view/-/react-native-hole-view-3.0.1.tgz#632a58a31755859e90a93c6621b0d67dbd74b2d1"
+  integrity sha512-cKHZzuCn8YwY6ES5GVCYbolnABfjbF+FNWX0/MAva4HQ0fVsmZ3ZZ0ujX9tv5StJilzjL4K3t4QQJnIHPMYDZw==
+
 "@upacyxou/react-native-month@^1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.3.tgz#8c5ae39632f1acdddd201b03b3a6e107c5648202"
@@ -6778,11 +6783,6 @@ react-native-gesture-handler@^1.9.0:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
-
-react-native-hole-view@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-hole-view/-/react-native-hole-view-2.0.1.tgz#43177ff71348749e18ef139a28783db47e726e3f"
-  integrity sha512-VCcTCKFOBokppR9ULZcnhnx0ByfIrdEC+zLVS4+1LTwurdLxtwyqqTJAUmu3x0vfDw2miUPlVD8UYCkZz/4gXA==
 
 react-native-iap@^4.4.2:
   version "4.4.3"

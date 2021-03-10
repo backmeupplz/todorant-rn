@@ -416,7 +416,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
-  - RNHoleView (from `../node_modules/react-native-hole-view`)
+  - RNHoleView (from `../node_modules/@upacyxou/react-native-hole-view`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -544,7 +544,7 @@ EXTERNAL SOURCES:
   RNGoogleSignin:
     :path: "../node_modules/@react-native-community/google-signin"
   RNHoleView:
-    :path: "../node_modules/react-native-hole-view"
+    :path: "../node_modules/@upacyxou/react-native-hole-view"
   RNIap:
     :path: "../node_modules/react-native-iap"
   RNLocalize:

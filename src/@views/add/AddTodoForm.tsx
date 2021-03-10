@@ -165,8 +165,8 @@ class TextRow extends Component<{
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
         onLayout={({ nativeEvent }) => {
-          if (!TextRowNodeId) {
-            TextRowNodeId = (nativeEvent as any).target as number
+          TextRowNodeId = (nativeEvent as any).target as number
+          if (sharedOnboardingStore.step === TutorialStep.AddTask) {
             sharedOnboardingStore.nextStep()
           }
         }}

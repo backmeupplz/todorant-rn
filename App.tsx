@@ -93,6 +93,12 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        if (sharedOnboardingStore.tutorialWasShown) return
+        sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
+      })
+    }, 1)
   }
 
   render() {

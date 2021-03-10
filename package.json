@@ -77,7 +77,7 @@
     "react-native-device-info": "^5.5.3",
     "react-native-draggable-flatlist": "^2.4.0",
     "react-native-gesture-handler": "^1.9.0",
-    "react-native-hole-view": "^2.0.1",
+    "@upacyxou/react-native-hole-view": "3.0.1",
     "react-native-iap": "^4.4.2",
     "react-native-indicators": "^0.17.0",
     "react-native-linear-gradient": "^2.5.6",

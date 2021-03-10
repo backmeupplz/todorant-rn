@@ -46,6 +46,7 @@ import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
 import { ScrollView } from 'react-native'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export let ScrollViewRef: ScrollView
 export let SupportButtonNodeId: number
@@ -140,7 +141,9 @@ export class SettingsContent extends Component {
             <SectionHeader title={translate('info')} />
             <TableItem
               onPress={() => {
-                navigate('Intro')
+                sharedOnboardingStore.nextStep(TutorialStep.Intro)
+                sharedOnboardingStore.tutorialWasShown = false
+                navigate('Current')
               }}
             >
               <Text

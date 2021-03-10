@@ -6,7 +6,7 @@ import {
   IRNHoleViewAnimation,
   RNHole,
   RNHoleView,
-} from 'react-native-hole-view'
+} from '@upacyxou/react-native-hole-view'
 import {
   measurePosition,
   sharedOnboardingStore,
@@ -28,9 +28,8 @@ export let tutorialOverlayRef: Overlay
 @observer
 export class Overlay extends Component {
   state = {
-    animation: undefined,
     holes: [{ x: 0, y: 0, width: 0, height: 0, borderRadius: 60 }],
-  }
+  } as { holes: RNHole[] }
 
   opacityAnimationValue = new Animated.Value(0)
   messageBoxOpacity = new Animated.Value(1)
@@ -60,14 +59,6 @@ export class Overlay extends Component {
         duration: 500,
         easing: Easing.linear,
       }).start()
-    })
-    setTimeout(() => {
-      this.setState({
-        animation: {
-          timingFunction: ERNHoleViewTimingFunction.EASE_IN_OUT,
-          duration: 500,
-        },
-      })
     })
     reaction(
       () => sharedOnboardingStore.tutorialWasShown,
@@ -135,12 +126,6 @@ export class Overlay extends Component {
             })
           }
         )
-        this.setState({
-          animation: {
-            timingFunction: ERNHoleViewTimingFunction.EASE_IN_OUT,
-            duration: 500,
-          },
-        })
       }
     )
 
@@ -160,9 +145,12 @@ export class Overlay extends Component {
   }
 
   render() {
-    return this.shouldRender ? (
+    return (
       <Animated.View
+        pointerEvents={'box-none'}
         style={{
+          maxWidth: this.shouldRender ? undefined : 0,
+          maxHeight: this.shouldRender ? undefined : 0,
           position: 'absolute',
           top: 0,
           right: 0,
@@ -178,7 +166,7 @@ export class Overlay extends Component {
       >
         {sharedOnboardingStore.messageBoxAppear && (
           <Animated.View
-            pointerEvents="box-none"
+            pointerEvents={this.shouldRender ? undefined : 'box-none'}
             style={{
               opacity: this.messageBoxOpacity,
               width: '100%',
@@ -196,18 +184,24 @@ export class Overlay extends Component {
           </Animated.View>
         )}
         <Animated.View
-          pointerEvents="box-only"
+          pointerEvents={this.shouldRender ? 'box-only' : 'box-none'}
           style={{
             position: 'absolute',
             top: 0,
             right: 0,
             bottom: 0,
             left: 0,
+            maxWidth: this.shouldRender ? undefined : 0,
+            maxHeight: this.shouldRender ? undefined : 0,
             opacity: this.opacityAnimationValue,
           }}
         >
           <RNHoleView
-            animation={this.state.animation}
+            pointerEvents={'box-none'}
+            animation={{
+              duration: 500,
+              timingFunction: ERNHoleViewTimingFunction.LINEAR,
+            }}
             style={{
               position: 'absolute',
               top: 0,
@@ -220,6 +214,6 @@ export class Overlay extends Component {
           />
         </Animated.View>
       </Animated.View>
-    ) : null
+    )
   }
 }

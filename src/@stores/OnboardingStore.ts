@@ -5,6 +5,7 @@ import { persist } from 'mobx-persist'
 import {
   Dimensions,
   findNodeHandle,
+  InteractionManager,
   Keyboard,
   Linking,
   UIManager,
@@ -14,7 +15,7 @@ import {
   ERNHoleViewTimingFunction,
   IRNHoleViewAnimation,
   RNHole,
-} from 'react-native-hole-view'
+} from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
 import { hydrate } from './hydration/hydrate'
 import { hydrateStore } from './hydration/hydrateStore'
@@ -28,8 +29,8 @@ import { logEvent } from '@utils/logEvent'
 
 export enum TutorialStep {
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
-  Close = 'Close',
   Finished = 'Finished',
+  Close = 'Close',
   Intro = 'Intro',
   Explain = 'Explain',
   AddTask = 'AddTask',
@@ -112,10 +113,11 @@ class OnboardingStore {
     ],
   }
 
+  @persist @observable savedStep?: TutorialStep
   @observable messageBoxAppear = true
   @observable step = TutorialStep.Intro
   @observable previousStep = TutorialStep.Intro
-  @observable tutorialWasShown = false
+  @persist @observable tutorialWasShown = false
 
   buildRnHole(
     { x, y, width, height, borderRadius = 128 }: RNHole,
@@ -159,6 +161,9 @@ class OnboardingStore {
       // Getting our nodeId
       const currentStep = await getCurrentStep()
       if (currentStep) {
+        if (!currentStep.dontSave) {
+          this.savedStep = nextStep
+        }
         this.stepObject = currentStep
         if (currentStep.nodeId) {
           try {
@@ -170,17 +175,24 @@ class OnboardingStore {
               holePosition,
               currentStep.divider
             )
-            this.changeStepAndHole(nextStep, buildedHole)
-            return
+            this.currentHole = buildedHole
+            this.step = nextStep
           } catch (err) {
             // Do nothing
           }
+        } else {
+          this.currentHole = this.defaultHole
+          this.step = nextStep
         }
+      } else {
+        this.currentHole = this.defaultHole
+        this.step = nextStep
       }
     } else {
+      this.currentHole = this.defaultHole
+      this.step = nextStep
       this.stepObject = {}
     }
-    this.changeStepAndHole(nextStep)
   }
 
   get closeButtonText() {
@@ -203,7 +215,7 @@ class OnboardingStore {
 export const sharedOnboardingStore = new OnboardingStore()
 hydrate('OnboardingStore', sharedOnboardingStore).then(() => {
   sharedOnboardingStore.hydrated = true
-  hydrateStore('SessionStore')
+  hydrateStore('OnboardingStore')
 })
 
 interface MessageBoxButton {
@@ -220,6 +232,7 @@ interface Step {
   notShowClose?: boolean
   predefined?: number
   divider?: number
+  dontSave?: boolean
 }
 
 // We are dynamiccaly import our nodeIds
@@ -241,6 +254,8 @@ export const AllStages = {
       message: 'article',
       action: () => {
         sharedOnboardingStore.tutorialWasShown = true
+        sharedOnboardingStore.step = TutorialStep.Intro
+        sharedOnboardingStore.previousStep = TutorialStep.Intro
         navigate('Rules')
       },
       preferred: true,
@@ -249,6 +264,8 @@ export const AllStages = {
       message: 'closeEverything',
       action: () => {
         sharedOnboardingStore.tutorialWasShown = true
+        sharedOnboardingStore.step = TutorialStep.Intro
+        sharedOnboardingStore.previousStep = TutorialStep.Intro
         Toast.show({
           text: `${translate('onboarding.Close.toast')}`,
         })
@@ -263,46 +280,51 @@ export const AllStages = {
       notShowContinue: true,
       notShowClose: true,
       messageBoxPosition: 'center',
+      dontSave: true,
     }
   },
   [TutorialStep.AddTask]: async () => {
     const nodeId = (await import('@components/PlusButton')).PlusButtonLayout
     return { nodeId, notShowContinue: true }
   },
-  [TutorialStep.AddText]: async () => {
-    navigate('AddTodo')
-    const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
-    return { nodeId, notShowContinue: true, divider: 16 }
+  [TutorialStep.AddText]: () => {
+    return new Promise(async (resolve, reject) => {
+      navigate('AddTodo')
+      InteractionManager.runAfterInteractions(async () => {
+        const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
+        resolve({ nodeId, notShowContinue: true, divider: 16 })
+      })
+    })
   },
   [TutorialStep.SelectDate]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
-    return { nodeId, divider: 16 }
+    return { nodeId, divider: 16, dontSave: true }
   },
   [TutorialStep.SelectFrog]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).FrogRowNodeId
-    return { nodeId, divider: 16 }
+    return { nodeId, divider: 16, dontSave: true }
   },
   [TutorialStep.SelectCompleted]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).CompletedRowNodeId
-    return { nodeId, divider: 16 }
+    return { nodeId, divider: 16, dontSave: true }
   },
   [TutorialStep.ShowMore]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).ShowMoreRowNodeId
-    return { nodeId, notShowContinue: true, divider: 16 }
+    return { nodeId, notShowContinue: true, divider: 16, dontSave: true }
   },
   [TutorialStep.AddAnotherTask]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@components/AddButton')).AddButonNodeId
-    return { nodeId }
+    return { nodeId, dontSave: true }
   },
   [TutorialStep.AddTodoComplete]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodo')).SaveButtonNodeId
-    return { nodeId, notShowContinue: true, divider: 12 }
+    return { nodeId, notShowContinue: true, divider: 12, dontSave: true }
   },
   [TutorialStep.ExplainCurrent]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardContent'))
@@ -321,24 +343,29 @@ export const AllStages = {
   },
   [TutorialStep.BreakdownTodo]: async () => {
     const nodeId = (await import('@views/add/AddTodo')).BreakdownTodoNodeId
-    return { nodeId, divider: 16 }
+    return { nodeId, divider: 16, dontSave: true }
   },
   [TutorialStep.BreakdownTodoAction]: async () => {
     const nodeId = findNodeHandle(rootRef)
-    return { nodeId, notShowContinue: true, notShowClose: true }
+    return { nodeId, notShowContinue: true, notShowClose: true, dontSave: true }
   },
   [TutorialStep.PlanningExplain]: async () => {
     navigate('Planning')
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.PlanningExplain2]: async () => {
+    navigate('Planning')
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainSearchAndCompleted]: async () => {
-    navigate('Planning')
-    const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
-      .PlanningHeaderNodeId
-    return { nodeId, messageBoxPosition: 'center' }
+    return new Promise(async (resolve, reject) => {
+      navigate('Planning')
+      InteractionManager.runAfterInteractions(async () => {
+        const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
+          .PlanningHeaderNodeId
+        resolve({ nodeId, messageBoxPosition: 'center' })
+      })
+    })
   },
   [TutorialStep.ExplainReccuring]: async () => {
     navigate('Settings')
@@ -357,9 +384,11 @@ export const AllStages = {
     }
   },
   [TutorialStep.ExplainPricing]: async () => {
+    navigate('Settings')
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainSettings]: async () => {
+    navigate('Settings')
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainNotifications]: async () => {
@@ -412,16 +441,19 @@ export const AllStages = {
     }
   },
   [TutorialStep.Explain]: async () => {
+    navigate('Current')
     return {
       messageBoxPosition: 'center',
     }
   },
   [TutorialStep.ExplainHashtags]: async () => {
+    navigate('Planning')
     return {
       messageBoxPosition: 'center',
     }
   },
   [TutorialStep.ExplainMultiplatform]: async () => {
+    navigate('Settings')
     const todorantWebsiteButton = {
       preferred: true,
       message: 'website',
@@ -435,42 +467,60 @@ export const AllStages = {
     }
   },
   [TutorialStep.Feedback]: async () => {
-    const scrollView = (await import('@views/settings/Settings')).ScrollViewRef
-    const feedButton = (await import('@views/settings/Settings'))
-      .SupportButtonNodeId
-    const feedButtonPosition = await measurePosition(feedButton)
-    const SettingsBeforeFeedbackButton = (
-      await import('@views/settings/Settings')
-    ).SettingsBeforeFeedbackButton
-    const measuredSettingsBeforeFeedback = await measurePosition(
-      SettingsBeforeFeedbackButton
-    )
-    scrollView.scrollToEnd()
-    return {
-      nodeId: feedButton,
-      messageBoxPosition: 'center',
-      predefined:
-        Dimensions.get('window').height -
-        (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
-        feedButtonPosition.height * 2,
-    }
+    navigate('Settings')
+    return new Promise(async (resolve, reject) => {
+      InteractionManager.runAfterInteractions(async () => {
+        const scrollView = (await import('@views/settings/Settings'))
+          .ScrollViewRef
+        const feedButton = (await import('@views/settings/Settings'))
+          .SupportButtonNodeId
+        const feedButtonPosition = await measurePosition(feedButton)
+        const SettingsBeforeFeedbackButton = (
+          await import('@views/settings/Settings')
+        ).SettingsBeforeFeedbackButton
+        const measuredSettingsBeforeFeedback = await measurePosition(
+          SettingsBeforeFeedbackButton
+        )
+        scrollView.scrollToEnd()
+        resolve({
+          nodeId: feedButton,
+          messageBoxPosition: 'center',
+          predefined:
+            Dimensions.get('window').height -
+            (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
+            feedButtonPosition.height * 2,
+        })
+      })
+    })
   },
   [TutorialStep.Rules]: async () => {
-    const scrollView = (await import('@views/settings/Settings')).ScrollViewRef
-    scrollView.scrollTo({ y: 0 })
-    const nodeId = (await import('@views/settings/Settings')).HowToUseNodeId
-    return {
-      nodeId,
-    }
+    navigate('Settings')
+    return new Promise(async (resolve, reject) => {
+      InteractionManager.runAfterInteractions(async () => {
+        const scrollView = (await import('@views/settings/Settings'))
+          .ScrollViewRef
+        scrollView.scrollTo({ y: 0 })
+        const nodeId = (await import('@views/settings/Settings')).HowToUseNodeId
+        resolve({
+          nodeId,
+        })
+      })
+    })
   },
   [TutorialStep.Info]: async () => {
-    const scrollView = (await import('@views/settings/Settings')).ScrollViewRef
-    scrollView.scrollTo({ y: 0 })
-    const nodeId = (await import('@components/InfoButton')).InfoButtonNodeId
-    return {
-      nodeId,
-      messageBoxPosition: 'center',
-    }
+    navigate('Settings')
+    return new Promise(async (resolve, reject) => {
+      InteractionManager.runAfterInteractions(async () => {
+        const scrollView = (await import('@views/settings/Settings'))
+          .ScrollViewRef
+        scrollView.scrollTo({ y: 0 })
+        const nodeId = (await import('@components/InfoButton')).InfoButtonNodeId
+        resolve({
+          nodeId,
+          messageBoxPosition: 'center',
+        })
+      })
+    })
   },
   [TutorialStep.Intro]: async () => {
     const closeButton = {
