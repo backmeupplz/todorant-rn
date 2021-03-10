@@ -175,22 +175,18 @@ class OnboardingStore {
               holePosition,
               currentStep.divider
             )
-            this.currentHole = buildedHole
-            this.step = nextStep
+            this.changeStepAndHole(nextStep, buildedHole)
           } catch (err) {
             // Do nothing
           }
         } else {
-          this.currentHole = this.defaultHole
-          this.step = nextStep
+          this.changeStepAndHole(nextStep, this.defaultHole)
         }
       } else {
-        this.currentHole = this.defaultHole
-        this.step = nextStep
+        this.changeStepAndHole(nextStep, this.defaultHole)
       }
     } else {
-      this.currentHole = this.defaultHole
-      this.step = nextStep
+      this.changeStepAndHole(nextStep, this.defaultHole)
       this.stepObject = {}
     }
   }
