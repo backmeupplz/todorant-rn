@@ -164,7 +164,6 @@ class OnboardingStore {
         if (!currentStep.dontSave) {
           this.savedStep = nextStep
         }
-        this.stepObject = currentStep
         if (currentStep.nodeId) {
           try {
             const holePosition = await measurePosition(currentStep.nodeId)
@@ -182,6 +181,7 @@ class OnboardingStore {
         } else {
           this.changeStepAndHole(nextStep, this.defaultHole)
         }
+        this.stepObject = currentStep
       } else {
         this.changeStepAndHole(nextStep, this.defaultHole)
       }
