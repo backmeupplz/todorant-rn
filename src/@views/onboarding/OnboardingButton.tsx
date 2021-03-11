@@ -1,4 +1,5 @@
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
@@ -44,7 +45,11 @@ export class OnboardingButton extends Component<{
           >
             <Text
               style={{
-                color: this.props.preferred ? 'white' : sharedColors.textColor,
+                color: this.props.preferred
+                  ? 'white'
+                  : sharedSettingsStore.isDark
+                  ? 'black'
+                  : sharedColors.textColor,
               }}
             >
               {this.props.title}

@@ -379,6 +379,17 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = (isHardware = false) => {
+    if (!sharedOnboardingStore.tutorialWasShown) {
+      if (
+        sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+        sharedOnboardingStore.step === TutorialStep.BreakdownTodo
+      )
+        sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
+      else {
+        sharedOnboardingStore.nextStep(TutorialStep.Close)
+      }
+      return true
+    }
     if (!this.isDirty()) {
       if (isHardware) {
         // Do nothing
@@ -637,7 +648,13 @@ class AddTodoContent extends Component<{
                 }}
               >
                 <TouchableOpacity
-                  disabled={!sharedOnboardingStore.tutorialWasShown}
+                  disabled={
+                    !sharedOnboardingStore.tutorialWasShown &&
+                    !(
+                      sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                    )
+                  }
                   onPress={() => {
                     this.addTodo()
                   }}

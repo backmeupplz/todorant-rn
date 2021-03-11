@@ -178,7 +178,12 @@ class TextRow extends Component<{
         }}
       >
         <Input
-          multiline
+          onSubmitEditing={() => {
+            if (this.props.vm.text) {
+              sharedOnboardingStore.nextStep()
+            }
+          }}
+          multiline={sharedOnboardingStore.tutorialWasShown}
           placeholder={translate('todo.create.text')}
           value={this.props.vm.text}
           onChangeText={(text) => {
@@ -534,49 +539,49 @@ export class AddTodoForm extends Component<{
               }}
             >
               <DateRow vm={this.props.vm} />
+              {this.props.vm.showDatePicker && (
+                <Calendar
+                  minDate={__DEV__ ? undefined : getDateString(this.minDate)}
+                  current={this.props.vm.datePickerValue || new Date()}
+                  markedDates={this.props.vm.markedDate}
+                  onDayPress={(day) => {
+                    this.props.vm.datePickerValue = day.dateString
+                    this.props.vm.showDatePicker = false
+                  }}
+                  theme={{
+                    backgroundColor: sharedColors.backgroundColor,
+                    calendarBackground: sharedColors.backgroundColor,
+                    selectedDayBackgroundColor: 'dodgerblue',
+                    textDisabledColor: sharedColors.placeholderColor,
+                    dayTextColor: sharedColors.textColor,
+                    textSectionTitleColor: sharedColors.textColor,
+                    monthTextColor: sharedColors.textColor,
+                  }}
+                  firstDay={sharedSettingsStore.firstDayOfWeekSafe}
+                  hideArrows={false}
+                  renderArrow={(direction) =>
+                    direction === 'left' ? (
+                      <Icon
+                        type="MaterialIcons"
+                        name="keyboard-arrow-left"
+                        style={{
+                          color: sharedColors.textColor,
+                        }}
+                      />
+                    ) : (
+                      <Icon
+                        type="MaterialIcons"
+                        name="keyboard-arrow-right"
+                        style={{
+                          color: sharedColors.textColor,
+                        }}
+                      />
+                    )
+                  }
+                />
+              )}
+              <MonthRow vm={this.props.vm} />
             </View>
-            {this.props.vm.showDatePicker && (
-              <Calendar
-                minDate={__DEV__ ? undefined : getDateString(this.minDate)}
-                current={this.props.vm.datePickerValue || new Date()}
-                markedDates={this.props.vm.markedDate}
-                onDayPress={(day) => {
-                  this.props.vm.datePickerValue = day.dateString
-                  this.props.vm.showDatePicker = false
-                }}
-                theme={{
-                  backgroundColor: sharedColors.backgroundColor,
-                  calendarBackground: sharedColors.backgroundColor,
-                  selectedDayBackgroundColor: 'dodgerblue',
-                  textDisabledColor: sharedColors.placeholderColor,
-                  dayTextColor: sharedColors.textColor,
-                  textSectionTitleColor: sharedColors.textColor,
-                  monthTextColor: sharedColors.textColor,
-                }}
-                firstDay={sharedSettingsStore.firstDayOfWeekSafe}
-                hideArrows={false}
-                renderArrow={(direction) =>
-                  direction === 'left' ? (
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-left"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  ) : (
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-right"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  )
-                }
-              />
-            )}
-            <MonthRow vm={this.props.vm} />
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
                 localeLanguage={languageTag.substr(0, 2)}

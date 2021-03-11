@@ -95,7 +95,11 @@ class App extends Component {
     })
     setTimeout(() => {
       requestAnimationFrame(() => {
-        if (sharedOnboardingStore.tutorialWasShown) return
+        if (
+          sharedOnboardingStore.tutorialWasShown ||
+          !sharedOnboardingStore.savedStep
+        )
+          return
         sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
       })
     }, 1)

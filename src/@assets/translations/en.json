@@ -387,7 +387,7 @@
       "nextStepButton": "Continue"
     },
     "BreakdownTodo": {
-      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of anything that needs to be done, because the original task will… vanish!",
+      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of anything that needs to be done, because the original task will… vanish!",
       "nextStepButton": "Continue"
     },
     "BreakdownVanish": {

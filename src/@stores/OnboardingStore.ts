@@ -120,8 +120,9 @@ class OnboardingStore {
   @persist @observable tutorialWasShown = false
 
   buildRnHole(
-    { x, y, width, height, borderRadius = 128 }: RNHole,
-    divider = 2
+    { x, y, width, height }: RNHole,
+    divider = 2,
+    borderRadius = 128
   ) {
     const halfOfHeight = height / divider
     const halfOfWidth = width / divider
@@ -132,7 +133,11 @@ class OnboardingStore {
     return { height, width, x, y, borderRadius }
   }
 
-  changeStepAndHole(step: TutorialStep, hole: RNHole = this.defaultHole) {
+  changeStepAndHole(
+    step: TutorialStep,
+    hole: RNHole = this.defaultHole,
+    stepObject?: Step
+  ) {
     logEvent(step)
     this.currentHole = hole
     Animated.timing(this.animatedOpacity, {
@@ -141,6 +146,9 @@ class OnboardingStore {
       easing: Easing.linear,
     }).start(() => {
       this.step = step
+      if (stepObject) {
+        this.stepObject = stepObject
+      }
       Animated.timing(this.animatedOpacity, {
         toValue: 1,
         duration: 250,
@@ -154,7 +162,12 @@ class OnboardingStore {
       this.tutorialStepAsArray.indexOf(this.step) + 1
     ]
   ) {
-    this.previousStep = this.step
+    if (
+      this.step !== TutorialStep.Close &&
+      this.step !== TutorialStep.BreakdownLessThanTwo
+    ) {
+      this.previousStep = this.step
+    }
     // Here we are checking does currentStep exists at all. If not, we are definging empty hole
     const getCurrentStep = AllStages[nextStep]
     if (getCurrentStep) {
@@ -172,16 +185,17 @@ class OnboardingStore {
             }
             const buildedHole = this.buildRnHole(
               holePosition,
-              currentStep.divider
+              currentStep.divider,
+              currentStep.borderRadius
             )
-            this.changeStepAndHole(nextStep, buildedHole)
+            this.changeStepAndHole(nextStep, buildedHole, currentStep)
           } catch (err) {
             // Do nothing
           }
         } else {
-          this.changeStepAndHole(nextStep, this.defaultHole)
+          this.changeStepAndHole(nextStep, this.defaultHole, currentStep)
         }
-        this.stepObject = currentStep
+        // this.stepObject = currentStep
       } else {
         this.changeStepAndHole(nextStep, this.defaultHole)
       }
@@ -229,6 +243,7 @@ interface Step {
   predefined?: number
   divider?: number
   dontSave?: boolean
+  borderRadius?: number
 }
 
 // We are dynamiccaly import our nodeIds
@@ -320,7 +335,13 @@ export const AllStages = {
   [TutorialStep.AddTodoComplete]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodo')).SaveButtonNodeId
-    return { nodeId, notShowContinue: true, divider: 12, dontSave: true }
+    return {
+      nodeId,
+      notShowContinue: true,
+      divider: 16,
+      dontSave: true,
+      borderRadius: 10,
+    }
   },
   [TutorialStep.ExplainCurrent]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardContent'))
@@ -405,6 +426,7 @@ export const AllStages = {
       message: 'nextStepButton',
       action: () => {
         sharedOnboardingStore.tutorialWasShown = true
+        navigate('Current')
         startConfetti()
       },
       preferred: true,

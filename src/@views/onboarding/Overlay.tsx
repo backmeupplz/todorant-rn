@@ -15,6 +15,7 @@ import {
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import {
+  BackHandler,
   Button,
   Dimensions,
   Keyboard,
@@ -100,9 +101,10 @@ export class Overlay extends Component {
                   Math.abs(totalSize)
                 if (
                   totalPosition < Dimensions.get('window').height &&
-                  messageBoxPosition.height -
-                    sharedOnboardingStore.currentHole.y <=
-                    0
+                  sharedOnboardingStore.currentHole.y +
+                    sharedOnboardingStore.currentHole.height +
+                    messageBoxPosition.y >
+                    Dimensions.get('window').height
                 ) {
                   Animated.timing(this.infoBoxY, {
                     toValue: sharedOnboardingStore.currentHole.y - totalSize,
