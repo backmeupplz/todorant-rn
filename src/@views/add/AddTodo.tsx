@@ -493,7 +493,9 @@ class AddTodoContent extends Component<{
                 this.isBreakdown && !!this.breakdownTodo && (
                   <View
                     onLayout={({ nativeEvent: { target } }: any) => {
-                      if (!BreakdownTodoNodeId) {
+                      if (
+                        sharedOnboardingStore.step === TutorialStep.Breakdown
+                      ) {
                         BreakdownTodoNodeId = target
                         sharedOnboardingStore.nextStep()
                       }

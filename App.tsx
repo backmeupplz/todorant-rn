@@ -4,7 +4,7 @@ import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/purchases'
-import { Root, StyleProvider, Text, View } from 'native-base'
+import { Icon, Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
@@ -47,9 +47,10 @@ import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
 import Animated from 'react-native-reanimated'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export let rootRef: any
+export let closeOnboardingButtonNode: number
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -111,7 +112,7 @@ class App extends Component {
     languageTag = `${languageTag}`
 
     return (
-      <Root ref={(e) => (rootRef = e)}>
+      <Root ref={(ref) => (rootRef = ref)}>
         <NavigationContainer ref={navigationRef}>
           <StatusBar
             backgroundColor={sharedColors.backgroundColor}
@@ -279,6 +280,24 @@ class App extends Component {
           <ConfettiView />
         </NavigationContainer>
         <Overlay />
+        {!sharedOnboardingStore.tutorialWasShown &&
+          !sharedOnboardingStore.stepObject.notShowClose && (
+            <TouchableOpacity
+              style={sharedOnboardingStore.closeOnboardingStyle}
+              onPress={() => {
+                sharedOnboardingStore.nextStep(TutorialStep.Close)
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name="close"
+                style={{
+                  color: 'white',
+                  fontSize: 48,
+                }}
+              />
+            </TouchableOpacity>
+          )}
       </Root>
     )
   }

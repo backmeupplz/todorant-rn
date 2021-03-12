@@ -6,6 +6,7 @@ import { Alert, AlertButton } from 'react-native'
 import { observer } from 'mobx-react'
 import CustomIcon from '@components/CustomIcon'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { navigationRef } from '@utils/navigation'
 
 export let InfoButtonNodeId: number
 
@@ -19,6 +20,8 @@ export class InfoButtonContent extends Component<{
     return (
       <TouchableOpacity
         onLayout={({ nativeEvent: { target } }: any) => {
+          if (navigationRef.current?.getCurrentRoute()?.name !== 'Settings')
+            return
           InfoButtonNodeId = target
         }}
         style={{

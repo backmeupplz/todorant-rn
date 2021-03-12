@@ -7,8 +7,9 @@ import CustomIcon from '@components/CustomIcon'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { findNodeHandle, LayoutRectangle, UIManager } from 'react-native'
 import { observer } from 'mobx-react'
+import { navigationRef } from '@utils/navigation'
 
-export let PlusButtonLayout = {}
+export let PlusButtonLayout: number
 
 @observer
 export class PlusButton extends Component {
@@ -16,7 +17,12 @@ export class PlusButton extends Component {
     return (
       <View
         onLayout={({ nativeEvent: { target } }: any) => {
-          PlusButtonLayout = target
+          if (
+            navigationRef.current?.getCurrentRoute()?.name === 'Current' &&
+            !PlusButtonLayout
+          ) {
+            PlusButtonLayout = target
+          }
         }}
         style={{
           width: 48,

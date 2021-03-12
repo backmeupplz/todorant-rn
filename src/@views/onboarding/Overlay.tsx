@@ -3,26 +3,13 @@ import Animated, { Easing } from 'react-native-reanimated'
 import { MessageBox } from '@views/onboarding/MessageBox'
 import {
   ERNHoleViewTimingFunction,
-  IRNHoleViewAnimation,
   RNHole,
   RNHoleView,
 } from '@upacyxou/react-native-hole-view'
-import {
-  measurePosition,
-  sharedOnboardingStore,
-  TutorialStep,
-} from '@stores/OnboardingStore'
+import { measurePosition, sharedOnboardingStore } from '@stores/OnboardingStore'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
-import {
-  BackHandler,
-  Button,
-  Dimensions,
-  Keyboard,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Dimensions, Keyboard } from 'react-native'
 
 export let tutorialOverlayRef: Overlay
 
@@ -77,6 +64,7 @@ export class Overlay extends Component {
           },
           () => {
             setTimeout(async () => {
+              const avatarPadding = 16
               const messageBoxNodeId = sharedOnboardingStore.messageBoxId
               if (!messageBoxNodeId) return
               if (
@@ -107,12 +95,13 @@ export class Overlay extends Component {
                     Dimensions.get('window').height
                 ) {
                   Animated.timing(this.infoBoxY, {
-                    toValue: sharedOnboardingStore.currentHole.y - totalSize,
+                    toValue:
+                      sharedOnboardingStore.currentHole.y -
+                      (totalSize + avatarPadding),
                     duration: 500,
                     easing: Easing.ease,
                   }).start()
                 } else {
-                  const avatarPadding = 16
                   messageBoxPosition.height += avatarPadding
                   messageBoxPosition.y -= avatarPadding
                   Animated.timing(this.infoBoxY, {

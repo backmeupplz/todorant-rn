@@ -128,14 +128,6 @@ export class MessageBox extends Component {
                 )
               }
             )}
-          {!sharedOnboardingStore.stepObject.notShowClose && (
-            <OnboardingButton
-              title={sharedOnboardingStore.closeButtonText}
-              onPress={() => {
-                sharedOnboardingStore.nextStep(TutorialStep.Close)
-              }}
-            />
-          )}
         </View>
       </View>
     )

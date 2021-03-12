@@ -6,26 +6,20 @@ import {
   Dimensions,
   findNodeHandle,
   InteractionManager,
-  Keyboard,
   Linking,
+  StyleProp,
   UIManager,
-  View,
+  ViewStyle,
 } from 'react-native'
-import {
-  ERNHoleViewTimingFunction,
-  IRNHoleViewAnimation,
-  RNHole,
-} from '@upacyxou/react-native-hole-view'
+import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
 import { hydrate } from './hydration/hydrate'
 import { hydrateStore } from './hydration/hydrateStore'
 import { navigate } from '@utils/navigation'
-import { sharedAppStateStore } from './AppStateStore'
-import { sharedSessionStore } from './SessionStore'
 import { Toast } from 'native-base'
-import { Link } from '@react-navigation/native'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
+import { sharedSessionStore } from './SessionStore'
 
 export enum TutorialStep {
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
@@ -119,6 +113,19 @@ class OnboardingStore {
   @observable previousStep = TutorialStep.Intro
   @persist @observable tutorialWasShown = false
 
+  @computed get closeOnboardingStyle() {
+    const basicStyle = {
+      alignSelf: 'flex-end',
+      position: 'absolute',
+      zIndex: 1,
+      padding: 12,
+    } as StyleProp<ViewStyle>
+    return this.step === TutorialStep.AddAnotherTask ||
+      this.step === TutorialStep.ExplainSearchAndCompleted
+      ? Object.assign(basicStyle, { bottom: 0 })
+      : Object.assign(basicStyle, { top: 0 })
+  }
+
   buildRnHole(
     { x, y, width, height }: RNHole,
     divider = 2,
@@ -162,6 +169,7 @@ class OnboardingStore {
       this.tutorialStepAsArray.indexOf(this.step) + 1
     ]
   ) {
+    sharedOnboardingStore.stepObject.messageBoxPosition = undefined
     if (
       this.step !== TutorialStep.Close &&
       this.step !== TutorialStep.BreakdownLessThanTwo
@@ -190,7 +198,8 @@ class OnboardingStore {
             )
             this.changeStepAndHole(nextStep, buildedHole, currentStep)
           } catch (err) {
-            // Do nothing
+            console.log(err)
+            logEvent(`onboardingError-${nextStep}`)
           }
         } else {
           this.changeStepAndHole(nextStep, this.defaultHole, currentStep)
@@ -265,8 +274,7 @@ export const AllStages = {
       message: 'article',
       action: () => {
         sharedOnboardingStore.tutorialWasShown = true
-        sharedOnboardingStore.step = TutorialStep.Intro
-        sharedOnboardingStore.previousStep = TutorialStep.Intro
+        sharedOnboardingStore.nextStep(TutorialStep.Intro)
         navigate('Rules')
       },
       preferred: true,
@@ -275,8 +283,7 @@ export const AllStages = {
       message: 'closeEverything',
       action: () => {
         sharedOnboardingStore.tutorialWasShown = true
-        sharedOnboardingStore.step = TutorialStep.Intro
-        sharedOnboardingStore.previousStep = TutorialStep.Intro
+        sharedOnboardingStore.nextStep(TutorialStep.Intro)
         Toast.show({
           text: `${translate('onboarding.Close.toast')}`,
         })
@@ -310,7 +317,7 @@ export const AllStages = {
   [TutorialStep.SelectDate]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
-    return { nodeId, divider: 16, dontSave: true }
+    return { nodeId, divider: 16, dontSave: true, borderRadius: 32 }
   },
   [TutorialStep.SelectFrog]: async () => {
     navigate('AddTodo')
@@ -541,16 +548,8 @@ export const AllStages = {
     })
   },
   [TutorialStep.Intro]: async () => {
-    const closeButton = {
-      message: 'closeButtonText',
-      action: () => {
-        sharedOnboardingStore.nextStep(TutorialStep.Close)
-      },
-    }
     return {
       messageBoxPosition: 'center',
-      notShowClose: true,
-      additionalButtons: [closeButton],
     }
   },
 } as { [step in TutorialStep]: (() => Promise<Step | undefined>) | undefined }

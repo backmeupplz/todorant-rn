@@ -179,7 +179,10 @@ class TextRow extends Component<{
       >
         <Input
           onSubmitEditing={() => {
-            if (this.props.vm.text) {
+            if (
+              this.props.vm.text &&
+              sharedOnboardingStore.step === TutorialStep.AddText
+            ) {
               sharedOnboardingStore.nextStep()
             }
           }}
