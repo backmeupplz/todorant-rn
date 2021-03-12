@@ -19,8 +19,7 @@ export class OnboardingButton extends Component<{
       <TouchableOpacity
         onPress={this.props.onPress}
         style={{
-          marginHorizontal: 8,
-          marginVertical: 9,
+          marginTop: 12,
         }}
       >
         <LinearGradient

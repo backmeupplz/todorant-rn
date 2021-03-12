@@ -11,7 +11,7 @@ import {
 } from '@stores/OnboardingStore'
 import Animated, { Easing } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
-import { reaction } from 'mobx'
+import { observable, reaction } from 'mobx'
 
 const avatar = require('@assets/images/nikita.jpg')
 
@@ -19,7 +19,7 @@ const avatar = require('@assets/images/nikita.jpg')
 export class MessageBox extends Component {
   avatarOpacity = new Animated.Value(1)
 
-  showAvatar =
+  @observable showAvatar =
     sharedOnboardingStore.step === TutorialStep.Intro ||
     sharedOnboardingStore.step === TutorialStep.Explain
 
@@ -27,19 +27,25 @@ export class MessageBox extends Component {
     reaction(
       () => sharedOnboardingStore.step,
       async (newValue) => {
-        if (!sharedOnboardingStore.messageBoxId) return
         if (
           newValue === TutorialStep.Intro ||
           newValue === TutorialStep.Explain
-        )
-          return
-        Animated.timing(this.avatarOpacity, {
-          toValue: 0,
-          duration: 500,
-          easing: Easing.linear,
-        }).start(() => {
-          this.showAvatar = false
-        })
+        ) {
+          this.showAvatar = true
+          Animated.timing(this.avatarOpacity, {
+            toValue: 1,
+            duration: 500,
+            easing: Easing.linear,
+          }).start(() => {})
+        } else {
+          Animated.timing(this.avatarOpacity, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.linear,
+          }).start(() => {
+            this.showAvatar = false
+          })
+        }
       }
     )
   }
@@ -55,6 +61,7 @@ export class MessageBox extends Component {
         {this.showAvatar && (
           <Animated.View
             style={{
+              margin: 12,
               width: 104,
               height: 104,
               borderRadius: 52,

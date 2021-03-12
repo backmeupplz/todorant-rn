@@ -451,6 +451,14 @@
     "Info": {
       "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner, most of the time, they’ll provide you with useful insight.",
       "nextStepButton": "Continue"
+    },
+    "BreakDownCompletedTodo": {
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!",
+      "holdOnButtonText": "Got it!"
+    },
+    "SelectDateNotAllowed": {
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!",
+      "holdOnButtonText": "Got it!"
     }
   },
   "introText0": "Hi there! It's Nikita, the creator of Todorant. I'm so glad you've downloaded Todorant because it means that you too will soon benefit from unlimited productivity.",

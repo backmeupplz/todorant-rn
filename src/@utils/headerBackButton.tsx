@@ -1,7 +1,7 @@
 import React from 'react'
 import { BackButton } from '@components/BackButton'
 import { View } from 'native-base'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 import { Observer } from 'mobx-react'
 
 export function headerBackButtonProps(useBackStore = false) {
@@ -12,7 +12,12 @@ export function headerBackButtonProps(useBackStore = false) {
           <View
             style={{ flexDirection: 'row' }}
             pointerEvents={
-              sharedOnboardingStore.tutorialWasShown ? 'auto' : 'none'
+              sharedOnboardingStore.tutorialWasShown
+                ? 'auto'
+                : sharedOnboardingStore.step ===
+                  TutorialStep.BreakdownTodoAction
+                ? 'auto'
+                : 'none'
             }
           >
             <BackButton useBackStore={useBackStore} />

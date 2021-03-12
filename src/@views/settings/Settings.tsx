@@ -141,9 +141,9 @@ export class SettingsContent extends Component {
             <SectionHeader title={translate('info')} />
             <TableItem
               onPress={() => {
-                sharedOnboardingStore.nextStep(TutorialStep.Intro)
-                sharedOnboardingStore.tutorialWasShown = false
                 navigate('Current')
+                sharedOnboardingStore.tutorialWasShown = false
+                sharedOnboardingStore.nextStep(TutorialStep.Intro)
               }}
             >
               <Text

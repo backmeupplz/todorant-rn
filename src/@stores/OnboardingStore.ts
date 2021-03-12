@@ -22,6 +22,8 @@ import { logEvent } from '@utils/logEvent'
 import { sharedSessionStore } from './SessionStore'
 
 export enum TutorialStep {
+  SelectDateNotAllowed = 'SelectDateNotAllowed',
+  BreakdownCompletedTodo = 'BreakDownCompletedTodo',
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
   Finished = 'Finished',
   Close = 'Close',
@@ -172,7 +174,8 @@ class OnboardingStore {
     sharedOnboardingStore.stepObject.messageBoxPosition = undefined
     if (
       this.step !== TutorialStep.Close &&
-      this.step !== TutorialStep.BreakdownLessThanTwo
+      this.step !== TutorialStep.BreakdownLessThanTwo &&
+      this.step !== TutorialStep.BreakdownCompletedTodo
     ) {
       this.previousStep = this.step
     }
@@ -310,14 +313,19 @@ export const AllStages = {
       navigate('AddTodo')
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
-        resolve({ nodeId, notShowContinue: true, divider: 16 })
+        resolve({
+          nodeId,
+          notShowContinue: true,
+          divider: 16,
+          borderRadius: 16,
+        })
       })
     })
   },
   [TutorialStep.SelectDate]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
-    return { nodeId, divider: 16, dontSave: true, borderRadius: 32 }
+    return { nodeId, divider: 16, dontSave: true, borderRadius: 16 }
   },
   [TutorialStep.SelectFrog]: async () => {
     navigate('AddTodo')
@@ -345,7 +353,7 @@ export const AllStages = {
     return {
       nodeId,
       notShowContinue: true,
-      divider: 16,
+      divider: 8,
       dontSave: true,
       borderRadius: 10,
     }
@@ -375,7 +383,9 @@ export const AllStages = {
   },
   [TutorialStep.PlanningExplain]: async () => {
     navigate('Planning')
-    return { messageBoxPosition: 'center' }
+    const nodeId = (await import('@assets/images/planning-active'))
+      .BottomTabPlanningButton
+    return { messageBoxPosition: 'center', nodeId, divider: 0.65 }
   },
   [TutorialStep.PlanningExplain2]: async () => {
     navigate('Planning')
@@ -413,7 +423,9 @@ export const AllStages = {
   },
   [TutorialStep.ExplainSettings]: async () => {
     navigate('Settings')
-    return { messageBoxPosition: 'center' }
+    const nodeId = (await import('@assets/images/settings-active'))
+      .BottomTabSettingsgButton
+    return { messageBoxPosition: 'center', nodeId, divider: 0.65 }
   },
   [TutorialStep.ExplainNotifications]: async () => {
     navigate('Settings')
@@ -550,6 +562,47 @@ export const AllStages = {
   [TutorialStep.Intro]: async () => {
     return {
       messageBoxPosition: 'center',
+      notShowClose: true,
+      additionalButtons: [
+        {
+          message: 'closeButtonText',
+          action: () => {
+            sharedOnboardingStore.nextStep(TutorialStep.Close)
+          },
+        },
+      ],
+    }
+  },
+  [TutorialStep.BreakdownCompletedTodo]: async () => {
+    const holdOnButton = {
+      preferred: true,
+      message: 'holdOnButtonText',
+      action: () => {
+        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
+      },
+    }
+    return {
+      messageBoxPosition: 'center',
+      notShowClose: true,
+      notShowContinue: true,
+      additionalButtons: [holdOnButton],
+      dontSave: true,
+    }
+  },
+  [TutorialStep.SelectDateNotAllowed]: async () => {
+    const holdOnButton = {
+      preferred: true,
+      message: 'holdOnButtonText',
+      action: () => {
+        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
+      },
+    }
+    return {
+      messageBoxPosition: 'center',
+      notShowClose: true,
+      notShowContinue: true,
+      additionalButtons: [holdOnButton],
+      dontSave: true,
     }
   },
 } as { [step in TutorialStep]: (() => Promise<Step | undefined>) | undefined }

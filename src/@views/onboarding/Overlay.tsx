@@ -6,7 +6,11 @@ import {
   RNHole,
   RNHoleView,
 } from '@upacyxou/react-native-hole-view'
-import { measurePosition, sharedOnboardingStore } from '@stores/OnboardingStore'
+import {
+  measurePosition,
+  sharedOnboardingStore,
+  TutorialStep,
+} from '@stores/OnboardingStore'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Dimensions, Keyboard } from 'react-native'
@@ -140,8 +144,16 @@ export class Overlay extends Component {
       <Animated.View
         pointerEvents={'box-none'}
         style={{
-          maxWidth: this.shouldRender ? undefined : 0,
-          maxHeight: this.shouldRender ? undefined : 0,
+          maxWidth: this.shouldRender
+            ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
+              ? 0
+              : undefined
+            : 0,
+          maxHeight: this.shouldRender
+            ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
+              ? 0
+              : undefined
+            : 0,
           position: 'absolute',
           top: 0,
           right: 0,
@@ -170,7 +182,6 @@ export class Overlay extends Component {
               transform: [{ translateY: this.infoBoxY }],
             }}
           >
-            {/* <Avatar /> */}
             <MessageBox />
           </Animated.View>
         )}

@@ -4,6 +4,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { goBack } from '@utils/navigation'
+import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export const backButtonStore = {
   back: () => {},
@@ -17,6 +18,13 @@ export class BackButton extends Component<{
     return (
       <TouchableOpacity
         onPress={() => {
+          if (
+            !sharedOnboardingStore.tutorialWasShown &&
+            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
+          ) {
+            sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
+            return
+          }
           if (this.props.useBackStore) {
             backButtonStore.back()
           } else {

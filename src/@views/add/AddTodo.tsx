@@ -548,9 +548,6 @@ class AddTodoContent extends Component<{
             }}
           >
             <Animatable.View
-              onLayout={({ nativeEvent: { target } }: any) => {
-                SaveButtonNodeId = target
-              }}
               style={{
                 marginRight: 10,
                 marginVertical: 10,
@@ -559,6 +556,9 @@ class AddTodoContent extends Component<{
               ref={this.hangleAddButtonViewRef}
             >
               <TouchableOpacity
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  SaveButtonNodeId = target
+                }}
                 disabled={
                   !sharedOnboardingStore.tutorialWasShown &&
                   !(

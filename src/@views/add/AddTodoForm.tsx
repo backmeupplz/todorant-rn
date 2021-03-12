@@ -290,8 +290,18 @@ class DateRow extends Component<{
   render() {
     return (
       <TouchableOpacity
-        disabled={!sharedOnboardingStore.tutorialWasShown}
+        disabled={
+          !sharedOnboardingStore.tutorialWasShown &&
+          !(
+            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+            sharedOnboardingStore.step === TutorialStep.SelectDate
+          )
+        }
         onPress={() => {
+          if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+            sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+            return
+          }
           this.props.vm.showDatePicker = !this.props.vm.showDatePicker
           if (!this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
@@ -340,8 +350,18 @@ class MonthRow extends Component<{
   render() {
     return (
       <TouchableOpacity
-        disabled={!sharedOnboardingStore.tutorialWasShown}
+        disabled={
+          !sharedOnboardingStore.tutorialWasShown &&
+          !(
+            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+            sharedOnboardingStore.step === TutorialStep.SelectDate
+          )
+        }
         onPress={() => {
+          if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+            sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+            return
+          }
           this.props.vm.showMonthAndYearPicker = !this.props.vm
             .showMonthAndYearPicker
           if (!!this.props.vm.date) {
@@ -667,7 +687,13 @@ export class AddTodoForm extends Component<{
             </View>
             <View
               pointerEvents={
-                sharedOnboardingStore.tutorialWasShown ? 'auto' : 'none'
+                sharedOnboardingStore.tutorialWasShown
+                  ? 'auto'
+                  : sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction ||
+                    sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                  ? 'auto'
+                  : 'none'
               }
               onLayout={({ nativeEvent: { target } }: any) => {
                 CompletedRowNodeId = target
@@ -677,6 +703,19 @@ export class AddTodoForm extends Component<{
                 name={translate('completed')}
                 value={this.props.vm.completed}
                 onValueChange={(value) => {
+                  if (
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownCompletedTodo ||
+                    sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                  ) {
+                    sharedOnboardingStore.nextStep(
+                      TutorialStep.BreakdownCompletedTodo
+                    )
+                    this.props.vm.completed = false
+                    return
+                  }
                   this.props.vm.completed = value
                 }}
               />
