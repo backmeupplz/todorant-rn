@@ -131,14 +131,15 @@ class OnboardingStore {
   buildRnHole(
     { x, y, width, height }: RNHole,
     divider = 2,
-    borderRadius = 128
+    borderRadius = 128,
+    heightMultiplier = 1
   ) {
     const halfOfHeight = height / divider
     const halfOfWidth = width / divider
-    height += halfOfHeight
+    height += halfOfHeight * heightMultiplier
     width += halfOfWidth
     x -= halfOfWidth / 2
-    y -= halfOfHeight / 2
+    y -= (halfOfHeight * heightMultiplier) / 2
     return { height, width, x, y, borderRadius }
   }
 
@@ -197,7 +198,8 @@ class OnboardingStore {
             const buildedHole = this.buildRnHole(
               holePosition,
               currentStep.divider,
-              currentStep.borderRadius
+              currentStep.borderRadius,
+              currentStep.heightMultiplier
             )
             this.changeStepAndHole(nextStep, buildedHole, currentStep)
           } catch (err) {
@@ -256,6 +258,7 @@ interface Step {
   divider?: number
   dontSave?: boolean
   borderRadius?: number
+  heightMultiplier?: number
 }
 
 // We are dynamiccaly import our nodeIds
@@ -353,9 +356,10 @@ export const AllStages = {
     return {
       nodeId,
       notShowContinue: true,
-      divider: 8,
+      divider: 16,
       dontSave: true,
       borderRadius: 10,
+      heightMultiplier: 6,
     }
   },
   [TutorialStep.ExplainCurrent]: async () => {
