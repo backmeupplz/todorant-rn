@@ -18,7 +18,6 @@ const {
   focusInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
-import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 
 export class TodoVM {
   @observable text = ''
