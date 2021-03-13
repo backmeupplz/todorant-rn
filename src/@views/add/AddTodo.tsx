@@ -26,6 +26,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  Keyboard,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -103,6 +104,7 @@ class AddTodoContent extends Component<{
       !sharedOnboardingStore.tutorialWasShown &&
       this.vms.length < 2
     ) {
+      Keyboard.dismiss()
       sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
       return
     }
@@ -274,6 +276,7 @@ class AddTodoContent extends Component<{
     if (!sharedOnboardingStore.tutorialWasShown) {
       sharedOnboardingStore.nextStep()
     }
+    Keyboard.dismiss()
     // Sync hero
     sharedSync.sync(SyncRequestEvent.Hero)
   }
