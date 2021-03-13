@@ -58,24 +58,6 @@ export enum TutorialStep {
   Congratulations = 'Congratulations',
 }
 
-class StepParams {
-  @persist nodeId?: number
-  @persist additionalButtons?: MessageBoxButton[]
-  @persist messageBoxPosition?: 'above' | 'below' | 'center'
-  @persist notShowContinue?: boolean
-  @persist notShowClose?: boolean
-  @persist predefined?: number
-  @persist divider?: number
-}
-
-class RNHoleParams {
-  @persist height?: number
-  @persist width?: number
-  @persist x?: number
-  @persist y?: number
-  @persist borderRadius?: number
-}
-
 class OnboardingStore {
   constructor() {
     makeObservable(this)
@@ -389,7 +371,12 @@ export const AllStages = {
     navigate('Planning')
     const nodeId = (await import('@assets/images/planning-active'))
       .BottomTabPlanningButton
-    return { messageBoxPosition: 'center', nodeId, divider: 0.65 }
+    return {
+      messageBoxPosition: 'center',
+      nodeId,
+      divider: 0.5,
+      heightMultiplier: 2,
+    }
   },
   [TutorialStep.PlanningExplain2]: async () => {
     navigate('Planning')
