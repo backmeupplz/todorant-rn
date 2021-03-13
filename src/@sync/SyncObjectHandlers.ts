@@ -13,6 +13,7 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
+import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 
 export async function onDelegationObjectsFromServer(
   objects: any,
@@ -255,4 +256,5 @@ export async function onTodosObjectsFromServer(
   })
   // Complete sync
   completeSync()
+  refreshWidgetAndBadgeAndWatch()
 }
