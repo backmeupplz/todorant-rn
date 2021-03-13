@@ -14,6 +14,7 @@ export class PlanningHeaderLeft extends Component {
         <TouchableOpacity
           onPress={() => {
             sharedAppStateStore.changeLoading(false)
+            sharedAppStateStore.searchQuery = []
             sharedAppStateStore.searchEnabled = !sharedAppStateStore.searchEnabled
           }}
           style={{ marginLeft: 12 }}
