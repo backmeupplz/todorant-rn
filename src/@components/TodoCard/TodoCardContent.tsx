@@ -15,6 +15,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { navigationRef } from '@utils/navigation'
 
 export let CurrentTodoNodeId: number
 
@@ -31,11 +32,8 @@ export class TodoCardContent extends Component<{
     return (
       <View
         onLayout={({ nativeEvent: { target } }: any) => {
-          if (!CurrentTodoNodeId) {
+          if (navigationRef.current?.getCurrentRoute()?.name === 'Current') {
             CurrentTodoNodeId = target
-            if (sharedOnboardingStore.step !== TutorialStep.Intro) {
-              sharedOnboardingStore.nextStep()
-            }
           }
         }}
       >

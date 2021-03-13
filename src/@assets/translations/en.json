@@ -419,8 +419,12 @@
       "messageBoxBody": "This is the screen with all the settings you need in Todorant. Feel free to explore it later. Notable ones are the “default tasks to today” and “inherit the tags during breakdown”.",
       "nextStepButton": "Continue"
     },
+    "ExplainNotificationsGoogle": {
+      "messageBoxBody": "If you really need notifications, you can integrate with Google Calendar and make Google Calendar send you notifications, but only for the tasks that have exact time assigned to them",
+      "nextStepButton": "Continue"
+    },
     "ExplainNotifications": {
-      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder in the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring when there are too many notifications (which is prone to missing important ones) and hanging notifications take too much of a mental toll.\n\nIf you really need notifications, you can integrate with Google Calendar and make Google Calendar send you notifications, but only for the tasks that have exact time assigned to them.",
+      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder in the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring when there are too many notifications (which is prone to missing important ones) and hanging notifications take too much of a mental toll.",
       "nextStepButton": "Continue"
     },
     "ExplainMultiplatform": {

@@ -50,6 +50,7 @@ export enum TutorialStep {
   ExplainReccuring = 'ExplainReccuring',
   ExplainSettings = 'ExplainSettings',
   ExplainNotifications = 'ExplainNotifications',
+  ExplainNotificationsGoogle = 'ExplainNotificationsGoogle',
   ExplainMultiplatform = 'ExplainMultiplatform',
   ExplainPricing = 'ExplainPricing',
   Feedback = 'Feedback',
@@ -345,7 +346,8 @@ export const AllStages = {
     }
   },
   [TutorialStep.ExplainCurrent]: async () => {
-    const nodeId = (await import('@components/TodoCard/TodoCardContent'))
+    navigate('Current')
+    const nodeId = (await import('@views/current/CurrentContent'))
       .CurrentTodoNodeId
     return { nodeId, divider: 11.5 }
   },
@@ -371,11 +373,12 @@ export const AllStages = {
     navigate('Planning')
     const nodeId = (await import('@assets/images/planning-active'))
       .BottomTabPlanningButton
+    const measuredPlanningButton = await measurePosition(nodeId)
     return {
       messageBoxPosition: 'center',
       nodeId,
       divider: 0.5,
-      heightMultiplier: 2,
+      predefined: measuredPlanningButton.y + measuredPlanningButton.height / 3,
     }
   },
   [TutorialStep.PlanningExplain2]: async () => {
@@ -416,20 +419,58 @@ export const AllStages = {
     navigate('Settings')
     const nodeId = (await import('@assets/images/settings-active'))
       .BottomTabSettingsgButton
-    return { messageBoxPosition: 'center', nodeId, divider: 0.65 }
-  },
-  [TutorialStep.ExplainNotifications]: async () => {
-    navigate('Settings')
-    if (!!sharedSessionStore.user) {
-      // Highlight integration button
-    } else {
-      await sharedOnboardingStore.nextStep(TutorialStep.ExplainMultiplatform)
-      // sharedOnboardingStore.currentHole = { x: 0, y: 0, width: 0, height: 0 }
-      // sharedOnboardingStore.step = sharedOnboardingStore.getNextStep
-    }
+    const measuredSettingsButton = await measurePosition(nodeId)
     return {
       messageBoxPosition: 'center',
+      nodeId,
+      divider: 0.5,
+      predefined: measuredSettingsButton.y + measuredSettingsButton.height / 3,
     }
+  },
+  [TutorialStep.ExplainNotifications]: async () => {
+    return { messageBoxPosition: 'center' }
+  },
+  [TutorialStep.ExplainNotificationsGoogle]: () => {
+    navigate('Settings')
+    return new Promise((resolve) => {
+      InteractionManager.runAfterInteractions(async () => {
+        // Actual ScrollView
+        const scrollView = (await import('@views/settings/Settings'))
+          .ScrollViewRef
+        // Actual integration button node
+        const integrationButtonNodeId = (
+          await import('@views/settings/GeneralSettings')
+        ).IntegrationButtonsNodeId
+        // Content rendered inside of ScrollView (unfortunately scrollview does not give a full height of content inside of it)
+        const scrollContentRef = (await import('@views/settings/Settings'))
+          .SettingsContentRef
+        // node of scrollContent
+        const scrollContentNodeId = findNodeHandle(scrollContentRef)
+        if (!scrollContentNodeId) return
+        // height/width/x/y of settingsContent
+        const measuredSettingsContent = await measurePosition(
+          scrollContentNodeId
+        )
+        // position of integrationButton not relative to the rootRef, but to the scrollContent
+        const buttonWithOffset = await measurePosition(
+          integrationButtonNodeId,
+          scrollContentRef
+        )
+        // scrolling to our intergationButton
+        scrollView.scrollTo({
+          y: buttonWithOffset.y,
+        })
+        resolve({
+          nodeId: integrationButtonNodeId,
+          predefined: Math.abs(
+            measuredSettingsContent.height -
+              buttonWithOffset.y -
+              Dimensions.get('window').height +
+              buttonWithOffset.height * 2.5
+          ),
+        })
+      })
+    })
   },
   [TutorialStep.Congratulations]: async () => {
     const endTutorialButton = {

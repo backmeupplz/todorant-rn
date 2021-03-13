@@ -83,7 +83,13 @@ export class CurrentContent extends Component {
             />
           )}
           {!!this.vm.currentTodo && (
-            <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+            <View
+              onLayout={({ nativeEvent: { target } }: any) => {
+                CurrentTodoNodeId = target
+              }}
+            >
+              <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+            </View>
           )}
           {!!sharedTodoStore.progress.count &&
             sharedTodoStore.progress.count ===

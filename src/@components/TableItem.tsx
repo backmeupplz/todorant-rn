@@ -4,12 +4,13 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View } from 'native-base'
-import { StyleProp, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 
 @observer
 export class TableItem extends Component<{
   onPress?: () => void
   onLongPress?: () => void
+  onLayout?: (layout: LayoutChangeEvent) => void
 }> {
   renderContent() {
     return (
@@ -49,6 +50,7 @@ export class TableItem extends Component<{
   render() {
     return this.props.onPress ? (
       <TouchableOpacity
+        onLayout={this.props.onLayout}
         onPress={this.props.onPress}
         onLongPress={this.props.onLongPress}
         disabled={!this.props.onPress}

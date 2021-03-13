@@ -45,7 +45,11 @@ import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
-import { ScrollView } from 'react-native'
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+} from 'react-native'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export let ScrollViewRef: ScrollView
@@ -53,6 +57,9 @@ export let SupportButtonNodeId: number
 export let SettingsRootRef: Container
 export let SettingsBeforeFeedbackButton: number
 export let HowToUseNodeId: number
+
+export let ScrollEvent: NativeSyntheticEvent<NativeScrollEvent>
+export let SettingsContentRef: View
 
 const Stack = createStackNavigator()
 
@@ -63,6 +70,9 @@ export class SettingsContent extends Component {
     return (
       <Container>
         <HeaderScrollView
+          onScrollViewContentRef={(ref) => {
+            SettingsContentRef = ref
+          }}
           onScrollViewRef={(ref) => {
             if (!ref) return
             ScrollViewRef = ref
