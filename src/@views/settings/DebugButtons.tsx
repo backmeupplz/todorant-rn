@@ -131,14 +131,6 @@ export class DebugButtons extends Component {
         />
         <DebugButton
           onPress={() => {
-            sharedSessionStore.numberOfTodosCompleted = 102
-            sharedSessionStore.askedToRate = false
-          }}
-          text="open rate modal"
-          testId="open_rating"
-        />
-        <DebugButton
-          onPress={() => {
             playFrogComplete('nice')
           }}
           text="play nice sound"

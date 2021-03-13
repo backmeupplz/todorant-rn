@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import RateModalExternal from 'react-native-store-rating'
+import RateModalExternal from '@tasumaniadiabori/react-native-store-rating'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sendFeedback } from '@utils/rest'
 import { observer } from 'mobx-react'
