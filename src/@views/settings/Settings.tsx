@@ -19,7 +19,6 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
-import { IntroMessage } from '@views/settings/intro/IntroMessage'
 import { InfoButton } from '@components/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
@@ -162,7 +161,7 @@ export class SettingsContent extends Component {
                   fontFamily: fonts.SFProTextRegular,
                 }}
               >
-                {translate('introButton')}
+                {translate('tutorialButton')}
               </Text>
             </TableItem>
             <TableItem
@@ -348,17 +347,6 @@ export function Settings() {
               title: translate('loginFacebook'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
-            }}
-          />
-          <Stack.Screen
-            name="Intro"
-            component={IntroMessage}
-            options={{
-              title: translate('introTitle'),
-              headerTitleAlign: 'center',
-              ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoIntro'),
               ...headerBackButtonProps(),
             }}
           />

@@ -131,7 +131,7 @@
   "appleUnauthorizedTextGoodNews": "Buenas noticias: no se te cobrará hasta que finalice la prueba de 30 días.",
   "appleUnauthorizedButtonExtra": "30 días de prueba gratis, entonces",
   "introTitle": "¡Bienvenido!",
-  "introButton": "Mensaje de introducción",
+  "tutorialButton": "Mensaje de introducción",
   "introBack": "¡Vamos!",
   "infoTitle": "Información",
   "infoIntro": "¡Buen trabajo utilizando el botón \"i\"! Este es el mensaje de bienvenida que explica lo que es Todorant. Ni más, ni menos.",

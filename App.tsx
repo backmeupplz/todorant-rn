@@ -27,7 +27,6 @@ import { Paywall } from '@views/settings/Paywall'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
-import { IntroMessage } from '@views/settings/intro/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
@@ -39,7 +38,6 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
-// import { refreshWidgetAndBadge } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
@@ -85,7 +83,6 @@ class App extends Component {
     SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
-    // refreshWidgetAndBadge()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
@@ -235,17 +232,6 @@ class App extends Component {
                   title: translate('loginTelegram'),
                   headerTitleAlign: 'center',
                   ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Intro"
-                component={IntroMessage}
-                options={{
-                  title: translate('introTitle'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton('infoIntro'),
                   ...headerBackButtonProps(),
                 }}
               />

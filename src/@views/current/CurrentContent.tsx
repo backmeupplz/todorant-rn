@@ -29,14 +29,6 @@ export let CurrentTodoNodeId: number
 export class CurrentContent extends Component {
   vm = new CurrentVM()
 
-  componentDidMount() {
-    setTimeout(() => {
-      if (!sharedSessionStore.introMessageShown) {
-        navigate('Intro')
-      }
-    }, 2 * 1000)
-  }
-
   render() {
     // Hack to make this reactive
     let languageTag = sharedAppStateStore.languageTag
