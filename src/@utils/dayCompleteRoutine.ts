@@ -1,4 +1,4 @@
-import { getDateString } from '@utils/time'
+import { getDateString, getTodayWithStartOfDay } from '@utils/time'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { dayCompleteOverlayRef } from '@components/DayCompleteOverlay'
@@ -8,7 +8,7 @@ export function shouldShowDayCompletionRoutine() {
   if (!sharedSettingsStore.soundOn && !sharedSettingsStore.endOfDaySoundOn) {
     return false
   }
-  const today = new Date()
+  const today = getTodayWithStartOfDay()
   const todayTodos = sharedTodoStore.todosForDate(getDateString(today))
 
   const progress = {
