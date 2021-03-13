@@ -38,12 +38,14 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkSharedContent } from '@utils/sharing'
+import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
+import { checkupVersion } from '@utils/checkupVersion'
 import Animated from 'react-native-reanimated'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
@@ -83,9 +85,11 @@ class App extends Component {
     SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
+    refreshWidgetAndBadgeAndWatch()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
+    checkupVersion()
     AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') {
         checkAndroidLaunchArgs()

@@ -13,6 +13,7 @@ import {
   getDateStringFromTodo,
   getDateDateString,
   getDateMonthAndYearString,
+  getTodayWithStartOfDay,
 } from '@utils/time'
 import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
@@ -83,9 +84,10 @@ export class TodoCardVM {
 
   moveToToday(todo: Todo) {
     const oldTitle = getTitle(todo)
+    const today = getTodayWithStartOfDay()
     realm.write(() => {
-      todo.date = getDateDateString(new Date())
-      todo.monthAndYear = getDateMonthAndYearString(new Date())
+      todo.date = getDateDateString(today)
+      todo.monthAndYear = getDateMonthAndYearString(today)
       todo._exactDate = new Date(getTitle(todo))
       todo.updatedAt = new Date()
     })

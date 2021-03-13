@@ -1,5 +1,9 @@
 import { MobxRealmModel } from '@utils/mobx-realm/model'
-import { getDateString, getDateStringFromTodo } from '@utils/time'
+import {
+  getDateString,
+  getDateStringFromTodo,
+  getTodayWithStartOfDay,
+} from '@utils/time'
 
 export class Todo extends MobxRealmModel {
   public static schema = {
@@ -56,7 +60,7 @@ export class Todo extends MobxRealmModel {
 }
 
 export function isTodoToday(todo: Todo) {
-  return getDateString(new Date()) === getDateStringFromTodo(todo)
+  return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)
 }
 
 export function compareTodos(completed: Boolean) {

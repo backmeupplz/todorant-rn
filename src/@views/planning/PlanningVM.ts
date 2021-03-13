@@ -2,14 +2,17 @@ import { sharedSync } from '@sync/Sync'
 import { RealmTodosData } from '@views/planning/RealmTodosData'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import {
+  getDateDateString,
+  getDateMonthAndYearString,
+  getTodayWithStartOfDay,
+} from '@utils/time'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
 import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 import { EventEmitter } from 'events'
 import { isTodoOld } from '@utils/isTodoOld'
 
