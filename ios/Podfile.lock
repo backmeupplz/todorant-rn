@@ -337,7 +337,7 @@ PODS:
   - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
     - React
-  - RNHoleView (2.0.1):
+  - RNHoleView (3.0.1):
     - React
   - RNIap (4.4.3):
     - React
@@ -416,7 +416,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
-  - RNHoleView (from `../node_modules/@upacyxou/react-native-hole-view`)
+  - "RNHoleView (from `../node_modules/@upacyxou/react-native-hole-view`)"
   - RNIap (from `../node_modules/react-native-iap`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -625,7 +625,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: a9601119924a67d2479d3facf04cec7b658f44ed
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
-  RNHoleView: 3df775b8e5a19c265126f5df479c9a79d2f93ac8
+  RNHoleView: 78fe2ca0ed1be643c0d245fea09e582cc8ee0d51
   RNIap: 3b6882c6478c4ea3b0f79486566ec01b2c92fd24
   RNLocalize: b6df30cc25ae736d37874f9bce13351db2f56796
   RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
