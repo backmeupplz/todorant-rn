@@ -9,13 +9,7 @@ import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { Observer, observer } from 'mobx-react'
-import {
-  StatusBar,
-  LogBox,
-  AppState,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native'
+import { StatusBar, LogBox, AppState, TouchableOpacity } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -46,8 +40,8 @@ import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
 import { checkupVersion } from '@utils/checkupVersion'
-import Animated from 'react-native-reanimated'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -122,7 +116,12 @@ class App extends Component {
             }
           />
           <RateModal />
-          <StyleProvider style={{ ...getTheme(), pointerEvent: 'box-none' }}>
+          <StyleProvider
+            style={{
+              ...getTheme(),
+              pointerEvent: 'box-none',
+            }}
+          >
             <Stack.Navigator
               screenOptions={{
                 cardStyleInterpolator: () => ({
@@ -155,7 +154,10 @@ class App extends Component {
                               ? 'auto'
                               : 'none'
                           }
-                          style={{ flexDirection: 'row', alignItems: 'center' }}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
                         >
                           <AddButton />
                           {InfoButton('infoAdd')()}
@@ -272,21 +274,34 @@ class App extends Component {
         <Overlay />
         {!sharedOnboardingStore.tutorialWasShown &&
           !sharedOnboardingStore.stepObject.notShowClose && (
-            <TouchableOpacity
-              style={sharedOnboardingStore.closeOnboardingStyle}
-              onPress={() => {
-                sharedOnboardingStore.nextStep(TutorialStep.Close)
+            <SafeAreaInsetsContext.Consumer>
+              {(insets) => {
+                return (
+                  <TouchableOpacity
+                    style={[
+                      sharedOnboardingStore.closeOnboardingStyle,
+                      { marginTop: insets?.top },
+                    ]}
+                    onPress={() => {
+                      sharedOnboardingStore.nextStep(TutorialStep.Close)
+                    }}
+                  >
+                    {/* A quick hack to make insets reactive on iOS, I have no idea why this works */}
+                    <Text style={{ opacity: 0, fontSize: 0 }}>
+                      {insets?.top || 'none'}
+                    </Text>
+                    <Icon
+                      type="MaterialIcons"
+                      name="close"
+                      style={{
+                        color: 'white',
+                        fontSize: 48,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )
               }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name="close"
-                style={{
-                  color: 'white',
-                  fontSize: 48,
-                }}
-              />
-            </TouchableOpacity>
+            </SafeAreaInsetsContext.Consumer>
           )}
       </Root>
     )

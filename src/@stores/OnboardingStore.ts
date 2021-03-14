@@ -10,6 +10,7 @@ import {
   StyleProp,
   UIManager,
   ViewStyle,
+  Platform,
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
@@ -19,7 +20,6 @@ import { navigate } from '@utils/navigation'
 import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
-import { sharedSessionStore } from './SessionStore'
 
 export enum TutorialStep {
   SelectDateNotAllowed = 'SelectDateNotAllowed',
@@ -71,7 +71,7 @@ class OnboardingStore {
     y: Dimensions.get('window').height / 2,
     width: 0,
     height: 0,
-    borderRadius: 128,
+    borderRadius: 0,
   }
 
   messageBoxId: number | undefined
@@ -114,7 +114,7 @@ class OnboardingStore {
   buildRnHole(
     { x, y, width, height }: RNHole,
     divider = 2,
-    borderRadius = 128,
+    borderRadius = Platform.OS === 'android' ? 128 : 32,
     heightMultiplier = 1
   ) {
     const halfOfHeight = height / divider
