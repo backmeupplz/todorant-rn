@@ -13,14 +13,14 @@ import {
 } from '@stores/OnboardingStore'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
-import { Dimensions, Keyboard } from 'react-native'
+import { Dimensions, Keyboard, Platform } from 'react-native'
 
 export let tutorialOverlayRef: Overlay
 
 @observer
 export class Overlay extends Component {
   state = {
-    holes: [{ x: 0, y: 0, width: 0, height: 0, borderRadius: 60 }],
+    holes: [{ x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }],
   } as { holes: RNHole[] }
 
   opacityAnimationValue = new Animated.Value(0)
@@ -142,7 +142,7 @@ export class Overlay extends Component {
   render() {
     return (
       <Animated.View
-        pointerEvents={'box-none'}
+        pointerEvents={Platform.OS === 'android' ? 'box-none' : 'none'}
         style={{
           maxWidth: this.shouldRender
             ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
@@ -199,7 +199,7 @@ export class Overlay extends Component {
           }}
         >
           <RNHoleView
-            pointerEvents={'box-none'}
+            pointerEvents={Platform.OS === 'android' ? 'box-none' : undefined}
             animation={{
               duration: 500,
               timingFunction: ERNHoleViewTimingFunction.LINEAR,
