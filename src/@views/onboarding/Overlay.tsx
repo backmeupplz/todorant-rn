@@ -13,7 +13,7 @@ import {
 } from '@stores/OnboardingStore'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
-import { Dimensions, Keyboard } from 'react-native'
+import { Dimensions, Keyboard, Platform } from 'react-native'
 
 export let tutorialOverlayRef: Overlay
 
@@ -139,26 +139,31 @@ export class Overlay extends Component {
     })
   }
 
+  renderHoles() {
+    return (
+      <RNHoleView
+        pointerEvents={Platform.OS === 'android' ? 'box-none' : undefined}
+        animation={{
+          duration: 500,
+          timingFunction: ERNHoleViewTimingFunction.LINEAR,
+        }}
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        }}
+        holes={this.state.holes}
+      />
+    )
+  }
+
   render() {
     return (
       <>
-        {this.shouldRender && (
-          <RNHoleView
-            animation={{
-              duration: 500,
-              timingFunction: ERNHoleViewTimingFunction.LINEAR,
-            }}
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            }}
-            holes={this.state.holes}
-          />
-        )}
+        {this.shouldRender && Platform.OS === 'ios' && this.renderHoles()}
         <Animated.View
           pointerEvents="box-none"
           style={{
@@ -185,6 +190,23 @@ export class Overlay extends Component {
             opacity: this.opacityAnimationValue,
           }}
         >
+          {this.shouldRender && Platform.OS === 'android' && (
+            <Animated.View
+              pointerEvents={this.shouldRender ? 'box-only' : 'box-none'}
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                maxWidth: this.shouldRender ? undefined : 0,
+                maxHeight: this.shouldRender ? undefined : 0,
+                opacity: this.opacityAnimationValue,
+              }}
+            >
+              {this.renderHoles()}
+            </Animated.View>
+          )}
           {sharedOnboardingStore.messageBoxAppear && (
             <Animated.View
               pointerEvents={this.shouldRender ? undefined : 'box-none'}
