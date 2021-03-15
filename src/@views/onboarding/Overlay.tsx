@@ -13,7 +13,7 @@ import {
 } from '@stores/OnboardingStore'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
-import { Dimensions, Keyboard, Platform } from 'react-native'
+import { Dimensions, Keyboard } from 'react-native'
 
 export let tutorialOverlayRef: Overlay
 
@@ -141,65 +141,9 @@ export class Overlay extends Component {
 
   render() {
     return (
-      <Animated.View
-        pointerEvents={Platform.OS === 'android' ? 'box-none' : 'none'}
-        style={{
-          maxWidth: this.shouldRender
-            ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-              ? 0
-              : undefined
-            : 0,
-          maxHeight: this.shouldRender
-            ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-              ? 0
-              : undefined
-            : 0,
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 12,
-          opacity: this.opacityAnimationValue,
-        }}
-      >
-        {sharedOnboardingStore.messageBoxAppear && (
-          <Animated.View
-            pointerEvents={this.shouldRender ? undefined : 'box-none'}
-            style={{
-              opacity: this.messageBoxOpacity,
-              width: '100%',
-              maxWidth: 400,
-              zIndex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transform: [{ translateY: this.infoBoxY }],
-            }}
-          >
-            <MessageBox />
-          </Animated.View>
-        )}
-        <Animated.View
-          pointerEvents={this.shouldRender ? 'box-only' : 'box-none'}
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            maxWidth: this.shouldRender ? undefined : 0,
-            maxHeight: this.shouldRender ? undefined : 0,
-            opacity: this.opacityAnimationValue,
-          }}
-        >
+      <>
+        {this.shouldRender && (
           <RNHoleView
-            pointerEvents={Platform.OS === 'android' ? 'box-none' : undefined}
             animation={{
               duration: 500,
               timingFunction: ERNHoleViewTimingFunction.LINEAR,
@@ -214,8 +158,53 @@ export class Overlay extends Component {
             }}
             holes={this.state.holes}
           />
+        )}
+        <Animated.View
+          pointerEvents="box-none"
+          style={{
+            maxWidth: this.shouldRender
+              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
+                ? 0
+                : undefined
+              : 0,
+            maxHeight: this.shouldRender
+              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
+                ? 0
+                : undefined
+              : 0,
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 12,
+            opacity: this.opacityAnimationValue,
+          }}
+        >
+          {sharedOnboardingStore.messageBoxAppear && (
+            <Animated.View
+              pointerEvents={this.shouldRender ? undefined : 'box-none'}
+              style={{
+                opacity: this.messageBoxOpacity,
+                width: '100%',
+                maxWidth: 400,
+                zIndex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transform: [{ translateY: this.infoBoxY }],
+              }}
+            >
+              <MessageBox />
+            </Animated.View>
+          )}
         </Animated.View>
-      </Animated.View>
+      </>
     )
   }
 }

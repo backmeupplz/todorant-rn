@@ -73,7 +73,7 @@
     "react-native-calendars": "^1.261.0",
     "react-native-camera": "^3.23.1",
     "react-native-check-version": "^1.0.8",
-    "react-native-code-push": "^6.2.0",
+    "react-native-code-push": "^7.0.0",
     "react-native-color-picker": "^0.5.2",
     "react-native-confetti": "^0.1.0",
     "react-native-dark-mode": "^0.2.2",
