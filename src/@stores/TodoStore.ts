@@ -12,6 +12,7 @@ import { realm } from '@utils/realm'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
+import { sharedOnboardingStore } from './OnboardingStore'
 
 class TodoStore {
   hydrated = false
@@ -107,7 +108,7 @@ class TodoStore {
   )
 
   @computed get isPlanningRequired() {
-    return !!this.oldTodos.length
+    return !!this.oldTodos.length && sharedOnboardingStore.tutorialWasShown
   }
 
   constructor() {

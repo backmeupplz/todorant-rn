@@ -386,11 +386,12 @@ class AddTodoContent extends Component<{
       if (
         sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
         sharedOnboardingStore.step === TutorialStep.BreakdownTodo
-      )
+      ) {
         sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
-      else {
+      } else {
         sharedOnboardingStore.nextStep(TutorialStep.Close)
       }
+      Keyboard.dismiss()
       return true
     }
     if (!this.isDirty()) {

@@ -359,7 +359,7 @@ export const AllStages = {
   [TutorialStep.Breakdown]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardActions'))
       .BrakdownNodeId
-    return { nodeId, notShowContinue: true }
+    return { nodeId, notShowContinue: true, divider: 8, heightMultiplier: 6 }
   },
   [TutorialStep.BreakdownTodo]: async () => {
     const nodeId = (await import('@views/add/AddTodo')).BreakdownTodoNodeId
@@ -502,6 +502,7 @@ export const AllStages = {
       notShowContinue: true,
       notShowClose: true,
       messageBoxPosition: 'center',
+      dontSave: true,
     }
   },
   [TutorialStep.BreakdownVanish]: async () => {
