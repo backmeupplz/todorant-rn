@@ -26,6 +26,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  BackHandlerStatic,
+  NativeEventSubscription,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -80,7 +82,7 @@ class AddTodoContent extends Component<{
 
   @observable savingTodo = false
 
-  mounted = false
+  backHandler: NativeEventSubscription | undefined
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
@@ -276,10 +278,9 @@ class AddTodoContent extends Component<{
   }
 
   componentDidMount() {
-    this.mounted = true
     logEvent('add_todo_opened')
     backButtonStore.back = this.onBackPress
-    BackHandler.addEventListener('hardwareBackPress', () => {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       return this.onBackPress(true)
     })
     if (this.props.route.params?.breakdownTodo) {
@@ -299,7 +300,7 @@ class AddTodoContent extends Component<{
   }
 
   componentWillUnmount() {
-    this.mounted = false
+    this.backHandler?.remove()
   }
 
   addTodo = () => {
@@ -367,7 +368,6 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = (isHardware = false) => {
-    if (!this.mounted) return false
     if (!this.isDirty()) {
       if (isHardware) {
         // Do nothing
