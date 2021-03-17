@@ -325,19 +325,27 @@ export const AllStages = {
     }
   },
   [TutorialStep.Breakdown]: async () => {
-    const nodeId = (await import('@components/TodoCard/TodoCardActions'))
-      .BrakdownNodeId
-    return {
-      nodeId,
-      notShowContinue: true,
-      divider: 8,
-      heightMultiplier: 6,
-      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
-    }
+    return new Promise(async (resolve) => {
+      InteractionManager.runAfterInteractions(async () => {})
+      const nodeId = (await import('@components/TodoCard/TodoCardActions'))
+        .BrakdownNodeId
+      resolve({
+        nodeId,
+        notShowContinue: true,
+        divider: 8,
+        heightMultiplier: 6,
+        borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+      })
+    })
   },
   [TutorialStep.BreakdownTodo]: async () => {
     const nodeId = (await import('@views/add/AddTodo')).BreakdownTodoNodeId
-    return { nodeId, divider: 16, dontSave: true }
+    return {
+      nodeId,
+      divider: 16,
+      dontSave: true,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.BreakdownTodoAction]: async () => {
     const nodeId = findNodeHandle(rootRef)
@@ -430,7 +438,7 @@ export const AllStages = {
           scrollContentNodeId
         )
         // position of integrationButton not relative to the rootRef, but to the scrollContent
-        const buttonWithOffset = await measurePosition(
+        let buttonWithOffset = await measurePosition(
           integrationButtonNodeId,
           scrollContentRef
         )
@@ -438,14 +446,20 @@ export const AllStages = {
         scrollView.scrollTo({
           y: buttonWithOffset.y,
         })
-        resolve({
-          nodeId: integrationButtonNodeId,
-          predefined: Math.abs(
-            measuredSettingsContent.height -
-              buttonWithOffset.y -
-              Dimensions.get('window').height +
-              buttonWithOffset.height * 2.5
-          ),
+        InteractionManager.runAfterInteractions(async () => {
+          buttonWithOffset = await measurePosition(
+            integrationButtonNodeId,
+            scrollContentRef
+          )
+          resolve({
+            nodeId: integrationButtonNodeId,
+            predefined: Math.abs(
+              measuredSettingsContent.height -
+                buttonWithOffset.y -
+                Dimensions.get('window').height +
+                buttonWithOffset.height * 2.5
+            ),
+          })
         })
       })
     })
@@ -520,24 +534,26 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
-        const feedButton = (await import('@views/settings/Settings'))
-          .SupportButtonNodeId
-        const feedButtonPosition = await measurePosition(feedButton)
-        const SettingsBeforeFeedbackButton = (
-          await import('@views/settings/Settings')
-        ).SettingsBeforeFeedbackButton
-        const measuredSettingsBeforeFeedback = await measurePosition(
-          SettingsBeforeFeedbackButton
-        )
         scrollView.scrollToEnd()
-        resolve({
-          nodeId: feedButton,
-          messageBoxPosition: 'center',
-          predefined:
-            Dimensions.get('window').height -
-            (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
-            feedButtonPosition.height * 2,
-          borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+        InteractionManager.runAfterInteractions(async () => {
+          const feedButton = (await import('@views/settings/Settings'))
+            .SupportButtonNodeId
+          const feedButtonPosition = await measurePosition(feedButton)
+          const SettingsBeforeFeedbackButton = (
+            await import('@views/settings/Settings')
+          ).SettingsBeforeFeedbackButton
+          const measuredSettingsBeforeFeedback = await measurePosition(
+            SettingsBeforeFeedbackButton
+          )
+          resolve({
+            nodeId: feedButton,
+            messageBoxPosition: 'center',
+            predefined:
+              Dimensions.get('window').height -
+              (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
+              feedButtonPosition.height * 2,
+            borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+          })
         })
       })
     })
