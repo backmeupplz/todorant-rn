@@ -26,6 +26,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  NativeEventSubscription,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -47,7 +48,6 @@ import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
-import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
@@ -79,6 +79,8 @@ class AddTodoContent extends Component<{
   @observable isBreakdown = false
 
   @observable savingTodo = false
+
+  backHandler: NativeEventSubscription | undefined
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
@@ -276,7 +278,7 @@ class AddTodoContent extends Component<{
   componentDidMount() {
     logEvent('add_todo_opened')
     backButtonStore.back = this.onBackPress
-    BackHandler.addEventListener('hardwareBackPress', () => {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       return this.onBackPress(true)
     })
     if (this.props.route.params?.breakdownTodo) {
@@ -296,7 +298,7 @@ class AddTodoContent extends Component<{
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    this.backHandler?.remove()
   }
 
   addTodo = () => {
