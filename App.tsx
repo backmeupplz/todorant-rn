@@ -9,7 +9,13 @@ import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
 import { Observer, observer } from 'mobx-react'
-import { StatusBar, LogBox, AppState, TouchableOpacity } from 'react-native'
+import {
+  StatusBar,
+  LogBox,
+  AppState,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -283,6 +289,7 @@ class App extends Component {
                       { marginTop: insets?.top },
                     ]}
                     onPress={() => {
+                      Keyboard.dismiss()
                       sharedOnboardingStore.nextStep(TutorialStep.Close)
                     }}
                   >
