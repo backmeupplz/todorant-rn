@@ -240,7 +240,7 @@ export const AllStages = {
     return { nodeId, notShowContinue: true }
   },
   [TutorialStep.AddText]: () => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       navigate('AddTodo')
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
@@ -361,7 +361,7 @@ export const AllStages = {
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainSearchAndCompleted]: async () => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       navigate('Planning')
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
@@ -517,7 +517,7 @@ export const AllStages = {
   },
   [TutorialStep.Feedback]: async () => {
     navigate('Settings')
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
@@ -545,7 +545,7 @@ export const AllStages = {
   },
   [TutorialStep.Rules]: async () => {
     navigate('Settings')
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
@@ -560,7 +560,7 @@ export const AllStages = {
   },
   [TutorialStep.Info]: async () => {
     navigate('Settings')
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
