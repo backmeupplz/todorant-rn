@@ -26,7 +26,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
-  BackHandlerStatic,
   NativeEventSubscription,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -49,7 +48,6 @@ import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
-import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
