@@ -171,7 +171,9 @@ class OnboardingStore {
   }
 
   @computed get nextStepButtonText() {
-    return translate(`onboarding.${this.step}.nextStepButton`)
+    return this.stepObject.customContinueText
+      ? translate(`onboarding.${this.step}.nextStepButton`)
+      : translate('onboarding.defaultNextStepButtonText')
   }
 
   @computed get prefixText() {
@@ -266,6 +268,7 @@ export const AllStages = {
       divider: 16,
       dontSave: true,
       borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+      customContinueText: true,
     }
   },
   [TutorialStep.SelectCompleted]: async () => {
@@ -479,6 +482,7 @@ export const AllStages = {
       additionalButtons: [endTutorialButton],
       notShowContinue: true,
       notShowClose: true,
+      customContinueText: true,
     }
   },
   [TutorialStep.BreakdownLessThanTwo]: async () => {
@@ -495,6 +499,7 @@ export const AllStages = {
       notShowClose: true,
       messageBoxPosition: 'center',
       dontSave: true,
+      customContinueText: true,
     }
   },
   [TutorialStep.BreakdownVanish]: async () => {
@@ -594,6 +599,7 @@ export const AllStages = {
           },
         },
       ],
+      customContinueText: true,
     }
   },
   [TutorialStep.BreakdownCompletedTodo]: async () => {

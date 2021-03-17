@@ -11,4 +11,5 @@ export interface Step {
   dontSave?: boolean
   borderRadius?: number
   heightMultiplier?: number
+  customContinueText?: boolean
 }
