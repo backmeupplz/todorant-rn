@@ -6869,7 +6869,7 @@ react-native-qrcode-scanner@^1.4.0:
     prop-types "^15.5.10"
     react-native-permissions "^2.0.2"
 
-react-native-ratings@^6.5.0:
+react-native-ratings@^6.3.1, react-native-ratings@^6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
   integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==

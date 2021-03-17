@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { PlanningContent } from '@views/planning/PlanningContent'
 import { PlanningHeader } from '@views/planning/PlanningHeader'
 import { PlanningHeaderRight } from '@views/planning/PlanningHeaderRight'
@@ -16,11 +19,7 @@ export class Planning extends Component {
     return (
       <Stack.Navigator
         screenOptions={{
-          cardStyleInterpolator: () => ({
-            cardStyle: {
-              opacity: 1,
-            },
-          }),
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }}
       >
         <Stack.Screen
