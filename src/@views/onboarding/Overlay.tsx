@@ -163,7 +163,10 @@ export class Overlay extends Component {
   render() {
     return (
       <>
-        {this.shouldRender && Platform.OS === 'ios' && this.renderHoles()}
+        {sharedOnboardingStore.hydrated &&
+          this.shouldRender &&
+          Platform.OS === 'ios' &&
+          this.renderHoles()}
         <Animated.View
           pointerEvents="box-none"
           style={{

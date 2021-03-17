@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { goBack } from '@utils/navigation'
 import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { Keyboard } from 'react-native'
 
 export const backButtonStore = {
   back: () => {},
@@ -22,6 +23,7 @@ export class BackButton extends Component<{
             !sharedOnboardingStore.tutorialWasShown &&
             sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
           ) {
+            Keyboard.dismiss()
             sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
             return
           }
