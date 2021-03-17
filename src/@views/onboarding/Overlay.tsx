@@ -29,7 +29,7 @@ export class Overlay extends Component {
   infoBoxY = new Animated.Value(0)
   infoBoxX = new Animated.Value(0)
 
-  @observable shouldRender = true
+  @observable shouldRender = false
 
   messageBoxNodeId: number | undefined
 

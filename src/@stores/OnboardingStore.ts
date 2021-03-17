@@ -421,7 +421,11 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
           .PlanningHeaderNodeId
-        resolve({ nodeId, messageBoxPosition: 'center' })
+        resolve({
+          nodeId,
+          messageBoxPosition: 'center',
+          borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+        })
       })
     })
   },
@@ -589,6 +593,7 @@ export const AllStages = {
             Dimensions.get('window').height -
             (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
             feedButtonPosition.height * 2,
+          borderRadius: Platform.OS === 'ios' ? 16 : undefined,
         })
       })
     })
@@ -603,6 +608,7 @@ export const AllStages = {
         const nodeId = (await import('@views/settings/Settings')).HowToUseNodeId
         resolve({
           nodeId,
+          borderRadius: Platform.OS === 'ios' ? 16 : undefined,
         })
       })
     })
@@ -616,7 +622,7 @@ export const AllStages = {
         scrollView.scrollTo({ y: 0 })
         const nodeId = (await import('@components/InfoButton')).InfoButtonNodeId
         resolve({
-          nodeId,
+          nodeId: Platform.OS === 'android' ? nodeId : undefined,
           messageBoxPosition: 'center',
         })
       })
