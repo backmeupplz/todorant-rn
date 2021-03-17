@@ -18,7 +18,10 @@ import {
 } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { AddTodo } from '@views/add/AddTodo'
 import { AddButton } from '@components/AddButton'
 import { InfoButton } from '@components/InfoButton'
@@ -130,11 +133,7 @@ class App extends Component {
           >
             <Stack.Navigator
               screenOptions={{
-                cardStyleInterpolator: () => ({
-                  cardStyle: {
-                    opacity: 1,
-                  },
-                }),
+                cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
               }}
             >
               <Stack.Screen

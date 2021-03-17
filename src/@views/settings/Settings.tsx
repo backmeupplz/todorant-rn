@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { Container, Text, View } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
@@ -248,11 +251,7 @@ export function Settings() {
       {() => (
         <Stack.Navigator
           screenOptions={{
-            cardStyleInterpolator: () => ({
-              cardStyle: {
-                opacity: 1,
-              },
-            }),
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         >
           <Stack.Screen
