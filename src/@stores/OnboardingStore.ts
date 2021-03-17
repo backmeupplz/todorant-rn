@@ -316,22 +316,42 @@ export const AllStages = {
   [TutorialStep.SelectFrog]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).FrogRowNodeId
-    return { nodeId, divider: 16, dontSave: true }
+    return {
+      nodeId,
+      divider: 16,
+      dontSave: true,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.SelectCompleted]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).CompletedRowNodeId
-    return { nodeId, divider: 16, dontSave: true }
+    return {
+      nodeId,
+      divider: 16,
+      dontSave: true,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.ShowMore]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).ShowMoreRowNodeId
-    return { nodeId, notShowContinue: true, divider: 16, dontSave: true }
+    return {
+      nodeId,
+      notShowContinue: true,
+      divider: 16,
+      dontSave: true,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.AddAnotherTask]: async () => {
     navigate('AddTodo')
     const nodeId = (await import('@components/AddButton')).AddButonNodeId
-    return { nodeId, dontSave: true }
+    return {
+      nodeId,
+      dontSave: true,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.AddTodoComplete]: async () => {
     navigate('AddTodo')
@@ -354,12 +374,22 @@ export const AllStages = {
   [TutorialStep.DeleteEditComplete]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardActions'))
       .TodoActionsNodeId
-    return { nodeId, divider: 4 }
+    return {
+      nodeId,
+      divider: 4,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.Breakdown]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardActions'))
       .BrakdownNodeId
-    return { nodeId, notShowContinue: true, divider: 8, heightMultiplier: 6 }
+    return {
+      nodeId,
+      notShowContinue: true,
+      divider: 8,
+      heightMultiplier: 6,
+      borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+    }
   },
   [TutorialStep.BreakdownTodo]: async () => {
     const nodeId = (await import('@views/add/AddTodo')).BreakdownTodoNodeId
