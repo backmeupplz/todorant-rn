@@ -64,7 +64,7 @@ class OnboardingStore {
     makeObservable(this)
   }
 
-  hydrated = false
+  @observable hydrated = false
 
   defaultHole: RNHole = {
     x: Dimensions.get('window').width / 2,
