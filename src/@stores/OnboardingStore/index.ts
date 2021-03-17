@@ -487,11 +487,11 @@ export const AllStages = {
   },
   [TutorialStep.BreakdownLessThanTwo]: async () => {
     const gotItButton = {
-      message: 'nextStepButton',
       action: () => {
         sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
       },
       preferred: true,
+      notAllowed: true,
     }
     return {
       additionalButtons: [gotItButton],
@@ -605,10 +605,10 @@ export const AllStages = {
   [TutorialStep.BreakdownCompletedTodo]: async () => {
     const holdOnButton = {
       preferred: true,
-      message: 'holdOnButtonText',
       action: () => {
         sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
       },
+      notAllowed: true,
     }
     return {
       messageBoxPosition: 'center',
@@ -621,10 +621,10 @@ export const AllStages = {
   [TutorialStep.SelectDateNotAllowed]: async () => {
     const holdOnButton = {
       preferred: true,
-      message: 'holdOnButtonText',
       action: () => {
         sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
       },
+      notAllowed: true,
     }
     return {
       messageBoxPosition: 'center',

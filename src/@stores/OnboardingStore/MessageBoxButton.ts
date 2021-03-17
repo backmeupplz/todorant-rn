@@ -1,5 +1,6 @@
 export interface MessageBoxButton {
   action: () => void
-  message: string
+  message?: string
   preferred?: boolean
+  notAllowed?: boolean
 }

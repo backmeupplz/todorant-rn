@@ -122,9 +122,13 @@ export class MessageBox extends Component {
                   <OnboardingButton
                     key={index}
                     preferred={button.preferred}
-                    title={translate(
-                      `${sharedOnboardingStore.prefixText}.${button.message}`
-                    )}
+                    title={
+                      button.notAllowed
+                        ? translate('onboarding.notAllowed')
+                        : translate(
+                            `${sharedOnboardingStore.prefixText}.${button.message}`
+                          )
+                    }
                     onPress={() => {
                       button.action()
                     }}

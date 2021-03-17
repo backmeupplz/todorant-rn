@@ -327,6 +327,7 @@
   "onboarding": {
     "closeButtonText": "Close the tutorial",
     "defaultNextStepButtonText": "Continue",
+    "notAllowed": "Got it!",
     "Close": {
       "messageBoxBody": "Are you sure you want to skip this tutorial? It is pretty difficult to unleash Todorant’s potential if you don’t know what to do! Maybe you could at least read a small article about the main Todorant principles instead?",
       "changedMyMind": "I changed my mind, continue the tutorial",
@@ -425,19 +426,16 @@
       "nextStepButton": "Hooray!"
     },
     "BreakdownLessThanTwo": {
-      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two smaller tasks that are still incomplete.",
-      "nextStepButton": "Got it!"
+      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two smaller tasks that are still incomplete."
     },
     "Info": {
       "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner. Most of the time, they’ll provide you with useful insight."
     },
     "BreakDownCompletedTodo": {
-      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!",
-      "holdOnButtonText": "Got it!"
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!"
     },
     "SelectDateNotAllowed": {
-      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!",
-      "holdOnButtonText": "Got it!"
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!"
     }
   },
   "dirtyValidSaveSingular": "Would you like to save the entered task?",
