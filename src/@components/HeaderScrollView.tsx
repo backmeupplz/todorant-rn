@@ -9,7 +9,7 @@ import {
   ViewStyle,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  LayoutChangeEvent,
+  NativeScrollPoint,
 } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
@@ -36,6 +36,7 @@ export class HeaderScrollView extends Component<{
   contentContainerStyle?: StyleProp<ViewStyle>
   onScrollViewRef?: (ref: ScrollView | null) => void
   onScrollViewContentRef?: (event: View) => void
+  onOffsetChange?: (offset: NativeScrollPoint) => void
 }> {
   @observable headerHeight = 0
   @observable headerY = 0
@@ -124,27 +125,35 @@ export class HeaderScrollView extends Component<{
         </View>
         <ScrollView
           ref={this.props.onScrollViewRef}
-          onScroll={Animated.event(
-            [
+          onScroll={(event) => {
+            Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: { y: this.scrollAnimatedValue },
+                  },
+                },
+              ],
               {
-                nativeEvent: { contentOffset: { y: this.scrollAnimatedValue } },
-              },
-            ],
-            {
-              listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-                const offset = event.nativeEvent.contentOffset.y
-                const scrollHeaderOffset = this.headerHeight + this.headerY - 8
-                const isHeaderScrolled = scrollHeaderOffset < offset
-                if (!this.isHeaderScrolled && isHeaderScrolled) {
-                  this.isHeaderScrolled = isHeaderScrolled
-                }
-                if (this.isHeaderScrolled && !isHeaderScrolled) {
-                  this.isHeaderScrolled = isHeaderScrolled
-                }
-              },
-              useNativeDriver: false,
+                listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+                  const offset = event.nativeEvent.contentOffset.y
+                  const scrollHeaderOffset =
+                    this.headerHeight + this.headerY - 8
+                  const isHeaderScrolled = scrollHeaderOffset < offset
+                  if (!this.isHeaderScrolled && isHeaderScrolled) {
+                    this.isHeaderScrolled = isHeaderScrolled
+                  }
+                  if (this.isHeaderScrolled && !isHeaderScrolled) {
+                    this.isHeaderScrolled = isHeaderScrolled
+                  }
+                },
+                useNativeDriver: false,
+              }
+            )(event)
+            if (this.props.onOffsetChange) {
+              this.props.onOffsetChange(event.nativeEvent.contentOffset)
             }
-          )}
+          }}
           scrollEventThrottle={8}
           style={{
             backgroundColor: sharedColors.backgroundColor,

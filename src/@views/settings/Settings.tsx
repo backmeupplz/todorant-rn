@@ -54,6 +54,7 @@ import {
 } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
 
 export let ScrollViewRef: ScrollView
 export let SupportButtonNodeId: number
@@ -80,6 +81,7 @@ export class SettingsContent extends Component {
             if (!ref) return
             ScrollViewRef = ref
           }}
+          onOffsetChange={setSettingsScrollOffset}
           title={translate('settings')}
           infoTitle="infoSettings"
         >
@@ -189,9 +191,6 @@ export class SettingsContent extends Component {
             }}
           >
             <Text
-              onLayout={({ nativeEvent: { target } }: any) => {
-                SupportButtonNodeId = target
-              }}
               style={{
                 color: sharedColors.textColor,
                 fontFamily: fonts.SFProTextRegular,
@@ -209,6 +208,9 @@ export class SettingsContent extends Component {
               style={{
                 color: sharedColors.textColor,
                 fontFamily: fonts.SFProTextRegular,
+              }}
+              onLayout={({ nativeEvent: { target } }: any) => {
+                SupportButtonNodeId = target
               }}
             >
               {translate('supportLabel')}

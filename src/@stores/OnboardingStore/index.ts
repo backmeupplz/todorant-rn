@@ -22,6 +22,7 @@ import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
+import { settingsScrollOffset } from '@utils/settingsScrollOffset'
 
 class OnboardingStore {
   constructor() {
@@ -438,7 +439,7 @@ export const AllStages = {
           scrollContentNodeId
         )
         // position of integrationButton not relative to the rootRef, but to the scrollContent
-        let buttonWithOffset = await measurePosition(
+        const buttonWithOffset = await measurePosition(
           integrationButtonNodeId,
           scrollContentRef
         )
@@ -446,21 +447,20 @@ export const AllStages = {
         scrollView.scrollTo({
           y: buttonWithOffset.y,
         })
-        InteractionManager.runAfterInteractions(async () => {
-          buttonWithOffset = await measurePosition(
-            integrationButtonNodeId,
-            scrollContentRef
-          )
-          resolve({
-            nodeId: integrationButtonNodeId,
-            predefined: Math.abs(
-              measuredSettingsContent.height -
-                buttonWithOffset.y -
-                Dimensions.get('window').height +
-                buttonWithOffset.height * 2.5
-            ),
+        // Wait for the scroll
+        setTimeout(() => {
+          InteractionManager.runAfterInteractions(async () => {
+            const offset = settingsScrollOffset
+            const buttonWithOffsetPosition = await measurePosition(
+              integrationButtonNodeId
+            )
+            resolve({
+              nodeId: integrationButtonNodeId,
+              predefined: buttonWithOffsetPosition.y - offset.y,
+              borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+            })
           })
-        })
+        }, 500)
       })
     })
   },
@@ -535,26 +535,20 @@ export const AllStages = {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
         scrollView.scrollToEnd()
-        InteractionManager.runAfterInteractions(async () => {
-          const feedButton = (await import('@views/settings/Settings'))
-            .SupportButtonNodeId
-          const feedButtonPosition = await measurePosition(feedButton)
-          const SettingsBeforeFeedbackButton = (
-            await import('@views/settings/Settings')
-          ).SettingsBeforeFeedbackButton
-          const measuredSettingsBeforeFeedback = await measurePosition(
-            SettingsBeforeFeedbackButton
-          )
-          resolve({
-            nodeId: feedButton,
-            messageBoxPosition: 'center',
-            predefined:
-              Dimensions.get('window').height -
-              (feedButtonPosition.y - measuredSettingsBeforeFeedback.height) -
-              feedButtonPosition.height * 2,
-            borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+        // Wait for the scroll
+        setTimeout(() => {
+          InteractionManager.runAfterInteractions(async () => {
+            const feedButton = (await import('@views/settings/Settings'))
+              .SupportButtonNodeId
+            const offset = settingsScrollOffset
+            const feedButtonPosition = await measurePosition(feedButton)
+            resolve({
+              nodeId: feedButton,
+              predefined: feedButtonPosition.y - offset.y,
+              borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+            })
           })
-        })
+        }, 500)
       })
     })
   },
