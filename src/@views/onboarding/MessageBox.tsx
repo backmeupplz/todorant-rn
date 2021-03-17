@@ -17,7 +17,7 @@ export class MessageBox extends Component {
   avatarOpacity = new Animated.Value(1)
 
   @observable showAvatar =
-    sharedOnboardingStore.step === TutorialStep.Intro ||
+    sharedOnboardingStore.step === TutorialStep.Start ||
     sharedOnboardingStore.step === TutorialStep.Explain
 
   componentDidMount() {
@@ -25,7 +25,7 @@ export class MessageBox extends Component {
       () => sharedOnboardingStore.step,
       async (newValue) => {
         if (
-          newValue === TutorialStep.Intro ||
+          newValue === TutorialStep.Start ||
           newValue === TutorialStep.Explain
         ) {
           this.showAvatar = true

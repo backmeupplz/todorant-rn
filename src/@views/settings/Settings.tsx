@@ -158,7 +158,7 @@ export class SettingsContent extends Component {
               onPress={() => {
                 navigate('Current')
                 sharedOnboardingStore.tutorialWasShown = false
-                sharedOnboardingStore.nextStep(TutorialStep.Intro)
+                sharedOnboardingStore.nextStep(TutorialStep.Start)
               }}
             >
               <Text

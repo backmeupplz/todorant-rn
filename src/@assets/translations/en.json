@@ -328,17 +328,17 @@
     "closeButtonText": "Close the tutorial",
     "defaultNextStepButtonText": "Continue",
     "notAllowed": "Got it!",
+    "Start": {
+      "closeButtonText": "Nah, I don’t read manuals",
+      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you how to achieve insane levels of productivity?",
+      "nextStepButton": "Sure! Show me how it works"
+    },
     "Close": {
       "messageBoxBody": "Are you sure you want to skip this tutorial? It is pretty difficult to unleash Todorant’s potential if you don’t know what to do! Maybe you could at least read a small article about the main Todorant principles instead?",
       "changedMyMind": "I changed my mind, continue the tutorial",
       "article": "Let’s stop the tutorial, but show me the article",
       "closeEverything": "I know what I am doing, close the tutorial",
       "toast": "I admire your bravery"
-    },
-    "Intro": {
-      "closeButtonText": "Nah, I don’t read manuals",
-      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you how to achieve insane levels of productivity?",
-      "nextStepButton": "Sure! Show me how it works"
     },
     "Explain": {
       "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. The restrictions here are carefully crafted to make your brain crave completing tasks like you crave sugar."

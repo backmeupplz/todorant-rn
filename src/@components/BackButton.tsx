@@ -20,18 +20,15 @@ export class BackButton extends Component<{
     return (
       <TouchableOpacity
         onPress={() => {
-          if (
-            !sharedOnboardingStore.tutorialWasShown &&
-            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-          ) {
+          if (!sharedOnboardingStore.tutorialWasShown) {
             Keyboard.dismiss()
             sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
-            return
-          }
-          if (this.props.useBackStore) {
-            backButtonStore.back()
           } else {
-            goBack()
+            if (this.props.useBackStore) {
+              backButtonStore.back()
+            } else {
+              goBack()
+            }
           }
         }}
       >
