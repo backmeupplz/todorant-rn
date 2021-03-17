@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
-import { goBack, navigate } from '@utils/navigation'
+import { goBack, navigate, navigationRef } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
@@ -79,6 +79,8 @@ class AddTodoContent extends Component<{
   @observable isBreakdown = false
 
   @observable savingTodo = false
+
+  mounted = false
 
   scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
@@ -274,6 +276,7 @@ class AddTodoContent extends Component<{
   }
 
   componentDidMount() {
+    this.mounted = true
     logEvent('add_todo_opened')
     backButtonStore.back = this.onBackPress
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -296,7 +299,7 @@ class AddTodoContent extends Component<{
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    this.mounted = false
   }
 
   addTodo = () => {
@@ -364,6 +367,7 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = (isHardware = false) => {
+    if (!this.mounted) return false
     if (!this.isDirty()) {
       if (isHardware) {
         // Do nothing
