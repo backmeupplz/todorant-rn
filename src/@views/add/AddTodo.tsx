@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
-import { goBack, navigate, navigationRef } from '@utils/navigation'
+import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
