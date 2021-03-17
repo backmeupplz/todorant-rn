@@ -207,7 +207,17 @@ class TextRow extends Component<{
             !sharedSessionStore.encryptionKey
           }
           selectionColor={sharedColors.primaryColor}
-          keyboardType={Platform.OS === 'ios' ? 'twitter' : undefined}
+          keyboardType={
+            Platform.OS === 'ios' &&
+            sharedOnboardingStore.step !== TutorialStep.AddText
+              ? 'twitter'
+              : undefined
+          }
+          returnKeyType={
+            sharedOnboardingStore.step === TutorialStep.AddText
+              ? 'done'
+              : undefined
+          }
           ref={this.props.vm.todoTextField}
           onSelectionChange={({ nativeEvent: { selection } }) =>
             (this.props.vm.cursorPosition = selection.start)
