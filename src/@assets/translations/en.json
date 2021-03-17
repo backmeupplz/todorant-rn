@@ -339,7 +339,7 @@
       "nextStepButton": "Sure! Show me how it works"
     },
     "Explain": {
-      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. All restrictions here are carefully crafted to make your brain complete tasks and not just mindlessly add them to endless list of todos.",
+      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. All restrictions here are carefully crafted to make your brain complete tasks and not just mindlessly add them to an endless list of todos.",
       "nextStepButton": "Continue"
     },
     "AddTask": {
@@ -351,15 +351,15 @@
       "nextStepButton": "Continue"
     },
     "SelectDate": {
-      "messageBoxBody": "Every todo should either have an exact date or an exact month when you want to complete it. You cannot select current month for a todo. if you could, what would you do when the month ends and you still have undone todos?",
+      "messageBoxBody": "Every todo should either have an exact date or an exact month when you want to complete it. You cannot select the current month for a todo. if you could, what would you do when the month ends and you still have undone todos?",
       "nextStepButton": "Continue"
     },
     "SelectFrog": {
-      "messageBoxBody": "You can mark the todo as a frog. Frogs are special kind of truly unpleasant tasks. You have to complete them first thing in the morning, they always appear at the top of the list. I recommend to have at most 2 frogs a day.",
+      "messageBoxBody": "You can mark the todo as a frog. Frogs are a special kind of truly unpleasant task. You have to complete them first thing in the morning, they always appear at the top of the list. I recommend having at most 2 frogs a day.",
       "nextStepButton": "It's not a frog"
     },
     "SelectCompleted": {
-      "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to todorant right after you complete them. This will help to build positive connection between completing tasks and satisfaction.",
+      "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to todorant right after you complete them. This will help to build a positive connection between completing tasks and satisfaction.",
       "nextStepButton": "Continue"
     },
     "ShowMore": {
@@ -383,15 +383,15 @@
       "nextStepButton": "Continue"
     },
     "Breakdown": {
-      "messageBoxBody": "Oh this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too broad to complete in less than 30 minutes, break it down into multiple parts.",
+      "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too broad to complete in less than 30 minutes, break it down into multiple parts.",
       "nextStepButton": "Continue"
     },
     "BreakdownTodo": {
-      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of anything that needs to be done, because the original task will… vanish!",
+      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of anything that needs to be done because the original task will... vanish!",
       "nextStepButton": "Continue"
     },
     "BreakdownVanish": {
-      "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: your original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task. So you get rewarded by marking the large task as complete for just breaking it down!",
+      "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task. So you get rewarded by marking the large task as complete for just breaking it down!",
       "nextStepButton": "Continue"
     },
     "PlanningExplain": {
@@ -403,7 +403,7 @@
       "nextStepButton": "Continue"
     },
     "ExplainHashtags": {
-      "messageBoxBody": "You might also notice that there is no “projects”. In fact, Todorant doesn’t have “projects” where you can hide undesired tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags.",
+      "messageBoxBody": "You might also notice that there are no “projects”. Todorant doesn’t have “projects” where you can hide undesired tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags.",
       "nextStepButton": "Continue"
     },
     "ExplainSearchAndCompleted": {
@@ -420,11 +420,11 @@
       "nextStepButton": "Continue"
     },
     "ExplainNotificationsGoogle": {
-      "messageBoxBody": "If you really need notifications, you can integrate with Google Calendar and make Google Calendar send you notifications, but only for the tasks that have exact time assigned to them",
+      "messageBoxBody": "If you still need notifications, you can integrate with Google Calendar and make Google Calendar send you notifications, but only for the tasks that have an exact time assigned to them",
       "nextStepButton": "Continue"
     },
     "ExplainNotifications": {
-      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder in the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring when there are too many notifications (which is prone to missing important ones) and hanging notifications take too much of a mental toll.",
+      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring when there are too many notifications (which is prone to missing important ones) and hanging notifications take too much of a mental toll.",
       "nextStepButton": "Continue"
     },
     "ExplainMultiplatform": {
@@ -437,7 +437,7 @@
       "nextStepButton": "Continue"
     },
     "Feedback": {
-      "messageBoxBody": "In case if you have any questions, suggestions or complaints, feel free to react out to us on the official Telegram support group or via email.",
+      "messageBoxBody": "In case if you have any questions, suggestions or complaints, feel free to reach out to us on the official Telegram support group or via email.",
       "nextStepButton": "Continue"
     },
     "Rules": {
