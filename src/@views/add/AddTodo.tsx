@@ -514,9 +514,11 @@ class AddTodoContent extends Component<{
           >
             <Animatable.View
               style={{
+                borderRadius: 10,
                 marginRight: 10,
                 marginVertical: 10,
                 flexGrow: 1,
+                overflow: 'hidden',
               }}
               ref={this.hangleAddButtonViewRef}
             >
