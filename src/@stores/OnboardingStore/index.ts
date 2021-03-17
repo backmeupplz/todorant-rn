@@ -1,3 +1,4 @@
+import { Step } from '@stores/OnboardingStore/Step'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { translate } from '@utils/i18n'
 import { rootRef } from '../../../App'
@@ -9,7 +10,6 @@ import {
   InteractionManager,
   Linking,
   StyleProp,
-  UIManager,
   ViewStyle,
   Platform,
 } from 'react-native'
@@ -21,6 +21,7 @@ import { navigate } from '@utils/navigation'
 import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
+import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 
 class OnboardingStore {
   constructor() {
@@ -188,26 +189,7 @@ hydrate('OnboardingStore', sharedOnboardingStore).then(() => {
   hydrateStore('OnboardingStore')
 })
 
-interface MessageBoxButton {
-  action: () => void
-  message: string
-  preferred?: boolean
-}
-
-interface Step {
-  nodeId?: number
-  additionalButtons?: MessageBoxButton[]
-  messageBoxPosition?: 'above' | 'below' | 'center'
-  notShowContinue?: boolean
-  notShowClose?: boolean
-  predefined?: number
-  divider?: number
-  dontSave?: boolean
-  borderRadius?: number
-  heightMultiplier?: number
-}
-
-// We are dynamiccaly import our nodeIds
+// We are dynamicaly importing our nodeIds
 export const AllStages = {
   [TutorialStep.Info]: async () => {
     return {
@@ -638,20 +620,3 @@ export const AllStages = {
     }
   },
 } as { [step in TutorialStep]: (() => Promise<Step | undefined>) | undefined }
-
-export function measurePosition(nodeId: number, rootNode = rootRef) {
-  return new Promise<RNHole>((resolve, reject) => {
-    UIManager.measureLayout(
-      nodeId,
-      findNodeHandle(rootNode) as number,
-      () => {
-        // If error
-        reject("Can't measure position of a given node.")
-      },
-      // Получаем абсолютные значения нашего ref-элемента
-      (x, y, width, height) => {
-        resolve({ x, y, width, height })
-      }
-    )
-  })
-}
