@@ -335,11 +335,11 @@
     },
     "Intro": {
       "closeButtonText": "Nah, I don’t read manuals",
-      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you the correct way of using Todorant to achieve insane levels of productivity?",
+      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you how to achieve insane levels of productivity?",
       "nextStepButton": "Sure! Show me how it works"
     },
     "Explain": {
-      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. All restrictions here are carefully crafted to make your brain complete tasks and not just mindlessly add them to an endless list of todos.",
+      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. The restrictions here are carefully crafted to make your brain crave completing tasks like you crave sugar.",
       "nextStepButton": "Continue"
     },
     "AddTask": {
@@ -347,11 +347,11 @@
       "nextStepButton": "Continue"
     },
     "AddText": {
-      "messageBoxBody": "Every todo starts with text. Think of something that you need to do. Now add it in a very short and actionable format like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable.",
+      "messageBoxBody": "Think of something that you need to do. Now type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable.",
       "nextStepButton": "Continue"
     },
     "SelectDate": {
-      "messageBoxBody": "Every todo should either have an exact date or an exact month when you want to complete it. You cannot select the current month for a todo. if you could, what would you do when the month ends and you still have undone todos?",
+      "messageBoxBody": "Every todo should either have an exact date for completion or a specific month assigned.\n\nYou cannot select the current month. What would you do if the month ended and you still had undone todos?",
       "nextStepButton": "Continue"
     },
     "SelectFrog": {
@@ -359,15 +359,15 @@
       "nextStepButton": "It's not a frog"
     },
     "SelectCompleted": {
-      "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to todorant right after you complete them. This will help to build a positive connection between completing tasks and satisfaction.",
+      "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to Todorant right after you complete them. This will help to build a positive connection between completing tasks and satisfaction.",
       "nextStepButton": "Continue"
     },
     "ShowMore": {
-      "messageBoxBody": "Tapping this magical button reveals more options when creating a task like setting the exact time (useful for meetings and get synced to Google Calendar to get notifications) and sorting the tasks.",
+      "messageBoxBody": "Tapping this magical button reveals more options when creating a task like setting the exact time (useful for meetings) and sorting the tasks.",
       "nextStepButton": "Continue"
     },
     "AddAnotherTask": {
-      "messageBoxBody": "You can also add multiple tasks at a time! Not this time though, but feel free to experiment with it in the future.",
+      "messageBoxBody": "You can also add multiple tasks at once! Not this time though, but feel free to experiment with it in the future.",
       "nextStepButton": "Continue"
     },
     "AddTodoComplete": {
@@ -375,23 +375,23 @@
       "nextStepButton": "Continue"
     },
     "ExplainCurrent": {
-      "messageBoxBody": "This the “Current” page. You will use it the most. It just tells the one task you must be working on and your progress — nothing more. Keeps you focused.",
+      "messageBoxBody": "This is the “Current” page. You will use it most of the time. It only shows the one task you must be working on as well as your progress — nothing more. Keeps you focused.",
       "nextStepButton": "Continue"
     },
     "DeleteEditComplete": {
-      "messageBoxBody": "You have just the bare minimum of tools on this screen: you can delete, edit or complete the current task. You can also swipe right or left if you want (try it later though).",
+      "messageBoxBody": "You have only the bare minimum of tools here: you can delete, edit or complete the current task. You can also swipe right or left if you want (try it later on your own).",
       "nextStepButton": "Continue"
     },
     "Breakdown": {
-      "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too broad to complete in less than 30 minutes, break it down into multiple parts.",
+      "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too complex to finish in under 30 minutes, break it down into multiple parts.",
       "nextStepButton": "Continue"
     },
     "BreakdownTodo": {
-      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of anything that needs to be done because the original task will... vanish!",
+      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!",
       "nextStepButton": "Continue"
     },
     "BreakdownVanish": {
-      "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task. So you get rewarded by marking the large task as complete for just breaking it down!",
+      "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task.\n\nYou get rewarded with a completed task for just breaking it down!",
       "nextStepButton": "Continue"
     },
     "PlanningExplain": {
@@ -399,11 +399,11 @@
       "nextStepButton": "Continue"
     },
     "PlanningExplain2": {
-      "messageBoxBody": "Here’s how you need to do planning with Todorant. As soon as you think of any task, write them down in Todorant immediately or you will forget about it.\n\nAnd every morning as well as every 1st day of every month you should sit down and plan your month or day by distributing and reordering tasks between days or months. Feel free to hold and drag tasks to reorder them.",
+      "messageBoxBody": "Here’s how to do planning with Todorant. As soon as you think of any task, add it to Todorant immediately or you will forget about it.\n\nAnd every morning as well as every 1st day of every month you should sit down and plan your month or day by distributing and reordering tasks between days or months. Feel free to hold and drag tasks to reorder them.",
       "nextStepButton": "Continue"
     },
     "ExplainHashtags": {
-      "messageBoxBody": "You might also notice that there are no “projects”. Todorant doesn’t have “projects” where you can hide undesired tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags.",
+      "messageBoxBody": "You might also notice that there are no “projects”. Todorant doesn’t have “projects” where you can hide undesirable tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags.",
       "nextStepButton": "Continue"
     },
     "ExplainSearchAndCompleted": {
@@ -412,7 +412,7 @@
     },
     "ExplainReccuring": {
       "article": "Read the article",
-      "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the plants and set the next task”. You can read more on the purpose and solutions in the article I wrote",
+      "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the #plants and set the next task”. You can read more about it in the article I wrote.",
       "nextStepButton": "Continue"
     },
     "ExplainSettings": {
@@ -420,40 +420,40 @@
       "nextStepButton": "Continue"
     },
     "ExplainNotificationsGoogle": {
-      "messageBoxBody": "If you still need notifications, you can integrate with Google Calendar and make Google Calendar send you notifications, but only for the tasks that have an exact time assigned to them",
+      "messageBoxBody": "If you still need notifications, you can integrate Google Calendar. It will send you alerts, but only for the tasks that have an exact time assigned to them.",
       "nextStepButton": "Continue"
     },
     "ExplainNotifications": {
-      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring when there are too many notifications (which is prone to missing important ones) and hanging notifications take too much of a mental toll.",
+      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring notifications when there are too many of them. This leads to missing important alerts.",
       "nextStepButton": "Continue"
     },
     "ExplainMultiplatform": {
       "website": "Go to todorant.com",
-      "messageBoxBody": "Todorant is available on iOS, Android, Web, as Chrome and Firefox extensions, as a Telegram bot, on macOS, Windows and Linux. See the full list of integrations on todorant.com",
+      "messageBoxBody": "Todorant is available on iOS, Android, Web, macOS, Windows, and Linux as well as Chrome and Firefox extensions, and as a Telegram bot. See the full list of integrations on todorant.com",
       "nextStepButton": "Continue"
     },
     "ExplainPricing": {
-      "messageBoxBody": "Todorant is free for the first 30 days to try it out, then $5/month.\n\nThe logic is simple: if Todorant is worth $5/month in your productivity, then you would want to continue using it. If it is not worth it, you can stop using Todorant. I believe 30 days is enough to figure it out.",
+      "messageBoxBody": "Todorant is free for the first 30 days, then $5/month.\n\nThe logic is simple: if Todorant is worth a cup of coffee a month in productivity gains, then you would want to continue using it. If it is not worth it, you can stop using Todorant.\n\nI believe 30 days is enough to figure it out.",
       "nextStepButton": "Continue"
     },
     "Feedback": {
-      "messageBoxBody": "In case if you have any questions, suggestions or complaints, feel free to reach out to us on the official Telegram support group or via email.",
+      "messageBoxBody": "If you have any questions, suggestions or complaints, feel free to reach out to us in the official Telegram support group or via email.",
       "nextStepButton": "Continue"
     },
     "Rules": {
-      "messageBoxBody": "I highly encourage you to review the “How to” section of Todorant. It will most likely answer all the questions you have about the app and the methodology.\n\nAlso, when you have questions, look out for the “i” buttons in the upper right corner, most of the time, they’ll provide you with useful insight.",
+      "messageBoxBody": "I encourage you to review the “How to” section of Todorant. It will most likely answer all the questions you have about the app and the methodology.",
       "nextStepButton": "Continue"
     },
     "Congratulations": {
-      "messageBoxBody": "Congratulations! You have finished the tutorial. I hope it is now clear how to use Todorant.\n\nLet’s jump straight to it. I recommend you to move all of your todos to Todorant now. You will have to make them short and actionable as well as assign them specific dates or months. It might feel tedious, but I assure you: it will pay off in the long run!",
+      "messageBoxBody": "Congratulations! You have finished the tutorial. I hope it is now clear how to use Todorant.\n\nLet’s jump straight to it. You can move all of your todos to Todorant now. You will have to make them short and actionable as well as assign them specific dates or months.\n\nIt might feel tedious, but I assure you: it will pay off in the long run!",
       "nextStepButton": "Hooray!"
     },
     "BreakdownLessThanTwo": {
-      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two tasks that are still incomplete.",
+      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two smaller tasks that are still incomplete.",
       "nextStepButton": "Got it!"
     },
     "Info": {
-      "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner, most of the time, they’ll provide you with useful insight.",
+      "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner. Most of the time, they’ll provide you with useful insight.",
       "nextStepButton": "Continue"
     },
     "BreakDownCompletedTodo": {
