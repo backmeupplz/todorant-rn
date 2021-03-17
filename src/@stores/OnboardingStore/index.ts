@@ -1,5 +1,6 @@
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { translate } from '@utils/i18n'
-import { rootRef } from '../../App'
+import { rootRef } from '../../../App'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import {
@@ -14,50 +15,12 @@ import {
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
-import { hydrate } from './hydration/hydrate'
-import { hydrateStore } from './hydration/hydrateStore'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { navigate } from '@utils/navigation'
 import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
-
-export enum TutorialStep {
-  SelectDateNotAllowed = 'SelectDateNotAllowed',
-  BreakdownCompletedTodo = 'BreakDownCompletedTodo',
-  BreakdownLessThanTwo = 'BreakdownLessThanTwo',
-  Finished = 'Finished',
-  Close = 'Close',
-  Intro = 'Intro',
-  Explain = 'Explain',
-  AddTask = 'AddTask',
-  AddText = 'AddText',
-  SelectDate = 'SelectDate',
-  SelectFrog = 'SelectFrog',
-  SelectCompleted = 'SelectCompleted',
-  ShowMore = 'ShowMore',
-  AddAnotherTask = 'AddAnotherTask',
-  AddTodoComplete = 'AddTodoComplete',
-  ExplainCurrent = 'ExplainCurrent',
-  DeleteEditComplete = 'DeleteEditComplete',
-  Breakdown = 'Breakdown',
-  BreakdownTodo = 'BreakdownTodo',
-  BreakdownTodoAction = 'BreakdownTodoAction',
-  BreakdownVanish = 'BreakdownVanish',
-  PlanningExplain = 'PlanningExplain',
-  PlanningExplain2 = 'PlanningExplain2',
-  ExplainHashtags = 'ExplainHashtags',
-  ExplainSearchAndCompleted = 'ExplainSearchAndCompleted',
-  ExplainReccuring = 'ExplainReccuring',
-  ExplainSettings = 'ExplainSettings',
-  ExplainNotifications = 'ExplainNotifications',
-  ExplainNotificationsGoogle = 'ExplainNotificationsGoogle',
-  ExplainMultiplatform = 'ExplainMultiplatform',
-  ExplainPricing = 'ExplainPricing',
-  Feedback = 'Feedback',
-  Rules = 'Rules',
-  Info = 'Info',
-  Congratulations = 'Congratulations',
-}
 
 class OnboardingStore {
   constructor() {

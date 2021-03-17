@@ -1,8 +1,6 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { CurrentVM } from '@views/current/CurrentVM'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Container, View } from 'native-base'
 import { TodoCard } from '@components/TodoCard'
@@ -21,7 +19,6 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 import { realm } from '@utils/realm'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 export let CurrentTodoNodeId: number
 

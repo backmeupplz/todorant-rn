@@ -2,13 +2,10 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
-import { Linking, View } from 'react-native'
+import { View } from 'react-native'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
-import {
-  measurePosition,
-  sharedOnboardingStore,
-  TutorialStep,
-} from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import Animated, { Easing } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
 import { observable, reaction } from 'mobx'

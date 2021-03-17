@@ -6,11 +6,8 @@ import {
   RNHole,
   RNHoleView,
 } from '@upacyxou/react-native-hole-view'
-import {
-  measurePosition,
-  sharedOnboardingStore,
-  TutorialStep,
-} from '@stores/OnboardingStore'
+import { measurePosition, sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Dimensions, Keyboard, Platform } from 'react-native'

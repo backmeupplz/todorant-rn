@@ -4,7 +4,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { goBack } from '@utils/navigation'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { Keyboard } from 'react-native'
 
 export const backButtonStore = {

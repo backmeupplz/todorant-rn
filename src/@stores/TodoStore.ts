@@ -12,7 +12,7 @@ import { realm } from '@utils/realm'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import { sharedOnboardingStore } from './OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 class TodoStore {
   hydrated = false

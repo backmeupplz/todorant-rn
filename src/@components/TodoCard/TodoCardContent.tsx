@@ -14,7 +14,7 @@ import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { navigationRef } from '@utils/navigation'
 
 export let CurrentTodoNodeId: number

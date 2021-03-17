@@ -20,7 +20,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import fonts from '@utils/fonts'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export let InfoButtonNodeId: number
 

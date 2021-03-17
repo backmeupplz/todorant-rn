@@ -49,7 +49,8 @@ import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure } from 'mobx'
 import { checkupVersion } from '@utils/checkupVersion'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
 
 export let rootRef: any

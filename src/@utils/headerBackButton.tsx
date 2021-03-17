@@ -1,7 +1,8 @@
 import React from 'react'
 import { BackButton } from '@components/BackButton'
 import { View } from 'native-base'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { Observer } from 'mobx-react'
 
 export function headerBackButtonProps(useBackStore = false) {

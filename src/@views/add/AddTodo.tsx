@@ -48,7 +48,6 @@ import { logEvent } from '@utils/logEvent'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
-import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
@@ -56,7 +55,8 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export let SaveButtonNodeId: number
 export let BreakdownTodoNodeId: number

@@ -9,7 +9,8 @@ import { navigate } from '@utils/navigation'
 import { IconButton } from '@components/IconButton'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export let TodoActionsNodeId: number
 export let BrakdownNodeId: number

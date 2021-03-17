@@ -17,7 +17,8 @@ import { findNodeHandle, Keyboard, TextInput } from 'react-native'
 const {
   focusInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export class TodoVM {
   @observable text = ''

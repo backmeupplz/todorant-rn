@@ -4,7 +4,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View } from 'react-native'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
 
 export const addButtonStore = {
   add: () => {},

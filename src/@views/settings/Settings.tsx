@@ -52,7 +52,8 @@ import {
   NativeSyntheticEvent,
   ScrollView,
 } from 'react-native'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export let ScrollViewRef: ScrollView
 export let SupportButtonNodeId: number

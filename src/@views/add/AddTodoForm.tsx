@@ -6,15 +6,7 @@ import { View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
-import {
-  Platform,
-  Clipboard,
-  ViewStyle,
-  StyleProp,
-  UIManager,
-  findNodeHandle,
-  TextInput,
-} from 'react-native'
+import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -32,8 +24,8 @@ import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
-import { sharedOnboardingStore, TutorialStep } from '@stores/OnboardingStore'
-import { rootRef } from '../../../App'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 const fontSize = 18
 const verticalSpacing = 8
