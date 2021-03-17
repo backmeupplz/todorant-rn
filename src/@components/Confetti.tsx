@@ -5,9 +5,9 @@ import Confetti from 'react-native-confetti'
 let confettiRef: any
 
 let animating = false
-export function startConfetti() {
+export function startConfetti(showForSure = false) {
   const random = Math.floor(Math.random() * 5)
-  if (animating || random !== 0) {
+  if ((animating || random) !== 0 && !showForSure) {
     return
   }
   animating = true

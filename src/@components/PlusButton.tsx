@@ -17,12 +17,9 @@ export class PlusButton extends Component {
     return (
       <View
         onLayout={({ nativeEvent: { target } }: any) => {
-          if (
-            navigationRef.current?.getCurrentRoute()?.name === 'Current' &&
-            !PlusButtonLayout
-          ) {
-            PlusButtonLayout = target
-          }
+          if (navigationRef.current?.getCurrentRoute()?.name !== 'Current')
+            return
+          PlusButtonLayout = target
         }}
         style={{
           width: 48,

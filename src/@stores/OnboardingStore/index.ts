@@ -200,6 +200,7 @@ hydrate('OnboardingStore', sharedOnboardingStore).then(() => {
 // We are dynamicaly importing our nodeIds
 export const AllStages = {
   [TutorialStep.Start]: async () => {
+    sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
     return {
       messageBoxPosition: 'center',
       notShowClose: true,
@@ -564,7 +565,7 @@ export const AllStages = {
       () => {
         sharedOnboardingStore.tutorialWasShown = true
         sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
-        startConfetti()
+        startConfetti(true)
       },
       'nextStepButton',
       true
