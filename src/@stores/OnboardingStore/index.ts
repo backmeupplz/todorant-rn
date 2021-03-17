@@ -156,7 +156,6 @@ class OnboardingStore {
         } else {
           this.changeStepAndHole(nextStep, this.defaultHole, currentStep)
         }
-        // this.stepObject = currentStep
       } else {
         this.changeStepAndHole(nextStep, this.defaultHole)
       }
