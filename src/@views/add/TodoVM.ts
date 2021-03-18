@@ -175,7 +175,9 @@ export class TodoVM {
     makeObservable(this)
 
     Keyboard.addListener('keyboardDidHide', () => {
-      if (this.text && sharedOnboardingStore.step === TutorialStep.AddText) {
+      if (sharedOnboardingStore.tutorialWasShown) return
+      if (!this.text) return
+      if (sharedOnboardingStore.step === TutorialStep.AddText) {
         sharedOnboardingStore.nextStep()
       }
     })

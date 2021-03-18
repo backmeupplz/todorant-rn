@@ -27,6 +27,7 @@ import {
   Platform,
   StatusBar,
   Keyboard,
+  InteractionManager,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -311,6 +312,11 @@ class AddTodoContent extends Component<{
     if (this.props.route.params?.text) {
       this.vms[0].text = this.props.route.params?.text
     }
+    InteractionManager.runAfterInteractions(() => {
+      if (sharedOnboardingStore.step === TutorialStep.Breakdown) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -497,12 +503,7 @@ class AddTodoContent extends Component<{
                 this.isBreakdown && !!this.breakdownTodo && (
                   <View
                     onLayout={({ nativeEvent: { target } }: any) => {
-                      if (
-                        sharedOnboardingStore.step === TutorialStep.Breakdown
-                      ) {
-                        BreakdownTodoNodeId = target
-                        sharedOnboardingStore.nextStep()
-                      }
+                      BreakdownTodoNodeId = target
                     }}
                   >
                     <TodoCard

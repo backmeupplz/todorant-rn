@@ -6,7 +6,13 @@ import { View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
-import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
+import {
+  Platform,
+  Clipboard,
+  ViewStyle,
+  StyleProp,
+  InteractionManager,
+} from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -152,15 +158,20 @@ class TextRow extends Component<{
   vm: TodoVM
   showCross: boolean
 }> {
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      if (sharedOnboardingStore.step === TutorialStep.AddTask) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
+  }
+
   render() {
     return (
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
-        onLayout={({ nativeEvent }) => {
-          TextRowNodeId = (nativeEvent as any).target as number
-          if (sharedOnboardingStore.step === TutorialStep.AddTask) {
-            sharedOnboardingStore.nextStep()
-          }
+        onLayout={({ nativeEvent: { target } }: any) => {
+          TextRowNodeId = target
         }}
         style={{
           flexDirection: 'row',
@@ -171,10 +182,9 @@ class TextRow extends Component<{
       >
         <Input
           onSubmitEditing={() => {
-            if (
-              this.props.vm.text &&
-              sharedOnboardingStore.step === TutorialStep.AddText
-            ) {
+            if (sharedOnboardingStore.tutorialWasShown) return
+            if (!this.props.vm.text) return
+            if (sharedOnboardingStore.step === TutorialStep.AddText) {
               sharedOnboardingStore.nextStep()
             }
           }}
@@ -680,10 +690,11 @@ export class AddTodoForm extends Component<{
                 name={translate('todo.create.frog')}
                 value={this.props.vm.frog}
                 onValueChange={(value) => {
+                  this.props.vm.frog = value
+                  if (sharedOnboardingStore.tutorialWasShown) return
                   if (sharedOnboardingStore.step === TutorialStep.SelectFrog) {
                     sharedOnboardingStore.nextStep()
                   }
-                  this.props.vm.frog = value
                 }}
               />
             </View>
@@ -754,10 +765,11 @@ export class AddTodoForm extends Component<{
                   opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
                 }}
                 onPress={() => {
+                  this.props.vm.showMore = true
+                  if (sharedOnboardingStore.tutorialWasShown) return
                   if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
                     sharedOnboardingStore.nextStep()
                   }
-                  this.props.vm.showMore = true
                 }}
               >
                 <Text

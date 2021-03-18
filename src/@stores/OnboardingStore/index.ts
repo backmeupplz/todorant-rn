@@ -23,6 +23,8 @@ import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { settingsScrollOffset } from '@utils/settingsScrollOffset'
+import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
+import { OnboardingButton } from './MessageBoxButton'
 
 class OnboardingStore {
   constructor() {
@@ -48,19 +50,18 @@ class OnboardingStore {
     messageBoxPosition: 'center',
     notShowClose: true,
     additionalButtons: [
-      {
-        message: 'closeButtonText',
-        action: () => {
-          sharedOnboardingStore.nextStep(TutorialStep.Close)
-        },
-      },
+      new OnboardingButton(
+        () => sharedOnboardingStore.nextStep(TutorialStep.Close),
+        'closeButtonText'
+      ),
     ],
   }
 
+  @persist @observable screen: OnboardingSreens = OnboardingSreens.Current
   @persist @observable savedStep?: TutorialStep
   @observable messageBoxAppear = true
-  @observable step = TutorialStep.Intro
-  @observable previousStep = TutorialStep.Intro
+  @observable step = TutorialStep.Start
+  @observable previousStep = TutorialStep.Start
   @persist @observable tutorialWasShown = false
 
   @computed get closeOnboardingStyle() {
@@ -89,6 +90,11 @@ class OnboardingStore {
     x -= halfOfWidth / 2
     y -= (halfOfHeight * heightMultiplier) / 2
     return { height, width, x, y, borderRadius }
+  }
+
+  changeSavedSreen(screen: OnboardingSreens) {
+    navigate(screen)
+    this.screen = screen
   }
 
   changeStepAndHole(
@@ -193,38 +199,43 @@ hydrate('OnboardingStore', sharedOnboardingStore).then(() => {
 
 // We are dynamicaly importing our nodeIds
 export const AllStages = {
-  [TutorialStep.Info]: async () => {
+  [TutorialStep.Start]: async () => {
+    sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
     return {
       messageBoxPosition: 'center',
+      notShowClose: true,
+      additionalButtons: [
+        new OnboardingButton(
+          () => sharedOnboardingStore.nextStep(TutorialStep.Close),
+          'closeButtonText'
+        ),
+      ],
+      customContinueText: true,
     }
   },
   [TutorialStep.Close]: async () => {
-    const changedMindButton = {
-      message: 'changedMyMind',
-      action: () => {
-        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
-      },
-      preferred: true,
-    }
-    const articleButton = {
-      message: 'article',
-      action: () => {
+    const changedMindButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      'changedMyMind',
+      true
+    )
+    const articleButton = new OnboardingButton(
+      () => {
         sharedOnboardingStore.tutorialWasShown = true
-        sharedOnboardingStore.nextStep(TutorialStep.Intro)
+        sharedOnboardingStore.nextStep(TutorialStep.Start)
         navigate('Rules')
       },
-      preferred: true,
-    }
-    const closeEverythingButton = {
-      message: 'closeEverything',
-      action: () => {
-        sharedOnboardingStore.tutorialWasShown = true
-        sharedOnboardingStore.nextStep(TutorialStep.Intro)
-        Toast.show({
-          text: `${translate('onboarding.Close.toast')}`,
-        })
-      },
-    }
+      'article',
+      true
+    )
+    const closeEverythingButton = new OnboardingButton(() => {
+      sharedOnboardingStore.tutorialWasShown = true
+      sharedOnboardingStore.nextStep(TutorialStep.Start)
+      Toast.show({
+        text: `${translate('onboarding.Close.toast')}`,
+      })
+    }, 'closeEverything')
+
     return {
       additionalButtons: [
         changedMindButton,
@@ -237,13 +248,18 @@ export const AllStages = {
       dontSave: true,
     }
   },
+  [TutorialStep.Explain]: async () => {
+    return {
+      messageBoxPosition: 'center',
+    }
+  },
   [TutorialStep.AddTask]: async () => {
     const nodeId = (await import('@components/PlusButton')).PlusButtonLayout
     return { nodeId, notShowContinue: true }
   },
   [TutorialStep.AddText]: () => {
     return new Promise(async (resolve) => {
-      navigate('AddTodo')
+      sharedOnboardingStore.changeSavedSreen(OnboardingSreens.AddTodo)
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
         resolve({
@@ -256,12 +272,10 @@ export const AllStages = {
     })
   },
   [TutorialStep.SelectDate]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
     return { nodeId, divider: 16, dontSave: true, borderRadius: 16 }
   },
   [TutorialStep.SelectFrog]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).FrogRowNodeId
     return {
       nodeId,
@@ -272,7 +286,6 @@ export const AllStages = {
     }
   },
   [TutorialStep.SelectCompleted]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).CompletedRowNodeId
     return {
       nodeId,
@@ -282,7 +295,6 @@ export const AllStages = {
     }
   },
   [TutorialStep.ShowMore]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodoForm')).ShowMoreRowNodeId
     return {
       nodeId,
@@ -293,7 +305,6 @@ export const AllStages = {
     }
   },
   [TutorialStep.AddAnotherTask]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@components/AddButton')).AddButonNodeId
     return {
       nodeId,
@@ -302,7 +313,6 @@ export const AllStages = {
     }
   },
   [TutorialStep.AddTodoComplete]: async () => {
-    navigate('AddTodo')
     const nodeId = (await import('@views/add/AddTodo')).SaveButtonNodeId
     return {
       nodeId,
@@ -314,7 +324,7 @@ export const AllStages = {
     }
   },
   [TutorialStep.ExplainCurrent]: async () => {
-    navigate('Current')
+    sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
     const nodeId = (await import('@views/current/CurrentContent'))
       .CurrentTodoNodeId
     return { nodeId, divider: 11.5 }
@@ -355,8 +365,29 @@ export const AllStages = {
     const nodeId = findNodeHandle(rootRef)
     return { nodeId, notShowContinue: true, notShowClose: true, dontSave: true }
   },
+  [TutorialStep.BreakdownLessThanTwo]: async () => {
+    const gotItButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      undefined,
+      true,
+      true
+    )
+    return {
+      additionalButtons: [gotItButton],
+      notShowContinue: true,
+      notShowClose: true,
+      messageBoxPosition: 'center',
+      dontSave: true,
+      customContinueText: true,
+    }
+  },
+  [TutorialStep.BreakdownVanish]: async () => {
+    return {
+      messageBoxPosition: 'center',
+    }
+  },
   [TutorialStep.PlanningExplain]: async () => {
-    navigate('Planning')
+    sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Planning)
     const nodeId = (await import('@assets/images/planning-active'))
       .BottomTabPlanningButton
     const measuredPlanningButton = await measurePosition(nodeId)
@@ -368,12 +399,15 @@ export const AllStages = {
     }
   },
   [TutorialStep.PlanningExplain2]: async () => {
-    navigate('Planning')
     return { messageBoxPosition: 'center' }
+  },
+  [TutorialStep.ExplainHashtags]: async () => {
+    return {
+      messageBoxPosition: 'center',
+    }
   },
   [TutorialStep.ExplainSearchAndCompleted]: async () => {
     return new Promise(async (resolve) => {
-      navigate('Planning')
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
           .PlanningHeaderNodeId
@@ -386,27 +420,22 @@ export const AllStages = {
     })
   },
   [TutorialStep.ExplainReccuring]: async () => {
-    navigate('Settings')
-    const articleButton = {
-      preferred: true,
-      message: 'article',
-      action: () => {
+    sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Settings)
+    const articleButton = new OnboardingButton(
+      () => {
         Linking.openURL(
           'https://blog.borodutch.com/automation-kills-productivity'
         )
       },
-    }
+      'article',
+      true
+    )
     return {
       additionalButtons: [articleButton],
       messageBoxPosition: 'center',
     }
   },
-  [TutorialStep.ExplainPricing]: async () => {
-    navigate('Settings')
-    return { messageBoxPosition: 'center' }
-  },
   [TutorialStep.ExplainSettings]: async () => {
-    navigate('Settings')
     const nodeId = (await import('@assets/images/settings-active'))
       .BottomTabSettingsgButton
     const measuredSettingsButton = await measurePosition(nodeId)
@@ -421,7 +450,6 @@ export const AllStages = {
     return { messageBoxPosition: 'center' }
   },
   [TutorialStep.ExplainNotificationsGoogle]: () => {
-    navigate('Settings')
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         // Actual ScrollView
@@ -467,75 +495,22 @@ export const AllStages = {
       })
     })
   },
-  [TutorialStep.Congratulations]: async () => {
-    const endTutorialButton = {
-      message: 'nextStepButton',
-      action: () => {
-        sharedOnboardingStore.tutorialWasShown = true
-        navigate('Current')
-        startConfetti()
-      },
-      preferred: true,
-    }
-    return {
-      messageBoxPosition: 'center',
-      additionalButtons: [endTutorialButton],
-      notShowContinue: true,
-      notShowClose: true,
-      customContinueText: true,
-    }
-  },
-  [TutorialStep.BreakdownLessThanTwo]: async () => {
-    const gotItButton = {
-      action: () => {
-        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
-      },
-      preferred: true,
-      notAllowed: true,
-    }
-    return {
-      additionalButtons: [gotItButton],
-      notShowContinue: true,
-      notShowClose: true,
-      messageBoxPosition: 'center',
-      dontSave: true,
-      customContinueText: true,
-    }
-  },
-  [TutorialStep.BreakdownVanish]: async () => {
-    return {
-      messageBoxPosition: 'center',
-    }
-  },
-  [TutorialStep.Explain]: async () => {
-    navigate('Current')
-    return {
-      messageBoxPosition: 'center',
-    }
-  },
-  [TutorialStep.ExplainHashtags]: async () => {
-    navigate('Planning')
-    return {
-      messageBoxPosition: 'center',
-    }
-  },
   [TutorialStep.ExplainMultiplatform]: async () => {
-    navigate('Settings')
-    const todorantWebsiteButton = {
-      preferred: true,
-      message: 'website',
-      action: () => {
-        Linking.openURL('https://todorant.com')
-      },
-    }
+    const todorantWebsiteButton = new OnboardingButton(
+      () => Linking.openURL('https://todorant.com'),
+      'website',
+      true
+    )
     return {
       additionalButtons: [todorantWebsiteButton],
       messageBoxPosition: 'center',
     }
   },
+  [TutorialStep.ExplainPricing]: async () => {
+    return { messageBoxPosition: 'center' }
+  },
   [TutorialStep.Feedback]: async () => {
-    navigate('Settings')
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
@@ -558,8 +533,7 @@ export const AllStages = {
     })
   },
   [TutorialStep.Rules]: async () => {
-    navigate('Settings')
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
@@ -573,8 +547,7 @@ export const AllStages = {
     })
   },
   [TutorialStep.Info]: async () => {
-    navigate('Settings')
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .ScrollViewRef
@@ -587,29 +560,31 @@ export const AllStages = {
       })
     })
   },
-  [TutorialStep.Intro]: async () => {
+  [TutorialStep.Congratulations]: async () => {
+    const endTutorialButton = new OnboardingButton(
+      () => {
+        sharedOnboardingStore.tutorialWasShown = true
+        sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
+        startConfetti(true)
+      },
+      'nextStepButton',
+      true
+    )
     return {
       messageBoxPosition: 'center',
+      additionalButtons: [endTutorialButton],
+      notShowContinue: true,
       notShowClose: true,
-      additionalButtons: [
-        {
-          message: 'closeButtonText',
-          action: () => {
-            sharedOnboardingStore.nextStep(TutorialStep.Close)
-          },
-        },
-      ],
       customContinueText: true,
     }
   },
   [TutorialStep.BreakdownCompletedTodo]: async () => {
-    const holdOnButton = {
-      preferred: true,
-      action: () => {
-        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
-      },
-      notAllowed: true,
-    }
+    const holdOnButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      undefined,
+      true,
+      true
+    )
     return {
       messageBoxPosition: 'center',
       notShowClose: true,
@@ -619,13 +594,12 @@ export const AllStages = {
     }
   },
   [TutorialStep.SelectDateNotAllowed]: async () => {
-    const holdOnButton = {
-      preferred: true,
-      action: () => {
-        sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep)
-      },
-      notAllowed: true,
-    }
+    const holdOnButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      undefined,
+      true,
+      true
+    )
     return {
       messageBoxPosition: 'center',
       notShowClose: true,

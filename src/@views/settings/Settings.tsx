@@ -48,6 +48,7 @@ import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
 import {
+  InteractionManager,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -156,9 +157,10 @@ export class SettingsContent extends Component {
             <SectionHeader title={translate('info')} />
             <TableItem
               onPress={() => {
-                navigate('Current')
                 sharedOnboardingStore.tutorialWasShown = false
-                sharedOnboardingStore.nextStep(TutorialStep.Intro)
+                InteractionManager.runAfterInteractions(() => {
+                  sharedOnboardingStore.nextStep(TutorialStep.Start)
+                })
               }}
             >
               <Text

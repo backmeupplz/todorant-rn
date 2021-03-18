@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from '@views/BottomTabNavigator'
-import { navigationRef } from '@utils/navigation'
+import { navigate, navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/purchases'
 import { Icon, Root, StyleProvider, Text, View } from 'native-base'
@@ -15,6 +15,7 @@ import {
   AppState,
   TouchableOpacity,
   Keyboard,
+  InteractionManager,
 } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
@@ -99,16 +100,13 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
-    setTimeout(() => {
+    InteractionManager.runAfterInteractions(() => {
       requestAnimationFrame(() => {
-        if (
-          sharedOnboardingStore.tutorialWasShown ||
-          !sharedOnboardingStore.savedStep
-        )
-          return
+        if (sharedOnboardingStore.tutorialWasShown) return
+        navigate(sharedOnboardingStore.screen)
         sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
       })
-    }, 1)
+    })
   }
 
   render() {

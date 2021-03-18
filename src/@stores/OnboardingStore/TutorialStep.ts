@@ -4,7 +4,7 @@ export enum TutorialStep {
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
   Finished = 'Finished',
   Close = 'Close',
-  Intro = 'Intro',
+  Start = 'Start',
   Explain = 'Explain',
   AddTask = 'AddTask',
   AddText = 'AddText',
