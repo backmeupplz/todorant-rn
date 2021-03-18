@@ -102,7 +102,11 @@ class App extends Component {
     })
     InteractionManager.runAfterInteractions(() => {
       requestAnimationFrame(() => {
-        if (sharedOnboardingStore.tutorialWasShown) return
+        if (
+          sharedOnboardingStore.tutorialWasShown ||
+          !sharedOnboardingStore.savedStep
+        )
+          return
         navigate(sharedOnboardingStore.screen)
         sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
       })
