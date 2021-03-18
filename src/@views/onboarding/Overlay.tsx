@@ -12,6 +12,8 @@ import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Dimensions, Keyboard, Platform } from 'react-native'
+import { realm } from '@utils/realm'
+import { Todo } from '@models/Todo'
 
 @observer
 export class Overlay extends Component {
@@ -31,6 +33,10 @@ export class Overlay extends Component {
 
   UNSAFE_componentWillMount() {
     makeObservable(this)
+  }
+
+  todosExists() {
+    return !!realm.objects(Todo).length
   }
 
   componentDidMount() {
@@ -57,6 +63,7 @@ export class Overlay extends Component {
     reaction(
       () => sharedOnboardingStore.hydrated,
       () => {
+        if (this.todosExists() && !sharedOnboardingStore.savedStep) return
         this.trigger(!sharedOnboardingStore.tutorialWasShown)
       }
     )
