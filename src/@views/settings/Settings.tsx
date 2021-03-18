@@ -47,24 +47,18 @@ import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
-import {
-  InteractionManager,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-} from 'react-native'
+import { InteractionManager, ScrollView } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
 
-export let ScrollViewRef: ScrollView
-export let SupportButtonNodeId: number
-export let SettingsRootRef: Container
-export let SettingsBeforeFeedbackButton: number
-export let HowToUseNodeId: number
+export let scrollViewRef: ScrollView
+export let supportButtonNodeId: number
+export let settingsRootRef: Container
+export let settingsBeforeFeedbackButton: number
+export let howToUseNodeId: number
 
-export let ScrollEvent: NativeSyntheticEvent<NativeScrollEvent>
-export let SettingsContentRef: View
+export let settingsContentRef: View
 
 const Stack = createStackNavigator()
 
@@ -76,11 +70,11 @@ export class SettingsContent extends Component {
       <Container>
         <HeaderScrollView
           onScrollViewContentRef={(ref) => {
-            SettingsContentRef = ref
+            settingsContentRef = ref
           }}
-          onScrollViewRef={(ref) => {
+          onscrollViewRef={(ref) => {
             if (!ref) return
-            ScrollViewRef = ref
+            scrollViewRef = ref
           }}
           onOffsetChange={setSettingsScrollOffset}
           title={translate('settings')}
@@ -88,7 +82,7 @@ export class SettingsContent extends Component {
         >
           <View
             onLayout={({ nativeEvent: { target } }: any) => {
-              SettingsBeforeFeedbackButton = target
+              settingsBeforeFeedbackButton = target
             }}
           >
             <DebugButtons />
@@ -102,7 +96,7 @@ export class SettingsContent extends Component {
             >
               <Text
                 onLayout={({ nativeEvent: { target } }: any) => {
-                  HowToUseNodeId = target
+                  howToUseNodeId = target
                 }}
                 {...sharedColors.regularTextExtraStyle}
               >
@@ -212,7 +206,7 @@ export class SettingsContent extends Component {
                 fontFamily: fonts.SFProTextRegular,
               }}
               onLayout={({ nativeEvent: { target } }: any) => {
-                SupportButtonNodeId = target
+                supportButtonNodeId = target
               }}
             >
               {translate('supportLabel')}

@@ -261,7 +261,7 @@ export const AllStages = {
     return new Promise(async (resolve) => {
       sharedOnboardingStore.changeSavedSreen(OnboardingSreens.AddTodo)
       InteractionManager.runAfterInteractions(async () => {
-        const nodeId = (await import('@views/add/AddTodoForm')).TextRowNodeId
+        const nodeId = (await import('@views/add/AddTodoForm')).textRowNodeId
         resolve({
           nodeId,
           notShowContinue: true,
@@ -272,11 +272,11 @@ export const AllStages = {
     })
   },
   [TutorialStep.SelectDate]: async () => {
-    const nodeId = (await import('@views/add/AddTodoForm')).DateRowNodeId
+    const nodeId = (await import('@views/add/AddTodoForm')).dateRowNodeId
     return { nodeId, divider: 16, dontSave: true, borderRadius: 16 }
   },
   [TutorialStep.SelectFrog]: async () => {
-    const nodeId = (await import('@views/add/AddTodoForm')).FrogRowNodeId
+    const nodeId = (await import('@views/add/AddTodoForm')).frogRowNodeId
     return {
       nodeId,
       divider: 16,
@@ -286,7 +286,7 @@ export const AllStages = {
     }
   },
   [TutorialStep.SelectCompleted]: async () => {
-    const nodeId = (await import('@views/add/AddTodoForm')).CompletedRowNodeId
+    const nodeId = (await import('@views/add/AddTodoForm')).completedRowNodeId
     return {
       nodeId,
       divider: 16,
@@ -295,7 +295,7 @@ export const AllStages = {
     }
   },
   [TutorialStep.ShowMore]: async () => {
-    const nodeId = (await import('@views/add/AddTodoForm')).ShowMoreRowNodeId
+    const nodeId = (await import('@views/add/AddTodoForm')).showMoreRowNodeId
     return {
       nodeId,
       notShowContinue: true,
@@ -305,7 +305,7 @@ export const AllStages = {
     }
   },
   [TutorialStep.AddAnotherTask]: async () => {
-    const nodeId = (await import('@components/AddButton')).AddButonNodeId
+    const nodeId = (await import('@components/AddButton')).addButonNodeId
     return {
       nodeId,
       dontSave: true,
@@ -313,7 +313,7 @@ export const AllStages = {
     }
   },
   [TutorialStep.AddTodoComplete]: async () => {
-    const nodeId = (await import('@views/add/AddTodo')).SaveButtonNodeId
+    const nodeId = (await import('@views/add/AddTodo')).saveButtonNodeId
     return {
       nodeId,
       notShowContinue: true,
@@ -326,12 +326,12 @@ export const AllStages = {
   [TutorialStep.ExplainCurrent]: async () => {
     sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
     const nodeId = (await import('@views/current/CurrentContent'))
-      .CurrentTodoNodeId
+      .currentTodoNodeId
     return { nodeId, divider: 11.5 }
   },
   [TutorialStep.DeleteEditComplete]: async () => {
     const nodeId = (await import('@components/TodoCard/TodoCardActions'))
-      .TodoActionsNodeId
+      .todoActionsNodeId
     return {
       nodeId,
       divider: 4,
@@ -342,7 +342,7 @@ export const AllStages = {
     return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {})
       const nodeId = (await import('@components/TodoCard/TodoCardActions'))
-        .BrakdownNodeId
+        .breakdownNodeId
       resolve({
         nodeId,
         notShowContinue: true,
@@ -353,7 +353,7 @@ export const AllStages = {
     })
   },
   [TutorialStep.BreakdownTodo]: async () => {
-    const nodeId = (await import('@views/add/AddTodo')).BreakdownTodoNodeId
+    const nodeId = (await import('@views/add/AddTodo')).breakdownTodoNodeId
     return {
       nodeId,
       divider: 16,
@@ -410,7 +410,7 @@ export const AllStages = {
     return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const nodeId = (await import('@views/planning/PlanningHeaderSegment'))
-          .PlanningHeaderNodeId
+          .planningHeaderNodeId
         resolve({
           nodeId,
           messageBoxPosition: 'center',
@@ -454,14 +454,14 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         // Actual ScrollView
         const scrollView = (await import('@views/settings/Settings'))
-          .ScrollViewRef
+          .scrollViewRef
         // Actual integration button node
         const integrationButtonNodeId = (
           await import('@views/settings/GeneralSettings')
-        ).IntegrationButtonsNodeId
+        ).integrationButtonsNodeId
         // Content rendered inside of ScrollView (unfortunately scrollview does not give a full height of content inside of it)
         const scrollContentRef = (await import('@views/settings/Settings'))
-          .SettingsContentRef
+          .settingsContentRef
         // node of scrollContent
         const scrollContentNodeId = findNodeHandle(scrollContentRef)
         if (!scrollContentNodeId) return
@@ -513,13 +513,13 @@ export const AllStages = {
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
-          .ScrollViewRef
+          .scrollViewRef
         scrollView.scrollToEnd()
         // Wait for the scroll
         setTimeout(() => {
           InteractionManager.runAfterInteractions(async () => {
             const feedButton = (await import('@views/settings/Settings'))
-              .SupportButtonNodeId
+              .supportButtonNodeId
             const offset = settingsScrollOffset
             const feedButtonPosition = await measurePosition(feedButton)
             resolve({
@@ -536,9 +536,9 @@ export const AllStages = {
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
-          .ScrollViewRef
+          .scrollViewRef
         scrollView.scrollTo({ y: 0 })
-        const nodeId = (await import('@views/settings/Settings')).HowToUseNodeId
+        const nodeId = (await import('@views/settings/Settings')).howToUseNodeId
         resolve({
           nodeId,
           borderRadius: Platform.OS === 'ios' ? 16 : undefined,
@@ -550,9 +550,9 @@ export const AllStages = {
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
-          .ScrollViewRef
+          .scrollViewRef
         scrollView.scrollTo({ y: 0 })
-        const nodeId = (await import('@components/InfoButton')).InfoButtonNodeId
+        const nodeId = (await import('@components/InfoButton')).infoButtonNodeId
         resolve({
           nodeId: Platform.OS === 'android' ? nodeId : undefined,
           messageBoxPosition: 'center',

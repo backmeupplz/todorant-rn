@@ -20,7 +20,7 @@ import { realm } from '@utils/realm'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
-export let CurrentTodoNodeId: number
+export let currentTodoNodeId: number
 
 @observer
 export class CurrentContent extends Component {
@@ -74,7 +74,7 @@ export class CurrentContent extends Component {
           {!!this.vm.currentTodo && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
-                CurrentTodoNodeId = target
+                currentTodoNodeId = target
               }}
             >
               <TodoCard todo={this.vm.currentTodo} type={CardType.current} />

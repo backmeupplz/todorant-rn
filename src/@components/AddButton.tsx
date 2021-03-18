@@ -9,7 +9,7 @@ export const addButtonStore = {
   add: () => {},
 }
 
-export let AddButonNodeId: number
+export let addButonNodeId: number
 
 @observer
 export class AddButton extends Component {
@@ -26,7 +26,7 @@ export class AddButton extends Component {
             marginHorizontal: 12,
           }}
           onLayout={({ nativeEvent: { target } }: any) => {
-            AddButonNodeId = target
+            addButonNodeId = target
           }}
         >
           <Icon

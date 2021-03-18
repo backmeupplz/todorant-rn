@@ -17,7 +17,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { navigationRef } from '@utils/navigation'
 
-export let CurrentTodoNodeId: number
+export let currentTodoNodeId: number
 
 @observer
 export class TodoCardContent extends Component<{
@@ -33,7 +33,7 @@ export class TodoCardContent extends Component<{
       <View
         onLayout={({ nativeEvent: { target } }: any) => {
           if (navigationRef.current?.getCurrentRoute()?.name === 'Current') {
-            CurrentTodoNodeId = target
+            currentTodoNodeId = target
           }
         }}
       >

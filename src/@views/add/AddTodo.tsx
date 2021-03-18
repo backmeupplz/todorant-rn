@@ -59,8 +59,8 @@ import {
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
-export let SaveButtonNodeId: number
-export let BreakdownTodoNodeId: number
+export let saveButtonNodeId: number
+export let breakdownTodoNodeId: number
 
 @observer
 class AddTodoContent extends Component<{
@@ -503,7 +503,7 @@ class AddTodoContent extends Component<{
                 this.isBreakdown && !!this.breakdownTodo && (
                   <View
                     onLayout={({ nativeEvent: { target } }: any) => {
-                      BreakdownTodoNodeId = target
+                      breakdownTodoNodeId = target
                     }}
                   >
                     <TodoCard
@@ -562,7 +562,7 @@ class AddTodoContent extends Component<{
             >
               <TouchableOpacity
                 onLayout={({ nativeEvent: { target } }: any) => {
-                  SaveButtonNodeId = target
+                  saveButtonNodeId = target
                 }}
                 disabled={
                   !sharedOnboardingStore.tutorialWasShown &&

@@ -34,7 +34,7 @@ const codeToName = {
   'pt-BR': 'Português Brasileiro',
 }
 
-export let IntegrationButtonsNodeId: number
+export let integrationButtonsNodeId: number
 
 @observer
 export class GeneralSettings extends Component {
@@ -145,7 +145,7 @@ export class GeneralSettings extends Component {
           <View onLayout={({ nativeEvent: { target } }: any) => {}}>
             <TableItem
               onLayout={({ nativeEvent: { target } }: any) => {
-                IntegrationButtonsNodeId = target
+                integrationButtonsNodeId = target
               }}
               onPress={() => {
                 navigate('Integrations')

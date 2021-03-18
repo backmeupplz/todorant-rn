@@ -147,11 +147,11 @@ class CollapsedTodo extends Component<{
   }
 }
 
-export let TextRowNodeId: number
-export let DateRowNodeId: number
-export let FrogRowNodeId: number
-export let CompletedRowNodeId: number
-export let ShowMoreRowNodeId: number
+export let textRowNodeId: number
+export let dateRowNodeId: number
+export let frogRowNodeId: number
+export let completedRowNodeId: number
+export let showMoreRowNodeId: number
 
 @observer
 class TextRow extends Component<{
@@ -171,7 +171,7 @@ class TextRow extends Component<{
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
         onLayout={({ nativeEvent: { target } }: any) => {
-          TextRowNodeId = target
+          textRowNodeId = target
         }}
         style={{
           flexDirection: 'row',
@@ -570,7 +570,7 @@ export class AddTodoForm extends Component<{
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
-                DateRowNodeId = target as number
+                dateRowNodeId = target as number
               }}
             >
               <DateRow vm={this.props.vm} />
@@ -683,7 +683,7 @@ export class AddTodoForm extends Component<{
             )}
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
-                FrogRowNodeId = target
+                frogRowNodeId = target
               }}
             >
               <SwitchRow
@@ -709,7 +709,7 @@ export class AddTodoForm extends Component<{
                   : 'none'
               }
               onLayout={({ nativeEvent: { target } }: any) => {
-                CompletedRowNodeId = target
+                completedRowNodeId = target
               }}
             >
               <SwitchRow
@@ -755,7 +755,7 @@ export class AddTodoForm extends Component<{
                   )
                 }
                 onLayout={({ nativeEvent: { target } }: any) => {
-                  ShowMoreRowNodeId = target
+                  showMoreRowNodeId = target
                 }}
                 style={{
                   flexDirection: 'row',

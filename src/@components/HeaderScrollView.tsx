@@ -23,7 +23,7 @@ import fonts from '@utils/fonts'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
-export let InfoButtonNodeId: number
+export let infoButtonNodeId: number
 
 const headerHeight = ifIphoneX(88, 60)
 const { height } = Dimensions.get('window')
@@ -34,7 +34,7 @@ export class HeaderScrollView extends Component<{
   showsHeroButton?: boolean
   infoTitle: string
   contentContainerStyle?: StyleProp<ViewStyle>
-  onScrollViewRef?: (ref: ScrollView | null) => void
+  onscrollViewRef?: (ref: ScrollView | null) => void
   onScrollViewContentRef?: (event: View) => void
   onOffsetChange?: (offset: NativeScrollPoint) => void
 }> {
@@ -124,7 +124,7 @@ export class HeaderScrollView extends Component<{
           </Fade>
         </View>
         <ScrollView
-          ref={this.props.onScrollViewRef}
+          ref={this.props.onscrollViewRef}
           onScroll={(event) => {
             Animated.event(
               [
@@ -191,7 +191,7 @@ export class HeaderScrollView extends Component<{
                   <View style={{ marginHorizontal: 12 }}>
                     <View
                       onLayout={({ nativeEvent: { target } }: any) => {
-                        InfoButtonNodeId = target
+                        infoButtonNodeId = target
                       }}
                     >
                       {InfoButton(this.props.infoTitle)()}

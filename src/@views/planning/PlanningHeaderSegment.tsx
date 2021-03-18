@@ -8,7 +8,7 @@ import { Platform, View } from 'react-native'
 import fonts from '@utils/fonts'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
-export let PlanningHeaderNodeId: number
+export let planningHeaderNodeId: number
 
 @observer
 export class PlanningHeaderSegment extends Component {
@@ -16,7 +16,7 @@ export class PlanningHeaderSegment extends Component {
     return (
       <View
         onLayout={({ nativeEvent: { target } }: any) => {
-          PlanningHeaderNodeId = target
+          planningHeaderNodeId = target
         }}
       >
         <SegmentedControl

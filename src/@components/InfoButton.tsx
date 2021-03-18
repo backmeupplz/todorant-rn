@@ -8,7 +8,7 @@ import CustomIcon from '@components/CustomIcon'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { navigationRef } from '@utils/navigation'
 
-export let InfoButtonNodeId: number
+export let infoButtonNodeId: number
 
 @observer
 export class InfoButtonContent extends Component<{
@@ -22,7 +22,7 @@ export class InfoButtonContent extends Component<{
         onLayout={({ nativeEvent: { target } }: any) => {
           if (navigationRef.current?.getCurrentRoute()?.name !== 'Settings')
             return
-          InfoButtonNodeId = target
+          infoButtonNodeId = target
         }}
         style={{
           marginRight: 12,

@@ -12,8 +12,8 @@ import { isTodoOld } from '@utils/isTodoOld'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
-export let TodoActionsNodeId: number
-export let BrakdownNodeId: number
+export let todoActionsNodeId: number
+export let breakdownNodeId: number
 
 @observer
 export class TodoCardActions extends Component<{
@@ -58,7 +58,7 @@ export class TodoCardActions extends Component<{
         >
           <View
             onLayout={({ nativeEvent: { target } }: any) => {
-              TodoActionsNodeId = target
+              todoActionsNodeId = target
             }}
             style={{
               flexDirection: 'row',
@@ -106,7 +106,7 @@ export class TodoCardActions extends Component<{
               this.props.type === CardType.planning) && (
               <View
                 onLayout={({ nativeEvent: { target } }: any) => {
-                  BrakdownNodeId = target
+                  breakdownNodeId = target
                 }}
               >
                 <IconButton
