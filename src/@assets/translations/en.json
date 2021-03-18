@@ -138,7 +138,6 @@
   "appleUnauthorizedTextGoodNews": "Good news though: you will not be charged until the 30 days trial is finished.",
   "appleUnauthorizedButtonExtra": "30 days free trial, then",
   "introTitle": "Welcome!",
-  "tutorialButton": "Tutorial",
   "introBack": "Let's go!",
   "infoTitle": "Info",
   "infoIntro": "Good job tapping the \"i\" button! This is the welcome message explaining what Todorant is. No more, no less.",
@@ -324,6 +323,17 @@
   "readRulesFirst": "I'll read how to use Todorant first!",
   "iAdmireYourBravery": "I admire your bravery!",
   "iAdmireYourSpirit": "I admire your spirit!",
+  "dirtyValidSaveSingular": "Would you like to save the entered task?",
+  "dirtyInvalidSaveSingular": "You didn't finish entering the task. Do you want to dismiss the entered task?",
+  "dissmissTasksSingular": "Dismiss task",
+  "saveTasksSingular": "Save task",
+  "fixTasksSingular": "Fix task",
+  "changeTasksSingular": "Change task",
+  "addedTask": "Added task",
+  "edit": "Edit",
+  "editText": "Edit hashtag text",
+  "editName": "New hashtag text",
+  "tutorialButton": "Tutorial",
   "onboarding": {
     "closeButtonText": "Close the tutorial",
     "defaultNextStepButtonText": "Continue",
@@ -344,7 +354,7 @@
       "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. The restrictions here are carefully crafted to make your brain crave completing tasks like you crave sugar."
     },
     "AddTask": {
-      "messageBoxBody": "Let’s add your first task. Click on the plus button below"
+      "messageBoxBody": "Let’s add your first task. Click on the plus button below."
     },
     "AddText": {
       "messageBoxBody": "Think of something that you need to do. Now type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable."
@@ -390,7 +400,7 @@
       "messageBoxBody": "Here’s how to do planning with Todorant. As soon as you think of any task, add it to Todorant immediately or you will forget about it.\n\nAnd every morning as well as every 1st day of every month you should sit down and plan your month or day by distributing and reordering tasks between days or months. Feel free to hold and drag tasks to reorder them."
     },
     "ExplainHashtags": {
-      "messageBoxBody": "You might also notice that there are no “projects”. Todorant doesn’t have “projects” where you can hide undesirable tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags."
+      "messageBoxBody": "You might also notice that Todorant doesn’t have “projects” where you can hide undesirable tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags."
     },
     "ExplainSearchAndCompleted": {
       "messageBoxBody": "You can see the completed tasks and search the tasks by using the buttons above."
@@ -400,17 +410,17 @@
       "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the #plants and set the next task”. You can read more about it in the article I wrote."
     },
     "ExplainSettings": {
-      "messageBoxBody": "This is the screen with all the settings you need in Todorant. Feel free to explore it later. Notable ones are the “default tasks to today” and “inherit the tags during breakdown”."
+      "messageBoxBody": "This is the screen with all the settings you need in Todorant. Feel free to explore it later. Notable ones are the “default tasks to today” and copy the tags during a breakdown”."
     },
     "ExplainNotificationsGoogle": {
       "messageBoxBody": "If you still need notifications, you can integrate Google Calendar. It will send you alerts, but only for the tasks that have an exact time assigned to them."
     },
     "ExplainNotifications": {
-      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring notifications when there are too many of them. This leads to missing important alerts."
+      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the optional planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring notifications when there are too many of them. This leads to missing important alerts."
     },
     "ExplainMultiplatform": {
       "website": "Go to todorant.com",
-      "messageBoxBody": "Todorant is available on iOS, Android, Web, macOS, Windows, and Linux as well as Chrome and Firefox extensions, and as a Telegram bot. See the full list of integrations on todorant.com"
+      "messageBoxBody": "Todorant is available on iOS, Android, Web, macOS, Windows, and Linux as well as Chrome and Firefox extensions, and as a Telegram bot. See the full list of platforms on todorant.com."
     },
     "ExplainPricing": {
       "messageBoxBody": "Todorant is free for the first 30 days, then $5/month.\n\nThe logic is simple: if Todorant is worth a cup of coffee a month in productivity gains, then you would want to continue using it. If it is not worth it, you can stop using Todorant.\n\nI believe 30 days is enough to figure it out."
@@ -438,16 +448,6 @@
       "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!"
     }
   },
-  "dirtyValidSaveSingular": "Would you like to save the entered task?",
-  "dirtyInvalidSaveSingular": "You didn't finish entering the task. Do you want to dismiss the entered task?",
-  "dissmissTasksSingular": "Dismiss task",
-  "saveTasksSingular": "Save task",
-  "fixTasksSingular": "Fix task",
-  "changeTasksSingular": "Change task",
-  "addedTask": "Added task",
-  "edit": "Edit",
-  "editText": "Edit hashtag text",
-  "editName": "New hashtag text",
   "updateVersionTitle": "Hey there! A new version of Todorant is available",
   "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
   "update": "Update"
