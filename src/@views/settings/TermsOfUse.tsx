@@ -9,7 +9,7 @@ import { Spinner } from '@components/Spinner'
 export class TermsOfUse extends Component {
   @observable loading = true
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

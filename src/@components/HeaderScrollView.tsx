@@ -44,7 +44,7 @@ export class HeaderScrollView extends Component<{
 
   scrollAnimatedValue = new Animated.Value(0)
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

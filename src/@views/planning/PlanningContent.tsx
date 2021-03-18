@@ -42,7 +42,7 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

@@ -12,7 +12,7 @@ import { makeObservable, observable } from 'mobx'
 export class PlanningHeader extends Component {
   @observable width = Dimensions.get('window').width
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

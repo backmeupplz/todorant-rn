@@ -32,7 +32,7 @@ class TimePickerRow extends Component<{
   @observable showTimePicker = false
   @observable clearTime = false
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -106,7 +106,7 @@ class TimePickerRow extends Component<{
 
 @observer
 export class TodoSettings extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

@@ -48,7 +48,7 @@ class ChangeTextContent extends Component<{
   @observable tag?: Tag
   @observable newName: string = ''
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

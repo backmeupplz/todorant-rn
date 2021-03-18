@@ -550,7 +550,7 @@ export class AddTodoForm extends Component<{
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

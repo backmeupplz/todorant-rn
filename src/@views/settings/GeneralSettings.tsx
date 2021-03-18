@@ -57,7 +57,7 @@ export class GeneralSettings extends Component {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

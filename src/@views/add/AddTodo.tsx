@@ -288,7 +288,7 @@ class AddTodoContent extends Component<{
     }, true)
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
