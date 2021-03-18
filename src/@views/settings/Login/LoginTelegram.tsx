@@ -5,10 +5,10 @@ import { observer } from 'mobx-react'
 import { goBack } from '@utils/navigation'
 import { alertError } from '@utils/alert'
 import { User } from '@models/User'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { makeObservable, observable } from 'mobx'
 import { Spinner } from '@components/Spinner'
+import { View } from 'native-base'
 
 const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 
@@ -29,33 +29,37 @@ class LoginTelegramContent extends Component<{
     return (
       <>
         {this.initialLoad && <Spinner />}
-        <WebView
-          source={{ uri: `${base}/mobile-login/telegram` }}
+        <View
           style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
-          onLoadStart={(e) => {
-            try {
-              const url = e.nativeEvent.url
-              if (url.includes('mobile_login_success')) {
-                const userInfo = JSON.parse(
-                  decodeURI(
-                    url.replace(`${base}/mobile_login_success?data=`, '')
-                  )
-                ) as User
-                userInfo.createdAt = new Date(userInfo.createdAt)
-                if (userInfo.updatedAt) {
-                  userInfo.updatedAt = new Date(userInfo.updatedAt)
+        >
+          <WebView
+            source={{ uri: `${base}/mobile-login/telegram` }}
+            style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+            onLoadStart={(e) => {
+              try {
+                const url = e.nativeEvent.url
+                if (url.includes('mobile_login_success')) {
+                  const userInfo = JSON.parse(
+                    decodeURI(
+                      url.replace(`${base}/mobile_login_success?data=`, '')
+                    )
+                  ) as User
+                  userInfo.createdAt = new Date(userInfo.createdAt)
+                  if (userInfo.updatedAt) {
+                    userInfo.updatedAt = new Date(userInfo.updatedAt)
+                  }
+                  this.props.route.params?.setLoadingToTrue(userInfo)
                 }
-                this.props.route.params?.setLoadingToTrue(userInfo)
+              } catch (err) {
+                goBack()
+                alertError(err)
               }
-            } catch (err) {
-              goBack()
-              alertError(err)
-            }
-          }}
-          onLoadEnd={() => {
-            this.initialLoad = false
-          }}
-        />
+            }}
+            onLoadEnd={() => {
+              this.initialLoad = false
+            }}
+          />
+        </View>
       </>
     )
   }

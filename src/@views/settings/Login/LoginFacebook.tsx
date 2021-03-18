@@ -42,39 +42,43 @@ class LoginFacebookContent extends Component<{
             <Spinner />
           </View>
         ) : (
-          <WebView
-            source={{
-              uri: `https://www.facebook.com/dialog/oauth?client_id=640750769753434&redirect_uri=https://facebook.com/connect/login_success.html&scope=email,public_profile&response_type=token&auth_type=rerequest`,
-            }}
+          <View
             style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
-            onLoadStart={async (e) => {
-              try {
-                const url = e.nativeEvent.url
-                console.log(url)
-                if (url.includes('login_success') && !url.includes('oauth')) {
-                  const token = this.getAccessToken(url)
-                  if (!token) {
-                    throw new Error(translate('facebookPermissionsError'))
+          >
+            <WebView
+              source={{
+                uri: `https://www.facebook.com/dialog/oauth?client_id=640750769753434&redirect_uri=https://facebook.com/connect/login_success.html&scope=email,public_profile&response_type=token&auth_type=rerequest`,
+              }}
+              style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
+              onLoadStart={async (e) => {
+                try {
+                  const url = e.nativeEvent.url
+                  console.log(url)
+                  if (url.includes('login_success') && !url.includes('oauth')) {
+                    const token = this.getAccessToken(url)
+                    if (!token) {
+                      throw new Error(translate('facebookPermissionsError'))
+                    }
+                    this.gotToken = true
+                    const userInfo = (await rest.loginFacebook(token)).data
+                    userInfo.createdAt = new Date(userInfo.createdAt)
+                    if (userInfo.updatedAt) {
+                      userInfo.updatedAt = new Date(userInfo.updatedAt)
+                    }
+                    sharedSessionStore.login(userInfo)
+                    goBack()
+                    this.props.route.params?.setLoadingToTrue()
                   }
-                  this.gotToken = true
-                  const userInfo = (await rest.loginFacebook(token)).data
-                  userInfo.createdAt = new Date(userInfo.createdAt)
-                  if (userInfo.updatedAt) {
-                    userInfo.updatedAt = new Date(userInfo.updatedAt)
-                  }
-                  sharedSessionStore.login(userInfo)
+                } catch (err) {
                   goBack()
-                  this.props.route.params?.setLoadingToTrue()
+                  alertError(err)
                 }
-              } catch (err) {
-                goBack()
-                alertError(err)
-              }
-            }}
-            onLoadEnd={() => {
-              this.initialLoad = false
-            }}
-          />
+              }}
+              onLoadEnd={() => {
+                this.initialLoad = false
+              }}
+            />
+          </View>
         )}
       </>
     )

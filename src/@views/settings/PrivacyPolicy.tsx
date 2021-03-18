@@ -4,6 +4,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import { Spinner } from '@components/Spinner'
+import { View } from 'native-base'
 
 @observer
 export class PrivacyPolicy extends Component {
@@ -15,7 +16,7 @@ export class PrivacyPolicy extends Component {
 
   render() {
     return (
-      <>
+      <View style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}>
         {this.loading && <Spinner />}
         <WebView
           onLoadEnd={() => {
@@ -24,7 +25,7 @@ export class PrivacyPolicy extends Component {
           source={{ uri: 'https://todorant.com/privacy' }}
           style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}
         />
-      </>
+      </View>
     )
   }
 }
