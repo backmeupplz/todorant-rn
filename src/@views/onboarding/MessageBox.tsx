@@ -22,6 +22,17 @@ export class MessageBox extends Component {
 
   componentDidMount() {
     reaction(
+      () => sharedOnboardingStore.tutorialWasShown,
+      () => {
+        this.showAvatar = true
+        Animated.timing(this.avatarOpacity, {
+          toValue: 1,
+          duration: 500,
+          easing: Easing.linear,
+        }).start()
+      }
+    )
+    reaction(
       () => sharedOnboardingStore.step,
       async (newValue) => {
         if (
@@ -33,7 +44,7 @@ export class MessageBox extends Component {
             toValue: 1,
             duration: 500,
             easing: Easing.linear,
-          }).start(() => {})
+          }).start()
         } else {
           Animated.timing(this.avatarOpacity, {
             toValue: 0,
