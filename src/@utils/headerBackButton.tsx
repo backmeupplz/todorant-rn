@@ -13,10 +13,8 @@ export function headerBackButtonProps(useBackStore = false) {
           <View
             style={{ flexDirection: 'row' }}
             pointerEvents={
-              sharedOnboardingStore.tutorialWasShown
-                ? 'auto'
-                : sharedOnboardingStore.step ===
-                  TutorialStep.BreakdownTodoAction
+              sharedOnboardingStore.tutorialWasShown ||
+              sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
                 ? 'auto'
                 : 'none'
             }

@@ -310,9 +310,11 @@ class DateRow extends Component<{
           )
         }
         onPress={() => {
-          if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
-            sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
-            return
+          if (!sharedOnboardingStore.tutorialWasShown) {
+            if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+              return
+            }
           }
           this.props.vm.showDatePicker = !this.props.vm.showDatePicker
           if (!this.props.vm.date) {
@@ -370,9 +372,11 @@ class MonthRow extends Component<{
           )
         }
         onPress={() => {
-          if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
-            sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
-            return
+          if (!sharedOnboardingStore.tutorialWasShown) {
+            if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+              return
+            }
           }
           this.props.vm.showMonthAndYearPicker = !this.props.vm
             .showMonthAndYearPicker
@@ -700,11 +704,10 @@ export class AddTodoForm extends Component<{
             </View>
             <View
               pointerEvents={
-                sharedOnboardingStore.tutorialWasShown
-                  ? 'auto'
-                  : sharedOnboardingStore.step ===
-                      TutorialStep.BreakdownTodoAction ||
-                    sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                sharedOnboardingStore.tutorialWasShown ||
+                sharedOnboardingStore.step ===
+                  TutorialStep.BreakdownTodoAction ||
+                sharedOnboardingStore.step === TutorialStep.SelectCompleted
                   ? 'auto'
                   : 'none'
               }
@@ -716,13 +719,7 @@ export class AddTodoForm extends Component<{
                 name={translate('completed')}
                 value={this.props.vm.completed}
                 onValueChange={(value) => {
-                  if (
-                    sharedOnboardingStore.step ===
-                      TutorialStep.BreakdownTodoAction ||
-                    sharedOnboardingStore.step ===
-                      TutorialStep.BreakdownCompletedTodo ||
-                    sharedOnboardingStore.step === TutorialStep.SelectCompleted
-                  ) {
+                  if (!sharedOnboardingStore.tutorialWasShown) {
                     sharedOnboardingStore.nextStep(
                       TutorialStep.BreakdownCompletedTodo
                     )
