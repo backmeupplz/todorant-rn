@@ -1,10 +1,13 @@
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { isLandscapeAndNotAPad, isPad } from '@utils/deviceInfo'
 import { sharedColors } from '@utils/sharedColors'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Dimensions, NativeModules, TouchableOpacity } from 'react-native'
+import { isLandscape } from 'react-native-device-info'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
 
@@ -14,12 +17,30 @@ export class OnboardingButton extends Component<{
   preferred?: boolean
   onPress: () => void
 }> {
+  @observable padding = isLandscapeAndNotAPad() ? 9 : 18
+  @observable marginTop = isLandscapeAndNotAPad() ? 6 : 12
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+  }
+
+  componentDidMount() {
+    Dimensions.addEventListener(
+      'change',
+      async ({ window: { width, height } }) => {
+        const isLandscape = isLandscapeAndNotAPad(width, height)
+        this.padding = isLandscape ? 9 : 18
+        this.marginTop = isLandscape ? 6 : 12
+      }
+    )
+  }
+
   render() {
     return (
       <TouchableOpacity
         onPress={this.props.onPress}
         style={{
-          marginTop: 12,
+          marginTop: this.marginTop,
         }}
       >
         <LinearGradient
@@ -35,7 +56,7 @@ export class OnboardingButton extends Component<{
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 28,
-            padding: 18,
+            padding: this.padding,
             opacity: this.props.preferred ? 1 : 0.7,
           }}
         >

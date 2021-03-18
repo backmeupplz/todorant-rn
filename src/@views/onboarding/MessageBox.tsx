@@ -2,13 +2,14 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { Text } from 'native-base'
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import Animated, { Easing } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
-import { observable, reaction } from 'mobx'
+import { makeObservable, observable, reaction } from 'mobx'
+import { isLandscapeAndNotAPad } from '@utils/deviceInfo'
 
 const avatar = require('@assets/images/nikita.jpg')
 
@@ -16,11 +17,26 @@ const avatar = require('@assets/images/nikita.jpg')
 export class MessageBox extends Component {
   avatarOpacity = new Animated.Value(1)
 
+  @observable margin = isLandscapeAndNotAPad() ? 6 : 12
+  @observable padding = isLandscapeAndNotAPad() ? 9 : 18
+
   @observable showAvatar =
     sharedOnboardingStore.step === TutorialStep.Start ||
     sharedOnboardingStore.step === TutorialStep.Explain
 
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+  }
+
   componentDidMount() {
+    Dimensions.addEventListener(
+      'change',
+      async ({ window: { width, height } }) => {
+        const isLandscape = isLandscapeAndNotAPad(width, height)
+        this.margin = isLandscape ? 6 : 12
+        this.padding = isLandscape ? 9 : 18
+      }
+    )
     reaction(
       () => sharedOnboardingStore.tutorialWasShown,
       () => {
@@ -69,7 +85,7 @@ export class MessageBox extends Component {
         {this.showAvatar && (
           <Animated.View
             style={{
-              margin: 12,
+              margin: this.margin,
               width: 104,
               height: 104,
               borderRadius: 52,
@@ -93,7 +109,7 @@ export class MessageBox extends Component {
         <View
           style={{
             backgroundColor: sharedColors.backgroundColor,
-            padding: 18,
+            padding: this.padding,
             borderRadius: 28,
             width: '100%',
           }}

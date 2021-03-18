@@ -14,6 +14,7 @@ import { observer } from 'mobx-react'
 import { Dimensions, Keyboard, Platform } from 'react-native'
 import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
+import { isLandscapeAndNotAPad } from '@utils/deviceInfo'
 
 @observer
 export class Overlay extends Component {
@@ -28,6 +29,7 @@ export class Overlay extends Component {
   infoBoxX = new Animated.Value(0)
 
   @observable shouldRender = false
+  @observable maxWidth = isLandscapeAndNotAPad() ? undefined : 400
 
   messageBoxNodeId: number | undefined
 
@@ -40,6 +42,13 @@ export class Overlay extends Component {
   }
 
   componentDidMount() {
+    Dimensions.addEventListener(
+      'change',
+      async ({ window: { width, height } }) => {
+        const isLandscape = isLandscapeAndNotAPad(width, height)
+        this.maxWidth = isLandscape ? undefined : 400
+      }
+    )
     Keyboard.addListener('keyboardDidShow', () => {
       Animated.timing(this.messageBoxOpacity, {
         toValue: 0,
@@ -79,7 +88,7 @@ export class Overlay extends Component {
           },
           () => {
             setTimeout(async () => {
-              const avatarPadding = 16
+              const avatarPadding = isLandscapeAndNotAPad() ? 4 : 16
               const messageBoxNodeId = sharedOnboardingStore.messageBoxId
               if (!messageBoxNodeId) return
               if (
@@ -223,7 +232,7 @@ export class Overlay extends Component {
               style={{
                 opacity: this.messageBoxOpacity,
                 width: '100%',
-                maxWidth: 400,
+                maxWidth: this.maxWidth,
                 zIndex: 1,
                 display: 'flex',
                 flexDirection: 'column',
