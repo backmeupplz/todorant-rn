@@ -140,28 +140,27 @@ export class GeneralSettings extends Component {
             {this.colorModeLabel}
           </Text>
         </TableItem>
-        {(!!sharedSessionStore.user ||
-          !sharedOnboardingStore.tutorialIsShown) && (
-          <View onLayout={({ nativeEvent: { target } }: any) => {}}>
-            <TableItem
-              onLayout={({ nativeEvent: { target } }: any) => {
-                integrationButtonsNodeId = target
-              }}
-              onPress={() => {
-                navigate('Integrations')
+        <View onLayout={({ nativeEvent: { target } }: any) => {}}>
+          <TableItem
+            onLayout={({ nativeEvent: { target } }: any) => {
+              integrationButtonsNodeId = target
+            }}
+            onPress={() => {
+              !!sharedSessionStore.user
+                ? navigate('Integrations')
+                : navigate('Login')
+            }}
+          >
+            <Text
+              style={{
+                flex: 1,
+                ...sharedColors.regularTextExtraStyle.style,
               }}
             >
-              <Text
-                style={{
-                  flex: 1,
-                  ...sharedColors.regularTextExtraStyle.style,
-                }}
-              >
-                {translate('integrations')}
-              </Text>
-            </TableItem>
-          </View>
-        )}
+              {translate('integrations')}
+            </Text>
+          </TableItem>
+        </View>
         {!!sharedSessionStore.user && (
           <TableItem
             onPress={() => {
