@@ -9,7 +9,7 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import Animated, { Easing } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
 import { makeObservable, observable, reaction } from 'mobx'
-import { isLandscapeAndNotAPad } from '@utils/deviceInfo'
+import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
 
 const avatar = require('@assets/images/nikita.jpg')
 
@@ -17,8 +17,8 @@ const avatar = require('@assets/images/nikita.jpg')
 export class MessageBox extends Component {
   avatarOpacity = new Animated.Value(1)
 
-  @observable margin = isLandscapeAndNotAPad() ? 6 : 12
-  @observable padding = isLandscapeAndNotAPad() ? 9 : 18
+  @observable margin = isLandscapeAndNotAPad() || isDeviceSmall() ? 6 : 12
+  @observable padding = isLandscapeAndNotAPad() || isDeviceSmall() ? 9 : 18
 
   @observable showAvatar =
     sharedOnboardingStore.step === TutorialStep.Start ||
@@ -32,9 +32,10 @@ export class MessageBox extends Component {
     Dimensions.addEventListener(
       'change',
       async ({ window: { width, height } }) => {
-        const isLandscape = isLandscapeAndNotAPad(width, height)
-        this.margin = isLandscape ? 6 : 12
-        this.padding = isLandscape ? 9 : 18
+        const shouldPaddingBeSmall =
+          isLandscapeAndNotAPad(width, height) || isDeviceSmall()
+        this.margin = shouldPaddingBeSmall ? 6 : 12
+        this.padding = shouldPaddingBeSmall ? 9 : 18
       }
     )
     reaction(

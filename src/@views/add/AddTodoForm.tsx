@@ -662,7 +662,8 @@ export class AddTodoForm extends Component<{
                 initialView={moment().add(1, 'month')}
               />
             )}
-            {(sharedSettingsStore.showMoreByDefault ||
+            {((sharedSettingsStore.showMoreByDefault &&
+              sharedOnboardingStore.tutorialIsShown) ||
               this.props.vm.showMore) && <TimeRow vm={this.props.vm} />}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
@@ -730,7 +731,8 @@ export class AddTodoForm extends Component<{
                 }}
               />
             </View>
-            {(sharedSettingsStore.showMoreByDefault ||
+            {((sharedSettingsStore.showMoreByDefault &&
+              sharedOnboardingStore.tutorialIsShown) ||
               this.props.vm.showMore) &&
               !this.props.vm.editedTodo && (
                 <SwitchRow
@@ -741,50 +743,52 @@ export class AddTodoForm extends Component<{
                   }}
                 />
               )}
-            {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
-              <TouchableOpacity
-                disabled={
-                  !sharedOnboardingStore.tutorialIsShown &&
-                  !(
-                    sharedOnboardingStore.step === TutorialStep.ShowMore ||
-                    sharedOnboardingStore.step ===
-                      TutorialStep.BreakdownTodoAction
-                  )
-                }
-                onLayout={({ nativeEvent: { target } }: any) => {
-                  showMoreRowNodeId = target
-                }}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingVertical: verticalSpacing,
-                  alignItems: 'center',
-                  opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
-                }}
-                onPress={() => {
-                  this.props.vm.showMore = true
-                  if (sharedOnboardingStore.tutorialIsShown) return
-                  if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
-                    sharedOnboardingStore.nextStep()
+            {(!sharedSettingsStore.showMoreByDefault ||
+              !sharedOnboardingStore.tutorialIsShown) &&
+              !this.props.vm.showMore && (
+                <TouchableOpacity
+                  disabled={
+                    !sharedOnboardingStore.tutorialIsShown &&
+                    !(
+                      sharedOnboardingStore.step === TutorialStep.ShowMore ||
+                      sharedOnboardingStore.step ===
+                        TutorialStep.BreakdownTodoAction
+                    )
                   }
-                }}
-              >
-                <Text
+                  onLayout={({ nativeEvent: { target } }: any) => {
+                    showMoreRowNodeId = target
+                  }}
                   style={{
-                    color: sharedColors.primaryColor,
-                    flex: 1,
-                    fontSize,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingVertical: verticalSpacing,
+                    alignItems: 'center',
+                    opacity: sharedSettingsStore.isDark ? 0.8 : undefined,
+                  }}
+                  onPress={() => {
+                    this.props.vm.showMore = true
+                    if (sharedOnboardingStore.tutorialIsShown) return
+                    if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
+                      sharedOnboardingStore.nextStep()
+                    }
                   }}
                 >
-                  {translate('addTodoMore')}
-                </Text>
-                <CustomIcon
-                  name="chevron_right_outline_28"
-                  color={sharedColors.primaryColor}
-                  size={24}
-                />
-              </TouchableOpacity>
-            )}
+                  <Text
+                    style={{
+                      color: sharedColors.primaryColor,
+                      flex: 1,
+                      fontSize,
+                    }}
+                  >
+                    {translate('addTodoMore')}
+                  </Text>
+                  <CustomIcon
+                    name="chevron_right_outline_28"
+                    color={sharedColors.primaryColor}
+                    size={24}
+                  />
+                </TouchableOpacity>
+              )}
             {!!this.props.deleteTodo && (
               <TouchableOpacity
                 style={{

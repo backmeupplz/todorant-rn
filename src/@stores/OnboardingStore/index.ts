@@ -564,6 +564,7 @@ export const AllStages = {
     const endTutorialButton = new OnboardingButton(
       () => {
         sharedOnboardingStore.tutorialIsShown = true
+        sharedOnboardingStore.nextStep(TutorialStep.Start)
         sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
         startConfetti(true)
       },

@@ -19,7 +19,7 @@ import {
 } from 'react-native'
 import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
-import { isLandscapeAndNotAPad } from '@utils/deviceInfo'
+import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
 import { navigate } from '@utils/navigation'
 
 @observer
@@ -94,7 +94,8 @@ export class Overlay extends Component {
           },
           () => {
             setTimeout(async () => {
-              const avatarPadding = isLandscapeAndNotAPad() ? 4 : 16
+              const avatarPadding =
+                isLandscapeAndNotAPad() || isDeviceSmall() ? 4 : 16
               const messageBoxNodeId = sharedOnboardingStore.messageBoxId
               if (!messageBoxNodeId) return
               if (
@@ -121,7 +122,8 @@ export class Overlay extends Component {
                   totalPosition < Dimensions.get('window').height &&
                   sharedOnboardingStore.currentHole.y +
                     sharedOnboardingStore.currentHole.height +
-                    messageBoxPosition.y >
+                    messageBoxPosition.y +
+                    messageBoxPosition.height >
                     Dimensions.get('window').height
                 ) {
                   Animated.timing(this.infoBoxY, {
