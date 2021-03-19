@@ -20,5 +20,5 @@ export function isLandscapeAndNotAPad(
 }
 
 export function isDeviceSmall() {
-  return getWidth() < 400 || (getHeight() < 600 && !isLandscapeAndNotAPad())
+  return (getWidth() < 400 || getHeight()) < 600 && !isLandscapeAndNotAPad()
 }
