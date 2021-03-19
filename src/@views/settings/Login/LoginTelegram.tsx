@@ -21,7 +21,7 @@ class LoginTelegramContent extends Component<{
 }> {
   @observable initialLoad = true
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

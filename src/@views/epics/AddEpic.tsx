@@ -46,7 +46,7 @@ class AddEpicContent extends Component<{
   @observable tag?: Tag
   @observable epicGoal: number | undefined
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

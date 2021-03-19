@@ -20,7 +20,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 export class Integrations extends Component {
   @observable loading = false
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

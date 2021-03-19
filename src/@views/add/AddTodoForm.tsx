@@ -6,7 +6,13 @@ import { View, Text, Input, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
-import { Platform, Clipboard, ViewStyle, StyleProp } from 'react-native'
+import {
+  Platform,
+  Clipboard,
+  ViewStyle,
+  StyleProp,
+  InteractionManager,
+} from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -24,6 +30,8 @@ import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
 import { computed, makeObservable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -139,15 +147,32 @@ class CollapsedTodo extends Component<{
   }
 }
 
+export let textRowNodeId: number
+export let dateRowNodeId: number
+export let frogRowNodeId: number
+export let completedRowNodeId: number
+export let showMoreRowNodeId: number
+
 @observer
 class TextRow extends Component<{
   vm: TodoVM
   showCross: boolean
 }> {
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      if (sharedOnboardingStore.step === TutorialStep.AddTask) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
+  }
+
   render() {
     return (
       <Animatable.View
         ref={this.props.vm.handleTodoTextViewRef}
+        onLayout={({ nativeEvent: { target } }: any) => {
+          textRowNodeId = target
+        }}
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -156,7 +181,14 @@ class TextRow extends Component<{
         }}
       >
         <Input
-          multiline
+          onSubmitEditing={() => {
+            if (sharedOnboardingStore.tutorialIsShown) return
+            if (!this.props.vm.text) return
+            if (sharedOnboardingStore.step === TutorialStep.AddText) {
+              sharedOnboardingStore.nextStep()
+            }
+          }}
+          multiline={sharedOnboardingStore.tutorialIsShown}
           placeholder={translate('todo.create.text')}
           value={this.props.vm.text}
           onChangeText={(text) => {
@@ -171,13 +203,23 @@ class TextRow extends Component<{
             padding: 0,
             paddingLeft: Platform.OS === 'android' ? 1 : undefined,
           }}
-          autoFocus
+          autoFocus={sharedOnboardingStore.tutorialIsShown}
           disabled={
             this.props.vm.editedTodo?.encrypted &&
             !sharedSessionStore.encryptionKey
           }
           selectionColor={sharedColors.primaryColor}
-          keyboardType={Platform.OS === 'ios' ? 'twitter' : undefined}
+          keyboardType={
+            Platform.OS === 'ios' &&
+            sharedOnboardingStore.step !== TutorialStep.AddText
+              ? 'twitter'
+              : undefined
+          }
+          returnKeyType={
+            sharedOnboardingStore.step === TutorialStep.AddText
+              ? 'done'
+              : undefined
+          }
           ref={this.props.vm.todoTextField}
           onSelectionChange={({ nativeEvent: { selection } }) =>
             (this.props.vm.cursorPosition = selection.start)
@@ -260,7 +302,20 @@ class DateRow extends Component<{
   render() {
     return (
       <TouchableOpacity
+        disabled={
+          !sharedOnboardingStore.tutorialIsShown &&
+          !(
+            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+            sharedOnboardingStore.step === TutorialStep.SelectDate
+          )
+        }
         onPress={() => {
+          if (!sharedOnboardingStore.tutorialIsShown) {
+            if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+              return
+            }
+          }
           this.props.vm.showDatePicker = !this.props.vm.showDatePicker
           if (!this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
@@ -309,7 +364,20 @@ class MonthRow extends Component<{
   render() {
     return (
       <TouchableOpacity
+        disabled={
+          !sharedOnboardingStore.tutorialIsShown &&
+          !(
+            sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+            sharedOnboardingStore.step === TutorialStep.SelectDate
+          )
+        }
         onPress={() => {
+          if (!sharedOnboardingStore.tutorialIsShown) {
+            if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
+              return
+            }
+          }
           this.props.vm.showMonthAndYearPicker = !this.props.vm
             .showMonthAndYearPicker
           if (!!this.props.vm.date) {
@@ -482,7 +550,7 @@ export class AddTodoForm extends Component<{
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -500,51 +568,59 @@ export class AddTodoForm extends Component<{
           <View
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
-            <TextRow vm={this.props.vm} showCross={this.props.showCross} />
+            <TouchableOpacity onPress={() => this.props.vm.focus()}>
+              <TextRow vm={this.props.vm} showCross={this.props.showCross} />
+            </TouchableOpacity>
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
-            <DateRow vm={this.props.vm} />
-            {this.props.vm.showDatePicker && (
-              <Calendar
-                minDate={__DEV__ ? undefined : getDateString(this.minDate)}
-                current={this.props.vm.datePickerValue || new Date()}
-                markedDates={this.props.vm.markedDate}
-                onDayPress={(day) => {
-                  this.props.vm.datePickerValue = day.dateString
-                  this.props.vm.showDatePicker = false
-                }}
-                theme={{
-                  backgroundColor: sharedColors.backgroundColor,
-                  calendarBackground: sharedColors.backgroundColor,
-                  selectedDayBackgroundColor: 'dodgerblue',
-                  textDisabledColor: sharedColors.placeholderColor,
-                  dayTextColor: sharedColors.textColor,
-                  textSectionTitleColor: sharedColors.textColor,
-                  monthTextColor: sharedColors.textColor,
-                }}
-                firstDay={sharedSettingsStore.firstDayOfWeekSafe}
-                hideArrows={false}
-                renderArrow={(direction) =>
-                  direction === 'left' ? (
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-left"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  ) : (
-                    <Icon
-                      type="MaterialIcons"
-                      name="keyboard-arrow-right"
-                      style={{
-                        color: sharedColors.textColor,
-                      }}
-                    />
-                  )
-                }
-              />
-            )}
-            <MonthRow vm={this.props.vm} />
+            <View
+              onLayout={({ nativeEvent: { target } }: any) => {
+                dateRowNodeId = target as number
+              }}
+            >
+              <DateRow vm={this.props.vm} />
+              {this.props.vm.showDatePicker && (
+                <Calendar
+                  minDate={__DEV__ ? undefined : getDateString(this.minDate)}
+                  current={this.props.vm.datePickerValue || new Date()}
+                  markedDates={this.props.vm.markedDate}
+                  onDayPress={(day) => {
+                    this.props.vm.datePickerValue = day.dateString
+                    this.props.vm.showDatePicker = false
+                  }}
+                  theme={{
+                    backgroundColor: sharedColors.backgroundColor,
+                    calendarBackground: sharedColors.backgroundColor,
+                    selectedDayBackgroundColor: 'dodgerblue',
+                    textDisabledColor: sharedColors.placeholderColor,
+                    dayTextColor: sharedColors.textColor,
+                    textSectionTitleColor: sharedColors.textColor,
+                    monthTextColor: sharedColors.textColor,
+                  }}
+                  firstDay={sharedSettingsStore.firstDayOfWeekSafe}
+                  hideArrows={false}
+                  renderArrow={(direction) =>
+                    direction === 'left' ? (
+                      <Icon
+                        type="MaterialIcons"
+                        name="keyboard-arrow-left"
+                        style={{
+                          color: sharedColors.textColor,
+                        }}
+                      />
+                    ) : (
+                      <Icon
+                        type="MaterialIcons"
+                        name="keyboard-arrow-right"
+                        style={{
+                          color: sharedColors.textColor,
+                        }}
+                      />
+                    )
+                  }
+                />
+              )}
+              <MonthRow vm={this.props.vm} />
+            </View>
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
                 localeLanguage={languageTag.substr(0, 2)}
@@ -609,20 +685,51 @@ export class AddTodoForm extends Component<{
                 }}
               />
             )}
-            <SwitchRow
-              name={translate('todo.create.frog')}
-              value={this.props.vm.frog}
-              onValueChange={(value) => {
-                this.props.vm.frog = value
+            <View
+              onLayout={({ nativeEvent: { target } }: any) => {
+                frogRowNodeId = target
               }}
-            />
-            <SwitchRow
-              name={translate('completed')}
-              value={this.props.vm.completed}
-              onValueChange={(value) => {
-                this.props.vm.completed = value
+            >
+              <SwitchRow
+                name={translate('todo.create.frog')}
+                value={this.props.vm.frog}
+                onValueChange={(value) => {
+                  this.props.vm.frog = value
+                  if (sharedOnboardingStore.tutorialIsShown) return
+                  if (sharedOnboardingStore.step === TutorialStep.SelectFrog) {
+                    sharedOnboardingStore.nextStep()
+                  }
+                }}
+              />
+            </View>
+            <View
+              pointerEvents={
+                sharedOnboardingStore.tutorialIsShown ||
+                sharedOnboardingStore.step ===
+                  TutorialStep.BreakdownTodoAction ||
+                sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                  ? 'auto'
+                  : 'none'
+              }
+              onLayout={({ nativeEvent: { target } }: any) => {
+                completedRowNodeId = target
               }}
-            />
+            >
+              <SwitchRow
+                name={translate('completed')}
+                value={this.props.vm.completed}
+                onValueChange={(value) => {
+                  if (!sharedOnboardingStore.tutorialIsShown) {
+                    sharedOnboardingStore.nextStep(
+                      TutorialStep.BreakdownCompletedTodo
+                    )
+                    this.props.vm.completed = false
+                    return
+                  }
+                  this.props.vm.completed = value
+                }}
+              />
+            </View>
             {(sharedSettingsStore.showMoreByDefault ||
               this.props.vm.showMore) &&
               !this.props.vm.editedTodo && (
@@ -636,6 +743,17 @@ export class AddTodoForm extends Component<{
               )}
             {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
+                disabled={
+                  !sharedOnboardingStore.tutorialIsShown &&
+                  !(
+                    sharedOnboardingStore.step === TutorialStep.ShowMore ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                  )
+                }
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  showMoreRowNodeId = target
+                }}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
@@ -645,6 +763,10 @@ export class AddTodoForm extends Component<{
                 }}
                 onPress={() => {
                   this.props.vm.showMore = true
+                  if (sharedOnboardingStore.tutorialIsShown) return
+                  if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
+                    sharedOnboardingStore.nextStep()
+                  }
                 }}
               >
                 <Text

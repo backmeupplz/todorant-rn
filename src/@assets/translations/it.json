@@ -136,7 +136,6 @@
   "appleUnauthorizedTextGoodNews": "Una buona notizia, però: non sarete addebitati fino al termine dei 30 giorni di prova.",
   "appleUnauthorizedButtonExtra": "E siano 30 giorni di prova",
   "introTitle": "Benvenuto!",
-  "introButton": "Messaggio di benvenuto",
   "introBack": "Andiamo!",
   "infoTitle": "Info",
   "infoIntro": "Grazie per aver premuto \"i\"! Questo è il messaggio di benvenuto che spiega cos'è Todorant. Né più, né meno.",
@@ -213,5 +212,6 @@
   "encryption": {
     "repeatPassword": "Ripetere la password"
   },
-  "purchaseErrorTryOnWeb": "Subscribe on the web"
+  "purchaseErrorTryOnWeb": "Subscribe on the web",
+  "tutorialButton": "Messaggio di benvenuto"
 }

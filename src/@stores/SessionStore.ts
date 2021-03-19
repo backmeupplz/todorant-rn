@@ -27,8 +27,6 @@ class SessionStore {
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 
-  @persist @observable introMessageShown = __DEV__ ? true : false
-
   @persist @observable encryptionKey?: string
 
   @persist @observable numberOfTodosCompleted = 0

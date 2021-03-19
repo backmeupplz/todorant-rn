@@ -22,7 +22,7 @@ class LoginFacebookContent extends Component<{
   @observable gotToken = false
   @observable initialLoad = true
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

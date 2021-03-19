@@ -20,7 +20,7 @@ export class DelegationSettings extends Component {
     sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken()
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

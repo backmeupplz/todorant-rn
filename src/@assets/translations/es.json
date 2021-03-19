@@ -131,7 +131,6 @@
   "appleUnauthorizedTextGoodNews": "Buenas noticias: no se te cobrará hasta que finalice la prueba de 30 días.",
   "appleUnauthorizedButtonExtra": "30 días de prueba gratis, entonces",
   "introTitle": "¡Bienvenido!",
-  "introButton": "Mensaje de introducción",
   "introBack": "¡Vamos!",
   "infoTitle": "Información",
   "infoIntro": "¡Buen trabajo utilizando el botón \"i\"! Este es el mensaje de bienvenida que explica lo que es Todorant. Ni más, ni menos.",
@@ -179,5 +178,6 @@
   "rateButton": "¡Calificar!",
   "emptyHashtags": "La lista de Hashtag está vacía por ahora. ¡Crea tu primera tarea con un #hashtag para añadir el primer hashtag aquí!",
   "startTimeOfDay": "Comienzo del día",
-  "purchaseErrorTryOnWeb": "Subscribe on the web"
+  "purchaseErrorTryOnWeb": "Subscribe on the web",
+  "tutorialButton": "Mensaje de introducción"
 }

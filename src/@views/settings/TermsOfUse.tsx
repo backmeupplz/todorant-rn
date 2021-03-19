@@ -10,7 +10,7 @@ import { View } from 'native-base'
 export class TermsOfUse extends Component {
   @observable loading = true
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

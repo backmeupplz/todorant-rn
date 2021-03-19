@@ -22,6 +22,8 @@ import { TextAndSwitch } from '@views/settings/TextAndSwitch'
 import { Language } from '@models/Language'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { View } from 'react-native'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 const codeToName = {
   en: 'English',
@@ -31,6 +33,8 @@ const codeToName = {
   es: 'Español',
   'pt-BR': 'Português Brasileiro',
 }
+
+export let integrationButtonsNodeId: number
 
 @observer
 export class GeneralSettings extends Component {
@@ -53,7 +57,7 @@ export class GeneralSettings extends Component {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -136,18 +140,27 @@ export class GeneralSettings extends Component {
             {this.colorModeLabel}
           </Text>
         </TableItem>
-        {!!sharedSessionStore.user && (
-          <TableItem
-            onPress={() => {
-              navigate('Integrations')
-            }}
-          >
-            <Text
-              style={{ flex: 1, ...sharedColors.regularTextExtraStyle.style }}
+        {(!!sharedSessionStore.user ||
+          !sharedOnboardingStore.tutorialIsShown) && (
+          <View onLayout={({ nativeEvent: { target } }: any) => {}}>
+            <TableItem
+              onLayout={({ nativeEvent: { target } }: any) => {
+                integrationButtonsNodeId = target
+              }}
+              onPress={() => {
+                navigate('Integrations')
+              }}
             >
-              {translate('integrations')}
-            </Text>
-          </TableItem>
+              <Text
+                style={{
+                  flex: 1,
+                  ...sharedColors.regularTextExtraStyle.style,
+                }}
+              >
+                {translate('integrations')}
+              </Text>
+            </TableItem>
+          </View>
         )}
         {!!sharedSessionStore.user && (
           <TableItem

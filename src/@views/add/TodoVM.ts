@@ -13,14 +13,24 @@ import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { TextInput } from 'react-native'
+import { findNodeHandle, Keyboard, TextInput } from 'react-native'
+const {
+  focusInput,
+} = require('react-native/Libraries/Components/TextInput/TextInputState')
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 
 export class TodoVM {
   @observable text = ''
   @observable completed = false
   @observable frog = false
-  @observable monthAndYear?: string
-  @observable date?: string
+  @observable
+  monthAndYear?: string = !sharedOnboardingStore.tutorialIsShown
+    ? getDateMonthAndYearString(getTodayWithStartOfDay())
+    : undefined
+  @observable date?: string = !sharedOnboardingStore.tutorialIsShown
+    ? getDateDateString(getTodayWithStartOfDay())
+    : undefined
   @observable time?: string
 
   @observable showDatePicker = false
@@ -63,6 +73,14 @@ export class TodoVM {
     return sharedTagStore.undeletedTags.filtered(
       `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
     )
+  }
+
+  focus() {
+    // Drop currentFocusedItem inside React-Native
+    focusInput({})
+    if (this.todoTextField.current) {
+      ;(this.todoTextField.current as any)._root.focus()
+    }
   }
 
   applyTag(tag: Tag) {
@@ -155,6 +173,14 @@ export class TodoVM {
 
   constructor() {
     makeObservable(this)
+
+    Keyboard.addListener('keyboardDidHide', () => {
+      if (sharedOnboardingStore.tutorialIsShown) return
+      if (!this.text) return
+      if (sharedOnboardingStore.step === TutorialStep.AddText) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
 
     if (sharedSettingsStore.showTodayOnAddTodo) {
       const now = getTodayWithStartOfDay()

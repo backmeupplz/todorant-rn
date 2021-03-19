@@ -1,15 +1,22 @@
 import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from '@views/BottomTabNavigator'
-import { navigationRef } from '@utils/navigation'
+import { navigate, navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-community/google-signin'
 import '@utils/purchases'
-import { Root, StyleProvider, View } from 'native-base'
+import { Icon, Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'
-import { observer } from 'mobx-react'
-import { StatusBar, LogBox, AppState } from 'react-native'
+import { Observer, observer } from 'mobx-react'
+import {
+  StatusBar,
+  LogBox,
+  AppState,
+  TouchableOpacity,
+  Keyboard,
+  InteractionManager,
+} from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
 import SplashScreen from 'react-native-splash-screen'
 import {
@@ -24,12 +31,12 @@ import { Paywall } from '@views/settings/Paywall'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
-import { IntroMessage } from '@views/settings/intro/IntroMessage'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
+import { checkOnboardingStep, Overlay } from '@views/onboarding/Overlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
@@ -41,8 +48,14 @@ import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { configure } from 'mobx'
+import { configure, when } from 'mobx'
 import { checkupVersion } from '@utils/checkupVersion'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
+
+export let rootRef: any
+export let closeOnboardingButtonNode: number
 
 const CodePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
@@ -87,6 +100,7 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
+    checkOnboardingStep()
   }
 
   render() {
@@ -95,7 +109,7 @@ class App extends Component {
     languageTag = `${languageTag}`
 
     return (
-      <Root>
+      <Root ref={(ref) => (rootRef = ref)}>
         <NavigationContainer ref={navigationRef}>
           <StatusBar
             backgroundColor={sharedColors.backgroundColor}
@@ -104,7 +118,12 @@ class App extends Component {
             }
           />
           <RateModal />
-          <StyleProvider style={getTheme()}>
+          <StyleProvider
+            style={{
+              ...getTheme(),
+              pointerEvent: 'box-none',
+            }}
+          >
             <Stack.Navigator
               screenOptions={{
                 cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
@@ -125,12 +144,24 @@ class App extends Component {
                   title: translate('addTodo'),
                   ...sharedColors.headerExtraStyle,
                   headerRight: () => (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <AddButton />
-                      {InfoButton('infoAdd')()}
-                    </View>
+                    <Observer>
+                      {() => (
+                        <View
+                          pointerEvents={
+                            sharedOnboardingStore.tutorialIsShown
+                              ? 'auto'
+                              : 'none'
+                          }
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <AddButton />
+                          {InfoButton('infoAdd')()}
+                        </View>
+                      )}
+                    </Observer>
                   ),
                   ...headerBackButtonProps(true),
                 }}
@@ -209,17 +240,6 @@ class App extends Component {
                 }}
               />
               <Stack.Screen
-                name="Intro"
-                component={IntroMessage}
-                options={{
-                  title: translate('introTitle'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton('infoIntro'),
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
                 name="HeroProfile"
                 component={HeroProfile}
                 options={{
@@ -249,6 +269,39 @@ class App extends Component {
           <DayCompleteOverlay />
           <ConfettiView />
         </NavigationContainer>
+        <Overlay />
+        {!sharedOnboardingStore.tutorialIsShown &&
+          !sharedOnboardingStore.stepObject.notShowClose && (
+            <SafeAreaInsetsContext.Consumer>
+              {(insets) => {
+                return (
+                  <TouchableOpacity
+                    style={[
+                      sharedOnboardingStore.closeOnboardingStyle,
+                      { marginTop: insets?.top },
+                    ]}
+                    onPress={() => {
+                      Keyboard.dismiss()
+                      sharedOnboardingStore.nextStep(TutorialStep.Close)
+                    }}
+                  >
+                    {/* A quick hack to make insets reactive on iOS, I have no idea why this works */}
+                    <Text style={{ opacity: 0, fontSize: 0 }}>
+                      {insets?.top || 'none'}
+                    </Text>
+                    <Icon
+                      type="MaterialIcons"
+                      name="close"
+                      style={{
+                        color: 'white',
+                        fontSize: 48,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )
+              }}
+            </SafeAreaInsetsContext.Consumer>
+          )}
       </Root>
     )
   }

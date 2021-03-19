@@ -26,6 +26,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  Keyboard,
+  InteractionManager,
   NativeEventSubscription,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -55,6 +57,11 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+
+export let saveButtonNodeId: number
+export let breakdownTodoNodeId: number
 
 @observer
 class AddTodoContent extends Component<{
@@ -94,6 +101,15 @@ class AddTodoContent extends Component<{
       Toast.show({
         text: '🤔',
       })
+      return
+    }
+    if (
+      this.breakdownTodo &&
+      !sharedOnboardingStore.tutorialIsShown &&
+      this.vms.length < 2
+    ) {
+      Keyboard.dismiss()
+      sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
       return
     }
     this.savingTodo = true
@@ -261,6 +277,10 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
+    if (!sharedOnboardingStore.tutorialIsShown) {
+      sharedOnboardingStore.nextStep()
+    }
+    Keyboard.dismiss()
     // Sync hero
     sharedSync.sync(SyncRequestEvent.Hero)
   }
@@ -271,7 +291,7 @@ class AddTodoContent extends Component<{
     }, true)
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -295,6 +315,11 @@ class AddTodoContent extends Component<{
     if (this.props.route.params?.text) {
       this.vms[0].text = this.props.route.params?.text
     }
+    InteractionManager.runAfterInteractions(() => {
+      if (sharedOnboardingStore.step === TutorialStep.Breakdown) {
+        sharedOnboardingStore.nextStep()
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -366,6 +391,18 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = (isHardware = false) => {
+    if (!sharedOnboardingStore.tutorialIsShown) {
+      if (
+        sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
+        sharedOnboardingStore.step === TutorialStep.BreakdownTodo
+      ) {
+        sharedOnboardingStore.nextStep(TutorialStep.BreakdownLessThanTwo)
+      } else {
+        sharedOnboardingStore.nextStep(TutorialStep.Close)
+      }
+      Keyboard.dismiss()
+      return true
+    }
     if (!this.isDirty()) {
       if (isHardware) {
         // Do nothing
@@ -467,10 +504,16 @@ class AddTodoContent extends Component<{
             renderItem={({ item, index, drag, isActive }) => {
               return index == 0 ? (
                 this.isBreakdown && !!this.breakdownTodo && (
-                  <TodoCard
-                    todo={this.breakdownTodo}
-                    type={CardType.breakdown}
-                  />
+                  <View
+                    onLayout={({ nativeEvent: { target } }: any) => {
+                      breakdownTodoNodeId = target
+                    }}
+                  >
+                    <TodoCard
+                      todo={this.breakdownTodo}
+                      type={CardType.breakdown}
+                    />
+                  </View>
                 )
               ) : (
                 <View
@@ -522,13 +565,19 @@ class AddTodoContent extends Component<{
               }}
               ref={this.hangleAddButtonViewRef}
             >
-              <Button
-                style={{
-                  borderRadius: 10,
-                  justifyContent: 'center',
-                  backgroundColor:
-                    !this.isValid || this.savingTodo ? 'grey' : undefined,
+              <TouchableOpacity
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  saveButtonNodeId = target
                 }}
+                disabled={
+                  !sharedOnboardingStore.tutorialIsShown &&
+                  !(
+                    sharedOnboardingStore.step ===
+                      TutorialStep.AddTodoComplete ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                  )
+                }
                 onPress={() => {
                   if (!this.isValid || this.savingTodo) {
                     if (this.addButtonView && this.addButtonView.shake) {
@@ -557,14 +606,50 @@ class AddTodoContent extends Component<{
                   })
                 }}
               >
-                <Text>
-                  {this.screenType === AddTodoScreenType.add
-                    ? this.vms.length > 1
-                      ? translate('addTodoPlural')
-                      : translate('addTodoSingular')
-                    : translate('saveTodo')}
-                </Text>
-              </Button>
+                <Button
+                  style={{
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    backgroundColor:
+                      !this.isValid || this.savingTodo ? 'grey' : undefined,
+                  }}
+                  onPress={() => {
+                    if (!this.isValid || this.savingTodo) {
+                      if (this.addButtonView && this.addButtonView.shake) {
+                        this.vms.forEach((vm) => {
+                          if (!vm.isValid) {
+                            vm.collapsed = false
+                          }
+                        })
+                        this.vms.forEach((vm) => {
+                          if (!vm.isValid) {
+                            vm.shakeInvalid()
+                          }
+                        })
+                        this.addButtonView.shake(1000)
+                      }
+                    } else {
+                      this.saveTodo()
+                    }
+                  }}
+                  onLongPress={() => {
+                    Clipboard.setString(
+                      JSON.stringify(this.props.route.params?.editedTodo)
+                    )
+                    Toast.show({
+                      text: translate('copied'),
+                    })
+                  }}
+                >
+                  <Text>
+                    {this.screenType === AddTodoScreenType.add
+                      ? this.vms.length > 1
+                        ? translate('addTodoPlural')
+                        : translate('addTodoSingular')
+                      : translate('saveTodo')}
+                  </Text>
+                </Button>
+              </TouchableOpacity>
             </Animatable.View>
             {this.screenType === AddTodoScreenType.add && (
               <View
@@ -575,6 +660,13 @@ class AddTodoContent extends Component<{
                 }}
               >
                 <TouchableOpacity
+                  disabled={
+                    !sharedOnboardingStore.tutorialIsShown &&
+                    !(
+                      sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction
+                    )
+                  }
                   onPress={() => {
                     this.addTodo()
                   }}

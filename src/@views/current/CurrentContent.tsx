@@ -1,8 +1,6 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { CurrentVM } from '@views/current/CurrentVM'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { navigate } from '@utils/navigation'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Container, View } from 'native-base'
 import { TodoCard } from '@components/TodoCard'
@@ -22,17 +20,11 @@ import { realm } from '@utils/realm'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
+export let currentTodoNodeId: number
+
 @observer
 export class CurrentContent extends Component {
   vm = new CurrentVM()
-
-  componentDidMount() {
-    setTimeout(() => {
-      if (!sharedSessionStore.introMessageShown) {
-        navigate('Intro')
-      }
-    }, 2 * 1000)
-  }
 
   render() {
     // Hack to make this reactive
@@ -80,7 +72,13 @@ export class CurrentContent extends Component {
             />
           )}
           {!!this.vm.currentTodo && (
-            <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+            <View
+              onLayout={({ nativeEvent: { target } }: any) => {
+                currentTodoNodeId = target
+              }}
+            >
+              <TodoCard todo={this.vm.currentTodo} type={CardType.current} />
+            </View>
           )}
           {!!sharedTodoStore.progress.count &&
             sharedTodoStore.progress.count ===

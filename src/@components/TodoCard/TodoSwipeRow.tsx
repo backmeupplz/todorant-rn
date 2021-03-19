@@ -17,7 +17,7 @@ export class TodoSwipeRow extends Component<{
   @observable direction = 'left'
   acting = false
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

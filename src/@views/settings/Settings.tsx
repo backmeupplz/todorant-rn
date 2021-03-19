@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack'
-import { Container, Text } from 'native-base'
+import { Container, Text, View } from 'native-base'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { navigate } from '@utils/navigation'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
@@ -22,7 +22,6 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
-import { IntroMessage } from '@views/settings/intro/IntroMessage'
 import { InfoButton } from '@components/InfoButton'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
 import { Tags } from '@views/settings/Tags'
@@ -48,107 +47,140 @@ import { DelegationUserScreen } from './DelegationUserScreen'
 import { ChangeText, ChangeTextHeaderRight } from './ChangeText'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { sharedSync } from '@sync/Sync'
+import { InteractionManager, ScrollView } from 'react-native'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
+
+export let scrollViewRef: ScrollView
+export let supportButtonNodeId: number
+export let settingsRootRef: Container
+export let settingsBeforeFeedbackButton: number
+export let howToUseNodeId: number
+
+export let settingsContentRef: View
 
 const Stack = createStackNavigator()
 
 const codePushVersion = require('@utils/version.json').version.split('.')[0]
-
 @observer
 export class SettingsContent extends Component {
   render() {
     return (
       <Container>
         <HeaderScrollView
+          onScrollViewContentRef={(ref) => {
+            settingsContentRef = ref
+          }}
+          onscrollViewRef={(ref) => {
+            if (!ref) return
+            scrollViewRef = ref
+          }}
+          onOffsetChange={setSettingsScrollOffset}
           title={translate('settings')}
           infoTitle="infoSettings"
         >
-          <DebugButtons />
-          {/* Important */}
-          <Divider />
-          <SectionHeader title={translate('important')} />
-          <TableItem
-            onPress={() => {
-              navigate('Rules')
+          <View
+            onLayout={({ nativeEvent: { target } }: any) => {
+              settingsBeforeFeedbackButton = target
             }}
           >
-            <Text {...sharedColors.regularTextExtraStyle}>
-              {translate('howToUse')}
-            </Text>
-          </TableItem>
-          {/* Account */}
-          <Divider />
-          <AccountInfo />
-          <LoginLogoutButtons />
-          {/* Todos */}
-          <Divider />
-          <SectionHeader title={translate('todos')} />
-          <TodoSettings />
-          {/* Delegation */}
-          {!!sharedSessionStore.user && (
-            <>
-              <Divider />
-              <SectionHeader title={translate('delegate.title')} />
-              <DelegationSettings />
-            </>
-          )}
-          {/* General */}
-          <Divider />
-          <SectionHeader title={translate('general')} />
-          {!!sharedSessionStore.user && (
+            <DebugButtons />
+            {/* Important */}
+            <Divider />
+            <SectionHeader title={translate('important')} />
             <TableItem
               onPress={() => {
-                navigate('Sockets')
+                navigate('Rules')
               }}
             >
-              <Text {...sharedColors.regularTextExtraStyle}>
-                {translate('socketsInfo')}
+              <Text
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  howToUseNodeId = target
+                }}
+                {...sharedColors.regularTextExtraStyle}
+              >
+                {translate('howToUse')}
               </Text>
-              <CheckOrCross ok={sharedSync.socketConnection.connected} />
             </TableItem>
-          )}
-          {!!sharedSessionStore.user && (
+            {/* Account */}
+            <Divider />
+            <AccountInfo />
+            <LoginLogoutButtons />
+            {/* Todos */}
+            <Divider />
+            <SectionHeader title={translate('todos')} />
+            <TodoSettings />
+            {/* Delegation */}
+            {!!sharedSessionStore.user && (
+              <>
+                <Divider />
+                <SectionHeader title={translate('delegate.title')} />
+                <DelegationSettings />
+              </>
+            )}
+            {/* General */}
+            <Divider />
+            <SectionHeader title={translate('general')} />
+            {!!sharedSessionStore.user && (
+              <TableItem
+                onPress={() => {
+                  navigate('Sockets')
+                }}
+              >
+                <Text {...sharedColors.regularTextExtraStyle}>
+                  {translate('socketsInfo')}
+                </Text>
+                <CheckOrCross ok={sharedSync.socketConnection.connected} />
+              </TableItem>
+            )}
+            {!!sharedSessionStore.user && (
+              <TableItem
+                onPress={() => {
+                  navigate('Data')
+                }}
+              >
+                <Text {...sharedColors.regularTextExtraStyle}>
+                  {translate('dataInfo')}
+                </Text>
+              </TableItem>
+            )}
+            <GeneralSettings />
+            {/* Information */}
+            <Divider />
+            <SectionHeader title={translate('info')} />
             <TableItem
               onPress={() => {
-                navigate('Data')
+                sharedOnboardingStore.tutorialIsShown = false
+                InteractionManager.runAfterInteractions(() => {
+                  sharedOnboardingStore.nextStep(TutorialStep.Start)
+                })
               }}
             >
-              <Text {...sharedColors.regularTextExtraStyle}>
-                {translate('dataInfo')}
+              <Text
+                style={{
+                  color: sharedColors.textColor,
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                {translate('tutorialButton')}
               </Text>
             </TableItem>
-          )}
-          <GeneralSettings />
-          {/* Information */}
-          <Divider />
-          <SectionHeader title={translate('info')} />
-          <TableItem
-            onPress={() => {
-              navigate('Intro')
-            }}
-          >
-            <Text
-              style={{
-                color: sharedColors.textColor,
-                fontFamily: fonts.SFProTextRegular,
+            <TableItem
+              onPress={() => {
+                navigate('Terms')
               }}
             >
-              {translate('introButton')}
-            </Text>
-          </TableItem>
-          <TableItem
-            onPress={() => {
-              navigate('Terms')
-            }}
-          >
-            <Text
-              style={{
-                color: sharedColors.textColor,
-                fontFamily: fonts.SFProTextRegular,
-              }}
-            >
-              {translate('termsOfUse')}
-            </Text>
-          </TableItem>
+              <Text
+                style={{
+                  color: sharedColors.textColor,
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                {translate('termsOfUse')}
+              </Text>
+            </TableItem>
+          </View>
           <TableItem
             onPress={() => {
               navigate('Privacy')
@@ -172,6 +204,9 @@ export class SettingsContent extends Component {
               style={{
                 color: sharedColors.textColor,
                 fontFamily: fonts.SFProTextRegular,
+              }}
+              onLayout={({ nativeEvent: { target } }: any) => {
+                supportButtonNodeId = target
               }}
             >
               {translate('supportLabel')}
@@ -310,17 +345,6 @@ export function Settings() {
               title: translate('loginFacebook'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
-            }}
-          />
-          <Stack.Screen
-            name="Intro"
-            component={IntroMessage}
-            options={{
-              title: translate('introTitle'),
-              headerTitleAlign: 'center',
-              ...sharedColors.headerExtraStyle,
-              headerRight: InfoButton('infoIntro'),
               ...headerBackButtonProps(),
             }}
           />
