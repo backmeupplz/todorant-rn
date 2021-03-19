@@ -209,7 +209,7 @@ class AddTodoContent extends Component<{
           vm.editedTodo.time = vm.time
           vm.editedTodo.updatedAt = new Date()
           vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
-          if (failed && !vm.editedTodo.date) {
+          if (failed && vm.editedTodo.date) {
             vm.editedTodo.frogFails++
             if (vm.editedTodo.frogFails > 1) {
               vm.editedTodo.frog = true
