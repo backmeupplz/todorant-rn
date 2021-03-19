@@ -226,7 +226,7 @@ export class Overlay extends Component {
               {this.renderHoles()}
             </Animated.View>
           )}
-          {sharedOnboardingStore.messageBoxAppear && (
+          {this.shouldRender && sharedOnboardingStore.messageBoxAppear && (
             <Animated.View
               pointerEvents={this.shouldRender ? undefined : 'box-none'}
               style={{
