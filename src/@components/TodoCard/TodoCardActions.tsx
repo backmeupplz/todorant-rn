@@ -67,7 +67,7 @@ export class TodoCardActions extends Component<{
             }}
           >
             <IconButton
-              disabled={!sharedOnboardingStore.tutorialWasShown}
+              disabled={!sharedOnboardingStore.tutorialIsShown}
               onPress={() => {
                 this.props.vm.delete(this.props.todo)
               }}
@@ -85,7 +85,7 @@ export class TodoCardActions extends Component<{
                 />
               )}
             <IconButton
-              disabled={!sharedOnboardingStore.tutorialWasShown}
+              disabled={!sharedOnboardingStore.tutorialIsShown}
               onPress={() => {
                 navigate('EditTodo', { editedTodo: this.props.todo })
               }}
@@ -94,7 +94,7 @@ export class TodoCardActions extends Component<{
             {this.props.type === CardType.current &&
               this.props.vm.isSkippable(this.props.todo) && (
                 <IconButton
-                  disabled={!sharedOnboardingStore.tutorialWasShown}
+                  disabled={!sharedOnboardingStore.tutorialIsShown}
                   onPress={() => {
                     sharedAppStateStore.skipping = true
                     this.props.vm.skip(this.props.todo)
@@ -111,7 +111,7 @@ export class TodoCardActions extends Component<{
               >
                 <IconButton
                   disabled={
-                    !sharedOnboardingStore.tutorialWasShown &&
+                    !sharedOnboardingStore.tutorialIsShown &&
                     sharedOnboardingStore.step !== TutorialStep.Breakdown
                   }
                   onPress={() => {
@@ -134,7 +134,7 @@ export class TodoCardActions extends Component<{
               />
             ) : (
               <IconButton
-                disabled={!sharedOnboardingStore.tutorialWasShown}
+                disabled={!sharedOnboardingStore.tutorialIsShown}
                 onPress={() => {
                   this.props.vm.complete(this.props.todo)
                 }}

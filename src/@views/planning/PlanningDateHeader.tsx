@@ -37,7 +37,7 @@ export class PlanningDateHeader extends Component<{
           <TouchableOpacity
             onLongPress={
               sharedAppStateStore.todoSection === TodoSectionType.planning &&
-              sharedOnboardingStore.tutorialWasShown
+              sharedOnboardingStore.tutorialIsShown
                 ? this.props.drag
                 : undefined
             }
@@ -69,7 +69,7 @@ export class PlanningDateHeader extends Component<{
             </View>
           </TouchableOpacity>
           <IconButton
-            disabled={!sharedOnboardingStore.tutorialWasShown}
+            disabled={!sharedOnboardingStore.tutorialIsShown}
             onPress={() => {
               navigate('AddTodo', { date: this.props.item.section })
             }}

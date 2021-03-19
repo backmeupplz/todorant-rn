@@ -68,7 +68,7 @@ export class HeaderScrollView extends Component<{
       <View
         style={{ flex: 1, backgroundColor: 'transparent' }}
         pointerEvents={
-          sharedOnboardingStore.tutorialWasShown ||
+          sharedOnboardingStore.tutorialIsShown ||
           sharedOnboardingStore.step === TutorialStep.Breakdown
             ? 'auto'
             : 'none'
@@ -168,7 +168,7 @@ export class HeaderScrollView extends Component<{
                 alignItems: 'center',
               }}
               pointerEvents={
-                sharedOnboardingStore.tutorialWasShown ? 'auto' : 'none'
+                sharedOnboardingStore.tutorialIsShown ? 'auto' : 'none'
               }
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>

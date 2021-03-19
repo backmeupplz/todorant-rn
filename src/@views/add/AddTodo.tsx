@@ -105,7 +105,7 @@ class AddTodoContent extends Component<{
     }
     if (
       this.breakdownTodo &&
-      !sharedOnboardingStore.tutorialWasShown &&
+      !sharedOnboardingStore.tutorialIsShown &&
       this.vms.length < 2
     ) {
       Keyboard.dismiss()
@@ -277,7 +277,7 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
-    if (!sharedOnboardingStore.tutorialWasShown) {
+    if (!sharedOnboardingStore.tutorialIsShown) {
       sharedOnboardingStore.nextStep()
     }
     Keyboard.dismiss()
@@ -391,7 +391,7 @@ class AddTodoContent extends Component<{
   }
 
   onBackPress = (isHardware = false) => {
-    if (!sharedOnboardingStore.tutorialWasShown) {
+    if (!sharedOnboardingStore.tutorialIsShown) {
       if (
         sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
         sharedOnboardingStore.step === TutorialStep.BreakdownTodo
@@ -570,7 +570,7 @@ class AddTodoContent extends Component<{
                   saveButtonNodeId = target
                 }}
                 disabled={
-                  !sharedOnboardingStore.tutorialWasShown &&
+                  !sharedOnboardingStore.tutorialIsShown &&
                   !(
                     sharedOnboardingStore.step ===
                       TutorialStep.AddTodoComplete ||
@@ -661,7 +661,7 @@ class AddTodoContent extends Component<{
               >
                 <TouchableOpacity
                   disabled={
-                    !sharedOnboardingStore.tutorialWasShown &&
+                    !sharedOnboardingStore.tutorialIsShown &&
                     !(
                       sharedOnboardingStore.step ===
                       TutorialStep.BreakdownTodoAction

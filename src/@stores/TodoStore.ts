@@ -108,7 +108,7 @@ class TodoStore {
   )
 
   @computed get isPlanningRequired() {
-    return !!this.oldTodos.length && sharedOnboardingStore.tutorialWasShown
+    return !!this.oldTodos.length && sharedOnboardingStore.tutorialIsShown
   }
 
   constructor() {

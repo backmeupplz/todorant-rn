@@ -182,13 +182,13 @@ class TextRow extends Component<{
       >
         <Input
           onSubmitEditing={() => {
-            if (sharedOnboardingStore.tutorialWasShown) return
+            if (sharedOnboardingStore.tutorialIsShown) return
             if (!this.props.vm.text) return
             if (sharedOnboardingStore.step === TutorialStep.AddText) {
               sharedOnboardingStore.nextStep()
             }
           }}
-          multiline={sharedOnboardingStore.tutorialWasShown}
+          multiline={sharedOnboardingStore.tutorialIsShown}
           placeholder={translate('todo.create.text')}
           value={this.props.vm.text}
           onChangeText={(text) => {
@@ -203,7 +203,7 @@ class TextRow extends Component<{
             padding: 0,
             paddingLeft: Platform.OS === 'android' ? 1 : undefined,
           }}
-          autoFocus={sharedOnboardingStore.tutorialWasShown}
+          autoFocus={sharedOnboardingStore.tutorialIsShown}
           disabled={
             this.props.vm.editedTodo?.encrypted &&
             !sharedSessionStore.encryptionKey
@@ -303,14 +303,14 @@ class DateRow extends Component<{
     return (
       <TouchableOpacity
         disabled={
-          !sharedOnboardingStore.tutorialWasShown &&
+          !sharedOnboardingStore.tutorialIsShown &&
           !(
             sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
             sharedOnboardingStore.step === TutorialStep.SelectDate
           )
         }
         onPress={() => {
-          if (!sharedOnboardingStore.tutorialWasShown) {
+          if (!sharedOnboardingStore.tutorialIsShown) {
             if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
               sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
               return
@@ -365,14 +365,14 @@ class MonthRow extends Component<{
     return (
       <TouchableOpacity
         disabled={
-          !sharedOnboardingStore.tutorialWasShown &&
+          !sharedOnboardingStore.tutorialIsShown &&
           !(
             sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction ||
             sharedOnboardingStore.step === TutorialStep.SelectDate
           )
         }
         onPress={() => {
-          if (!sharedOnboardingStore.tutorialWasShown) {
+          if (!sharedOnboardingStore.tutorialIsShown) {
             if (sharedOnboardingStore.step === TutorialStep.SelectDate) {
               sharedOnboardingStore.nextStep(TutorialStep.SelectDateNotAllowed)
               return
@@ -695,7 +695,7 @@ export class AddTodoForm extends Component<{
                 value={this.props.vm.frog}
                 onValueChange={(value) => {
                   this.props.vm.frog = value
-                  if (sharedOnboardingStore.tutorialWasShown) return
+                  if (sharedOnboardingStore.tutorialIsShown) return
                   if (sharedOnboardingStore.step === TutorialStep.SelectFrog) {
                     sharedOnboardingStore.nextStep()
                   }
@@ -704,7 +704,7 @@ export class AddTodoForm extends Component<{
             </View>
             <View
               pointerEvents={
-                sharedOnboardingStore.tutorialWasShown ||
+                sharedOnboardingStore.tutorialIsShown ||
                 sharedOnboardingStore.step ===
                   TutorialStep.BreakdownTodoAction ||
                 sharedOnboardingStore.step === TutorialStep.SelectCompleted
@@ -719,7 +719,7 @@ export class AddTodoForm extends Component<{
                 name={translate('completed')}
                 value={this.props.vm.completed}
                 onValueChange={(value) => {
-                  if (!sharedOnboardingStore.tutorialWasShown) {
+                  if (!sharedOnboardingStore.tutorialIsShown) {
                     sharedOnboardingStore.nextStep(
                       TutorialStep.BreakdownCompletedTodo
                     )
@@ -744,7 +744,7 @@ export class AddTodoForm extends Component<{
             {!sharedSettingsStore.showMoreByDefault && !this.props.vm.showMore && (
               <TouchableOpacity
                 disabled={
-                  !sharedOnboardingStore.tutorialWasShown &&
+                  !sharedOnboardingStore.tutorialIsShown &&
                   !(
                     sharedOnboardingStore.step === TutorialStep.ShowMore ||
                     sharedOnboardingStore.step ===
@@ -763,7 +763,7 @@ export class AddTodoForm extends Component<{
                 }}
                 onPress={() => {
                   this.props.vm.showMore = true
-                  if (sharedOnboardingStore.tutorialWasShown) return
+                  if (sharedOnboardingStore.tutorialIsShown) return
                   if (sharedOnboardingStore.step === TutorialStep.ShowMore) {
                     sharedOnboardingStore.nextStep()
                   }

@@ -33,7 +33,7 @@ export class PlanningHeaderRight extends Component {
           </View>
         ) : sharedAppStateStore.todoSection === TodoSectionType.planning ? (
           <TouchableOpacity
-            disabled={!sharedOnboardingStore.tutorialWasShown}
+            disabled={!sharedOnboardingStore.tutorialIsShown}
             onPress={() => {
               sharedAppStateStore.calendarEnabled = !sharedAppStateStore.calendarEnabled
             }}

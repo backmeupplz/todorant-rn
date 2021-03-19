@@ -141,7 +141,7 @@ export class GeneralSettings extends Component {
           </Text>
         </TableItem>
         {(!!sharedSessionStore.user ||
-          !sharedOnboardingStore.tutorialWasShown) && (
+          !sharedOnboardingStore.tutorialIsShown) && (
           <View onLayout={({ nativeEvent: { target } }: any) => {}}>
             <TableItem
               onLayout={({ nativeEvent: { target } }: any) => {

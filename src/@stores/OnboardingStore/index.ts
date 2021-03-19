@@ -62,7 +62,7 @@ class OnboardingStore {
   @observable messageBoxAppear = true
   @observable step = TutorialStep.Start
   @observable previousStep = TutorialStep.Start
-  @persist @observable tutorialWasShown = false
+  @persist @observable tutorialIsShown = false
 
   @computed get closeOnboardingStyle() {
     const basicStyle = {
@@ -221,7 +221,7 @@ export const AllStages = {
     )
     const articleButton = new OnboardingButton(
       () => {
-        sharedOnboardingStore.tutorialWasShown = true
+        sharedOnboardingStore.tutorialIsShown = true
         sharedOnboardingStore.nextStep(TutorialStep.Start)
         navigate('Rules')
       },
@@ -229,7 +229,7 @@ export const AllStages = {
       true
     )
     const closeEverythingButton = new OnboardingButton(() => {
-      sharedOnboardingStore.tutorialWasShown = true
+      sharedOnboardingStore.tutorialIsShown = true
       sharedOnboardingStore.nextStep(TutorialStep.Start)
       Toast.show({
         text: `${translate('onboarding.Close.toast')}`,
@@ -563,7 +563,7 @@ export const AllStages = {
   [TutorialStep.Congratulations]: async () => {
     const endTutorialButton = new OnboardingButton(
       () => {
-        sharedOnboardingStore.tutorialWasShown = true
+        sharedOnboardingStore.tutorialIsShown = true
         sharedOnboardingStore.changeSavedSreen(OnboardingSreens.Current)
         startConfetti(true)
       },

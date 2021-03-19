@@ -40,7 +40,7 @@ export class TodoCardContent extends Component<{
         <Swipeable
           enabled={
             sharedSettingsStore.swipeActions &&
-            sharedOnboardingStore.tutorialWasShown
+            sharedOnboardingStore.tutorialIsShown
           }
           ref={(ref) => (row = ref)}
           leftThreshold={100}
@@ -62,7 +62,7 @@ export class TodoCardContent extends Component<{
             if (
               (this.props.type === 'current' ||
                 this.props.type === 'planning') &&
-              sharedOnboardingStore.tutorialWasShown
+              sharedOnboardingStore.tutorialIsShown
             ) {
               return (
                 <View
@@ -90,7 +90,7 @@ export class TodoCardContent extends Component<{
             if (
               (this.props.type === 'current' ||
                 this.props.type === 'planning') &&
-              sharedOnboardingStore.tutorialWasShown
+              sharedOnboardingStore.tutorialIsShown
             ) {
               return (
                 <View
@@ -144,7 +144,7 @@ export class TodoCardContent extends Component<{
               type={this.props.type}
               drag={
                 this.props.type === CardType.planning &&
-                sharedOnboardingStore.tutorialWasShown
+                sharedOnboardingStore.tutorialIsShown
                   ? this.props.drag
                   : undefined
               }

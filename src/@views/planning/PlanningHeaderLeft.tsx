@@ -13,7 +13,7 @@ export class PlanningHeaderLeft extends Component {
       !sharedAppStateStore.hash.length &&
       sharedAppStateStore.todoSection === TodoSectionType.planning && (
         <TouchableOpacity
-          disabled={!sharedOnboardingStore.tutorialWasShown}
+          disabled={!sharedOnboardingStore.tutorialIsShown}
           onPress={() => {
             sharedAppStateStore.changeLoading(false)
             sharedAppStateStore.searchQuery = []

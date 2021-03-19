@@ -11,10 +11,16 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { makeObservable, observable, reaction } from 'mobx'
 import { observer } from 'mobx-react'
-import { Dimensions, Keyboard, Platform } from 'react-native'
+import {
+  Dimensions,
+  InteractionManager,
+  Keyboard,
+  Platform,
+} from 'react-native'
 import { realm } from '@utils/realm'
 import { Todo } from '@models/Todo'
 import { isLandscapeAndNotAPad } from '@utils/deviceInfo'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class Overlay extends Component {
@@ -64,19 +70,19 @@ export class Overlay extends Component {
       }).start()
     })
     reaction(
-      () => sharedOnboardingStore.tutorialWasShown,
+      () => sharedOnboardingStore.tutorialIsShown,
       () => {
-        this.trigger(!sharedOnboardingStore.tutorialWasShown)
+        this.trigger(!sharedOnboardingStore.tutorialIsShown)
       }
     )
     reaction(
       () => sharedOnboardingStore.hydrated,
       () => {
         if (this.todosExists() && !sharedOnboardingStore.savedStep) {
-          sharedOnboardingStore.tutorialWasShown = true
+          sharedOnboardingStore.tutorialIsShown = true
           return
         }
-        this.trigger(!sharedOnboardingStore.tutorialWasShown)
+        this.trigger(!sharedOnboardingStore.tutorialIsShown)
       }
     )
     reaction(
@@ -151,7 +157,7 @@ export class Overlay extends Component {
       duration: 500,
       easing: Easing.linear,
     }).start(() => {
-      this.shouldRender = !sharedOnboardingStore.tutorialWasShown
+      this.shouldRender = !sharedOnboardingStore.tutorialIsShown
     })
   }
 
@@ -248,4 +254,18 @@ export class Overlay extends Component {
       </>
     )
   }
+}
+
+export function checkOnboardingStep() {
+  InteractionManager.runAfterInteractions(async () => {
+    setTimeout(() => {
+      if (
+        sharedOnboardingStore.tutorialIsShown ||
+        !sharedOnboardingStore.savedStep
+      )
+        return
+      navigate(sharedOnboardingStore.screen)
+      sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
+    }, 500)
+  })
 }

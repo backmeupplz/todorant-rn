@@ -36,7 +36,7 @@ import { RateModal } from '@components/RateModal'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { ConfettiView } from '@components/Confetti'
 import { DayCompleteOverlay } from '@components/DayCompleteOverlay'
-import { Overlay } from '@views/onboarding/Overlay'
+import { checkOnboardingStep, Overlay } from '@views/onboarding/Overlay'
 import { HeroProfile } from '@views/hero/HeroProfile'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
@@ -48,7 +48,7 @@ import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { configure } from 'mobx'
+import { configure, when } from 'mobx'
 import { checkupVersion } from '@utils/checkupVersion'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
@@ -100,17 +100,7 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
-    InteractionManager.runAfterInteractions(() => {
-      requestAnimationFrame(() => {
-        if (
-          sharedOnboardingStore.tutorialWasShown ||
-          !sharedOnboardingStore.savedStep
-        )
-          return
-        navigate(sharedOnboardingStore.screen)
-        sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
-      })
-    })
+    checkOnboardingStep()
   }
 
   render() {
@@ -158,7 +148,7 @@ class App extends Component {
                       {() => (
                         <View
                           pointerEvents={
-                            sharedOnboardingStore.tutorialWasShown
+                            sharedOnboardingStore.tutorialIsShown
                               ? 'auto'
                               : 'none'
                           }
@@ -280,7 +270,7 @@ class App extends Component {
           <ConfettiView />
         </NavigationContainer>
         <Overlay />
-        {!sharedOnboardingStore.tutorialWasShown &&
+        {!sharedOnboardingStore.tutorialIsShown &&
           !sharedOnboardingStore.stepObject.notShowClose && (
             <SafeAreaInsetsContext.Consumer>
               {(insets) => {

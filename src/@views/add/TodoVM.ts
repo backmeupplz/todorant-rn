@@ -25,10 +25,10 @@ export class TodoVM {
   @observable completed = false
   @observable frog = false
   @observable
-  monthAndYear?: string = !sharedOnboardingStore.tutorialWasShown
+  monthAndYear?: string = !sharedOnboardingStore.tutorialIsShown
     ? getDateMonthAndYearString(getTodayWithStartOfDay())
     : undefined
-  @observable date?: string = !sharedOnboardingStore.tutorialWasShown
+  @observable date?: string = !sharedOnboardingStore.tutorialIsShown
     ? getDateDateString(getTodayWithStartOfDay())
     : undefined
   @observable time?: string
@@ -175,7 +175,7 @@ export class TodoVM {
     makeObservable(this)
 
     Keyboard.addListener('keyboardDidHide', () => {
-      if (sharedOnboardingStore.tutorialWasShown) return
+      if (sharedOnboardingStore.tutorialIsShown) return
       if (!this.text) return
       if (sharedOnboardingStore.step === TutorialStep.AddText) {
         sharedOnboardingStore.nextStep()

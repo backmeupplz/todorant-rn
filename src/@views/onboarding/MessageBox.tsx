@@ -38,7 +38,7 @@ export class MessageBox extends Component {
       }
     )
     reaction(
-      () => sharedOnboardingStore.tutorialWasShown,
+      () => sharedOnboardingStore.tutorialIsShown,
       () => {
         this.showAvatar = true
         Animated.timing(this.avatarOpacity, {

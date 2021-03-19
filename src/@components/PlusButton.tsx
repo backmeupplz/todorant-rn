@@ -32,7 +32,7 @@ export class PlusButton extends Component {
         <TouchableOpacity
           onPress={plusButtonAction}
           disabled={
-            !sharedOnboardingStore.tutorialWasShown &&
+            !sharedOnboardingStore.tutorialIsShown &&
             sharedOnboardingStore.step !== TutorialStep.AddTask
           }
         >
