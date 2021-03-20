@@ -189,8 +189,6 @@
   "disconnect": "Disconnect",
   "infoIntegrations": "You can setup third party app integrations here by tapping the options.",
   "googleCalendar": "Google Calendar",
-  "googleCalendarHint": "Only the tasks created in Todorant with an exact time will be synced to Google Calendar",
-  "googleCalendarGotIt": "Got it!",
   "loginQR": "Login with QR",
   "qrDescription": "Please open the QR code popup on the Todorant website and scan the code here",
   "cameraAuthorization": "Camera not authorized",
@@ -452,5 +450,7 @@
   },
   "updateVersionTitle": "Hey there! A new version of Todorant is available",
   "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
-  "update": "Update"
+  "update": "Update",
+  "googleCalendarHint": "Only the tasks created in Todorant with an exact time will be synced to Google Calendar",
+  "googleCalendarGotIt": "Got it!"
 }
