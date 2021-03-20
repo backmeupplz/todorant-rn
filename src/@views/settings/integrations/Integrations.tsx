@@ -8,7 +8,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { makeObservable, observable } from 'mobx'
-import { alertError, alertMessage } from '@utils/alert'
+import { alertConfirm, alertError, alertMessage } from '@utils/alert'
 import * as rest from '@utils/rest'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
@@ -96,7 +96,11 @@ export class Integrations extends Component {
           <TableItem
             {...sharedColors.listItemExtraStyle}
             onPress={() => {
-              this.googleCalendarTapped()
+              alertConfirm(
+                translate('googleCalendarHint'),
+                translate('googleCalendarGotIt'),
+                () => this.googleCalendarTapped()
+              )
             }}
           >
             <Text {...sharedColors.textExtraStyle}>
