@@ -1,6 +1,6 @@
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { isLandscapeAndNotAPad, isPad } from '@utils/deviceInfo'
+import { isDeviceSmall, isLandscapeAndNotAPad, isPad } from '@utils/deviceInfo'
 import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
@@ -17,8 +17,8 @@ export class OnboardingButton extends Component<{
   preferred?: boolean
   onPress: () => void
 }> {
-  @observable padding = isLandscapeAndNotAPad() ? 9 : 18
-  @observable marginTop = isLandscapeAndNotAPad() ? 6 : 12
+  @observable padding = isLandscapeAndNotAPad() || isDeviceSmall() ? 9 : 18
+  @observable marginTop = isLandscapeAndNotAPad() || isDeviceSmall() ? 6 : 12
 
   UNSAFE_componentWillMount() {
     makeObservable(this)
@@ -28,9 +28,10 @@ export class OnboardingButton extends Component<{
     Dimensions.addEventListener(
       'change',
       async ({ window: { width, height } }) => {
-        const isLandscape = isLandscapeAndNotAPad(width, height)
-        this.padding = isLandscape ? 9 : 18
-        this.marginTop = isLandscape ? 6 : 12
+        const shouldPaddingBeSmall =
+          isLandscapeAndNotAPad(width, height) || isDeviceSmall()
+        this.padding = shouldPaddingBeSmall ? 9 : 18
+        this.marginTop = shouldPaddingBeSmall ? 6 : 12
       }
     )
   }
