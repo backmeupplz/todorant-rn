@@ -62,6 +62,7 @@ export class PlanningVM {
       // discard calendar after applying changes
       sharedAppStateStore.activeDay = undefined
       sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+      promise()
     } else {
       // we are saving promise for reseting hover state in future
       this.resetHoverState = promise
