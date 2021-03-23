@@ -14,6 +14,7 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { SectionListData } from 'react-native'
 import { Todo } from '@models/Todo'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class PlanningDateHeader extends Component<{
@@ -62,7 +63,7 @@ export class PlanningDateHeader extends Component<{
                 {(this.props.item.section?.length || 0) === 10 &&
                   `, ${capitalizeSentence(
                     moment(this.props.item.section!)
-                      .locale(i18n.locale)
+                      .locale(sharedSettingsStore.language || 'en-US')
                       .format('dddd')
                   )}`}
               </Text>
