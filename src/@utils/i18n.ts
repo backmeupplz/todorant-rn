@@ -54,6 +54,6 @@ export function setI18nConfig() {
 export async function setI18nConfigAsync() {
   const languageTag = await getLanguageTag()
   i18n.locale = languageTag
-  sharedAppStateStore.languageTag = languageTag
+  sharedSettingsStore.language = languageTag
   configCalendar(languageTag)
 }

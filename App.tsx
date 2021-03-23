@@ -105,9 +105,6 @@ class App extends Component {
 
   render() {
     // Hack to make this reactive
-    let languageTag = sharedAppStateStore.languageTag
-    languageTag = `${languageTag}`
-
     return (
       <Root ref={(ref) => (rootRef = ref)}>
         <NavigationContainer ref={navigationRef}>

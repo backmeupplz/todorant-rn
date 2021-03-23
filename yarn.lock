@@ -1599,10 +1599,10 @@
   resolved "https://registry.yarnpkg.com/@upacyxou/react-native-hole-view/-/react-native-hole-view-3.0.1.tgz#632a58a31755859e90a93c6621b0d67dbd74b2d1"
   integrity sha512-cKHZzuCn8YwY6ES5GVCYbolnABfjbF+FNWX0/MAva4HQ0fVsmZ3ZZ0ujX9tv5StJilzjL4K3t4QQJnIHPMYDZw==
 
-"@upacyxou/react-native-month@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.3.tgz#8c5ae39632f1acdddd201b03b3a6e107c5648202"
-  integrity sha512-qYd65+OUQowUpsP08yQdBnc63tQnGBK5vzOBfr5bb9yuPYXFhJRod4YsVwubEkBPSkbmYIttLYp4wx7BehzO2w==
+"@upacyxou/react-native-month@^1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.8.tgz#c34994385ca54f613ba757fba4ad95ec96ba6851"
+  integrity sha512-9nBKWy+c7efUz7ysrjowiA1ofK7IoFcINjWe+1WoB9hbL7zg0WSH5JV/Hzg2+GcUPDw0SQ2zJTwr03dnW7DFHw==
   dependencies:
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"
@@ -6866,7 +6866,14 @@ react-native-ratings@^6.3.1, react-native-ratings@^6.5.0:
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-native-reanimated@^1.13.1, react-native-reanimated@^1.13.2:
+react-native-reanimated@^1.13.1:
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.3.tgz#fb0e1d582c8866015140f2159e147ffe6e798a3a"
+  integrity sha512-i714H24dv6ncpFO7/SZ0PfAMbvjgVbF8Ow2NPtowoZAz8osS54DmTMrkgJ9Za+uEku/s0AEaxqiXG2Xgntvv2g==
+  dependencies:
+    fbjs "^1.0.0"
+
+react-native-reanimated@^1.13.2:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
   integrity sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ==

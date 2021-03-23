@@ -150,7 +150,7 @@ export class PlanningContent extends Component {
               month={this.currentMonth}
               year={this.currentYear}
               showWeekdays
-              locale="en"
+              locale={sharedSettingsStore.language}
             />
           </View>
         </View>
