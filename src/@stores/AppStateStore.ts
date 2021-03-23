@@ -1,6 +1,4 @@
-import { Todo } from '@models/Todo'
 import { action, computed, makeObservable, observable } from 'mobx'
-import { persist } from 'mobx-persist'
 
 export enum TodoSectionType {
   planning = 'planning',

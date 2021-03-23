@@ -40,7 +40,6 @@ export let integrationButtonsNodeId: number
 @observer
 export class GeneralSettings extends Component {
   @computed get languageLabel() {
-    console.log(sharedSettingsStore.language)
     return sharedSettingsStore.language === Language.auto
       ? translate('languageAuto')
       : (codeToName as any)[sharedSettingsStore.language || 'en']
