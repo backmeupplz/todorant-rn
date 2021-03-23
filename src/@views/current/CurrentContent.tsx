@@ -27,10 +27,6 @@ export class CurrentContent extends Component {
   vm = new CurrentVM()
 
   render() {
-    // Hack to make this reactive
-    let languageTag = sharedAppStateStore.languageTag
-    languageTag = `${languageTag}`
-
     return (
       <Container {...({ language: sharedSettingsStore.language } as any)}>
         <HeaderScrollView

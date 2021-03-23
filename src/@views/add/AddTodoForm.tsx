@@ -555,7 +555,6 @@ export class AddTodoForm extends Component<{
   }
 
   render() {
-    const languageTag = sharedAppStateStore.languageTag
     return (
       <>
         {this.props.vm.collapsed ? (
@@ -623,7 +622,7 @@ export class AddTodoForm extends Component<{
             </View>
             {this.props.vm.showMonthAndYearPicker && (
               <MonthPicker
-                localeLanguage={languageTag.substr(0, 2)}
+                localeLanguage={sharedSettingsStore.language?.substr(0, 2)}
                 selectedDate={this.props.vm.monthAndYearPickerValue}
                 onMonthChange={(date: Moment) => {
                   this.props.vm.monthAndYearPickerValue = date.toDate()

@@ -72,10 +72,6 @@ class SettingsRotatingIcon extends Component<{
 }
 
 export default observer(() => {
-  // Hack to make this reactive
-  let languageTag = sharedAppStateStore.languageTag
-  languageTag = `${languageTag}`
-
   return (
     <>
       <Tab.Navigator

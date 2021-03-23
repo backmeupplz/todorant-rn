@@ -8,10 +8,6 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 @observer
 export class NoTodosPlaceholder extends Component {
   render() {
-    // Hack to make this reactive
-    let languageTag = sharedAppStateStore.languageTag
-    languageTag = `${languageTag}`
-
     return (
       <View
         style={{

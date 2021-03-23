@@ -1,5 +1,6 @@
 import { Todo } from '@models/Todo'
 import { action, computed, makeObservable, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 export enum TodoSectionType {
   planning = 'planning',
@@ -13,8 +14,6 @@ class AppStateStore {
 
   @observable todoSection: TodoSectionType = TodoSectionType.planning
   @observable hash: string[] = []
-
-  @observable languageTag = 'en'
 
   @observable skipping = false
   @observable searchEnabled = false

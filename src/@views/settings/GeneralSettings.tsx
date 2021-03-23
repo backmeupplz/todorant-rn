@@ -24,6 +24,7 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { View } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { configCalendar } from '@utils/configCalendar'
 
 const codeToName = {
   en: 'English',
@@ -39,6 +40,7 @@ export let integrationButtonsNodeId: number
 @observer
 export class GeneralSettings extends Component {
   @computed get languageLabel() {
+    console.log(sharedSettingsStore.language)
     return sharedSettingsStore.language === Language.auto
       ? translate('languageAuto')
       : (codeToName as any)[sharedSettingsStore.language || 'en']
@@ -90,8 +92,9 @@ export class GeneralSettings extends Component {
                 } else if (i < 7) {
                   sharedSettingsStore.language = options[i].code
                   sharedSettingsStore.updatedAt = new Date()
-                  await sharedSync.sync(SyncRequestEvent.Settings)
                   await AsyncStorage.setItem('languageSelect', options[i].code)
+                  configCalendar(options[i].code)
+                  await sharedSync.sync(SyncRequestEvent.Settings)
                 }
               }
             )
