@@ -1599,10 +1599,10 @@
   resolved "https://registry.yarnpkg.com/@upacyxou/react-native-hole-view/-/react-native-hole-view-3.0.1.tgz#632a58a31755859e90a93c6621b0d67dbd74b2d1"
   integrity sha512-cKHZzuCn8YwY6ES5GVCYbolnABfjbF+FNWX0/MAva4HQ0fVsmZ3ZZ0ujX9tv5StJilzjL4K3t4QQJnIHPMYDZw==
 
-"@upacyxou/react-native-month@^1.2.8":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.8.tgz#c34994385ca54f613ba757fba4ad95ec96ba6851"
-  integrity sha512-9nBKWy+c7efUz7ysrjowiA1ofK7IoFcINjWe+1WoB9hbL7zg0WSH5JV/Hzg2+GcUPDw0SQ2zJTwr03dnW7DFHw==
+"@upacyxou/react-native-month@^1.2.9":
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-month/-/react-native-month-1.2.9.tgz#36d43f5927cbbe0a7d6510d3f7e0b496f67e2bad"
+  integrity sha512-S8/eq9si5roU+Wff+DwgibJh2GoIjzZ0b7Lkt8kb/36NH4ARg7NlGavYUF7z7SgiE+V6aruRtqfw//gwIoX7Fg==
   dependencies:
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"

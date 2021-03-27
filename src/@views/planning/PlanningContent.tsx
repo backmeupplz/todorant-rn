@@ -26,6 +26,7 @@ import { getDateString } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
 import { Todo } from '@models/Todo'
+import { debounce } from 'lodash'
 
 @observer
 export class PlanningContent extends Component {
@@ -46,22 +47,13 @@ export class PlanningContent extends Component {
     makeObservable(this)
   }
 
-  setCoordinates(yAx: number, xAx: number) {
-    if (!this.lastTimeX || !this.lastTimeY) {
-      this.lastTimeY = yAx
-      this.lastTimeX = xAx
-    }
-    if (
-      Math.abs(this.lastTimeX - xAx) > 30 ||
-      Math.abs(this.lastTimeY - yAx) > 40
-    ) {
-      this.lastTimeX = xAx
-      this.lastTimeY = yAx
+  setCoordinates = debounce(
+    (yAx: number, xAx: number) => {
       sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
-    }
-    this.currentX.setValue(xAx as any)
-    this.currentY.setValue((yAx - this.todoHeight) as any)
-  }
+    },
+    1000,
+    { maxWait: 250 }
+  )
 
   renderPlanningRequiredMessage() {
     return (
@@ -191,6 +183,8 @@ export class PlanningContent extends Component {
               }}
               contentContainerStyle={{ paddingBottom: 100 }}
               onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+                this.currentX.setValue(absoluteX as any)
+                this.currentY.setValue((absoluteY - this.todoHeight) as any)
                 this.setCoordinates(absoluteY, absoluteX)
               }}
               autoscrollSpeed={200}
