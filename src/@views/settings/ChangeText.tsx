@@ -48,7 +48,7 @@ class ChangeTextContent extends Component<{
   @observable tag?: Tag
   @observable newName: string = ''
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -92,32 +92,34 @@ class ChangeTextContent extends Component<{
   }
   render() {
     return (
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          flex: 1,
-          justifyContent: 'center',
-        }}
-      >
-        <Text>{`#${this.tag?.tag}`}</Text>
+      <View style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: 'column',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
-          <Input
-            onChangeText={(text) => {
-              this.newName = text
-            }}
-            placeholder={translate('editName')}
+          <Text>{`#${this.tag?.tag}`}</Text>
+          <View
             style={{
-              flex: 1,
               flexDirection: 'row',
-              color: 'green',
-              textAlign: 'center',
             }}
-          />
+          >
+            <Input
+              onChangeText={(text) => {
+                this.newName = text
+              }}
+              placeholder={translate('editName')}
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                color: 'green',
+                textAlign: 'center',
+              }}
+            />
+          </View>
         </View>
       </View>
     )

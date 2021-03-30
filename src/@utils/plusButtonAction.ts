@@ -1,9 +1,10 @@
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 export function plusButtonAction() {
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === 'ios' && sharedOnboardingStore.tutorialIsShown) {
     if (!sharedSessionStore.user && !sharedSessionStore.localAppleReceipt) {
       navigate('Paywall', { type: 'appleUnauthorized' })
       return

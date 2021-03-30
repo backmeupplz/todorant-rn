@@ -13,6 +13,8 @@ import { capitalizeSentence } from '@utils/capitalizeSentence'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { SectionListData } from 'react-native'
 import { Todo } from '@models/Todo'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class PlanningDateHeader extends Component<{
@@ -35,7 +37,8 @@ export class PlanningDateHeader extends Component<{
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             onLongPress={
-              sharedAppStateStore.todoSection === TodoSectionType.planning
+              sharedAppStateStore.todoSection === TodoSectionType.planning &&
+              sharedOnboardingStore.tutorialIsShown
                 ? this.props.drag
                 : undefined
             }
@@ -60,13 +63,14 @@ export class PlanningDateHeader extends Component<{
                 {(this.props.item.section?.length || 0) === 10 &&
                   `, ${capitalizeSentence(
                     moment(this.props.item.section!)
-                      .locale(i18n.locale)
+                      .locale(sharedSettingsStore.language || 'en-US')
                       .format('dddd')
                   )}`}
               </Text>
             </View>
           </TouchableOpacity>
           <IconButton
+            disabled={!sharedOnboardingStore.tutorialIsShown}
             onPress={() => {
               navigate('AddTodo', { date: this.props.item.section })
             }}

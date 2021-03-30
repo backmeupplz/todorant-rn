@@ -27,7 +27,7 @@ export class Security extends Component {
   @observable password = ''
   @observable passwordRepeat = ''
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

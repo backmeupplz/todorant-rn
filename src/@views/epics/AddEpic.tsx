@@ -46,7 +46,7 @@ class AddEpicContent extends Component<{
   @observable tag?: Tag
   @observable epicGoal: number | undefined
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -76,33 +76,35 @@ class AddEpicContent extends Component<{
   }
   render() {
     return (
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          flex: 1,
-          justifyContent: 'center',
-        }}
-      >
-        <Text>{`#${this.tag?.tag}`}</Text>
+      <View style={{ flex: 1, backgroundColor: sharedColors.backgroundColor }}>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: 'column',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
-          <Input
-            onChangeText={(text) => {
-              this.epicGoal = parseInt(text)
-            }}
-            placeholder={translate('epic.epicGoal')}
-            keyboardType="number-pad"
+          <Text>{`#${this.tag?.tag}`}</Text>
+          <View
             style={{
-              flex: 1,
               flexDirection: 'row',
-              color: 'green',
-              textAlign: 'center',
             }}
-          />
+          >
+            <Input
+              onChangeText={(text) => {
+                this.epicGoal = parseInt(text)
+              }}
+              placeholder={translate('epic.epicGoal')}
+              keyboardType="number-pad"
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                color: 'green',
+                textAlign: 'center',
+              }}
+            />
+          </View>
         </View>
       </View>
     )

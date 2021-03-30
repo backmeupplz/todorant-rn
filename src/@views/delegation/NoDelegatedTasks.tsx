@@ -12,10 +12,6 @@ import {
 @observer
 export class NoDelegatedTasks extends Component {
   render() {
-    // Hack to make this reactive
-    let languageTag = sharedAppStateStore.languageTag
-    languageTag = `${languageTag}`
-
     return (
       <View
         style={{

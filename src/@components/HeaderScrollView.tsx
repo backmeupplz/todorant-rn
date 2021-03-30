@@ -7,6 +7,9 @@ import {
   Dimensions,
   StyleProp,
   ViewStyle,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  NativeScrollPoint,
 } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
@@ -17,6 +20,10 @@ import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import fonts from '@utils/fonts'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+
+export let infoButtonNodeId: number
 
 const headerHeight = ifIphoneX(88, 60)
 const { height } = Dimensions.get('window')
@@ -27,6 +34,9 @@ export class HeaderScrollView extends Component<{
   showsHeroButton?: boolean
   infoTitle: string
   contentContainerStyle?: StyleProp<ViewStyle>
+  onscrollViewRef?: (ref: ScrollView | null) => void
+  onScrollViewContentRef?: (event: View) => void
+  onOffsetChange?: (offset: NativeScrollPoint) => void
 }> {
   @observable headerHeight = 0
   @observable headerY = 0
@@ -34,7 +44,7 @@ export class HeaderScrollView extends Component<{
 
   scrollAnimatedValue = new Animated.Value(0)
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
@@ -55,7 +65,15 @@ export class HeaderScrollView extends Component<{
     })
 
     return (
-      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+      <View
+        style={{ flex: 1, backgroundColor: 'transparent' }}
+        pointerEvents={
+          sharedOnboardingStore.tutorialIsShown ||
+          sharedOnboardingStore.step === TutorialStep.Breakdown
+            ? 'auto'
+            : 'none'
+        }
+      >
         <View
           style={{
             height: headerHeight,
@@ -106,67 +124,86 @@ export class HeaderScrollView extends Component<{
           </Fade>
         </View>
         <ScrollView
-          onScroll={Animated.event(
-            [
+          ref={this.props.onscrollViewRef}
+          onScroll={(event) => {
+            Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: { y: this.scrollAnimatedValue },
+                  },
+                },
+              ],
               {
-                nativeEvent: { contentOffset: { y: this.scrollAnimatedValue } },
-              },
-            ],
-            {
-              listener: (event: any) => {
-                const offset = event.nativeEvent.contentOffset.y
-                const scrollHeaderOffset = this.headerHeight + this.headerY - 8
-                const isHeaderScrolled = scrollHeaderOffset < offset
-
-                if (!this.isHeaderScrolled && isHeaderScrolled) {
-                  this.isHeaderScrolled = isHeaderScrolled
-                }
-
-                if (this.isHeaderScrolled && !isHeaderScrolled) {
-                  this.isHeaderScrolled = isHeaderScrolled
-                }
-              },
-              useNativeDriver: false,
+                listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+                  const offset = event.nativeEvent.contentOffset.y
+                  const scrollHeaderOffset =
+                    this.headerHeight + this.headerY - 8
+                  const isHeaderScrolled = scrollHeaderOffset < offset
+                  if (!this.isHeaderScrolled && isHeaderScrolled) {
+                    this.isHeaderScrolled = isHeaderScrolled
+                  }
+                  if (this.isHeaderScrolled && !isHeaderScrolled) {
+                    this.isHeaderScrolled = isHeaderScrolled
+                  }
+                },
+                useNativeDriver: false,
+              }
+            )(event)
+            if (this.props.onOffsetChange) {
+              this.props.onOffsetChange(event.nativeEvent.contentOffset)
             }
-          )}
+          }}
           scrollEventThrottle={8}
-          style={{ backgroundColor: sharedColors.backgroundColor }}
+          style={{
+            backgroundColor: sharedColors.backgroundColor,
+          }}
           contentContainerStyle={this.props.contentContainerStyle}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Animated.Text
-                style={[
-                  titleStyles,
-                  {
-                    fontSize: animatedFontSize,
-                    color: sharedColors.textColor,
-                  },
-                ]}
-                onLayout={(event: any) => {
-                  this.headerHeight = event.nativeEvent.layout.height
-                  this.headerY = event.nativeEvent.layout.y
-                }}
-              >
-                {this.props.title}
-              </Animated.Text>
-
-              {!!this.props.infoTitle && (
-                <View style={{ marginHorizontal: 12 }}>
-                  {InfoButton(this.props.infoTitle)()}
-                </View>
-              )}
+          <View ref={this.props.onScrollViewContentRef}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+              pointerEvents={
+                sharedOnboardingStore.tutorialIsShown ? 'auto' : 'none'
+              }
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Animated.Text
+                  style={[
+                    titleStyles,
+                    {
+                      fontSize: animatedFontSize,
+                      color: sharedColors.textColor,
+                    },
+                  ]}
+                  onLayout={(event) => {
+                    this.headerHeight = event.nativeEvent.layout.height
+                    this.headerY = event.nativeEvent.layout.y
+                  }}
+                >
+                  {this.props.title}
+                </Animated.Text>
+                {!!this.props.infoTitle && (
+                  <View style={{ marginHorizontal: 12 }}>
+                    <View
+                      onLayout={({ nativeEvent: { target } }: any) => {
+                        infoButtonNodeId = target
+                      }}
+                    >
+                      {InfoButton(this.props.infoTitle)()}
+                    </View>
+                  </View>
+                )}
+              </View>
+              {this.props.showsHeroButton &&
+                sharedSettingsStore.gamificationOn && <HeroButton />}
             </View>
-            {this.props.showsHeroButton &&
-              sharedSettingsStore.gamificationOn && <HeroButton />}
+            {this.props.children}
           </View>
-          {this.props.children}
         </ScrollView>
       </View>
     )

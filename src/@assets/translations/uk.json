@@ -138,7 +138,6 @@
   "appleUnauthorizedTextGoodNews": "Гарна новина: до закінчення 30-денного пробного періоду з Вас не стягуватиметься плата.",
   "appleUnauthorizedButtonExtra": "30 днів безплатного випробування",
   "introTitle": "Ласкаво просимо!",
-  "introButton": "Вступне повідомлення",
   "introBack": "Ходімо!",
   "infoTitle": "Відомості",
   "infoIntro": "Чудово, Ви натиснули кнопку \"i\"! Це вітальне повідомлення, яке пояснює, що таке Todorant. Ні більше, ні менше.",
@@ -217,5 +216,12 @@
     "repeatPassword": "Повторіть пароль"
   },
   "startTimeOfDay": "Початок дня",
-  "purchaseErrorTryOnWeb": "Вебсайт Тудуранта"
+  "purchaseErrorTryOnWeb": "Вебсайт Тудуранта",
+  "dissmissTasksSingular": "Видалити завдання",
+  "saveTasksSingular": "Зберегти завдання",
+  "fixTasksSingular": "Виправити завдання",
+  "changeTasksSingular": "Змінити завдання",
+  "addedTask": "Завдання добавлено",
+  "edit": "Редагувати",
+  "tutorialButton": "Вступне повідомлення"
 }

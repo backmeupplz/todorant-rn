@@ -44,10 +44,8 @@ platform :ios do
       submit_for_review: true,
       skip_screenshots: true,
       submission_information: {
-        add_id_info_uses_idfa: true,
         add_id_info_limits_tracking: false,
         add_id_info_serves_ads: false,
-        add_id_info_uses_idfa: false,
         add_id_info_tracks_install: false,
         add_id_info_uses_idfa: false,
         export_compliance_available_on_french_store: "",
@@ -64,6 +62,7 @@ platform :ios do
   end
 
   lane :release_beta do
+    increment_version_number
     build_for_sumbission
     upload_to_testflight(
       distribute_external: true,

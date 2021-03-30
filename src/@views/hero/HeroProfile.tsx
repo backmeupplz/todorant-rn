@@ -10,7 +10,7 @@ import { translate } from '@utils/i18n'
 
 @observer
 export class HeroProfile extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

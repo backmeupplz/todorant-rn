@@ -2,14 +2,17 @@ import { sharedSync } from '@sync/Sync'
 import { RealmTodosData } from '@views/planning/RealmTodosData'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import {
+  getDateDateString,
+  getDateMonthAndYearString,
+  getTodayWithStartOfDay,
+} from '@utils/time'
 import { Alert } from 'react-native'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
 import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { getTodayWithStartOfDay } from '@utils/ObservableNow'
 import { EventEmitter } from 'events'
 import { isTodoOld } from '@utils/isTodoOld'
 
@@ -59,6 +62,7 @@ export class PlanningVM {
       // discard calendar after applying changes
       sharedAppStateStore.activeDay = undefined
       sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+      promise()
     } else {
       // we are saving promise for reseting hover state in future
       this.resetHoverState = promise
@@ -115,8 +119,10 @@ export class PlanningVM {
             if (i === from || i === to) {
               if (isTodoOld(item)) {
                 if (item.frogFails < 3) {
+                  if (item.frogFails >= 1) {
+                    item.frog = true
+                  }
                   item.frogFails++
-                  item.frog = true
                   item.updatedAt = new Date()
                 } else {
                   Alert.alert(

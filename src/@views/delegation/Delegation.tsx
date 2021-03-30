@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { observer, Observer } from 'mobx-react'
 import { View } from 'native-base'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { InfoButton } from '@components/InfoButton'
 import { sharedColors } from '@utils/sharedColors'
@@ -17,23 +20,29 @@ class DelegationHeaderRight extends Component {
   }
 }
 
-export class Delegation extends Component {
-  render() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Delegation"
-          component={DelegateContent}
-          options={{
-            headerTitle: () => <DelegationHeader />,
-            headerRight: () => <DelegationHeaderRight />,
-            headerTitleAlign: 'center',
-            ...sharedColors.headerExtraStyle,
-            ...headerBackButtonProps(),
-            headerLeft: undefined,
+export function Delegation() {
+  return (
+    <Observer>
+      {() => (
+        <Stack.Navigator
+          screenOptions={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
-        />
-      </Stack.Navigator>
-    )
-  }
+        >
+          <Stack.Screen
+            name="Delegation"
+            component={DelegateContent}
+            options={{
+              headerTitle: () => <DelegationHeader />,
+              headerRight: () => <DelegationHeaderRight />,
+              headerTitleAlign: 'center',
+              ...sharedColors.headerExtraStyle,
+              ...headerBackButtonProps(),
+              headerLeft: undefined,
+            }}
+          />
+        </Stack.Navigator>
+      )}
+    </Observer>
+  )
 }

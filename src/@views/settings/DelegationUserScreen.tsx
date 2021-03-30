@@ -18,7 +18,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 class Row extends Component<{ delegationUser: DelegationUser }> {
   @observable loading = false
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

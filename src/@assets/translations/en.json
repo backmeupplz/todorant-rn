@@ -138,7 +138,6 @@
   "appleUnauthorizedTextGoodNews": "Good news though: you will not be charged until the 30 days trial is finished.",
   "appleUnauthorizedButtonExtra": "30 days free trial, then",
   "introTitle": "Welcome!",
-  "introButton": "Intro message",
   "introBack": "Let's go!",
   "infoTitle": "Info",
   "infoIntro": "Good job tapping the \"i\" button! This is the welcome message explaining what Todorant is. No more, no less.",
@@ -328,22 +327,6 @@
   "readRulesFirst": "I'll read how to use Todorant first!",
   "iAdmireYourBravery": "I admire your bravery!",
   "iAdmireYourSpirit": "I admire your spirit!",
-  "introText0": "Hi there! It's Nikita, the creator of Todorant. I'm so glad you've downloaded Todorant because it means that you too will soon benefit from unlimited productivity.",
-  "introText1": "Most of the people who end up here are like me: tried what feels like all productivity tools but none of them were just right.",
-  "introText2": "Let me show you how Todorant became the last and the only productivity tool for me and what will happen to you in the next 3-4 weeks. Just scroll or use the buttons on the bottom!",
-  "introText3": "First thing that will happen to you after you enter all of your tasks to Todorant will be that it will seem to others like you can remember everything. You won't need to do anything extra, the system will just work.",
-  "introText4": "This is why my wife loves the fact that I use Todorant. Before, I kept forgetting things and obligations that didn't seem important to me, but were important for my wife.",
-  "introText5": "Now every time I make a commitment or a promise, I add it to Todorant and when the time comes, I'm aware of what needs to be done and can plan accordingly.",
-  "introText6": "Second thing that will happen to you will be the ease of mind. You will stop stressing out about undone tasks and tasks you think you forgot about.",
-  "introText7": "You will always know what you need to be working on at any moment and will stay in the \"Flow Zone\" longer achieving goals and completing tasks.",
-  "introText8": "Even though I support over a dozen services used by more than 20 000 000 people, I never feel stressed anymore. I always have the current task in front of me and I'm always aware that if I make progress then I'll achieve the goal eventually.",
-  "introText9": "Third thing that will happen to you will be a super-human like planning power. You will be able to accurately estimate the length and the ETA of any task.",
-  "introText10": "Every time a colleague or a friend asks me when a particular thing will be done, I always check Todorant and see when the task is scheduled to be worked on. Most of the time, I can accurately give them estimates that are quite realistic.",
-  "introText11": "I personally never have to rush anything now. I never have to have \"crunch time\" anymore! I complete tasks at a comfortable pace and people around can trust me.",
-  "introText12": "Know that you are in a good company. Thousands of users trust their productivity to Todorant daily, myself included.",
-  "introText13": "If you ever have any questions about the app — just click on the \"i\" button in the top right. If you can't find an answer there, find my personal contacts under the \"Support\" section in the settings and shoot me a message!",
-  "introText14": "There is one more thing to note though! To fully control superpower, you need to learn how to use it. Make sure to read \"How to use Todorant\" in the settings!",
-  "introText15": "Good luck with Todorant! I hope it will transform your life to the better as it did mine!",
   "dirtyValidSaveSingular": "Would you like to save the entered task?",
   "dirtyInvalidSaveSingular": "You didn't finish entering the task. Do you want to dismiss the entered task?",
   "dissmissTasksSingular": "Dismiss task",
@@ -353,5 +336,125 @@
   "addedTask": "Added task",
   "edit": "Edit",
   "editText": "Edit hashtag text",
-  "editName": "New hashtag text"
+  "editName": "New hashtag text",
+  "tutorialButton": "Tutorial",
+  "onboarding": {
+    "closeButtonText": "Close the tutorial",
+    "defaultNextStepButtonText": "Continue",
+    "notAllowed": "Got it!",
+    "Close": {
+      "messageBoxBody": "Are you sure you want to skip this tutorial? It is pretty difficult to unleash Todorant’s potential if you don’t know what to do! Maybe you could at least read a small article about the main Todorant principles instead?",
+      "changedMyMind": "I changed my mind, continue the tutorial",
+      "article": "Let’s stop the tutorial, but show me the article",
+      "closeEverything": "I know what I am doing, close the tutorial",
+      "toast": "I admire your bravery"
+    },
+    "Explain": {
+      "messageBoxBody": "Todorant is not just an app, it is a productivity methodology. The restrictions here are carefully crafted to make your brain crave completing tasks like you crave sugar."
+    },
+    "AddTask": {
+      "messageBoxBody": "Let’s add your first task. Click on the plus button below."
+    },
+    "AddText": {
+      "messageBoxBody": "Think of something that you need to do. Now type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable."
+    },
+    "SelectDate": {
+      "messageBoxBody": "Every todo should either have an exact date for completion or a specific month assigned.\n\nYou cannot select the current month. What would you do if the month ended and you still had undone todos?"
+    },
+    "SelectFrog": {
+      "messageBoxBody": "You can mark the todo as a frog. Frogs are a special kind of truly unpleasant task. You have to complete them first thing in the morning, they always appear at the top of the list. I recommend having at most 2 frogs a day.",
+      "nextStepButton": "It's not a frog"
+    },
+    "SelectCompleted": {
+      "messageBoxBody": "I encourage you to also add tasks that you’ve already completed to Todorant right after you complete them. This will help to build a positive connection between completing tasks and satisfaction."
+    },
+    "ShowMore": {
+      "messageBoxBody": "Tapping this magical button reveals more options when creating a task like setting the exact time (useful for meetings) and sorting the tasks."
+    },
+    "AddAnotherTask": {
+      "messageBoxBody": "You can also add multiple tasks at once! Not this time though, but feel free to experiment with it in the future."
+    },
+    "AddTodoComplete": {
+      "messageBoxBody": "Nice! You’ve just finished your first todo. Now save it."
+    },
+    "ExplainCurrent": {
+      "messageBoxBody": "This is the “Current” page. You will use it most of the time. It only shows the one task you must be working on as well as your progress — nothing more. Keeps you focused."
+    },
+    "DeleteEditComplete": {
+      "messageBoxBody": "You have only the bare minimum of tools here: you can delete, edit or complete the current task. You can also swipe right or left if you want (try it later on your own)."
+    },
+    "Breakdown": {
+      "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too complex to finish in under 30 minutes, break it down into multiple parts."
+    },
+    "BreakdownTodo": {
+      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!"
+    },
+    "BreakdownVanish": {
+      "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task.\n\nYou get rewarded with a completed task for just breaking it down!"
+    },
+    "PlanningExplain": {
+      "messageBoxBody": "This is where you plan the work. Remember that every task has a date or a month assigned to it? Well, you can see the tasks sorted here!\n\nYou should not look at this screen too often. After you finish planning, you should only use the “Current” page."
+    },
+    "PlanningExplain2": {
+      "messageBoxBody": "Here’s how to do planning with Todorant. As soon as you think of any task, add it to Todorant immediately or you will forget about it.\n\nAnd every morning as well as every 1st day of every month you should sit down and plan your month or day by distributing and reordering tasks between days or months. Feel free to hold and drag tasks to reorder them."
+    },
+    "ExplainHashtags": {
+      "messageBoxBody": "You might also notice that Todorant doesn’t have “projects” where you can hide undesirable tasks to forget about them.\n\nInstead, Todorant uses the system of hashtags. Just add #sport, #cooking or #anything_really to group the tasks and make them searchable by tapping the hashtags."
+    },
+    "ExplainSearchAndCompleted": {
+      "messageBoxBody": "You can see the completed tasks and search the tasks by using the buttons above."
+    },
+    "ExplainReccuring": {
+      "article": "Read the article",
+      "messageBoxBody": "You can also find that Todorant does not have repeating or recurring tasks. This is done on purpose because repeating tasks hurt one’s productivity in the long run.\n\nInstead, use the breakdown feature with tag inheritance (one of the settings) and task names like “Water the #plants and set the next task”. You can read more about it in the article I wrote."
+    },
+    "ExplainSettings": {
+      "messageBoxBody": "This is the screen with all the settings you need in Todorant. Feel free to explore it later. Notable ones are the “default tasks to today” and copy the tags during a breakdown”."
+    },
+    "ExplainNotificationsGoogle": {
+      "messageBoxBody": "If you still need notifications, you can integrate Google Calendar. It will send you alerts, but only for the tasks that have an exact time assigned to them."
+    },
+    "ExplainNotifications": {
+      "messageBoxBody": "You can also notice that there are no notifications in Todorant (except for the optional planning reminder at the beginning of a day). It is also done on purpose.\n\nPeople tend to start ignoring notifications when there are too many of them. This leads to missing important alerts."
+    },
+    "ExplainMultiplatform": {
+      "website": "Go to todorant.com",
+      "messageBoxBody": "Todorant is available on iOS, Android, Web, macOS, Windows, and Linux as well as Chrome and Firefox extensions, and as a Telegram bot. See the full list of platforms on todorant.com."
+    },
+    "ExplainPricing": {
+      "messageBoxBody": "Todorant is free for the first 30 days, then $5/month.\n\nThe logic is simple: if Todorant is worth a cup of coffee a month in productivity gains, then you would want to continue using it. If it is not worth it, you can stop using Todorant.\n\nI believe 30 days is enough to figure it out."
+    },
+    "Feedback": {
+      "messageBoxBody": "If you have any questions, suggestions or complaints, feel free to reach out to us in the official Telegram support group or via email."
+    },
+    "Rules": {
+      "messageBoxBody": "I encourage you to review the “How to” section of Todorant. It will most likely answer all the questions you have about the app and the methodology."
+    },
+    "Congratulations": {
+      "messageBoxBody": "Congratulations! You have finished the tutorial. I hope it is now clear how to use Todorant.\n\nLet’s jump straight to it. You can move all of your todos to Todorant now. You will have to make them short and actionable as well as assign them specific dates or months.\n\nIt might feel tedious, but I assure you: it will pay off in the long run!",
+      "nextStepButton": "Hooray!"
+    },
+    "BreakdownLessThanTwo": {
+      "messageBoxBody": "Not so fast! I know it can be difficult, but try to think of breaking this task down into at least two smaller tasks that are still incomplete."
+    },
+    "Info": {
+      "messageBoxBody": "Also, when you have questions, look out for the “i” buttons in the upper right corner. Most of the time, they’ll provide you with useful insight."
+    },
+    "BreakDownCompletedTodo": {
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!"
+    },
+    "SelectDateNotAllowed": {
+      "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!"
+    },
+    "Start": {
+      "closeButtonText": "Nah, I don’t read manuals",
+      "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you how to achieve insane levels of productivity?",
+      "nextStepButton": "Sure! Show me how it works"
+    }
+  },
+  "updateVersionTitle": "Hey there! A new version of Todorant is available",
+  "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
+  "update": "Update",
+  "googleCalendarHint": "Only the tasks created in Todorant with an exact time will be synced to Google Calendar",
+  "googleCalendarGotIt": "Got it!"
 }

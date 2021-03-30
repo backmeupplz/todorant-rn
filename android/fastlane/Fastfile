@@ -102,7 +102,7 @@ platform :android do
   end
 
   lane :release_beta do
-    increment_version_code
+    increment_android_versions
     gradle(
       task: 'bundle',
       build_type: 'Release'

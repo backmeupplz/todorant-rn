@@ -6,6 +6,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { InfoButton } from '@components/InfoButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
 
 @observer
 export class PlanningHeaderRight extends Component {
@@ -32,6 +33,7 @@ export class PlanningHeaderRight extends Component {
           </View>
         ) : sharedAppStateStore.todoSection === TodoSectionType.planning ? (
           <TouchableOpacity
+            disabled={!sharedOnboardingStore.tutorialIsShown}
             onPress={() => {
               sharedAppStateStore.calendarEnabled = !sharedAppStateStore.calendarEnabled
             }}

@@ -52,7 +52,7 @@ class ColorPickerContent extends Component<{
   @observable tag?: Tag
   @observable color = 'dodgerblue'
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

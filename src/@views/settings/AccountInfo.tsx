@@ -48,7 +48,7 @@ export class AccountInfo extends Component {
   @observable name = ''
   @observable nameChangingMenu = false
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

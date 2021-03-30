@@ -138,7 +138,6 @@
   "appleUnauthorizedTextGoodNews": "Boas notícias: você não será cobrado até que o período de avaliação de 30 dias esteja concluído.",
   "appleUnauthorizedButtonExtra": "30 dias de tesgte gratuito, então",
   "introTitle": "Bem vindo!",
-  "introButton": "Mensagem de introdução",
   "introBack": "Vamos lá!",
   "infoTitle": "Info",
   "infoIntro": "Bom trabalho tocando no botão \"i\"! Esta é a mensagem de boas-vindas que explica o que é Todorant. Nem mais nem menos.",
@@ -231,5 +230,6 @@
     "signupDescription": "Você precisa fazer o login antes de usar a atribuição"
   },
   "startTimeOfDay": "Início do dia",
-  "purchaseErrorTryOnWeb": "Subscribe on the web"
+  "purchaseErrorTryOnWeb": "Subscribe on the web",
+  "tutorialButton": "Mensagem de introdução"
 }

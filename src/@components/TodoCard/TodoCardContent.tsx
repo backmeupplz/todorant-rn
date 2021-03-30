@@ -14,6 +14,10 @@ import { Vibration, Platform } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { navigationRef } from '@utils/navigation'
+
+export let currentTodoNodeId: number
 
 @observer
 export class TodoCardContent extends Component<{
@@ -26,9 +30,18 @@ export class TodoCardContent extends Component<{
   render() {
     let row: any
     return (
-      <View>
+      <View
+        onLayout={({ nativeEvent: { target } }: any) => {
+          if (navigationRef.current?.getCurrentRoute()?.name === 'Current') {
+            currentTodoNodeId = target
+          }
+        }}
+      >
         <Swipeable
-          enabled={sharedSettingsStore.swipeActions}
+          enabled={
+            sharedSettingsStore.swipeActions &&
+            sharedOnboardingStore.tutorialIsShown
+          }
           ref={(ref) => (row = ref)}
           leftThreshold={100}
           rightThreshold={100}
@@ -47,8 +60,9 @@ export class TodoCardContent extends Component<{
           }}
           renderLeftActions={() => {
             if (
-              this.props.type === 'current' ||
-              this.props.type === 'planning'
+              (this.props.type === 'current' ||
+                this.props.type === 'planning') &&
+              sharedOnboardingStore.tutorialIsShown
             ) {
               return (
                 <View
@@ -74,8 +88,9 @@ export class TodoCardContent extends Component<{
           }}
           renderRightActions={() => {
             if (
-              this.props.type === 'current' ||
-              this.props.type === 'planning'
+              (this.props.type === 'current' ||
+                this.props.type === 'planning') &&
+              sharedOnboardingStore.tutorialIsShown
             ) {
               return (
                 <View
@@ -128,7 +143,8 @@ export class TodoCardContent extends Component<{
               todo={this.props.todo}
               type={this.props.type}
               drag={
-                this.props.type === CardType.planning
+                this.props.type === CardType.planning &&
+                sharedOnboardingStore.tutorialIsShown
                   ? this.props.drag
                   : undefined
               }

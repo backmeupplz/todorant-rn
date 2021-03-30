@@ -1,5 +1,8 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { Observer } from 'mobx-react'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { CurrentContent } from '@views/current/CurrentContent'
@@ -11,6 +14,9 @@ export function Current() {
     <Observer>
       {() => (
         <Stack.Navigator
+          screenOptions={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+          }}
           {...({ language: sharedSettingsStore.language } as any)}
         >
           <Stack.Screen
