@@ -27,6 +27,9 @@ export class Todo extends MobxRealmModel {
       date: { type: 'string?', indexed: true },
       time: 'string?',
 
+      delegator: { type: 'string?', indexed: true },
+      // delegator: { type: 'object?' },
+      // delegate: { type: 'string?', indexed: true },
       delegateName: { type: 'string?', indexed: true },
       delegatorName: { type: 'string?', indexed: true },
       delegateAccepted: { type: 'bool?', indexed: true },
@@ -52,6 +55,8 @@ export class Todo extends MobxRealmModel {
   date?: string
   time?: string
 
+  delegator?: string
+  delegate?: string
   delegateName?: string
   delegatorName?: string
   delegateAccepted?: boolean
@@ -130,6 +135,8 @@ export function cloneTodo(todo: Todo) {
     date: todo.date,
     time: todo.time,
 
+    delegate: todo.delegate,
+    delegator: todo.delegator,
     delegatorName: todo.delegatorName,
     delegateAccepted: todo.delegateAccepted,
   }

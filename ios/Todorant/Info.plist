@@ -36,7 +36,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLIconFile</key>
-			<string></string>
+			<string/>
 			<key>CFBundleURLName</key>
 			<string>todorant</string>
 			<key>CFBundleURLSchemes</key>
@@ -94,7 +94,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Todorant uses camera to scan QR codes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSSiriUsageDescription</key>
 	<string>Add todos with voice</string>
 	<key>UIAppFonts</key>

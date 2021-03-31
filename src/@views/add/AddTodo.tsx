@@ -59,6 +59,7 @@ import {
 } from '@utils/ObservableNow'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 
 export let saveButtonNodeId: number
 export let breakdownTodoNodeId: number
@@ -126,6 +127,7 @@ class AddTodoContent extends Component<{
     realm.write(() => {
       for (const vm of this.vms) {
         if (this.screenType === AddTodoScreenType.add) {
+          // console.log(vm.delegate._id)
           const todo = {
             updatedAt: new Date(),
             createdAt: new Date(),
@@ -141,7 +143,10 @@ class AddTodoContent extends Component<{
             date: vm.date,
             time: vm.time,
             encrypted: !!sharedSessionStore.encryptionKey,
-
+            delegator: vm.delegate?._id,
+            // delegate: vm.delegate,
+            // delegateName: vm.delegate?.name,
+            // delegatorName: sharedSessionStore.user?.name,
             _tempSyncId: uuid(),
           } as Todo
           todo._exactDate = new Date(getTitle(todo))
@@ -151,8 +156,9 @@ class AddTodoContent extends Component<{
           }
 
           const dbtodo = realm.create<Todo>('Todo', todo)
+          console.log(dbtodo.delegate)
           involvedTodos.push(dbtodo)
-
+          //
           titlesToFixOrder.push(getTitle(todo))
           if (vm.addOnTop) {
             addTodosOnTop.push(todo)

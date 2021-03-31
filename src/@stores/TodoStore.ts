@@ -7,7 +7,10 @@ import {
 } from '@utils/ObservableNow'
 import { observableNow } from '@utils/ObservableNow'
 import { getTitle, Todo } from '@models/Todo'
-import { shallowMobxRealmCollection } from '@utils/mobx-realm/collection'
+import {
+  mobxRealmCollection,
+  shallowMobxRealmCollection,
+} from '@utils/mobx-realm/collection'
 import { realm } from '@utils/realm'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { computed, makeObservable, observable } from 'mobx'
@@ -83,15 +86,19 @@ class TodoStore {
   }
 
   @computed get unacceptedTodos() {
-    return realm
-      .objects(Todo)
-      .filtered('delegateName = null')
-      .filtered('deleted = false')
-      .filtered('delegateAccepted = false')
+    return mobxRealmCollection(
+      realm
+        .objects(Todo)
+        .filtered('delegateName = null')
+        .filtered('deleted = false')
+        .filtered('delegateAccepted = false')
+    )
   }
 
   @computed get delegatedTodos() {
-    return realm.objects(Todo).filtered('delegateName != null')
+    return mobxRealmCollection(
+      realm.objects(Todo).filtered('delegateName != null')
+    )
   }
 
   @observable shallowTodayUncompletedTodos = shallowMobxRealmCollection(

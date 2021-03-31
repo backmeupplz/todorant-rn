@@ -19,6 +19,7 @@ const {
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { DelegationUser } from '@models/DelegationUser'
 
 export class TodoVM {
   @observable text = ''
@@ -32,6 +33,8 @@ export class TodoVM {
     ? getDateDateString(getTodayWithStartOfDay())
     : undefined
   @observable time?: string
+
+  @observable delegate?: DelegationUser
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false

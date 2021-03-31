@@ -13,9 +13,14 @@ import {
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
 import { sharedColors } from '@utils/sharedColors'
+import { makeObservable } from 'mobx'
 
 @observer
 export class DelegateContent extends Component {
+  // UNSAFE_componentWillMount() {
+  //   makeObservable(this)
+  // }
+
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>

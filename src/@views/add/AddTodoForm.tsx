@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { View, Text, Input, Icon } from 'native-base'
+import {
+  View,
+  Text,
+  Input,
+  Icon,
+  List,
+  ListItem,
+  ActionSheet,
+} from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
@@ -12,6 +20,8 @@ import {
   ViewStyle,
   StyleProp,
   InteractionManager,
+  StyleSheet,
+  ScrollView,
 } from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
@@ -28,10 +38,15 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
-import { computed, makeObservable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import Modal from 'react-native-modal'
+import { Divider } from '@components/Divider'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -491,6 +506,57 @@ class TimeRow extends Component<{
 }
 
 @observer
+class DelegationRow extends Component<{ vm: TodoVM }> {
+  render() {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          ActionSheet.show(
+            {
+              options: sharedDelegationStore.delegates.map(
+                (delegate) => delegate.name
+              ),
+              title: translate('delegate.to'),
+            },
+            (buttonIndex) => {
+              this.props.vm.delegate =
+                sharedDelegationStore.delegates[buttonIndex]
+              console.log(buttonIndex)
+            }
+          )
+        }}
+        disabled={!sharedOnboardingStore.tutorialIsShown}
+        style={{
+          borderColor: sharedColors.placeholderColor,
+          paddingVertical: verticalSpacing,
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color: this.props.vm.delegate?.name
+              ? sharedColors.textColor
+              : sharedColors.placeholderColor,
+            fontFamily: fonts.SFProTextRegular,
+            fontSize: fontSize,
+          }}
+        >
+          {this.props.vm.delegate?.name}
+        </Text>
+        <CustomIcon
+          name="chevron_right_outline_28"
+          color={sharedColors.borderColor}
+          size={24}
+        />
+      </TouchableOpacity>
+    )
+  }
+}
+
+@observer
 export class SwitchRow extends Component<{
   name: string
   value: boolean
@@ -553,6 +619,8 @@ export class AddTodoForm extends Component<{
   UNSAFE_componentWillMount() {
     makeObservable(this)
   }
+
+  @observable isVisible = false
 
   render() {
     return (
@@ -663,7 +731,12 @@ export class AddTodoForm extends Component<{
             )}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||
-              this.props.vm.showMore) && <TimeRow vm={this.props.vm} />}
+              this.props.vm.showMore) && (
+              <View>
+                <TimeRow vm={this.props.vm} />
+                <DelegationRow vm={this.props.vm} />
+              </View>
+            )}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
                 textColor={sharedColors.textColor}
