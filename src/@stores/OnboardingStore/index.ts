@@ -581,7 +581,12 @@ export const AllStages = {
   },
   [TutorialStep.BreakdownCompletedTodo]: async () => {
     const holdOnButton = new OnboardingButton(
-      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      () =>
+        sharedOnboardingStore.nextStep(
+          sharedOnboardingStore.previousStep === TutorialStep.SelectCompleted
+            ? TutorialStep.ShowMore
+            : sharedOnboardingStore.previousStep
+        ),
       undefined,
       true,
       true
@@ -596,7 +601,7 @@ export const AllStages = {
   },
   [TutorialStep.SelectDateNotAllowed]: async () => {
     const holdOnButton = new OnboardingButton(
-      () => sharedOnboardingStore.nextStep(sharedOnboardingStore.previousStep),
+      () => sharedOnboardingStore.nextStep(TutorialStep.SelectFrog),
       undefined,
       true,
       true
