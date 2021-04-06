@@ -45,6 +45,14 @@ class SessionStore {
     return !this.appInstalled || this.appInstalled < monthAgo
   }
 
+  @computed get shouldShowPaywalSubscription() {
+    return !(
+      (this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter &&
+        this.hasPurchased) ||
+      this.user?.subscriptionStatus == SubscriptionStatus.active
+    )
+  }
+
   @computed get isSubscriptionActive() {
     return (
       this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
