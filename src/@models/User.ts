@@ -28,6 +28,7 @@ export class User {
   @persist('date') @observable createdAt!: Date
   @persist('date') @observable updatedAt?: Date
 
+  @persist @observable _id?: string
   @persist @observable email?: string
   @persist @observable facebookId?: string
   @persist @observable telegramId?: string
@@ -53,6 +54,7 @@ export class User {
 
 export function areUsersPartiallyEqual(user: User, anotherUser: User) {
   return (
+    user._id === anotherUser._id &&
     user.email === anotherUser.email &&
     user.facebookId === anotherUser.facebookId &&
     user.telegramId === anotherUser.telegramId &&

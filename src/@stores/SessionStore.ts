@@ -17,6 +17,7 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
+import uuid from 'uuid'
 
 class SessionStore {
   constructor() {
@@ -24,6 +25,7 @@ class SessionStore {
   }
 
   @persist('date') @observable appInstalled = new Date()
+  @persist @observable installationId = uuid()
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 
@@ -148,6 +150,8 @@ class SessionStore {
         this.user.token = token
       }
     } else {
+      // Update the current user id
+      this.user._id = user._id
       if (!areUsersPartiallyEqual(this.user, user)) {
         const userFromServer = await pushBack(this.user)
         if (userFromServer.updatedAt) {
