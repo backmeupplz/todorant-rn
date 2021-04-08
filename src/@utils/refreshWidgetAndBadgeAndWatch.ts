@@ -6,11 +6,11 @@ const WidgetManager = NativeModules.WidgetManager
 const WatchUpdateManager = NativeModules.WatchUpdateManager
 
 export function refreshWidgetAndBadgeAndWatch() {
+  updateBadgeNumber()
   if (Platform.OS === 'android') {
     TodorantWidget.forceUpdateAll()
   } else {
     WidgetManager.refresh()
     WatchUpdateManager.updateContext()
   }
-  updateBadgeNumber()
 }
