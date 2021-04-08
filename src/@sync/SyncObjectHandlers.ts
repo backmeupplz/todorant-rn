@@ -210,6 +210,7 @@ export async function onTodosObjectsFromServer(
   if (!todosToPush.length) {
     // Complete sync
     completeSync()
+    refreshWidgetAndBadgeAndWatch()
     observableNowEventEmitter.emit(
       ObservableNowEventEmitterEvent.ObservableNowChanged
     )
