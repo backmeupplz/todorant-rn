@@ -38,7 +38,7 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
   try {
     const receipt = purchase.transactionReceipt
 
-    if (receipt && (purchase.purchaseToken || purchase.transactionReceipt)) {
+    if (receipt) {
       if (Platform.OS === 'android' && purchase.purchaseToken) {
         await rest.verifyPurchaseGoogle({
           packageName: 'com.todorant',
@@ -53,17 +53,16 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
         }
       }
       await RNIap.finishTransaction(purchase, false)
-      logEvent('subscription_success')
     } else {
-      logEvent('subscription_purchase_error')
       throw new Error(translate('purchaseReceiptError'))
     }
 
     if (purchaseListener.success) {
       purchaseListener.success()
     }
+    logEvent('subscription_success')
   } catch (err) {
-    logEvent('subscription_purchase_error')
+    logEvent('subscription_purchase_error_server')
     if (purchaseListener.fail) {
       purchaseListener.fail(err)
     }
@@ -76,7 +75,7 @@ export const purchaseUpdateSubscription = purchaseUpdatedListener(tryPurchase)
 
 export const purchaseErrorSubscription = purchaseErrorListener(
   (error: PurchaseError) => {
-    logEvent('subscription_purchase_error')
+    logEvent('subscription_purchase_error_local')
     try {
       if (purchaseListener.fail) {
         purchaseListener.fail(error)

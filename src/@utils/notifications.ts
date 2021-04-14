@@ -32,7 +32,7 @@ export function updateBadgeNumber() {
   }
   if (sharedSettingsStore.badgeIconCurrentCount) {
     PushNotification.setApplicationIconBadgeNumber(
-      sharedTodoStore.progress.count - sharedTodoStore.progress.completed
+      sharedTodoStore.shallowTodayUncompletedTodos.length
     )
   } else {
     resetBadgeNumber()
