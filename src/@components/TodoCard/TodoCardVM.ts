@@ -4,7 +4,7 @@ import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
-import { alertConfirm } from '@utils/alert'
+import { alertConfirm, alertMessage } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -141,6 +141,12 @@ export class TodoCardVM {
     if (todo.frog) {
       playFrogComplete()
     } else {
+      if (sharedTodoStore.incompleteFrogsExist) {
+        alertMessage(
+          translate('frogsAlert.title'),
+          translate('frogsAlert.text')
+        )
+      }
       playTaskComplete()
     }
     sharedHeroStore.incrementPoints()

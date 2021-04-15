@@ -452,5 +452,9 @@
   "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
   "update": "Update",
   "googleCalendarHint": "Only the tasks created in Todorant with an exact time will be synced to Google Calendar",
-  "googleCalendarGotIt": "Got it!"
+  "googleCalendarGotIt": "Got it!",
+  "frogsAlert": {
+    "title": "Stop! It's illegal",
+    "text": "Don't break the rules. If you have any frogs today — finish them first, break them down, move them to future days or remove the frog flag from them. Please, just don't ignore the frogs!"
+  }
 }
