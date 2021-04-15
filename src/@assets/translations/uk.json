@@ -151,7 +151,6 @@
   "infoRules": "Будь ласка, уважно прочитайте правила, щоб отримати щонайбільшу користь від Todorant.",
   "preserveOrderByTime": "Зберегти точний порядок часу",
   "subscriptionMonth": "місяць",
-  "subscriptionYear": "рік (знижка ≈40%)",
   "languageSelect": "Мова",
   "languageAuto": "Авто",
   "syncExactDates": "Перерахувати точні дати",
@@ -221,5 +220,6 @@
   "changeTasksSingular": "Змінити завдання",
   "addedTask": "Завдання добавлено",
   "edit": "Редагувати",
-  "tutorialButton": "Вступне повідомлення"
+  "tutorialButton": "Вступне повідомлення",
+  "subscriptionYear": "рік (знижка ≈40%)"
 }

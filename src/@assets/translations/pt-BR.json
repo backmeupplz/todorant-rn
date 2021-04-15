@@ -151,7 +151,6 @@
   "infoRules": "Por favor, leia atentamente as regras para aproveitar ao máximo a Todorant.",
   "preserveOrderByTime": "Preservar a hora exata",
   "subscriptionMonth": "mensal",
-  "subscriptionYear": "anual (~40% descont)",
   "languageSelect": "Idioma",
   "languageAuto": "Auto",
   "syncExactDates": "Recalcular datas exatas",
@@ -229,5 +228,6 @@
   },
   "startTimeOfDay": "Início do dia",
   "purchaseErrorTryOnWeb": "Subscribe on the web",
-  "tutorialButton": "Mensagem de introdução"
+  "tutorialButton": "Mensagem de introdução",
+  "subscriptionYear": "anual (~40% descont)"
 }

@@ -150,7 +150,6 @@
   "infoRules": "Vă rog, citiți secțiunea \"Cum se utilizează Todorant\", pentru a stoarce eficiență maximă din Todorant",
   "preserveOrderByTime": "Urmărește ordinea task-urilor care au timp exact",
   "subscriptionMonth": "lună",
-  "subscriptionYear": "an (≈40% reducere)",
   "languageSelect": "Limba",
   "languageAuto": "Auto",
   "syncExactDates": "Recalculați datele exacte",
@@ -181,5 +180,6 @@
   "googleCalendar": "Calendar Google",
   "loginQR": "Intrare prin QR",
   "cameraAuthorization": "Camera nu e autorizată",
-  "security": "Securitate"
+  "security": "Securitate",
+  "subscriptionYear": "an (≈40% reducere)"
 }

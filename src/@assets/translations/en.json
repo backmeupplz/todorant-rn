@@ -152,7 +152,6 @@
   "infoRules": "Please, read the rules thoroughly to get the most out of Todorant.",
   "preserveOrderByTime": "Preserve exact time order",
   "subscriptionMonth": "month",
-  "subscriptionYear": "year (≈40% discount)",
   "languageSelect": "Language",
   "languageAuto": "Auto",
   "syncExactDates": "Recalculate exact dates",
@@ -455,5 +454,6 @@
   "frogsAlert": {
     "title": "Stop! It's illegal",
     "text": "Don't break the rules. If you have any frogs today — finish them first, break them down, move them to future days or remove the frog flag from them. Please, just don't ignore the frogs!"
-  }
+  },
+  "subscriptionYear": "year (≈40% discount)"
 }

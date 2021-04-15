@@ -25,13 +25,15 @@ class PurchaseListener {
 
 export const purchaseListener = new PurchaseListener()
 
-export function getProducts(skus?: string[]) {
-  return RNIap.getSubscriptions(
-    skus ||
-      (Platform.OS === 'android'
-        ? ['todorant.monthly', 'todorant.yearly.36']
-        : ['monthly', 'yearly'])
-  )
+export async function getProducts(skus?: string[]) {
+  const produtctsAndSubscriptions =
+    Platform.OS === 'android'
+      ? ['todorant.monthly', 'todorant.yearly.36', 'todorant.perpetual']
+      : ['monthly', 'yearly']
+  return [
+    ...(await RNIap.getSubscriptions(skus || produtctsAndSubscriptions)),
+    ...(await RNIap.getProducts(skus || produtctsAndSubscriptions)),
+  ]
 }
 
 async function tryPurchase(purchase: SubscriptionPurchase) {

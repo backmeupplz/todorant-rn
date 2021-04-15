@@ -5,6 +5,7 @@ import { TableItem } from '@components/TableItem'
 import { SubscriptionStatus } from '@models/User'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
@@ -23,11 +24,11 @@ import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, Platform } from 'react-native'
-import { Subscription } from 'react-native-iap'
+import { Subscription, Product } from 'react-native-iap'
 import RNRestart from 'react-native-restart'
 
 class PaywallVM {
-  @observable products: Subscription[] = []
+  @observable products: (Subscription | Product)[] = []
 
   @observable loading = false
 
@@ -189,6 +190,15 @@ class PaywallContent extends Component<{
                   }}
                   disabled={purchaseListener.isPurchasing}
                   key={i}
+                  bordered={
+                    product.productId.includes('monthly') ||
+                    product.productId.includes('perpetual')
+                  }
+                  light={
+                    (product.productId.includes('monthly') ||
+                      product.productId.includes('perpetual')) &&
+                    sharedSettingsStore.isDark
+                  }
                 >
                   {this.props.route.params?.type === 'appleUnauthorized' && (
                     <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
@@ -202,10 +212,11 @@ class PaywallContent extends Component<{
                       : product.title}
                   </Text>
                   <Text>
-                    {product.localizedPrice}/
-                    {product.productId.includes('monthly')
-                      ? translate('subscriptionMonth')
-                      : translate('subscriptionYear')}
+                    {product.localizedPrice}
+                    {product.productId.includes('yearly') &&
+                      `/${translate('subscriptionYear')}`}
+                    {product.productId.includes('monthly') &&
+                      `/${translate('subscriptionMonth')}`}
                   </Text>
                 </Button>
               ))}

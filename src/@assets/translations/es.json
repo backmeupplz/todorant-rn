@@ -144,7 +144,6 @@
   "infoRules": "Por favor, lee las reglas a fondo para obtener lo máximo de Todorant.",
   "preserveOrderByTime": "Preservar el orden de tiempo exacto",
   "subscriptionMonth": "mes",
-  "subscriptionYear": "año (≈40% descuento)",
   "languageAuto": "Automático",
   "syncExactDates": "Recalcular fechas exactas",
   "askBeforeDelete": "Preguntar antes de eliminar tareas",
@@ -177,5 +176,6 @@
   "emptyHashtags": "La lista de Hashtag está vacía por ahora. ¡Crea tu primera tarea con un #hashtag para añadir el primer hashtag aquí!",
   "startTimeOfDay": "Comienzo del día",
   "purchaseErrorTryOnWeb": "Subscribe on the web",
-  "tutorialButton": "Mensaje de introducción"
+  "tutorialButton": "Mensaje de introducción",
+  "subscriptionYear": "año (≈40% descuento)"
 }

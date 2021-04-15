@@ -150,7 +150,6 @@
   "infoRules": "Per favore, leggi completamente le regole per usare al meglio Todorant.",
   "preserveOrderByTime": "Conserva l'ordine esatto del tempo",
   "subscriptionMonth": "mese",
-  "subscriptionYear": "anno (sconto del ≈40%)",
   "languageSelect": "Lingua",
   "languageAuto": "Auto",
   "syncExactDates": "Ricalcola le date esatte",
@@ -212,5 +211,6 @@
     "repeatPassword": "Ripetere la password"
   },
   "purchaseErrorTryOnWeb": "Subscribe on the web",
-  "tutorialButton": "Messaggio di benvenuto"
+  "tutorialButton": "Messaggio di benvenuto",
+  "subscriptionYear": "anno (sconto del ≈40%)"
 }
