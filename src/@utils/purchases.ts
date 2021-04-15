@@ -29,7 +29,7 @@ export function getProducts(skus?: string[]) {
   return RNIap.getSubscriptions(
     skus ||
       (Platform.OS === 'android'
-        ? ['todorant.monthly', 'todorant.yearly']
+        ? ['todorant.monthly', 'todorant.yearly.36']
         : ['monthly', 'yearly'])
   )
 }

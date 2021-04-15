@@ -205,9 +205,7 @@ class PaywallContent extends Component<{
                     {product.localizedPrice}/
                     {product.productId.includes('monthly')
                       ? translate('subscriptionMonth')
-                      : Platform.OS === 'android'
-                      ? translate('subscriptionYearAndroid')
-                      : translate('subscriptionYeariOS')}
+                      : translate('subscriptionYear')}
                   </Text>
                 </Button>
               ))}
