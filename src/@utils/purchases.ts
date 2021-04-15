@@ -54,7 +54,13 @@ async function tryPurchase(purchase: SubscriptionPurchase) {
           sharedSessionStore.localAppleReceipt = purchase.transactionReceipt
         }
       }
-      await RNIap.finishTransaction(purchase, false)
+      try {
+        await RNIap.finishTransaction(purchase, false)
+      } catch (err) {
+        if (!err.message.includes('purchase is not suitable to be purchased')) {
+          throw err
+        }
+      }
     } else {
       throw new Error(translate('purchaseReceiptError'))
     }
