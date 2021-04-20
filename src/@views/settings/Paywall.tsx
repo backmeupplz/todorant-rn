@@ -24,8 +24,9 @@ import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, Platform } from 'react-native'
-import { Subscription, Product } from 'react-native-iap'
+import { Subscription, Product, clearTransactionIOS } from 'react-native-iap'
 import RNRestart from 'react-native-restart'
+import { uniqBy } from 'lodash'
 
 class PaywallVM {
   @observable products: (Subscription | Product)[] = []
@@ -60,7 +61,9 @@ class PaywallContent extends Component<{
     }
     purchaseListener.success = async () => {
       try {
-        await sharedSync.sync(SyncRequestEvent.All)
+        if (sharedSessionStore.user) {
+          await sharedSync.sync(SyncRequestEvent.All)
+        }
       } catch (err) {
         alertError(err)
       }
@@ -75,11 +78,16 @@ class PaywallContent extends Component<{
 
     this.vm.loading = true
     try {
-      this.vm.products = await getProducts(
-        Platform.OS === 'ios' &&
-          this.props.route.params?.type === 'appleUnauthorized'
-          ? ['monthly.with.trial', 'yearly.with.trial']
-          : undefined
+      this.vm.products = sortProducts(
+        uniqBy(
+          await getProducts(
+            Platform.OS === 'ios' &&
+              this.props.route.params?.type === 'appleUnauthorized'
+              ? ['monthly.with.trial', 'yearly.with.trial', 'perpetual']
+              : undefined
+          ),
+          (p) => p.productId
+        )
       )
     } catch (err) {
       alertError(err)
@@ -186,6 +194,9 @@ class PaywallContent extends Component<{
                         : undefined,
                   }}
                   onPress={() => {
+                    if (Platform.OS === 'ios') {
+                      clearTransactionIOS()
+                    }
                     purchase(product.productId)
                   }}
                   disabled={purchaseListener.isPurchasing}
@@ -200,9 +211,10 @@ class PaywallContent extends Component<{
                     sharedSettingsStore.isDark
                   }
                 >
-                  {this.props.route.params?.type === 'appleUnauthorized' && (
-                    <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
-                  )}
+                  {this.props.route.params?.type === 'appleUnauthorized' &&
+                    product.productId !== 'perpetual' && (
+                      <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
+                    )}
                   <Text>
                     {Platform.OS === 'android'
                       ? product.title
@@ -261,4 +273,23 @@ export const Paywall = () => {
     RouteProp<Record<string, { type: string | undefined } | undefined>, string>
   >()
   return <PaywallContent route={route} />
+}
+
+const productOrder = ['monthly', 'yearly', 'perpetual']
+function sortProducts(products: (Subscription | Product)[]) {
+  return products.sort((a, b) => {
+    const productOrderStringA = productOrder.find((s) =>
+      a.productId.includes(s)
+    )
+    const indexA = productOrderStringA
+      ? productOrder.indexOf(productOrderStringA)
+      : 0
+    const productOrderStringB = productOrder.find((s) =>
+      b.productId.includes(s)
+    )
+    const indexB = productOrderStringB
+      ? productOrder.indexOf(productOrderStringB)
+      : 1
+    return indexA < indexB ? -1 : 1
+  })
 }
