@@ -9,7 +9,7 @@ import { makeObservable, observable } from 'mobx'
 export class DelegationHeader extends Component {
   @observable width = Dimensions.get('window').width
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 

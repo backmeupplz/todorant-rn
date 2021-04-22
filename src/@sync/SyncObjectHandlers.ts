@@ -15,29 +15,34 @@ import {
 } from '@utils/ObservableNow'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 
+const findDelegation = (id: string) => {
+  const dele = realm.objects(DelegationUser).filtered(`_id = "${id}"`)
+  return dele.length ? dele[0] : undefined
+}
+
 export async function onDelegationObjectsFromServer(
   objects: any,
   completeSync: () => void
 ) {
   // Remove all
   realm.write(() => {
-    realm.delete(realm.objects<DelegationUser>('DelegationUser'))
+    realm.delete(realm.objects(DelegationUser))
   })
   // Sync delegates
   realm.write(() => {
     for (const delegate of objects.delegates) {
-      realm.create('DelegationUser', {
+      realm.create(DelegationUser, {
         ...delegate,
-        delegationType: DelegationUserType.delegate,
+        isDelegator: false,
       })
     }
   })
   // Sync delegators
   realm.write(() => {
     for (const delegator of objects.delegators) {
-      realm.create('DelegationUser', {
+      realm.create(DelegationUser, {
         ...delegator,
-        delegationType: DelegationUserType.delegator,
+        isDelegator: true,
       })
     }
   })
@@ -62,7 +67,7 @@ export async function onTagsObjectsFromServer(
     }
     return p
   }, {} as { [index: string]: Tag })
-  const allTags = realm.objects<Tag>('Tag')
+  const allTags = realm.objects(Tag)
   const lastSyncDate = sharedTagStore.updatedAt
   const tagsChangedLocally = lastSyncDate
     ? allTags.filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
@@ -84,7 +89,7 @@ export async function onTagsObjectsFromServer(
         const newTag = {
           ...serverTag,
         }
-        realm.create('Tag', newTag)
+        realm.create(Tag, newTag as Tag)
       }
     }
   })
@@ -144,13 +149,6 @@ export async function onTodosObjectsFromServer(
   todosChangedOnServer.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)
     todo.createdAt = new Date(todo.createdAt)
-    if ((todo as any).delegator && (todo as any).delegator.name) {
-      todo.delegateAccepted = !!todo.delegateAccepted
-      todo.delegatorName = (todo as any).delegator.name
-    }
-    if ((todo as any).user && (todo as any).user.name) {
-      todo.delegateName = (todo as any).user.name
-    }
   })
   // Get variables
   const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
@@ -235,6 +233,7 @@ export async function onTodosObjectsFromServer(
         return v
       }) as any
   )
+  console.log(savedPushedTodos)
   // Modify dates
   savedPushedTodos.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)
@@ -257,6 +256,9 @@ export async function onTodosObjectsFromServer(
       }
     }
   })
+  observableNowEventEmitter.emit(
+    ObservableNowEventEmitterEvent.ObservableNowChanged
+  )
   // Complete sync
   completeSync()
   refreshWidgetAndBadgeAndWatch()

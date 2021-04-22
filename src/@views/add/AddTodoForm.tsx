@@ -42,7 +42,6 @@ import { computed, makeObservable, observable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import Modal from 'react-native-modal'
 import { Divider } from '@components/Divider'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
@@ -521,6 +520,7 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             (buttonIndex) => {
               this.props.vm.delegate =
                 sharedDelegationStore.delegates[buttonIndex]
+              console.log(this.props.vm.delegate)
               console.log(buttonIndex)
             }
           )
@@ -544,7 +544,8 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             fontSize: fontSize,
           }}
         >
-          {this.props.vm.delegate?.name}
+          {this.props.vm.delegate?.name ||
+            translate('delegate.pickDelegateField')}
         </Text>
         <CustomIcon
           name="chevron_right_outline_28"
@@ -734,7 +735,14 @@ export class AddTodoForm extends Component<{
               this.props.vm.showMore) && (
               <View>
                 <TimeRow vm={this.props.vm} />
-                <DelegationRow vm={this.props.vm} />
+                {sharedSessionStore.user &&
+                  (!this.props.vm.editedTodo?.delegator ||
+                    (this.props.vm.editedTodo.delegator._id ===
+                      sharedSessionStore.user?._id &&
+                      !this.props.vm.editedTodo.delegateAccepted)) &&
+                  !this.props.vm.editedTodo?.completed && (
+                    <DelegationRow vm={this.props.vm} />
+                  )}
               </View>
             )}
             {this.props.vm.showTimePicker && (

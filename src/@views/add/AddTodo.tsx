@@ -4,7 +4,7 @@ import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo, getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -60,6 +60,9 @@ import {
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { pick } from 'lodash'
+import { DelegationUser } from '@models/DelegationUser'
+import { TermsOfUse } from '@views/settings/TermsOfUse'
 
 export let saveButtonNodeId: number
 export let breakdownTodoNodeId: number
@@ -74,6 +77,7 @@ class AddTodoContent extends Component<{
           breakdownTodo?: Todo
           date?: string
           text?: string
+          delegateId?: string
         }
       | undefined
     >,
@@ -127,7 +131,6 @@ class AddTodoContent extends Component<{
     realm.write(() => {
       for (const vm of this.vms) {
         if (this.screenType === AddTodoScreenType.add) {
-          // console.log(vm.delegate._id)
           const todo = {
             updatedAt: new Date(),
             createdAt: new Date(),
@@ -142,23 +145,21 @@ class AddTodoContent extends Component<{
             deleted: false,
             date: vm.date,
             time: vm.time,
+            user: !!vm.delegate
+              ? cloneDelegator(vm.delegate)
+              : cloneDelegator(sharedSessionStore.user),
+            delegator: !!vm.delegate
+              ? cloneDelegator(sharedSessionStore.user)
+              : undefined,
             encrypted: !!sharedSessionStore.encryptionKey,
-            delegator: vm.delegate?._id,
-            // delegate: vm.delegate,
-            // delegateName: vm.delegate?.name,
-            // delegatorName: sharedSessionStore.user?.name,
             _tempSyncId: uuid(),
           } as Todo
           todo._exactDate = new Date(getTitle(todo))
-
           if (todo.completed) {
             completedAtCreation.push(todo.text)
           }
-
-          const dbtodo = realm.create<Todo>('Todo', todo)
-          console.log(dbtodo.delegate)
+          const dbtodo = realm.create(Todo, todo)
           involvedTodos.push(dbtodo)
-          //
           titlesToFixOrder.push(getTitle(todo))
           if (vm.addOnTop) {
             addTodosOnTop.push(todo)

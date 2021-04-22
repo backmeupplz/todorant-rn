@@ -16,18 +16,42 @@ import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWa
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSessionStore } from './SessionStore'
+import { isHydrated } from './hydration/hydratedStores'
+import { Results } from 'realm'
+import { DelegationUserInTodo } from '@models/DelegationUser'
 
 class TodoStore {
   hydrated = false
+  @observable observableKey = 0
 
   @persist('date') @observable updatedAt?: Date
 
-  getRealmTodos(title: string, completed: boolean) {
-    return realm
+  getDelegationTodos(byMe: boolean) {
+    let todosWithoutDelegationPredicate = realm
       .objects(Todo)
-      .filtered('delegateName = null')
       .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
+      .filtered('delegator != null')
+
+    if (!byMe) {
+      const todosWithDelegationPredicate = todosWithoutDelegationPredicate
+        .filtered('delegateAccepted != true')
+        .filtered(`user._id = "${sharedSessionStore.user?._id}"`)
+      todosWithoutDelegationPredicate = todosWithDelegationPredicate
+    } else {
+      const todosWithDelegationPredicate = todosWithoutDelegationPredicate.filtered(
+        `delegator._id = "${sharedSessionStore.user?._id}"`
+      )
+      todosWithoutDelegationPredicate = todosWithDelegationPredicate
+    }
+    return todosWithoutDelegationPredicate
+  }
+
+  getRealmTodos(title: string, completed: boolean) {
+    let realmResultsWithoutDelegation = realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != false && delegateAccepted != null')
       .filtered(`completed = ${completed ? 'true' : 'false'}`)
       .filtered(
         title.length === 10
@@ -40,18 +64,22 @@ class TodoStore {
               7
             )}" && (date == "" || date == null)`
       )
-      .sorted([
-        ['frog', true],
-        ['order', false],
-      ])
+    if (sharedSessionStore && sharedSessionStore.hydrated) {
+      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
+        `delegator._id != "${sharedSessionStore.user?._id}"`
+      )
+    }
+    return realmResultsWithoutDelegation.sorted([
+      ['frog', true],
+      ['order', false],
+    ])
   }
 
   todosForDate = (title: string) => {
     return realm
       .objects(Todo)
-      .filtered('delegateName = null')
       .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
+      .filtered('delegateAccepted != false && delegateAccepted != null')
       .filtered(
         title.length === 10
           ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
@@ -71,12 +99,18 @@ class TodoStore {
     const todayString = `T${
       Math.floor(todayWithTimezoneOffset.getTime() / 1000) - 1
     }:000`
-    return realm
+    let realmResultsWithoutDelegation = realm
       .objects(Todo)
-      .filtered('delegateName = null')
-      .filtered(
-        `deleted = false && completed = false && _exactDate < ${todayString} && delegateAccepted != false`
+      .filtered('deleted = false')
+      .filtered('completed = false')
+      .filtered(`_exactDate < ${todayString}`)
+      .filtered('delegateAccepted = true')
+    if (isHydrated() && sharedSessionStore.user?._id) {
+      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
+        `user._id = "${sharedSessionStore.user?._id}"`
       )
+    }
+    return realmResultsWithoutDelegation
   }
 
   @computed get currentTodo() {
@@ -86,19 +120,72 @@ class TodoStore {
   }
 
   @computed get unacceptedTodos() {
-    return mobxRealmCollection(
-      realm
-        .objects(Todo)
-        .filtered('delegateName = null')
-        .filtered('deleted = false')
-        .filtered('delegateAccepted = false')
-    )
+    //
+    let realmResultsWithoutDelegation = realm
+      .objects(Todo)
+      .filtered('deleted = false')
+      .filtered('delegateAccepted != true')
+      .filtered('delegator != null')
+    if (isHydrated() && sharedSessionStore.user?._id) {
+      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
+        `user._id = "${sharedSessionStore.user?._id}"`
+      )
+    }
+    return mobxRealmCollection(realmResultsWithoutDelegation)
   }
 
-  @computed get delegatedTodos() {
-    return mobxRealmCollection(
-      realm.objects(Todo).filtered('delegateName != null')
+  @computed get delegatedByMe() {
+    return this.getDelegationTodos(true)
+  }
+  @computed get delegatedToMe() {
+    return this.getDelegationTodos(false)
+  }
+
+  getDelegatedTodosMap(todos: Results<Todo>, byMe: boolean) {
+    const todoSectionMap = {} as {
+      [key: string]: {
+        userInSection: DelegationUserInTodo
+        data: Todo[]
+      }
+    }
+
+    let currentTitle: string | undefined
+    let sectionIndex = 0
+    for (const realmTodo of todos) {
+      const user = byMe ? realmTodo.user : realmTodo.delegator
+      if (!user) return
+      const titleKey = user?._id
+      if (currentTitle && currentTitle !== titleKey) {
+        sectionIndex++
+      }
+      if (todoSectionMap[titleKey]) {
+        todoSectionMap[titleKey].data.push(mobxRealmObject(realmTodo))
+      } else {
+        todoSectionMap[titleKey] = {
+          userInSection: user,
+          data: [mobxRealmObject(realmTodo)],
+        }
+      }
+    }
+    return Object.keys(todoSectionMap).map((key) => {
+      return todoSectionMap[key] as TodoSection
+    })
+  }
+
+  @computed get delegatedByMeTodosMap() {
+    let kek = this.observableKey
+    const delegatedByMeMap = this.getDelegatedTodosMap(this.delegatedByMe, true)
+    return delegatedByMeMap
+  }
+
+  @computed get delegatedToMeTodosMap() {
+    let kek = this.observableKey
+    const delegatedByMeMap = this.getDelegatedTodosMap(
+      this.delegatedToMe,
+      false
     )
+    console.log(delegatedByMeMap)
+    return delegatedByMeMap
   }
 
   @observable shallowTodayUncompletedTodos = shallowMobxRealmCollection(
@@ -133,6 +220,7 @@ class TodoStore {
     observableNowEventEmitter.on(
       ObservableNowEventEmitterEvent.ObservableNowChanged,
       () => {
+        this.observableKey = Date.now()
         this.oldTodos = shallowMobxRealmCollection(
           this.todosBeforeDate(observableNow.todayTitle)
         )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardItem, Text } from 'native-base'
+import { CardItem, Icon, Text, View } from 'native-base'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
@@ -11,6 +11,7 @@ import {
   DelegateSectionType,
   sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
+import { IconButton } from '@components/IconButton'
 
 @observer
 export class DelegateCardActions extends Component<{
@@ -19,34 +20,61 @@ export class DelegateCardActions extends Component<{
 }> {
   render() {
     return (
-      <CardItem
-        footer
+      <View
         style={{
           justifyContent: 'space-between',
-          backgroundColor: 'transparent',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 6,
+          paddingHorizontal: 16,
         }}
       >
+        <Text
+          style={{
+            color: sharedColors.borderColor,
+          }}
+        >
+          {`${this.props.todo.monthAndYear || ''}${
+            this.props.todo.date ? `-${this.props.todo.date}` : ''
+          }`}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          {!this.props.todo.delegateAccepted && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}
+            >
+              <IconButton
+                onPress={() => {
+                  this.props.vm.delete(this.props.todo)
+                }}
+                color={sharedColors.destructIconColor}
+                name="delete_outline_28-iOS"
+              />
+              <IconButton
+                onPress={() => {
+                  navigate('EditTodo', { editedTodo: this.props.todo })
+                }}
+                name="edit_outline_28"
+              />
+            </View>
+          )}
+        </View>
         {sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
           <>
-            {this.props.todo.monthAndYear && (
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.vm.accept(this.props.todo)
-                }}
-              >
-                <Text
-                  style={{
-                    ...sharedColors.regularTextExtraStyle.style,
-                    color: sharedColors.successIconColor,
-                  }}
-                >
-                  {translate('accept')}
-                </Text>
-              </TouchableOpacity>
-            )}
             <TouchableOpacity
               onPress={() => {
-                navigate('EditTodo', { editedTodo: this.props.todo })
+                this.props.vm.accept(this.props.todo)
               }}
             >
               <Text
@@ -55,34 +83,14 @@ export class DelegateCardActions extends Component<{
                   color: sharedColors.successIconColor,
                 }}
               >
-                {translate('edit')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.vm.delete(this.props.todo)
-              }}
-            >
-              <Text
-                style={{
-                  ...sharedColors.regularTextExtraStyle.style,
-                  color: sharedColors.destructIconColor,
-                }}
-              >
-                {translate('delete')}
+                {translate('accept')}
               </Text>
             </TouchableOpacity>
           </>
         ) : (
-          <Text
-            style={{
-              color: sharedColors.borderColor,
-            }}
-          >
-            {translate('delegate.to')}: {this.props.todo.delegateName}
-          </Text>
+          <View></View>
         )}
-      </CardItem>
+      </View>
     )
   }
 }

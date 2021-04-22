@@ -12,6 +12,8 @@ import QueryString from 'query-string'
 import { Linking } from 'react-native'
 import uuid from 'uuid'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { alertConfirm, alertError } from './alert'
+import { acceptDelegate } from './rest'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -69,6 +71,16 @@ function handleUrl(url: string) {
     navigate('Planning')
     sharedAppStateStore.searchEnabled = true
     sharedAppStateStore.searchQuery = [params.query.query as string]
+  } else if (params.url.match(/https:\/\/todorant.com\/invite\/*/g)) {
+    alertConfirm(translate('delegate.inviteConfirm'), translate('ok'), () => {
+      const splittedUrl = params.url.split('/')
+      const delegationToken = splittedUrl[4]
+      if (!sharedSessionStore.user?.token) {
+        alertError(translate('pleaseLogin'))
+        return
+      }
+      acceptDelegate(delegationToken)
+    })
   }
 }
 

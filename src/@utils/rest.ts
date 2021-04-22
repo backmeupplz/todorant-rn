@@ -182,3 +182,15 @@ export async function deleteDelegator(id: string) {
     })
   ).data as string
 }
+
+export async function acceptDelegate(token: string) {
+  return await axios.post(
+    `${base}/delegate/useToken`,
+    { token },
+    {
+      headers: {
+        token: sharedSessionStore.user?.token,
+      },
+    }
+  )
+}

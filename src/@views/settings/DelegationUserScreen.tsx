@@ -15,7 +15,10 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
-class Row extends Component<{ delegationUser: DelegationUser }> {
+class Row extends Component<{
+  delegationUser: DelegationUser
+  delegationType: string
+}> {
   @observable loading = false
 
   UNSAFE_componentWillMount() {
@@ -32,17 +35,14 @@ class Row extends Component<{ delegationUser: DelegationUser }> {
           disabled={this.loading}
           onPress={() => {
             alertConfirm(
-              this.props.delegationUser.delegationType ===
-                DelegationUserType.delegate
-                ? translate('delegate.deleteDelegateConfirmation')
-                : translate('delegate.deleteDelegatorConfirmation'),
+              translate('delegate.deleteDelegatorConfirmation'),
               translate('delete'),
               async () => {
                 this.loading = true
                 try {
+                  console.log(this.props)
                   if (
-                    this.props.delegationUser.delegationType ===
-                    DelegationUserType.delegate
+                    this.props.delegationType === DelegationUserType.delegate
                   ) {
                     await deleteDelegate(this.props.delegationUser._id)
                   } else {
@@ -92,7 +92,12 @@ export class DelegationUserScreenContent extends Component<{
           }}
         >
           {list.length ? (
-            list.map((u) => <Row delegationUser={u} />)
+            list.map((u) => (
+              <Row
+                delegationUser={u}
+                delegationType={this.props.route.params.delegationType}
+              />
+            ))
           ) : (
             <TableItem>
               <Text {...sharedColors.textExtraStyle}>

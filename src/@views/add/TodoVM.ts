@@ -171,7 +171,7 @@ export class TodoVM {
 
   @computed
   get isValid() {
-    return !!this.text && !!this.monthAndYear
+    return !!this.text && (!!this.delegate || !!this.monthAndYear)
   }
 
   constructor() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { Container } from 'native-base'
+import { Container, Text, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
 import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
@@ -13,13 +13,44 @@ import {
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { makeObservable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
+import { SectionList } from 'react-native'
+import { RealmTodosData } from './DelegationVM'
+import { TodoHeader } from '@components/TodoHeader'
+import { navigate } from '@utils/navigation'
 
 @observer
 export class DelegateContent extends Component {
-  // UNSAFE_componentWillMount() {
-  //   makeObservable(this)
-  // }
+  constructor(props: any) {
+    super(props)
+    makeObservable(this)
+  }
+
+  renderDelegationSectionList(byMe: boolean) {
+    return (
+      <SectionList
+        renderItem={({ item, index }) => {
+          return <TodoCard key={index} todo={item} type={CardType.delegation} />
+        }}
+        renderSectionHeader={(header) => {
+          return (
+            <TodoHeader
+              item={header.section.userInSection.name}
+              hidePlus={true}
+            />
+          )
+        }}
+        sections={
+          byMe
+            ? sharedTodoStore.delegatedByMeTodosMap
+            : sharedTodoStore.delegatedToMeTodosMap
+        }
+        keyExtractor={(item) => item._id || item._tempSyncId}
+      />
+    )
+  }
+
+  @observable test = new RealmTodosData(false)
 
   render() {
     return (
@@ -28,41 +59,19 @@ export class DelegateContent extends Component {
         {!!sharedSessionStore.user &&
           (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
             <>
-              {!sharedTodoStore.unacceptedTodos.length && <NoDelegatedTasks />}
-              {!!sharedTodoStore.unacceptedTodos.length && (
-                <FlatList
-                  data={sharedTodoStore.unacceptedTodos}
-                  style={{ marginTop: 20 }}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <TodoCard
-                        key={index}
-                        todo={item}
-                        type={CardType.delegation}
-                      />
-                    )
-                  }}
-                />
+              {!sharedTodoStore?.delegatedToMeTodosMap?.length && (
+                <NoDelegatedTasks />
               )}
+              {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
+                this.renderDelegationSectionList(false)}
             </>
           ) : (
             <>
-              {!sharedTodoStore.delegatedTodos.length && <NoDelegatedTasks />}
-              {!!sharedTodoStore.delegatedTodos.length && (
-                <FlatList
-                  data={sharedTodoStore.delegatedTodos}
-                  style={{ marginTop: 20 }}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <TodoCard
-                        key={index}
-                        todo={item}
-                        type={CardType.delegation}
-                      />
-                    )
-                  }}
-                />
+              {!sharedTodoStore?.delegatedByMeTodosMap?.length && (
+                <NoDelegatedTasks />
               )}
+              {!!sharedTodoStore?.delegatedByMeTodosMap?.length &&
+                this.renderDelegationSectionList(true)}
             </>
           ))}
       </Container>

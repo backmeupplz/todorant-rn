@@ -5,13 +5,29 @@ export enum DelegationUserType {
   delegator = 'delegator',
 }
 
+export class DelegationUserInTodo extends MobxRealmModel {
+  public static schema = {
+    name: 'DelegationUserInTodo',
+    properties: {
+      _id: { type: 'string', indexed: true },
+      name: { type: 'string', indexed: true },
+    },
+  }
+
+  objectSchema() {
+    return DelegationUserInTodo.schema
+  }
+
+  _id!: string
+  name!: string
+}
+
 export class DelegationUser extends MobxRealmModel {
   public static schema = {
     name: 'DelegationUser',
     properties: {
-      _id: { type: 'string', indexed: true },
-      name: { type: 'string', indexed: true },
-      delegationType: { type: 'string', indexed: true },
+      ...DelegationUserInTodo.schema.properties,
+      isDelegator: 'bool',
     },
   }
 
@@ -21,5 +37,5 @@ export class DelegationUser extends MobxRealmModel {
 
   _id!: string
   name!: string
-  delegationType!: DelegationUserType
+  isDelegator!: boolean
 }

@@ -75,6 +75,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <data 
+                    android:host="todorant.com"
+                    android:pathPrefix="/invite"
+                    android:scheme="https"
+                />
                 <data
                     android:host="create-todo"
                     android:scheme="todorant" />
