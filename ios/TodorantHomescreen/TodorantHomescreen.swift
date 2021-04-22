@@ -37,6 +37,14 @@ struct TodoStatusProvider: TimelineProvider {
     )
     completion(entry)
   }
+  
+  private func getCurrentTime() -> String {
+    let now = Date()
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone.current
+    formatter.dateFormat = "MM-dd HH:mm"
+    return NSLocalizedString("timesStamp", comment: "") + " " + formatter.string(from: now)
+  }
 
   func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
     store.updateCurrent {
@@ -45,7 +53,7 @@ struct TodoStatusProvider: TimelineProvider {
       
       if let currentState = store.currentState {
         
-        let warning = store.errorShown ? NSLocalizedString("error", comment: "") : nil
+        let warning = store.errorShown ? getCurrentTime() : getCurrentTime()
         
         if let todo = currentState.todo {
           let todoEntry = TodoWidgetContent(
