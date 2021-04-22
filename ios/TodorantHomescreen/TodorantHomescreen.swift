@@ -41,8 +41,7 @@ struct TodoStatusProvider: TimelineProvider {
   private func getCurrentTime() -> String {
     let now = Date()
     let formatter = DateFormatter()
-    formatter.timeZone = TimeZone.current
-    formatter.dateFormat = "MM-dd HH:mm"
+    formatter.setLocalizedDateFormatFromTemplate("MM dd HH:mm")
     return NSLocalizedString("timesStamp", comment: "") + " " + formatter.string(from: now)
   }
 
