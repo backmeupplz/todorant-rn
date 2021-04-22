@@ -53,7 +53,7 @@ struct TodoStatusProvider: TimelineProvider {
       
       if let currentState = store.currentState {
         
-        let warning = store.errorShown ? getCurrentTime() : getCurrentTime()
+        let warning = store.errorShown ? getCurrentTime() : nil
         
         if let todo = currentState.todo {
           let todoEntry = TodoWidgetContent(
