@@ -61,6 +61,7 @@ struct CurrentState: Codable {
 }
 
 class Store: ObservableObject {
+  
   @Published var authenticated = UserSession.accessToken != nil
 
   @Published var currentState: CurrentState?
@@ -69,10 +70,12 @@ class Store: ObservableObject {
   @Published var errorShown = false
 
   @Published var expanded = false
+  @Published var updatedAt: String
   
   static let shared = Store()
   
   private init() {
+    updatedAt = getCurrentTime()
     self.updateCurrent()
   }
 
@@ -85,6 +88,7 @@ class Store: ObservableObject {
       case .success(let currentState):
         // Update state
         self.currentState = currentState
+        self.updatedAt = getCurrentTime()
         self.errorShown = false
       case .failure:
         self.errorShown = true
@@ -92,4 +96,11 @@ class Store: ObservableObject {
       completion?()
     }
   }
+}
+
+private func getCurrentTime() -> String {
+  let now = Date()
+  let formatter = DateFormatter()
+  formatter.setLocalizedDateFormatFromTemplate("MM dd HH:mm")
+  return NSLocalizedString("timesStamp", comment: "") + " " + formatter.string(from: now)
 }
