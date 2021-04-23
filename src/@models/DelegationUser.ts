@@ -9,8 +9,8 @@ export class DelegationUserInTodo extends MobxRealmModel {
   public static schema = {
     name: 'DelegationUserInTodo',
     properties: {
-      _id: { type: 'string', indexed: true },
-      name: { type: 'string', indexed: true },
+      _id: { type: 'string?', indexed: true },
+      name: { type: 'string?', indexed: true },
     },
   }
 
@@ -28,6 +28,9 @@ export class DelegationUser extends MobxRealmModel {
     properties: {
       ...DelegationUserInTodo.schema.properties,
       isDelegator: 'bool',
+      deleted: 'bool',
+      updatedAt: { type: 'date', indexed: true },
+      delegateInviteToken: 'string?',
     },
   }
 
@@ -35,7 +38,10 @@ export class DelegationUser extends MobxRealmModel {
     return DelegationUser.schema
   }
 
-  _id!: string
-  name!: string
+  _id?: string
+  name?: string
   isDelegator!: boolean
+  updatedAt!: Date
+  delegateInviteToken!: string
+  deleted!: boolean
 }

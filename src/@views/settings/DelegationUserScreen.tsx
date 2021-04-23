@@ -10,9 +10,9 @@ import { sharedDelegationStore } from '@stores/DelegationStore'
 import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
-import { deleteDelegate, deleteDelegator } from '@utils/rest'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { removeDelegation } from '@utils/delegations'
 
 @observer
 class Row extends Component<{
@@ -44,9 +44,9 @@ class Row extends Component<{
                   if (
                     this.props.delegationType === DelegationUserType.delegate
                   ) {
-                    await deleteDelegate(this.props.delegationUser._id)
+                    removeDelegation(this.props.delegationUser, false)
                   } else {
-                    await deleteDelegator(this.props.delegationUser._id)
+                    removeDelegation(this.props.delegationUser, true)
                   }
                   sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {

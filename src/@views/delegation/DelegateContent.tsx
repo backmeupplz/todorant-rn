@@ -15,9 +15,7 @@ import {
 import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { SectionList } from 'react-native'
-import { RealmTodosData } from './DelegationVM'
 import { TodoHeader } from '@components/TodoHeader'
-import { navigate } from '@utils/navigation'
 
 @observer
 export class DelegateContent extends Component {
@@ -45,12 +43,10 @@ export class DelegateContent extends Component {
             ? sharedTodoStore.delegatedByMeTodosMap
             : sharedTodoStore.delegatedToMeTodosMap
         }
-        keyExtractor={(item) => item._id || item._tempSyncId}
+        keyExtractor={(item) => (item._id || item._tempSyncId) as string}
       />
     )
   }
-
-  @observable test = new RealmTodosData(false)
 
   render() {
     return (

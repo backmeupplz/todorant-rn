@@ -42,7 +42,7 @@ export class TodoCardBody extends Component<{
                 justifyContent: 'space-between',
               }}
             >
-              {!!this.props.todo.delegatorName && (
+              {!!this.props.todo.delegator?.name && (
                 <Text>
                   <Text
                     onPress={() => {
@@ -50,7 +50,7 @@ export class TodoCardBody extends Component<{
                     }}
                     {...sharedColors.regularTextExtraStyle}
                   >
-                    {this.props.todo.delegatorName}
+                    {this.props.todo.delegator?.name}
                   </Text>
                   {this.props.todo.delegateAccepted === false && (
                     <Text {...sharedColors.regularTextExtraStyle}>

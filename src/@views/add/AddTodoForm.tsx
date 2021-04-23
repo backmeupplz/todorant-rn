@@ -512,9 +512,9 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
         onPress={() => {
           ActionSheet.show(
             {
-              options: sharedDelegationStore.delegates.map(
-                (delegate) => delegate.name
-              ),
+              options: sharedDelegationStore.delegates
+                .map((delegate) => delegate.name)
+                .filter((delegate) => !!delegate) as string[],
               title: translate('delegate.to'),
             },
             (buttonIndex) => {

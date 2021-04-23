@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
-import { resetDelegateToken } from '@utils/rest'
 import { TableItem } from '@components/TableItem'
 import { Clipboard } from 'react-native'
 import { Text, Icon, Toast, View, ActionSheet } from 'native-base'
@@ -12,6 +11,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import fonts from '@utils/fonts'
 import { DelegationUserType } from '@models/DelegationUser'
+import { resetDelegateToken } from '@utils/rest'
 
 @observer
 export class DelegationSettings extends Component {

@@ -19,7 +19,8 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from './SessionStore'
 import { isHydrated } from './hydration/hydratedStores'
 import { Results } from 'realm'
-import { DelegationUserInTodo } from '@models/DelegationUser'
+import { DelegationUser, DelegationUserInTodo } from '@models/DelegationUser'
+import { SectionListData } from 'react-native'
 
 class TodoStore {
   hydrated = false
@@ -144,7 +145,7 @@ class TodoStore {
   getDelegatedTodosMap(todos: Results<Todo>, byMe: boolean) {
     const todoSectionMap = {} as {
       [key: string]: {
-        userInSection: DelegationUserInTodo
+        userInSection: DelegationUser
         data: Todo[]
       }
     }
@@ -153,8 +154,9 @@ class TodoStore {
     let sectionIndex = 0
     for (const realmTodo of todos) {
       const user = byMe ? realmTodo.user : realmTodo.delegator
-      if (!user) return
+      if (!user) continue
       const titleKey = user?._id
+      if (!titleKey) continue
       if (currentTitle && currentTitle !== titleKey) {
         sectionIndex++
       }
@@ -168,8 +170,8 @@ class TodoStore {
       }
     }
     return Object.keys(todoSectionMap).map((key) => {
-      return todoSectionMap[key] as TodoSection
-    })
+      return todoSectionMap[key]
+    }) as SectionListData<Todo>[]
   }
 
   @computed get delegatedByMeTodosMap() {

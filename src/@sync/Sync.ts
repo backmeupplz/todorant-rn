@@ -19,6 +19,7 @@ import {
   onTagsObjectsFromServer,
   onTodosObjectsFromServer,
 } from '@sync/SyncObjectHandlers'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -114,9 +115,12 @@ class Sync {
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => undefined,
-      (objects, _, completeSync) => {
-        return onDelegationObjectsFromServer(objects, completeSync)
+      () => sharedDelegationStore.updatedAt,
+      (objects, pushBack, completeSync) => {
+        return onDelegationObjectsFromServer(objects, pushBack, completeSync)
+      },
+      async (lastSyncDate) => {
+        sharedDelegationStore.updatedAt = lastSyncDate
       }
     )
   }
