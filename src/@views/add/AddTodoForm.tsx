@@ -520,8 +520,6 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             (buttonIndex) => {
               this.props.vm.delegate =
                 sharedDelegationStore.delegates[buttonIndex]
-              console.log(this.props.vm.delegate)
-              console.log(buttonIndex)
             }
           )
         }}

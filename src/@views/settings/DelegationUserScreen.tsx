@@ -40,7 +40,6 @@ class Row extends Component<{
               async () => {
                 this.loading = true
                 try {
-                  console.log(this.props)
                   if (
                     this.props.delegationType === DelegationUserType.delegate
                   ) {

@@ -186,7 +186,6 @@ class TodoStore {
       this.delegatedToMe,
       false
     )
-    console.log(delegatedByMeMap)
     return delegatedByMeMap
   }
 
