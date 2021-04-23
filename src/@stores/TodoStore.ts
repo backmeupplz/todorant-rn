@@ -175,13 +175,13 @@ class TodoStore {
   }
 
   @computed get delegatedByMeTodosMap() {
-    let kek = this.observableKey
+    const key = this.observableKey
     const delegatedByMeMap = this.getDelegatedTodosMap(this.delegatedByMe, true)
     return delegatedByMeMap
   }
 
   @computed get delegatedToMeTodosMap() {
-    let kek = this.observableKey
+    const key = this.observableKey
     const delegatedByMeMap = this.getDelegatedTodosMap(
       this.delegatedToMe,
       false
