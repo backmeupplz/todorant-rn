@@ -31,14 +31,14 @@ export function removeMismatchesWithServer(
   localDelegations: DelegationUser[] | Results<DelegationUser>,
   serverDelegations: DelegationUser[]
 ) {
-  localDelegations.forEach((localeDelegation) => {
+  localDelegations.forEach((localDelegation) => {
     if (
-      localeDelegation &&
+      localDelegation &&
       !serverDelegations.find(
-        (delegation) => delegation._id === localeDelegation._id
+        (delegation) => delegation._id === localDelegation._id
       )
     ) {
-      realm.delete(localeDelegation)
+      realm.delete(localDelegation)
     }
   })
 }
