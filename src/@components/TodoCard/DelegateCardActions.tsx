@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardItem, Text } from 'native-base'
+import { CardItem, Icon, Text, View } from 'native-base'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
@@ -7,6 +7,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { Todo } from '@models/Todo'
 import { navigate } from '@utils/navigation'
+import {
+  DelegateSectionType,
+  sharedDelegateStateStore,
+} from '@stores/DelegateScreenStateStore'
+import { IconButton } from '@components/IconButton'
 
 @observer
 export class DelegateCardActions extends Component<{
@@ -15,58 +20,77 @@ export class DelegateCardActions extends Component<{
 }> {
   render() {
     return (
-      <CardItem
-        footer
+      <View
         style={{
           justifyContent: 'space-between',
-          backgroundColor: 'transparent',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 6,
+          paddingHorizontal: 16,
         }}
       >
-        {this.props.todo.monthAndYear && (
-          <TouchableOpacity
-            onPress={() => {
-              this.props.vm.accept(this.props.todo)
-            }}
-          >
-            <Text
+        <Text
+          style={{
+            color: sharedColors.borderColor,
+          }}
+        >
+          {`${this.props.todo.monthAndYear || ''}${
+            this.props.todo.date ? `-${this.props.todo.date}` : ''
+          }`}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          {!this.props.todo.delegateAccepted && (
+            <View
               style={{
-                ...sharedColors.regularTextExtraStyle.style,
-                color: sharedColors.successIconColor,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
               }}
             >
-              {translate('accept')}
-            </Text>
-          </TouchableOpacity>
+              <IconButton
+                onPress={() => {
+                  this.props.vm.delete(this.props.todo)
+                }}
+                color={sharedColors.destructIconColor}
+                name="delete_outline_28-iOS"
+              />
+              <IconButton
+                onPress={() => {
+                  navigate('EditTodo', { editedTodo: this.props.todo })
+                }}
+                name="edit_outline_28"
+              />
+            </View>
+          )}
+        </View>
+        {sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
+          <>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.vm.accept(this.props.todo)
+              }}
+            >
+              <Text
+                style={{
+                  ...sharedColors.regularTextExtraStyle.style,
+                  color: sharedColors.successIconColor,
+                }}
+              >
+                {translate('accept')}
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <View></View>
         )}
-        <TouchableOpacity
-          onPress={() => {
-            navigate('EditTodo', { editedTodo: this.props.todo })
-          }}
-        >
-          <Text
-            style={{
-              ...sharedColors.regularTextExtraStyle.style,
-              color: sharedColors.successIconColor,
-            }}
-          >
-            {translate('edit')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.vm.delete(this.props.todo)
-          }}
-        >
-          <Text
-            style={{
-              ...sharedColors.regularTextExtraStyle.style,
-              color: sharedColors.destructIconColor,
-            }}
-          >
-            {translate('delete')}
-          </Text>
-        </TouchableOpacity>
-      </CardItem>
+      </View>
     )
   }
 }

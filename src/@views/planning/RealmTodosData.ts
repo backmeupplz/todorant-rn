@@ -13,6 +13,7 @@ import {
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
 import { PlanningEventEmitter, planningEventEmitter } from './PlanningVM'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 export class RealmTodosData {
   completed: boolean
@@ -400,7 +401,8 @@ function getRealmTodos(completed: boolean) {
   return realm
     .objects(Todo)
     .filtered('deleted = false')
-    .filtered('delegateAccepted != false')
+    .filtered(`user._id = "${sharedSessionStore.user?._id}" OR user = null`)
+    .filtered('delegator = null OR delegateAccepted = true')
     .filtered(`completed = ${completed ? 'true' : 'false'}`)
     .sorted([
       ['_exactDate', completed],

@@ -165,9 +165,7 @@ export class TodoCardVM {
 
   isOld(type: CardType, todo: Todo) {
     return (
-      type !== CardType.done &&
-      todo.delegateAccepted !== false &&
-      isTodoOld(todo)
+      type !== CardType.done && type !== CardType.delegation && isTodoOld(todo)
     )
   }
 }

@@ -1624,7 +1624,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.todorant.app;
 				PRODUCT_NAME = Todorant;
-				PROVISIONING_PROFILE_SPECIFIER = "Todorant-app";
+				PROVISIONING_PROFILE_SPECIFIER = "Todorant-app3";
 				SWIFT_OBJC_BRIDGING_HEADER = "Todorant-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

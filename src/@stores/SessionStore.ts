@@ -82,7 +82,7 @@ class SessionStore {
   }
 
   @computed get delegateInviteLink() {
-    return `https://todorant.com/invite/${this.user!.delegateInviteToken}`
+    return `https://todorant.com/invite/${this.user?.delegateInviteToken}`
   }
 
   hydrated = false

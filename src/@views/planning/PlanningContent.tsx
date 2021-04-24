@@ -11,7 +11,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
-import { PlanningDateHeader } from './PlanningDateHeader'
 import {
   SectionList,
   SectionListData,
@@ -27,6 +26,7 @@ import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
 import { Todo } from '@models/Todo'
 import { debounce } from 'lodash'
+import { TodoHeader } from '@components/TodoHeader'
 
 @observer
 export class PlanningContent extends Component {
@@ -236,10 +236,10 @@ export class PlanningContent extends Component {
               }}
               renderSectionHeader={({ item, drag, index, isActive }) => {
                 return (
-                  <PlanningDateHeader
+                  <TodoHeader
                     drag={drag}
                     isActive={isActive}
-                    item={item}
+                    item={item.section}
                     key={index}
                     vm={this.vm}
                   />
@@ -276,8 +276,8 @@ export class PlanningContent extends Component {
               />
             )}
             renderSectionHeader={({ section }) => (
-              <PlanningDateHeader
-                item={section}
+              <TodoHeader
+                item={section.section}
                 vm={this.vm}
                 drag={() => {}}
                 isActive={false}

@@ -12,6 +12,10 @@ import QueryString from 'query-string'
 import { Linking } from 'react-native'
 import uuid from 'uuid'
 import { sharedAppStateStore } from '@stores/AppStateStore'
+import { alertConfirm, alertError } from './alert'
+import { DelegationUser } from '@models/DelegationUser'
+import { requestSync } from '@sync/syncEventEmitter'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -69,6 +73,24 @@ function handleUrl(url: string) {
     navigate('Planning')
     sharedAppStateStore.searchEnabled = true
     sharedAppStateStore.searchQuery = [params.query.query as string]
+  } else if (params.url.match(/https:\/\/todorant.com\/invite\/*/g)) {
+    alertConfirm(translate('delegate.inviteConfirm'), translate('ok'), () => {
+      const splittedUrl = params.url.split('/')
+      const delegateInviteToken = splittedUrl[4]
+      if (!sharedSessionStore.user?.token) {
+        alertError(translate('pleaseLogin'))
+        return
+      }
+      realm.write(() => {
+        realm.create(DelegationUser, {
+          delegateInviteToken,
+          updatedAt: new Date(),
+          isDelegator: true,
+          deleted: false,
+        } as DelegationUser)
+      })
+      requestSync(SyncRequestEvent.Delegation)
+    })
   }
 }
 

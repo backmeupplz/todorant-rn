@@ -61,26 +61,16 @@ export class Data extends Component {
           <Row
             title={translate('tagsCount')}
             subtitle={`${
-              realm.objects<Tag>('Tag').filtered('deleted = false').length
+              realm.objects(Tag).filtered('deleted = false').length
             }`}
           />
           <Row
             title={translate('delegate.delegators')}
-            subtitle={`${
-              realm
-                .objects<DelegationUser>('DelegationUser')
-                .filtered(`delegationType = "${DelegationUserType.delegator}"`)
-                .length
-            }`}
+            subtitle={`${realm.objects(DelegationUser).length}`}
           />
           <Row
             title={translate('delegate.delegates')}
-            subtitle={`${
-              realm
-                .objects<DelegationUser>('DelegationUser')
-                .filtered(`delegationType = "${DelegationUserType.delegate}"`)
-                .length
-            }`}
+            subtitle={`${realm.objects(DelegationUser).length}`}
           />
           {/* Sync */}
           <Divider />

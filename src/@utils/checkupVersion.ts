@@ -12,7 +12,7 @@ export async function checkupVersion() {
         ? 'https://appgallery.huawei.com/#/app/C102992095'
         : version.url
 
-    if (version.needsUpdate) {
+    if (version.needsUpdate && !__DEV__) {
       Alert.alert(
         `${translate('updateVersionTitle')} ${version.version}!`,
         translate('updateVersionMsg'),

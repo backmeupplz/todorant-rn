@@ -163,23 +163,3 @@ export async function resetDelegateToken() {
     )
   ).data as string
 }
-
-export async function deleteDelegate(id: string) {
-  return (
-    await axios.delete(`${base}/delegate/delegate/${id}`, {
-      headers: {
-        token: sharedSessionStore.user?.token,
-      },
-    })
-  ).data as string
-}
-
-export async function deleteDelegator(id: string) {
-  return (
-    await axios.delete(`${base}/delegate/delegator/${id}`, {
-      headers: {
-        token: sharedSessionStore.user?.token,
-      },
-    })
-  ).data as string
-}
