@@ -9,7 +9,7 @@ export const realm = new Realm({
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 13) {
       // DelegationUser
-      realm.delete(realm.objects(DelegationUser))
+      newRealm.delete(newRealm.objects('DelegationUser'))
     }
   },
 })
