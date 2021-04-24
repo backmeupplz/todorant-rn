@@ -214,6 +214,26 @@ class TodoStore {
     return !!this.oldTodos.length && sharedOnboardingStore.tutorialIsShown
   }
 
+  @computed get incompleteFrogsExist() {
+    const date = observableNow.todayTitle
+    return realm
+      .objects(Todo)
+      .filtered(
+        date.length === 10
+          ? `monthAndYear = "${date.substr(0, 7)}" && date = "${date.substr(
+              8,
+              2
+            )}"`
+          : `monthAndYear = "${date.substr(
+              0,
+              7
+            )}" && (date == "" || date == null)`
+      )
+      .filtered(
+        'deleted = false && delegateAccepted != false && completed = false && frog = true'
+      ).length
+  }
+
   constructor() {
     makeObservable(this)
     this.refreshTodos()

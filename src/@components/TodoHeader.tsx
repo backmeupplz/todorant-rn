@@ -33,7 +33,7 @@ export class TodoHeader extends Component<{
         {(this.props.item.section?.length || 0) === 10 &&
           `, ${capitalizeSentence(
             moment(this.props.item.section!)
-              .locale(sharedSettingsStore.language || 'en-US')
+              .locale(sharedSettingsStore.language || 'en')
               .format('dddd')
           )}`}
       </>

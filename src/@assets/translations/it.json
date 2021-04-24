@@ -65,8 +65,8 @@
   "purchaseError": "Hm, looks like something went wrong with the purchases. Please, go to the website, login and subscribe there!",
   "purchaseThankYou": "Grazie",
   "purchaseThankYouText": "Grazie per aver acquistato l'abbonamento!",
-  "activeText": "🎉 Grazie mille per aver sostenuto Todorant! Personalmente spero che Todorant abbia già migliorato la tua vita e che continui a migliorarla in futuro! Il tuo sostegno mi permette di lavorare quotidianamente su Todorant e di aggiungere nuove funzionalità che semplificano il lavoro e liberano il tuo tempo e le tue risorse cognitive. Grazie mille, ancora una volta!",
-  "inactiveText": "🐝 Sembra che il tuo periodo di prova di Todorant sia giunto al termine. Questo è il momento imbarazzante in cui dovrai decidere — se il Todorant ha migliorato la tua vita abbastanza da permetterti di spendere soldi per questo — e io devo indirizzarti verso la decisione giusta. Sono all'apice della felicità quando sono in grado di portare valore alle persone; e se Todorant è stato in grado di migliorare la vostra vita, vi sarò più che grato se acquisterete l'abbonamento. Sono solo 5 dollari al mese per la produttività illimitata e la mente libera. Ogni centesimo che guadagno su Todorant sarà speso per migliorare il servizio. Sostenendo Todorant — permettete a me, sviluppatore indipendente, di continuare a migliorare il prodotto che ci avvantaggia tutti di giorno in giorno. Grazie mille in anticipo!",
+  "activeText": "🎉 Grazie mille per sostenere Todorant! Spero che Todorant abbia già migliorato la tua vita e che continuerà a migliorarla in futuro! Il tuo supporto mi permette di migliorare Todorant ogni giorno, aggiungendo nuove funzionalità e semplificando i processi di lavoro!",
+  "inactiveText": "🐝 Sembra che la tua prova di Todorant sia giunta alla fine. Todorant ha migliorato la tua vita di almeno 5 dollari al mese? Spero proprio di sì! Vado subito al sodo.\n\nOfferta commerciale. Ricevo: 5$ al mese, 36$ all'anno (un enorme sconto del 40%) o 150$ una tantum. Voi ricevete: produttività illimitata e Todorant illimitato come bonus.\n\nChe ne dite?",
   "earlyAdopterText": "👏👏 — questo sono io che vi applaudo; voi — i pazzi che hanno accettato di provare lo strumento della produttività sempre crescente, Todorant, tra i primi. Si può dire che voi siete i pionieri, il cui feedback ha plasmato il Todorant fin dall'inizio. Avete tutti i diritti di usare il Todorant quanto volete: non avrete mai limiti, ve lo siete guadagnato. Tuttavia, se avete notato che il Todorant ha drasticamente migliorato la vostra vita — potete comunque acquistare l'abbonamento dicendo così il miglior tipo di \"Grazie\". Non perderete mai lo stato di \"Early adopter 🦄\" — ma potrete sempre annullare l'abbonamento. Vi ringrazio molto per l'utilizzo di Todorant — e continuerò ad aggiungere nuove funzionalità che migliorano il prodotto e che hanno un effetto positivo su tutti noi. Buona fortuna!",
   "earlyAdopterTextBonus": "🤗 Accidenti! Sembra che io o Todorant vi abbiamo aiutato abbastanza da farvi acquistare l'abbonamento, anche se potreste usare Todorant gratuitamente per sempre. Sono profondamente commosso e felice di prendere una tazza di caffè con voi o di chiacchierare un po'. Sentitevi liberi di contattarmi su Telegram (@borodutch) o via e-mail — basta cliccare sul mio nome qui sotto. Grazie mille! È difficile immaginare quanto sia importante il vostro contributo!",
   "trialText": "💪 Benvenuti in Todorant! Avete 30 giorni di tempo dopo la registrazione per capire se Todorant funziona bene per voi. Trascorsi i 30 giorni, avrete ancora accesso ai vecchi compiti, ma non potrete aggiungerne di nuovi. Va benissimo acquistare l'abbonamento prima della fine dei 30 giorni. Ritengo che l'utilizzo di Todorant vi porterà nuove vette nella produttività personale!",
@@ -150,8 +150,6 @@
   "infoRules": "Per favore, leggi completamente le regole per usare al meglio Todorant.",
   "preserveOrderByTime": "Conserva l'ordine esatto del tempo",
   "subscriptionMonth": "mese",
-  "subscriptionYeariOS": "anno (sconto del ~15%)",
-  "subscriptionYearAndroid": "anno (sconto del ~16.6%)",
   "languageSelect": "Lingua",
   "languageAuto": "Auto",
   "syncExactDates": "Ricalcola le date esatte",
@@ -213,5 +211,6 @@
     "repeatPassword": "Ripetere la password"
   },
   "purchaseErrorTryOnWeb": "Subscribe on the web",
-  "tutorialButton": "Messaggio di benvenuto"
+  "tutorialButton": "Messaggio di benvenuto",
+  "subscriptionYear": "anno (sconto del ≈40%)"
 }

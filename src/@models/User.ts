@@ -46,6 +46,7 @@ export class User {
   @persist @observable subscriptionId?: string
   @persist @observable appleReceipt?: string
   @persist @observable googleReceipt?: string
+  @persist @observable isPerpetualLicense?: boolean
 
   @persist @observable createdOnApple?: boolean
 
@@ -54,12 +55,14 @@ export class User {
 
 export function areUsersPartiallyEqual(user: User, anotherUser: User) {
   return (
+    user._id === anotherUser._id &&
     user.email === anotherUser.email &&
     user.facebookId === anotherUser.facebookId &&
     user.telegramId === anotherUser.telegramId &&
     user.name === anotherUser.name &&
     user.timezone === anotherUser.timezone &&
     user.subscriptionStatus === anotherUser.subscriptionStatus &&
-    user.subscriptionId === anotherUser.subscriptionId
+    user.subscriptionId === anotherUser.subscriptionId &&
+    user.isPerpetualLicense === anotherUser.isPerpetualLicense
   )
 }

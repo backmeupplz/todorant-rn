@@ -2759,10 +2759,10 @@ cosmiconfig@^5.0.5, cosmiconfig@^5.1.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-countly-sdk-react-native-bridge@^20.11.0:
-  version "20.11.0"
-  resolved "https://registry.yarnpkg.com/countly-sdk-react-native-bridge/-/countly-sdk-react-native-bridge-20.11.0.tgz#304887055267e9b1089a1a2eeb1f17b913f772cd"
-  integrity sha512-NnF8aOcOjZL6Lkl9RiNdj2n4JVlUa9h1VZKiAHePY535ZP2fM80G2xePIG1kCxESp07/yrbKKuCcZN88U2td0w==
+countly-sdk-react-native-bridge@^20.11.5:
+  version "20.11.5"
+  resolved "https://registry.yarnpkg.com/countly-sdk-react-native-bridge/-/countly-sdk-react-native-bridge-20.11.5.tgz#dd9706b35fd13ecacd45317fcb221967450dd7cd"
+  integrity sha512-IX/MCJNwVJkhOcGzSyXcptbXOo2DV1CURqC2wq9xKXZnzUGlGlEUPw6c6pqExk74Dnllsizw2K3JONigO18IJw==
 
 create-react-class@*, create-react-class@^15.6.3:
   version "15.6.3"
@@ -3099,10 +3099,10 @@ domutils@^1.7.0:
     dom-serializer "0"
     domelementtype "1"
 
-dooboolab-welcome@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.1.1.tgz#ca2184f6e1f568865d707a6ce3bda7e003550f54"
-  integrity sha512-tQ/9NBCGnalHwKOBjDqTD4t4wQpDfSSbxQGctzkzaLHR3AhN0wCBkIs05JciVtvl/jfLZ+DgAndktAMk3Bu7Vw==
+dooboolab-welcome@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.2.0.tgz#295818ce85a8e97dc90c0ec0510b4008e2d722dc"
+  integrity sha512-XgEbjJHAsKLge/e8jtuHsv84Ovg1Gx0GvnOTOmOlVGV1643nduTAkT3fyo/mxKbzvyXBr47RHaJAY4R2toI0UA==
 
 dotenv@*, dotenv@^8.2.0:
   version "8.2.0"
@@ -6781,12 +6781,12 @@ react-native-gesture-handler@^1.9.0:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-iap@^4.4.2:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-4.4.3.tgz#16c174b569caf3e401a4c756de249ef64dada7a9"
-  integrity sha512-vywdYj61i/F3Qw+o1U130ap77AYYkyFX3ioDnl5UzOd3xmoo2/uH36FPdlKrFZUmdYdMySoV+AYJDLh5T5ihWw==
+react-native-iap@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-6.0.2.tgz#ae34d1a46e84f0be3aff5657e360f4bab54e9894"
+  integrity sha512-Se2n3KjdyD6QXpR+5Wx0kObvQlHYQb6bmcWKaeO+21y+GoV0KlXkjIZE3L1tFULVZFm9rd+/XbIFIJv5fib5Tw==
   dependencies:
-    dooboolab-welcome "^1.1.1"
+    dooboolab-welcome "^1.2.0"
 
 react-native-indicators@^0.17.0:
   version "0.17.0"

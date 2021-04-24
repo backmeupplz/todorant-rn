@@ -45,7 +45,7 @@ struct TodoStatusProvider: TimelineProvider {
       
       if let currentState = store.currentState {
         
-        let warning = store.errorShown ? NSLocalizedString("error", comment: "") : nil
+        let warning = store.errorShown ? store.updatedAt : nil
         
         if let todo = currentState.todo {
           let todoEntry = TodoWidgetContent(

@@ -67,8 +67,8 @@
   "purchaseError": "Hm, looks like something went wrong with the purchases. Please, go to the website, login and subscribe there!",
   "purchaseThankYou": "Thank you",
   "purchaseThankYouText": "Thank you for purchasing the subscription!",
-  "activeText": "🎉 Thank you a lot for supporting Todorant! I personally hope that Todorant has improved your life already and will keep making it better in future! You support allows me to work on Todorant daily and to add new features simplifying the work and freeing your time and your cognitive resources. Thank you a lot, again!",
-  "inactiveText": "🐝 It looks like your Todorant trial has come to the end. This is the awkward moment when you have to decide — whether Todorant has improved your life enough to spend money on it — and I have to navigate you towards the right decision. I am at the peak of my happines when I am able to bring value to the people; and if Todorant was able to make your life better, I will be more than thankful if you buy the subscription. It is just $5/month for the unlimited productivity and free mind. Every cent I earn on Todorant will be spent on improving the service. By supporting Todorant — you allow me, independent developer, to keep improving the product that benefits us all from day to day. Thank you a lot in advance!",
+  "activeText": "🎉 Thank you a lot for supporting Todorant! I hope that Todorant has improved your life already and will keep making it better in the future! Your support allows me to improve Todorant daily, adding new features and simplifying the work processes!",
+  "inactiveText": "🐝 It looks like your Todorant trial has come to the end. Has Todorant improved your life by at least $5/month? I certainly hope so! I'll cut straight to the chase.\n\nTrade offer. I receive: $5 per month, $36 per year (a whopping 40% discount) or $150 one time. You receive: unlimited productivity and unlimited Todorant as a bonus.\n\nWhat do you say?",
   "earlyAdopterText": "👏👏 — this is me applauding you; you — the crazy ones who agreed to try out the instrument of ever increasing productivity, Todorant, among the first. One can say that you are the golden thousand, feedback of whom was shaping the Todorant from the very beginning. You have all the rights to use Todorant as much as you wish — you will never experience any limits, you have earned it. However, if you noticed that Todorant has drastically improved your life — you can still buy the subscription thus saying the best kind of \"Thank you\". You will never loose the \"Early adopter 🦄\" status — but will always be able to cancel the subscription. Thank you a lot for still using Todorant — and I will keep adding new features improving the product that positively affects all of us. Good luck!",
   "earlyAdopterTextBonus": "🤗 Holy +*%$! Looks like either Todorant or I personally helped you enough that you purchased subscription even though you could use Todorant for free forever. I am deeply touched and happy to have a cup of coffee with you or just to chat a little. Feel free to reach me on Telegram (@borodutch) or by email — just click my name below. Thank you a lot! It is hard to imagine how important your contribution is!",
   "trialText": "💪 Welcome to Todorant! You have 30 days after the registration to figure out whether Todorant works well for you. After 30 days will pass, you will still have access to the old tasks but will not be able to add new ones. It is perfectly fine to purchase subscription before 30 days end. I believe that using Todorant will bring you new heights in the personal productivity!",
@@ -152,8 +152,6 @@
   "infoRules": "Please, read the rules thoroughly to get the most out of Todorant.",
   "preserveOrderByTime": "Preserve exact time order",
   "subscriptionMonth": "month",
-  "subscriptionYeariOS": "year (~15% discount)",
-  "subscriptionYearAndroid": "year (~16.6% discount)",
   "languageSelect": "Language",
   "languageAuto": "Auto",
   "syncExactDates": "Recalculate exact dates",
@@ -457,5 +455,10 @@
   "updateVersionMsg": "There is a chance that something will break on the old version, so please update as soon as possible.",
   "update": "Update",
   "googleCalendarHint": "Only the tasks created in Todorant with an exact time will be synced to Google Calendar",
-  "googleCalendarGotIt": "Got it!"
+  "googleCalendarGotIt": "Got it!",
+  "frogsAlert": {
+    "title": "Stop! It's illegal",
+    "text": "Don't break the rules. If you have any frogs today — finish them first, break them down, move them to future days or remove the frog flag from them. Please, just don't ignore the frogs!"
+  },
+  "subscriptionYear": "year (≈40% discount)"
 }
