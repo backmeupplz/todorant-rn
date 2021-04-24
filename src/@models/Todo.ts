@@ -7,16 +7,6 @@ import {
 import { DelegationUser } from './DelegationUser'
 import { User } from './User'
 
-class DelegationUserInTodo extends MobxRealmModel {
-  public static schema = {
-    name: 'DelegationUserInTodo',
-    properties: {
-      _id: { type: 'string', indexed: true },
-      name: { type: 'string', indexed: true },
-    },
-  }
-}
-
 export class Todo extends MobxRealmModel {
   public static schema = {
     name: 'Todo',
@@ -39,8 +29,8 @@ export class Todo extends MobxRealmModel {
       date: { type: 'string?', indexed: true },
       time: 'string?',
 
-      user: 'DelegationUserInTodo?',
-      delegator: 'DelegationUserInTodo?',
+      user: 'DelegationUser?',
+      delegator: 'DelegationUser?',
       delegateAccepted: { type: 'bool?', indexed: true },
     },
   }
