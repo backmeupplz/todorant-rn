@@ -268,17 +268,17 @@
   "accept": "Accept",
   "delegate": {
     "title": "Delegation",
-    "noDelegators": "You don't have any delegators yet. Share the invite link with the people who you want to make delegators",
-    "noDelegates": "You don't have any delegates yet. Ask for an invite link to become someone's delegator.",
+    "noDelegators": "You don't have any delegators yet. Ask for an invite link to become someone's delegate.",
+    "noDelegates": "You don't have any delegates yet. Share the invite link with the people who you want to make delegates",
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
     "noDelegatedTasksTo": "You haven't delegated any tasks yet.",
     "link": "Delegate invite link",
-    "linkDescription": "Share this link only with the people you trust. People can become your delegators by following this link. Delegators will only see the tasks that they delegated to you.",
+    "linkDescription": "People can become your delegates by following this link. Delegates will only see the tasks that you delegated to them.",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
     "delegators": "Delegators",
     "delegates": "Delegates",
-    "inviteSuccess": "Success! Now you can delegate tasks to this user.",
-    "inviteConfirm": "Are you sure you want to become a delegator to this user?",
+    "inviteSuccess": "Success! Now this user can delegate tasks for you.",
+    "inviteConfirm": "Are you sure you want to become a delegate of this user?",
     "deleteDelegateConfirmation": "Are you sure you want to delete this delegate? You will no longer be able to delegate tasks to this delegate.",
     "deleteDelegatorConfirmation": "Are you sure you want to delete this delegator? This delegator will no longer be able to delegate tasks to you.",
     "pickDelegateField": "Delegate",
@@ -288,7 +288,8 @@
     "resetLink": "Reset the link",
     "ToMe": "To me",
     "ByMe": "By me",
-    "to": "To"
+    "to": "To",
+    "from": "From"
   },
   "errors": {
     "delegate": {

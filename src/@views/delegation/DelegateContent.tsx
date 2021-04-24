@@ -19,11 +19,6 @@ import { TodoHeader } from '@components/TodoHeader'
 
 @observer
 export class DelegateContent extends Component {
-  constructor(props: any) {
-    super(props)
-    makeObservable(this)
-  }
-
   renderDelegationSectionList(byMe: boolean) {
     return (
       <SectionList
