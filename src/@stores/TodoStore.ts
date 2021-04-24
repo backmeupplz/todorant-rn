@@ -52,7 +52,7 @@ class TodoStore {
     let realmResultsWithoutDelegation = realm
       .objects(Todo)
       .filtered('deleted = false')
-      .filtered('delegateAccepted != false && delegateAccepted != null')
+      .filtered('delegateAccepted != false')
       .filtered(`completed = ${completed ? 'true' : 'false'}`)
       .filtered(
         title.length === 10
@@ -80,7 +80,7 @@ class TodoStore {
     return realm
       .objects(Todo)
       .filtered('deleted = false')
-      .filtered('delegateAccepted != false && delegateAccepted != null')
+      .filtered('delegateAccepted != false')
       .filtered(
         title.length === 10
           ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
