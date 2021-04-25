@@ -27,9 +27,9 @@ export class DelegationUser extends MobxRealmModel {
     name: 'DelegationUser',
     properties: {
       ...DelegationUserInTodo.schema.properties,
-      isDelegator: 'bool',
-      deleted: 'bool',
-      updatedAt: { type: 'date', indexed: true },
+      isDelegator: 'bool?',
+      deleted: 'bool?',
+      updatedAt: { type: 'date?', indexed: true },
       delegateInviteToken: 'string?',
     },
   }
