@@ -145,9 +145,7 @@ class AddTodoContent extends Component<{
             deleted: false,
             date: vm.date,
             time: vm.time,
-            user: !!vm.delegate
-              ? cloneDelegator(vm.delegate)
-              : cloneDelegator(sharedSessionStore.user),
+            user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
             delegator: !!vm.delegate
               ? cloneDelegator(sharedSessionStore.user)
               : undefined,

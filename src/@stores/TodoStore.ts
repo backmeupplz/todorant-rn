@@ -19,7 +19,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from './SessionStore'
 import { isHydrated } from './hydration/hydratedStores'
 import { Results } from 'realm'
-import { DelegationUser, DelegationUserInTodo } from '@models/DelegationUser'
+import { DelegationUser } from '@models/DelegationUser'
 import { SectionListData } from 'react-native'
 
 class TodoStore {
