@@ -5,7 +5,7 @@ import Realm from 'realm'
 
 export const realm = new Realm({
   schema: [DelegationUser, Todo, Tag, DelegationUserInTodo],
-  schemaVersion: 14,
+  schemaVersion: 15,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 13) {
       // DelegationUser
