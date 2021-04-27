@@ -198,8 +198,11 @@ class TextRow extends Component<{
           onSubmitEditing={() => {
             if (sharedOnboardingStore.tutorialIsShown) return
             if (!this.props.vm.text) return
-            if (sharedOnboardingStore.step === TutorialStep.AddText) {
-              sharedOnboardingStore.nextStep()
+            if (
+              sharedOnboardingStore.step === TutorialStep.AddText ||
+              sharedOnboardingStore.step === TutorialStep.AddTextContinueButton
+            ) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
             }
           }}
           multiline={sharedOnboardingStore.tutorialIsShown}
@@ -207,6 +210,9 @@ class TextRow extends Component<{
           value={this.props.vm.text}
           onChangeText={(text) => {
             this.props.vm.text = text
+            if (!sharedOnboardingStore.tutorialIsShown) {
+              sharedOnboardingStore.textInTodo = text
+            }
           }}
           placeholderTextColor={sharedColors.placeholderColor}
           maxLength={1500}

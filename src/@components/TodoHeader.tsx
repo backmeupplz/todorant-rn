@@ -86,7 +86,7 @@ export class TodoHeader extends Component<{
               onPress={() => {
                 this.props.onPlusPress
                   ? this.props.onPlusPress()
-                  : navigate('AddTodo', { date: this.props.item.section })
+                  : navigate('AddTodo', { date: this.props.item })
               }}
               size={20}
               name="add_outline_28"

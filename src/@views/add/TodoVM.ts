@@ -180,8 +180,11 @@ export class TodoVM {
     Keyboard.addListener('keyboardDidHide', () => {
       if (sharedOnboardingStore.tutorialIsShown) return
       if (!this.text) return
-      if (sharedOnboardingStore.step === TutorialStep.AddText) {
-        sharedOnboardingStore.nextStep()
+      if (
+        sharedOnboardingStore.step === TutorialStep.AddText ||
+        sharedOnboardingStore.step === TutorialStep.AddTextContinueButton
+      ) {
+        sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
       }
     })
 

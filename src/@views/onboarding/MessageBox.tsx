@@ -107,26 +107,28 @@ export class MessageBox extends Component {
             />
           </Animated.View>
         )}
-        <View
-          style={{
-            backgroundColor: sharedColors.backgroundColor,
-            padding: this.padding,
-            borderRadius: 28,
-            width: '100%',
-          }}
-        >
-          <Animated.View
-            style={{ opacity: sharedOnboardingStore.animatedOpacity }}
+        {!sharedOnboardingStore.stepObject.notShowMessage && (
+          <View
+            style={{
+              backgroundColor: sharedColors.backgroundColor,
+              padding: this.padding,
+              borderRadius: 28,
+              width: '100%',
+            }}
           >
-            <Text
-              style={{
-                ...sharedColors.textExtraStyle.style,
-              }}
+            <Animated.View
+              style={{ opacity: sharedOnboardingStore.animatedOpacity }}
             >
-              {sharedOnboardingStore.currentBoxBody}
-            </Text>
-          </Animated.View>
-        </View>
+              <Text
+                style={{
+                  ...sharedColors.textExtraStyle.style,
+                }}
+              >
+                {sharedOnboardingStore.currentBoxBody}
+              </Text>
+            </Animated.View>
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'column',
