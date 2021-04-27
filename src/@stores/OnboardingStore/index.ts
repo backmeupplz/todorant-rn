@@ -12,6 +12,7 @@ import {
   StyleProp,
   ViewStyle,
   Platform,
+  Keyboard,
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
@@ -63,6 +64,8 @@ class OnboardingStore {
   @observable step = TutorialStep.Start
   @observable previousStep = TutorialStep.Start
   @persist @observable tutorialIsShown = false
+
+  @observable textInTodo?: string
 
   @computed get closeOnboardingStyle() {
     const basicStyle = {
@@ -611,6 +614,49 @@ export const AllStages = {
       notShowClose: true,
       notShowContinue: true,
       additionalButtons: [holdOnButton],
+      dontSave: true,
+    }
+  },
+  [TutorialStep.AddTextContinueButton]: async () => {
+    const continueButton = new OnboardingButton(
+      () => {
+        Keyboard.dismiss()
+        if (sharedOnboardingStore.textInTodo?.length) {
+          sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
+        } else {
+          sharedOnboardingStore.nextStep(TutorialStep.AddTextContinueTooFast)
+        }
+      },
+      'continue',
+      true
+    )
+    return new Promise(async (resolve) => {
+      InteractionManager.runAfterInteractions(async () => {
+        const nodeId = (await import('@views/add/AddTodoForm')).textRowNodeId
+        resolve({
+          nodeId,
+          divider: 16,
+          borderRadius: 16,
+          dontSave: true,
+          notShowMessage: true,
+          notShowContinue: true,
+          additionalButtons: [continueButton],
+        })
+      })
+    })
+  },
+  [TutorialStep.AddTextContinueTooFast]: async () => {
+    const gotItButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(TutorialStep.AddTextContinueButton),
+      undefined,
+      true,
+      true
+    )
+    return {
+      messageBoxPosition: 'center',
+      notShowClose: true,
+      notShowContinue: true,
+      additionalButtons: [gotItButton],
       dontSave: true,
     }
   },

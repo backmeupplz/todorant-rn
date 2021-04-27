@@ -442,6 +442,12 @@
     "BreakDownCompletedTodo": {
       "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!"
     },
+    "AddTextContinueTooFast": {
+      "messageBoxBody": "Please, enter the todo text first."
+    },
+    "AddTextContinueButton": {
+      "continue": "Continue"
+    },
     "SelectDateNotAllowed": {
       "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!"
     },
