@@ -4,6 +4,7 @@ import { TableItem } from '@components/TableItem'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { Tag } from '@models/Tag'
 import { Todo } from '@models/Todo'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -66,11 +67,11 @@ export class Data extends Component {
           />
           <Row
             title={translate('delegate.delegators')}
-            subtitle={`${realm.objects(DelegationUser).length}`}
+            subtitle={`${sharedDelegationStore.delegators.length}`}
           />
           <Row
             title={translate('delegate.delegates')}
-            subtitle={`${realm.objects(DelegationUser).length}`}
+            subtitle={`${sharedDelegationStore.delegates.length}`}
           />
           {/* Sync */}
           <Divider />
