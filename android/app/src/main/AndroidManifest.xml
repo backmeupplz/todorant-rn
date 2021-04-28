@@ -69,7 +69,7 @@
                 <data android:mimeType="text/*" />
             </intent-filter>
             <!-- Deep link -->
-            <intent-filter android:label="filter_react_native">
+            <intent-filter android:label="Todorant">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
