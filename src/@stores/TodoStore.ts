@@ -17,7 +17,7 @@ import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from './SessionStore'
-import { isHydrated } from './hydration/hydratedStores'
+import { hydration } from './hydration/hydratedStores'
 import { Results } from 'realm'
 import { DelegationUser } from '@models/DelegationUser'
 import { SectionListData } from 'react-native'
@@ -106,7 +106,7 @@ class TodoStore {
       .filtered('completed = false')
       .filtered(`_exactDate < ${todayString}`)
       .filtered('delegateAccepted = true')
-    if (isHydrated() && sharedSessionStore.user?._id) {
+    if (hydration.isHydrated && sharedSessionStore.user?._id) {
       realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
         `user._id = "${sharedSessionStore.user?._id}"`
       )
@@ -127,7 +127,7 @@ class TodoStore {
       .filtered('deleted = false')
       .filtered('delegateAccepted != true')
       .filtered('delegator != null')
-    if (isHydrated() && sharedSessionStore.user?._id) {
+    if (hydration.isHydrated && sharedSessionStore.user?._id) {
       realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
         `user._id = "${sharedSessionStore.user?._id}"`
       )

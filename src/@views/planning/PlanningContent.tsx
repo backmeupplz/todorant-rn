@@ -18,7 +18,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { makeObservable, observable } from 'mobx'
+import { makeObservable, observable, when } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateString } from '@utils/time'
@@ -27,10 +27,11 @@ import { navigate } from '@utils/navigation'
 import { Todo } from '@models/Todo'
 import { debounce } from 'lodash'
 import { TodoHeader } from '@components/TodoHeader'
+import { hydration } from '@stores/hydration/hydratedStores'
 
 @observer
 export class PlanningContent extends Component {
-  vm = new PlanningVM()
+  @observable vm?: PlanningVM
 
   @observable currentMonth = new Date().getMonth()
   @observable currentYear = new Date().getUTCFullYear()
@@ -43,8 +44,11 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
-  UNSAFE_componentWillMount() {
+  async UNSAFE_componentWillMount() {
     makeObservable(this)
+
+    await when(() => hydration.isHydrated)
+    this.vm = new PlanningVM()
   }
 
   setCoordinates = debounce(
@@ -171,11 +175,11 @@ export class PlanningContent extends Component {
           />
         )}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
-          this.vm.uncompletedTodosData.todosArray.length ? (
+          this.vm?.uncompletedTodosData.todosArray.length ? (
             <DraggableSectionList<Todo, SectionListData<Todo>>
               onEndReached={() => {
                 sharedAppStateStore.changeLoading(true)
-                setTimeout(() => this.vm.uncompletedTodosData.increaseOffset())
+                setTimeout(() => this.vm?.uncompletedTodosData.increaseOffset())
               }}
               onEndReachedThreshold={0.3}
               onViewableItemsChanged={() => {
@@ -250,11 +254,11 @@ export class PlanningContent extends Component {
           ) : (
             <NoTodosPlaceholder />
           )
-        ) : this.vm.completedTodosData.todosArray.length ? (
+        ) : this.vm?.completedTodosData.todosArray.length ? (
           <SectionList
             onEndReached={() => {
               sharedAppStateStore.changeLoading(true)
-              setTimeout(() => this.vm.completedTodosData.increaseOffset())
+              setTimeout(() => this.vm?.completedTodosData.increaseOffset())
             }}
             onEndReachedThreshold={0.3}
             onViewableItemsChanged={() => {

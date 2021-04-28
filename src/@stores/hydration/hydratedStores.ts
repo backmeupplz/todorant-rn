@@ -1,16 +1,26 @@
-export const hydratedStores = {
-  SettingsStore: false,
-  HeroStore: false,
-  SessionStore: false,
-  TodoStore: false,
-  TagStore: false,
-  OnboardingStore: false,
-  DelegationStore: false,
-} as { [index: string]: boolean }
+import { computed, makeObservable, observable } from 'mobx'
 
-export function isHydrated() {
-  return Object.keys(hydratedStores).reduce(
-    (prev, cur) => (!hydratedStores[cur] ? false : prev),
-    true
-  )
+class Hydration {
+  constructor() {
+    makeObservable(this)
+  }
+
+  @observable hydratedStores = {
+    SettingsStore: false,
+    HeroStore: false,
+    SessionStore: false,
+    TodoStore: false,
+    TagStore: false,
+    OnboardingStore: false,
+    DelegationStore: false,
+  } as { [index: string]: boolean }
+
+  @computed get isHydrated() {
+    return Object.keys(this.hydratedStores).reduce(
+      (prev, cur) => (!this.hydratedStores[cur] ? false : prev),
+      true
+    )
+  }
 }
+
+export const hydration = new Hydration()
