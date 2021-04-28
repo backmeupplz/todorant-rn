@@ -1,6 +1,6 @@
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedTagStore } from '@stores/TagStore'
-import { isHydrated } from '@stores/hydration/hydratedStores'
+import { hydration } from '@stores/hydration/hydratedStores'
 import { syncEventEmitter } from '@sync/syncEventEmitter'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -156,7 +156,7 @@ class Sync {
   }
 
   globalSync = () => {
-    if (!isHydrated()) {
+    if (!hydration) {
       return Promise.reject("Global sync: stores didn't hydrate yet")
     }
     return this.sync()
