@@ -516,16 +516,21 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
     return (
       <TouchableOpacity
         onPress={() => {
+          const options = sharedDelegationStore.delegates
+            .map((delegate) => delegate.name)
+            .filter((delegate) => !!delegate)
+            .concat([translate('cancel')]) as string[]
           ActionSheet.show(
             {
-              options: sharedDelegationStore.delegates
-                .map((delegate) => delegate.name)
-                .filter((delegate) => !!delegate) as string[],
+              options: options,
               title: translate('delegate.to'),
+              cancelButtonIndex: options.length,
+              destructiveButtonIndex: options.length,
             },
             (buttonIndex) => {
-              this.props.vm.delegate =
-                sharedDelegationStore.delegates[buttonIndex]
+              if (buttonIndex + 1 !== options.length)
+                this.props.vm.delegate =
+                  sharedDelegationStore.delegates[buttonIndex]
             }
           )
         }}
