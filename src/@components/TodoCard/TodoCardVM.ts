@@ -20,6 +20,7 @@ import { startConfetti } from '@components/Confetti'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
+import { navigate } from '@utils/navigation'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -120,6 +121,10 @@ export class TodoCardVM {
   }
 
   accept(todo: Todo) {
+    if (!todo.date && !todo.monthAndYear) {
+      navigate('EditTodo', { editedTodo: todo })
+      return
+    }
     realm.write(() => {
       todo.delegateAccepted = true
       todo.updatedAt = new Date()
