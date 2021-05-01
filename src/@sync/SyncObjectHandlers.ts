@@ -32,7 +32,7 @@ export async function onDelegationObjectsFromServer(
     delegators: DelegationUser[]
     delegates: DelegationUser[]
   }) => Promise<{
-    delegators: DelegationUser[]
+    delegators: (DelegationUser & { invalid?: boolean })[]
     delegates: DelegationUser[]
   }>,
   completeSync: () => void
@@ -123,6 +123,10 @@ export async function onDelegationObjectsFromServer(
     })
     // Fill delegations with missing info
     savedPushedDelegations.delegators.forEach((delegator) => {
+      if (delegator.invalid) {
+        removeDelegation(delegator, true)
+        return
+      }
       updateOrCreateDelegation(delegator, true)
     })
     savedPushedDelegations.delegates.forEach((delegate) => {

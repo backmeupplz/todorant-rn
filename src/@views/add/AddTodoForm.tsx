@@ -514,27 +514,7 @@ class TimeRow extends Component<{
 class DelegationRow extends Component<{ vm: TodoVM }> {
   render() {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          const options = sharedDelegationStore.delegates
-            .map((delegate) => delegate.name)
-            .filter((delegate) => !!delegate)
-            .concat([translate('cancel')]) as string[]
-          ActionSheet.show(
-            {
-              options: options,
-              title: translate('delegate.to'),
-              cancelButtonIndex: options.length,
-              destructiveButtonIndex: options.length,
-            },
-            (buttonIndex) => {
-              if (buttonIndex + 1 !== options.length)
-                this.props.vm.delegate =
-                  sharedDelegationStore.delegates[buttonIndex]
-            }
-          )
-        }}
-        disabled={!sharedOnboardingStore.tutorialIsShown}
+      <View
         style={{
           borderColor: sharedColors.placeholderColor,
           paddingVertical: verticalSpacing,
@@ -544,24 +524,65 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
           alignItems: 'center',
         }}
       >
-        <Text
-          style={{
-            color: this.props.vm.delegate?.name
-              ? sharedColors.textColor
-              : sharedColors.placeholderColor,
-            fontFamily: fonts.SFProTextRegular,
-            fontSize: fontSize,
+        <TouchableOpacity
+          onPress={() => {
+            const options = sharedDelegationStore.delegates
+              .map((delegate) => delegate.name)
+              .filter((delegate) => !!delegate)
+              .concat([translate('cancel')]) as string[]
+            ActionSheet.show(
+              {
+                options: options,
+                title: translate('delegate.to'),
+                cancelButtonIndex: options.length,
+                destructiveButtonIndex: options.length,
+              },
+              (buttonIndex) => {
+                if (buttonIndex + 1 !== options.length)
+                  this.props.vm.delegate =
+                    sharedDelegationStore.delegates[buttonIndex]
+              }
+            )
           }}
+          disabled={!sharedOnboardingStore.tutorialIsShown}
         >
-          {this.props.vm.delegate?.name ||
-            translate('delegate.pickDelegateField')}
-        </Text>
-        <CustomIcon
-          name="chevron_right_outline_28"
-          color={sharedColors.borderColor}
-          size={24}
-        />
-      </TouchableOpacity>
+          <Text
+            style={{
+              color: this.props.vm.delegate?.name
+                ? sharedColors.textColor
+                : sharedColors.placeholderColor,
+              fontFamily: fonts.SFProTextRegular,
+              fontSize: fontSize,
+            }}
+          >
+            {this.props.vm.delegate?.name ||
+              translate('delegate.pickDelegateField')}
+          </Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          {!!this.props.vm.delegate && (
+            <TouchableOpacity
+              onPress={() => {
+                this.props.vm.delegate = undefined
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name="close"
+                style={{
+                  color: sharedColors.borderColor,
+                  fontSize: 24,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+          <CustomIcon
+            name="chevron_right_outline_28"
+            color={sharedColors.borderColor}
+            size={24}
+          />
+        </View>
+      </View>
     )
   }
 }
@@ -745,6 +766,7 @@ export class AddTodoForm extends Component<{
               <View>
                 <TimeRow vm={this.props.vm} />
                 {sharedSessionStore.user &&
+                  !!sharedDelegationStore.delegates.length &&
                   (!this.props.vm.editedTodo?.delegator ||
                     (this.props.vm.editedTodo.delegator._id ===
                       sharedSessionStore.user?._id &&

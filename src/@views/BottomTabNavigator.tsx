@@ -101,7 +101,7 @@ export default observer(() => {
                   {icon}
                   {((route.name === 'Settings' && !sharedSessionStore.user) ||
                     (route.name === 'Delegation' &&
-                      !!sharedTodoStore.unacceptedTodos.length)) && (
+                      !!sharedTodoStore.delegatedToMe.length)) && (
                     <View
                       style={{
                         position: 'absolute',

@@ -7,10 +7,12 @@ export function removeDelegation(
   delegator: boolean
 ) {
   const localDelegation = getLocalDelegation(delegation, delegator)
-  realm.write(() => {
-    localDelegation.deleted = true
-    localDelegation.updatedAt = new Date()
-  })
+  if (!localDelegation) {
+    console.error('Local delegation not found')
+    return
+  }
+  localDelegation.deleted = true
+  localDelegation.updatedAt = new Date()
 }
 
 export function getLocalDelegation(

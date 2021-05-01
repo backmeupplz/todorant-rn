@@ -28,11 +28,12 @@ class TodoStore {
 
   @persist('date') @observable updatedAt?: Date
 
-  getDelegationTodos(byMe: boolean) {
+  getDelegationTodos(byMe: boolean, completed = false) {
     let todosWithoutDelegationPredicate = realm
       .objects(Todo)
       .filtered('deleted = false')
       .filtered('delegator != null')
+      .filtered(`completed = ${completed}`)
 
     if (!byMe) {
       const todosWithDelegationPredicate = todosWithoutDelegationPredicate
@@ -120,23 +121,11 @@ class TodoStore {
       : undefined
   }
 
-  @computed get unacceptedTodos() {
-    //
-    let realmResultsWithoutDelegation = realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('delegateAccepted != true')
-      .filtered('delegator != null')
-    if (hydration.isHydrated && sharedSessionStore.user?._id) {
-      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
-        `user._id = "${sharedSessionStore.user?._id}"`
-      )
-    }
-    return mobxRealmCollection(realmResultsWithoutDelegation)
-  }
-
   @computed get delegatedByMe() {
     return this.getDelegationTodos(true)
+  }
+  @computed get delegatedByMeCompleted() {
+    return this.getDelegationTodos(true, true)
   }
   @computed get delegatedToMe() {
     return this.getDelegationTodos(false)
@@ -177,6 +166,15 @@ class TodoStore {
   @computed get delegatedByMeTodosMap() {
     const key = this.observableKey
     const delegatedByMeMap = this.getDelegatedTodosMap(this.delegatedByMe, true)
+    return delegatedByMeMap
+  }
+
+  @computed get delegatedByMeCompletedTodosMap() {
+    const key = this.observableKey
+    const delegatedByMeMap = this.getDelegatedTodosMap(
+      this.delegatedByMeCompleted,
+      true
+    )
     return delegatedByMeMap
   }
 
