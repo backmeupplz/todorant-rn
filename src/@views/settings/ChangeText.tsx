@@ -105,8 +105,9 @@ class ChangeTextContent extends Component<{
             }}
           >
             <Input
+              value={this.newName}
               onChangeText={(text) => {
-                this.newName = text
+                this.newName = text.trim()
               }}
               placeholder={translate('editName')}
               style={{
