@@ -16,17 +16,19 @@ export class DelegationHeaderSegment extends Component {
   render() {
     return (
       <SegmentedControl
-        values={[translate('delegate.ToMe'), translate('delegate.ByMe')]}
-        selectedIndex={
-          sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe
-            ? 0
-            : 1
-        }
-        onChange={(event) => {
-          if (event.nativeEvent.selectedSegmentIndex === 0) {
+        values={[
+          translate('delegate.ToMe'),
+          translate('delegate.ByMe'),
+          translate('completed'),
+        ]}
+        selectedIndex={sharedDelegateStateStore.todoSectionIndex}
+        onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+          if (selectedSegmentIndex === 0) {
             sharedDelegateStateStore.todoSection = DelegateSectionType.ToMe
-          } else {
+          } else if (selectedSegmentIndex === 1) {
             sharedDelegateStateStore.todoSection = DelegateSectionType.ByMe
+          } else {
+            sharedDelegateStateStore.todoSection = DelegateSectionType.Completed
           }
         }}
         appearance={sharedSettingsStore.isDark ? 'dark' : 'light'}

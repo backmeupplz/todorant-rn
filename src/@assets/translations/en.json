@@ -265,6 +265,7 @@
   "pointsTillNextLevel": "points to unlock the next level",
   "accept": "Accept",
   "delegate": {
+    "delegatorExists": "Delegator already exists",
     "title": "Delegation",
     "noDelegators": "You don't have any delegators yet. Ask for an invite link to become someone's delegate.",
     "noDelegates": "You don't have any delegates yet. Share the invite link with the people who you want to make delegates",

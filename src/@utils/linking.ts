@@ -16,6 +16,7 @@ import { alertConfirm, alertError } from './alert'
 import { DelegationUser } from '@models/DelegationUser'
 import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { getLocalDelegation } from './delegations'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -81,14 +82,23 @@ function handleUrl(url: string) {
         alertError(translate('pleaseLogin'))
         return
       }
-      realm.write(() => {
-        realm.create(DelegationUser, {
-          delegateInviteToken,
-          updatedAt: new Date(),
-          isDelegator: true,
-          deleted: false,
-        } as DelegationUser)
-      })
+      const localDelegator = getLocalDelegation(
+        { delegateInviteToken } as DelegationUser,
+        true
+      )
+      if (!localDelegator) {
+        realm.write(() => {
+          realm.create(DelegationUser, {
+            delegateInviteToken,
+            updatedAt: new Date(),
+            isDelegator: true,
+            deleted: false,
+          } as DelegationUser)
+        })
+      } else {
+        alertError(translate('delegate.delegatorExists'))
+        return
+      }
       requestSync(SyncRequestEvent.Delegation)
     })
   }

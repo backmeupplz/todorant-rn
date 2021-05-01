@@ -13,6 +13,7 @@ import { makeObservable, observable } from 'mobx'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { removeDelegation } from '@utils/delegations'
+import { realm } from '@utils/realm'
 
 @observer
 class Row extends Component<{
@@ -28,7 +29,7 @@ class Row extends Component<{
   render() {
     return (
       <TableItem>
-        <Text {...sharedColors.textExtraStyle}>
+        <Text {...sharedColors.textExtraStyle} style={{ maxWidth: '90%' }}>
           {this.props.delegationUser.name}
         </Text>
         <IconButton
@@ -43,9 +44,13 @@ class Row extends Component<{
                   if (
                     this.props.delegationType === DelegationUserType.delegate
                   ) {
-                    removeDelegation(this.props.delegationUser, false)
+                    realm.write(() => {
+                      removeDelegation(this.props.delegationUser, false)
+                    })
                   } else {
-                    removeDelegation(this.props.delegationUser, true)
+                    realm.write(() => {
+                      removeDelegation(this.props.delegationUser, true)
+                    })
                   }
                   sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {

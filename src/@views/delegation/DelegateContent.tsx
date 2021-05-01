@@ -14,12 +14,22 @@ import {
 } from '@stores/DelegateScreenStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
-import { SectionList } from 'react-native'
+import { SectionList, SectionListData } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
+import { Todo } from '@models/Todo'
 
 @observer
 export class DelegateContent extends Component {
-  renderDelegationSectionList(byMe: boolean) {
+  renderDelegationSectionList(byMe: boolean, completed = false) {
+    let todosMapToRender: SectionListData<Todo>[]
+    if (byMe && completed) {
+      todosMapToRender = sharedTodoStore.delegatedByMeCompletedTodosMap
+    } else if (byMe) {
+      todosMapToRender = sharedTodoStore.delegatedByMeTodosMap
+    } else {
+      todosMapToRender = sharedTodoStore.delegatedToMeTodosMap
+    }
+
     return (
       <SectionList
         renderItem={({ item, index }) => {
@@ -33,38 +43,55 @@ export class DelegateContent extends Component {
             />
           )
         }}
-        sections={
-          byMe
-            ? sharedTodoStore.delegatedByMeTodosMap
-            : sharedTodoStore.delegatedToMeTodosMap
-        }
+        sections={todosMapToRender}
         keyExtractor={(item) => (item._id || item._tempSyncId) as string}
       />
     )
+  }
+
+  renderDelegation() {
+    if (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe) {
+      return (
+        <>
+          {!sharedTodoStore?.delegatedToMeTodosMap?.length && (
+            <NoDelegatedTasks />
+          )}
+          {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
+            this.renderDelegationSectionList(false)}
+        </>
+      )
+    }
+    if (sharedDelegateStateStore.todoSection === DelegateSectionType.ByMe) {
+      return (
+        <>
+          {!sharedTodoStore?.delegatedByMeTodosMap?.length && (
+            <NoDelegatedTasks />
+          )}
+          {!!sharedTodoStore?.delegatedByMeTodosMap?.length &&
+            this.renderDelegationSectionList(true)}
+        </>
+      )
+    }
+    if (
+      sharedDelegateStateStore.todoSection === DelegateSectionType.Completed
+    ) {
+      return (
+        <>
+          {!sharedTodoStore?.delegatedByMeCompleted?.length && (
+            <NoDelegatedTasks />
+          )}
+          {!!sharedTodoStore?.delegatedByMeCompleted?.length &&
+            this.renderDelegationSectionList(true, true)}
+        </>
+      )
+    }
   }
 
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         {!sharedSessionStore.user && <SignupPlaceholder />}
-        {!!sharedSessionStore.user &&
-          (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
-            <>
-              {!sharedTodoStore?.delegatedToMeTodosMap?.length && (
-                <NoDelegatedTasks />
-              )}
-              {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
-                this.renderDelegationSectionList(false)}
-            </>
-          ) : (
-            <>
-              {!sharedTodoStore?.delegatedByMeTodosMap?.length && (
-                <NoDelegatedTasks />
-              )}
-              {!!sharedTodoStore?.delegatedByMeTodosMap?.length &&
-                this.renderDelegationSectionList(true)}
-            </>
-          ))}
+        {!!sharedSessionStore.user && this.renderDelegation()}
       </Container>
     )
   }

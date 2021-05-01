@@ -18,6 +18,7 @@ import {
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
 import uuid from 'uuid'
+import { resetDelegateToken } from '@utils/rest'
 
 class SessionStore {
   constructor() {
@@ -118,6 +119,7 @@ class SessionStore {
       sharedTodoStore.logout()
       sharedDelegationStore.logout()
       sharedHeroStore.logout()
+      sharedDelegationStore.logout()
       removeToken()
       removePassword()
       logEvent('logout_success')
@@ -169,6 +171,9 @@ class SessionStore {
       }
     }
     completeSync()
+    if (this.user && !this.user.delegateInviteToken) {
+      this.user.delegateInviteToken = await resetDelegateToken()
+    }
   }
 }
 
