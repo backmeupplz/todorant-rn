@@ -106,10 +106,12 @@ class TodoStore {
       .filtered('deleted = false')
       .filtered('completed = false')
       .filtered(`_exactDate < ${todayString}`)
-      .filtered('delegateAccepted = true')
+      .filtered(
+        'delegateAccepted = true || (user = null && delegateAccepted != true)'
+      )
     if (hydration.isHydrated && sharedSessionStore.user?._id) {
       realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
-        `user._id = "${sharedSessionStore.user?._id}"`
+        `user = null || user._id = "${sharedSessionStore.user?._id}"`
       )
     }
     return realmResultsWithoutDelegation

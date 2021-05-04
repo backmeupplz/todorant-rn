@@ -135,6 +135,7 @@ export class PlanningContent extends Component {
           <View>
             <Month
               onActiveDayChange={(day: Date) => {
+                if (!sharedAppStateStore.calendarEnabled) return
                 sharedAppStateStore.activeDay = day
               }}
               dark={sharedSettingsStore.isDark}
@@ -241,6 +242,7 @@ export class PlanningContent extends Component {
               renderSectionHeader={({ item, drag, index, isActive }) => {
                 return (
                   <TodoHeader
+                    date={true}
                     drag={drag}
                     isActive={isActive}
                     item={item.section}
@@ -285,6 +287,7 @@ export class PlanningContent extends Component {
                 vm={this.vm}
                 drag={() => {}}
                 isActive={false}
+                date={true}
               />
             )}
             stickySectionHeadersEnabled={false}

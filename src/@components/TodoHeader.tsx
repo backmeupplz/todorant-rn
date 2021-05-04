@@ -18,7 +18,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
 export class TodoHeader extends Component<{
-  item: SectionListData<Todo>
+  item: string
   vm?: PlanningVM
   drag?: () => void
   isActive?: boolean
@@ -29,10 +29,10 @@ export class TodoHeader extends Component<{
   renderDateContent() {
     return (
       <>
-        {this.props.item.section}
-        {(this.props.item.section?.length || 0) === 10 &&
+        {this.props.item}
+        {(this.props.item.length || 0) === 10 &&
           `, ${capitalizeSentence(
-            moment(this.props.item.section!)
+            moment(this.props.item)
               .locale(sharedSettingsStore.language || 'en')
               .format('dddd')
           )}`}
