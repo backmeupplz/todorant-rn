@@ -13,7 +13,7 @@ import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { findNodeHandle, Keyboard, TextInput } from 'react-native'
+import { Keyboard, TextInput } from 'react-native'
 const {
   focusInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
@@ -201,7 +201,9 @@ export class TodoVM {
   setEditedTodo(todo: Todo) {
     this.editedTodo = todo
 
-    this.text = todo.text
+    requestAnimationFrame(() => {
+      this.text = todo.text
+    })
     this.completed = todo.completed
     this.frog = todo.frog
     this.monthAndYear = todo.monthAndYear
