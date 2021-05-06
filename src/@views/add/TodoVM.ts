@@ -35,6 +35,7 @@ export class TodoVM {
   @observable time?: string
 
   @observable delegate?: DelegationUser
+  @observable delegateAccepted?: boolean
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false
@@ -209,6 +210,7 @@ export class TodoVM {
     this.monthAndYear = todo.monthAndYear
     this.date = todo.date
     this.time = todo.time
+    this.delegateAccepted = todo.delegateAccepted
 
     this.showMore = true
   }

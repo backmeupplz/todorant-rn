@@ -524,8 +524,17 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
           alignItems: 'center',
         }}
       >
-        <TouchableOpacity
+        <Text
+          style={{
+            color: this.props.vm.delegate
+              ? sharedColors.textColor
+              : sharedColors.placeholderColor,
+            flex: 1,
+            fontFamily: fonts.SFProTextRegular,
+            fontSize: fontSize,
+          }}
           onPress={() => {
+            if (!sharedOnboardingStore.tutorialIsShown) return
             const options = sharedDelegationStore.delegates
               .map((delegate) => delegate.name)
               .filter((delegate) => !!delegate)
@@ -544,21 +553,10 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
               }
             )
           }}
-          disabled={!sharedOnboardingStore.tutorialIsShown}
         >
-          <Text
-            style={{
-              color: this.props.vm.delegate?.name
-                ? sharedColors.textColor
-                : sharedColors.placeholderColor,
-              fontFamily: fonts.SFProTextRegular,
-              fontSize: fontSize,
-            }}
-          >
-            {this.props.vm.delegate?.name ||
-              translate('delegate.pickDelegateField')}
-          </Text>
-        </TouchableOpacity>
+          {this.props.vm.delegate?.name ||
+            translate('delegate.pickDelegateField')}
+        </Text>
         <View style={{ flexDirection: 'row' }}>
           {!!this.props.vm.delegate && (
             <TouchableOpacity
@@ -771,7 +769,9 @@ export class AddTodoForm extends Component<{
                     (this.props.vm.editedTodo.delegator._id ===
                       sharedSessionStore.user?._id &&
                       !this.props.vm.editedTodo.delegateAccepted)) &&
-                  !this.props.vm.editedTodo?.completed && (
+                  !this.props.vm.editedTodo?.completed &&
+                  this.props.vm?.editedTodo?.delegator?._id !==
+                    sharedSessionStore.user?._id && (
                     <DelegationRow vm={this.props.vm} />
                   )}
               </View>
@@ -814,34 +814,45 @@ export class AddTodoForm extends Component<{
                 }}
               />
             </View>
-            <View
-              pointerEvents={
-                sharedOnboardingStore.tutorialIsShown ||
-                sharedOnboardingStore.step ===
-                  TutorialStep.BreakdownTodoAction ||
-                sharedOnboardingStore.step === TutorialStep.SelectCompleted
-                  ? 'auto'
-                  : 'none'
-              }
-              onLayout={({ nativeEvent: { target } }: any) => {
-                completedRowNodeId = target
-              }}
-            >
-              <SwitchRow
-                name={translate('completed')}
-                value={this.props.vm.completed}
-                onValueChange={(value) => {
-                  if (!sharedOnboardingStore.tutorialIsShown) {
-                    sharedOnboardingStore.nextStep(
-                      TutorialStep.BreakdownCompletedTodo
-                    )
-                    this.props.vm.completed = false
-                    return
-                  }
-                  this.props.vm.completed = value
+            {this.props.vm?.editedTodo?.delegator?._id !==
+              sharedSessionStore.user?._id && (
+              <View
+                pointerEvents={
+                  sharedOnboardingStore.tutorialIsShown ||
+                  sharedOnboardingStore.step ===
+                    TutorialStep.BreakdownTodoAction ||
+                  sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                    ? 'auto'
+                    : 'none'
+                }
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  completedRowNodeId = target
                 }}
-              />
-            </View>
+              >
+                <SwitchRow
+                  name={translate('completed')}
+                  value={this.props.vm.completed}
+                  onValueChange={(value) => {
+                    if (!sharedOnboardingStore.tutorialIsShown) {
+                      sharedOnboardingStore.nextStep(
+                        TutorialStep.BreakdownCompletedTodo
+                      )
+                      this.props.vm.completed = false
+                      return
+                    }
+                    this.props.vm.completed = value
+                    if (
+                      sharedSessionStore.user &&
+                      this.props.vm.editedTodo?.delegator?._id !==
+                        sharedSessionStore.user?._id &&
+                      !this.props.vm.editedTodo?.delegateAccepted
+                    ) {
+                      this.props.vm.delegateAccepted = value
+                    }
+                  }}
+                />
+              </View>
+            )}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||
               this.props.vm.showMore) &&
