@@ -346,7 +346,9 @@ export class RealmTodosData {
   increaseOffset() {
     if (this.offset < this.todos.length) {
       this.offset += 50
+      return
     }
+    sharedAppStateStore.changeLoading(false)
   }
 
   logout() {

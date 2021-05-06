@@ -15,6 +15,7 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { EventEmitter } from 'events'
 import { isTodoOld } from '@utils/isTodoOld'
+import { debounce } from 'lodash'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -33,6 +34,14 @@ export class PlanningVM {
   arrOfDraggedTodos = {} as {
     [index: string]: boolean
   }
+
+  setCoordinates = debounce(
+    (yAx: number, xAx: number) => {
+      sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
+    },
+    1000,
+    { maxWait: 250 }
+  )
 
   constructor() {
     planningEventEmitter.on(PlanningEventEmitter.ResolveHoverState, () => {
@@ -62,8 +71,15 @@ export class PlanningVM {
       // discard calendar after applying changes
       sharedAppStateStore.activeDay = undefined
       sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+      this.setCoordinates.cancel()
       promise()
     } else {
+      if (from === to || from === 0 || to === 0) {
+        this.resetHoverState()
+        promise()
+        this.uncompletedTodosData.updateInvalidationKeys()
+        return
+      }
       // we are saving promise for reseting hover state in future
       this.resetHoverState = promise
       // help us to find closest section (looks from bottom to the top)

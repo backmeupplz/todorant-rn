@@ -220,6 +220,7 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
+          vm.editedTodo.delegateAccepted = vm.delegateAccepted
           involvedTodos.push(vm.editedTodo)
           titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
         }

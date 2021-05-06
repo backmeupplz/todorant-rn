@@ -51,14 +51,6 @@ export class PlanningContent extends Component {
     this.vm = new PlanningVM()
   }
 
-  setCoordinates = debounce(
-    (yAx: number, xAx: number) => {
-      sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
-    },
-    1000,
-    { maxWait: 250 }
-  )
-
   renderPlanningRequiredMessage() {
     return (
       sharedTodoStore.isPlanningRequired &&
@@ -72,6 +64,28 @@ export class PlanningContent extends Component {
         >
           {translate('planningText')}
         </Text>
+      )
+    )
+  }
+
+  renderCircle() {
+    return (
+      sharedAppStateStore.activeDay &&
+      sharedAppStateStore.activeCoordinates.x &&
+      sharedAppStateStore.activeCoordinates.y && (
+        <Animated.View
+          style={{
+            ...styles.circle,
+            transform: [
+              {
+                translateX: this.currentX,
+              },
+              {
+                translateY: this.currentY,
+              },
+            ],
+          }}
+        />
       )
     )
   }
@@ -160,21 +174,7 @@ export class PlanningContent extends Component {
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
-        {sharedAppStateStore.activeDay && (
-          <Animated.View
-            style={{
-              ...styles.circle,
-              transform: [
-                {
-                  translateX: this.currentX,
-                },
-                {
-                  translateY: this.currentY,
-                },
-              ],
-            }}
-          />
-        )}
+        {this.renderCircle()}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
           this.vm?.uncompletedTodosData.todosArray.length ? (
             <DraggableSectionList<Todo, SectionListData<Todo>>
@@ -188,9 +188,10 @@ export class PlanningContent extends Component {
               }}
               contentContainerStyle={{ paddingBottom: 100 }}
               onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+                if (!sharedAppStateStore.calendarEnabled) return
                 this.currentX.setValue(absoluteX as any)
                 this.currentY.setValue((absoluteY - this.todoHeight) as any)
-                this.setCoordinates(absoluteY, absoluteX)
+                this.vm?.setCoordinates(absoluteY, absoluteX)
               }}
               autoscrollSpeed={200}
               data={
