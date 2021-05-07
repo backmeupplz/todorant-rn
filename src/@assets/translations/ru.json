@@ -339,6 +339,10 @@
   "editName": "Новый текст хештега",
   "tutorialButton": "Обучение",
   "onboarding": {
+    "todoText": "Помедитировать #медитация",
+    "breakdownTodo1": "Найти 10-ти минутное видео с медитацией #медитация",
+    "breakdownTodo2": "Запустить видео с медитацией #медитация",
+    "breakdownTodo3": "Помедитировать 10 минут #медитация",
     "closeButtonText": "Закрыть обучение",
     "defaultNextStepButtonText": "Продолжить",
     "notAllowed": "Ясно!",

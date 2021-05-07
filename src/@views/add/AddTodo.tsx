@@ -63,6 +63,12 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { pick } from 'lodash'
 import { DelegationUser } from '@models/DelegationUser'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
+import { EventEmitter } from 'events'
+
+export const addTodoEventEmitter = new EventEmitter()
+export enum AddTodoEventEmitterEvent {
+  saveTodo = 'saveTodo',
+}
 
 export let saveButtonNodeId: number
 export let breakdownTodoNodeId: number
@@ -100,6 +106,19 @@ class AddTodoContent extends Component<{
 
   addButtonView?: Animatable.View
   hangleAddButtonViewRef = (ref: any) => (this.addButtonView = ref)
+
+  get onboardingBreakdownTodos() {
+    const firstTodo = new TodoVM()
+    const secondTodo = new TodoVM()
+    const thirdTodo = new TodoVM()
+    firstTodo.text = translate('onboarding.breakdownTodo1')
+    secondTodo.text = translate('onboarding.breakdownTodo2')
+    thirdTodo.text = translate('onboarding.breakdownTodo3')
+    firstTodo.collapsed = true
+    secondTodo.collapsed = true
+    thirdTodo.collapsed = true
+    return [firstTodo, secondTodo, thirdTodo]
+  }
 
   saveTodo() {
     if (this.savingTodo) {
@@ -311,7 +330,14 @@ class AddTodoContent extends Component<{
       this.breakdownTodo = this.props.route.params?.breakdownTodo
       this.isBreakdown = true
     }
-    this.addTodo()
+    if (
+      !sharedOnboardingStore.tutorialIsShown &&
+      sharedOnboardingStore.step === TutorialStep.Breakdown
+    ) {
+      this.vms.push(...this.onboardingBreakdownTodos)
+    } else {
+      this.addTodo()
+    }
     if (this.props.route.params?.editedTodo) {
       this.completed = this.props.route.params?.editedTodo.completed
       this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
@@ -325,6 +351,9 @@ class AddTodoContent extends Component<{
       if (sharedOnboardingStore.step === TutorialStep.Breakdown) {
         sharedOnboardingStore.nextStep()
       }
+    })
+    addTodoEventEmitter.on(AddTodoEventEmitterEvent.saveTodo, () => {
+      this.saveTodo()
     })
   }
 

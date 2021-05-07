@@ -339,6 +339,10 @@
   "editName": "New hashtag text",
   "tutorialButton": "Tutorial",
   "onboarding": {
+    "todoText": "Meditate #meditation",
+    "breakdownTodo1": "Find a 10 minute guided meditation video #mediation",
+    "breakdownTodo2": "Launch the guided meditation video #mediation",
+    "breakdownTodo3": "Spend 10 mintues mediatating #mediation",
     "closeButtonText": "Close the tutorial",
     "defaultNextStepButtonText": "Continue",
     "notAllowed": "Got it!",
