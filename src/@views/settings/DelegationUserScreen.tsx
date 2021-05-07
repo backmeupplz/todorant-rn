@@ -29,7 +29,7 @@ class Row extends Component<{
   render() {
     return (
       <TableItem>
-        <Text {...sharedColors.textExtraStyle} style={{ maxWidth: '90%' }}>
+        <Text style={{ maxWidth: '90%', ...sharedColors.textExtraStyle.style }}>
           {this.props.delegationUser.name}
         </Text>
         <IconButton
@@ -96,8 +96,9 @@ export class DelegationUserScreenContent extends Component<{
           }}
         >
           {list.length ? (
-            list.map((u) => (
+            list.map((u, i) => (
               <Row
+                key={i}
                 delegationUser={u}
                 delegationType={this.props.route.params.delegationType}
               />
