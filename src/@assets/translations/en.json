@@ -360,7 +360,7 @@
       "messageBoxBody": "Let’s add your first task. Click on the plus button below."
     },
     "AddText": {
-      "messageBoxBody": "Think of something that you need to do. Now type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable."
+      "messageBoxBody": "Think of something that you need to do. Then type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable.\n\nI prefilled the task for you to show you how it works. Feel free to remove the sample tasks after the tutorial!"
     },
     "SelectDate": {
       "messageBoxBody": "Every todo should either have an exact date for completion or a specific month assigned.\n\nYou cannot select the current month. What would you do if the month ended and you still had undone todos?"
@@ -391,7 +391,10 @@
       "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too complex to finish in under 30 minutes, break it down into multiple parts."
     },
     "BreakdownTodo": {
-      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!"
+      "messageBoxBody": "I guess the task we just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!"
+    },
+    "BreakdownTodoAction": {
+      "messageBoxBody": "Ok, this time I broke down the task for you, but in future you will need to do it on your own!"
     },
     "BreakdownVanish": {
       "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task.\n\nYou get rewarded with a completed task for just breaking it down!"
