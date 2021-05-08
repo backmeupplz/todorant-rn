@@ -93,7 +93,9 @@ export class TodoVM {
     const before = text.substr(0, this.cursorPosition)
     const after = text.substr(this.cursorPosition, len)
     const insertText =
-      before[before.length - 1] === ' ' ? `#${tag.tag}` : ` #${tag.tag}`
+      before.length && before[before.length - 1] !== ' '
+        ? ` #${tag.tag}`
+        : `#${tag.tag}`
 
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
