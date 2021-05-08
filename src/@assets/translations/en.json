@@ -265,12 +265,10 @@
   "pointsTillNextLevel": "points to unlock the next level",
   "accept": "Accept",
   "delegate": {
-    "delegatorExists": "Delegator already exists",
     "title": "Delegation",
     "noDelegators": "You don't have any delegators yet. Ask for an invite link to become someone's delegate.",
     "noDelegates": "You don't have any delegates yet. Share the invite link with the people who you want to make delegates",
     "noDelegatedTasks": "You don't have any more newly delegated tasks.",
-    "noDelegatedTasksTo": "You haven't delegated any tasks yet.",
     "link": "Delegate invite link",
     "linkDescription": "People can become your delegates by following this link. Delegates will only see the tasks that you delegated to them.",
     "resetConfirmation": "Are you sure that you want to reset the link? The current link won't work anymore!",
@@ -285,10 +283,12 @@
     "signupTitle": "Oopsie",
     "signupDescription": "You need to log in before you can use delegation",
     "resetLink": "Reset the link",
-    "ToMe": "Inbox",
+    "delegatorExists": "Delegator already exists",
+    "noDelegatedTasksTo": "You haven't delegated any tasks yet.",
     "ByMe": "By me",
     "to": "To",
-    "from": "From"
+    "from": "From",
+    "ToMe": "Inbox"
   },
   "errors": {
     "delegate": {
@@ -356,7 +356,7 @@
       "messageBoxBody": "Let’s add your first task. Click on the plus button below."
     },
     "AddText": {
-      "messageBoxBody": "Think of something that you need to do. Now type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable."
+      "messageBoxBody": "Think of something that you need to do. Then type it in a very short and actionable form like “Walk the dog” or “Buy milk”. Avoid adding tasks that are too broad or aren’t actionable.\n\nI prefilled the task for you to show you how it works. Feel free to remove the sample tasks after the tutorial!"
     },
     "SelectDate": {
       "messageBoxBody": "Every todo should either have an exact date for completion or a specific month assigned.\n\nYou cannot select the current month. What would you do if the month ended and you still had undone todos?"
@@ -387,7 +387,7 @@
       "messageBoxBody": "Oh, this is a special “breakdown” button, you will use it a lot. If you encounter a task that is too complex to finish in under 30 minutes, break it down into multiple parts."
     },
     "BreakdownTodo": {
-      "messageBoxBody": "I guess the task you just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into at least 2 smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!"
+      "messageBoxBody": "I guess the task we just created was too broad! I know it can get a bit absurd, but bear with me.\n\nYou can see the original task on top, break it down into smaller tasks. Make sure you think of everything that needs to be done because the original task will... vanish!"
     },
     "BreakdownVanish": {
       "messageBoxBody": "You might notice two things. First: you now see one of your subtasks. Second: the original task that you broke down is now marked as completed.\n\nIt is done automatically because when you breakdown tasks and create subtasks that fully cover the original task there is no more need for the original task.\n\nYou get rewarded with a completed task for just breaking it down!"
@@ -443,12 +443,6 @@
     "BreakDownCompletedTodo": {
       "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited adding tasks as completed. But feel free to experiment with this setting after you finish the tutorial!"
     },
-    "AddTextContinueTooFast": {
-      "messageBoxBody": "Please, enter the todo text first."
-    },
-    "AddTextContinueButton": {
-      "continue": "Continue"
-    },
     "SelectDateNotAllowed": {
       "messageBoxBody": "Hold on a second, for the sake of this tutorial, we limited changing tasks' month and day. But feel free to experiment with this setting after you finish the tutorial!"
     },
@@ -456,6 +450,19 @@
       "closeButtonText": "Nah, I don’t read manuals",
       "messageBoxBody": "Hey there! It's Nikita, I created Todorant.\n\nUsers understand Todorant better when I show them how to use it. Would you like me to show you how to achieve insane levels of productivity?",
       "nextStepButton": "Sure! Show me how it works"
+    },
+    "todoText": "Meditate #meditation",
+    "breakdownTodo1": "Find a 10 minute guided meditation video #mediation",
+    "breakdownTodo2": "Launch the guided meditation video #mediation",
+    "breakdownTodo3": "Spend 10 mintues mediatating #mediation",
+    "BreakdownTodoAction": {
+      "messageBoxBody": "Ok, this time I broke down the task for you, but in future you will need to do it on your own!"
+    },
+    "AddTextContinueTooFast": {
+      "messageBoxBody": "Please, enter the todo text first."
+    },
+    "AddTextContinueButton": {
+      "continue": "Continue"
     }
   },
   "updateVersionTitle": "Hey there! A new version of Todorant is available",

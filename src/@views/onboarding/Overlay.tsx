@@ -181,16 +181,6 @@ export class Overlay extends Component {
         <Animated.View
           pointerEvents="box-none"
           style={{
-            maxWidth: this.shouldRender
-              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-                ? 0
-                : undefined
-              : 0,
-            maxHeight: this.shouldRender
-              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-                ? 0
-                : undefined
-              : 0,
             position: 'absolute',
             top: 0,
             right: 0,

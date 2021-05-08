@@ -664,9 +664,7 @@ export class AddTodoForm extends Component<{
           <View
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
-            <TouchableOpacity onPress={() => this.props.vm.focus()}>
-              <TextRow vm={this.props.vm} showCross={this.props.showCross} />
-            </TouchableOpacity>
+            <TextRow vm={this.props.vm} showCross={this.props.showCross} />
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
@@ -815,44 +813,45 @@ export class AddTodoForm extends Component<{
               />
             </View>
             {this.props.vm?.editedTodo?.delegator?._id !==
-              sharedSessionStore.user?._id && (
-              <View
-                pointerEvents={
-                  sharedOnboardingStore.tutorialIsShown ||
-                  sharedOnboardingStore.step ===
-                    TutorialStep.BreakdownTodoAction ||
-                  sharedOnboardingStore.step === TutorialStep.SelectCompleted
-                    ? 'auto'
-                    : 'none'
-                }
-                onLayout={({ nativeEvent: { target } }: any) => {
-                  completedRowNodeId = target
-                }}
-              >
-                <SwitchRow
-                  name={translate('completed')}
-                  value={this.props.vm.completed}
-                  onValueChange={(value) => {
-                    if (!sharedOnboardingStore.tutorialIsShown) {
-                      sharedOnboardingStore.nextStep(
-                        TutorialStep.BreakdownCompletedTodo
-                      )
-                      this.props.vm.completed = false
-                      return
-                    }
-                    this.props.vm.completed = value
-                    if (
-                      sharedSessionStore.user &&
-                      this.props.vm.editedTodo?.delegator?._id !==
-                        sharedSessionStore.user?._id &&
-                      !this.props.vm.editedTodo?.delegateAccepted
-                    ) {
-                      this.props.vm.delegateAccepted = value
-                    }
+              sharedSessionStore.user?._id ||
+              (!this.props.vm?.editedTodo?.delegator && (
+                <View
+                  pointerEvents={
+                    sharedOnboardingStore.tutorialIsShown ||
+                    sharedOnboardingStore.step ===
+                      TutorialStep.BreakdownTodoAction ||
+                    sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                      ? 'auto'
+                      : 'none'
+                  }
+                  onLayout={({ nativeEvent: { target } }: any) => {
+                    completedRowNodeId = target
                   }}
-                />
-              </View>
-            )}
+                >
+                  <SwitchRow
+                    name={translate('completed')}
+                    value={this.props.vm.completed}
+                    onValueChange={(value) => {
+                      if (!sharedOnboardingStore.tutorialIsShown) {
+                        sharedOnboardingStore.nextStep(
+                          TutorialStep.BreakdownCompletedTodo
+                        )
+                        this.props.vm.completed = false
+                        return
+                      }
+                      this.props.vm.completed = value
+                      if (
+                        sharedSessionStore.user &&
+                        this.props.vm.editedTodo?.delegator?._id !==
+                          sharedSessionStore.user?._id &&
+                        !this.props.vm.editedTodo?.delegateAccepted
+                      ) {
+                        this.props.vm.delegateAccepted = value
+                      }
+                    }}
+                  />
+                </View>
+              ))}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||
               this.props.vm.showMore) &&

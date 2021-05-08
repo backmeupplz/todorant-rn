@@ -20,9 +20,16 @@ const {
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { DelegationUser } from '@models/DelegationUser'
+import { translate } from '@utils/i18n'
 
 export class TodoVM {
-  @observable text = ''
+  @observable text =
+    !sharedOnboardingStore.tutorialIsShown &&
+    (sharedOnboardingStore.step === TutorialStep.AddText ||
+      sharedOnboardingStore.step === TutorialStep.AddTask ||
+      sharedOnboardingStore.savedStep === TutorialStep.AddText)
+      ? translate('onboarding.todoText')
+      : ''
   @observable completed = false
   @observable frog = false
   @observable
