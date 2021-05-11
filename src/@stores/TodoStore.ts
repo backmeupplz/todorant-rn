@@ -106,13 +106,12 @@ class TodoStore {
       .filtered('deleted = false')
       .filtered('completed = false')
       .filtered(`_exactDate < ${todayString}`)
-      .filtered(
-        'delegateAccepted = true || (user = null && delegateAccepted != true)'
-      )
     if (hydration.isHydrated && sharedSessionStore.user?._id) {
-      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
-        `user = null || user._id = "${sharedSessionStore.user?._id}"`
-      )
+      realmResultsWithoutDelegation = realmResultsWithoutDelegation
+        .filtered(`user = null || user._id = "${sharedSessionStore.user?._id}"`)
+        .filtered(
+          'delegator = null || (delegator != null && delegateAccepted = true)'
+        )
     }
     return realmResultsWithoutDelegation
   }
