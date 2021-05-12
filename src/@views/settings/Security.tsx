@@ -62,7 +62,7 @@ export class Security extends Component {
     try {
       const todos = realm
         .objects(Todo)
-        .filtered(`encrypted = true && deleted = false`)
+        .filtered(`encrypted = true && deleted = false && delegator = null`)
       realm.write(() => {
         for (const todo of todos) {
           if (encrypt) {
