@@ -168,7 +168,7 @@ class AddTodoContent extends Component<{
             delegator: !!vm.delegate
               ? cloneDelegator(sharedSessionStore.user)
               : undefined,
-            encrypted: !!sharedSessionStore.encryptionKey,
+            encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
             _tempSyncId: uuid(),
           } as Todo
           todo._exactDate = new Date(getTitle(todo))
