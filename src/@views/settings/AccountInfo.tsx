@@ -11,9 +11,10 @@ import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
 import { makeObservable, observable } from 'mobx'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { setUserName } from '@utils/rest'
+import { setQrToken, setUserName } from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Spinner } from '@components/Spinner'
+import { navigate } from '@utils/navigation'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
@@ -186,6 +187,27 @@ export class AccountInfo extends Component {
           />
         )}
         <SubscriptionSection />
+        {sharedSessionStore.user && (
+          <TableItem
+            {...sharedColors.listItemExtraStyle}
+            onPress={() => {
+              navigate('LoginQR', {
+                getToken: async (uuid: string) => {
+                  try {
+                    const token = sharedSessionStore.user!.token
+                    await setQrToken(uuid, token)
+                  } catch (err) {
+                    console.error(err)
+                  }
+                },
+              })
+            }}
+          >
+            <Text {...sharedColors.regularTextExtraStyle}>
+              {translate('addDevices')}
+            </Text>
+          </TableItem>
+        )}
       </>
     )
   }

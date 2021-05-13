@@ -70,6 +70,16 @@ export function loginToken(token: string) {
     .then(cleanLocalAppleReceipt)
 }
 
+export async function setQrToken(uuid: string, token: string) {
+  return (
+    await axios.post(`${base}/login/qr_token`, {
+      uuid,
+      token,
+      ...extraParams,
+    })
+  ).data as string
+}
+
 export function verifyPurchaseGoogle(payload: {
   packageName: string
   productId: string
