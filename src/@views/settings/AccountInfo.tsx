@@ -194,8 +194,7 @@ export class AccountInfo extends Component {
               navigate('LoginQR', {
                 getToken: async (uuid: string) => {
                   try {
-                    const token = sharedSessionStore.user!.token
-                    await setQrToken(uuid, token)
+                    await setQrToken(uuid)
                   } catch (err) {
                     console.error(err)
                   }
