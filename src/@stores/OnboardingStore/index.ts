@@ -12,6 +12,7 @@ import {
   StyleProp,
   ViewStyle,
   Platform,
+  Keyboard,
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
@@ -25,6 +26,11 @@ import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { settingsScrollOffset } from '@utils/settingsScrollOffset'
 import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
 import { OnboardingButton } from './MessageBoxButton'
+import { sharedTodoStore } from '@stores/TodoStore'
+import {
+  addTodoEventEmitter,
+  AddTodoEventEmitterEvent,
+} from '@views/add/AddTodo'
 
 class OnboardingStore {
   constructor() {
@@ -63,6 +69,8 @@ class OnboardingStore {
   @observable step = TutorialStep.Start
   @observable previousStep = TutorialStep.Start
   @persist @observable tutorialIsShown = false
+
+  @observable textInTodo?: string
 
   @computed get closeOnboardingStyle() {
     const basicStyle = {
@@ -264,7 +272,6 @@ export const AllStages = {
         const nodeId = (await import('@views/add/AddTodoForm')).textRowNodeId
         resolve({
           nodeId,
-          notShowContinue: true,
           divider: 16,
           borderRadius: 16,
         })
@@ -298,7 +305,6 @@ export const AllStages = {
     const nodeId = (await import('@views/add/AddTodoForm')).showMoreRowNodeId
     return {
       nodeId,
-      notShowContinue: true,
       divider: 16,
       dontSave: true,
       borderRadius: Platform.OS === 'ios' ? 16 : undefined,
@@ -313,6 +319,12 @@ export const AllStages = {
     }
   },
   [TutorialStep.AddTodoComplete]: async () => {
+    const gotItButton = new OnboardingButton(
+      () => addTodoEventEmitter.emit(AddTodoEventEmitterEvent.saveTodo),
+      undefined,
+      true,
+      true
+    )
     const nodeId = (await import('@views/add/AddTodo')).saveButtonNodeId
     return {
       nodeId,
@@ -321,6 +333,7 @@ export const AllStages = {
       dontSave: true,
       borderRadius: 10,
       heightMultiplier: 6,
+      additionalButtons: [gotItButton],
     }
   },
   [TutorialStep.ExplainCurrent]: async () => {
@@ -339,6 +352,16 @@ export const AllStages = {
     }
   },
   [TutorialStep.Breakdown]: async () => {
+    const gotItButton = new OnboardingButton(
+      () => {
+        navigate('BreakdownTodo', {
+          breakdownTodo: sharedTodoStore.currentTodo,
+        })
+      },
+      undefined,
+      true,
+      true
+    )
     return new Promise(async (resolve) => {
       InteractionManager.runAfterInteractions(async () => {})
       const nodeId = (await import('@components/TodoCard/TodoCardActions'))
@@ -349,6 +372,7 @@ export const AllStages = {
         divider: 8,
         heightMultiplier: 6,
         borderRadius: Platform.OS === 'ios' ? 16 : undefined,
+        additionalButtons: [gotItButton],
       })
     })
   },
@@ -362,8 +386,22 @@ export const AllStages = {
     }
   },
   [TutorialStep.BreakdownTodoAction]: async () => {
-    const nodeId = findNodeHandle(rootRef)
-    return { nodeId, notShowContinue: true, notShowClose: true, dontSave: true }
+    const nodeId = (await import('@views/add/AddTodo')).saveButtonNodeId
+    const gotItButton = new OnboardingButton(
+      () => addTodoEventEmitter.emit(AddTodoEventEmitterEvent.saveTodo),
+      undefined,
+      true,
+      true
+    )
+    return {
+      nodeId,
+      dontSave: true,
+      additionalButtons: [gotItButton],
+      notShowContinue: true,
+      divider: 16,
+      borderRadius: 10,
+      heightMultiplier: 6,
+    }
   },
   [TutorialStep.BreakdownLessThanTwo]: async () => {
     const gotItButton = new OnboardingButton(
@@ -611,6 +649,49 @@ export const AllStages = {
       notShowClose: true,
       notShowContinue: true,
       additionalButtons: [holdOnButton],
+      dontSave: true,
+    }
+  },
+  [TutorialStep.AddTextContinueButton]: async () => {
+    const continueButton = new OnboardingButton(
+      () => {
+        Keyboard.dismiss()
+        if (sharedOnboardingStore.textInTodo?.length) {
+          sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
+        } else {
+          sharedOnboardingStore.nextStep(TutorialStep.AddTextContinueTooFast)
+        }
+      },
+      'continue',
+      true
+    )
+    return new Promise(async (resolve) => {
+      InteractionManager.runAfterInteractions(async () => {
+        const nodeId = (await import('@views/add/AddTodoForm')).textRowNodeId
+        resolve({
+          nodeId,
+          divider: 16,
+          borderRadius: 16,
+          dontSave: true,
+          notShowMessage: true,
+          notShowContinue: true,
+          additionalButtons: [continueButton],
+        })
+      })
+    })
+  },
+  [TutorialStep.AddTextContinueTooFast]: async () => {
+    const gotItButton = new OnboardingButton(
+      () => sharedOnboardingStore.nextStep(TutorialStep.AddTextContinueButton),
+      undefined,
+      true,
+      true
+    )
+    return {
+      messageBoxPosition: 'center',
+      notShowClose: true,
+      notShowContinue: true,
+      additionalButtons: [gotItButton],
       dontSave: true,
     }
   },

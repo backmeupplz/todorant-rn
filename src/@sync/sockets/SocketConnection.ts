@@ -44,7 +44,7 @@ export class SocketConnection {
         return res()
       }
       this.pendingAuthorization = { res, rej, createdAt: Date.now() }
-      this.socketIO.emit('authorize', this.token, '1')
+      this.socketIO.emit('authorize', this.token, '2')
     })
   }
 

@@ -102,7 +102,7 @@ export class AccountInfo extends Component {
               placeholder={translate('nameLabel')}
               value={this.name}
               onChangeText={(text) => {
-                this.name = text
+                this.name = text.trim()
               }}
               placeholderTextColor={sharedColors.placeholderColor}
               maxLength={250}

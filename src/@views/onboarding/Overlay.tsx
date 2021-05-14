@@ -56,18 +56,8 @@ export class Overlay extends Component {
       }
     )
     Keyboard.addListener('keyboardDidShow', () => {
-      Animated.timing(this.messageBoxOpacity, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.linear,
-      }).start()
-    })
-    Keyboard.addListener('keyboardDidHide', () => {
-      Animated.timing(this.messageBoxOpacity, {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.linear,
-      }).start()
+      if (sharedOnboardingStore.step !== TutorialStep.AddText) return
+      sharedOnboardingStore.nextStep(TutorialStep.AddTextContinueButton)
     })
     reaction(
       () => sharedOnboardingStore.tutorialIsShown,
@@ -115,17 +105,13 @@ export class Overlay extends Component {
                 )
                 const totalSize =
                   messageBoxPosition.y + messageBoxPosition.height
-                const totalPosition =
-                  Math.abs(sharedOnboardingStore.currentHole.y - totalSize) +
-                  Math.abs(totalSize)
                 if (
-                  totalPosition < Dimensions.get('window').height &&
                   sharedOnboardingStore.currentHole.y +
-                    sharedOnboardingStore.currentHole.height +
-                    messageBoxPosition.y +
-                    messageBoxPosition.height >
-                    Dimensions.get('window').height
+                    totalSize -
+                    Dimensions.get('screen').height >
+                  avatarPadding * 2
                 ) {
+                  // Move bubble above the hole
                   Animated.timing(this.infoBoxY, {
                     toValue:
                       sharedOnboardingStore.currentHole.y -
@@ -134,6 +120,7 @@ export class Overlay extends Component {
                     easing: Easing.ease,
                   }).start()
                 } else {
+                  // Move bubble under the hole
                   messageBoxPosition.height += avatarPadding
                   messageBoxPosition.y -= avatarPadding
                   Animated.timing(this.infoBoxY, {
@@ -194,16 +181,6 @@ export class Overlay extends Component {
         <Animated.View
           pointerEvents="box-none"
           style={{
-            maxWidth: this.shouldRender
-              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-                ? 0
-                : undefined
-              : 0,
-            maxHeight: this.shouldRender
-              ? sharedOnboardingStore.step === TutorialStep.BreakdownTodoAction
-                ? 0
-                : undefined
-              : 0,
             position: 'absolute',
             top: 0,
             right: 0,

@@ -7,6 +7,7 @@ import { Todo, getTitle } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
+import { translate } from '@utils/i18n'
 
 const showDebugInfo = false
 
@@ -42,23 +43,25 @@ export class TodoCardBody extends Component<{
                 justifyContent: 'space-between',
               }}
             >
-              {!!this.props.todo.delegatorName && (
-                <Text>
-                  <Text
-                    onPress={() => {
-                      this.props.vm.expanded = !this.props.vm.expanded
-                    }}
-                    {...sharedColors.regularTextExtraStyle}
-                  >
-                    {this.props.todo.delegatorName}
-                  </Text>
-                  {this.props.todo.delegateAccepted === false && (
-                    <Text {...sharedColors.regularTextExtraStyle}>
-                      {` ${getTitle(this.props.todo)}`}
+              {!!this.props.todo.delegator?.name &&
+                this.props.type !== CardType.delegation && (
+                  <Text>
+                    <Text
+                      onPress={() => {
+                        this.props.vm.expanded = !this.props.vm.expanded
+                      }}
+                      {...sharedColors.regularTextExtraStyle}
+                    >
+                      {translate('delegate.from')}:{' '}
+                      {this.props.todo.delegator?.name}
                     </Text>
-                  )}
-                </Text>
-              )}
+                    {this.props.todo.delegateAccepted === false && (
+                      <Text {...sharedColors.regularTextExtraStyle}>
+                        {` ${getTitle(this.props.todo)}`}
+                      </Text>
+                    )}
+                  </Text>
+                )}
               <TodoCardTextBlock
                 todo={this.props.todo}
                 isOld={isOld}

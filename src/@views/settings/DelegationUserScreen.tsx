@@ -10,12 +10,16 @@ import { sharedDelegationStore } from '@stores/DelegationStore'
 import { IconButton } from '@components/IconButton'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
-import { deleteDelegate, deleteDelegator } from '@utils/rest'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { removeDelegation } from '@utils/delegations'
+import { realm } from '@utils/realm'
 
 @observer
-class Row extends Component<{ delegationUser: DelegationUser }> {
+class Row extends Component<{
+  delegationUser: DelegationUser
+  delegationType: string
+}> {
   @observable loading = false
 
   UNSAFE_componentWillMount() {
@@ -25,28 +29,28 @@ class Row extends Component<{ delegationUser: DelegationUser }> {
   render() {
     return (
       <TableItem>
-        <Text {...sharedColors.textExtraStyle}>
+        <Text style={{ maxWidth: '90%', ...sharedColors.textExtraStyle.style }}>
           {this.props.delegationUser.name}
         </Text>
         <IconButton
           disabled={this.loading}
           onPress={() => {
             alertConfirm(
-              this.props.delegationUser.delegationType ===
-                DelegationUserType.delegate
-                ? translate('delegate.deleteDelegateConfirmation')
-                : translate('delegate.deleteDelegatorConfirmation'),
+              translate('delegate.deleteDelegatorConfirmation'),
               translate('delete'),
               async () => {
                 this.loading = true
                 try {
                   if (
-                    this.props.delegationUser.delegationType ===
-                    DelegationUserType.delegate
+                    this.props.delegationType === DelegationUserType.delegate
                   ) {
-                    await deleteDelegate(this.props.delegationUser._id)
+                    realm.write(() => {
+                      removeDelegation(this.props.delegationUser, false)
+                    })
                   } else {
-                    await deleteDelegator(this.props.delegationUser._id)
+                    realm.write(() => {
+                      removeDelegation(this.props.delegationUser, true)
+                    })
                   }
                   sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {
@@ -92,7 +96,13 @@ export class DelegationUserScreenContent extends Component<{
           }}
         >
           {list.length ? (
-            list.map((u) => <Row delegationUser={u} />)
+            list.map((u, i) => (
+              <Row
+                key={i}
+                delegationUser={u}
+                delegationType={this.props.route.params.delegationType}
+              />
+            ))
           ) : (
             <TableItem>
               <Text {...sharedColors.textExtraStyle}>

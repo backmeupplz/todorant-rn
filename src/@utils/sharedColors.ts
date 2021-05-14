@@ -1,6 +1,7 @@
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { computed, makeObservable } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
+import { Platform } from 'react-native'
 import fonts from './fonts'
 const ColorScheme = require('color-scheme')
 
@@ -44,6 +45,24 @@ export class ColorModeManager {
       },
       headerTintColor: this.textColor,
     }
+  }
+  @computed get headerSegmentExtraStyle() {
+    return Platform.OS === 'android'
+      ? {
+          backgroundColor: sharedSettingsStore.isDark ? '#2f2f33' : undefined,
+          tintColor: sharedSettingsStore.isDark ? '#68686d' : '#6e7185',
+          fontStyle: {
+            fontFamily: fonts.SFProRoundedRegular,
+            color: sharedSettingsStore.isDark ? undefined : this.textColor,
+          },
+          activeFontStyle: {
+            fontFamily: fonts.SFProRoundedRegular,
+            color: sharedSettingsStore.isDark
+              ? undefined
+              : this.invertedTextColor,
+          },
+        }
+      : undefined
   }
   @computed get textExtraStyle() {
     return {

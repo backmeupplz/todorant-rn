@@ -53,7 +53,6 @@ class LoginFacebookContent extends Component<{
               onLoadStart={async (e) => {
                 try {
                   const url = e.nativeEvent.url
-                  console.log(url)
                   if (url.includes('login_success') && !url.includes('oauth')) {
                     const token = this.getAccessToken(url)
                     if (!token) {

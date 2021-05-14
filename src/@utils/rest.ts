@@ -6,7 +6,7 @@ import { Platform } from 'react-native'
 
 const base = __DEV__ ? 'http://localhost:1337' : 'https://backend.todorant.com'
 
-const extraParams =
+const extraParams = () =>
   Platform.OS === 'ios'
     ? {
         fromApple: true,
@@ -23,7 +23,7 @@ export function loginGoogle(accessToken: string) {
   return axios
     .post<User>(`${base}/login/google`, {
       accessToken,
-      ...extraParams,
+      ...extraParams(),
     })
     .then(cleanLocalAppleReceipt)
 }
@@ -32,7 +32,7 @@ export function loginFacebook(accessToken: string) {
   return axios
     .post<User>(`${base}/login/facebook`, {
       accessToken,
-      ...extraParams,
+      ...extraParams(),
     })
     .then(cleanLocalAppleReceipt)
 }
@@ -43,7 +43,7 @@ export function loginApple(code: string, user?: any) {
       client: 'ios',
       code,
       user,
-      ...extraParams,
+      ...extraParams(),
     })
     .then(cleanLocalAppleReceipt)
 }
@@ -56,7 +56,7 @@ export function loginAppleAndroid(code: string, name?: string) {
         oauthIdToken: code,
       },
       name,
-      ...extraParams,
+      ...extraParams(),
     })
     .then(cleanLocalAppleReceipt)
 }
@@ -65,7 +65,7 @@ export function loginToken(token: string) {
   return axios
     .post<User>(`${base}/login/token`, {
       token,
-      ...extraParams,
+      ...extraParams(),
     })
     .then(cleanLocalAppleReceipt)
 }
@@ -171,25 +171,5 @@ export async function resetDelegateToken() {
         },
       }
     )
-  ).data as string
-}
-
-export async function deleteDelegate(id: string) {
-  return (
-    await axios.delete(`${base}/delegate/delegate/${id}`, {
-      headers: {
-        token: sharedSessionStore.user?.token,
-      },
-    })
-  ).data as string
-}
-
-export async function deleteDelegator(id: string) {
-  return (
-    await axios.delete(`${base}/delegate/delegator/${id}`, {
-      headers: {
-        token: sharedSessionStore.user?.token,
-      },
-    })
   ).data as string
 }

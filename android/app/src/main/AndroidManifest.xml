@@ -69,12 +69,17 @@
                 <data android:mimeType="text/*" />
             </intent-filter>
             <!-- Deep link -->
-            <intent-filter android:label="filter_react_native">
+            <intent-filter android:label="Todorant">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <data 
+                    android:host="todorant.com"
+                    android:pathPrefix="/invite"
+                    android:scheme="https"
+                />
                 <data
                     android:host="create-todo"
                     android:scheme="todorant" />

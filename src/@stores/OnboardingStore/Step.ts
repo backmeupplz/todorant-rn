@@ -6,6 +6,7 @@ export interface Step {
   messageBoxPosition?: 'above' | 'below' | 'center'
   notShowContinue?: boolean
   notShowClose?: boolean
+  notShowMessage?: boolean
   predefined?: number
   divider?: number
   dontSave?: boolean

@@ -2,6 +2,8 @@ export enum TutorialStep {
   SelectDateNotAllowed = 'SelectDateNotAllowed',
   BreakdownCompletedTodo = 'BreakDownCompletedTodo',
   BreakdownLessThanTwo = 'BreakdownLessThanTwo',
+  AddTextContinueTooFast = 'AddTextContinueTooFast',
+  AddTextContinueButton = 'AddTextContinueButton',
   Finished = 'Finished',
   Close = 'Close',
   Start = 'Start',

@@ -14,33 +14,128 @@ import {
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
+import { sharedDelegationStore } from '@stores/DelegationStore'
+import {
+  cloneDelegation,
+  removeDelegation,
+  removeMismatchesWithServer,
+  updateOrCreateDelegation,
+} from '@utils/delegations'
 
 export async function onDelegationObjectsFromServer(
-  objects: any,
+  objects: {
+    delegators: DelegationUser[]
+    delegates: DelegationUser[]
+    delegateUpdated: boolean
+  },
+  pushBack: (objects: {
+    delegators: DelegationUser[]
+    delegates: DelegationUser[]
+  }) => Promise<{
+    delegators: (DelegationUser & { invalid?: boolean })[]
+    delegates: DelegationUser[]
+  }>,
   completeSync: () => void
 ) {
-  // Remove all
+  const lastSyncDate = sharedDelegationStore.updatedAt
+  // Get local delegators
+  const realmDelegators = realm
+    .objects(DelegationUser)
+    .filtered('isDelegator = true')
+  // Get local delegates
+  const realmDelegates = realm
+    .objects(DelegationUser)
+    .filtered('isDelegator != true')
+  // Filter delegators that changed locally
+  const delegatorsChangedLocally = lastSyncDate
+    ? realmDelegators.filtered(
+        `updatedAt > ${realmTimestampFromDate(lastSyncDate)}`
+      )
+    : realmDelegators
+  // Filter delegates that changed locally
+  const delegatesChangedLocally = lastSyncDate
+    ? realmDelegates.filtered(
+        `updatedAt > ${realmTimestampFromDate(lastSyncDate)}`
+      )
+    : realmDelegates
+  // Pull
+  // Create and delete delegates and delegators
   realm.write(() => {
-    realm.delete(realm.objects<DelegationUser>('DelegationUser'))
-  })
-  // Sync delegates
-  realm.write(() => {
-    for (const delegate of objects.delegates) {
-      realm.create('DelegationUser', {
-        ...delegate,
-        delegationType: DelegationUserType.delegate,
-      })
+    // Delegators
+    // Check if delegators list changed on server
+    if (objects.delegateUpdated) {
+      // If so then remove that delegates which exists locally but not on server
+      removeMismatchesWithServer(realmDelegators, objects.delegators)
     }
-  })
-  // Sync delegators
-  realm.write(() => {
-    for (const delegator of objects.delegators) {
-      realm.create('DelegationUser', {
-        ...delegator,
-        delegationType: DelegationUserType.delegator,
-      })
+    // Create new or just update existing delegators
+    objects.delegators.forEach((delegator) => {
+      updateOrCreateDelegation(delegator, true)
+    })
+    // Delegates
+    // Check if delegates list changed on server
+    if (objects.delegateUpdated) {
+      // If so then remove that delegates which exists locally but not on server
+      removeMismatchesWithServer(realmDelegates, objects.delegates)
     }
+    // Create new or just update existing delegates
+    objects.delegates.forEach((delegate) => {
+      updateOrCreateDelegation(delegate, false)
+    })
   })
+  // Push
+  // Get delegators which should be removed
+  const delegatorsToDelete = delegatorsChangedLocally.filter(
+    (delegator) => delegator.deleted
+  )
+  // Get delegates without data (they were accepted offline or didnt load data properly when accepted)
+  const delegatorsWithoutData = delegatorsChangedLocally.filter(
+    (delegator) => !delegator._id
+  )
+  // Get delegators which should be pushed on server
+  const delegatorsToPush = [...delegatorsWithoutData, ...delegatorsToDelete]
+  // Get delegates which should be removed
+  const delegatesToDelete = delegatesChangedLocally.filter(
+    (delegate) => delegate.deleted
+  )
+  // If there's no data that should be pushed on server that just completeSync
+  if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
+    // Complete sync
+    completeSync()
+    observableNowEventEmitter.emit(
+      ObservableNowEventEmitterEvent.ObservableNowChanged
+    )
+    return
+  }
+  // Push data on server
+  const savedPushedDelegations = await pushBack({
+    delegates: delegatesChangedLocally.map((delegate) =>
+      cloneDelegation(delegate)
+    ),
+    delegators: delegatorsToPush.map((delegator) => cloneDelegation(delegator)),
+  })
+  realm.write(() => {
+    // Delete after after sync
+    delegatorsToDelete.forEach((delegator) => {
+      removeDelegation(delegator, true)
+    })
+    delegatesToDelete.forEach((delegate) => {
+      removeDelegation(delegate, false)
+    })
+    // Fill delegations with missing info
+    savedPushedDelegations.delegators.forEach((delegator) => {
+      if (delegator.invalid) {
+        removeDelegation(delegator, true)
+        return
+      }
+      updateOrCreateDelegation(delegator, true)
+    })
+    savedPushedDelegations.delegates.forEach((delegate) => {
+      updateOrCreateDelegation(delegate, false)
+    })
+  })
+  observableNowEventEmitter.emit(
+    ObservableNowEventEmitterEvent.ObservableNowChanged
+  )
   // Complete sync
   completeSync()
 }
@@ -62,7 +157,7 @@ export async function onTagsObjectsFromServer(
     }
     return p
   }, {} as { [index: string]: Tag })
-  const allTags = realm.objects<Tag>('Tag')
+  const allTags = realm.objects(Tag)
   const lastSyncDate = sharedTagStore.updatedAt
   const tagsChangedLocally = lastSyncDate
     ? allTags.filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
@@ -84,7 +179,7 @@ export async function onTagsObjectsFromServer(
         const newTag = {
           ...serverTag,
         }
-        realm.create('Tag', newTag)
+        realm.create(Tag, newTag as Tag)
       }
     }
   })
@@ -144,10 +239,6 @@ export async function onTodosObjectsFromServer(
   todosChangedOnServer.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)
     todo.createdAt = new Date(todo.createdAt)
-    if ((todo as any).delegator && (todo as any).delegator.name) {
-      todo.delegateAccepted = !!todo.delegateAccepted
-      todo.delegatorName = (todo as any).delegator.name
-    }
   })
   // Get variables
   const serverTodosMap = todosChangedOnServer.reduce((p, c) => {
@@ -233,6 +324,7 @@ export async function onTodosObjectsFromServer(
         return v
       }) as any
   )
+  console.log(savedPushedTodos)
   // Modify dates
   savedPushedTodos.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)
@@ -255,6 +347,9 @@ export async function onTodosObjectsFromServer(
       }
     }
   })
+  observableNowEventEmitter.emit(
+    ObservableNowEventEmitterEvent.ObservableNowChanged
+  )
   // Complete sync
   completeSync()
   refreshWidgetAndBadgeAndWatch()

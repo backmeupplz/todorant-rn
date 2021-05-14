@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoVM } from '@views/add/TodoVM'
 import { sharedAppStateStore } from '@stores/AppStateStore'
-import { View, Text, Input, Icon } from 'native-base'
+import {
+  View,
+  Text,
+  Input,
+  Icon,
+  List,
+  ListItem,
+  ActionSheet,
+} from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
@@ -12,6 +20,8 @@ import {
   ViewStyle,
   StyleProp,
   InteractionManager,
+  StyleSheet,
+  ScrollView,
 } from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { getDateString, getDateMonthAndYearString } from '@utils/time'
@@ -28,10 +38,14 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { IconButton } from '@components/IconButton'
 import CustomIcon from '@components/CustomIcon'
 import fonts from '@utils/fonts'
-import { computed, makeObservable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { Divider } from '@components/Divider'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -184,8 +198,11 @@ class TextRow extends Component<{
           onSubmitEditing={() => {
             if (sharedOnboardingStore.tutorialIsShown) return
             if (!this.props.vm.text) return
-            if (sharedOnboardingStore.step === TutorialStep.AddText) {
-              sharedOnboardingStore.nextStep()
+            if (
+              sharedOnboardingStore.step === TutorialStep.AddText ||
+              sharedOnboardingStore.step === TutorialStep.AddTextContinueButton
+            ) {
+              sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
             }
           }}
           multiline={sharedOnboardingStore.tutorialIsShown}
@@ -193,6 +210,9 @@ class TextRow extends Component<{
           value={this.props.vm.text}
           onChangeText={(text) => {
             this.props.vm.text = text
+            if (!sharedOnboardingStore.tutorialIsShown) {
+              sharedOnboardingStore.textInTodo = text
+            }
           }}
           placeholderTextColor={sharedColors.placeholderColor}
           maxLength={1500}
@@ -491,6 +511,81 @@ class TimeRow extends Component<{
 }
 
 @observer
+class DelegationRow extends Component<{ vm: TodoVM }> {
+  render() {
+    return (
+      <View
+        style={{
+          borderColor: sharedColors.placeholderColor,
+          paddingVertical: verticalSpacing,
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color: this.props.vm.delegate
+              ? sharedColors.textColor
+              : sharedColors.placeholderColor,
+            flex: 1,
+            fontFamily: fonts.SFProTextRegular,
+            fontSize: fontSize,
+          }}
+          onPress={() => {
+            if (!sharedOnboardingStore.tutorialIsShown) return
+            const options = sharedDelegationStore.delegates
+              .map((delegate) => delegate.name)
+              .filter((delegate) => !!delegate)
+              .concat([translate('cancel')]) as string[]
+            ActionSheet.show(
+              {
+                options: options,
+                title: translate('delegate.to'),
+                cancelButtonIndex: options.length,
+                destructiveButtonIndex: options.length,
+              },
+              (buttonIndex) => {
+                if (buttonIndex + 1 !== options.length)
+                  this.props.vm.delegate =
+                    sharedDelegationStore.delegates[buttonIndex]
+              }
+            )
+          }}
+        >
+          {this.props.vm.delegate?.name ||
+            translate('delegate.pickDelegateField')}
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          {!!this.props.vm.delegate && (
+            <TouchableOpacity
+              onPress={() => {
+                this.props.vm.delegate = undefined
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name="close"
+                style={{
+                  color: sharedColors.borderColor,
+                  fontSize: 24,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+          <CustomIcon
+            name="chevron_right_outline_28"
+            color={sharedColors.borderColor}
+            size={24}
+          />
+        </View>
+      </View>
+    )
+  }
+}
+
+@observer
 export class SwitchRow extends Component<{
   name: string
   value: boolean
@@ -554,6 +649,8 @@ export class AddTodoForm extends Component<{
     makeObservable(this)
   }
 
+  @observable isVisible = false
+
   render() {
     return (
       <>
@@ -567,9 +664,7 @@ export class AddTodoForm extends Component<{
           <View
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
-            <TouchableOpacity onPress={() => this.props.vm.focus()}>
-              <TextRow vm={this.props.vm} showCross={this.props.showCross} />
-            </TouchableOpacity>
+            <TextRow vm={this.props.vm} showCross={this.props.showCross} />
             {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
@@ -663,7 +758,22 @@ export class AddTodoForm extends Component<{
             )}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||
-              this.props.vm.showMore) && <TimeRow vm={this.props.vm} />}
+              this.props.vm.showMore) && (
+              <View>
+                <TimeRow vm={this.props.vm} />
+                {sharedSessionStore.user &&
+                  !!sharedDelegationStore.delegates.length &&
+                  (!this.props.vm.editedTodo?.delegator ||
+                    (this.props.vm.editedTodo.delegator._id ===
+                      sharedSessionStore.user?._id &&
+                      !this.props.vm.editedTodo.delegateAccepted)) &&
+                  !this.props.vm.editedTodo?.completed &&
+                  this.props.vm?.editedTodo?.delegator?._id !==
+                    sharedSessionStore.user?._id && (
+                    <DelegationRow vm={this.props.vm} />
+                  )}
+              </View>
+            )}
             {this.props.vm.showTimePicker && (
               <DateTimePicker
                 textColor={sharedColors.textColor}
@@ -702,34 +812,46 @@ export class AddTodoForm extends Component<{
                 }}
               />
             </View>
-            <View
-              pointerEvents={
-                sharedOnboardingStore.tutorialIsShown ||
-                sharedOnboardingStore.step ===
-                  TutorialStep.BreakdownTodoAction ||
-                sharedOnboardingStore.step === TutorialStep.SelectCompleted
-                  ? 'auto'
-                  : 'none'
-              }
-              onLayout={({ nativeEvent: { target } }: any) => {
-                completedRowNodeId = target
-              }}
-            >
-              <SwitchRow
-                name={translate('completed')}
-                value={this.props.vm.completed}
-                onValueChange={(value) => {
-                  if (!sharedOnboardingStore.tutorialIsShown) {
-                    sharedOnboardingStore.nextStep(
-                      TutorialStep.BreakdownCompletedTodo
-                    )
-                    this.props.vm.completed = false
-                    return
-                  }
-                  this.props.vm.completed = value
+            {(this.props.vm?.editedTodo?.delegator?._id !==
+              sharedSessionStore.user?._id ||
+              !this.props.vm?.editedTodo?.delegator) && (
+              <View
+                pointerEvents={
+                  sharedOnboardingStore.tutorialIsShown ||
+                  sharedOnboardingStore.step ===
+                    TutorialStep.BreakdownTodoAction ||
+                  sharedOnboardingStore.step === TutorialStep.SelectCompleted
+                    ? 'auto'
+                    : 'none'
+                }
+                onLayout={({ nativeEvent: { target } }: any) => {
+                  completedRowNodeId = target
                 }}
-              />
-            </View>
+              >
+                <SwitchRow
+                  name={translate('completed')}
+                  value={this.props.vm.completed}
+                  onValueChange={(value) => {
+                    if (!sharedOnboardingStore.tutorialIsShown) {
+                      sharedOnboardingStore.nextStep(
+                        TutorialStep.BreakdownCompletedTodo
+                      )
+                      this.props.vm.completed = false
+                      return
+                    }
+                    this.props.vm.completed = value
+                    if (
+                      sharedSessionStore.user &&
+                      this.props.vm.editedTodo?.delegator?._id !==
+                        sharedSessionStore.user?._id &&
+                      !this.props.vm.editedTodo?.delegateAccepted
+                    ) {
+                      this.props.vm.delegateAccepted = value
+                    }
+                  }}
+                />
+              </View>
+            )}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||
               this.props.vm.showMore) &&

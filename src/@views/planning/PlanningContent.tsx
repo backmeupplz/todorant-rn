@@ -11,7 +11,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
-import { PlanningDateHeader } from './PlanningDateHeader'
 import {
   SectionList,
   SectionListData,
@@ -19,7 +18,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { makeObservable, observable } from 'mobx'
+import { makeObservable, observable, when } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateString } from '@utils/time'
@@ -27,10 +26,12 @@ import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
 import { Todo } from '@models/Todo'
 import { debounce } from 'lodash'
+import { TodoHeader } from '@components/TodoHeader'
+import { hydration } from '@stores/hydration/hydratedStores'
 
 @observer
 export class PlanningContent extends Component {
-  vm = new PlanningVM()
+  @observable vm?: PlanningVM
 
   @observable currentMonth = new Date().getMonth()
   @observable currentYear = new Date().getUTCFullYear()
@@ -43,17 +44,12 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
-  UNSAFE_componentWillMount() {
+  async UNSAFE_componentWillMount() {
     makeObservable(this)
-  }
 
-  setCoordinates = debounce(
-    (yAx: number, xAx: number) => {
-      sharedAppStateStore.activeCoordinates = { x: xAx, y: yAx }
-    },
-    1000,
-    { maxWait: 250 }
-  )
+    await when(() => hydration.isHydrated)
+    this.vm = new PlanningVM()
+  }
 
   renderPlanningRequiredMessage() {
     return (
@@ -68,6 +64,28 @@ export class PlanningContent extends Component {
         >
           {translate('planningText')}
         </Text>
+      )
+    )
+  }
+
+  renderCircle() {
+    return (
+      sharedAppStateStore.activeDay &&
+      sharedAppStateStore.activeCoordinates.x &&
+      sharedAppStateStore.activeCoordinates.y && (
+        <Animated.View
+          style={{
+            ...styles.circle,
+            transform: [
+              {
+                translateX: this.currentX,
+              },
+              {
+                translateY: this.currentY,
+              },
+            ],
+          }}
+        />
       )
     )
   }
@@ -131,6 +149,7 @@ export class PlanningContent extends Component {
           <View>
             <Month
               onActiveDayChange={(day: Date) => {
+                if (!sharedAppStateStore.calendarEnabled) return
                 sharedAppStateStore.activeDay = day
               }}
               dark={sharedSettingsStore.isDark}
@@ -155,27 +174,13 @@ export class PlanningContent extends Component {
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
-        {sharedAppStateStore.activeDay && (
-          <Animated.View
-            style={{
-              ...styles.circle,
-              transform: [
-                {
-                  translateX: this.currentX,
-                },
-                {
-                  translateY: this.currentY,
-                },
-              ],
-            }}
-          />
-        )}
+        {this.renderCircle()}
         {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
-          this.vm.uncompletedTodosData.todosArray.length ? (
+          this.vm?.uncompletedTodosData.todosArray.length ? (
             <DraggableSectionList<Todo, SectionListData<Todo>>
               onEndReached={() => {
                 sharedAppStateStore.changeLoading(true)
-                setTimeout(() => this.vm.uncompletedTodosData.increaseOffset())
+                setTimeout(() => this.vm?.uncompletedTodosData.increaseOffset())
               }}
               onEndReachedThreshold={0.3}
               onViewableItemsChanged={() => {
@@ -183,9 +188,10 @@ export class PlanningContent extends Component {
               }}
               contentContainerStyle={{ paddingBottom: 100 }}
               onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+                if (!sharedAppStateStore.calendarEnabled) return
                 this.currentX.setValue(absoluteX as any)
                 this.currentY.setValue((absoluteY - this.todoHeight) as any)
-                this.setCoordinates(absoluteY, absoluteX)
+                this.vm?.setCoordinates(absoluteY, absoluteX)
               }}
               autoscrollSpeed={200}
               data={
@@ -236,10 +242,11 @@ export class PlanningContent extends Component {
               }}
               renderSectionHeader={({ item, drag, index, isActive }) => {
                 return (
-                  <PlanningDateHeader
+                  <TodoHeader
+                    date={true}
                     drag={drag}
                     isActive={isActive}
-                    item={item}
+                    item={item.section}
                     key={index}
                     vm={this.vm}
                   />
@@ -250,11 +257,11 @@ export class PlanningContent extends Component {
           ) : (
             <NoTodosPlaceholder />
           )
-        ) : this.vm.completedTodosData.todosArray.length ? (
+        ) : this.vm?.completedTodosData.todosArray.length ? (
           <SectionList
             onEndReached={() => {
               sharedAppStateStore.changeLoading(true)
-              setTimeout(() => this.vm.completedTodosData.increaseOffset())
+              setTimeout(() => this.vm?.completedTodosData.increaseOffset())
             }}
             onEndReachedThreshold={0.3}
             onViewableItemsChanged={() => {
@@ -276,11 +283,12 @@ export class PlanningContent extends Component {
               />
             )}
             renderSectionHeader={({ section }) => (
-              <PlanningDateHeader
-                item={section}
+              <TodoHeader
+                item={section.section}
                 vm={this.vm}
                 drag={() => {}}
                 isActive={false}
+                date={true}
               />
             )}
             stickySectionHeadersEnabled={false}

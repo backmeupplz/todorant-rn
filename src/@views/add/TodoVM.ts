@@ -13,15 +13,23 @@ import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { findNodeHandle, Keyboard, TextInput } from 'react-native'
+import { Keyboard, TextInput } from 'react-native'
 const {
   focusInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { DelegationUser } from '@models/DelegationUser'
+import { translate } from '@utils/i18n'
 
 export class TodoVM {
-  @observable text = ''
+  @observable text =
+    !sharedOnboardingStore.tutorialIsShown &&
+    (sharedOnboardingStore.step === TutorialStep.AddText ||
+      sharedOnboardingStore.step === TutorialStep.AddTask ||
+      sharedOnboardingStore.savedStep === TutorialStep.AddText)
+      ? translate('onboarding.todoText')
+      : ''
   @observable completed = false
   @observable frog = false
   @observable
@@ -32,6 +40,9 @@ export class TodoVM {
     ? getDateDateString(getTodayWithStartOfDay())
     : undefined
   @observable time?: string
+
+  @observable delegate?: DelegationUser
+  @observable delegateAccepted?: boolean
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false
@@ -84,11 +95,14 @@ export class TodoVM {
   }
 
   applyTag(tag: Tag) {
-    const insertText = `#${tag.tag}`
     const text = this.text
     const len = text.length
     const before = text.substr(0, this.cursorPosition)
     const after = text.substr(this.cursorPosition, len)
+    const insertText =
+      before.length && before[before.length - 1] !== ' '
+        ? ` #${tag.tag}`
+        : `#${tag.tag}`
 
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
@@ -168,7 +182,7 @@ export class TodoVM {
 
   @computed
   get isValid() {
-    return !!this.text && !!this.monthAndYear
+    return !!this.text && (!!this.delegate || !!this.monthAndYear)
   }
 
   constructor() {
@@ -177,8 +191,11 @@ export class TodoVM {
     Keyboard.addListener('keyboardDidHide', () => {
       if (sharedOnboardingStore.tutorialIsShown) return
       if (!this.text) return
-      if (sharedOnboardingStore.step === TutorialStep.AddText) {
-        sharedOnboardingStore.nextStep()
+      if (
+        sharedOnboardingStore.step === TutorialStep.AddText ||
+        sharedOnboardingStore.step === TutorialStep.AddTextContinueButton
+      ) {
+        sharedOnboardingStore.nextStep(TutorialStep.SelectDate)
       }
     })
 
@@ -195,12 +212,15 @@ export class TodoVM {
   setEditedTodo(todo: Todo) {
     this.editedTodo = todo
 
-    this.text = todo.text
+    requestAnimationFrame(() => {
+      this.text = todo.text
+    })
     this.completed = todo.completed
     this.frog = todo.frog
     this.monthAndYear = todo.monthAndYear
     this.date = todo.date
     this.time = todo.time
+    this.delegateAccepted = todo.delegateAccepted
 
     this.showMore = true
   }

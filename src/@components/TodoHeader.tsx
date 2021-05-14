@@ -17,12 +17,29 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer
-export class PlanningDateHeader extends Component<{
-  item: SectionListData<Todo>
-  vm: PlanningVM
-  drag: () => void
-  isActive: boolean
+export class TodoHeader extends Component<{
+  item: string
+  vm?: PlanningVM
+  drag?: () => void
+  isActive?: boolean
+  date?: boolean
+  onPlusPress?: () => void
+  hidePlus?: boolean
 }> {
+  renderDateContent() {
+    return (
+      <>
+        {this.props.item}
+        {(this.props.item.length || 0) === 10 &&
+          `, ${capitalizeSentence(
+            moment(this.props.item)
+              .locale(sharedSettingsStore.language || 'en')
+              .format('dddd')
+          )}`}
+      </>
+    )
+  }
+
   render() {
     return (
       <View
@@ -59,25 +76,23 @@ export class PlanningDateHeader extends Component<{
                   fontFamily: fonts.SFProRoundedRegular,
                 }}
               >
-                {this.props.item.section}
-                {(this.props.item.section?.length || 0) === 10 &&
-                  `, ${capitalizeSentence(
-                    moment(this.props.item.section!)
-                      .locale(sharedSettingsStore.language || 'en')
-                      .format('dddd')
-                  )}`}
+                {this.props.date ? this.renderDateContent() : this.props.item}
               </Text>
             </View>
           </TouchableOpacity>
-          <IconButton
-            disabled={!sharedOnboardingStore.tutorialIsShown}
-            onPress={() => {
-              navigate('AddTodo', { date: this.props.item.section })
-            }}
-            size={20}
-            name="add_outline_28"
-            color={sharedColors.primaryColor}
-          />
+          {!this.props.hidePlus && (
+            <IconButton
+              disabled={!sharedOnboardingStore.tutorialIsShown}
+              onPress={() => {
+                this.props.onPlusPress
+                  ? this.props.onPlusPress()
+                  : navigate('AddTodo', { date: this.props.item })
+              }}
+              size={20}
+              name="add_outline_28"
+              color={sharedColors.primaryColor}
+            />
+          )}
         </View>
       </View>
     )

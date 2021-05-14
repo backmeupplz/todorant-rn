@@ -1,6 +1,6 @@
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedTagStore } from '@stores/TagStore'
-import { isHydrated } from '@stores/hydration/hydratedStores'
+import { hydration } from '@stores/hydration/hydratedStores'
 import { syncEventEmitter } from '@sync/syncEventEmitter'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -19,6 +19,7 @@ import {
   onTagsObjectsFromServer,
   onTodosObjectsFromServer,
 } from '@sync/SyncObjectHandlers'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -114,9 +115,12 @@ class Sync {
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => undefined,
-      (objects, _, completeSync) => {
-        return onDelegationObjectsFromServer(objects, completeSync)
+      () => sharedDelegationStore.updatedAt,
+      (objects, pushBack, completeSync) => {
+        return onDelegationObjectsFromServer(objects, pushBack, completeSync)
+      },
+      async (lastSyncDate) => {
+        sharedDelegationStore.updatedAt = lastSyncDate
       }
     )
   }
@@ -152,7 +156,7 @@ class Sync {
   }
 
   globalSync = () => {
-    if (!isHydrated()) {
+    if (!hydration) {
       return Promise.reject("Global sync: stores didn't hydrate yet")
     }
     return this.sync()

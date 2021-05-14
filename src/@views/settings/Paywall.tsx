@@ -5,6 +5,7 @@ import { TableItem } from '@components/TableItem'
 import { SubscriptionStatus } from '@models/User'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
@@ -23,11 +24,12 @@ import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, Platform } from 'react-native'
-import { Subscription } from 'react-native-iap'
+import { Subscription, Product, clearTransactionIOS } from 'react-native-iap'
 import RNRestart from 'react-native-restart'
+import { uniqBy } from 'lodash'
 
 class PaywallVM {
-  @observable products: Subscription[] = []
+  @observable products: (Subscription | Product)[] = []
 
   @observable loading = false
 
@@ -59,7 +61,9 @@ class PaywallContent extends Component<{
     }
     purchaseListener.success = async () => {
       try {
-        await sharedSync.sync(SyncRequestEvent.All)
+        if (sharedSessionStore.user) {
+          await sharedSync.sync(SyncRequestEvent.All)
+        }
       } catch (err) {
         alertError(err)
       }
@@ -74,11 +78,16 @@ class PaywallContent extends Component<{
 
     this.vm.loading = true
     try {
-      this.vm.products = await getProducts(
-        Platform.OS === 'ios' &&
-          this.props.route.params?.type === 'appleUnauthorized'
-          ? ['monthly.with.trial', 'yearly.with.trial']
-          : undefined
+      this.vm.products = sortProducts(
+        uniqBy(
+          await getProducts(
+            Platform.OS === 'ios' &&
+              this.props.route.params?.type === 'appleUnauthorized'
+              ? ['monthly.with.trial', 'yearly.with.trial', 'perpetual']
+              : undefined
+          ),
+          (p) => p.productId
+        )
       )
     } catch (err) {
       alertError(err)
@@ -185,14 +194,27 @@ class PaywallContent extends Component<{
                         : undefined,
                   }}
                   onPress={() => {
+                    if (Platform.OS === 'ios') {
+                      clearTransactionIOS()
+                    }
                     purchase(product.productId)
                   }}
                   disabled={purchaseListener.isPurchasing}
                   key={i}
+                  bordered={
+                    product.productId.includes('monthly') ||
+                    product.productId.includes('perpetual')
+                  }
+                  light={
+                    (product.productId.includes('monthly') ||
+                      product.productId.includes('perpetual')) &&
+                    sharedSettingsStore.isDark
+                  }
                 >
-                  {this.props.route.params?.type === 'appleUnauthorized' && (
-                    <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
-                  )}
+                  {this.props.route.params?.type === 'appleUnauthorized' &&
+                    product.productId !== 'perpetual' && (
+                      <Text>{translate('appleUnauthorizedButtonExtra')}</Text>
+                    )}
                   <Text>
                     {Platform.OS === 'android'
                       ? product.title
@@ -202,12 +224,11 @@ class PaywallContent extends Component<{
                       : product.title}
                   </Text>
                   <Text>
-                    {product.localizedPrice}/
-                    {product.productId.includes('monthly')
-                      ? translate('subscriptionMonth')
-                      : Platform.OS === 'android'
-                      ? translate('subscriptionYearAndroid')
-                      : translate('subscriptionYeariOS')}
+                    {product.localizedPrice}
+                    {product.productId.includes('yearly') &&
+                      `/${translate('subscriptionYear')}`}
+                    {product.productId.includes('monthly') &&
+                      `/${translate('subscriptionMonth')}`}
                   </Text>
                 </Button>
               ))}
@@ -252,4 +273,23 @@ export const Paywall = () => {
     RouteProp<Record<string, { type: string | undefined } | undefined>, string>
   >()
   return <PaywallContent route={route} />
+}
+
+const productOrder = ['monthly', 'yearly', 'perpetual']
+function sortProducts(products: (Subscription | Product)[]) {
+  return products.sort((a, b) => {
+    const productOrderStringA = productOrder.find((s) =>
+      a.productId.includes(s)
+    )
+    const indexA = productOrderStringA
+      ? productOrder.indexOf(productOrderStringA)
+      : 0
+    const productOrderStringB = productOrder.find((s) =>
+      b.productId.includes(s)
+    )
+    const indexB = productOrderStringB
+      ? productOrder.indexOf(productOrderStringB)
+      : 1
+    return indexA < indexB ? -1 : 1
+  })
 }

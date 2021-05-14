@@ -4,6 +4,6 @@ import { realm } from '@utils/realm'
 
 export function gatherData() {
   const todos = realm.objects(Todo)
-  const tags = realm.objects<Tag>('Tag')
+  const tags = realm.objects(Tag)
   return { todos, tags }
 }

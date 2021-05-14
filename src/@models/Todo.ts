@@ -4,6 +4,8 @@ import {
   getDateStringFromTodo,
   getTodayWithStartOfDay,
 } from '@utils/time'
+import { DelegationUser } from './DelegationUser'
+import { User } from './User'
 
 export class Todo extends MobxRealmModel {
   public static schema = {
@@ -27,7 +29,8 @@ export class Todo extends MobxRealmModel {
       date: { type: 'string?', indexed: true },
       time: 'string?',
 
-      delegatorName: { type: 'string?', indexed: true },
+      user: 'DelegationUser?',
+      delegator: 'DelegationUser?',
       delegateAccepted: { type: 'bool?', indexed: true },
     },
   }
@@ -51,7 +54,8 @@ export class Todo extends MobxRealmModel {
   date?: string
   time?: string
 
-  delegatorName?: string
+  user?: DelegationUser
+  delegator?: DelegationUser
   delegateAccepted?: boolean
 
   // Local values
@@ -128,7 +132,11 @@ export function cloneTodo(todo: Todo) {
     date: todo.date,
     time: todo.time,
 
-    delegatorName: todo.delegatorName,
+    user: cloneDelegator(todo.user),
+    delegator: cloneDelegator(todo.delegator),
     delegateAccepted: todo.delegateAccepted,
   }
 }
+
+export const cloneDelegator = (u: DelegationUser | User | undefined) =>
+  u ? { _id: u._id, name: u.name } : undefined

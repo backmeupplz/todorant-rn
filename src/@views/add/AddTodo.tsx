@@ -4,7 +4,7 @@ import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle } from '@models/Todo'
+import { Todo, getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -59,6 +59,16 @@ import {
 } from '@utils/ObservableNow'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { pick } from 'lodash'
+import { DelegationUser } from '@models/DelegationUser'
+import { TermsOfUse } from '@views/settings/TermsOfUse'
+import { EventEmitter } from 'events'
+
+export const addTodoEventEmitter = new EventEmitter()
+export enum AddTodoEventEmitterEvent {
+  saveTodo = 'saveTodo',
+}
 
 export let saveButtonNodeId: number
 export let breakdownTodoNodeId: number
@@ -73,6 +83,7 @@ class AddTodoContent extends Component<{
           breakdownTodo?: Todo
           date?: string
           text?: string
+          delegateId?: string
         }
       | undefined
     >,
@@ -95,6 +106,19 @@ class AddTodoContent extends Component<{
 
   addButtonView?: Animatable.View
   hangleAddButtonViewRef = (ref: any) => (this.addButtonView = ref)
+
+  get onboardingBreakdownTodos() {
+    const firstTodo = new TodoVM()
+    const secondTodo = new TodoVM()
+    const thirdTodo = new TodoVM()
+    firstTodo.text = translate('onboarding.breakdownTodo1')
+    secondTodo.text = translate('onboarding.breakdownTodo2')
+    thirdTodo.text = translate('onboarding.breakdownTodo3')
+    firstTodo.collapsed = true
+    secondTodo.collapsed = true
+    thirdTodo.collapsed = true
+    return [firstTodo, secondTodo, thirdTodo]
+  }
 
   saveTodo() {
     if (this.savingTodo) {
@@ -140,19 +164,19 @@ class AddTodoContent extends Component<{
             deleted: false,
             date: vm.date,
             time: vm.time,
-            encrypted: !!sharedSessionStore.encryptionKey,
-
+            user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
+            delegator: !!vm.delegate
+              ? cloneDelegator(sharedSessionStore.user)
+              : undefined,
+            encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
             _tempSyncId: uuid(),
           } as Todo
           todo._exactDate = new Date(getTitle(todo))
-
           if (todo.completed) {
             completedAtCreation.push(todo.text)
           }
-
-          const dbtodo = realm.create<Todo>('Todo', todo)
+          const dbtodo = realm.create(Todo, todo)
           involvedTodos.push(dbtodo)
-
           titlesToFixOrder.push(getTitle(todo))
           if (vm.addOnTop) {
             addTodosOnTop.push(todo)
@@ -215,6 +239,7 @@ class AddTodoContent extends Component<{
               vm.editedTodo.frog = true
             }
           }
+          vm.editedTodo.delegateAccepted = vm.delegateAccepted
           involvedTodos.push(vm.editedTodo)
           titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
         }
@@ -305,7 +330,14 @@ class AddTodoContent extends Component<{
       this.breakdownTodo = this.props.route.params?.breakdownTodo
       this.isBreakdown = true
     }
-    this.addTodo()
+    if (
+      !sharedOnboardingStore.tutorialIsShown &&
+      sharedOnboardingStore.step === TutorialStep.Breakdown
+    ) {
+      this.vms.push(...this.onboardingBreakdownTodos)
+    } else {
+      this.addTodo()
+    }
     if (this.props.route.params?.editedTodo) {
       this.completed = this.props.route.params?.editedTodo.completed
       this.vms[0].setEditedTodo(this.props.route.params.editedTodo)
@@ -319,6 +351,9 @@ class AddTodoContent extends Component<{
       if (sharedOnboardingStore.step === TutorialStep.Breakdown) {
         sharedOnboardingStore.nextStep()
       }
+    })
+    addTodoEventEmitter.on(AddTodoEventEmitterEvent.saveTodo, () => {
+      this.saveTodo()
     })
   }
 
