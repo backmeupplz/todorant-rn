@@ -763,13 +763,7 @@ export class AddTodoForm extends Component<{
                 <TimeRow vm={this.props.vm} />
                 {sharedSessionStore.user &&
                   !!sharedDelegationStore.delegates.length &&
-                  (!this.props.vm.editedTodo?.delegator ||
-                    (this.props.vm.editedTodo.delegator._id ===
-                      sharedSessionStore.user?._id &&
-                      !this.props.vm.editedTodo.delegateAccepted)) &&
-                  !this.props.vm.editedTodo?.completed &&
-                  this.props.vm?.editedTodo?.delegator?._id !==
-                    sharedSessionStore.user?._id && (
+                  !this.props.vm.editedTodo && (
                     <DelegationRow vm={this.props.vm} />
                   )}
               </View>
