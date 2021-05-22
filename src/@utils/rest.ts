@@ -6,17 +6,13 @@ import { Platform } from 'react-native'
 
 const base = __DEV__ ? 'http://localhost:1337' : 'https://backend.todorant.com'
 
-const extraParams = () => {
-  return {
-    token: sharedSessionStore.user?.token,
-    ...(Platform.OS === 'ios'
-      ? {
-          fromApple: true,
-          appleReceipt: sharedSessionStore.localAppleReceipt,
-        }
-      : {}),
-  }
-}
+const extraParams = () =>
+  Platform.OS === 'ios'
+    ? {
+        fromApple: true,
+        appleReceipt: sharedSessionStore.localAppleReceipt,
+      }
+    : {}
 
 function cleanLocalAppleReceipt(user: AxiosResponse<User>) {
   sharedSessionStore.localAppleReceipt = undefined
@@ -76,10 +72,14 @@ export function loginToken(token: string) {
 
 export async function setQrToken(uuid: string) {
   return (
-    await axios.post(`${base}/login/qr_token`, {
-      uuid,
-      ...extraParams(),
-    })
+    await axios.post(
+      `${base}/login/qr_token`,
+      {
+        uuid,
+        ...extraParams(),
+      },
+      { headers: { token: sharedSessionStore.user?.token } }
+    )
   ).data as string
 }
 

@@ -193,10 +193,13 @@ export class AccountInfo extends Component {
             onPress={() => {
               navigate('LoginQR', {
                 getToken: async (uuid: string) => {
+                  this.loading = true
                   try {
                     await setQrToken(uuid)
                   } catch (err) {
-                    console.error(err)
+                    alertError(err)
+                  } finally {
+                    this.loading = false
                   }
                 },
               })
