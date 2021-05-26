@@ -2,6 +2,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { computed, makeObservable } from 'mobx'
 import { StyleProp, ViewStyle } from 'react-native'
 import { Platform } from 'react-native'
+import { isDeviceSmall } from './deviceInfo'
 import fonts from './fonts'
 const ColorScheme = require('color-scheme')
 
@@ -60,6 +61,7 @@ export class ColorModeManager {
             color: sharedSettingsStore.isDark
               ? undefined
               : this.invertedTextColor,
+            fontSize: isDeviceSmall() ? 12 : undefined,
           },
         }
       : undefined

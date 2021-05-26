@@ -97,6 +97,8 @@ export class PlanningVM {
         return closestSection
       }
 
+      let disableLoading = false
+
       const closestFrom = findClosestSection(from, beforeChangesArr)
       const closestTo = findClosestSection(to, dataArr)
       if (closestFrom === closestTo) {
@@ -112,7 +114,6 @@ export class PlanningVM {
           }
         })
       } else {
-        const today = getTodayWithStartOfDay().getTime()
         const lowerDay = Math.min(closestFrom, closestTo)
         const maxDay = Math.max(closestFrom, closestTo)
         realm.write(() => {
@@ -132,7 +133,7 @@ export class PlanningVM {
               lastSection = item
               continue
             }
-            if (i === from || i === to) {
+            if (i === to) {
               if (isTodoOld(item)) {
                 if (item.frogFails < 3) {
                   if (item.frogFails >= 1) {
@@ -160,6 +161,7 @@ export class PlanningVM {
                     ]
                   )
                   lastOrder++
+                  disableLoading = true
                   continue
                 }
               }
@@ -172,6 +174,9 @@ export class PlanningVM {
             lastOrder++
           }
         })
+      }
+      if (disableLoading) {
+        sharedAppStateStore.changeLoading(false)
       }
     }
     if (
