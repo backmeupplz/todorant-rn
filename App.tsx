@@ -53,6 +53,7 @@ import { checkupVersion } from '@utils/checkupVersion'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
+import { hydration } from '@stores/hydration/hydratedStores'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -87,7 +88,6 @@ class App extends Component {
   async componentDidMount() {
     await setI18nConfigAsync()
     checkTokenAndPassword()
-    SplashScreen.hide()
     checkSiriPermission()
     checkSharedContent()
     refreshWidgetAndBadgeAndWatch()
@@ -100,6 +100,8 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
+    await when(() => hydration.isHydrated)
+    SplashScreen.hide()
     checkOnboardingStep()
   }
 
