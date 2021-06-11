@@ -53,7 +53,9 @@ async function tryPurchase(
         })
       } else {
         if (sharedSessionStore.user) {
-          await delay(5)
+          if (Platform.OS === 'ios') {
+            await delay(5)
+          }
           await rest.verifyPurchaseApple(receipt)
         } else {
           sharedSessionStore.localAppleReceipt = receipt
