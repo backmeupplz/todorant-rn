@@ -132,6 +132,7 @@ class ChangeTextContent extends Component<{
           <Text
             style={{
               color: this.tag?.color || 'dodgerblue',
+              maxWidth: '80%',
             }}
           >{`#${this.tag?.tag}`}</Text>
           <View
