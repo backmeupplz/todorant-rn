@@ -85,7 +85,9 @@ class AddEpicContent extends Component<{
             justifyContent: 'center',
           }}
         >
-          <Text>{`#${this.tag?.tag}`}</Text>
+          <Text
+            style={{ maxWidth: '80%', color: this.tag?.color || 'dodgerblue' }}
+          >{`#${this.tag?.tag}`}</Text>
           <View
             style={{
               flexDirection: 'row',
