@@ -385,7 +385,7 @@ export function Settings() {
             name="ChangeText"
             component={ChangeText}
             options={{
-              title: translate('editText'),
+              title: translate('editHashtag'),
               headerTitleAlign: 'center',
               headerRight: () => <ChangeTextHeaderRight />,
               ...sharedColors.headerExtraStyle,

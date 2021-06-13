@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Container, ActionSheet } from 'native-base'
+import { Text, Container, ActionSheet, View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { FlatList } from 'react-native-gesture-handler'
 import { sharedTagStore } from '@stores/TagStore'
@@ -13,53 +13,11 @@ import { TableItem } from '@components/TableItem'
 import { Alert } from 'react-native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { sharedSync } from '@sync/Sync'
+import fonts from '@utils/fonts'
+import { IconButton } from '@components/IconButton'
+import { Divider } from '@components/Divider'
 
 class TagsVM {
-  onTap(tag: Tag) {
-    const hasColor = !!tag.color
-    const isEpic = !!tag.epic
-    const options = [
-      translate('changeColor'),
-      translate('editText'),
-      translate('delete'),
-      translate('cancel'),
-    ]
-    if (hasColor) {
-      options.splice(1, 0, translate('changeColorToDefault'))
-    }
-    if (!isEpic) {
-      if (hasColor) {
-        options.splice(2, 0, translate('epic.intoEpic'))
-      } else {
-        options.splice(1, 0, translate('epic.intoEpic'))
-      }
-    }
-    const cancelButtonIndex = options.length - 1
-    const deleteButtonIndex = options.length - 2
-    ActionSheet.show(
-      {
-        options,
-        cancelButtonIndex: cancelButtonIndex,
-        destructiveButtonIndex: deleteButtonIndex,
-        title: `#${tag.tag}${hasColor ? ` — ${tag.color}` : ''}`,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === cancelButtonIndex) {
-        } else if (buttonIndex === deleteButtonIndex) {
-          this.deleteTag(tag)
-        } else if (buttonIndex === 0) {
-          this.changeColor(tag)
-        } else if (!isEpic && buttonIndex === 1) {
-          this.makeAnEpic(tag)
-        } else if (buttonIndex === options.length - 3) {
-          this.editText(tag)
-        } else {
-          this.changeColorToDefault(tag)
-        }
-      }
-    )
-  }
-
   deleteTag(tag: Tag) {
     alertConfirm(
       `${translate('deleteTodo')} "#${
@@ -128,7 +86,7 @@ class DeleteAllTagsButton extends Component {
           }, 100)
         }}
       >
-        <Text style={{ color: sharedColors.destructIconColor }}>
+        <Text style={{ color: sharedColors.destructIconColor, marginTop: 8 }}>
           {translate('deleteAllHashtags')}
         </Text>
       </TableItem>
@@ -147,20 +105,61 @@ export class Tags extends Component {
           backgroundColor: sharedColors.backgroundColor,
         }}
       >
-        {sharedTagStore.undeletedTags.length ? (
+        {sharedTagStore.sortedTags.length ? (
           <FlatList
             ListHeaderComponent={DeleteAllTagsButton}
-            data={sharedTagStore.undeletedTags}
+            data={sharedTagStore.sortedTags}
             renderItem={({ item }) => {
               return (
-                <TableItem onPress={() => this.vm.onTap(item)}>
-                  <Text style={{ color: item.color || 'dodgerblue' }}>
-                    #{item.tag}
-                  </Text>
-                </TableItem>
+                <View
+                  style={{ paddingHorizontal: 16, marginVertical: 8, flex: 1 }}
+                >
+                  <View
+                    style={{
+                      borderColor: sharedColors.placeholderColor,
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: item.color || 'dodgerblue',
+                        fontFamily: fonts.SFProTextRegular,
+                      }}
+                    >
+                      #{item.tag}
+                    </Text>
+                    <View style={{ flexDirection: 'row' }}>
+                      {!item.epic && (
+                        <IconButton
+                          onPress={() => {
+                            this.vm.makeAnEpic(item)
+                          }}
+                          name="target_outline_28"
+                        />
+                      )}
+                      <IconButton
+                        onPress={() => {
+                          this.vm.editText(item)
+                        }}
+                        name="edit_outline_28"
+                      />
+                      <IconButton
+                        onPress={() => {
+                          this.vm.deleteTag(item)
+                        }}
+                        color={sharedColors.destructIconColor}
+                        name="delete_outline_28-iOS"
+                      />
+                    </View>
+                  </View>
+                  <Divider marginHorizontal={0} />
+                </View>
               )
             }}
-            keyExtractor={(_, index) => `${index}`}
+            keyExtractor={(tag) => (tag._id || tag._tempSyncId)!}
           />
         ) : (
           <Text

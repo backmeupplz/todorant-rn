@@ -15,6 +15,10 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { Todo } from '@models/Todo'
+import { TouchableOpacity } from 'react-native'
+import { IconButton } from '@components/IconButton'
+import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 
 const ChangeTextStore = {
   save: () => {},
@@ -45,25 +49,51 @@ export class ChangeTextHeaderRight extends Component {
 class ChangeTextContent extends Component<{
   route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
 }> {
-  @observable tag?: Tag
+  @observable tag = this.props.route.params?.tag!
   @observable newName: string = ''
+
+  @observable colorPickerEnabled = false
 
   UNSAFE_componentWillMount() {
     makeObservable(this)
   }
 
   componentDidMount() {
-    this.tag = this.props.route.params?.tag
     ChangeTextStore.save = () => {
       this.save()
     }
   }
 
+  get colors() {
+    return sharedSettingsStore.isDark
+      ? [
+          '#FFBE3D',
+          '#FF984C',
+          '#FF715B',
+          '#6cdaaf',
+          '#32A4C6',
+          '#70bfd7',
+          '#23738b',
+          '#ab81d6',
+        ]
+      : [
+          '#FFBE3D',
+          '#FF984C',
+          '#FF715B',
+          '#2DCA8C',
+          '#32A4C6',
+          '#377DFF',
+          '#4740D6',
+          '#5603AD',
+        ]
+  }
+
   save() {
     const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
-    if (!dbtag || !this.newName || !this.newName.match(/^[\S]+$/)) {
+    if (!dbtag) {
       return
     }
+    if (this.newName && !this.newName.match(/^[\S]+$/)) this.newName = ''
     realm.write(() => {
       for (const todo of realm.objects(Todo).filtered('deleted = false')) {
         todo.text = todo.text
@@ -72,14 +102,15 @@ class ChangeTextContent extends Component<{
             if (word !== `#${dbtag.tag}`) {
               return word
             }
-            return `#${this.newName}`
+            return `#${this.newName || dbtag.tag}`
           })
           .join(' ')
         todo.updatedAt = new Date()
       }
     })
     realm.write(() => {
-      dbtag.tag = this.newName
+      dbtag.tag = this.newName || dbtag.tag
+      dbtag.color = (this.tag.color || dbtag.color)!
       dbtag.updatedAt = new Date()
     })
     goBack()
@@ -98,7 +129,11 @@ class ChangeTextContent extends Component<{
             justifyContent: 'center',
           }}
         >
-          <Text>{`#${this.tag?.tag}`}</Text>
+          <Text
+            style={{
+              color: this.tag?.color || 'dodgerblue',
+            }}
+          >{`#${this.tag?.tag}`}</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -113,11 +148,57 @@ class ChangeTextContent extends Component<{
               style={{
                 flex: 1,
                 flexDirection: 'row',
-                color: 'green',
+                color: sharedColors.textColor,
                 textAlign: 'center',
               }}
             />
           </View>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}
+          >
+            {this.colors.map((color, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  this.tag.color = color
+                }}
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: 16,
+                  backgroundColor: color,
+                  marginHorizontal: 6,
+                }}
+              />
+            ))}
+            <IconButton
+              onPress={() => {
+                this.colorPickerEnabled = !this.colorPickerEnabled
+              }}
+              name={
+                this.colorPickerEnabled
+                  ? 'cancel_outline_28--close'
+                  : 'palette_outline_28'
+              }
+            />
+          </View>
+          {this.colorPickerEnabled && (
+            <ColorPicker
+              style={{ width: '50%', height: '50%' }}
+              onColorSelected={(color) => {
+                this.tag.color = color
+              }}
+              onColorChange={(hsv) => {
+                this.tag.color = fromHsv(hsv)
+              }}
+              color={toHsv(this.tag.color || 'dodgerblue')}
+              defaultColor={toHsv(this.tag.color || 'dodgerblue')}
+              hideSliders
+              sliderComponent={undefined as any}
+            />
+          )}
         </View>
       </View>
     )

@@ -335,7 +335,7 @@
   "changeTasksSingular": "Изменить задачу",
   "addedTask": "Задача добавлена",
   "edit": "Редактировать",
-  "editText": "Редактировать текст хештега",
+  "editText": "Редактировать хештег",
   "editName": "Новый текст хештега",
   "tutorialButton": "Обучение",
   "onboarding": {
