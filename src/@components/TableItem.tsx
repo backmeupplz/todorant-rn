@@ -11,6 +11,7 @@ export class TableItem extends Component<{
   onPress?: () => void
   onLongPress?: () => void
   onLayout?: (layout: LayoutChangeEvent) => void
+  disableIndents?: boolean
 }> {
   renderContent() {
     return (
@@ -43,8 +44,8 @@ export class TableItem extends Component<{
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    marginVertical: 8,
+    paddingHorizontal: this.props.disableIndents ? 0 : 16,
+    marginVertical: this.props.disableIndents ? 0 : 8,
   } as StyleProp<ViewStyle>
 
   render() {

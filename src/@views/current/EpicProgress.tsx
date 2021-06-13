@@ -12,36 +12,32 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { navigate } from '@utils/navigation'
 
 @observer
-class EpicText extends Component<{
+export class EpicText extends Component<{
   text: string
   color?: string
   onPress?: () => void
+  disableMargin?: boolean
 }> {
   render() {
-    return this.props.onPress ? (
-      <TouchableOpacity onPress={this.props.onPress}>
-        <Text
-          style={{
-            fontFamily: fonts.SFProRoundedRegular,
-            fontSize: 22,
-            marginHorizontal: 16,
-            color: this.props.color || sharedColors.primaryColor,
-          }}
-        >
-          {this.props.text}
-        </Text>
-      </TouchableOpacity>
-    ) : (
+    const actualText = (
       <Text
         style={{
           fontFamily: fonts.SFProRoundedRegular,
           fontSize: 22,
-          marginHorizontal: 16,
+          marginHorizontal: this.props.disableMargin ? 0 : 16,
           color: this.props.color || sharedColors.primaryColor,
         }}
       >
         {this.props.text}
       </Text>
+    )
+
+    return this.props.onPress ? (
+      <TouchableOpacity onPress={this.props.onPress}>
+        {actualText}
+      </TouchableOpacity>
+    ) : (
+      actualText
     )
   }
 }

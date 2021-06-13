@@ -7,6 +7,7 @@ import { sharedColors } from '@utils/sharedColors'
 export class Divider extends Component<{
   color?: string
   marginVertical?: number
+  marginHorizontal?: number
 }> {
   render() {
     return (
@@ -14,7 +15,10 @@ export class Divider extends Component<{
         style={{
           backgroundColor: this.props.color || sharedColors.borderColor,
           height: 1,
-          marginHorizontal: 16,
+          marginHorizontal:
+            this.props.marginHorizontal === undefined
+              ? 16
+              : this.props.marginHorizontal,
           marginVertical:
             this.props.marginVertical === undefined
               ? 6

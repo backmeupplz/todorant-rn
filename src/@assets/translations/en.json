@@ -335,7 +335,7 @@
   "changeTasksSingular": "Change task",
   "addedTask": "Added task",
   "edit": "Edit",
-  "editText": "Edit hashtag text",
+  "editHashtag": "Edit hashtag",
   "editName": "New hashtag text",
   "tutorialButton": "Tutorial",
   "onboarding": {

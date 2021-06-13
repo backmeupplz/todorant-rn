@@ -25,6 +25,13 @@ class TagStore {
     ])
   }
 
+  @computed get sortedTags() {
+    return this.undeletedTags.sorted([
+      [`epic`, true],
+      [`epicOrder`, false],
+    ])
+  }
+
   constructor() {
     makeObservable(this)
     this.refreshTags()
