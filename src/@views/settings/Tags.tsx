@@ -125,6 +125,7 @@ export class Tags extends Component {
                   >
                     <Text
                       style={{
+                        maxWidth: '70%',
                         color: item.color || 'dodgerblue',
                         fontFamily: fonts.SFProTextRegular,
                       }}
