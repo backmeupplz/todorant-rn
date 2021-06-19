@@ -3,6 +3,8 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
+import { todosCollection } from '../../App'
+import { database } from '../../App'
 import uuid from 'uuid'
 
 export function deleteAllTodos() {
@@ -30,11 +32,11 @@ class TodoSample {
   _tempSyncId: string = uuid()
 }
 
-export function add5000Todos() {
+export async function add5000Todos() {
   let todos: any[] = []
   let counter = 0
   let lastYear = 2021
-  for (let i = 0; i < 50000; i++) {
+  for (let i = 0; i < 1000; i++) {
     if (counter++ >= 30) {
       counter = 0
       dateS.setUTCFullYear(lastYear)
@@ -43,9 +45,15 @@ export function add5000Todos() {
     todos.push(new TodoSample())
   }
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
+  await database.action(async () => {
+    for (const vm of todos) {
+      const newTodo = await todosCollection.create((todo) => {
+        todo.text = vm.text
+        todo.monthAndYear = vm.monthAndYear
+        todo.time = vm.time
+        todo.completed = false
+        todo.deleted = false
+      })
     }
   })
 

@@ -24,10 +24,14 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateString } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
-import { Todo } from '@models/Todo'
+import { getTitle, Todo } from '@models/Todo'
 import { debounce } from 'lodash'
 import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
+import { MelonTodo } from '@models/MelonTodo'
+import withObservables from '@nozbe/with-observables'
+import { todosCollection } from '../../../App'
+import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 
 @observer
 export class PlanningContent extends Component {
@@ -175,127 +179,7 @@ export class PlanningContent extends Component {
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
         {this.renderCircle()}
-        {sharedAppStateStore.todoSection !== TodoSectionType.completed ? (
-          this.vm?.uncompletedTodosData.todosArray.length ? (
-            <DraggableSectionList<Todo, SectionListData<Todo>>
-              onEndReached={() => {
-                sharedAppStateStore.changeLoading(true)
-                setTimeout(() => this.vm?.uncompletedTodosData.increaseOffset())
-              }}
-              onEndReachedThreshold={0.3}
-              onViewableItemsChanged={() => {
-                sharedAppStateStore.changeLoading(false)
-              }}
-              contentContainerStyle={{ paddingBottom: 100 }}
-              onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
-                if (!sharedAppStateStore.calendarEnabled) return
-                this.currentX.setValue(absoluteX as any)
-                this.currentY.setValue((absoluteY - this.todoHeight) as any)
-                this.vm?.setCoordinates(absoluteY, absoluteX)
-              }}
-              autoscrollSpeed={200}
-              data={
-                (sharedAppStateStore.hash.length ||
-                sharedAppStateStore.searchQuery.length > 0
-                  ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
-                  : this.vm.uncompletedTodosData.todosArray) || []
-              }
-              layoutInvalidationKey={
-                this.vm.uncompletedTodosData.invalidationKey
-              }
-              keyExtractor={(item, index) => {
-                return `${index}-${
-                  (item as Todo)._tempSyncId || (item as Todo)._id || item
-                }`
-              }}
-              onDragEnd={this.vm.onDragEnd}
-              isSectionHeader={(a: any) => {
-                if (a === undefined) {
-                  return false
-                }
-                return !a.text
-              }}
-              renderItem={({ item, index, drag, isActive }) => {
-                if (!item) return
-                return (
-                  <View
-                    style={{ padding: isActive ? 10 : 0 }}
-                    key={index}
-                    onLayout={(e) => {
-                      if (!index) return
-                      this.todoHeight = e.nativeEvent.layout.height
-                    }}
-                  >
-                    <TodoCard
-                      todo={item as Todo}
-                      type={
-                        sharedAppStateStore.todoSection ===
-                        TodoSectionType.planning
-                          ? CardType.planning
-                          : CardType.done
-                      }
-                      drag={drag}
-                      active={isActive}
-                    />
-                  </View>
-                )
-              }}
-              renderSectionHeader={({ item, drag, index, isActive }) => {
-                return (
-                  <TodoHeader
-                    date={true}
-                    drag={drag}
-                    isActive={isActive}
-                    item={item.section}
-                    key={index}
-                    vm={this.vm}
-                  />
-                )
-              }}
-              stickySectionHeadersEnabled={false}
-            />
-          ) : (
-            <NoTodosPlaceholder />
-          )
-        ) : this.vm?.completedTodosData.todosArray.length ? (
-          <SectionList
-            onEndReached={() => {
-              sharedAppStateStore.changeLoading(true)
-              setTimeout(() => this.vm?.completedTodosData.increaseOffset())
-            }}
-            onEndReachedThreshold={0.3}
-            onViewableItemsChanged={() => {
-              sharedAppStateStore.changeLoading(false)
-            }}
-            refreshing={true}
-            keyExtractor={(item, index) => {
-              return `${index}-${item._tempSyncId || item._id || item}`
-            }}
-            sections={this.vm.completedTodosData.todosArray}
-            renderItem={({ item }) => (
-              <TodoCard
-                todo={item as Todo}
-                type={
-                  sharedAppStateStore.todoSection === TodoSectionType.planning
-                    ? CardType.planning
-                    : CardType.done
-                }
-              />
-            )}
-            renderSectionHeader={({ section }) => (
-              <TodoHeader
-                item={section.section}
-                vm={this.vm}
-                drag={() => {}}
-                isActive={false}
-                date={true}
-              />
-            )}
-            stickySectionHeadersEnabled={false}
-          />
-        ) : (
-          sharedAppStateStore.changeLoading(false)
-        )}
+        <EnhancedBlogPostList />
         <PlusButton />
       </Container>
     )
@@ -311,3 +195,49 @@ let styles = StyleSheet.create({
     borderRadius: 12,
   },
 })
+
+const TodoSectionList = ({ todos }: { todos: MelonTodo[] }) => {
+  console.log(todos)
+  const todoSectionMap = {} as any
+  let currentTitle: string | undefined
+  let sectionIndex = 0
+
+  for (const watermelonTodo of todos) {
+    const realmTodoTitle = getTitle(watermelonTodo)
+    if (currentTitle && currentTitle !== realmTodoTitle) {
+      sectionIndex++
+    }
+    if (todoSectionMap[realmTodoTitle]) {
+      todoSectionMap[realmTodoTitle].data.push(watermelonTodo as any)
+    } else {
+      todoSectionMap[realmTodoTitle] = {
+        order: sectionIndex,
+        section: realmTodoTitle,
+        data: [watermelonTodo as any],
+      }
+    }
+  }
+
+  const whatINeed = Object.keys(todoSectionMap).map((key) => {
+    return todoSectionMap[key]
+  })
+
+  return (
+    <SectionList
+      renderItem={({ item, index, section }) => <Text></Text>}
+      renderSectionHeader={({ section: { title } }) => (
+        <Text style={{ fontWeight: 'bold' }}></Text>
+      )}
+      sections={whatINeed}
+      keyExtractor={(item) => item.id}
+    />
+  )
+}
+
+const enhance = withDatabase(
+  withObservables([], ({ database }) => ({
+    todos: database.collections.get('todos').query().observe(),
+  }))
+)
+
+const EnhancedBlogPostList = enhance(TodoSectionList)

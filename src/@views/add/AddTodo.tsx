@@ -64,6 +64,7 @@ import { pick } from 'lodash'
 import { DelegationUser } from '@models/DelegationUser'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
+import { database, todosCollection } from '../../../App'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -120,7 +121,7 @@ class AddTodoContent extends Component<{
     return [firstTodo, secondTodo, thirdTodo]
   }
 
-  saveTodo() {
+  async saveTodo() {
     if (this.savingTodo) {
       Toast.show({
         text: '🤔',
@@ -147,8 +148,20 @@ class AddTodoContent extends Component<{
       vm.order = i
     })
     const completedAtCreation: string[] = []
-    realm.write(() => {
+    await database.action(async () => {
       for (const vm of this.vms) {
+        const newTodo = await todosCollection.create((todo) => {
+          todo.text = vm.text
+          todo.monthAndYear = vm.monthAndYear
+          todo.time = vm.time
+          todo.frog = vm.frog
+          todo._exactDate = new Date(getTitle(vm))
+          todo.completed = vm.completed
+          todo.skipped = false
+          todo.order = vm.order
+          todo.date = vm.date
+        })
+        console.log(newTodo)
         if (this.screenType === AddTodoScreenType.add) {
           const todo = {
             updatedAt: new Date(),
@@ -175,76 +188,10 @@ class AddTodoContent extends Component<{
           if (todo.completed) {
             completedAtCreation.push(todo.text)
           }
-          const dbtodo = realm.create(Todo, todo)
-          involvedTodos.push(dbtodo)
-          titlesToFixOrder.push(getTitle(todo))
-          if (vm.addOnTop) {
-            addTodosOnTop.push(todo)
-          } else {
-            addTodosToBottom.push(todo)
-          }
-        } else if (vm.editedTodo) {
-          const oldTitle = getTitle(vm.editedTodo)
-          const failed =
-            isTodoOld(vm.editedTodo) &&
-            (vm.editedTodo.date !== vm.date ||
-              vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
-            !vm.editedTodo.completed
-
-          if (
-            vm.editedTodo.frogFails > 2 &&
-            (vm.editedTodo.monthAndYear !==
-              (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
-              vm.editedTodo.date !== vm.date)
-          ) {
-            setTimeout(() => {
-              Alert.alert(translate('error'), translate('breakdownRequest'), [
-                {
-                  text: translate('cancel'),
-                  style: 'cancel',
-                },
-                {
-                  text: translate('breakdownButton'),
-                  onPress: () => {
-                    goBack()
-                    navigate('BreakdownTodo', {
-                      breakdownTodo: vm.editedTodo,
-                    })
-                  },
-                },
-              ])
-            }, 100)
-            return
-          }
-
-          if (vm.completed && !vm.editedTodo.completed) {
-            completedAtCreation.push(vm.text)
-          }
-
-          if (!vm.editedTodo) {
-            return
-          }
-          vm.editedTodo.text = vm.text
-          vm.editedTodo.completed = vm.completed
-          vm.editedTodo.frog = vm.frog
-          vm.editedTodo.monthAndYear =
-            vm.monthAndYear || getDateMonthAndYearString(new Date())
-          vm.editedTodo.date = vm.date
-          vm.editedTodo.time = vm.time
-          vm.editedTodo.updatedAt = new Date()
-          vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
-          if (failed && vm.editedTodo.date) {
-            vm.editedTodo.frogFails++
-            if (vm.editedTodo.frogFails > 1) {
-              vm.editedTodo.frog = true
-            }
-          }
-          vm.editedTodo.delegateAccepted = vm.delegateAccepted
-          involvedTodos.push(vm.editedTodo)
-          titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
         }
       }
     })
+
     completedAtCreation.forEach((todoText) => {
       sharedTagStore.incrementEpicPoints(todoText)
       // Increment hero store

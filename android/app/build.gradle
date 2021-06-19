@@ -129,6 +129,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        exclude "META-INF/watermelondb_debug.kotlin_module"
+    }
+
     defaultConfig {
         applicationId "com.todorant"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -197,6 +201,7 @@ android {
 dependencies {
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-reanimated')
+    // implementation project(':watermelondb')  // ⬅️ This!
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules

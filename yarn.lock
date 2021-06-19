@@ -820,6 +820,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.11.2":
+  version "7.14.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.6.tgz#535203bc0892efc7dec60bdc27b2ecf6e409062d"
+  integrity sha512-/PCB2uJ7oM44tz8YhC4Z/6PeOKXp4K588f+5M3clr1M4zbqztlo0XEfJ2LEzj/FgwfgGcIdl8n7YYjTCI0BYwg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.0.0", "@babel/template@^7.8.3", "@babel/template@^7.8.6":
   version "7.8.6"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.8.6.tgz#86b22af15f828dfb086474f964dcc3e39c43ce2b"
@@ -1072,6 +1079,31 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@nozbe/sqlite@3.31.1":
+  version "3.31.1"
+  resolved "https://registry.yarnpkg.com/@nozbe/sqlite/-/sqlite-3.31.1.tgz#ffd394ad7c188c6b73f89fd6e1ccb849a1b96dba"
+  integrity sha512-z5+GdcHZl9OQ1g0pnygORAnwCYUlYw/gQxdW/8rS0HxD2Gnn/k3DBQOvqQIH4Z3Z3KWVMbGUYhcH1v4SqTAdwg==
+
+"@nozbe/watermelondb@^0.22.0":
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/@nozbe/watermelondb/-/watermelondb-0.22.0.tgz#a808300015f7fb62b1925b25da5aeb59b5440acd"
+  integrity sha512-c6HNSbd0fmg3wNOeOpdPGR4m3LoPhpNbA/5Nt5wbVtadiRHZTTHCRoaVA+35eUURJH9B1gnLIKYTu3p/9+Qxvg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    "@nozbe/sqlite" "3.31.1"
+    "@nozbe/with-observables" "1.3.0"
+    hoist-non-react-statics "^3.3.2"
+    lokijs "npm:@nozbe/lokijs@1.5.12-wmelon2"
+    rxjs "^6.5.3"
+    sql-escape-string "^1.1.0"
+
+"@nozbe/with-observables@1.3.0", "@nozbe/with-observables@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@nozbe/with-observables/-/with-observables-1.3.0.tgz#c1c581dd1e62866fd11bd3b6721c9c82c28aca2a"
+  integrity sha512-pcE8+FeDgDmHJcKjTkFrC3qAoSG6UvofpF65Hs4pCSNn243G7Tu5Fdlo56n9tAXKr7X37f73VmT8g8wXdojO4w==
+  dependencies:
+    hoist-non-react-statics "^3.3.2"
+
 "@react-native-async-storage/async-storage@^1.13.0":
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.0.tgz#7b26b04fd2acf95353e7697927939817e46d3166"
@@ -1256,7 +1288,7 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.7.0.tgz#54be55f22c6a6358d5d61f2aa1bc1de20c7b53b6"
   integrity sha512-ZhmkaqRpLFvOMu/Ln3YCitBJUgk7lbFsvcinbW/LIktXM6BwVwEZPTkYr+N74hEAhKz2CcDN8aMzzaokxwxRqg==
 
-"@react-native-community/push-notification-ios@^1.4.0", "@react-native-community/push-notification-ios@^1.5.0":
+"@react-native-community/push-notification-ios@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.5.0.tgz#b41802b58d2388c8cb76cd219bbeec9ac9a4c06d"
   integrity sha512-88Uwu6S8oRVnuMfBMGN+MtTyUjiVmMKwfObYrPmm+b2E2Aqk0WlZ4clfECukG8QIzv1pfELJZ5uZMVTYMI6klg==
@@ -5112,6 +5144,11 @@ logkitty@^0.7.1:
     dayjs "^1.8.15"
     yargs "^15.1.0"
 
+"lokijs@npm:@nozbe/lokijs@1.5.12-wmelon2":
+  version "1.5.12-wmelon2"
+  resolved "https://registry.yarnpkg.com/@nozbe/lokijs/-/lokijs-1.5.12-wmelon2.tgz#31bc7b2d0c62edc1ccabd50ba795635d40e3e8c9"
+  integrity sha512-/YkZghPWKmyXgVpZ2MaIe3y/t/IYm/wQxXyEoi0G8JrjTrO9tlrAs2uiHUhbdY/2ZSPMLKbw1q9EqXZxA8ZqnQ==
+
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -6840,12 +6877,10 @@ react-native-permissions@^2.0.2, react-native-permissions@^2.1.4:
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.1.4.tgz#b0663839d28444d8ea6b5302303b2151ea70d2da"
   integrity sha512-R1mVPGctEJuOlxoeIBlT5270A+DKngP78rWU0dgMxIuETjGYhBRJMKOp1rQUbp6PxcahfU+PjSTSzsbja5FyDw==
 
-react-native-push-notification@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-5.1.1.tgz#104572ddc8c73b1a3a95c90e26d05800c51b12c5"
-  integrity sha512-CJmKqzM2P/s+a9PImoaiUN4TP1+K4YfmG1B0uUbavgFdGhTtRPTLLwDfFk2h3J6VmTXNak82rUz2iGwyptHm5w==
-  dependencies:
-    "@react-native-community/push-notification-ios" "^1.4.0"
+react-native-push-notification@^7.3.1:
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.3.1.tgz#1495feacd25169b998446dcf7b448a197ae5dca0"
+  integrity sha512-5kSKPvDU23uZRmzgKTsGhbwGNvB2tidu1VnInBHP53ZD0VEPSBl5fbpuTfHH98ED+Gp1SCcT2/e6bJWkIspKvg==
 
 react-native-qrcode-scanner@^1.4.0:
   version "1.4.0"
@@ -7359,6 +7394,13 @@ rxjs@^5.4.3:
   dependencies:
     symbol-observable "1.0.1"
 
+rxjs@^6.5.3:
+  version "6.6.7"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
+  integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
+  dependencies:
+    tslib "^1.9.0"
+
 rxjs@^6.6.0:
   version "6.6.6"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.6.tgz#14d8417aa5a07c5e633995b525e1e3c0dec03b70"
@@ -7757,6 +7799,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
+
+sql-escape-string@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/sql-escape-string/-/sql-escape-string-1.1.0.tgz#fe744b8514868c0eb4bfb9e4a989271d40f30eb9"
+  integrity sha1-/nRLhRSGjA60v7nkqYknHUDzDrk=
 
 sshpk@^1.7.0:
   version "1.16.1"

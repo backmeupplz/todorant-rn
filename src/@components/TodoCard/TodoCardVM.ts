@@ -21,6 +21,8 @@ import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
+import { MelonTodo } from '@models/MelonTodo'
+import { database } from '../../../App'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -96,27 +98,29 @@ export class TodoCardVM {
     fixOrder([oldTitle, getTitle(todo)], undefined, undefined, [todo])
   }
 
-  delete(todo: Todo) {
+  async delete(todo: MelonTodo) {
     if (sharedSettingsStore.askBeforeDelete) {
       alertConfirm(
         `${translate('deleteTodo')} "${
           todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
         }"?`,
         translate('delete'),
-        () => {
-          realm.write(() => {
-            todo.deleted = true
-            todo.updatedAt = new Date()
+        async () => {
+          await database.action(async () => {
+            await todo.update((todo) => {
+              todo.deleted = true
+            })
           })
-          fixOrder([getTitle(todo)])
+          // fixOrder([getTitle(todo)])
         }
       )
     } else {
-      realm.write(() => {
-        todo.deleted = true
-        todo.updatedAt = new Date()
+      await database.action(async () => {
+        await todo.update((todo) => {
+          todo.deleted = true
+        })
       })
-      fixOrder([getTitle(todo)])
+      // fixOrder([getTitle(todo)])
     }
   }
 
@@ -142,7 +146,7 @@ export class TodoCardVM {
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
-  complete(todo: Todo) {
+  async complete(todo: MelonTodo) {
     if (todo.frog) {
       playFrogComplete()
     } else {
@@ -157,12 +161,18 @@ export class TodoCardVM {
     sharedHeroStore.incrementPoints()
     sharedTagStore.incrementEpicPoints(todo.text)
 
-    realm.write(() => {
-      todo.completed = true
-      todo.updatedAt = new Date()
+    await database.action(async () => {
+      await todo.update((todo) => {
+        todo.completed = true
+      })
     })
 
-    fixOrder([getTitle(todo)])
+    // realm.write(() => {
+    //   todo.completed = true
+    //   todo.updatedAt = new Date()
+    // })
+
+    // fixOrder([getTitle(todo)])
     sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
     checkDayCompletionRoutine()

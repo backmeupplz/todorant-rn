@@ -14,6 +14,9 @@ import {
 } from '@utils/ObservableNow'
 import { PlanningEventEmitter, planningEventEmitter } from './PlanningVM'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { todosCollection } from '../../../App'
+import { Collection } from '@nozbe/watermelondb'
+import { MelonTodo } from '@models/MelonTodo'
 
 export class RealmTodosData {
   completed: boolean
@@ -28,6 +31,7 @@ export class RealmTodosData {
   @observable offset = 50
 
   get todosArray() {
+    mapsFromWatermelonTodos(todosCollection.query().fetch())
     const observableKey = this.invalidationKey
     return Object.keys(this.todoSectionMap).map((key) => {
       return this.todoSectionMap[key] as TodoSection
@@ -411,6 +415,29 @@ function getRealmTodos(completed: boolean) {
       ['frog', true],
       ['order', false],
     ])
+}
+
+async function mapsFromWatermelonTodos(watermelonTodos: Promise<MelonTodo[]>) {
+  const todoSectionMap = {} as TodoSectionMap
+  let currentTitle: string | undefined
+  let sectionIndex = 0
+
+  for (const watermelonTodo of await watermelonTodos) {
+    const realmTodoTitle = getTitle(watermelonTodo)
+    if (currentTitle && currentTitle !== realmTodoTitle) {
+      sectionIndex++
+    }
+    if (todoSectionMap[realmTodoTitle]) {
+      todoSectionMap[realmTodoTitle].data.push(watermelonTodo as any)
+    } else {
+      todoSectionMap[realmTodoTitle] = {
+        order: sectionIndex,
+        section: realmTodoTitle,
+        data: [watermelonTodo as any],
+      }
+    }
+  }
+  console.log(todoSectionMap)
 }
 
 function mapsFromRealmTodos(realmTodos: Realm.Results<Todo> | Todo[]) {
