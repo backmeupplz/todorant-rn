@@ -32,6 +32,8 @@ import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { todosCollection } from '../../../App'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
+import { Q } from '@nozbe/watermelondb'
+import { v4 } from 'uuid'
 
 @observer
 export class PlanningContent extends Component {
@@ -47,6 +49,10 @@ export class PlanningContent extends Component {
 
   lastTimeY = 0
   lastTimeX = 0
+
+  todos = todosCollection
+    .query(Q.where('is_completed', false), Q.where('is_deleted', false))
+    .observe()
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)
@@ -179,7 +185,7 @@ export class PlanningContent extends Component {
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
         {this.renderCircle()}
-        <EnhancedBlogPostList />
+        <ImReally todo={this.todos} />
         <PlusButton />
       </Container>
     )
@@ -234,10 +240,76 @@ const TodoSectionList = ({ todos }: { todos: MelonTodo[] }) => {
   )
 }
 
-const enhance = withDatabase(
-  withObservables([], ({ database }) => ({
-    todos: database.collections.get('todos').query().observe(),
-  }))
-)
+const TryingEnhancedTodo = ({ todo }: { todo: MelonTodo[] }) => {
+  const sections = {} as any
 
-const EnhancedBlogPostList = enhance(TodoSectionList)
+  const todoSectionMap = {} as any
+  const todoIdToDateMap = new Map<string, string>()
+
+  let currentTitle: string | undefined
+  let sectionIndex = 0
+  for (const realmTodo of todo) {
+    const realmTodoTitle = getTitle(realmTodo)
+    if (currentTitle && currentTitle !== realmTodoTitle) {
+      sectionIndex++
+    }
+    if (todoSectionMap[realmTodoTitle]) {
+      todoSectionMap[realmTodoTitle].data.push(realmTodo)
+    } else {
+      todoSectionMap[realmTodoTitle] = {
+        order: sectionIndex,
+        section: realmTodoTitle,
+        data: [realmTodo],
+      }
+    }
+  }
+
+  const idk = Object.keys(todoSectionMap).map((key) => {
+    return todoSectionMap[key]
+  })
+
+  return (
+    <SectionList
+      renderItem={({ item, index, section }) => {
+        if (!item) return
+        return (
+          <View style={{ padding: false ? 10 : 0 }} key={item.id}>
+            <TodoCard
+              todo={item as Todo}
+              type={
+                sharedAppStateStore.todoSection === TodoSectionType.planning
+                  ? CardType.planning
+                  : CardType.done
+              }
+              drag={undefined}
+              active={undefined}
+            />
+          </View>
+        )
+      }}
+      renderSectionHeader={(item: any, index: any) => {
+        return (
+          <TodoHeader
+            date={true}
+            drag={undefined}
+            isActive={undefined}
+            item={item.section.section}
+            key={item.section.section}
+            vm={undefined}
+          />
+        )
+      }}
+      sections={idk}
+      keyExtractor={(item) => item.id}
+    />
+  )
+}
+
+const enhancedTest = withObservables(['todo'], ({ todo }) => {
+  // console.log(todo)
+  return {
+    todo,
+  }
+})
+
+const ImReally = enhancedTest(TryingEnhancedTodo)

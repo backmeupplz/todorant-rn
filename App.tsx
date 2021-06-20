@@ -67,6 +67,7 @@ import { MelonTodo } from '@models/MelonTodo'
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
   schema: watermelon,
+  synchronous: true,
   // (You might want to comment it out for development purposes -- see Migrations documentation)
   migrations: watertmelonMigration,
   // (optional database name or file system path)

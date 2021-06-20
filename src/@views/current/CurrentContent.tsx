@@ -86,7 +86,7 @@ export class CurrentContent extends Component {
               total={sharedTodoStore.progress.count}
             />
           )}
-          {true && (
+          {false && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 currentTodoNodeId = target
