@@ -258,7 +258,8 @@
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Копировать хештеги при разбивке",
-    "showMoreByDefault": "Сразу показывать расширенные настройки добавления задачи"
+    "showMoreByDefault": "Сразу показывать расширенные настройки добавления задачи",
+    "removeCompletedFromCalendar": "Удалять задачи из Гугл Календаря после выполнения"
   },
   "level": "Уровень",
   "points": "очков",

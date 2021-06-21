@@ -258,7 +258,8 @@
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
-    "showMoreByDefault": "Show more when adding todos by default"
+    "showMoreByDefault": "Show more when adding todos by default",
+    "removeCompletedFromCalendar": "Remove completed todos from Google Calendar"
   },
   "level": "Level",
   "points": "points",
