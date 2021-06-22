@@ -7,5 +7,5 @@
     <ImageView
         android:layout_width="362dp"
         android:layout_height="109dp"
-        android:src="@mipmap/splash"/>
+        android:src="@mipmap/bootsplash_logo"/>
 </LinearLayout>

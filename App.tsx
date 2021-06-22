@@ -18,7 +18,6 @@ import {
   InteractionManager,
 } from 'react-native'
 import { sharedColors } from '@utils/sharedColors'
-import SplashScreen from 'react-native-splash-screen'
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -54,6 +53,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
 import { hydration } from '@stores/hydration/hydratedStores'
+import RNBootSplash from 'react-native-bootsplash'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -101,7 +101,7 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
-    SplashScreen.hide()
+    RNBootSplash.hide({ fade: true }) // fade
     checkOnboardingStep()
   }
 
