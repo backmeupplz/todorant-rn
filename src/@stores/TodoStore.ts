@@ -21,6 +21,8 @@ import { hydration } from './hydration/hydratedStores'
 import { Results } from 'realm'
 import { DelegationUser } from '@models/DelegationUser'
 import { SectionListData } from 'react-native'
+import { database, todosCollection } from '../../App'
+import { MelonTodo } from '@models/MelonTodo'
 
 class TodoStore {
   hydrated = false

@@ -106,7 +106,7 @@ export class TodoCardVM {
         }"?`,
         translate('delete'),
         async () => {
-          await database.action(async () => {
+          await database.write(async () => {
             await todo.update((todo) => {
               todo.deleted = true
             })
@@ -115,7 +115,7 @@ export class TodoCardVM {
         }
       )
     } else {
-      await database.action(async () => {
+      await database.write(async () => {
         await todo.update((todo) => {
           todo.deleted = true
         })
@@ -158,10 +158,10 @@ export class TodoCardVM {
       }
       playTaskComplete()
     }
-    sharedHeroStore.incrementPoints()
-    sharedTagStore.incrementEpicPoints(todo.text)
+    // sharedHeroStore.incrementPoints()
+    // sharedTagStore.incrementEpicPoints(todo.text)
 
-    await database.action(async () => {
+    await database.write(async () => {
       await todo.update((todo) => {
         todo.completed = true
       })
@@ -173,9 +173,9 @@ export class TodoCardVM {
     // })
 
     // fixOrder([getTitle(todo)])
-    sharedSessionStore.numberOfTodosCompleted++
+    // sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
-    checkDayCompletionRoutine()
+    // checkDayCompletionRoutine()
   }
 
   isOld(type: CardType, todo: Todo) {

@@ -36,7 +36,7 @@ export async function add5000Todos() {
   let todos: any[] = []
   let counter = 0
   let lastYear = 2021
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 25000; i++) {
     if (counter++ >= 30) {
       counter = 0
       dateS.setUTCFullYear(lastYear)
@@ -45,19 +45,33 @@ export async function add5000Todos() {
     todos.push(new TodoSample())
   }
 
-  database.batch(
-    ...todos.map((todo) =>
-      todosCollection.prepareCreate((melontodo) => {
-        melontodo.text = todo.text
-        melontodo.monthAndYear = todo.monthAndYear
-        melontodo.time = todo.time
-        melontodo.completed = false
-        melontodo.deleted = false
+  await database.write(async () => {
+    await database.batch(
+      ...todos.map((todo1) => {
+        return todosCollection.prepareCreate((todo) => {
+          todo.text = todo1.text
+          todo.monthAndYear = todo1.monthAndYear
+          todo.time = todo1.time
+          todo.completed = false
+          todo.deleted = false
+          todo.date = todo1.date
+        })
       })
     )
-  )
+    console.log((await todosCollection.query().fetch()).length)
+    // for (const vm of todos) {
+    //   const newTodo = todosCollection.create((todo) => {
+    //     todo.text = vm.text
+    //     todo.monthAndYear = vm.monthAndYear
+    //     todo.time = vm.time
+    //     todo.completed = false
+    //     todo.deleted = false
+    //     todo.date = vm.date
+    //   })
+    // }
+  })
 
-  // await database.action(async () => {
+  // await database.write(async () => {
   //   for (const vm of todos) {
   //     const newTodo = await todosCollection.create((todo) => {
   //       todo.text = vm.text

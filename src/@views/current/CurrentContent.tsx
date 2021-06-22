@@ -34,15 +34,27 @@ export let currentTodoNodeId: number
 export class CurrentContent extends Component {
   vm = new CurrentVM()
 
-  todos = todosCollection
-    .query(Q.where('is_completed', false), Q.where('is_deleted', false))
-    .observe()
+  todos = todosCollection.query(
+    Q.where('is_completed', false),
+    Q.where('is_deleted', false),
+    Q.experimentalTake(1)
+  )
 
   @observable loading = false
 
+  state = { completedToday: 0 }
+
   async UNSAFE_componentWillMount() {
     makeObservable(this)
-    this.loading = false
+    this.setState({
+      completedToday: await todosCollection
+        .query(Q.where('is_completed', true))
+        .fetchCount(),
+    })
+    todosCollection
+      .query(Q.where('is_completed', true))
+      .observe()
+      .subscribe((amount) => this.setState({ completedToday: amount.length }))
   }
 
   render() {
@@ -80,12 +92,12 @@ export class CurrentContent extends Component {
               />
             </View>
           )}
-          {!!sharedTodoStore.progress.count && (
+          {
             <SegmentedProgressView
-              completed={sharedTodoStore.progress.completed}
-              total={sharedTodoStore.progress.count}
+              completed={this.state.completedToday}
+              total={100}
             />
-          )}
+          }
           {false && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
@@ -156,7 +168,7 @@ const EnhancedTodoComponent = ({ todo }: { todo: MelonTodo }) => {
       <Text>{todo.text}</Text>
       <Button
         onPress={async () => {
-          await database.action(async () => {
+          await database.write(async () => {
             console.log(todo)
             await todo.update((post) => {
               post.text = v4()

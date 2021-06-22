@@ -148,7 +148,7 @@ class AddTodoContent extends Component<{
       vm.order = i
     })
     const completedAtCreation: string[] = []
-    await database.action(async () => {
+    await database.write(async () => {
       for (const vm of this.vms) {
         const newTodo = await todosCollection.create((todo) => {
           todo.text = vm.text
@@ -161,7 +161,7 @@ class AddTodoContent extends Component<{
           todo.order = vm.order
           todo.date = vm.date
         })
-        console.log(newTodo)
+        // console.log(newTodo)
         if (this.screenType === AddTodoScreenType.add) {
           const todo = {
             updatedAt: new Date(),

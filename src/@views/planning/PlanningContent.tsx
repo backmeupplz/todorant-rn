@@ -5,7 +5,9 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import DraggableSectionList from '@upacyxou/react-native-draggable-sectionlist'
+import DraggableSectionList, {
+  DragEndParams,
+} from '@upacyxou/react-native-draggable-sectionlist'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { PlanningVM } from '@views/planning/PlanningVM'
@@ -21,7 +23,11 @@ import { Month } from '@upacyxou/react-native-month'
 import { makeObservable, observable, when } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { getDateString } from '@utils/time'
+import {
+  getDateDateString,
+  getDateMonthAndYearString,
+  getDateString,
+} from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
 import { getTitle, Todo } from '@models/Todo'
@@ -30,10 +36,11 @@ import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
-import { todosCollection } from '../../../App'
+import { database, todosCollection } from '../../../App'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { v4 } from 'uuid'
+import { isTodoOld } from '@utils/isTodoOld'
 
 @observer
 export class PlanningContent extends Component {
@@ -51,7 +58,12 @@ export class PlanningContent extends Component {
   lastTimeX = 0
 
   todos = todosCollection
-    .query(Q.where('is_completed', false), Q.where('is_deleted', false))
+    .query(
+      Q.where('is_completed', false),
+      Q.where('is_deleted', false),
+      Q.experimentalTake(50),
+      Q.experimentalSortBy('order', Q.asc)
+    )
     .observe()
 
   async UNSAFE_componentWillMount() {
@@ -202,8 +214,9 @@ let styles = StyleSheet.create({
   },
 })
 
-const TodoSectionList = ({ todos }: { todos: MelonTodo[] }) => {
-  console.log(todos)
+const TodoSectionList = (test) => {
+  const todos = test.todos
+  console.log(test)
   const todoSectionMap = {} as any
   let currentTitle: string | undefined
   let sectionIndex = 0
@@ -240,9 +253,13 @@ const TodoSectionList = ({ todos }: { todos: MelonTodo[] }) => {
   )
 }
 
-const TryingEnhancedTodo = ({ todo }: { todo: MelonTodo[] }) => {
+const TryingEnhancedTodo = ({
+  todo,
+  increaseOffset,
+}: {
+  todo: MelonTodo[]
+}) => {
   const sections = {} as any
-
   const todoSectionMap = {} as any
   const todoIdToDateMap = new Map<string, string>()
 
@@ -270,24 +287,12 @@ const TryingEnhancedTodo = ({ todo }: { todo: MelonTodo[] }) => {
 
   return (
     <SectionList
-      renderItem={({ item, index, section }) => {
-        if (!item) return
-        return (
-          <View style={{ padding: false ? 10 : 0 }} key={item.id}>
-            <TodoCard
-              todo={item as Todo}
-              type={
-                sharedAppStateStore.todoSection === TodoSectionType.planning
-                  ? CardType.planning
-                  : CardType.done
-              }
-              drag={undefined}
-              active={undefined}
-            />
-          </View>
-        )
-      }}
-      renderSectionHeader={(item: any, index: any) => {
+      removeClippedSubviews={true}
+      maxToRenderPerBatch={1}
+      initialNumToRender={10}
+      updateCellsBatchingPeriod={1}
+      renderItem={renderItem}
+      renderSectionHeader={(item: any) => {
         return (
           <TodoHeader
             date={true}
@@ -313,3 +318,80 @@ const enhancedTest = withObservables(['todo'], ({ todo }) => {
 })
 
 const ImReally = enhancedTest(TryingEnhancedTodo)
+
+function onDragEnd(params: DragEndParams<MelonTodo | string>) {
+  const { beforeChangesArr, dataArr, to, from, promise } = params
+  promise()
+  if (from === to || from === 0 || to === 0) {
+    promise()
+    return
+  }
+  // we are saving promise for reseting hover state in future
+  // help us to find closest section (looks from bottom to the top)
+  const findClosestSection = (
+    index: number,
+    arrToSearch: (string | MelonTodo)[]
+  ) => {
+    let closestSection = 0
+    for (let i = index; i >= 0; --i) {
+      if (typeof arrToSearch[i] === 'string') {
+        closestSection = i
+        break
+      }
+    }
+    return closestSection
+  }
+
+  let disableLoading = false
+
+  const closestFrom = findClosestSection(from, beforeChangesArr)
+  const closestTo = findClosestSection(to, dataArr)
+  database.write(async () => {
+    const lowerDay = Math.min(closestFrom, closestTo)
+    const maxDay = Math.max(closestFrom, closestTo)
+    let lastOrder = 0
+    let lastSection = dataArr[lowerDay] as string
+    for (let i = lowerDay + 1; ; i++) {
+      const item = dataArr[i]
+      if (item === undefined) break
+      if (typeof item === 'string') {
+        // if new section, outside of our draggable items begin
+        if (
+          new Date(item).getTime() >
+          new Date(dataArr[maxDay] as string).getTime()
+        )
+          break
+        lastOrder = 0
+        lastSection = item
+        continue
+      }
+      if (i === to) {
+        item.update((item) => {
+          item.order = lastOrder
+        })
+        lastOrder++
+      }
+    }
+    if (disableLoading) {
+      sharedAppStateStore.changeLoading(false)
+    }
+  })
+}
+
+const renderItem = ({ item, section }) => {
+  if (!item) return
+  return (
+    <View style={{ padding: false ? 10 : 0 }} key={item.id}>
+      <TodoCard
+        todo={item as Todo}
+        type={
+          sharedAppStateStore.todoSection === TodoSectionType.planning
+            ? CardType.planning
+            : CardType.done
+        }
+        drag={undefined}
+        active={undefined}
+      />
+    </View>
+  )
+}
