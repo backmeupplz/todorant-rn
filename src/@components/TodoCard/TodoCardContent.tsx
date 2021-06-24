@@ -16,13 +16,14 @@ import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { navigationRef } from '@utils/navigation'
+import { MelonTodo } from '@models/MelonTodo'
 
 export let currentTodoNodeId: number
 
 @observer
 export class TodoCardContent extends Component<{
   vm: TodoCardVM
-  todo: Todo
+  todo: MelonTodo
   type: CardType
   drag?: () => void
   active?: boolean

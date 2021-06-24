@@ -4,23 +4,12 @@ import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { TodoCardContent } from '@components/TodoCard/TodoCardContent'
+import withObservables from '@nozbe/with-observables'
+import { Text, View } from 'native-base'
+import { MelonTodo } from '@models/MelonTodo'
 
-@observer
-export class TodoCard extends Component<{
-  todo: Todo
-  type: CardType
-  drag?: () => void
-  active?: boolean
-}> {
-  vm = new TodoCardVM()
+export const TodoCard = (props) => {
+  const vm = new TodoCardVM()
 
-  render() {
-    return (
-      <TodoCardContent
-        {...this.props}
-        vm={this.vm}
-        active={this.props.active}
-      />
-    )
-  }
+  return <TodoCardContent todo={props.todo.todo} vm={vm} {...props} />
 }

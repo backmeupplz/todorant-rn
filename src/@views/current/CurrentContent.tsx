@@ -27,6 +27,7 @@ import { getTitle } from '@models/Todo'
 import { SectionList } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
+import { IconButton } from '@components/IconButton'
 
 export let currentTodoNodeId: number
 
@@ -37,6 +38,7 @@ export class CurrentContent extends Component {
   todos = todosCollection.query(
     Q.where('is_completed', false),
     Q.where('is_deleted', false),
+    Q.where('text', Q.notEq('')),
     Q.experimentalTake(1)
   )
 
@@ -192,13 +194,26 @@ const enhance1 = withObservables(['todo'], ({ todo }) => {
 const EnhancedTodo1 = enhance1(EnhancedTodoComponent)
 
 const TryingEnhancedTodo = ({ todo }: { todo: MelonTodo }) => {
-  return <TodoCard todo={todo[0]} type={CardType.current} />
+  return (
+    <View>
+      <Text>{todo[0].text}</Text>
+      <TodoCard todo={todo[0]} type={CardType.current} />
+      <IconButton
+        onPress={async () => {
+          await database.write(async () => {
+            await todo[0].update((todo) => (todo.text = v4()))
+          })
+        }}
+        name="edit_o111utline_28"
+      />
+    </View>
+  )
 }
 
 const enhancedTest = withObservables(['todo'], ({ todo }) => {
   // console.log(todo)
   return {
-    todo,
+    todo: todo.observeWithColumns(['text', 'frog']),
   }
 })
 

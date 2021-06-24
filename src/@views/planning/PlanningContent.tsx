@@ -42,166 +42,36 @@ import { Q } from '@nozbe/watermelondb'
 import { v4 } from 'uuid'
 import { isTodoOld } from '@utils/isTodoOld'
 
-@observer
-export class PlanningContent extends Component {
-  @observable vm?: PlanningVM
+export const PlanningContent = () => {
+  let vm: PlanningVM
 
-  @observable currentMonth = new Date().getMonth()
-  @observable currentYear = new Date().getUTCFullYear()
+  const currentMonth = new Date().getMonth()
+  const currentYear = new Date().getUTCFullYear()
 
-  currentX = new Value(0)
-  currentY = new Value(0)
+  const currentX = new Value(0)
+  const currentY = new Value(0)
 
-  todoHeight = 0
+  const todoHeight = 0
 
-  lastTimeY = 0
-  lastTimeX = 0
+  const lastTimeY = 0
+  const lastTimeX = 0
 
-  todos = todosCollection
-    .query(
-      Q.where('is_completed', false),
-      Q.where('is_deleted', false),
-      Q.experimentalTake(50),
-      Q.experimentalSortBy('order', Q.asc)
-    )
-    .observe()
+  const todos = todosCollection.query(
+    Q.where('is_completed', false),
+    Q.where('is_deleted', false),
+    Q.experimentalTake(50),
+    Q.experimentalSortBy('order', Q.asc),
+    Q.experimentalSortBy('is_frog', Q.desc)
+  )
 
-  async UNSAFE_componentWillMount() {
-    makeObservable(this)
+  vm = new PlanningVM()
 
-    await when(() => hydration.isHydrated)
-    this.vm = new PlanningVM()
-  }
-
-  renderPlanningRequiredMessage() {
-    return (
-      sharedTodoStore.isPlanningRequired &&
-      sharedAppStateStore.todoSection !== TodoSectionType.completed && (
-        <Text
-          style={{
-            backgroundColor: 'dodgerblue',
-            color: 'white',
-            padding: 12,
-          }}
-        >
-          {translate('planningText')}
-        </Text>
-      )
-    )
-  }
-
-  renderCircle() {
-    return (
-      sharedAppStateStore.activeDay &&
-      sharedAppStateStore.activeCoordinates.x &&
-      sharedAppStateStore.activeCoordinates.y && (
-        <Animated.View
-          style={{
-            ...styles.circle,
-            transform: [
-              {
-                translateX: this.currentX,
-              },
-              {
-                translateY: this.currentY,
-              },
-            ],
-          }}
-        />
-      )
-    )
-  }
-
-  renderCalendar() {
-    return (
-      !!sharedAppStateStore.calendarEnabled && (
-        <View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              padding: 12,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                if (this.currentMonth <= 0) {
-                  this.currentYear--
-                  this.currentMonth = 11
-                } else {
-                  this.currentMonth--
-                }
-              }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name={'keyboard-arrow-left'}
-                style={{ color: sharedColors.textColor, opacity: 0.5 }}
-              />
-            </TouchableOpacity>
-            <Text style={{ color: sharedColors.textColor }}>
-              {moment(this.currentMonth + 1, 'MM')
-                .locale(
-                  sharedSettingsStore.language
-                    ? sharedSettingsStore.language
-                    : 'en'
-                )
-                .format('MMMM')}{' '}
-              {this.currentYear}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                if (this.currentMonth >= 11) {
-                  this.currentYear++
-                  this.currentMonth = 0
-                } else {
-                  this.currentMonth++
-                }
-              }}
-            >
-              <Icon
-                type="MaterialIcons"
-                name={'keyboard-arrow-right'}
-                style={{ color: sharedColors.textColor, opacity: 0.5 }}
-              />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Month
-              onActiveDayChange={(day: Date) => {
-                if (!sharedAppStateStore.calendarEnabled) return
-                sharedAppStateStore.activeDay = day
-              }}
-              dark={sharedSettingsStore.isDark}
-              onPress={(day: Date) => {
-                navigate('AddTodo', { date: getDateString(day) })
-              }}
-              emptyDays={(emptyDays: any) => {}}
-              activeCoordinates={sharedAppStateStore.activeCoordinates}
-              month={this.currentMonth}
-              year={this.currentYear}
-              showWeekdays
-              locale={sharedSettingsStore.language}
-            />
-          </View>
-        </View>
-      )
-    )
-  }
-
-  render() {
-    return (
-      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        {this.renderPlanningRequiredMessage()}
-        {this.renderCalendar()}
-        {this.renderCircle()}
-        <ImReally todo={this.todos} />
-        <PlusButton />
-      </Container>
-    )
-  }
+  return (
+    <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
+      <ImReally todo={todos} />
+      <PlusButton />
+    </Container>
+  )
 }
 
 let styles = StyleSheet.create({
@@ -311,9 +181,10 @@ const TryingEnhancedTodo = ({
 }
 
 const enhancedTest = withObservables(['todo'], ({ todo }) => {
-  // console.log(todo)
   return {
-    todo,
+    todo: todo.observeWithColumns(
+      Object.keys(todo.collection.database.schema.tables.todos.columns)
+    ),
   }
 })
 
@@ -379,6 +250,7 @@ function onDragEnd(params: DragEndParams<MelonTodo | string>) {
 }
 
 const renderItem = ({ item, section }) => {
+  console.log('ыыыы')
   if (!item) return
   return (
     <View style={{ padding: false ? 10 : 0 }} key={item.id}>

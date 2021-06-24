@@ -23,6 +23,7 @@ import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
 import { database } from '../../../App'
+import { v4 } from 'uuid'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -163,7 +164,7 @@ export class TodoCardVM {
 
     await database.write(async () => {
       await todo.update((todo) => {
-        todo.completed = true
+        todo.text = v4()
       })
     })
 
