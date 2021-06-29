@@ -16,4 +16,5 @@ export class MelonTodo extends Model {
   @field('is_deleted') deleted!: boolean
   @field('enctypted') encrypted!: boolean
   @field('date') date: string | undefined
+  @field('is_delegate_accepted') isDelegateAccepted!: boolean
 }

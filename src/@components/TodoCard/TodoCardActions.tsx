@@ -11,8 +11,8 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { database } from '../../../App'
 import { v4 } from 'uuid'
+import { database } from '@utils/wmdb'
 export let todoActionsNodeId: number
 export let breakdownNodeId: number
 
@@ -90,7 +90,7 @@ export class TodoCardActions extends Component<{
               onPress={async () => {
                 await database.write(async () => {
                   await this.props.todo.update(
-                    (todo) => (todo.frog = !this.props.todo.frog)
+                    (todo) => (todo.completed = true)
                   )
                 })
               }}

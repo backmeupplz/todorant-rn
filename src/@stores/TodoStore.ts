@@ -21,8 +21,10 @@ import { hydration } from './hydration/hydratedStores'
 import { Results } from 'realm'
 import { DelegationUser } from '@models/DelegationUser'
 import { SectionListData } from 'react-native'
-import { database, todosCollection } from '../../App'
 import { MelonTodo } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
+import { todosCollection } from '@utils/wmdb'
+import { Subscription } from 'rxjs'
 
 class TodoStore {
   hydrated = false
@@ -49,6 +51,28 @@ class TodoStore {
       todosWithoutDelegationPredicate = todosWithDelegationPredicate
     }
     return todosWithoutDelegationPredicate
+  }
+
+  getTodos(title: string, completed: boolean) {
+    console.log(title)
+    const dateQuery =
+      title.length === 10
+        ? Q.where('date', title.substr(8, 2))
+        : Q.or(Q.where('date', ''), Q.where('date', Q.eq(null)))
+    // if (sharedSessionStore && sharedSessionStore.hydrated) {
+    //   realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
+    //     `delegator._id != "${sharedSessionStore.user?._id}"`
+    //   )
+    // }
+    return todosCollection.query(
+      Q.where('is_deleted', false),
+      Q.where('is_delegate_accepted', Q.notEq(false)),
+      Q.where('is_completed', completed),
+      Q.where('month_and_year', title.substr(0, 7)),
+      dateQuery,
+      Q.experimentalSortBy('is_frog', Q.desc),
+      Q.experimentalSortBy('order', Q.asc)
+    )
   }
 
   getRealmTodos(title: string, completed: boolean) {
@@ -198,12 +222,13 @@ class TodoStore {
     this.getRealmTodos(observableNow.todayTitle, true)
   )
 
+  todayUncompletedTodos = this.getTodos(observableNow.todayTitle, false)
+  todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
+
   @computed get progress() {
     return {
-      count:
-        this.shallowTodayUncompletedTodos.length +
-        this.shallowTodayCompletedTodos.length,
-      completed: this.shallowTodayCompletedTodos.length,
+      count: this.uncompletedTodayAmount + this.completedTodayAmount,
+      completed: this.completedTodayAmount,
     }
   }
 
@@ -235,6 +260,11 @@ class TodoStore {
       ).length
   }
 
+  @observable uncompletedTodayAmount = 0
+  @observable completedTodayAmount = 0
+
+  currentSubscription?: Subscription
+
   constructor() {
     makeObservable(this)
     this.refreshTodos()
@@ -252,8 +282,18 @@ class TodoStore {
         this.shallowTodayCompletedTodos = shallowMobxRealmCollection(
           this.getRealmTodos(observableNow.todayTitle, true)
         )
+        this.todayUncompletedTodos = this.getTodos(
+          observableNow.todayTitle,
+          false
+        )
       }
     )
+    this.todayCompletedTodos
+      .observe()
+      .subscribe((amount) => (this.completedTodayAmount = amount.length))
+    this.currentSubscription = this.todayUncompletedTodos
+      .observe()
+      .subscribe((amount) => (this.uncompletedTodayAmount = amount.length))
   }
 
   logout = () => {

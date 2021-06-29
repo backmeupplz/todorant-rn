@@ -36,91 +36,163 @@ import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
-import { database, todosCollection } from '../../../App'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { v4 } from 'uuid'
 import { isTodoOld } from '@utils/isTodoOld'
+import { database, todosCollection } from '@utils/wmdb'
 
-export const PlanningContent = () => {
-  let vm: PlanningVM
-
-  const currentMonth = new Date().getMonth()
-  const currentYear = new Date().getUTCFullYear()
-
-  const currentX = new Value(0)
-  const currentY = new Value(0)
-
-  const todoHeight = 0
-
-  const lastTimeY = 0
-  const lastTimeX = 0
-
-  const todos = todosCollection.query(
+@observer
+export class PlanningContent extends Component {
+  @observable vm?: PlanningVM
+  @observable currentMonth = new Date().getMonth()
+  @observable currentYear = new Date().getUTCFullYear()
+  currentX = new Value(0)
+  currentY = new Value(0)
+  todoHeight = 0
+  lastTimeY = 0
+  lastTimeX = 0
+  todos = todosCollection.query(
     Q.where('is_completed', false),
     Q.where('is_deleted', false),
-    Q.experimentalTake(50),
-    Q.experimentalSortBy('order', Q.asc),
-    Q.experimentalSortBy('is_frog', Q.desc)
+    Q.experimentalTake(100),
+    Q.experimentalSortBy('order', Q.asc)
   )
 
-  vm = new PlanningVM()
+  async UNSAFE_componentWillMount() {
+    makeObservable(this)
 
-  return (
-    <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-      <ImReally todo={todos} />
-      <PlusButton />
-    </Container>
-  )
-}
-
-let styles = StyleSheet.create({
-  circle: {
-    position: 'absolute',
-    backgroundColor: sharedColors.primaryColor,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-  },
-})
-
-const TodoSectionList = (test) => {
-  const todos = test.todos
-  console.log(test)
-  const todoSectionMap = {} as any
-  let currentTitle: string | undefined
-  let sectionIndex = 0
-
-  for (const watermelonTodo of todos) {
-    const realmTodoTitle = getTitle(watermelonTodo)
-    if (currentTitle && currentTitle !== realmTodoTitle) {
-      sectionIndex++
-    }
-    if (todoSectionMap[realmTodoTitle]) {
-      todoSectionMap[realmTodoTitle].data.push(watermelonTodo as any)
-    } else {
-      todoSectionMap[realmTodoTitle] = {
-        order: sectionIndex,
-        section: realmTodoTitle,
-        data: [watermelonTodo as any],
-      }
-    }
+    await when(() => hydration.isHydrated)
+    this.vm = new PlanningVM()
   }
 
-  const whatINeed = Object.keys(todoSectionMap).map((key) => {
-    return todoSectionMap[key]
-  })
+  renderPlanningRequiredMessage() {
+    return (
+      sharedTodoStore.isPlanningRequired &&
+      sharedAppStateStore.todoSection !== TodoSectionType.completed && (
+        <Text
+          style={{
+            backgroundColor: 'dodgerblue',
+            color: 'white',
+            padding: 12,
+          }}
+        >
+          {translate('planningText')}
+        </Text>
+      )
+    )
+  }
 
-  return (
-    <SectionList
-      renderItem={({ item, index, section }) => <Text></Text>}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text style={{ fontWeight: 'bold' }}></Text>
-      )}
-      sections={whatINeed}
-      keyExtractor={(item) => item.id}
-    />
-  )
+  renderCircle() {
+    return (
+      sharedAppStateStore.activeDay &&
+      sharedAppStateStore.activeCoordinates.x &&
+      sharedAppStateStore.activeCoordinates.y && (
+        <Animated.View
+          style={{
+            ...styles.circle,
+            transform: [
+              {
+                translateX: this.currentX,
+              },
+              {
+                translateY: this.currentY,
+              },
+            ],
+          }}
+        />
+      )
+    )
+  }
+  renderCalendar() {
+    return (
+      !!sharedAppStateStore.calendarEnabled && (
+        <View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              padding: 12,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                if (this.currentMonth <= 0) {
+                  this.currentYear--
+                  this.currentMonth = 11
+                } else {
+                  this.currentMonth--
+                }
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name={'keyboard-arrow-left'}
+                style={{ color: sharedColors.textColor, opacity: 0.5 }}
+              />
+            </TouchableOpacity>
+            <Text style={{ color: sharedColors.textColor }}>
+              {moment(this.currentMonth + 1, 'MM')
+                .locale(
+                  sharedSettingsStore.language
+                    ? sharedSettingsStore.language
+                    : 'en'
+                )
+                .format('MMMM')}{' '}
+              {this.currentYear}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (this.currentMonth >= 11) {
+                  this.currentYear++
+                  this.currentMonth = 0
+                } else {
+                  this.currentMonth++
+                }
+              }}
+            >
+              <Icon
+                type="MaterialIcons"
+                name={'keyboard-arrow-right'}
+                style={{ color: sharedColors.textColor, opacity: 0.5 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Month
+              onActiveDayChange={(day: Date) => {
+                if (!sharedAppStateStore.calendarEnabled) return
+                sharedAppStateStore.activeDay = day
+              }}
+              dark={sharedSettingsStore.isDark}
+              onPress={(day: Date) => {
+                navigate('AddTodo', { date: getDateString(day) })
+              }}
+              emptyDays={(emptyDays: any) => {}}
+              activeCoordinates={sharedAppStateStore.activeCoordinates}
+              month={this.currentMonth}
+              year={this.currentYear}
+              showWeekdays
+              locale={sharedSettingsStore.language}
+            />
+          </View>
+        </View>
+      )
+    )
+  }
+  render() {
+    return (
+      <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
+        {this.renderPlanningRequiredMessage()}
+        {this.renderCalendar()}
+        {this.renderCircle()}
+        <ImReally todo={this.todos} />
+        <PlusButton />
+      </Container>
+    )
+  }
 }
 
 const TryingEnhancedTodo = ({
@@ -156,25 +228,38 @@ const TryingEnhancedTodo = ({
   })
 
   return (
-    <SectionList
+    <DraggableSectionList
+      onEndReached={() => {}}
+      onEndReachedThreshold={0.3}
+      onViewableItemsChanged={() => {}}
+      contentContainerStyle={{ paddingBottom: 100 }}
+      onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {}}
+      autoscrollSpeed={200}
       removeClippedSubviews={true}
       maxToRenderPerBatch={1}
       initialNumToRender={10}
       updateCellsBatchingPeriod={1}
+      onDragEnd={() => {}}
+      isSectionHeader={(a: any) => {
+        if (a === undefined) {
+          return false
+        }
+        return !a.text
+      }}
       renderItem={renderItem}
-      renderSectionHeader={(item: any) => {
+      renderSectionHeader={({ item, drag, index, isActive }) => {
         return (
           <TodoHeader
             date={true}
-            drag={undefined}
-            isActive={undefined}
-            item={item.section.section}
-            key={item.section.section}
+            drag={drag}
+            isActive={isActive}
+            item={item.section}
+            key={index}
             vm={undefined}
           />
         )
       }}
-      sections={idk}
+      data={idk}
       keyExtractor={(item) => item.id}
     />
   )
@@ -249,8 +334,7 @@ function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   })
 }
 
-const renderItem = ({ item, section }) => {
-  console.log('ыыыы')
+const renderItem = ({ item, drag, index, isActive }) => {
   if (!item) return
   return (
     <View style={{ padding: false ? 10 : 0 }} key={item.id}>
@@ -261,8 +345,8 @@ const renderItem = ({ item, section }) => {
             ? CardType.planning
             : CardType.done
         }
-        drag={undefined}
-        active={undefined}
+        drag={drag}
+        active={isActive}
       />
     </View>
   )

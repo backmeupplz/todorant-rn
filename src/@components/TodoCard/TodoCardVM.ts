@@ -22,8 +22,8 @@ import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
-import { database } from '../../../App'
 import { v4 } from 'uuid'
+import { database } from '@utils/wmdb'
 
 export class TodoCardVM {
   @observable expanded = false

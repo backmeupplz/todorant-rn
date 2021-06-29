@@ -64,7 +64,7 @@ import { pick } from 'lodash'
 import { DelegationUser } from '@models/DelegationUser'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
-import { database, todosCollection } from '../../../App'
+import { database, todosCollection } from '@utils/wmdb'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {

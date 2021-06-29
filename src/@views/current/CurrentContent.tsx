@@ -20,7 +20,6 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
-import { database, todosCollection } from '../../../App'
 import { makeObservable, observable } from 'mobx'
 import { v4 } from 'uuid'
 import { getTitle } from '@models/Todo'
@@ -28,6 +27,7 @@ import { SectionList } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { IconButton } from '@components/IconButton'
+import { database, todosCollection } from '@utils/wmdb'
 
 export let currentTodoNodeId: number
 
@@ -96,20 +96,23 @@ export class CurrentContent extends Component {
           )}
           {
             <SegmentedProgressView
-              completed={this.state.completedToday}
-              total={100}
+              completed={sharedTodoStore.progress.completed}
+              total={sharedTodoStore.progress.count}
             />
           }
-          {false && (
+          {!!sharedTodoStore.uncompletedTodayAmount && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 currentTodoNodeId = target
               }}
             >
-              <ImReally todo={this.todos} />
+              <EnhancedTodoCard todo={this.vm.currentTodo} />
             </View>
           )}
-          {/* {true && <EnhancedTodo todos={this.todos} />} */}
+          {!!sharedTodoStore.progress.count &&
+            sharedTodoStore.progress.count ===
+              sharedTodoStore.progress.completed && <AllDonePlaceholder />}
+          {!sharedTodoStore.progress.count && <NoTodosPlaceholder />}
         </HeaderScrollView>
         <PlusButton />
       </Container>
@@ -117,104 +120,14 @@ export class CurrentContent extends Component {
   }
 }
 
-const Todo = ({ todos }: { todos: MelonTodo[] }) => {
-  const todoSectionMap = {} as any
-  let currentTitle: string | undefined
-  let sectionIndex = 0
-
-  for (const watermelonTodo of todos) {
-    const todo = getTitle(watermelonTodo)
-    if (currentTitle && currentTitle !== todo) {
-      sectionIndex++
-    }
-    if (todoSectionMap[todo]) {
-      todoSectionMap[todo].data.push(watermelonTodo as any)
-    } else {
-      todoSectionMap[todo] = {
-        order: sectionIndex,
-        section: todo,
-        data: [watermelonTodo as any],
-      }
-    }
-  }
-
-  const whatINeed = Object.keys(todoSectionMap).map((key) => {
-    return todoSectionMap[key]
-  })
-
-  return (
-    <SectionList
-      renderItem={({ item, index, section }) => {
-        return <EnhancedTodo1 todo={item} />
-      }}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text style={{ fontWeight: 'bold' }}>{title}</Text>
-      )}
-      sections={whatINeed}
-      keyExtractor={(item) => item.id}
-    />
-  )
-}
-
-const enhance = withObservables(['todos'], ({ todos }) => {
+const enhance = withObservables(['todo'], ({ todo }) => {
   return {
-    todos: todos,
+    todo: todo.observeWithColumns(
+      Object.keys(todo.collection.database.schema.tables.todos.columns)
+    ),
   }
 })
 
-const EnhancedTodo = enhance(Todo)
-
-const EnhancedTodoComponent = ({ todo }: { todo: MelonTodo }) => {
-  return (
-    <View>
-      <Text>{todo.text}</Text>
-      <Button
-        onPress={async () => {
-          await database.write(async () => {
-            console.log(todo)
-            await todo.update((post) => {
-              post.text = v4()
-              post.completed = true
-            })
-          })
-        }}
-      >
-        <Text>change text</Text>
-      </Button>
-    </View>
-  )
-}
-
-const enhance1 = withObservables(['todo'], ({ todo }) => {
-  return {
-    todo,
-  }
+const EnhancedTodoCard = enhance(({ todo }: { todo: MelonTodo[] }) => {
+  return <TodoCard todo={todo[0]} type={CardType.current} />
 })
-
-const EnhancedTodo1 = enhance1(EnhancedTodoComponent)
-
-const TryingEnhancedTodo = ({ todo }: { todo: MelonTodo }) => {
-  return (
-    <View>
-      <Text>{todo[0].text}</Text>
-      <TodoCard todo={todo[0]} type={CardType.current} />
-      <IconButton
-        onPress={async () => {
-          await database.write(async () => {
-            await todo[0].update((todo) => (todo.text = v4()))
-          })
-        }}
-        name="edit_o111utline_28"
-      />
-    </View>
-  )
-}
-
-const enhancedTest = withObservables(['todo'], ({ todo }) => {
-  // console.log(todo)
-  return {
-    todo: todo.observeWithColumns(['text', 'frog']),
-  }
-})
-
-const ImReally = enhancedTest(TryingEnhancedTodo)

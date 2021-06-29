@@ -19,6 +19,7 @@ export const watermelon = appSchema({
         { name: 'is_deleted', type: 'boolean' },
         { name: 'encrypted', type: 'boolean' },
         { name: 'date', type: 'string', isOptional: true },
+        { name: 'is_delegate_accepted', type: 'boolean', isOptional: true },
       ],
     }),
   ],

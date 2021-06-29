@@ -8,8 +8,22 @@ import withObservables from '@nozbe/with-observables'
 import { Text, View } from 'native-base'
 import { MelonTodo } from '@models/MelonTodo'
 
-export const TodoCard = (props) => {
+const TodoC1ard = (props) => {
   const vm = new TodoCardVM()
-
-  return <TodoCardContent todo={props.todo.todo} vm={vm} {...props} />
+  return (
+    <TodoCardContent
+      {...props}
+      todo={props.todo}
+      vm={vm}
+      active={props.active}
+    />
+  )
 }
+
+const enhance = withObservables(['todos'], (items) => {
+  return {
+    todo: items.todo,
+  }
+})
+
+export const TodoCard = enhance(TodoC1ard)
