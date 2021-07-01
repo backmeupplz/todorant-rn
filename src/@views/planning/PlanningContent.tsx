@@ -20,7 +20,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { makeObservable, observable, when } from 'mobx'
+import { computed, makeObservable, observable, when } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
@@ -44,7 +44,7 @@ import { database, todosCollection } from '@utils/wmdb'
 
 @observer
 export class PlanningContent extends Component {
-  @observable vm?: PlanningVM
+  @observable vm = new PlanningVM()
   @observable currentMonth = new Date().getMonth()
   @observable currentYear = new Date().getUTCFullYear()
   currentX = new Value(0)
@@ -52,18 +52,13 @@ export class PlanningContent extends Component {
   todoHeight = 0
   lastTimeY = 0
   lastTimeX = 0
-  todos = todosCollection.query(
-    Q.where('is_completed', false),
-    Q.where('is_deleted', false),
-    Q.experimentalTake(100),
-    Q.experimentalSortBy('order', Q.asc)
-  )
+
+  @computed get isCompleted() {
+    return sharedAppStateStore.todoSection === TodoSectionType.completed
+  }
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)
-
-    await when(() => hydration.isHydrated)
-    this.vm = new PlanningVM()
   }
 
   renderPlanningRequiredMessage() {
@@ -188,84 +183,21 @@ export class PlanningContent extends Component {
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
         {this.renderCircle()}
-        <ImReally todo={this.todos} />
+        <EnhancedDraggableSectionList
+          todo={
+            this.isCompleted
+              ? this.vm?.completedTodosData
+              : this.vm?.uncompletedTodosData
+          }
+          isCompleted={this.isCompleted}
+        />
         <PlusButton />
       </Container>
     )
   }
 }
 
-const TryingEnhancedTodo = ({
-  todo,
-  increaseOffset,
-}: {
-  todo: MelonTodo[]
-}) => {
-  const sections = {} as any
-  const todoSectionMap = {} as any
-  const todoIdToDateMap = new Map<string, string>()
-
-  let currentTitle: string | undefined
-  let sectionIndex = 0
-  for (const realmTodo of todo) {
-    const realmTodoTitle = getTitle(realmTodo)
-    if (currentTitle && currentTitle !== realmTodoTitle) {
-      sectionIndex++
-    }
-    if (todoSectionMap[realmTodoTitle]) {
-      todoSectionMap[realmTodoTitle].data.push(realmTodo)
-    } else {
-      todoSectionMap[realmTodoTitle] = {
-        order: sectionIndex,
-        section: realmTodoTitle,
-        data: [realmTodo],
-      }
-    }
-  }
-
-  const idk = Object.keys(todoSectionMap).map((key) => {
-    return todoSectionMap[key]
-  })
-
-  return (
-    <DraggableSectionList
-      onEndReached={() => {}}
-      onEndReachedThreshold={0.3}
-      onViewableItemsChanged={() => {}}
-      contentContainerStyle={{ paddingBottom: 100 }}
-      onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {}}
-      autoscrollSpeed={200}
-      removeClippedSubviews={true}
-      maxToRenderPerBatch={1}
-      initialNumToRender={10}
-      updateCellsBatchingPeriod={1}
-      onDragEnd={() => {}}
-      isSectionHeader={(a: any) => {
-        if (a === undefined) {
-          return false
-        }
-        return !a.text
-      }}
-      renderItem={renderItem}
-      renderSectionHeader={({ item, drag, index, isActive }) => {
-        return (
-          <TodoHeader
-            date={true}
-            drag={drag}
-            isActive={isActive}
-            item={item.section}
-            key={index}
-            vm={undefined}
-          />
-        )
-      }}
-      data={idk}
-      keyExtractor={(item) => item.id}
-    />
-  )
-}
-
-const enhancedTest = withObservables(['todo'], ({ todo }) => {
+const enhance = withObservables(['todo'], ({ todo }) => {
   return {
     todo: todo.observeWithColumns(
       Object.keys(todo.collection.database.schema.tables.todos.columns)
@@ -273,7 +205,103 @@ const enhancedTest = withObservables(['todo'], ({ todo }) => {
   }
 })
 
-const ImReally = enhancedTest(TryingEnhancedTodo)
+const EnhancedDraggableSectionList = enhance(
+  ({ todo, isCompleted }: { todo: MelonTodo[]; isCompleted: boolean }) => {
+    const todoSectionMap = {} as any
+
+    let currentTitle: string | undefined
+    let sectionIndex = 0
+    for (const realmTodo of todo) {
+      const realmTodoTitle = getTitle(realmTodo)
+      if (currentTitle && currentTitle !== realmTodoTitle) {
+        sectionIndex++
+      }
+      if (todoSectionMap[realmTodoTitle]) {
+        todoSectionMap[realmTodoTitle].data.push(realmTodo)
+      } else {
+        todoSectionMap[realmTodoTitle] = {
+          order: sectionIndex,
+          section: realmTodoTitle,
+          data: [realmTodo],
+        }
+      }
+    }
+
+    const todosMap = Object.keys(todoSectionMap).map((key) => {
+      return todoSectionMap[key]
+    })
+
+    return isCompleted ? (
+      <SectionList
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={1}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={1}
+        sections={todosMap}
+        renderItem={renderItem}
+        renderSectionHeader={(item) => {
+          return (
+            <TodoHeader
+              date={true}
+              drag={undefined}
+              isActive={undefined}
+              item={item.section.section}
+              key={item.section.section}
+              vm={undefined}
+            />
+          )
+        }}
+      />
+    ) : (
+      <DraggableSectionList
+        onEndReached={() => {}}
+        onEndReachedThreshold={0.3}
+        onViewableItemsChanged={() => {}}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+          if (!sharedAppStateStore.calendarEnabled) return
+          // TODO calendar actions
+          //this.currentX.setValue(absoluteX as any)
+          //this.currentY.setValue((absoluteY - this.todoHeight) as any)
+          //this.vm?.setCoordinates(absoluteY, absoluteX)
+        }}
+        autoscrollSpeed={200}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={1}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={1}
+        onDragEnd={() => {}}
+        isSectionHeader={(a: any) => {
+          if (a === undefined) {
+            return false
+          }
+          return !a.text
+        }}
+        renderItem={renderItem}
+        renderSectionHeader={({ item, drag, index, isActive }) => {
+          return (
+            <TodoHeader
+              date={true}
+              drag={drag}
+              isActive={isActive}
+              item={item.section}
+              key={item.section}
+              vm={undefined}
+            />
+          )
+        }}
+        // TODO implement tags search and query search
+        //  as ref
+        //  (sharedAppStateStore.hash.length ||
+        //  sharedAppStateStore.searchQuery.length > 0
+        //    ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
+        //    : this.vm.uncompletedTodosData.todosArray) || []
+        data={todosMap}
+        keyExtractor={(item) => item.id}
+      />
+    )
+  }
+)
 
 function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   const { beforeChangesArr, dataArr, to, from, promise } = params

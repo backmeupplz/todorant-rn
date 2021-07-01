@@ -16,6 +16,8 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { EventEmitter } from 'events'
 import { isTodoOld } from '@utils/isTodoOld'
 import { debounce } from 'lodash'
+import { todosCollection } from '@utils/wmdb'
+import { Q } from '@nozbe/watermelondb'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -24,8 +26,8 @@ export enum PlanningEventEmitter {
 }
 
 export class PlanningVM {
-  uncompletedTodosData = new RealmTodosData(false)
-  completedTodosData = new RealmTodosData(true)
+  uncompletedTodosData = this.getTodos(false)
+  completedTodosData = this.getTodos(true)
 
   resetHoverState = () => {}
 
@@ -33,6 +35,19 @@ export class PlanningVM {
 
   arrOfDraggedTodos = {} as {
     [index: string]: boolean
+  }
+
+  getTodos(completed: boolean) {
+    return todosCollection.query(
+      Q.where('is_deleted', false),
+      Q.where('is_completed', completed),
+      Q.experimentalSortBy('exact_date_at', completed ? Q.desc : Q.asc),
+      Q.experimentalSortBy('is_frog', Q.desc),
+      Q.experimentalSortBy('order', Q.asc)
+    )
+    // TODO user and delegation in wmdb
+    // .filtered(`user._id = "${sharedSessionStore.user?._id}" OR user = null`)
+    // .filtered('delegator = null OR delegateAccepted = true')
   }
 
   setCoordinates = debounce(

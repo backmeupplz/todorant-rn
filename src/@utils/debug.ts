@@ -3,9 +3,9 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
-import { todosCollection } from '../../App'
-import { database } from '../../App'
 import uuid from 'uuid'
+import { database } from './wmdb'
+import { todosCollection } from '@utils/wmdb'
 
 export function deleteAllTodos() {
   sharedSessionStore.logout()
@@ -36,7 +36,7 @@ export async function add5000Todos() {
   let todos: any[] = []
   let counter = 0
   let lastYear = 2021
-  for (let i = 0; i < 5000; i++) {
+  for (let i = 0; i < 100; i++) {
     if (counter++ >= 30) {
       counter = 0
       dateS.setUTCFullYear(lastYear)
