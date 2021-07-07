@@ -13,15 +13,24 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { v4 } from 'uuid'
 import { database } from '@utils/wmdb'
+import { MelonTodo } from '@models/MelonTodo'
+import { makeObservable, observable } from 'mobx'
 export let todoActionsNodeId: number
 export let breakdownNodeId: number
 
 @observer
 export class TodoCardActions extends Component<{
-  todo: Todo
+  todo: MelonTodo
   type: CardType
   vm: TodoCardVM
 }> {
+  @observable isSkippable = false
+
+  async UNSAFE_componentWillMount() {
+    makeObservable(this)
+    this.isSkippable = await this.props.vm.isSkippable(this.props.todo)
+  }
+
   render() {
     return (
       <View
@@ -87,33 +96,21 @@ export class TodoCardActions extends Component<{
               )}
             <IconButton
               disabled={!sharedOnboardingStore.tutorialIsShown}
-              onPress={async () => {
-                await database.write(async () => {
-                  await this.props.todo.update(
-                    (todo) => (todo.completed = true)
-                  )
-                })
-              }}
-              name="edit_o111utline_28"
-            />
-            <IconButton
-              disabled={!sharedOnboardingStore.tutorialIsShown}
               onPress={() => {
                 navigate('EditTodo', { editedTodo: this.props.todo })
               }}
               name="edit_outline_28"
             />
-            {this.props.type === CardType.current &&
-              this.props.vm.isSkippable(this.props.todo) && (
-                <IconButton
-                  disabled={!sharedOnboardingStore.tutorialIsShown}
-                  onPress={() => {
-                    sharedAppStateStore.skipping = true
-                    this.props.vm.skip(this.props.todo)
-                  }}
-                  name="arrow_right_outline_28--forward"
-                />
-              )}
+            {this.props.type === CardType.current && this.isSkippable && (
+              <IconButton
+                disabled={!sharedOnboardingStore.tutorialIsShown}
+                onPress={() => {
+                  sharedAppStateStore.skipping = true
+                  this.props.vm.skip(this.props.todo)
+                }}
+                name="arrow_right_outline_28--forward"
+              />
+            )}
             {(this.props.type === CardType.current ||
               this.props.type === CardType.planning) && (
               <View

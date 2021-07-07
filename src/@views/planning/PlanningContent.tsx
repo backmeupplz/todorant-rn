@@ -53,12 +53,15 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
+  @observable offset = 50
+
   @computed get isCompleted() {
     return sharedAppStateStore.todoSection === TodoSectionType.completed
   }
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)
+    setInterval(() => (this.offset += 1), 250000)
   }
 
   renderPlanningRequiredMessage() {
@@ -186,8 +189,24 @@ export class PlanningContent extends Component {
         <EnhancedDraggableSectionList
           todo={
             this.isCompleted
-              ? this.vm?.completedTodosData
-              : this.vm?.uncompletedTodosData
+              ? this.vm?.completedTodosData.extend(
+                  Q.experimentalTake(this.offset),
+                  Q.experimentalSortBy(
+                    'exact_date_at',
+                    this.isCompleted ? Q.desc : Q.asc
+                  ),
+                  Q.experimentalSortBy('is_frog', Q.desc),
+                  Q.experimentalSortBy('order', Q.asc)
+                )
+              : this.vm?.uncompletedTodosData.extend(
+                  Q.experimentalTake(this.offset),
+                  Q.experimentalSortBy(
+                    'exact_date_at',
+                    this.isCompleted ? Q.desc : Q.asc
+                  ),
+                  Q.experimentalSortBy('is_frog', Q.desc),
+                  Q.experimentalSortBy('order', Q.asc)
+                )
           }
           isCompleted={this.isCompleted}
         />
@@ -208,7 +227,6 @@ const enhance = withObservables(['todo'], ({ todo }) => {
 const EnhancedDraggableSectionList = enhance(
   ({ todo, isCompleted }: { todo: MelonTodo[]; isCompleted: boolean }) => {
     const todoSectionMap = {} as any
-
     let currentTitle: string | undefined
     let sectionIndex = 0
     for (const realmTodo of todo) {

@@ -1,5 +1,4 @@
 import { sharedSync } from '@sync/Sync'
-import { RealmTodosData } from '@views/planning/RealmTodosData'
 import { getTitle, Todo } from '@models/Todo'
 import { realm } from '@utils/realm'
 import {
@@ -40,10 +39,7 @@ export class PlanningVM {
   getTodos(completed: boolean) {
     return todosCollection.query(
       Q.where('is_deleted', false),
-      Q.where('is_completed', completed),
-      Q.experimentalSortBy('exact_date_at', completed ? Q.desc : Q.asc),
-      Q.experimentalSortBy('is_frog', Q.desc),
-      Q.experimentalSortBy('order', Q.asc)
+      Q.where('is_completed', completed)
     )
     // TODO user and delegation in wmdb
     // .filtered(`user._id = "${sharedSessionStore.user?._id}" OR user = null`)

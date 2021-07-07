@@ -16,64 +16,76 @@ import { sharedSync } from '@sync/Sync'
 import fonts from '@utils/fonts'
 import { IconButton } from '@components/IconButton'
 import { Divider } from '@components/Divider'
+import { MelonTag } from '@models/MelonTag'
+import withObservables from '@nozbe/with-observables'
+import { makeObservable, observable } from 'mobx'
+import { database } from '@utils/wmdb'
 
 class TagsVM {
-  deleteTag(tag: Tag) {
+  deleteTag(tag: MelonTag) {
     alertConfirm(
       `${translate('deleteTodo')} "#${
         tag.tag.length > 50 ? `${tag.tag.substr(0, 50)}...` : tag.tag
       }"?`,
       translate('delete'),
-      () => {
-        realm.write(() => {
-          tag.deleted = true
-          tag.updatedAt = new Date()
-        })
-        sharedTagStore.refreshTags()
+      async () => {
+        await tag.delete()
+        await sharedTagStore.refreshTags()
         sharedSync.sync(SyncRequestEvent.Tag)
       }
     )
   }
 
-  changeColor(tag: Tag) {
-    navigate('ColorPicker', { tag: { ...cloneTag(tag) } })
+  changeColor(tag: MelonTag) {
+    navigate('ColorPicker', { tag })
   }
 
-  changeColorToDefault(tag: Tag) {
-    realm.write(() => {
-      tag.color = undefined
-      tag.updatedAt = new Date()
-    })
-    sharedTagStore.refreshTags()
+  async changeColorToDefault(tag: MelonTag) {
+    await tag.changeColorToDefault()
+    await sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }
-  makeAnEpic(tag: Tag) {
-    navigate('AddEpic', { tag: { ...cloneTag(tag) } })
+  makeAnEpic(tag: MelonTag) {
+    navigate('AddEpic', { tag })
   }
-  editText(tag: Tag) {
-    navigate('ChangeText', { tag: { ...cloneTag(tag) } })
+  editText(tag: MelonTag) {
+    navigate('ChangeText', { tag })
   }
 }
 
 @observer
 class DeleteAllTagsButton extends Component {
+  @observable tagsAmount = 0
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+    sharedTagStore.undeletedTags
+      .observeCount()
+      .subscribe((amount) => (this.tagsAmount = amount))
+  }
+
   render() {
-    return !!sharedTagStore.undeletedTags.length ? (
+    return !!this.tagsAmount ? (
       <TableItem
         onPress={() => {
           setTimeout(() => {
             Alert.alert(translate('deleteAllHashtagsConfirm'), '', [
               {
                 text: translate('delete'),
-                onPress: () => {
-                  const undeletedTags = sharedTagStore.undeletedTags
-                  realm.write(() => {
-                    for (const tag of undeletedTags) {
-                      tag.deleted = true
-                      tag.updatedAt = new Date()
-                    }
-                  })
-                  sharedTagStore.refreshTags()
+                onPress: async () => {
+                  const undeletedTags = await sharedTagStore.undeletedTags.fetch()
+                  const toUpdate = [] as MelonTag[]
+                  for (const tag of undeletedTags) {
+                    toUpdate.push(
+                      tag.prepareUpdate(
+                        (tagToUpdate) => (tagToUpdate.deleted = true)
+                      )
+                    )
+                  }
+                  await database.write(
+                    async () => await database.batch(...toUpdate)
+                  )
+                  await sharedTagStore.refreshTags()
                   sharedSync.sync(SyncRequestEvent.Tag)
                 },
                 style: 'destructive',
@@ -96,7 +108,14 @@ class DeleteAllTagsButton extends Component {
 
 @observer
 export class Tags extends Component {
-  vm = new TagsVM()
+  @observable tagsAmount = 0
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+    sharedTagStore.undeletedTags
+      .observeCount()
+      .subscribe((amount) => (this.tagsAmount = amount))
+  }
 
   render() {
     return (
@@ -105,63 +124,8 @@ export class Tags extends Component {
           backgroundColor: sharedColors.backgroundColor,
         }}
       >
-        {sharedTagStore.sortedTags.length ? (
-          <FlatList
-            ListHeaderComponent={DeleteAllTagsButton}
-            data={sharedTagStore.sortedTags}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{ paddingHorizontal: 16, marginVertical: 8, flex: 1 }}
-                >
-                  <View
-                    style={{
-                      borderColor: sharedColors.placeholderColor,
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        maxWidth: '70%',
-                        color: item.color || 'dodgerblue',
-                        fontFamily: fonts.SFProTextRegular,
-                      }}
-                    >
-                      #{item.tag}
-                    </Text>
-                    <View style={{ flexDirection: 'row' }}>
-                      {!item.epic && (
-                        <IconButton
-                          onPress={() => {
-                            this.vm.makeAnEpic(item)
-                          }}
-                          name="target_outline_28"
-                        />
-                      )}
-                      <IconButton
-                        onPress={() => {
-                          this.vm.editText(item)
-                        }}
-                        name="edit_outline_28"
-                      />
-                      <IconButton
-                        onPress={() => {
-                          this.vm.deleteTag(item)
-                        }}
-                        color={sharedColors.destructIconColor}
-                        name="delete_outline_28-iOS"
-                      />
-                    </View>
-                  </View>
-                  <Divider marginHorizontal={0} />
-                </View>
-              )
-            }}
-            keyExtractor={(tag) => (tag._id || tag._tempSyncId)!}
-          />
+        {!!this.tagsAmount ? (
+          <EnhancedTagList tags={sharedTagStore.undeletedTags} />
         ) : (
           <Text
             style={{
@@ -177,3 +141,73 @@ export class Tags extends Component {
     )
   }
 }
+
+const enhance = withObservables(['tags'], ({ tags }) => {
+  return {
+    tags: tags.observeWithColumns(
+      Object.keys(tags.collection.database.schema.tables.tags.columns)
+    ),
+  }
+})
+
+const EnhancedTagList = enhance(({ tags }: { tags: MelonTag[] }) => {
+  const vm = new TagsVM()
+
+  return (
+    <FlatList
+      ListHeaderComponent={DeleteAllTagsButton}
+      data={tags}
+      renderItem={({ item }) => {
+        console.log(item.epic)
+        return (
+          <View style={{ paddingHorizontal: 16, marginVertical: 8, flex: 1 }}>
+            <View
+              style={{
+                borderColor: sharedColors.placeholderColor,
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  maxWidth: '70%',
+                  color: item.color || 'dodgerblue',
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                #{item.tag}
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                {!item.epic && (
+                  <IconButton
+                    onPress={() => {
+                      vm.makeAnEpic(item)
+                    }}
+                    name="target_outline_28"
+                  />
+                )}
+                <IconButton
+                  onPress={() => {
+                    vm.editText(item)
+                  }}
+                  name="edit_outline_28"
+                />
+                <IconButton
+                  onPress={() => {
+                    vm.deleteTag(item)
+                  }}
+                  color={sharedColors.destructIconColor}
+                  name="delete_outline_28-iOS"
+                />
+              </View>
+            </View>
+            <Divider marginHorizontal={0} />
+          </View>
+        )
+      }}
+      keyExtractor={(tag) => tag._tempSyncId}
+    />
+  )
+})

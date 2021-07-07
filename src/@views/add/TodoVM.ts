@@ -21,6 +21,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { DelegationUser } from '@models/DelegationUser'
 import { translate } from '@utils/i18n'
+import { MelonTodo } from '@models/MelonTodo'
 
 export class TodoVM {
   @observable text =
@@ -48,7 +49,7 @@ export class TodoVM {
   @observable showMonthAndYearPicker = false
   @observable showTimePicker = false
 
-  editedTodo?: Todo
+  editedTodo?: MelonTodo
   @observable showMore = false
 
   @observable order = 0
@@ -81,9 +82,10 @@ export class TodoVM {
         : []
     }
     const match = matches[0]
-    return sharedTagStore.undeletedTags.filtered(
-      `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
-    )
+    //return sharedTagStore.undeletedTags.filtered(
+    //  `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
+    //)
+    return []
   }
 
   focus() {

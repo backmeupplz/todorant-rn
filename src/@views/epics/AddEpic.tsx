@@ -13,6 +13,7 @@ import { extraButtonProps } from '@utils/extraButtonProps'
 import { translate } from '@utils/i18n'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { MelonTag } from '@models/MelonTag'
 
 const AddEpicStore = {
   save: () => {},
@@ -41,9 +42,9 @@ export class AddEpicHeaderRight extends Component {
 
 @observer
 class AddEpicContent extends Component<{
-  route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
 }> {
-  @observable tag?: Tag
+  @observable tag?: MelonTag
   @observable epicGoal: number | undefined
 
   UNSAFE_componentWillMount() {
@@ -57,19 +58,11 @@ class AddEpicContent extends Component<{
     }
   }
 
-  save() {
-    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
-    if (!dbtag) {
-      return
-    }
+  async save() {
     if (!this.epicGoal || +this.epicGoal <= 0) {
       return
     }
-    realm.write(() => {
-      dbtag.epic = true
-      dbtag.epicGoal = this.epicGoal
-      dbtag.updatedAt = new Date()
-    })
+    await this.tag?.turnTagToEpic(this.epicGoal)
     goBack()
     sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
@@ -115,7 +108,7 @@ class AddEpicContent extends Component<{
 
 export const AddEpic = () => {
   const route = useRoute<
-    RouteProp<Record<string, { tag: Tag } | undefined>, string>
+    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
   >()
   return <AddEpicContent route={route} />
 }

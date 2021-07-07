@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { CurrentVM } from '@views/current/CurrentVM'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { Button, Container, Text, View } from 'native-base'
@@ -28,6 +28,7 @@ import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { IconButton } from '@components/IconButton'
 import { database, todosCollection } from '@utils/wmdb'
+import { MelonTag } from '@models/MelonTag'
 
 export let currentTodoNodeId: number
 
@@ -35,28 +36,25 @@ export let currentTodoNodeId: number
 export class CurrentContent extends Component {
   vm = new CurrentVM()
 
-  todos = todosCollection.query(
-    Q.where('is_completed', false),
-    Q.where('is_deleted', false),
-    Q.where('text', Q.notEq('')),
-    Q.experimentalTake(1)
-  )
-
   @observable loading = false
+
+  @observable epicsAmount = 0
 
   state = { completedToday: 0 }
 
+  test = todosCollection.query(
+    Q.where('is_deleted', false),
+    Q.where('is_completed', false),
+    Q.experimentalSortBy('exact_date_at', false ? Q.desc : Q.asc),
+    Q.experimentalSortBy('is_frog', Q.desc),
+    Q.experimentalSortBy('order', Q.asc)
+  )
+
   async UNSAFE_componentWillMount() {
     makeObservable(this)
-    this.setState({
-      completedToday: await todosCollection
-        .query(Q.where('is_completed', true))
-        .fetchCount(),
-    })
-    todosCollection
-      .query(Q.where('is_completed', true))
-      .observe()
-      .subscribe((amount) => this.setState({ completedToday: amount.length }))
+    sharedTagStore.epics
+      .observeCount(false)
+      .subscribe((amount) => (this.epicsAmount = amount))
   }
 
   render() {
@@ -68,38 +66,11 @@ export class CurrentContent extends Component {
           infoTitle="infoCurrent"
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          {!!sharedTagStore.undeletedTags.filter((tag) => tag.epic).length && (
-            <View style={{ marginTop: 16 }}>
-              <DraggableFlatList
-                data={sharedTagStore.undeletedTags
-                  .filter((tag) => tag.epic)
-                  .sort((a, b) => {
-                    if ((a.epicOrder ?? 0) < (b.epicOrder ?? 0)) return -1
-                    return 1
-                  })}
-                renderItem={({ item, index, drag, isActive }) => {
-                  return <EpicProgress epic={item} key={index} drag={drag} />
-                }}
-                keyExtractor={(_, index) => `draggable-epic-${index}`}
-                onDragEnd={(epics) => {
-                  realm.write(() => {
-                    epics.data.map((epic, index) => {
-                      epic.epicOrder = index
-                      epic.updatedAt = new Date()
-                    })
-                    sharedTagStore.refreshTags()
-                    sharedSync.sync(SyncRequestEvent.Tag)
-                  })
-                }}
-              />
-            </View>
-          )}
-          {
-            <SegmentedProgressView
-              completed={sharedTodoStore.progress.completed}
-              total={sharedTodoStore.progress.count}
-            />
-          }
+          {!!this.epicsAmount && <EnhancedEpics epics={sharedTagStore.epics} />}
+          <SegmentedProgressView
+            completed={sharedTodoStore.progress.completed}
+            total={sharedTodoStore.progress.count}
+          />
           {!!sharedTodoStore.uncompletedTodayAmount && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
@@ -120,7 +91,7 @@ export class CurrentContent extends Component {
   }
 }
 
-const enhance = withObservables(['todo'], ({ todo }) => {
+const enhanceTodoCard = withObservables(['todo'], ({ todo }) => {
   return {
     todo: todo.observeWithColumns(
       Object.keys(todo.collection.database.schema.tables.todos.columns)
@@ -128,6 +99,43 @@ const enhance = withObservables(['todo'], ({ todo }) => {
   }
 })
 
-const EnhancedTodoCard = enhance(({ todo }: { todo: MelonTodo[] }) => {
-  return <TodoCard todo={todo[0]} type={CardType.current} />
+const enhanceEpics = withObservables(['epics'], ({ epics }) => {
+  return {
+    epics: epics.observeWithColumns(
+      Object.keys(epics.collection.database.schema.tables.tags.columns)
+    ),
+  }
+})
+
+const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
+  return (
+    <View style={{ marginTop: 16 }}>
+      <DraggableFlatList
+        data={epics}
+        renderItem={({ item, index, drag, isActive }) => {
+          return <EpicProgress epic={item} key={item._tempSyncId} drag={drag} />
+        }}
+        keyExtractor={(epic) => epic._tempSyncId}
+        onDragEnd={async (epics) => {
+          const toUpdate = epics.data.map((epic, index) => {
+            console.log(epic.epicOrder)
+            return epic.prepareUpdate(
+              (epicToUpdate) => (epicToUpdate.epicOrder = index)
+            )
+          })
+          await database.write(async () => await database.batch(...toUpdate))
+          await sharedTagStore.refreshTags()
+          sharedSync.sync(SyncRequestEvent.Tag)
+        }}
+      />
+    </View>
+  )
+})
+
+const EnhancedTodoCard = enhanceTodoCard(({ todo }: { todo: MelonTodo[] }) => {
+  return (
+    <Fragment key={todo[0]._tempSyncId}>
+      <TodoCard todo={todo[0]} type={CardType.current} />
+    </Fragment>
+  )
 })

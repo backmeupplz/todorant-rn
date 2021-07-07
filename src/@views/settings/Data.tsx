@@ -4,6 +4,7 @@ import { TableItem } from '@components/TableItem'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
 import { Tag } from '@models/Tag'
 import { Todo } from '@models/Todo'
+import { Q } from '@nozbe/watermelondb'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -17,6 +18,8 @@ import { translate } from '@utils/i18n'
 import { realm } from '@utils/realm'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
+import { tagsCollection, todosCollection } from '@utils/wmdb'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import moment from 'moment'
 import { Container, Content, Text, Toast } from 'native-base'
@@ -40,6 +43,21 @@ class Row extends Component<{ title: string; subtitle: string }> {
 
 @observer
 export class Data extends Component {
+  @observable todosAmount = 0
+  @observable tagsAmount = 0
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+    todosCollection
+      .query(Q.where('is_deleted', false))
+      .observeCount(false)
+      .subscribe((amount) => (this.todosAmount = amount))
+    tagsCollection
+      .query(Q.where('is_deleted', false))
+      .observeCount(false)
+      .subscribe((amount) => (this.tagsAmount = amount))
+  }
+
   render() {
     return (
       <Container>
@@ -55,16 +73,9 @@ export class Data extends Component {
           <SectionHeader title={translate('count')} />
           <Row
             title={translate('todoCount')}
-            subtitle={`${
-              realm.objects(Todo).filtered('deleted = false').length
-            }`}
+            subtitle={`${this.todosAmount}`}
           />
-          <Row
-            title={translate('tagsCount')}
-            subtitle={`${
-              realm.objects(Tag).filtered('deleted = false').length
-            }`}
-          />
+          <Row title={translate('tagsCount')} subtitle={`${this.tagsAmount}`} />
           <Row
             title={translate('delegate.delegators')}
             subtitle={`${sharedDelegationStore.delegators.length}`}
@@ -167,7 +178,7 @@ export class Data extends Component {
           </TableItem>
           <TableItem
             onPress={async () => {
-              const data = gatherData()
+              const data = await gatherData()
               await rest.sendData(data)
               Toast.show({
                 text: '👍',

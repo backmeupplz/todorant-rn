@@ -12,8 +12,8 @@ export function shouldShowDayCompletionRoutine() {
   const todayTodos = sharedTodoStore.todosForDate(getDateString(today))
 
   const progress = {
-    count: todayTodos.length,
-    completed: todayTodos.filtered('completed = true').length,
+    count: 0,
+    completed: 0,
   }
 
   if (!!progress.count && progress.count === progress.completed) {

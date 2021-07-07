@@ -8,7 +8,6 @@ import { Todo, getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
-import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { addButtonStore } from '@components/AddButton'
@@ -64,6 +63,7 @@ import { pick } from 'lodash'
 import { DelegationUser } from '@models/DelegationUser'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
+import { MelonTodo } from '@models/MelonTodo'
 import { database, todosCollection } from '@utils/wmdb'
 
 export const addTodoEventEmitter = new EventEmitter()
@@ -80,7 +80,7 @@ class AddTodoContent extends Component<{
     Record<
       string,
       | {
-          editedTodo?: Todo
+          editedTodo?: MelonTodo
           breakdownTodo?: Todo
           date?: string
           text?: string
@@ -148,50 +148,129 @@ class AddTodoContent extends Component<{
       vm.order = i
     })
     const completedAtCreation: string[] = []
-    await database.write(async () => {
-      for (const vm of this.vms) {
-        const newTodo = await todosCollection.create((todo) => {
-          todo.text = vm.text
-          todo.monthAndYear = vm.monthAndYear
-          todo.time = vm.time
-          todo.frog = vm.frog
-          todo._exactDate = new Date(getTitle(vm))
-          todo.completed = vm.completed
-          todo.skipped = false
-          todo.order = vm.order
-          todo.date = vm.date
-        })
-        // console.log(newTodo)
-        if (this.screenType === AddTodoScreenType.add) {
-          const todo = {
-            updatedAt: new Date(),
-            createdAt: new Date(),
-            text: vm.text,
-            completed: vm.completed,
-            frog: vm.frog,
-            frogFails: 0,
-            skipped: false,
-            order: vm.order,
-            monthAndYear:
-              vm.monthAndYear || getDateMonthAndYearString(new Date()),
-            deleted: false,
-            date: vm.date,
-            time: vm.time,
-            user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-            delegator: !!vm.delegate
-              ? cloneDelegator(sharedSessionStore.user)
-              : undefined,
-            encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
-            _tempSyncId: uuid(),
-          } as Todo
-          todo._exactDate = new Date(getTitle(todo))
-          if (todo.completed) {
-            completedAtCreation.push(todo.text)
-          }
+    const toCreate = [] as MelonTodo[]
+    const toUpdate = [] as MelonTodo[]
+    for (const vm of this.vms) {
+      if (this.screenType === AddTodoScreenType.add) {
+        const todo = {
+          updatedAt: new Date(),
+          createdAt: new Date(),
+          text: vm.text,
+          completed: vm.completed,
+          frog: vm.frog,
+          frogFails: 0,
+          skipped: false,
+          order: vm.order,
+          monthAndYear:
+            vm.monthAndYear || getDateMonthAndYearString(new Date()),
+          deleted: false,
+          date: vm.date,
+          time: vm.time,
+          user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
+          delegator: !!vm.delegate
+            ? cloneDelegator(sharedSessionStore.user)
+            : undefined,
+          encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
+          _tempSyncId: uuid(),
+        } as Todo
+        todo._exactDate = new Date(getTitle(todo))
+        if (todo.completed) {
+          completedAtCreation.push(todo.text)
         }
-      }
-    })
+        const dbtodo = todosCollection.prepareCreate((dbtodo) => {
+          dbtodo.text = vm.text
+          dbtodo.completed = vm.completed
+          dbtodo.frog = vm.frog
+          dbtodo.frogFails = 0
+          dbtodo.skipped = false
+          dbtodo.order = vm.order
+          dbtodo.monthAndYear =
+            vm.monthAndYear || getDateMonthAndYearString(new Date())
+          dbtodo.deleted = false
+          dbtodo.date = vm.date
+          dbtodo.time = vm.time
+          //user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
+          //delegator: !!vm.delegate
+          //  ? cloneDelegator(sharedSessionStore.user)
+          //  : undefined,
+          //dbtodo.encrypted = !!sharedSessionStore.encryptionKey && !vm.delegate
+          //_tempSyncId: uuid(),
+        })
+        toCreate.push(dbtodo)
+        involvedTodos.push(dbtodo)
+        titlesToFixOrder.push(getTitle(dbtodo))
+        if (vm.addOnTop) {
+          addTodosOnTop.push(dbtodo)
+        } else {
+          addTodosToBottom.push(dbtodo)
+        }
+      } else if (vm.editedTodo) {
+        const oldTitle = getTitle(vm.editedTodo)
+        const failed =
+          isTodoOld(vm.editedTodo) &&
+          (vm.editedTodo.date !== vm.date ||
+            vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
+          !vm.editedTodo.completed
 
+        if (
+          vm.editedTodo.frogFails > 2 &&
+          (vm.editedTodo.monthAndYear !==
+            (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
+            vm.editedTodo.date !== vm.date)
+        ) {
+          setTimeout(() => {
+            Alert.alert(translate('error'), translate('breakdownRequest'), [
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+              {
+                text: translate('breakdownButton'),
+                onPress: () => {
+                  goBack()
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: vm.editedTodo,
+                  })
+                },
+              },
+            ])
+          }, 100)
+          return
+        }
+
+        if (vm.completed && !vm.editedTodo.completed) {
+          completedAtCreation.push(vm.text)
+        }
+
+        if (!vm.editedTodo) {
+          return
+        }
+
+        const editedTodo = vm.editedTodo.prepareUpdate((todo) => {
+          todo.text = vm.text
+          todo.completed = vm.completed
+          todo.frog = vm.frog
+          todo.monthAndYear =
+            vm.monthAndYear || getDateMonthAndYearString(new Date())
+          todo.date = vm.date
+          todo.time = vm.time
+          todo._exactDate = new Date(getTitle(vm.editedTodo))
+          if (failed && todo.date) {
+            todo.frogFails++
+            if (todo.frogFails > 1) {
+              todo.frog = true
+            }
+          }
+          todo.delegateAccepted = vm.delegateAccepted
+        })
+        toUpdate.push(editedTodo)
+        involvedTodos.push(editedTodo)
+        titlesToFixOrder.push(oldTitle, getTitle(editedTodo))
+      }
+    }
+    await database.write(
+      async () => await database.batch(...toCreate, ...toUpdate)
+    )
     completedAtCreation.forEach((todoText) => {
       sharedTagStore.incrementEpicPoints(todoText)
       // Increment hero store
@@ -244,7 +323,12 @@ class AddTodoContent extends Component<{
       ObservableNowEventEmitterEvent.ObservableNowChanged
     )
     // Sync todos
-    fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
+    await fixOrder(
+      titlesToFixOrder,
+      addTodosOnTop,
+      addTodosToBottom,
+      involvedTodos
+    )
     goBack()
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()

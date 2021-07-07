@@ -23,7 +23,7 @@ import { DelegationUser } from '@models/DelegationUser'
 import { SectionListData } from 'react-native'
 import { MelonTodo } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
-import { todosCollection } from '@utils/wmdb'
+import { database, todosCollection } from '@utils/wmdb'
 import { Subscription } from 'rxjs'
 
 class TodoStore {
@@ -104,6 +104,21 @@ class TodoStore {
   }
 
   todosForDate = (title: string) => {
+    const dateQuery =
+      title.length === 10
+        ? Q.where('date', title.substr(8, 2))
+        : Q.or(Q.where('date', ''), Q.where('date', Q.eq(null)))
+
+    return todosCollection.query(
+      Q.where('is_deleted', false),
+      Q.where('is_delegate_accepted', Q.notEq(false)),
+      Q.where('month_and_year', title.substr(0, 7)),
+      dateQuery,
+      Q.experimentalSortBy('order', Q.asc)
+    )
+  }
+
+  todosForDate1 = (title: string) => {
     return realm
       .objects(Todo)
       .filtered('deleted = false')
@@ -305,13 +320,18 @@ class TodoStore {
     refreshWidgetAndBadgeAndWatch()
   }
 
-  recalculateExactDates() {
-    const todos = realm.objects(Todo)
-    realm.write(() => {
-      for (const todo of todos) {
-        todo._exactDate = new Date(getTitle(todo))
-      }
-    })
+  async recalculateExactDates() {
+    const todos = await todosCollection.query().fetch()
+    const toUpdate = [] as MelonTodo[]
+
+    for (const todo of todos) {
+      toUpdate.push(
+        todo.prepareUpdate(
+          (todoToUpdate) => (todoToUpdate._exactDate = new Date(getTitle(todo)))
+        )
+      )
+    }
+    await database.write(async () => await database.batch(...toUpdate))
   }
 }
 

@@ -10,27 +10,26 @@ import { computed, makeObservable, observable } from 'mobx'
 import uuid from 'uuid'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { persist } from 'mobx-persist'
+import { database, tagsCollection } from '@utils/wmdb'
+import { Q } from '@nozbe/watermelondb'
+import { MelonTodo } from '@models/MelonTodo'
+import { MelonTag } from '@models/MelonTag'
 
 class TagStore {
   hydrated = false
   @persist('date') @observable updatedAt?: Date
 
-  @observable allTags = realm.objects(Tag)
   @observable tagColorMap = {} as { [index: string]: string }
 
-  @computed get undeletedTags() {
-    return this.allTags.filtered('deleted = false').sorted([
-      ['numberOfUses', true],
-      ['tag', false],
-    ])
-  }
+  undeletedTags = tagsCollection.query(
+    Q.where('is_deleted', false),
+    Q.experimentalSortBy('is_epic', Q.desc),
+    Q.experimentalSortBy('epic_order', Q.asc),
+    Q.experimentalSortBy('number_of_uses', Q.desc),
+    Q.experimentalSortBy('tag', Q.asc)
+  )
 
-  @computed get sortedTags() {
-    return this.undeletedTags.sorted([
-      [`epic`, true],
-      [`epicOrder`, false],
-    ])
-  }
+  epics = this.undeletedTags.extend(Q.where('is_epic', true))
 
   constructor() {
     makeObservable(this)
@@ -42,59 +41,52 @@ class TagStore {
     this.refreshTags()
   }
 
-  refreshTags = () => {
-    this.allTags = realm.objects(Tag)
-    this.tagColorMap = this.allTags
-      .filtered('deleted = false')
-      .reduce((p, c) => {
-        if (c.color) {
-          p[c.tag] = c.color
-        }
-        return p
-      }, {} as { [index: string]: string })
+  refreshTags = async () => {
+    this.tagColorMap = (
+      await tagsCollection.query(Q.where('is_deleted', false)).fetch()
+    ).reduce((p, c) => {
+      if (c.color) {
+        p[c.tag] = c.color
+      }
+      return p
+    }, {} as { [index: string]: string })
   }
 
-  completeEpic = (epic: Tag) => {
-    const dbtag = getTagById(epic._id)
-    if (!dbtag) {
-      return
-    }
-    realm.write(() => {
-      dbtag.epic = false
-      dbtag.epicPoints = 0
-      dbtag.epicGoal = 0
-      dbtag.epicCompleted = true
-      dbtag.updatedAt = new Date()
-    })
-    this.refreshTags()
+  completeEpic = async (epic: MelonTag) => {
+    await epic.completeEpic()
+    await this.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }
 
-  incrementEpicPoints = (text: string) => {
+  incrementEpicPoints = async (text: string) => {
     const tagsInTodo = l(text)
       .filter((c) => c.type === 'hash')
       .map((c) => c.url?.substr(1))
-    const epics = this.allTags
-      .filtered('epic = true')
-      .filter((epic) => tagsInTodo.indexOf(epic.tag) > -1)
-    realm.write(() => {
-      epics.forEach((epic) => {
-        const dbtag = getTagById(epic._id || epic._tempSyncId)
-        if (!dbtag || !dbtag.epicGoal) {
-          return
-        }
-        if (!dbtag.epicPoints) {
-          dbtag.epicPoints = 0
-        }
-        if (dbtag.epicPoints < dbtag.epicGoal) dbtag.epicPoints++
-        dbtag.updatedAt = new Date()
-      })
+    const epics = (await this.epics.fetch()).filter(
+      (epic) => tagsInTodo.indexOf(epic.tag) > -1
+    )
+    const toUpdate = [] as MelonTag[]
+    epics.forEach((epic) => {
+      if (!epic.epicGoal) {
+        return
+      }
+      if (!epic.epicPoints) epic.epicPoints = 0
+      if (epic.epicPoints < epic.epicGoal)
+        toUpdate.push(
+          epic.prepareUpdate((epic) => {
+            if (!epic.epicPoints) epic.epicPoints = 0
+            epic.epicPoints++
+          })
+        )
     })
-    this.refreshTags()
+    await database.write(async () => await database.batch(...toUpdate))
+    await this.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }
 
-  addTags(vms: TodoVM[]) {
+  async addTags(vms: TodoVM[]) {
+    const toUpdate = [] as MelonTag[]
+    const toCreate = [] as MelonTag[]
     const tags = vms
       .map((vm) => l(vm.text))
       .reduce((p, c) => p.concat(c), [])
@@ -109,15 +101,14 @@ class TagStore {
       }
       return p
     }, {} as { [index: string]: number })
-    const dbtagsObjects = this.allTags.filtered('deleted = false')
-    realm.write(() => {
-      for (const dbtag of dbtagsObjects) {
-        if (tagsMap[dbtag.tag]) {
-          dbtag.numberOfUses += tagsMap[dbtag.tag]
-          dbtag.updatedAt = new Date()
-        }
+    const dbtagsObjects = await this.undeletedTags.fetch()
+    for (const dbtag of dbtagsObjects) {
+      if (tagsMap[dbtag.tag]) {
+        toUpdate.push(
+          dbtag.prepareUpdate((tag) => (tag.numberOfUses += tagsMap[dbtag.tag]))
+        )
       }
-    })
+    }
     const dbtags = dbtagsObjects.map((tag) => tag.tag)
     let tagsToAdd = tags.filter((tag) => dbtags.indexOf(tag) < 0)
     const tagsToAddMap = tagsToAdd.reduce((p, c) => {
@@ -125,21 +116,17 @@ class TagStore {
       return p
     }, {} as { [index: string]: boolean })
     tagsToAdd = Object.keys(tagsToAddMap)
-    realm.write(() => {
-      for (const tag of tagsToAdd) {
-        realm.create(Tag, {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deleted: false,
-          tag,
-          _tempSyncId: uuid(),
-          epic: false,
-          epicCompleted: false,
-          epicGoal: 0,
-          epicPoints: 0,
-        } as Tag)
-      }
-    })
+    for (const tag of tagsToAdd) {
+      toCreate.push(
+        tagsCollection.prepareCreate((tagToCreate) => {
+          tagToCreate.tag = tag
+          tagToCreate.epicPoints = 0
+        })
+      )
+    }
+    await database.write(
+      async () => await database.batch(...toUpdate, ...toCreate)
+    )
     this.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }

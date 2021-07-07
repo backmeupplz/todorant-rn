@@ -5,66 +5,78 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { realm } from '@utils/realm'
 import { InteractionManager } from 'react-native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { MelonTodo } from '@models/MelonTodo'
+import { database } from './wmdb'
+import { Q } from '@nozbe/watermelondb'
 
-export function fixOrder(
+export async function fixOrder(
   titlesInvolved: string[],
-  addTodosOnTop = [] as Todo[],
-  addTodosToBottom = [] as Todo[],
-  timeTodosToYield = [] as Todo[],
+  addTodosOnTop = [] as MelonTodo[],
+  addTodosToBottom = [] as MelonTodo[],
+  timeTodosToYield = [] as MelonTodo[],
   sync = true
 ) {
+  const startSSS = Date.now()
   // Deduplicate
   const titlesInvolvedSet = new Set(titlesInvolved)
   // Get ids
-  const addTodosOnTopIds = addTodosOnTop
-    .map((t) => t._id || t._tempSyncId)
-    .filter((v) => !!v) as string[]
-  const addTodosToBottomIds = addTodosToBottom
-    .map((t) => t._id || t._tempSyncId)
-    .filter((v) => !!v) as string[]
+  const addTodosOnTopIds = addTodosOnTop.map((t) => t._id || t._tempSyncId)
+  const addTodosToBottomIds = addTodosToBottom.map(
+    (t) => t._id || t._tempSyncId
+  )
+  const toUpdate: any[] = []
   // Fix every title
-  realm.write(() => {
-    for (const titleInvolved of titlesInvolvedSet) {
-      const todos = sharedTodoStore.todosForDate(titleInvolved)
-      // Go over completed
-      const orderedCompleted = Array.from(
-        todos.filtered(`completed = true`)
-      ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-      orderedCompleted.forEach((todo, i) => {
-        if (todo.order !== i) {
-          todo.order = i
-          todo.updatedAt = new Date()
-        }
-      })
-      const startTime = Date.now()
-      // Go over uncompleted
-      const orderedUncompleted = Array.from(
-        todos.filtered(`completed = false`)
-      ).sort(sortTodos(addTodosOnTopIds, addTodosToBottomIds))
-      // Fix exact times
-      if (sharedSettingsStore.preserveOrderByTime) {
-        while (!isTimeSorted(orderedUncompleted)) {
-          fixOneTodoTime(orderedUncompleted, timeTodosToYield)
-        }
+  // database.batch(())
+  for (const titleInvolved of titlesInvolvedSet) {
+    const todos = sharedTodoStore.todosForDate(titleInvolved)
+    const completedForDate = await todos
+      .extend(Q.where('is_completed', true))
+      .fetch()
+    // Go over completed
+    const orderedCompleted = completedForDate.sort(
+      sortTodos(addTodosOnTopIds, addTodosToBottomIds)
+    )
+    orderedCompleted.forEach((todo, i) => {
+      if (todo.order !== i) {
+        toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
       }
-      // Save order
-      orderedUncompleted.forEach((todo, i) => {
-        if (todo.order !== i) {
-          todo.order = i
-          todo.updatedAt = new Date()
-        }
-      })
+    })
+    // Go over uncompleted
+    const uncompletedForDate = await todos
+      .extend(Q.where('is_completed', false))
+      .fetch()
+    const orderedUncompleted = uncompletedForDate.sort(
+      sortTodos(addTodosOnTopIds, addTodosToBottomIds)
+    )
+    // Fix exact times
+    if (sharedSettingsStore.preserveOrderByTime) {
+      while (!isTimeSorted(orderedUncompleted)) {
+        fixOneTodoTime(orderedUncompleted, timeTodosToYield)
+      }
     }
-  })
-  // Refresh
-  sharedTodoStore.refreshTodos()
-  // Sync
-  if (sync) {
-    sharedSync.sync(SyncRequestEvent.Todo)
+    // Save order
+    orderedUncompleted.forEach((todo, i) => {
+      if (todo.order !== i) {
+        toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
+      }
+    })
+    const startWriting = Date.now()
+    console.log(toUpdate.length)
+    await database.write(async () => await database.batch(...toUpdate))
+    console.log(`конец записи: ${Date.now() - startWriting}`)
   }
+
+  console.log(Date.now() - startSSS)
+
+  //// Refresh
+  //sharedTodoStore.refreshTodos()
+  //// Sync
+  //if (sync) {
+  //  sharedSync.sync(SyncRequestEvent.Todo)
+  // }
 }
 
-function isTimeSorted(todos: (Todo & Realm.Object)[]) {
+function isTimeSorted(todos: (MelonTodo & Partial<MelonTodo>)[]) {
   let result = true
   let time: number | undefined
   for (const todo of todos) {
@@ -85,8 +97,8 @@ function isTimeSorted(todos: (Todo & Realm.Object)[]) {
 }
 
 function fixOneTodoTime(
-  todos: (Todo & Realm.Object)[],
-  timeTodosToYield: Todo[]
+  todos: (MelonTodo & Partial<MelonTodo>)[],
+  timeTodosToYield: MelonTodo[]
 ) {
   const timeTodosToYieldIds = timeTodosToYield.map(
     (t) => t._id || t._tempSyncId
@@ -134,7 +146,7 @@ function minutesFromTime(time: string) {
 }
 
 function sortTodos(todosOnTopIds: string[], todosOnBottomIds: string[]) {
-  return (a: Todo, b: Todo) => {
+  return (a: MelonTodo, b: MelonTodo) => {
     const aId = a._id || a._tempSyncId
     const bId = b._id || b._tempSyncId
     if (

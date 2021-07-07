@@ -19,6 +19,7 @@ import {
 } from '@utils/ObservableNow'
 import uuid from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
+import { database, todosCollection } from '@utils/wmdb'
 
 class SessionStore {
   constructor() {
@@ -107,9 +108,7 @@ class SessionStore {
       this.user = undefined
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
-      realm.write(() => {
-        realm.deleteAll()
-      })
+      await database.unsafeResetDatabase()
       observableNowEventEmitter.emit(
         ObservableNowEventEmitterEvent.ObservableNowChanged
       )

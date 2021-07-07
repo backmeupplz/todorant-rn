@@ -17,6 +17,7 @@ import { goBack } from '@utils/navigation'
 import { Button } from '@components/Button'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { MelonTag } from '@models/MelonTag'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 
@@ -47,9 +48,9 @@ export class ColorPickerHeaderRight extends Component {
 
 @observer
 class ColorPickerContent extends Component<{
-  route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
 }> {
-  @observable tag?: Tag
+  @observable tag?: MelonTag
   @observable color = 'dodgerblue'
 
   UNSAFE_componentWillMount() {
@@ -66,15 +67,8 @@ class ColorPickerContent extends Component<{
     }
   }
 
-  save() {
-    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
-    if (!dbtag) {
-      return
-    }
-    realm.write(() => {
-      dbtag.color = this.color
-      dbtag.updatedAt = new Date()
-    })
+  async save() {
+    await this.tag?.changeColor(this.color)
     goBack()
     sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
@@ -115,7 +109,7 @@ class ColorPickerContent extends Component<{
 
 export const ColorPicker = () => {
   const route = useRoute<
-    RouteProp<Record<string, { tag: Tag } | undefined>, string>
+    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
   >()
   return <ColorPickerContent route={route} />
 }

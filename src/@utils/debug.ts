@@ -1,11 +1,11 @@
 import { getTitle, Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import uuid from 'uuid'
 import { database } from './wmdb'
 import { todosCollection } from '@utils/wmdb'
+import { MelonTodo } from '@models/MelonTodo'
 
 export function deleteAllTodos() {
   sharedSessionStore.logout()
@@ -17,13 +17,13 @@ const dateS = new Date()
 class TodoSample {
   updatedAt: Date = new Date()
   createdAt: Date = new Date()
-  completed: boolean = false
+  completed: boolean = true
   frog: boolean = false
   frogFails: number = 0
   skipped: boolean = false
   order: number = 0
   monthAndYear: string = getDateMonthAndYearString(dateS)
-  deleted: boolean = false
+  deleted: boolean = true
   date: string = getDateDateString(dateS)
   time: string | undefined = undefined
   text: string = uuid()
@@ -36,7 +36,7 @@ export async function add5000Todos() {
   let todos: any[] = []
   let counter = 0
   let lastYear = 2021
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 500; i++) {
     if (counter++ >= 30) {
       counter = 0
       dateS.setUTCFullYear(lastYear)
@@ -86,10 +86,8 @@ export async function add5000Todos() {
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosRu() {
+export async function addTodosRu() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -99,8 +97,6 @@ export function addTodosRu() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -142,19 +138,22 @@ export function addTodosRu() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosUk() {
+export async function addTodosUk() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -164,8 +163,6 @@ export function addTodosUk() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -207,19 +204,22 @@ export function addTodosUk() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosEn() {
+export async function addTodosEn() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -229,8 +229,6 @@ export function addTodosEn() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -272,19 +270,22 @@ export function addTodosEn() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosIt() {
+export async function addTodosIt() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -294,8 +295,6 @@ export function addTodosIt() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -337,19 +336,22 @@ export function addTodosIt() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosEs() {
+export async function addTodosEs() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -359,8 +361,6 @@ export function addTodosEs() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -402,19 +402,22 @@ export function addTodosEs() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }
 
-export function addTodosPtBR() {
+export async function addTodosPtBR() {
   const template = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
     completed: false,
     frog: false,
     frogFails: 0,
@@ -424,8 +427,6 @@ export function addTodosPtBR() {
     deleted: false,
     date: getDateDateString(daysAgo(0)),
     time: undefined,
-
-    _tempSyncId: uuid(),
   }
   const todos = ([
     {
@@ -467,11 +468,16 @@ export function addTodosPtBR() {
     return v
   })
 
-  realm.write(() => {
-    for (const todo of todos) {
-      realm.create(Todo, todo)
-    }
-  })
+  const toCreate = [] as MelonTodo[]
+
+  for (const todo of todos) {
+    toCreate.push(
+      todosCollection.prepareCreate((todoToCreate) =>
+        Object.assign(todoToCreate, todo)
+      )
+    )
+  }
+  await database.write(async () => await database.batch(...toCreate))
 
   sharedTodoStore.refreshTodos()
 }

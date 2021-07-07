@@ -24,6 +24,7 @@ import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
 import { v4 } from 'uuid'
 import { database } from '@utils/wmdb'
+import { Q } from '@nozbe/watermelondb'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -32,68 +33,75 @@ export class TodoCardVM {
     makeObservable(this)
   }
 
-  skip(todo: Todo) {
-    const neighbours = sharedTodoStore
+  async skip(todo: MelonTodo) {
+    const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .filtered(`completed = ${todo.completed}`)
+      .extend(Q.where(`is_completed`, todo.completed))
+      .fetch()
     let startOffseting = false
     let offset = 0
-    realm.write(() => {
-      let foundValidNeighbour = false
-      for (const t of neighbours) {
-        if (
-          (t._id && todo._id && t._id === todo._id) ||
-          (t._tempSyncId &&
-            todo._tempSyncId &&
-            t._tempSyncId === todo._tempSyncId)
-        ) {
-          startOffseting = true
-          continue
-        }
-        if (startOffseting) {
-          offset++
-          if (!t.skipped) {
-            t.order -= offset
-            t.updatedAt = new Date()
-            foundValidNeighbour = true
-            break
-          }
+    const toUpdate: MelonTodo[] = []
+    await database.write(async () => await database.batch(...toUpdate))
+
+    let foundValidNeighbour = false
+    for (const t of neighbours) {
+      if (
+        (t._id && todo._id && t._id === todo._id) ||
+        (t._tempSyncId &&
+          todo._tempSyncId &&
+          t._tempSyncId === todo._tempSyncId)
+      ) {
+        startOffseting = true
+        continue
+      }
+      if (startOffseting) {
+        offset++
+        if (!t.skipped) {
+          toUpdate.push(t.prepareUpdate((todo) => (todo.order -= offset)))
+          foundValidNeighbour = true
+          break
         }
       }
-      if (!foundValidNeighbour) {
-        neighbours.forEach((n, i) => {
-          if (i > 0) {
-            n.order--
-            n.updatedAt = new Date()
-          }
-        })
-      }
-      todo.order += offset
-      todo.skipped = true
-      todo.updatedAt = new Date()
-    })
+    }
+    if (!foundValidNeighbour) {
+      neighbours.forEach((n, i) => {
+        if (i > 0) {
+          toUpdate.push(n.prepareUpdate((todo) => todo.order--))
+        }
+      })
+    }
+    toUpdate.push(
+      todo.prepareUpdate((todo) => {
+        todo.order += offset
+        todo.skipped = true
+      })
+    )
+
+    await database.write(async () => await database.batch(...toUpdate))
 
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
-  isSkippable(todo: Todo) {
+  async isSkippable(todo: MelonTodo) {
     if (todo.frog || todo.time) {
       return false
     }
-    const neighbours = sharedTodoStore
+    const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .filtered(`completed = ${todo.completed}`)
+      .extend(Q.where(`is_completed`, todo.completed))
+      .fetch()
     return neighbours.length > 1
   }
 
-  moveToToday(todo: Todo) {
+  async moveToToday(todo: MelonTodo) {
     const oldTitle = getTitle(todo)
     const today = getTodayWithStartOfDay()
-    realm.write(() => {
-      todo.date = getDateDateString(today)
-      todo.monthAndYear = getDateMonthAndYearString(today)
-      todo._exactDate = new Date(getTitle(todo))
-      todo.updatedAt = new Date()
+    await database.write(async () => {
+      await todo.update((todo) => {
+        todo.date = getDateDateString(today)
+        todo.monthAndYear = getDateMonthAndYearString(today)
+        todo._exactDate = new Date(getTitle(todo))
+      })
     })
 
     fixOrder([oldTitle, getTitle(todo)], undefined, undefined, [todo])
@@ -107,42 +115,28 @@ export class TodoCardVM {
         }"?`,
         translate('delete'),
         async () => {
-          await database.write(async () => {
-            await todo.update((todo) => {
-              todo.deleted = true
-            })
-          })
-          // fixOrder([getTitle(todo)])
+          await todo.delete()
+          fixOrder([getTitle(todo)])
         }
       )
     } else {
-      await database.write(async () => {
-        await todo.update((todo) => {
-          todo.deleted = true
-        })
-      })
-      // fixOrder([getTitle(todo)])
+      await todo.delete()
+      fixOrder([getTitle(todo)])
     }
   }
 
-  accept(todo: Todo) {
+  async accept(todo: MelonTodo) {
     if (!todo.date && !todo.monthAndYear) {
       navigate('EditTodo', { editedTodo: todo })
       return
     }
-    realm.write(() => {
-      todo.delegateAccepted = true
-      todo.updatedAt = new Date()
-    })
+    await todo.accept()
 
     fixOrder([getTitle(todo)])
   }
 
-  uncomplete(todo: Todo) {
-    realm.write(() => {
-      todo.completed = false
-      todo.updatedAt = new Date()
-    })
+  async uncomplete(todo: MelonTodo) {
+    await todo.uncomplete()
 
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
@@ -162,18 +156,9 @@ export class TodoCardVM {
     // sharedHeroStore.incrementPoints()
     // sharedTagStore.incrementEpicPoints(todo.text)
 
-    await database.write(async () => {
-      await todo.update((todo) => {
-        todo.text = v4()
-      })
-    })
+    await todo.complete()
 
-    // realm.write(() => {
-    //   todo.completed = true
-    //   todo.updatedAt = new Date()
-    // })
-
-    // fixOrder([getTitle(todo)])
+    await fixOrder([getTitle(todo)])
     // sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
     // checkDayCompletionRoutine()

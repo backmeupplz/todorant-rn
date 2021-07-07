@@ -2,7 +2,9 @@ import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
+import { MelonTodo } from '@models/MelonTodo'
 import { Todo } from '@models/Todo'
+import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
@@ -13,6 +15,7 @@ import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
 import { realm } from '@utils/realm'
 import { sharedColors } from '@utils/sharedColors'
+import { database, todosCollection } from '@utils/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
@@ -37,18 +40,22 @@ export class Security extends Component {
     this.passwordRepeat = sharedSessionStore.encryptionKey || ''
   }
 
-  changeEncrypted(encrypted: boolean) {
+  async changeEncrypted(encrypted: boolean) {
     this.loading = true
     try {
-      const todos = realm
-        .objects(Todo)
-        .filtered(`encrypted = ${!encrypted} && deleted = false`)
-      realm.write(() => {
-        for (const todo of todos) {
-          todo.encrypted = encrypted
-          todo.updatedAt = new Date()
-        }
-      })
+      const todos = await todosCollection
+        .query(
+          Q.where('is_deleted', false),
+          Q.where('is_encrypted', !encrypted)
+        )
+        .fetch()
+      const toUpdate = [] as MelonTodo[]
+      for (const todo of todos) {
+        toUpdate.push(
+          todo.prepareUpdate((todo) => (todo.encrypted = encrypted))
+        )
+      }
+      await database.write(async () => await database.batch(...toUpdate))
       sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
       alertError(err)
@@ -57,22 +64,31 @@ export class Security extends Component {
     }
   }
 
-  encryptEncrypted(encrypt: boolean, key: string) {
+  async encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = realm
-        .objects(Todo)
-        .filtered(`encrypted = true && deleted = false && delegator = null`)
-      realm.write(() => {
-        for (const todo of todos) {
-          if (encrypt) {
-            todo.text = _e(todo.text, key)
-          } else {
-            todo.text = _d(todo.text, key)
-          }
+      const todos = await todosCollection
+        .query(
+          Q.where('is_deleted', false),
+          Q.where('is_encrypted', encrypt),
+          Q.where('delegator', null)
+        )
+        .fetch()
+      const toUpdate = [] as MelonTodo[]
+      for (const todo of todos) {
+        if (encrypt) {
+          toUpdate.push(
+            todo.prepareUpdate((todo) => (todo.text = _e(todo.text, key)))
+          )
+        } else {
+          toUpdate.push(
+            todo.prepareUpdate((todo) => (todo.text = _d(todo.text, key)))
+          )
         }
-      })
-      sharedSync.sync(SyncRequestEvent.Todo)
+      }
+      await database.write(async () => await database.batch(...toUpdate))
+
+      await sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
       alertError(err)

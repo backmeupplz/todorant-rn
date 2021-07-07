@@ -21,6 +21,10 @@ import {
   removeMismatchesWithServer,
   updateOrCreateDelegation,
 } from '@utils/delegations'
+import { database, todosCollection } from '@utils/wmdb'
+import { Q } from '@nozbe/watermelondb'
+import { MelonTodo } from '@models/MelonTodo'
+import { omit } from 'lodash'
 
 export async function onDelegationObjectsFromServer(
   objects: {
@@ -231,8 +235,8 @@ export async function onTagsObjectsFromServer(
 }
 
 export async function onTodosObjectsFromServer(
-  todosChangedOnServer: Todo[],
-  pushBack: (objects: Todo[]) => Promise<Todo[]>,
+  todosChangedOnServer: MelonTodo[],
+  pushBack: (objects: MelonTodo[]) => Promise<MelonTodo[]>,
   completeSync: () => void
 ) {
   // Modify dates
@@ -246,46 +250,68 @@ export async function onTodosObjectsFromServer(
       p[c._id] = c
     }
     return p
-  }, {} as { [index: string]: Todo })
+  }, {} as { [index: string]: MelonTodo })
   const lastSyncDate = sharedTodoStore.updatedAt
-  const todosChangedLocally = lastSyncDate
-    ? realm
-        .objects(Todo)
-        .filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
-    : realm.objects(Todo)
+  const todosChangedLocally = await (lastSyncDate
+    ? todosCollection
+        .query(Q.where('updated_at', Q.gt(lastSyncDate.getTime())))
+        .fetch()
+    : todosCollection.query().fetch())
   // Pull
-  realm.write(() => {
-    for (const serverTodo of todosChangedOnServer) {
-      if (!serverTodo._id) {
-        continue
-      }
-      let localTodo = getTodoById(serverTodo._id)
-      if (localTodo) {
-        if (localTodo.updatedAt < serverTodo.updatedAt) {
-          if (localTodo) {
-            Object.assign(localTodo, serverTodo)
-            if (localTodo.encrypted) {
-              localTodo.text = decrypt(localTodo.text)
+  const toUpdate: MelonTodo[] = []
+  const toCreate: MelonTodo[] = []
+  console.log('щщщщ')
+  // realm.write(() => {
+  for (const serverTodo of todosChangedOnServer) {
+    if (!serverTodo._id) {
+      continue
+    }
+    let localTodo = await getTodoById(serverTodo._id)
+    if (localTodo) {
+      if (localTodo.updatedAt < serverTodo.updatedAt) {
+        toUpdate.push(
+          localTodo.prepareUpdate((todo) => {
+            Object.assign(todo, serverTodo)
+            if (localTodo?.encrypted) {
+              todo.text = decrypt(localTodo.text)
             }
-            localTodo._exactDate = localTodo.monthAndYear
+            if (!localTodo) return
+            todo._exactDate = localTodo.monthAndYear
               ? new Date(getTitle(localTodo))
               : new Date()
-          }
-        }
-      } else {
-        const newTodo = {
-          ...serverTodo,
-          _exactDate: serverTodo.monthAndYear
-            ? new Date(getTitle(serverTodo))
-            : new Date(),
-        }
-        if (newTodo.encrypted) {
-          newTodo.text = decrypt(newTodo.text)
-        }
-        realm.create(Todo, newTodo as Todo)
+          })
+        )
       }
+    } else {
+      const newTodo = {
+        ...serverTodo,
+        _exactDate: serverTodo.monthAndYear
+          ? new Date(getTitle(serverTodo))
+          : new Date(),
+      }
+      if (newTodo.encrypted) {
+        newTodo.text = decrypt(newTodo.text)
+      }
+      toCreate.push(
+        todosCollection.prepareCreate((todo) => {
+          //console.log(newTodo)
+          //todo.text = newTodo.text
+          //todo.completed = newTodo.completed
+          //todo.frog = newTodo.frog
+          //todo.monthAndYear = newTodo.monthAndYear
+          //todo.date = newTodo.date
+          //todo.time = newTodo.time
+          //todo._exactDate = newTodo._exactDate
+          Object.assign(
+            todo,
+            omit(newTodo, 'user', 'delegator', 'createdAt', 'updatedAt')
+          )
+        })
+      )
     }
-  })
+  }
+  console.log('where')
+  //})
   // Push
   const todosToPush = todosChangedLocally.filter((todo) => {
     if (!todo._id) {
@@ -299,6 +325,9 @@ export async function onTodosObjectsFromServer(
     }
   })
   if (!todosToPush.length) {
+    await database.write(async () => {
+      await database.batch(...toUpdate, ...toCreate)
+    })
     // Complete sync
     completeSync()
     refreshWidgetAndBadgeAndWatch()
@@ -307,13 +336,13 @@ export async function onTodosObjectsFromServer(
     )
     return
   }
-  realm.write(() => {
-    for (const todoToPush of todosToPush) {
-      if (!todoToPush._tempSyncId) {
-        todoToPush._tempSyncId = uuid()
-      }
-    }
-  })
+  //realm.write(() => {
+  //  for (const todoToPush of todosToPush) {
+  //    if (!todoToPush._tempSyncId) {
+  //      todoToPush._tempSyncId = uuid()
+  //    }
+  //  }
+  //})
   const savedPushedTodos = await pushBack(
     todosToPush
       .map((v) => ({ ...cloneTodo(v) }))
@@ -330,23 +359,30 @@ export async function onTodosObjectsFromServer(
     todo.updatedAt = new Date(todo.updatedAt)
     todo.createdAt = new Date(todo.createdAt)
   })
-  realm.write(() => {
-    for (const todo of savedPushedTodos) {
-      if (!todo._tempSyncId) {
-        continue
-      }
-      const localTodo = getTodoById(todo._tempSyncId)
-      if (localTodo) {
-        Object.assign(localTodo, todo)
-        if (localTodo.encrypted) {
-          localTodo.text = decrypt(localTodo.text)
-        }
-        localTodo._exactDate = localTodo.monthAndYear
-          ? new Date(getTitle(localTodo))
-          : new Date()
-      }
+  for (const todo of savedPushedTodos) {
+    if (!todo._tempSyncId) {
+      continue
     }
+    const localTodo = await getTodoById(todo._tempSyncId)
+    if (localTodo) {
+      toUpdate.push(
+        localTodo.prepareUpdate((todoToUpdate) => {
+          Object.assign(todoToUpdate, todo)
+          if (localTodo.encrypted) {
+            todoToUpdate.text = decrypt(localTodo.text)
+          }
+          todoToUpdate._exactDate = localTodo.monthAndYear
+            ? new Date(getTitle(localTodo))
+            : new Date()
+        })
+      )
+    }
+  }
+
+  await database.write(async () => {
+    await database.batch(...toUpdate, ...toCreate)
   })
+
   observableNowEventEmitter.emit(
     ObservableNowEventEmitterEvent.ObservableNowChanged
   )

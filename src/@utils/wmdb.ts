@@ -2,7 +2,8 @@ import { Platform } from 'react-native'
 import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 import { watermelon, watertmelonMigration } from '@utils/melondb'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { MelonTag } from '@models/MelonTag'
 
 // SQLiteAdapterOptions
 
@@ -23,7 +24,8 @@ const adapter = new SQLiteAdapter({
 // Then, make a Watermelon database from it!
 export const database = new Database({
   adapter,
-  modelClasses: [MelonTodo],
+  modelClasses: [MelonTodo, MelonUser, MelonTag],
 })
 
 export const todosCollection = database.collections.get<MelonTodo>('todos')
+export const tagsCollection = database.collections.get<MelonTag>('tags')
