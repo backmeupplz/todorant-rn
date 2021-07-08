@@ -68,12 +68,12 @@ export async function fixOrder(
 
   console.log(Date.now() - startSSS)
 
-  //// Refresh
-  //sharedTodoStore.refreshTodos()
-  //// Sync
-  //if (sync) {
-  //  sharedSync.sync(SyncRequestEvent.Todo)
-  // }
+  // Refresh
+  sharedTodoStore.refreshTodos()
+  // Sync
+  if (sync) {
+    sharedSync.sync(SyncRequestEvent.Todo)
+  }
 }
 
 function isTimeSorted(todos: (MelonTodo & Partial<MelonTodo>)[]) {

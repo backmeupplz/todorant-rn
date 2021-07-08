@@ -8,6 +8,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
 import { translate } from '@utils/i18n'
+import { MelonTodo } from '@models/MelonTodo'
 
 const showDebugInfo = false
 
@@ -15,7 +16,7 @@ const showDebugInfo = false
 export class TodoCardBody extends Component<{
   vm: TodoCardVM
   type: CardType
-  todo: Todo
+  todo: MelonTodo
   drag?: () => void
 }> {
   render() {

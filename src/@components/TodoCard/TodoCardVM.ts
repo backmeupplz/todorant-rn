@@ -164,7 +164,7 @@ export class TodoCardVM {
     // checkDayCompletionRoutine()
   }
 
-  isOld(type: CardType, todo: Todo) {
+  isOld(type: CardType, todo: MelonTodo) {
     return (
       type !== CardType.done && type !== CardType.delegation && isTodoOld(todo)
     )

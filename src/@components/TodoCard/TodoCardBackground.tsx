@@ -3,11 +3,12 @@ import { observer } from 'mobx-react'
 import { Todo } from '@models/Todo'
 import { View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
+import { MelonTodo } from '@models/MelonTodo'
 
 @observer
 export class TodoCardBackground extends Component<{
   direction: string
-  todo: Todo
+  todo: MelonTodo
 }> {
   render() {
     return (

@@ -1,13 +1,13 @@
-import { MobxRealmModel } from '@utils/mobx-realm/model'
 import {
   getDateString,
   getDateStringFromTodo,
   getTodayWithStartOfDay,
 } from '@utils/time'
 import { DelegationUser } from './DelegationUser'
+import { MelonTodo } from './MelonTodo'
 import { User } from './User'
 
-export class Todo extends MobxRealmModel {
+export class Todo {
   public static schema = {
     name: 'Todo',
     properties: {
@@ -63,12 +63,12 @@ export class Todo extends MobxRealmModel {
   _exactDate!: Date
 }
 
-export function isTodoToday(todo: Todo) {
+export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)
 }
 
 export function compareTodos(completed: Boolean) {
-  return (a: Todo, b: Todo) => {
+  return (a: MelonTodo, b: MelonTodo) => {
     if (a.date === b.date && a.monthAndYear === b.monthAndYear) {
       if (a.frog && b.frog) {
         return a.order < b.order ? -1 : 1
@@ -112,7 +112,7 @@ export function getTitle(todo: { monthAndYear?: string; date?: string }) {
   }`
 }
 
-export function cloneTodo(todo: Todo) {
+export function cloneTodo(todo: MelonTodo) {
   return {
     _tempSyncId: todo._tempSyncId,
     _exactDate: todo._exactDate,
@@ -132,8 +132,8 @@ export function cloneTodo(todo: Todo) {
     date: todo.date,
     time: todo.time,
 
-    user: cloneDelegator(todo.user),
-    delegator: cloneDelegator(todo.delegator),
+    //user: cloneDelegator(todo.user),
+    //delegator: cloneDelegator(todo.delegator),
     delegateAccepted: todo.delegateAccepted,
   }
 }

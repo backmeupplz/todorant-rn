@@ -21,10 +21,12 @@ import {
   removeMismatchesWithServer,
   updateOrCreateDelegation,
 } from '@utils/delegations'
-import { database, todosCollection } from '@utils/wmdb'
+import { database, tagsCollection, todosCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonTodo } from '@models/MelonTodo'
 import { omit } from 'lodash'
+import { MelonTag } from '@models/MelonTag'
+import { TagColumn, TodoColumn } from '@utils/melondb'
 
 export async function onDelegationObjectsFromServer(
   objects: {
@@ -145,8 +147,8 @@ export async function onDelegationObjectsFromServer(
 }
 
 export async function onTagsObjectsFromServer(
-  tagsChangedOnServer: Tag[],
-  pushBack: (objects: Tag[]) => Promise<Tag[]>,
+  tagsChangedOnServer: MelonTag[],
+  pushBack: (objects: MelonTag[]) => Promise<MelonTag[]>,
   completeSync: () => void
 ) {
   // Modify dates
@@ -160,35 +162,35 @@ export async function onTagsObjectsFromServer(
       p[c._id] = c
     }
     return p
-  }, {} as { [index: string]: Tag })
-  const allTags = realm.objects(Tag)
+  }, {} as { [index: string]: MelonTag })
+  const allTags = tagsCollection
   const lastSyncDate = sharedTagStore.updatedAt
   const tagsChangedLocally = lastSyncDate
-    ? allTags.filtered(`updatedAt > ${realmTimestampFromDate(lastSyncDate)}`)
-    : allTags
+    ? allTags.query(Q.where(TagColumn.updatedAt, Q.gt(lastSyncDate.getTime())))
+    : allTags.query()
+  const toUpdate = [] as MelonTag[]
+  const toCreate = [] as MelonTag[]
   // Pull
-  realm.write(() => {
-    for (const serverTag of tagsChangedOnServer) {
-      if (!serverTag._id) {
-        continue
-      }
-      let localTag = getTagById(serverTag._id)
-      if (localTag) {
-        if (localTag.updatedAt < serverTag.updatedAt) {
-          if (localTag) {
-            Object.assign(localTag, serverTag)
-          }
-        }
-      } else {
-        const newTag = {
-          ...serverTag,
-        }
-        realm.create(Tag, newTag as Tag)
-      }
+  for (const serverTag of tagsChangedOnServer) {
+    if (!serverTag._id) {
+      continue
     }
-  })
+    let localTag = await getTagById(serverTag._id)
+    if (localTag) {
+      if (localTag.updatedAt < serverTag.updatedAt) {
+        toUpdate.push(
+          localTag.prepareUpdate((tag) => Object.assign(tag, serverTag))
+        )
+      }
+    } else {
+      toCreate.push(
+        tagsCollection.prepareCreate((tag) => Object.assign(tag, serverTag))
+      )
+    }
+  }
+
   // Push
-  const tagsToPush = tagsChangedLocally.filter((tag) => {
+  const tagsToPush = (await tagsChangedLocally.fetch()).filter((tag) => {
     if (!tag._id) {
       return true
     }
@@ -201,16 +203,12 @@ export async function onTagsObjectsFromServer(
   })
   if (!tagsToPush.length) {
     // Complete sync
+    await database.write(
+      async () => await database.batch(...toUpdate, ...toCreate)
+    )
     completeSync()
     return
   }
-  realm.write(() => {
-    for (const tagToPush of tagsToPush) {
-      if (!tagToPush._tempSyncId) {
-        tagToPush._tempSyncId = uuid()
-      }
-    }
-  })
   const savedPushedTags = await pushBack(
     tagsToPush.map((v) => ({ ...cloneTag(v) })) as any
   )
@@ -231,6 +229,9 @@ export async function onTagsObjectsFromServer(
     }
   })
   // Complete sync
+  console.log(
+    'ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы'
+  )
   completeSync()
 }
 
@@ -252,16 +253,14 @@ export async function onTodosObjectsFromServer(
     return p
   }, {} as { [index: string]: MelonTodo })
   const lastSyncDate = sharedTodoStore.updatedAt
-  const todosChangedLocally = await (lastSyncDate
-    ? todosCollection
-        .query(Q.where('updated_at', Q.gt(lastSyncDate.getTime())))
-        .fetch()
-    : todosCollection.query().fetch())
+  const todosChangedLocally = lastSyncDate
+    ? todosCollection.query(
+        Q.where(TodoColumn.updatedAt, Q.gt(lastSyncDate.getTime()))
+      )
+    : todosCollection.query()
+  const toUpdate = [] as MelonTodo[]
+  const toCreate = [] as MelonTodo[]
   // Pull
-  const toUpdate: MelonTodo[] = []
-  const toCreate: MelonTodo[] = []
-  console.log('щщщщ')
-  // realm.write(() => {
   for (const serverTodo of todosChangedOnServer) {
     if (!serverTodo._id) {
       continue
@@ -271,13 +270,12 @@ export async function onTodosObjectsFromServer(
       if (localTodo.updatedAt < serverTodo.updatedAt) {
         toUpdate.push(
           localTodo.prepareUpdate((todo) => {
-            Object.assign(todo, serverTodo)
-            if (localTodo?.encrypted) {
-              todo.text = decrypt(localTodo.text)
+            Object.assign(todo, omit(serverTodo, 'user', 'delegator'))
+            if (todo.encrypted) {
+              todo.text = decrypt(todo.text)
             }
-            if (!localTodo) return
-            todo._exactDate = localTodo.monthAndYear
-              ? new Date(getTitle(localTodo))
+            todo._exactDate = serverTodo.monthAndYear
+              ? new Date(getTitle(serverTodo))
               : new Date()
           })
         )
@@ -293,27 +291,15 @@ export async function onTodosObjectsFromServer(
         newTodo.text = decrypt(newTodo.text)
       }
       toCreate.push(
-        todosCollection.prepareCreate((todo) => {
-          //console.log(newTodo)
-          //todo.text = newTodo.text
-          //todo.completed = newTodo.completed
-          //todo.frog = newTodo.frog
-          //todo.monthAndYear = newTodo.monthAndYear
-          //todo.date = newTodo.date
-          //todo.time = newTodo.time
-          //todo._exactDate = newTodo._exactDate
-          Object.assign(
-            todo,
-            omit(newTodo, 'user', 'delegator', 'createdAt', 'updatedAt')
-          )
-        })
+        todosCollection.prepareCreate((todo) =>
+          Object.assign(todo, omit(newTodo, 'user', 'delegator'))
+        )
       )
     }
   }
-  console.log('where')
-  //})
+
   // Push
-  const todosToPush = todosChangedLocally.filter((todo) => {
+  const todosToPush = (await todosChangedLocally.fetch()).filter((todo) => {
     if (!todo._id) {
       return true
     }
@@ -336,13 +322,6 @@ export async function onTodosObjectsFromServer(
     )
     return
   }
-  //realm.write(() => {
-  //  for (const todoToPush of todosToPush) {
-  //    if (!todoToPush._tempSyncId) {
-  //      todoToPush._tempSyncId = uuid()
-  //    }
-  //  }
-  //})
   const savedPushedTodos = await pushBack(
     todosToPush
       .map((v) => ({ ...cloneTodo(v) }))
@@ -365,16 +344,17 @@ export async function onTodosObjectsFromServer(
     }
     const localTodo = await getTodoById(todo._tempSyncId)
     if (localTodo) {
+      Object.assign(localTodo, todo)
+      if (localTodo.encrypted) {
+        localTodo.text = decrypt(localTodo.text)
+      }
+      localTodo._exactDate = localTodo.monthAndYear
+        ? new Date(getTitle(localTodo))
+        : new Date()
       toUpdate.push(
-        localTodo.prepareUpdate((todoToUpdate) => {
-          Object.assign(todoToUpdate, todo)
-          if (localTodo.encrypted) {
-            todoToUpdate.text = decrypt(localTodo.text)
-          }
-          todoToUpdate._exactDate = localTodo.monthAndYear
-            ? new Date(getTitle(localTodo))
-            : new Date()
-        })
+        localTodo.prepareUpdate((todo) =>
+          Object.assign(todo, omit(localTodo, 'user', 'delegator'))
+        )
       )
     }
   }
@@ -382,7 +362,6 @@ export async function onTodosObjectsFromServer(
   await database.write(async () => {
     await database.batch(...toUpdate, ...toCreate)
   })
-
   observableNowEventEmitter.emit(
     ObservableNowEventEmitterEvent.ObservableNowChanged
   )

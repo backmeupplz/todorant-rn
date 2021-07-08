@@ -7,23 +7,24 @@ import {
   relation,
   writer,
 } from '@nozbe/watermelondb/decorators'
+import { Tables, TagColumn } from '@utils/melondb'
 
 export class MelonTag extends Model {
-  static table = 'tags'
+  static table = Tables.tags
 
-  @field('server_id') _id?: string
-  @field('id') _tempSyncId!: string
-  @readonly @date('created_at') readonly createdAt!: Date
-  @readonly @date('updated_at') readonly updatedAt!: Date
-  @field('is_deleted') deleted?: boolean
-  @field('tag') tag!: string
-  @field('color') color?: string
-  @field('number_of_uses') numberOfUses!: number
-  @field('is_epic') epic?: boolean
-  @field('epic_goal') epicGoal?: number
-  @field('is_epic_completed') epicCompleted?: boolean
-  @field('epic_points') epicPoints?: number
-  @field('epic_order') epicOrder?: number
+  @field(TagColumn._id) _id?: string
+  @field(TagColumn._tempSyncId) _tempSyncId!: string
+  @date(TagColumn.createdAt) createdAt!: Date
+  @date(TagColumn.updatedAt) updatedAt!: Date
+  @field(TagColumn.deleted) deleted?: boolean
+  @field(TagColumn.tag) tag!: string
+  @field(TagColumn.color) color?: string
+  @field(TagColumn.numberOfUses) numberOfUses!: number
+  @field(TagColumn.epic) epic?: boolean
+  @field(TagColumn.epicGoal) epicGoal?: number
+  @field(TagColumn.epicCompleted) epicCompleted?: boolean
+  @field(TagColumn.epicPoints) epicPoints?: number
+  @field(TagColumn.epicOrder) epicOrder?: number
 
   @writer async completeEpic() {
     await this.update((tag) => {

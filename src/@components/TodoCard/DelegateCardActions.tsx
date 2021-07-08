@@ -12,11 +12,12 @@ import {
   sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
 import { IconButton } from '@components/IconButton'
+import { MelonTodo } from '@models/MelonTodo'
 
 @observer
 export class DelegateCardActions extends Component<{
   vm: TodoCardVM
-  todo: Todo
+  todo: MelonTodo
 }> {
   render() {
     return (

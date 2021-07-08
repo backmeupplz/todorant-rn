@@ -81,7 +81,7 @@ class AddTodoContent extends Component<{
       string,
       | {
           editedTodo?: MelonTodo
-          breakdownTodo?: Todo
+          breakdownTodo?: MelonTodo
           date?: string
           text?: string
           delegateId?: string
@@ -94,7 +94,7 @@ class AddTodoContent extends Component<{
 }> {
   @observable screenType = AddTodoScreenType.add
   @observable vms: TodoVM[] = []
-  breakdownTodo?: Todo
+  breakdownTodo?: MelonTodo
   @observable isBreakdown = false
 
   @observable savingTodo = false
@@ -153,8 +153,6 @@ class AddTodoContent extends Component<{
     for (const vm of this.vms) {
       if (this.screenType === AddTodoScreenType.add) {
         const todo = {
-          updatedAt: new Date(),
-          createdAt: new Date(),
           text: vm.text,
           completed: vm.completed,
           frog: vm.frog,
@@ -166,35 +164,18 @@ class AddTodoContent extends Component<{
           deleted: false,
           date: vm.date,
           time: vm.time,
-          user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-          delegator: !!vm.delegate
-            ? cloneDelegator(sharedSessionStore.user)
-            : undefined,
+          //user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
+          //delegator: !!vm.delegate
+          //  ? cloneDelegator(sharedSessionStore.user)
+          //  : undefined,
           encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
-          _tempSyncId: uuid(),
         } as Todo
         todo._exactDate = new Date(getTitle(todo))
         if (todo.completed) {
           completedAtCreation.push(todo.text)
         }
         const dbtodo = todosCollection.prepareCreate((dbtodo) => {
-          dbtodo.text = vm.text
-          dbtodo.completed = vm.completed
-          dbtodo.frog = vm.frog
-          dbtodo.frogFails = 0
-          dbtodo.skipped = false
-          dbtodo.order = vm.order
-          dbtodo.monthAndYear =
-            vm.monthAndYear || getDateMonthAndYearString(new Date())
-          dbtodo.deleted = false
-          dbtodo.date = vm.date
-          dbtodo.time = vm.time
-          //user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-          //delegator: !!vm.delegate
-          //  ? cloneDelegator(sharedSessionStore.user)
-          //  : undefined,
-          //dbtodo.encrypted = !!sharedSessionStore.encryptionKey && !vm.delegate
-          //_tempSyncId: uuid(),
+          Object.assign(dbtodo, todo)
         })
         toCreate.push(dbtodo)
         involvedTodos.push(dbtodo)
@@ -769,8 +750,8 @@ export const AddTodo = () => {
       Record<
         string,
         | {
-            editedTodo?: Todo
-            breakdownTodo?: Todo
+            editedTodo?: MelonTodo
+            breakdownTodo?: MelonTodo
             date?: string
             text?: string
           }

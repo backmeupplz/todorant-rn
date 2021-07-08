@@ -211,7 +211,7 @@ export class TodoVM {
     }
   }
 
-  setEditedTodo(todo: Todo) {
+  setEditedTodo(todo: MelonTodo) {
     this.editedTodo = todo
 
     requestAnimationFrame(() => {

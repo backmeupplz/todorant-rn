@@ -1,8 +1,9 @@
+import { MelonTodo } from '@models/MelonTodo'
 import { Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 
-export function isTodoOld(todo: Todo) {
+export function isTodoOld(todo: MelonTodo) {
   const now = new Date()
   const day = getDateDateString(now)
   const monthAndYear = getDateMonthAndYearString(now)

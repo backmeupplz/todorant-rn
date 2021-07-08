@@ -4,9 +4,10 @@ import { Todo } from '@models/Todo'
 import { Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import moment from 'moment'
+import { MelonTodo } from '@models/MelonTodo'
 
 @observer
-export class DebugTodoInfo extends Component<{ todo: Todo }> {
+export class DebugTodoInfo extends Component<{ todo: MelonTodo }> {
   render() {
     return (
       <>

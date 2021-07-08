@@ -42,14 +42,6 @@ export class CurrentContent extends Component {
 
   state = { completedToday: 0 }
 
-  test = todosCollection.query(
-    Q.where('is_deleted', false),
-    Q.where('is_completed', false),
-    Q.experimentalSortBy('exact_date_at', false ? Q.desc : Q.asc),
-    Q.experimentalSortBy('is_frog', Q.desc),
-    Q.experimentalSortBy('order', Q.asc)
-  )
-
   async UNSAFE_componentWillMount() {
     makeObservable(this)
     sharedTagStore.epics

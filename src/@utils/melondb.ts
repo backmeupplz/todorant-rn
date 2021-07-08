@@ -1,29 +1,115 @@
-import { appSchema, tableSchema } from '@nozbe/watermelondb'
+import { MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
+import {
+  tableName,
+  columnName,
+  TableName,
+  appSchema,
+  tableSchema,
+} from '@nozbe/watermelondb'
 import { schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
+
+export const Tables = {
+  tags: tableName<MelonTodo>('tags'),
+  todos: tableName<MelonTag>('todos'),
+}
+
+const Columns = {
+  todos: {
+    _tempSyncId: 'id',
+    _exactDate: 'exact_date_at',
+    _id: 'server_id',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    text: 'text',
+    completed: 'is_completed',
+    frog: 'is_frog',
+    frogFails: 'frog_fails',
+    skipped: 'is_skipped',
+    order: 'order',
+    monthAndYear: 'month_and_year',
+    deleted: 'is_deleted',
+    encrypted: 'is_encrypted',
+    date: 'date',
+    time: 'time',
+
+    user: 'user_id',
+    //delegator:
+    delegateAccepted: 'is_delegate_accepted',
+  },
+  tags: {
+    _tempSyncId: 'id',
+    _id: 'server_id',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deleted: 'is_deleted',
+    tag: 'tag',
+    color: 'color',
+    numberOfUses: 'number_of_uses',
+    epic: 'is_epic',
+    epicGoal: 'epic_goal',
+    epicCompleted: 'is_epic_completed',
+    epicPoints: 'epic_points',
+    epicOrder: 'epic_order',
+  },
+}
+
+export const TodoColumn = Columns.todos
+export const TagColumn = Columns.tags
 
 export const watermelon = appSchema({
   version: 1,
   tables: [
     tableSchema({
-      name: 'todos',
+      name: Tables.todos,
       columns: [
-        { name: 'text', type: 'string' },
-        { name: 'month_and_year', type: 'string', isOptional: true },
-        { name: 'time', type: 'string', isOptional: true },
-        { name: 'is_frog', type: 'boolean' },
-        { name: 'exact_date_at', type: 'number', isOptional: true },
-        { name: 'is_completed', type: 'boolean' },
-        { name: 'frog_fails', type: 'number' },
-        { name: 'is_skipped', type: 'boolean' },
-        { name: 'order', type: 'number' },
-        { name: 'is_deleted', type: 'boolean' },
-        { name: 'is_encrypted', type: 'boolean' },
-        { name: 'date', type: 'string', isOptional: true },
-        { name: 'is_delegate_accepted', type: 'boolean', isOptional: true },
-        { name: 'server_id', type: 'string', isOptional: true },
-        { name: 'created_at', type: 'number' },
-        { name: 'updated_at', type: 'number' },
-        { name: 'user_id', type: 'string', isIndexed: true },
+        {
+          name: TodoColumn._exactDate,
+          type: 'number',
+          isOptional: true,
+          isIndexed: true,
+        },
+        {
+          name: TodoColumn._id,
+          type: 'string',
+          isOptional: true,
+          isIndexed: true,
+        },
+        { name: TodoColumn.createdAt, type: 'number', isIndexed: true },
+        { name: TodoColumn.updatedAt, type: 'number', isIndexed: true },
+        { name: TodoColumn.text, type: 'string' },
+        { name: TodoColumn.completed, type: 'boolean', isIndexed: true },
+        { name: TodoColumn.frog, type: 'boolean' },
+        { name: TodoColumn.frogFails, type: 'number' },
+        { name: TodoColumn.skipped, type: 'boolean', isIndexed: true },
+        { name: TodoColumn.order, type: 'number' },
+        {
+          name: TodoColumn.monthAndYear,
+          type: 'string',
+          isOptional: true,
+          isIndexed: true,
+        },
+        { name: TodoColumn.deleted, type: 'boolean', isIndexed: true },
+        { name: TodoColumn.encrypted, type: 'boolean', isIndexed: true },
+        {
+          name: TodoColumn.date,
+          type: 'string',
+          isOptional: true,
+          isIndexed: true,
+        },
+        { name: TodoColumn.time, type: 'string', isOptional: true },
+        {
+          name: TodoColumn.delegateAccepted,
+          type: 'boolean',
+          isOptional: true,
+          isIndexed: true,
+        },
+        {
+          name: TodoColumn.user,
+          type: 'string',
+          isOptional: true,
+          isIndexed: true,
+        },
       ],
     }),
     tableSchema({
@@ -40,25 +126,25 @@ export const watermelon = appSchema({
       ],
     }),
     tableSchema({
-      name: 'tags',
+      name: Tables.tags,
       columns: [
         {
-          name: 'server_id',
+          name: TagColumn._id,
           type: 'string',
           isOptional: true,
           isIndexed: true,
         },
-        { name: 'created_at', type: 'number', isIndexed: true },
-        { name: 'updated_at', type: 'number', isIndexed: true },
-        { name: 'is_deleted', type: 'boolean', isIndexed: true },
-        { name: 'tag', type: 'string' },
-        { name: 'color', type: 'string', isOptional: true },
-        { name: 'number_of_uses', type: 'number', isIndexed: true },
-        { name: 'is_epic', type: 'boolean', isOptional: true },
-        { name: 'epic_goal', type: 'number', isOptional: true },
-        { name: 'is_epic_completed', type: 'boolean', isOptional: true },
-        { name: 'epic_points', type: 'number', isOptional: true },
-        { name: 'epic_order', type: 'number', isOptional: true },
+        { name: TagColumn.createdAt, type: 'number', isIndexed: true },
+        { name: TagColumn.updatedAt, type: 'number', isIndexed: true },
+        { name: TagColumn.deleted, type: 'boolean', isIndexed: true },
+        { name: TagColumn.tag, type: 'string' },
+        { name: TagColumn.color, type: 'string', isOptional: true },
+        { name: TagColumn.numberOfUses, type: 'number', isIndexed: true },
+        { name: TagColumn.epic, type: 'boolean', isOptional: true },
+        { name: TagColumn.epicGoal, type: 'number', isOptional: true },
+        { name: TagColumn.epicCompleted, type: 'boolean', isOptional: true },
+        { name: TagColumn.epicPoints, type: 'number', isOptional: true },
+        { name: TagColumn.epicOrder, type: 'number', isOptional: true },
       ],
     }),
   ],

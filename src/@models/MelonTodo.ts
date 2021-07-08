@@ -7,6 +7,7 @@ import {
   relation,
   writer,
 } from '@nozbe/watermelondb/decorators'
+import { Tables, TodoColumn } from '@utils/melondb'
 
 export class MelonUser extends Model {
   static table = 'users'
@@ -24,32 +25,29 @@ export class MelonUser extends Model {
 }
 
 export class MelonTodo extends Model {
-  static table = 'todos'
-  static associations = {
-    users: { type: 'has_many', foreignKey: 'todo_id' },
-  }
+  static table = Tables.todos
 
-  @field('text') text!: string
-  @field('month_and_year') monthAndYear: string | undefined
-  @field('time') time: string | undefined
-  @field('is_frog') frog!: boolean
-  @date('exact_date_at') _exactDate: Date | undefined
-  @field('is_completed') completed!: boolean
-  @field('frog_fails') frogFails!: number
-  @field('is_skipped') skipped!: boolean
-  @field('order') order!: number
-  @field('is_deleted') deleted!: boolean
-  @field('is_encrypted') encrypted!: boolean
-  @field('date') date: string | undefined
-  @field('is_delegate_accepted') delegateAccepted?: boolean
-  @readonly @field('id') _tempSyncId!: string
-  @field('server_id') _id?: string
+  @field(TodoColumn._tempSyncId) _tempSyncId!: string
+  @date(TodoColumn._exactDate) _exactDate?: Date
+  @field(TodoColumn._id) _id?: string
+  @date(TodoColumn.createdAt) createdAt!: Date
+  @date(TodoColumn.updatedAt) updatedAt!: Date
+  @field(TodoColumn.text) text!: string
+  @field(TodoColumn.completed) completed!: boolean
+  @field(TodoColumn.frog) frog!: boolean
+  @field(TodoColumn.frogFails) frogFails!: number
+  @field(TodoColumn.skipped) skipped!: boolean
+  @field(TodoColumn.order) order!: number
+  @field(TodoColumn.monthAndYear) monthAndYear?: string
+  @field(TodoColumn.deleted) deleted!: boolean
+  @field(TodoColumn.encrypted) encrypted!: boolean
+  @field(TodoColumn.date) date?: string
+  @field(TodoColumn.time) time?: string
+  @field(TodoColumn.delegateAccepted) delegateAccepted?: boolean
   @relation('users', 'user_id') user
-  @relation('users', 'user_id') delegator
+  //@relation('users', 'user_id') delegator
   //user
   //delegator
-  @readonly @date('created_at') createdAt!: Date
-  @readonly @date('updated_at') updatedAt!: Date
 
   @writer async complete() {
     await this.update((todo) => (todo.completed = true))

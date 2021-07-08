@@ -6,13 +6,14 @@ import { Todo } from '@models/Todo'
 import { SwipeRow } from 'react-native-swipe-list-view'
 import { sharedColors } from '@utils/sharedColors'
 import { TodoCardBackground } from '@components/TodoCard/TodoCardBackground'
+import { MelonTodo } from '@models/MelonTodo'
 
 const threshold = 125
 
 @observer
 export class TodoSwipeRow extends Component<{
   vm: TodoCardVM
-  todo: Todo
+  todo: MelonTodo
 }> {
   @observable direction = 'left'
   acting = false

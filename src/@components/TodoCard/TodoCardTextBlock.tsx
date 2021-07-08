@@ -12,12 +12,13 @@ import { CardType } from '@components/TodoCard/CardType'
 import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
+import { MelonTodo } from '@models/MelonTodo'
 
 const debug = false
 
 @observer
 export class TodoCardTextBlock extends Component<{
-  todo: Todo
+  todo: MelonTodo
   isOld: boolean
   type: CardType
   drag?: () => void

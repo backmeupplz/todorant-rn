@@ -20,6 +20,7 @@ import {
   onTodosObjectsFromServer,
 } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
+import { MelonTag } from '@models/MelonTag'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -28,7 +29,7 @@ class Sync {
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
   private todoSyncManager: SyncManager<Todo[]>
-  private tagsSyncManager: SyncManager<Tag[]>
+  private tagsSyncManager: SyncManager<MelonTag[]>
   private delegationSyncManager: SyncManager<any>
 
   @computed get isSyncing() {
@@ -97,14 +98,14 @@ class Sync {
         sharedTodoStore.updatedAt = lastSyncDate
       }
     )
-    this.tagsSyncManager = new SyncManager<Tag[]>(
+    this.tagsSyncManager = new SyncManager<MelonTag[]>(
       this.socketConnection,
       'tags',
       () => sharedTagStore.updatedAt,
       (objects, pushBack, completeSync) => {
         return onTagsObjectsFromServer(
           objects,
-          pushBack as () => Promise<Tag[]>,
+          pushBack as () => Promise<MelonTag[]>,
           completeSync
         )
       },
