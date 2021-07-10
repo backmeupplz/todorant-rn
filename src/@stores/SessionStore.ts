@@ -108,10 +108,7 @@ class SessionStore {
       this.user = undefined
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
-      await database.unsafeResetDatabase()
-      observableNowEventEmitter.emit(
-        ObservableNowEventEmitterEvent.ObservableNowChanged
-      )
+      await database.write(async () => await database.unsafeResetDatabase())
       await AsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()

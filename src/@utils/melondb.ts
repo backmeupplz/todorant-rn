@@ -34,7 +34,7 @@ const Columns = {
     time: 'time',
 
     user: 'user_id',
-    //delegator:
+    delegator: 'delegator_id',
     delegateAccepted: 'is_delegate_accepted',
   },
   tags: {
@@ -110,6 +110,12 @@ export const watermelon = appSchema({
           isOptional: true,
           isIndexed: true,
         },
+        {
+          name: TodoColumn.delegator,
+          type: 'string',
+          isOptional: true,
+          isIndexed: true,
+        },
       ],
     }),
     tableSchema({
@@ -122,7 +128,7 @@ export const watermelon = appSchema({
         { name: 'is_delegator', type: 'boolean', isOptional: true },
         { name: 'is_deleted', type: 'boolean', isOptional: true },
         { name: 'delegate_invite_token', type: 'string', isOptional: true },
-        { name: 'todo_id', type: 'string', isIndexed: true },
+        { name: 'todo_id', type: 'string', isOptional: true },
       ],
     }),
     tableSchema({

@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
-import { Database } from '@nozbe/watermelondb'
+import { Database, Q } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
-import { watermelon, watertmelonMigration } from '@utils/melondb'
+import { TodoColumn, watermelon, watertmelonMigration } from '@utils/melondb'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { MelonTag } from '@models/MelonTag'
 
@@ -29,3 +29,7 @@ export const database = new Database({
 
 export const todosCollection = database.collections.get<MelonTodo>('todos')
 export const tagsCollection = database.collections.get<MelonTag>('tags')
+export const usersCollection = database.collections.get<MelonUser>('users')
+export const notDeletedTodos = todosCollection.query(
+  Q.where(TodoColumn.deleted, false)
+)

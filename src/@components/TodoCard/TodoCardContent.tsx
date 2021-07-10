@@ -16,7 +16,7 @@ import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { navigationRef } from '@utils/navigation'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
 export let currentTodoNodeId: number
 
@@ -24,6 +24,7 @@ export let currentTodoNodeId: number
 export class TodoCardContent extends Component<{
   vm: TodoCardVM
   todo: MelonTodo
+  delegator: MelonUser
   type: CardType
   drag?: () => void
   active?: boolean
@@ -140,6 +141,7 @@ export class TodoCardContent extends Component<{
               </View>
             )}
             <TodoCardBody
+              delegator={this.props.delegator}
               vm={this.props.vm}
               todo={this.props.todo}
               type={this.props.type}
@@ -150,7 +152,6 @@ export class TodoCardContent extends Component<{
                   : undefined
               }
             />
-
             {this.props.type !== CardType.breakdown &&
               this.props.type !== CardType.delegation &&
               (this.props.vm.expanded ||

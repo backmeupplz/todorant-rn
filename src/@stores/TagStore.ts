@@ -14,6 +14,7 @@ import { database, tagsCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonTodo } from '@models/MelonTodo'
 import { MelonTag } from '@models/MelonTag'
+import { TagColumn } from '@utils/melondb'
 
 class TagStore {
   hydrated = false
@@ -22,14 +23,14 @@ class TagStore {
   @observable tagColorMap = {} as { [index: string]: string }
 
   undeletedTags = tagsCollection.query(
-    Q.where('is_deleted', false),
-    Q.experimentalSortBy('is_epic', Q.desc),
-    Q.experimentalSortBy('epic_order', Q.asc),
-    Q.experimentalSortBy('number_of_uses', Q.desc),
-    Q.experimentalSortBy('tag', Q.asc)
+    Q.where(TagColumn.deleted, false),
+    Q.experimentalSortBy(TagColumn.epic, Q.desc),
+    Q.experimentalSortBy(TagColumn.epicOrder, Q.asc),
+    Q.experimentalSortBy(TagColumn.numberOfUses, Q.desc),
+    Q.experimentalSortBy(TagColumn.tag, Q.asc)
   )
 
-  epics = this.undeletedTags.extend(Q.where('is_epic', true))
+  epics = this.undeletedTags.extend(Q.where(TagColumn.epic, true))
 
   constructor() {
     makeObservable(this)
@@ -43,7 +44,7 @@ class TagStore {
 
   refreshTags = async () => {
     this.tagColorMap = (
-      await tagsCollection.query(Q.where('is_deleted', false)).fetch()
+      await tagsCollection.query(Q.where(TagColumn.deleted, false)).fetch()
     ).reduce((p, c) => {
       if (c.color) {
         p[c.tag] = c.color

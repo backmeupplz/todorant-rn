@@ -17,81 +17,103 @@ import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWa
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import {
   cloneDelegation,
+  getLocalDelegation,
+  getMismatchesWithServer,
   removeDelegation,
-  removeMismatchesWithServer,
   updateOrCreateDelegation,
 } from '@utils/delegations'
-import { database, tagsCollection, todosCollection } from '@utils/wmdb'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+  usersCollection,
+} from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { omit } from 'lodash'
 import { MelonTag } from '@models/MelonTag'
 import { TagColumn, TodoColumn } from '@utils/melondb'
 
 export async function onDelegationObjectsFromServer(
   objects: {
-    delegators: DelegationUser[]
-    delegates: DelegationUser[]
+    delegators: MelonUser[]
+    delegates: MelonUser[]
     delegateUpdated: boolean
   },
   pushBack: (objects: {
-    delegators: DelegationUser[]
-    delegates: DelegationUser[]
+    delegators: MelonUser[]
+    delegates: MelonUser[]
   }) => Promise<{
-    delegators: (DelegationUser & { invalid?: boolean })[]
-    delegates: DelegationUser[]
+    delegators: (MelonUser & { invalid?: boolean })[]
+    delegates: MelonUser[]
   }>,
   completeSync: () => void
 ) {
   const lastSyncDate = sharedDelegationStore.updatedAt
   // Get local delegators
-  const realmDelegators = realm
-    .objects(DelegationUser)
-    .filtered('isDelegator = true')
+  const realmDelegators = usersCollection.query(Q.where('is_delegator', true))
   // Get local delegates
-  const realmDelegates = realm
-    .objects(DelegationUser)
-    .filtered('isDelegator != true')
+  const realmDelegates = usersCollection.query(
+    Q.where('is_delegator', Q.notEq(true))
+  )
   // Filter delegators that changed locally
-  const delegatorsChangedLocally = lastSyncDate
-    ? realmDelegators.filtered(
-        `updatedAt > ${realmTimestampFromDate(lastSyncDate)}`
+  const delegatorsChangedLocally = await (lastSyncDate
+    ? realmDelegators.extend(
+        Q.where('updated_at', Q.gt(lastSyncDate.getTime()))
       )
     : realmDelegators
+  ).fetch()
   // Filter delegates that changed locally
-  const delegatesChangedLocally = lastSyncDate
-    ? realmDelegates.filtered(
-        `updatedAt > ${realmTimestampFromDate(lastSyncDate)}`
-      )
+  const delegatesChangedLocally = await (lastSyncDate
+    ? realmDelegates.extend(Q.where('updated_at', Q.gt(lastSyncDate.getTime())))
     : realmDelegates
+  ).fetch()
+  const toDelete = [] as MelonUser[]
+  const toUpdateOrCreate = [] as MelonUser[]
   // Pull
   // Create and delete delegates and delegators
-  realm.write(() => {
-    // Delegators
-    // Check if delegators list changed on server
-    if (objects.delegateUpdated) {
-      // If so then remove that delegates which exists locally but not on server
-      removeMismatchesWithServer(realmDelegators, objects.delegators)
-    }
-    // Create new or just update existing delegators
-    objects.delegators.forEach((delegator) => {
-      updateOrCreateDelegation(delegator, true)
+  // Delegators
+  // Check if delegators list changed on server
+  if (objects.delegateUpdated) {
+    // If so then remove that delegates which exists locally but not on server
+    toDelete.push(
+      ...getMismatchesWithServer(
+        await realmDelegators.fetch(),
+        objects.delegators
+      )
+    )
+  }
+  // Create new or just update existing delegators
+  await Promise.all(
+    objects.delegators.map(async (delegator) => {
+      return toUpdateOrCreate.push(
+        await updateOrCreateDelegation(delegator, true)
+      )
     })
-    // Delegates
-    // Check if delegates list changed on server
-    if (objects.delegateUpdated) {
-      // If so then remove that delegates which exists locally but not on server
-      removeMismatchesWithServer(realmDelegates, objects.delegates)
-    }
-    // Create new or just update existing delegates
-    objects.delegates.forEach((delegate) => {
-      updateOrCreateDelegation(delegate, false)
+  )
+  // Delegates
+  // Check if delegates list changed on server
+  if (objects.delegateUpdated) {
+    // If so then remove that delegates which exists locally but not on server
+    toDelete.push(
+      ...getMismatchesWithServer(
+        await realmDelegates.fetch(),
+        objects.delegates
+      )
+    )
+  }
+  // Create new or just update existing delegates
+  await Promise.all(
+    objects.delegates.map(async (delegate) => {
+      return toUpdateOrCreate.push(
+        await updateOrCreateDelegation(delegate, false)
+      )
     })
-  })
+  )
   // Push
   // Get delegators which should be removed
   const delegatorsToDelete = delegatorsChangedLocally.filter(
-    (delegator) => delegator.deleted
+    (delegator) => !!delegator.deleted
   )
   // Get delegates without data (they were accepted offline or didnt load data properly when accepted)
   const delegatorsWithoutData = delegatorsChangedLocally.filter(
@@ -101,15 +123,15 @@ export async function onDelegationObjectsFromServer(
   const delegatorsToPush = [...delegatorsWithoutData, ...delegatorsToDelete]
   // Get delegates which should be removed
   const delegatesToDelete = delegatesChangedLocally.filter(
-    (delegate) => delegate.deleted
+    (delegate) => !!delegate.deleted
   )
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
     // Complete sync
-    completeSync()
-    observableNowEventEmitter.emit(
-      ObservableNowEventEmitterEvent.ObservableNowChanged
+    await database.write(
+      async () => await database.batch(...toUpdateOrCreate, ...toDelete)
     )
+    completeSync()
     return
   }
   // Push data on server
@@ -119,28 +141,37 @@ export async function onDelegationObjectsFromServer(
     ),
     delegators: delegatorsToPush.map((delegator) => cloneDelegation(delegator)),
   })
-  realm.write(() => {
-    // Delete after after sync
-    delegatorsToDelete.forEach((delegator) => {
-      removeDelegation(delegator, true)
+  // Delete after after sync
+  await Promise.all(
+    delegatorsToDelete.map(async (delegator) => {
+      const localMarked = await removeDelegation(delegator, true)
+      if (localMarked) toDelete.push(localMarked)
     })
-    delegatesToDelete.forEach((delegate) => {
-      removeDelegation(delegate, false)
+  )
+  await Promise.all(
+    delegatesToDelete.map(async (delegate) => {
+      const localMarked = await removeDelegation(delegate, false)
+      if (localMarked) toDelete.push(localMarked)
     })
-    // Fill delegations with missing info
-    savedPushedDelegations.delegators.forEach((delegator) => {
+  )
+  // Fill delegations with missing info
+  await Promise.all(
+    savedPushedDelegations.delegators.map(async (delegator) => {
       if (delegator.invalid) {
-        removeDelegation(delegator, true)
+        const localMarked = await removeDelegation(delegator, true)
+        if (localMarked) toDelete.push(localMarked)
         return
       }
-      updateOrCreateDelegation(delegator, true)
+      toUpdateOrCreate.push(await updateOrCreateDelegation(delegator, true))
     })
-    savedPushedDelegations.delegates.forEach((delegate) => {
-      updateOrCreateDelegation(delegate, false)
+  )
+  await Promise.all(
+    savedPushedDelegations.delegates.map(async (delegate) => {
+      toUpdateOrCreate.push(await updateOrCreateDelegation(delegate, false))
     })
-  })
-  observableNowEventEmitter.emit(
-    ObservableNowEventEmitterEvent.ObservableNowChanged
+  )
+  await database.write(
+    async () => await database.batch(...toUpdateOrCreate, ...toDelete)
   )
   // Complete sync
   completeSync()
@@ -217,21 +248,21 @@ export async function onTagsObjectsFromServer(
     tag.updatedAt = new Date(tag.updatedAt)
     tag.createdAt = new Date(tag.createdAt)
   })
-  realm.write(() => {
-    for (const tag of savedPushedTags) {
-      if (!tag._tempSyncId) {
-        continue
-      }
-      const localTag = getTagById(tag._tempSyncId)
-      if (localTag) {
-        Object.assign(localTag, tag)
-      }
+  for (const tag of savedPushedTags) {
+    if (!tag._tempSyncId) {
+      continue
     }
-  })
-  // Complete sync
-  console.log(
-    'ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы'
+    const localTag = await getTagById(tag._tempSyncId)
+    if (localTag) {
+      toUpdate.push(
+        localTag.prepareUpdate((tagToUpdate) => Object.assign(tagToUpdate, tag))
+      )
+    }
+  }
+  await database.write(
+    async () => await database.batch(...toUpdate, ...toCreate)
   )
+  // Complete sync
   completeSync()
 }
 
@@ -290,10 +321,18 @@ export async function onTodosObjectsFromServer(
       if (newTodo.encrypted) {
         newTodo.text = decrypt(newTodo.text)
       }
+      const user = newTodo.user
+        ? await getLocalDelegation(newTodo.user, false)
+        : undefined
+      const delegator = newTodo.delegator
+        ? await getLocalDelegation(newTodo.delegator, true)
+        : undefined
       toCreate.push(
-        todosCollection.prepareCreate((todo) =>
+        todosCollection.prepareCreate((todo) => {
           Object.assign(todo, omit(newTodo, 'user', 'delegator'))
-        )
+          if (user) todo.user?.set(user)
+          if (delegator) todo.delegator?.set(delegator)
+        })
       )
     }
   }
@@ -317,9 +356,6 @@ export async function onTodosObjectsFromServer(
     // Complete sync
     completeSync()
     refreshWidgetAndBadgeAndWatch()
-    observableNowEventEmitter.emit(
-      ObservableNowEventEmitterEvent.ObservableNowChanged
-    )
     return
   }
   const savedPushedTodos = await pushBack(
@@ -338,23 +374,25 @@ export async function onTodosObjectsFromServer(
     todo.updatedAt = new Date(todo.updatedAt)
     todo.createdAt = new Date(todo.createdAt)
   })
-  for (const todo of savedPushedTodos) {
-    if (!todo._tempSyncId) {
+  for (const serverTodo of savedPushedTodos) {
+    if (!serverTodo._tempSyncId) {
       continue
     }
-    const localTodo = await getTodoById(todo._tempSyncId)
+    const localTodo = await getTodoById(serverTodo._tempSyncId)
     if (localTodo) {
-      Object.assign(localTodo, todo)
-      if (localTodo.encrypted) {
-        localTodo.text = decrypt(localTodo.text)
-      }
-      localTodo._exactDate = localTodo.monthAndYear
-        ? new Date(getTitle(localTodo))
-        : new Date()
       toUpdate.push(
-        localTodo.prepareUpdate((todo) =>
-          Object.assign(todo, omit(localTodo, 'user', 'delegator'))
-        )
+        localTodo.prepareUpdate((todo) => {
+          if (serverTodo.encrypted) {
+            serverTodo.text = decrypt(serverTodo.text)
+          }
+          serverTodo._exactDate = serverTodo.monthAndYear
+            ? new Date(getTitle(serverTodo))
+            : new Date()
+          Object.assign(
+            todo,
+            omit(serverTodo, 'user', 'delegator', '_tempSyncId')
+          )
+        })
       )
     }
   }
@@ -362,9 +400,6 @@ export async function onTodosObjectsFromServer(
   await database.write(async () => {
     await database.batch(...toUpdate, ...toCreate)
   })
-  observableNowEventEmitter.emit(
-    ObservableNowEventEmitterEvent.ObservableNowChanged
-  )
   // Complete sync
   completeSync()
   refreshWidgetAndBadgeAndWatch()

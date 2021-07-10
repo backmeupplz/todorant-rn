@@ -36,7 +36,7 @@ export async function add5000Todos() {
   let todos: any[] = []
   let counter = 0
   let lastYear = 2021
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 30; i++) {
     if (counter++ >= 30) {
       counter = 0
       dateS.setUTCFullYear(lastYear)

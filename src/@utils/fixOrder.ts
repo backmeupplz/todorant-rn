@@ -60,13 +60,8 @@ export async function fixOrder(
         toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
       }
     })
-    const startWriting = Date.now()
-    console.log(toUpdate.length)
     await database.write(async () => await database.batch(...toUpdate))
-    console.log(`конец записи: ${Date.now() - startWriting}`)
   }
-
-  console.log(Date.now() - startSSS)
 
   // Refresh
   sharedTodoStore.refreshTodos()

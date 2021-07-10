@@ -19,13 +19,17 @@ export class MelonUser extends Model {
   @field('name') name?: string
   @field('is_delegator') isDelegator?: boolean
   @field('is_deleted') deleted?: boolean
-  @readonly @date('created_at') createdAt!: Date
-  @readonly @date('updated_at') updatedAt!: Date
+  @date('created_at') createdAt!: Date
+  @date('updated_at') updatedAt!: Date
   @field('delegate_invite_token') delegateInviteToken?: string
 }
 
 export class MelonTodo extends Model {
   static table = Tables.todos
+
+  static associations = {
+    users: { type: 'has_many', foreignKey: 'todo_id' },
+  }
 
   @field(TodoColumn._tempSyncId) _tempSyncId!: string
   @date(TodoColumn._exactDate) _exactDate?: Date
@@ -44,8 +48,8 @@ export class MelonTodo extends Model {
   @field(TodoColumn.date) date?: string
   @field(TodoColumn.time) time?: string
   @field(TodoColumn.delegateAccepted) delegateAccepted?: boolean
-  @relation('users', 'user_id') user
-  //@relation('users', 'user_id') delegator
+  @relation('users', 'user_id') user?: MelonUser
+  @relation('users', 'delegator_id') delegator?: MelonUser
   //user
   //delegator
 

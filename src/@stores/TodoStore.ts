@@ -28,6 +28,13 @@ class TodoStore {
 
   @persist('date') @observable updatedAt?: Date
 
+  delegatedToMeTodo = todosCollection.query(
+    Q.where(TodoColumn.deleted, false),
+    Q.where(TodoColumn.delegator, Q.notEq(null)),
+    Q.where(TodoColumn.completed, false),
+    Q.where(TodoColumn.delegateAccepted, Q.notEq(true))
+  )
+
   getDelegationTodos(byMe: boolean, completed = false) {
     let todosWithoutDelegationPredicate = realm
       .objects(Todo)
@@ -76,26 +83,28 @@ class TodoStore {
   todosForDate = (title: string) => {
     const dateQuery =
       title.length === 10
-        ? Q.where('date', title.substr(8, 2))
-        : Q.or(Q.where('date', ''), Q.where('date', Q.eq(null)))
+        ? Q.where(TodoColumn.date, title.substr(8, 2))
+        : Q.or(
+            Q.where(TodoColumn.date, ''),
+            Q.where(TodoColumn.date, Q.eq(null))
+          )
 
     return todosCollection.query(
-      Q.where('is_deleted', false),
-      Q.where('is_delegate_accepted', Q.notEq(false)),
-      Q.where('month_and_year', title.substr(0, 7)),
+      Q.where(TodoColumn.deleted, false),
+      Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
+      Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
       dateQuery,
-      Q.experimentalSortBy('order', Q.asc)
+      Q.experimentalSortBy(TodoColumn.order, Q.asc)
     )
   }
 
   todosBeforeDate = (title: string) => {
-    const todayWithTimezoneOffset = new Date()
+    const todayWithTimezoneOffset = new Date(title)
     let realmResultsWithoutDelegation = todosCollection.query(
-      Q.where('is_deleted', false),
-      Q.where('is_completed', false),
-      Q.where('exact_date_at', Q.lte(todayWithTimezoneOffset.getTime()))
+      Q.where(TodoColumn.deleted, false),
+      Q.where(TodoColumn.completed, false),
+      Q.where(TodoColumn._exactDate, Q.lt(todayWithTimezoneOffset.getTime()))
     )
-
     // if (hydration.isHydrated && sharedSessionStore.user?._id) {
     //   realmResultsWithoutDelegation = realmResultsWithoutDelegation
     //     .filtered(`user = null || user._id = "${sharedSessionStore.user?._id}"`)
@@ -104,12 +113,6 @@ class TodoStore {
     //     )
     // }
     return realmResultsWithoutDelegation
-  }
-
-  @computed get currentTodo() {
-    return this.shallowTodayUncompletedTodos.length
-      ? mobxRealmObject(this.shallowTodayUncompletedTodos[0])
-      : undefined
   }
 
   @computed get delegatedByMe() {
@@ -178,16 +181,6 @@ class TodoStore {
     return delegatedByMeMap
   }
 
-  @observable shallowTodayUncompletedTodos = this.getTodos(
-    observableNow.todayTitle,
-    false
-  )
-
-  @observable shallowTodayCompletedTodos = this.getTodos(
-    observableNow.todayTitle,
-    true
-  )
-
   todayUncompletedTodos = this.getTodos(observableNow.todayTitle, false)
   todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
 
@@ -231,38 +224,22 @@ class TodoStore {
 
   oldTodosSubscribtion?: Subscription
 
-  constructor() {
-    makeObservable(this)
+  subscribeOldTodos() {
+    this.oldTodosSubscribtion?.unsubscribe()
     this.oldTodosSubscribtion = this.todosBeforeDate(observableNow.todayTitle)
       .observeCount()
-      .subscribe((count) => {
-        console.log(observableNow.todayTitle)
-        console.log('ау блиннн')
-        console.log(count)
-        this.oldTodosCount = count
-      })
+      .subscribe((count) => (this.oldTodosCount = count))
+  }
+
+  constructor() {
+    makeObservable(this)
+    this.subscribeOldTodos()
     this.refreshTodos()
     // Today date changed
     observableNowEventEmitter.on(
       ObservableNowEventEmitterEvent.ObservableNowChanged,
       () => {
-        this.oldTodosSubscribtion = this.todosBeforeDate(
-          observableNow.todayTitle
-        )
-          .observeCount()
-          .subscribe((count) => (this.oldTodosCount = count))
-        this.observableKey = Date.now()
-        this.oldTodos = this.todosBeforeDate(observableNow.todayTitle)
-
-        this.shallowTodayUncompletedTodos = this.getTodos(
-          observableNow.todayTitle,
-          false
-        )
-
-        this.shallowTodayCompletedTodos = this.getTodos(
-          observableNow.todayTitle,
-          true
-        )
+        this.subscribeOldTodos()
 
         this.todayUncompletedTodos = this.getTodos(
           observableNow.todayTitle,

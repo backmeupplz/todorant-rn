@@ -14,6 +14,7 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import {
+  Alert,
   SectionList,
   SectionListData,
   StyleSheet,
@@ -41,10 +42,12 @@ import { Q } from '@nozbe/watermelondb'
 import { v4 } from 'uuid'
 import { isTodoOld } from '@utils/isTodoOld'
 import { database, todosCollection } from '@utils/wmdb'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 @observer
 export class PlanningContent extends Component {
-  @observable vm = new PlanningVM()
+  @observable vm?: PlanningVM
   @observable currentMonth = new Date().getMonth()
   @observable currentYear = new Date().getUTCFullYear()
   currentX = new Value(0)
@@ -62,6 +65,8 @@ export class PlanningContent extends Component {
   async UNSAFE_componentWillMount() {
     makeObservable(this)
     setInterval(() => (this.offset += 1), 250000)
+    await when(() => hydration.isHydrated)
+    this.vm = new PlanningVM()
   }
 
   renderPlanningRequiredMessage() {
@@ -186,30 +191,32 @@ export class PlanningContent extends Component {
         {this.renderPlanningRequiredMessage()}
         {this.renderCalendar()}
         {this.renderCircle()}
-        <EnhancedDraggableSectionList
-          todo={
-            this.isCompleted
-              ? this.vm?.completedTodosData.extend(
-                  Q.experimentalTake(this.offset),
-                  Q.experimentalSortBy(
-                    'exact_date_at',
-                    this.isCompleted ? Q.desc : Q.asc
-                  ),
-                  Q.experimentalSortBy('is_frog', Q.desc),
-                  Q.experimentalSortBy('order', Q.asc)
-                )
-              : this.vm?.uncompletedTodosData.extend(
-                  Q.experimentalTake(this.offset),
-                  Q.experimentalSortBy(
-                    'exact_date_at',
-                    this.isCompleted ? Q.desc : Q.asc
-                  ),
-                  Q.experimentalSortBy('is_frog', Q.desc),
-                  Q.experimentalSortBy('order', Q.asc)
-                )
-          }
-          isCompleted={this.isCompleted}
-        />
+        {!!this.vm && (
+          <EnhancedDraggableSectionList
+            todo={
+              this.isCompleted
+                ? this.vm?.completedTodosData.extend(
+                    Q.experimentalTake(this.offset),
+                    Q.experimentalSortBy(
+                      'exact_date_at',
+                      this.isCompleted ? Q.desc : Q.asc
+                    ),
+                    Q.experimentalSortBy('is_frog', Q.desc),
+                    Q.experimentalSortBy('order', Q.asc)
+                  )
+                : this.vm?.uncompletedTodosData.extend(
+                    Q.experimentalTake(this.offset),
+                    Q.experimentalSortBy(
+                      'exact_date_at',
+                      this.isCompleted ? Q.desc : Q.asc
+                    ),
+                    Q.experimentalSortBy('is_frog', Q.desc),
+                    Q.experimentalSortBy('order', Q.asc)
+                  )
+            }
+            isCompleted={this.isCompleted}
+          />
+        )}
         <PlusButton />
       </Container>
     )
@@ -251,6 +258,7 @@ const EnhancedDraggableSectionList = enhance(
 
     return isCompleted ? (
       <SectionList
+        keyExtractor={(item) => item.id}
         removeClippedSubviews={true}
         maxToRenderPerBatch={1}
         initialNumToRender={10}
@@ -288,7 +296,7 @@ const EnhancedDraggableSectionList = enhance(
         maxToRenderPerBatch={1}
         initialNumToRender={10}
         updateCellsBatchingPeriod={1}
-        onDragEnd={() => {}}
+        onDragEnd={onDragEnd}
         isSectionHeader={(a: any) => {
           if (a === undefined) {
             return false
@@ -321,63 +329,64 @@ const EnhancedDraggableSectionList = enhance(
   }
 )
 
-function onDragEnd(params: DragEndParams<MelonTodo | string>) {
+async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   const { beforeChangesArr, dataArr, to, from, promise } = params
-  promise()
-  if (from === to || from === 0 || to === 0) {
-    promise()
-    return
-  }
-  // we are saving promise for reseting hover state in future
-  // help us to find closest section (looks from bottom to the top)
-  const findClosestSection = (
-    index: number,
-    arrToSearch: (string | MelonTodo)[]
-  ) => {
-    let closestSection = 0
-    for (let i = index; i >= 0; --i) {
-      if (typeof arrToSearch[i] === 'string') {
-        closestSection = i
-        break
-      }
-    }
-    return closestSection
-  }
-
-  let disableLoading = false
-
-  const closestFrom = findClosestSection(from, beforeChangesArr)
-  const closestTo = findClosestSection(to, dataArr)
-  database.write(async () => {
-    const lowerDay = Math.min(closestFrom, closestTo)
-    const maxDay = Math.max(closestFrom, closestTo)
-    let lastOrder = 0
-    let lastSection = dataArr[lowerDay] as string
-    for (let i = lowerDay + 1; ; i++) {
-      const item = dataArr[i]
-      if (item === undefined) break
-      if (typeof item === 'string') {
-        // if new section, outside of our draggable items begin
-        if (
-          new Date(item).getTime() >
-          new Date(dataArr[maxDay] as string).getTime()
+  // enable loader
+  sharedAppStateStore.changeLoading(true)
+  // check is calendar dragging
+  if (sharedAppStateStore.activeDay) {
+    const todo = dataArr[to] as MelonTodo
+    if (todo) {
+      realm.write(() => {
+        todo.date = getDateDateString(sharedAppStateStore.activeDay!)
+        todo.monthAndYear = getDateMonthAndYearString(
+          sharedAppStateStore.activeDay!
         )
+        const newTitle = getTitle(todo)
+        todo._exactDate = new Date(newTitle)
+        todo.updatedAt = new Date()
+      })
+    }
+    // discard calendar after applying changes
+    sharedAppStateStore.activeDay = undefined
+    sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+    this.setCoordinates.cancel()
+    promise()
+  } else {
+    // help us to find closest section (looks from bottom to the top)
+    const findClosestSection = (
+      index: number,
+      arrToSearch: (string | MelonTodo)[]
+    ) => {
+      let closestSection = 0
+      for (let i = index; i >= 0; --i) {
+        if (typeof arrToSearch[i] === 'string') {
+          closestSection = i
           break
-        lastOrder = 0
-        lastSection = item
-        continue
+        }
       }
-      if (i === to) {
-        item.update((item) => {
-          item.order = lastOrder
-        })
+      return closestSection
+    }
+
+    const toUpdate = [] as MelonTodo[]
+
+    let disableLoading = false
+
+    const closestFrom = findClosestSection(from, beforeChangesArr)
+    const closestTo = findClosestSection(to, dataArr)
+    if (closestFrom === closestTo) {
+      let lastOrder = 0
+      for (let i = closestTo + 1; ; i++) {
+        const item = dataArr[i]
+        if (item === undefined) break
+        if (typeof item === 'string') break
+        toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
         lastOrder++
       }
     }
-    if (disableLoading) {
-      sharedAppStateStore.changeLoading(false)
-    }
-  })
+    await database.write(async () => await database.batch(...toUpdate))
+    promise()
+  }
 }
 
 const renderItem = ({ item, drag, index, isActive }) => {

@@ -141,9 +141,9 @@ class AddTodoContent extends Component<{
     const dayCompletinRoutineDoneInitially = shouldShowDayCompletionRoutine()
 
     const titlesToFixOrder = [] as string[]
-    const addTodosOnTop = [] as Todo[]
-    const addTodosToBottom = [] as Todo[]
-    const involvedTodos = [] as Todo[]
+    const addTodosOnTop = [] as MelonTodo[]
+    const addTodosToBottom = [] as MelonTodo[]
+    const involvedTodos = [] as MelonTodo[]
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
@@ -267,13 +267,10 @@ class AddTodoContent extends Component<{
       sharedHeroStore.points++
       sharedHeroStore.updatedAt = new Date()
 
-      realm.write(() => {
-        if (!this.breakdownTodo) {
-          return
-        }
-        this.breakdownTodo.completed = true
-        this.breakdownTodo.updatedAt = new Date()
-      })
+      if (this.breakdownTodo) {
+        await this.breakdownTodo.complete()
+      }
+
       titlesToFixOrder.push(breakdownTodoTitle)
       sharedSessionStore.numberOfTodosCompleted++
       startConfetti()
@@ -299,10 +296,7 @@ class AddTodoContent extends Component<{
       }
     }
     // Add tags
-    sharedTagStore.addTags(this.vms)
-    observableNowEventEmitter.emit(
-      ObservableNowEventEmitterEvent.ObservableNowChanged
-    )
+    await sharedTagStore.addTags(this.vms)
     // Sync todos
     await fixOrder(
       titlesToFixOrder,

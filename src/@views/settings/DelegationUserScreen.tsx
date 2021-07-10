@@ -14,6 +14,8 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { removeDelegation } from '@utils/delegations'
 import { realm } from '@utils/realm'
+import { usersCollection } from '@utils/wmdb'
+import { Q } from '@nozbe/watermelondb'
 
 @observer
 class Row extends Component<{
@@ -82,11 +84,18 @@ export class DelegationUserScreenContent extends Component<{
     string
   >
 }> {
+  @observable list: any
+
+  async UNSAFE_componentWillMount() {
+    makeObservable(this)
+    this.list = await (this.props.route.params.delegationType ===
+    DelegationUserType.delegate
+      ? usersCollection.query(Q.where('is_delegator', false))
+      : usersCollection.query(Q.where('is_delegator', true))
+    ).fetch()
+  }
+
   render() {
-    const list =
-      this.props.route.params.delegationType === DelegationUserType.delegate
-        ? sharedDelegationStore.delegates
-        : sharedDelegationStore.delegators
     return (
       <Container>
         <Content
@@ -95,8 +104,8 @@ export class DelegationUserScreenContent extends Component<{
             paddingTop: 16,
           }}
         >
-          {list.length ? (
-            list.map((u, i) => (
+          {!!this.list && this.list.length ? (
+            this.list.map((u, i) => (
               <Row
                 key={i}
                 delegationUser={u}

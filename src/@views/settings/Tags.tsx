@@ -158,7 +158,6 @@ const EnhancedTagList = enhance(({ tags }: { tags: MelonTag[] }) => {
       ListHeaderComponent={DeleteAllTagsButton}
       data={tags}
       renderItem={({ item }) => {
-        console.log(item.epic)
         return (
           <View style={{ paddingHorizontal: 16, marginVertical: 8, flex: 1 }}>
             <View

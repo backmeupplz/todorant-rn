@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Container, Text, View } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -16,24 +16,68 @@ import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { SectionList, SectionListData } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
-import { Todo } from '@models/Todo'
+import { getTitle, Todo } from '@models/Todo'
+import withObservables from '@nozbe/with-observables'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
-@observer
-export class DelegateContent extends Component {
-  renderDelegationSectionList(byMe: boolean, completed = false) {
-    let todosMapToRender: SectionListData<Todo>[]
-    if (byMe && completed) {
-      todosMapToRender = sharedTodoStore.delegatedByMeCompletedTodosMap
-    } else if (byMe) {
-      todosMapToRender = sharedTodoStore.delegatedByMeTodosMap
-    } else {
-      todosMapToRender = sharedTodoStore.delegatedToMeTodosMap
+const enhance = withObservables(['todo'], ({ todo }) => {
+  return {
+    todo: todo.observeWithColumns(
+      Object.keys(todo.collection.database.schema.tables.todos.columns)
+    ),
+  }
+})
+
+const EnhancedDraggableSectionList = enhance(
+  ({ todo }: { todo: MelonTodo[] }) => {
+    const [ready, setReady] = useState(false)
+    const [map, setMap] = useState()
+
+    async function build() {
+      const todoSectionMap = {} as any
+      let currentTitle: string | undefined
+      let sectionIndex = 0
+      for (const realmTodo of todo) {
+        const user = await realmTodo.delegator
+        if (!user) continue
+        const titleKey = user?._id
+        if (!titleKey) continue
+        if (currentTitle && currentTitle !== titleKey) {
+          sectionIndex++
+        }
+        if (todoSectionMap[titleKey]) {
+          todoSectionMap[titleKey].data.push(realmTodo)
+        } else {
+          todoSectionMap[titleKey] = {
+            userInSection: user,
+            data: [realmTodo],
+          }
+        }
+      }
+
+      const todosMap = Object.keys(todoSectionMap).map((key) => {
+        return todoSectionMap[key]
+      })
+      setMap(todosMap)
+      setReady(true)
     }
 
-    return (
+    if (!ready) build()
+
+    return ready ? (
       <SectionList
+        keyExtractor={(item) => item.id}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={1}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={1}
+        sections={map}
         renderItem={({ item, index }) => {
-          return <TodoCard key={index} todo={item} type={CardType.delegation} />
+          return (
+            <Fragment key={item.id}>
+              <TodoCard todo={item} type={CardType.delegation} />
+            </Fragment>
+          )
         }}
         renderSectionHeader={(header) => {
           return (
@@ -43,9 +87,25 @@ export class DelegateContent extends Component {
             />
           )
         }}
-        sections={todosMapToRender}
-        keyExtractor={(item) => (item._id || item._tempSyncId) as string}
       />
+    ) : null
+  }
+)
+
+@observer
+export class DelegateContent extends Component {
+  renderDelegationSectionList(byMe: boolean, completed = false) {
+    let todosMapToRender: SectionListData<Todo>[]
+    if (true) {
+      todosMapToRender = sharedTodoStore.delegatedToMeTodo
+    } else if (byMe) {
+      todosMapToRender = sharedTodoStore.delegatedByMeTodosMap
+    } else {
+      todosMapToRender = sharedTodoStore.delegatedToMeTodosMap
+    }
+
+    return (
+      <EnhancedDraggableSectionList todo={sharedTodoStore.delegatedToMeTodo} />
     )
   }
 
@@ -53,9 +113,6 @@ export class DelegateContent extends Component {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe) {
       return (
         <>
-          {!sharedTodoStore?.delegatedToMeTodosMap?.length && (
-            <NoDelegatedTasks />
-          )}
           {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
             this.renderDelegationSectionList(false)}
         </>
@@ -90,8 +147,7 @@ export class DelegateContent extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        {!sharedSessionStore.user && <SignupPlaceholder />}
-        {!!sharedSessionStore.user && this.renderDelegation()}
+        {this.renderDelegationSectionList(false)}
       </Container>
     )
   }

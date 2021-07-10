@@ -19,6 +19,9 @@ import { TouchableOpacity } from 'react-native'
 import { IconButton } from '@components/IconButton'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { database, notDeletedTodos } from '@utils/wmdb'
+import { MelonTodo } from '@models/MelonTodo'
+import { MelonTag } from '@models/MelonTag'
 
 const ChangeTextStore = {
   save: () => {},
@@ -88,31 +91,32 @@ class ChangeTextContent extends Component<{
         ]
   }
 
-  save() {
-    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
+  async save() {
+    const dbtag = await getTagById(this.tag?._id || this.tag._tempSyncId)
     if (!dbtag) {
       return
     }
     if (this.newName && !this.newName.match(/^[\S]+$/)) this.newName = ''
-    realm.write(() => {
-      for (const todo of realm.objects(Todo).filtered('deleted = false')) {
-        todo.text = todo.text
-          .split(' ')
-          .map((word) => {
-            if (word !== `#${dbtag.tag}`) {
-              return word
-            }
-            return `#${this.newName || dbtag.tag}`
-          })
-          .join(' ')
-        todo.updatedAt = new Date()
-      }
-    })
-    realm.write(() => {
-      dbtag.tag = this.newName || dbtag.tag
-      dbtag.color = (this.tag.color || dbtag.color)!
-      dbtag.updatedAt = new Date()
-    })
+    const toUpdate = [] as (MelonTodo | MelonTag)[]
+    for (const todo of await notDeletedTodos.fetch()) {
+      toUpdate.push(
+        todo.prepareUpdate((todoToUpdate) => {
+          todoToUpdate.text = todo.text
+            .split(' ')
+            .map((word) => {
+              if (word !== `#${dbtag.tag}`) {
+                return word
+              }
+              return `#${this.newName || dbtag.tag}`
+            })
+            .join(' ')
+        })
+      )
+    }
+    await database.write(async () => await database.batch(...toUpdate))
+    await dbtag.changeText(this.newName || dbtag.tag)
+    await dbtag.changeColor(this.tag.color || dbtag.color!)
+
     goBack()
     sharedTagStore.refreshTags()
     sharedTodoStore.refreshTodos()

@@ -1,4 +1,5 @@
 import { MobxRealmModel } from '@utils/mobx-realm/model'
+import { MelonTag } from './MelonTag'
 
 export class Tag extends MobxRealmModel {
   public static schema = {
@@ -43,7 +44,7 @@ export class Tag extends MobxRealmModel {
   epicOrder?: number
 }
 
-export function cloneTag(tag: Tag) {
+export function cloneTag(tag: MelonTag) {
   return {
     _tempSyncId: tag._tempSyncId,
     _id: tag._id,

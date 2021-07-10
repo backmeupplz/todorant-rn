@@ -1,38 +1,47 @@
 import { DelegationUser } from '@models/DelegationUser'
+import { MelonUser } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
 import { Results } from 'realm'
 import { realm } from './realm'
+import { usersCollection } from './wmdb'
 
-export function removeDelegation(
-  delegation: DelegationUser,
+export async function removeDelegation(
+  delegation: MelonUser,
   delegator: boolean
 ) {
-  const localDelegation = getLocalDelegation(delegation, delegator)
+  const localDelegation = await getLocalDelegation(delegation, delegator)
   if (!localDelegation) {
     console.error('Local delegation not found')
     return
   }
-  localDelegation.deleted = true
-  localDelegation.updatedAt = new Date()
+  return localDelegation.prepareUpdate(
+    (delegation) => (delegation.deleted = true)
+  )
 }
 
-export function getLocalDelegation(
-  delegation: DelegationUser,
+export async function getLocalDelegation(
+  delegation: MelonUser,
   delegator: boolean
 ) {
-  const delegationIdPredicate = `_id = "${delegation._id}"`
-  const delegationTokenPredicate = `delegateInviteToken = "${delegation.delegateInviteToken}"`
-  let delegations = realm.objects(DelegationUser)
-  let predicateToSearch: string = `(${delegationIdPredicate} || ${delegationTokenPredicate})`
-  return delegations.filtered(
-    `isDelegator = ${delegator} && ${predicateToSearch}`
+  return (
+    await usersCollection
+      .query(
+        Q.where('is_delegator', delegator),
+        Q.or(
+          Q.where('server_id', delegation._id),
+          Q.where('delegate_invite_token', delegation.delegateInviteToken)
+        )
+      )
+      .fetch()
   )[0]
 }
 
 // Should be placed inside of realm.write
-export function removeMismatchesWithServer(
-  localDelegations: DelegationUser[] | Results<DelegationUser>,
-  serverDelegations: DelegationUser[]
+export function getMismatchesWithServer(
+  localDelegations: MelonUser[] | Results<MelonUser>,
+  serverDelegations: MelonUser[]
 ) {
+  const missMatches = [] as MelonUser[]
   localDelegations.forEach((localDelegation) => {
     if (
       localDelegation &&
@@ -40,34 +49,34 @@ export function removeMismatchesWithServer(
         (delegation) => delegation._id === localDelegation._id
       )
     ) {
-      realm.delete(localDelegation)
+      missMatches.push(localDelegation.prepareMarkAsDeleted())
     }
   })
+  return missMatches
 }
 
-export function updateOrCreateDelegation(
-  delegation: DelegationUser,
+export async function updateOrCreateDelegation(
+  delegation: MelonUser,
   delegator: boolean
 ) {
-  const localDelegate = getLocalDelegation(delegation, delegator)
+  const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
-    Object.assign(localDelegate, delegation)
-    localDelegate.updatedAt = new Date()
+    return localDelegate.prepareUpdate((delegate) =>
+      Object.assign(delegate, delegation)
+    )
   } else
-    realm.create(DelegationUser, {
-      ...delegation,
-      isDelegator: delegator,
-      deleted: false,
-      updatedAt: new Date(),
-    } as DelegationUser)
+    return usersCollection.prepareCreate((delegate) => {
+      Object.assign(delegate, delegation)
+      delegate.isDelegator = delegator
+    })
 }
 
-export function cloneDelegation(delegation: DelegationUser) {
+export function cloneDelegation(delegation: MelonUser) {
   return {
     _id: delegation._id,
     name: delegation.name,
     updatedAt: delegation.updatedAt,
     delegateInviteToken: delegation.delegateInviteToken,
     deleted: delegation.deleted,
-  } as DelegationUser
+  } as MelonUser
 }

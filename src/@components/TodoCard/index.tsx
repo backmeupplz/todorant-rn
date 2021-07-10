@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { Todo } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
@@ -10,6 +10,7 @@ import { MelonTodo } from '@models/MelonTodo'
 
 const TodoC1ard = (props) => {
   const vm = new TodoCardVM()
+
   return (
     <TodoCardContent
       {...props}
@@ -23,6 +24,7 @@ const TodoC1ard = (props) => {
 const enhance = withObservables(['todos'], (items) => {
   return {
     todo: items.todo,
+    delegator: items.todo.delegator,
   }
 })
 

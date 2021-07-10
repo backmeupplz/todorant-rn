@@ -110,7 +110,6 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
         keyExtractor={(epic) => epic._tempSyncId}
         onDragEnd={async (epics) => {
           const toUpdate = epics.data.map((epic, index) => {
-            console.log(epic.epicOrder)
             return epic.prepareUpdate(
               (epicToUpdate) => (epicToUpdate.epicOrder = index)
             )

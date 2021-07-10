@@ -53,9 +53,13 @@ export class MelonTag extends Model {
   @writer async changeColor(color: string) {
     await this.update((tag) => (tag.color = color))
   }
+
+  @writer async changeText(text: string) {
+    await this.update((tag) => (tag.tag = text))
+  }
 }
 
-export function cloneTag(tag: Tag) {
+export function cloneTag(tag: MelonTag) {
   return {
     _tempSyncId: tag._tempSyncId,
     _id: tag._id,
