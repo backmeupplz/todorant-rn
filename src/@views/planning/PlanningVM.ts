@@ -45,12 +45,15 @@ export class PlanningVM {
       Q.where('is_completed', completed),
       Q.or(
         Q.where(TodoColumn.user, null),
-        Q.on('users', 'server_id', sharedSessionStore.user?._id)
+        Q.on('users', 'server_id', sharedSessionStore.user?._id || null)
       ),
       Q.or(
         Q.where(TodoColumn.delegator, null),
         Q.where(TodoColumn.delegateAccepted, true)
-      )
+      ),
+      Q.experimentalSortBy('exact_date_at', completed ? Q.desc : Q.asc),
+      Q.experimentalSortBy('is_frog', Q.desc),
+      Q.experimentalSortBy('order', Q.asc)
       //QQ.where('server_id', null)
 
       //Q.where(TodoColumn.user, null)

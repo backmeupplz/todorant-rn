@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useMemo, useRef } from 'react'
 import { Container, Text, View, Icon } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -7,6 +7,7 @@ import { CardType } from '@components/TodoCard/CardType'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import DraggableSectionList, {
   DragEndParams,
+  AnimatedSectionList,
 } from '@upacyxou/react-native-draggable-sectionlist'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -15,13 +16,12 @@ import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlusButton } from '@components/PlusButton'
 import {
   Alert,
-  SectionList,
   SectionListData,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { computed, makeObservable, observable, when } from 'mobx'
+import { computed, makeObservable, observable, reaction, when } from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
@@ -44,6 +44,7 @@ import { isTodoOld } from '@utils/isTodoOld'
 import { database, todosCollection } from '@utils/wmdb'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoColumn } from '@utils/melondb'
 
 @observer
 export class PlanningContent extends Component {
@@ -56,15 +57,37 @@ export class PlanningContent extends Component {
   lastTimeY = 0
   lastTimeX = 0
 
-  @observable offset = 50
+  @observable offset = 15
 
   @computed get isCompleted() {
+    this.offset = 15
     return sharedAppStateStore.todoSection === TodoSectionType.completed
+  }
+
+  @computed get completedWithOffset() {
+    return this.vm?.completedTodosData.extend(Q.experimentalTake(this.offset))
+  }
+
+  @computed get uncompletedWithOffset() {
+    return this.vm?.uncompletedTodosData.extend(Q.experimentalTake(this.offset))
+  }
+
+  @computed get querySearch() {
+    return this.uncompletedWithOffset?.extend(
+      Q.where(
+        TodoColumn.text,
+        Q.like(
+          `%${Q.sanitizeLikeString(
+            sharedAppStateStore.searchQuery[0] ||
+              sharedAppStateStore.hash.join(' ')
+          )}%`
+        )
+      )
+    )
   }
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)
-    setInterval(() => (this.offset += 1), 250000)
     await when(() => hydration.isHydrated)
     this.vm = new PlanningVM()
   }
@@ -194,27 +217,19 @@ export class PlanningContent extends Component {
         {!!this.vm && (
           <EnhancedDraggableSectionList
             todo={
-              this.isCompleted
-                ? this.vm?.completedTodosData.extend(
-                    Q.experimentalTake(this.offset),
-                    Q.experimentalSortBy(
-                      'exact_date_at',
-                      this.isCompleted ? Q.desc : Q.asc
-                    ),
-                    Q.experimentalSortBy('is_frog', Q.desc),
-                    Q.experimentalSortBy('order', Q.asc)
-                  )
-                : this.vm?.uncompletedTodosData.extend(
-                    Q.experimentalTake(this.offset),
-                    Q.experimentalSortBy(
-                      'exact_date_at',
-                      this.isCompleted ? Q.desc : Q.asc
-                    ),
-                    Q.experimentalSortBy('is_frog', Q.desc),
-                    Q.experimentalSortBy('order', Q.asc)
-                  )
+              sharedAppStateStore.searchQuery.length ||
+              sharedAppStateStore.hash.length
+                ? this.querySearch
+                : this.isCompleted
+                ? this.completedWithOffset
+                : this.uncompletedWithOffset
             }
             isCompleted={this.isCompleted}
+            increaseOffset={async () => {
+              const todosAmount = await todosCollection.query().fetchCount()
+              if (todosAmount <= this.offset) return
+              this.offset += 15
+            }}
           />
         )}
         <PlusButton />
@@ -232,7 +247,15 @@ const enhance = withObservables(['todo'], ({ todo }) => {
 })
 
 const EnhancedDraggableSectionList = enhance(
-  ({ todo, isCompleted }: { todo: MelonTodo[]; isCompleted: boolean }) => {
+  ({
+    todo,
+    isCompleted,
+    increaseOffset,
+  }: {
+    todo: MelonTodo[]
+    isCompleted: boolean
+    increaseOffset: () => void
+  }) => {
     const todoSectionMap = {} as any
     let currentTitle: string | undefined
     let sectionIndex = 0
@@ -257,31 +280,9 @@ const EnhancedDraggableSectionList = enhance(
     })
 
     return isCompleted ? (
-      <SectionList
-        keyExtractor={(item) => item.id}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={1}
-        initialNumToRender={10}
-        updateCellsBatchingPeriod={1}
-        sections={todosMap}
-        renderItem={renderItem}
-        renderSectionHeader={(item) => {
-          return (
-            <TodoHeader
-              date={true}
-              drag={undefined}
-              isActive={undefined}
-              item={item.section.section}
-              key={item.section.section}
-              vm={undefined}
-            />
-          )
-        }}
-      />
-    ) : (
       <DraggableSectionList
-        onEndReached={() => {}}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={0}
+        onEndReached={() => increaseOffset()}
         onViewableItemsChanged={() => {}}
         contentContainerStyle={{ paddingBottom: 100 }}
         onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
@@ -293,9 +294,56 @@ const EnhancedDraggableSectionList = enhance(
         }}
         autoscrollSpeed={200}
         removeClippedSubviews={true}
-        maxToRenderPerBatch={1}
+        maxToRenderPerBatch={5}
         initialNumToRender={10}
         updateCellsBatchingPeriod={1}
+        onDragEnd={onDragEnd}
+        isSectionHeader={(a: any) => {
+          if (a === undefined) {
+            return false
+          }
+          return !a.text
+        }}
+        renderItem={renderItem}
+        renderSectionHeader={({ item, drag, index, isActive }) => {
+          return (
+            <TodoHeader
+              date={true}
+              drag={drag}
+              isActive={isActive}
+              item={item.section}
+              key={item.section}
+              vm={undefined}
+            />
+          )
+        }}
+        // TODO implement tags search and query search
+        //  as ref
+        //  (sharedAppStateStore.hash.length ||
+        //  sharedAppStateStore.searchQuery.length > 0
+        //    ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
+        //    : this.vm.uncompletedTodosData.todosArray) || []
+        data={todosMap}
+        keyExtractor={(item) => item.id}
+      />
+    ) : (
+      <DraggableSectionList
+        onEndReachedThreshold={0.5}
+        onEndReached={() => increaseOffset()}
+        onViewableItemsChanged={() => {}}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
+          if (!sharedAppStateStore.calendarEnabled) return
+          // TODO calendar actions
+          //this.currentX.setValue(absoluteX as any)
+          //this.currentY.setValue((absoluteY - this.todoHeight) as any)
+          //this.vm?.setCoordinates(absoluteY, absoluteX)
+        }}
+        autoscrollSpeed={200}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={5}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={0.9}
         onDragEnd={onDragEnd}
         isSectionHeader={(a: any) => {
           if (a === undefined) {
