@@ -17,7 +17,7 @@ import { isTodoOld } from '@utils/isTodoOld'
 import { debounce } from 'lodash'
 import { todosCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from '@utils/melondb'
+import { Tables, TodoColumn, UserColumn } from '@utils/melondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 
 export const planningEventEmitter = new EventEmitter()
@@ -40,27 +40,21 @@ export class PlanningVM {
 
   getTodos(completed: boolean) {
     return todosCollection.query(
-      Q.experimentalJoinTables(['users']),
-      Q.where('is_deleted', false),
-      Q.where('is_completed', completed),
+      Q.experimentalJoinTables([Tables.users]),
+      Q.where(TodoColumn.deleted, false),
+      Q.where(TodoColumn.completed, completed),
       Q.or(
         Q.where(TodoColumn.user, null),
-        Q.on('users', 'server_id', sharedSessionStore.user?._id || null)
+        Q.on(Tables.users, UserColumn._id, sharedSessionStore.user?._id || null)
       ),
       Q.or(
         Q.where(TodoColumn.delegator, null),
         Q.where(TodoColumn.delegateAccepted, true)
       ),
-      Q.experimentalSortBy('exact_date_at', completed ? Q.desc : Q.asc),
-      Q.experimentalSortBy('is_frog', Q.desc),
-      Q.experimentalSortBy('order', Q.asc)
-      //QQ.where('server_id', null)
-
-      //Q.where(TodoColumn.user, null)
+      Q.experimentalSortBy(TodoColumn._exactDate, completed ? Q.desc : Q.asc),
+      Q.experimentalSortBy(TodoColumn.frog, Q.desc),
+      Q.experimentalSortBy(TodoColumn.order, Q.asc)
     )
-    // TODO user and delegation in wmdb
-    // .filtered(`user._id = "${sharedSessionStore.user?._id}" OR user = null`)
-    // .filtered('delegator = null OR delegateAccepted = true')
   }
 
   setCoordinates = debounce(

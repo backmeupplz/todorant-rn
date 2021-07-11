@@ -1,35 +1,31 @@
 import { Model } from '@nozbe/watermelondb'
-import {
-  action,
-  date,
-  field,
-  readonly,
-  relation,
-  writer,
-} from '@nozbe/watermelondb/decorators'
-import { Tables, TodoColumn } from '@utils/melondb'
+import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
+import { associations } from '@nozbe/watermelondb/Model'
+import { Tables, TodoColumn, UserColumn } from '@utils/melondb'
 
 export class MelonUser extends Model {
-  static table = 'users'
-  static associations = {
-    todos: { type: 'belongs_to', key: 'todo_id' },
-  }
+  static table = Tables.users
+  static associations = associations([
+    Tables.todos,
+    { type: 'belongs_to', key: UserColumn.todoId },
+  ])
 
-  @field('server_id') _id?: string
-  @field('name') name?: string
-  @field('is_delegator') isDelegator?: boolean
-  @field('is_deleted') deleted?: boolean
-  @date('created_at') createdAt!: Date
-  @date('updated_at') updatedAt!: Date
-  @field('delegate_invite_token') delegateInviteToken?: string
+  @field(UserColumn._id) _id?: string
+  @field(UserColumn.name) name?: string
+  @field(UserColumn.isDelegator) isDelegator?: boolean
+  @field(UserColumn.deleted) deleted?: boolean
+  @date(UserColumn.createdAt) createdAt!: Date
+  @date(UserColumn.updatedAt) updatedAt!: Date
+  @field(UserColumn.delegateInviteToken) delegateInviteToken?: string
 }
 
 export class MelonTodo extends Model {
   static table = Tables.todos
 
-  static associations = {
-    users: { type: 'has_many', foreignKey: 'todo_id' },
-  }
+  static associations = associations([
+    Tables.users,
+    { type: 'has_many', foreignKey: UserColumn.todoId },
+  ])
 
   @field(TodoColumn._tempSyncId) _tempSyncId!: string
   @date(TodoColumn._exactDate) _exactDate?: Date
@@ -48,10 +44,8 @@ export class MelonTodo extends Model {
   @field(TodoColumn.date) date?: string
   @field(TodoColumn.time) time?: string
   @field(TodoColumn.delegateAccepted) delegateAccepted?: boolean
-  @relation('users', 'user_id') user?: MelonUser
-  @relation('users', 'delegator_id') delegator?: MelonUser
-  //user
-  //delegator
+  @relation(Tables.users, TodoColumn.user) user?: MelonUser
+  @relation(Tables.users, TodoColumn.delegator) delegator?: MelonUser
 
   @writer async complete() {
     await this.update((todo) => (todo.completed = true))

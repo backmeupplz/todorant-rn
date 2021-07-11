@@ -1,6 +1,4 @@
-import { Todo } from '@models/Todo'
 import { Q } from '@nozbe/watermelondb'
-import { realm } from '@utils/realm'
 import { TodoColumn } from './melondb'
 import { todosCollection } from './wmdb'
 

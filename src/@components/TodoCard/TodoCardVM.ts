@@ -1,30 +1,25 @@
 import { isTodoOld } from '@utils/isTodoOld'
-import { sharedHeroStore } from '@stores/HeroStore'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
 import { alertConfirm, alertMessage } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import {
   getDateStringFromTodo,
   getDateDateString,
   getDateMonthAndYearString,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
-import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
-import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
-import { v4 } from 'uuid'
 import { database } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from '@utils/melondb'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -36,7 +31,7 @@ export class TodoCardVM {
   async skip(todo: MelonTodo) {
     const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .extend(Q.where(`is_completed`, todo.completed))
+      .extend(Q.where(TodoColumn.completed, todo.completed))
       .fetch()
     let startOffseting = false
     let offset = 0
@@ -88,7 +83,7 @@ export class TodoCardVM {
     }
     const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .extend(Q.where(`is_completed`, todo.completed))
+      .extend(Q.where(TodoColumn.completed, todo.completed))
       .fetch()
     return neighbours.length > 1
   }

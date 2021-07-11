@@ -13,6 +13,7 @@ import { alertConfirm, alertError } from '@utils/alert'
 import { _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
+import { TodoColumn } from '@utils/melondb'
 import { realm } from '@utils/realm'
 import { sharedColors } from '@utils/sharedColors'
 import { database, todosCollection } from '@utils/wmdb'
@@ -45,8 +46,8 @@ export class Security extends Component {
     try {
       const todos = await todosCollection
         .query(
-          Q.where('is_deleted', false),
-          Q.where('is_encrypted', !encrypted)
+          Q.where(TodoColumn.deleted, false),
+          Q.where(TodoColumn.encrypted, !encrypted)
         )
         .fetch()
       const toUpdate = [] as MelonTodo[]
@@ -69,9 +70,9 @@ export class Security extends Component {
     try {
       const todos = await todosCollection
         .query(
-          Q.where('is_deleted', false),
-          Q.where('is_encrypted', encrypt),
-          Q.where('delegator', null)
+          Q.where(TodoColumn.deleted, false),
+          Q.where(TodoColumn.encrypted, encrypt),
+          Q.where(TodoColumn.delegator, null)
         )
         .fetch()
       const toUpdate = [] as MelonTodo[]

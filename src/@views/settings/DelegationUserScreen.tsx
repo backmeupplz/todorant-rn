@@ -16,6 +16,7 @@ import { removeDelegation } from '@utils/delegations'
 import { realm } from '@utils/realm'
 import { usersCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
+import { UserColumn } from '@utils/melondb'
 
 @observer
 class Row extends Component<{
@@ -90,8 +91,8 @@ export class DelegationUserScreenContent extends Component<{
     makeObservable(this)
     this.list = await (this.props.route.params.delegationType ===
     DelegationUserType.delegate
-      ? usersCollection.query(Q.where('is_delegator', false))
-      : usersCollection.query(Q.where('is_delegator', true))
+      ? usersCollection.query(Q.where(UserColumn.isDelegator, false))
+      : usersCollection.query(Q.where(UserColumn.isDelegator, true))
     ).fetch()
   }
 

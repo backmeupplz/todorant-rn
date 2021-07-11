@@ -15,6 +15,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError } from '@utils/alert'
 import { gatherData } from '@utils/gatherData'
 import { translate } from '@utils/i18n'
+import { TagColumn, TodoColumn } from '@utils/melondb'
 import { realm } from '@utils/realm'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
@@ -49,11 +50,11 @@ export class Data extends Component {
   UNSAFE_componentWillMount() {
     makeObservable(this)
     todosCollection
-      .query(Q.where('is_deleted', false))
+      .query(Q.where(TodoColumn.deleted, false))
       .observeCount(false)
       .subscribe((amount) => (this.todosAmount = amount))
     tagsCollection
-      .query(Q.where('is_deleted', false))
+      .query(Q.where(TagColumn.deleted, false))
       .observeCount(false)
       .subscribe((amount) => (this.tagsAmount = amount))
   }

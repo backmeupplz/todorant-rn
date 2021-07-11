@@ -32,7 +32,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { omit } from 'lodash'
 import { MelonTag } from '@models/MelonTag'
-import { TagColumn, TodoColumn } from '@utils/melondb'
+import { TagColumn, TodoColumn, UserColumn } from '@utils/melondb'
 
 export async function onDelegationObjectsFromServer(
   objects: {
@@ -51,15 +51,17 @@ export async function onDelegationObjectsFromServer(
 ) {
   const lastSyncDate = sharedDelegationStore.updatedAt
   // Get local delegators
-  const realmDelegators = usersCollection.query(Q.where('is_delegator', true))
+  const realmDelegators = usersCollection.query(
+    Q.where(UserColumn.isDelegator, true)
+  )
   // Get local delegates
   const realmDelegates = usersCollection.query(
-    Q.where('is_delegator', Q.notEq(true))
+    Q.where(UserColumn.isDelegator, Q.notEq(true))
   )
   // Filter delegators that changed locally
   const delegatorsChangedLocally = await (lastSyncDate
     ? realmDelegators.extend(
-        Q.where('updated_at', Q.gt(lastSyncDate.getTime()))
+        Q.where(UserColumn.updatedAt, Q.gt(lastSyncDate.getTime()))
       )
     : realmDelegators
   ).fetch()

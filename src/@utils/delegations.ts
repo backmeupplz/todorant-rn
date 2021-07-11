@@ -2,6 +2,7 @@ import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { Results } from 'realm'
+import { UserColumn } from './melondb'
 import { realm } from './realm'
 import { usersCollection } from './wmdb'
 
@@ -26,10 +27,13 @@ export async function getLocalDelegation(
   return (
     await usersCollection
       .query(
-        Q.where('is_delegator', delegator),
+        Q.where(UserColumn.isDelegator, delegator),
         Q.or(
-          Q.where('server_id', delegation._id),
-          Q.where('delegate_invite_token', delegation.delegateInviteToken)
+          Q.where(UserColumn._id, delegation._id || null),
+          Q.where(
+            UserColumn.delegateInviteToken,
+            delegation.delegateInviteToken || null
+          )
         )
       )
       .fetch()

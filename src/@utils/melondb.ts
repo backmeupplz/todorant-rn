@@ -1,17 +1,12 @@
 import { MelonTag } from '@models/MelonTag'
-import { MelonTodo } from '@models/MelonTodo'
-import {
-  tableName,
-  columnName,
-  TableName,
-  appSchema,
-  tableSchema,
-} from '@nozbe/watermelondb'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { tableName, appSchema, tableSchema } from '@nozbe/watermelondb'
 import { schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
 
 export const Tables = {
   tags: tableName<MelonTodo>('tags'),
   todos: tableName<MelonTag>('todos'),
+  users: tableName<MelonUser>('users'),
 }
 
 const Columns = {
@@ -52,10 +47,21 @@ const Columns = {
     epicPoints: 'epic_points',
     epicOrder: 'epic_order',
   },
+  users: {
+    _id: 'server_id',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    name: 'name',
+    isDelegator: 'is_delegator',
+    deleted: 'is_deleted',
+    delegateInviteToken: 'delegate_invite_token',
+    todoId: 'todo_id',
+  },
 }
 
 export const TodoColumn = Columns.todos
 export const TagColumn = Columns.tags
+export const UserColumn = Columns.users
 
 export const watermelon = appSchema({
   version: 1,
@@ -119,16 +125,20 @@ export const watermelon = appSchema({
       ],
     }),
     tableSchema({
-      name: 'users',
+      name: Tables.users,
       columns: [
-        { name: 'server_id', type: 'string', isOptional: true },
-        { name: 'created_at', type: 'number' },
-        { name: 'updated_at', type: 'number' },
-        { name: 'name', type: 'string', isOptional: true },
-        { name: 'is_delegator', type: 'boolean', isOptional: true },
-        { name: 'is_deleted', type: 'boolean', isOptional: true },
-        { name: 'delegate_invite_token', type: 'string', isOptional: true },
-        { name: 'todo_id', type: 'string', isOptional: true },
+        { name: UserColumn._id, type: 'string', isOptional: true },
+        { name: UserColumn.createdAt, type: 'number' },
+        { name: UserColumn.updatedAt, type: 'number' },
+        { name: UserColumn.name, type: 'string', isOptional: true },
+        { name: UserColumn.isDelegator, type: 'boolean', isOptional: true },
+        { name: UserColumn.deleted, type: 'boolean', isOptional: true },
+        {
+          name: UserColumn.delegateInviteToken,
+          type: 'string',
+          isOptional: true,
+        },
+        { name: UserColumn.todoId, type: 'string', isOptional: true },
       ],
     }),
     tableSchema({

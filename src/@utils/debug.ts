@@ -59,30 +59,7 @@ export async function add5000Todos() {
       })
     )
     console.log((await todosCollection.query().fetch()).length)
-    // for (const vm of todos) {
-    //   const newTodo = todosCollection.create((todo) => {
-    //     todo.text = vm.text
-    //     todo.monthAndYear = vm.monthAndYear
-    //     todo.time = vm.time
-    //     todo.completed = false
-    //     todo.deleted = false
-    //     todo.date = vm.date
-    //   })
-    // }
   })
-
-  // await database.write(async () => {
-  //   for (const vm of todos) {
-  //     const newTodo = await todosCollection.create((todo) => {
-  //       todo.text = vm.text
-  //       todo.monthAndYear = vm.monthAndYear
-  //       todo.time = vm.time
-  //       todo.completed = false
-  //       todo.deleted = false
-  //     })
-  //   }
-  // })
-
   sharedTodoStore.refreshTodos()
 }
 

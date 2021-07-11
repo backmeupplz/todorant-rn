@@ -21,7 +21,14 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Month } from '@upacyxou/react-native-month'
-import { computed, makeObservable, observable, reaction, when } from 'mobx'
+import {
+  computed,
+  makeObservable,
+  observable,
+  reaction,
+  runInAction,
+  when,
+} from 'mobx'
 import moment from 'moment'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
@@ -60,7 +67,7 @@ export class PlanningContent extends Component {
   @observable offset = 15
 
   @computed get isCompleted() {
-    this.offset = 15
+    runInAction(() => (this.offset = 15))
     return sharedAppStateStore.todoSection === TodoSectionType.completed
   }
 
@@ -317,12 +324,6 @@ const EnhancedDraggableSectionList = enhance(
             />
           )
         }}
-        // TODO implement tags search and query search
-        //  as ref
-        //  (sharedAppStateStore.hash.length ||
-        //  sharedAppStateStore.searchQuery.length > 0
-        //    ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
-        //    : this.vm.uncompletedTodosData.todosArray) || []
         data={todosMap}
         keyExtractor={(item) => item.id}
       />
@@ -334,10 +335,6 @@ const EnhancedDraggableSectionList = enhance(
         contentContainerStyle={{ paddingBottom: 100 }}
         onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
           if (!sharedAppStateStore.calendarEnabled) return
-          // TODO calendar actions
-          //this.currentX.setValue(absoluteX as any)
-          //this.currentY.setValue((absoluteY - this.todoHeight) as any)
-          //this.vm?.setCoordinates(absoluteY, absoluteX)
         }}
         autoscrollSpeed={200}
         removeClippedSubviews={true}
@@ -364,12 +361,6 @@ const EnhancedDraggableSectionList = enhance(
             />
           )
         }}
-        // TODO implement tags search and query search
-        //  as ref
-        //  (sharedAppStateStore.hash.length ||
-        //  sharedAppStateStore.searchQuery.length > 0
-        //    ? this.vm.uncompletedTodosData.allTodosAndHash?.slice()
-        //    : this.vm.uncompletedTodosData.todosArray) || []
         data={todosMap}
         keyExtractor={(item) => item.id}
       />

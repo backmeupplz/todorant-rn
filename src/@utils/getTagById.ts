@@ -1,6 +1,4 @@
-import { Tag } from '@models/Tag'
 import { Q } from '@nozbe/watermelondb'
-import { realm } from '@utils/realm'
 import { TagColumn } from './melondb'
 import { tagsCollection } from './wmdb'
 
