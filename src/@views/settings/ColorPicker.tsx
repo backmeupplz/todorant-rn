@@ -11,7 +11,6 @@ import {
   fromHsv,
 } from 'react-native-color-picker'
 import { extraButtonProps } from '@utils/extraButtonProps'
-import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { Button } from '@components/Button'

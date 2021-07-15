@@ -5,18 +5,17 @@ import { fixOrder } from '@utils/fixOrder'
 import { translate } from '@utils/i18n'
 import { navigate } from '@utils/navigation'
 import { daysAgo } from '@utils/plusButtonAction'
-import { realm } from '@utils/realm'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { Toast } from 'native-base'
 import QueryString from 'query-string'
 import { Linking } from 'react-native'
-import uuid from 'uuid'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm, alertError } from './alert'
-import { DelegationUser } from '@models/DelegationUser'
 import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { getLocalDelegation } from './delegations'
+import { getLocalDelegation, updateOrCreateDelegation } from './delegations'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { database, todosCollection } from './wmdb'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -75,36 +74,37 @@ function handleUrl(url: string) {
     sharedAppStateStore.searchEnabled = true
     sharedAppStateStore.searchQuery = [params.query.query as string]
   } else if (params.url.match(/https:\/\/todorant.com\/invite\/*/g)) {
-    alertConfirm(translate('delegate.inviteConfirm'), translate('ok'), () => {
-      const splittedUrl = params.url.split('/')
-      const delegateInviteToken = splittedUrl[4]
-      if (!sharedSessionStore.user?.token) {
-        alertError(translate('pleaseLogin'))
-        return
+    alertConfirm(
+      translate('delegate.inviteConfirm'),
+      translate('ok'),
+      async () => {
+        const splittedUrl = params.url.split('/')
+        const delegateInviteToken = splittedUrl[4]
+        if (!sharedSessionStore.user?.token) {
+          alertError(translate('pleaseLogin'))
+          return
+        }
+        const localDelegator = getLocalDelegation(
+          { delegateInviteToken } as MelonUser,
+          true
+        )
+        if (!localDelegator) {
+          await updateOrCreateDelegation(
+            { delegateInviteToken } as MelonUser,
+            true,
+            true
+          )
+        } else {
+          alertError(translate('delegate.delegatorExists'))
+          return
+        }
+        requestSync(SyncRequestEvent.Delegation)
       }
-      const localDelegator = getLocalDelegation(
-        { delegateInviteToken } as DelegationUser,
-        true
-      )
-      if (!localDelegator) {
-        realm.write(() => {
-          realm.create(DelegationUser, {
-            delegateInviteToken,
-            updatedAt: new Date(),
-            isDelegator: true,
-            deleted: false,
-          } as DelegationUser)
-        })
-      } else {
-        alertError(translate('delegate.delegatorExists'))
-        return
-      }
-      requestSync(SyncRequestEvent.Delegation)
-    })
+    )
   }
 }
 
-function addTodo(text: string) {
+async function addTodo(text: string) {
   if (!sharedSettingsStore.showTodayOnAddTodo) {
     navigate('AddTodo', { text })
     return
@@ -112,31 +112,27 @@ function addTodo(text: string) {
   const date = getDateDateString(new Date())
   const monthAndYear = getDateMonthAndYearString(new Date())
 
-  const todo = {
-    updatedAt: new Date(),
-    createdAt: new Date(),
+  const newTodo = {
     text,
-    completed: false,
-    frog: false,
-    frogFails: 0,
-    skipped: false,
-    order: 0,
     monthAndYear,
-    deleted: false,
     date: date,
     encrypted: !!sharedSessionStore.encryptionKey,
-    _tempSyncId: uuid(),
   } as Todo
-  todo._exactDate = new Date(getTitle(todo))
+  newTodo._exactDate = new Date(getTitle(newTodo))
 
-  realm.write(() => {
-    realm.create(Todo, todo)
+  let createdTodo!: MelonTodo
+
+  await database.write(async () => {
+    createdTodo = await todosCollection.create((todo) =>
+      Object.assign(todo, newTodo)
+    )
   })
+
   // Sync todos
   fixOrder(
-    [getTitle(todo)],
-    sharedSettingsStore.newTodosGoFirst ? [todo] : [],
-    sharedSettingsStore.newTodosGoFirst ? [] : [todo]
+    [getTitle(createdTodo)],
+    sharedSettingsStore.newTodosGoFirst ? [createdTodo] : [],
+    sharedSettingsStore.newTodosGoFirst ? [] : [createdTodo]
   )
   // Show toast
   Toast.show({

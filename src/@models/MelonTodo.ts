@@ -7,8 +7,16 @@ export class MelonUser extends Model {
   static table = Tables.users
   static associations = associations([
     Tables.todos,
-    { type: 'belongs_to', key: UserColumn.todoId },
+    { type: 'belongs_to', key: UserColumn._id },
   ])
+
+  @writer async delete() {
+    return await this.update((user) => (user.deleted = true))
+  }
+
+  @writer async updateUser(updatedUser: MelonUser) {
+    return await this.update((user) => Object.assign(user, updatedUser))
+  }
 
   @field(UserColumn._id) _id?: string
   @field(UserColumn.name) name?: string
@@ -24,7 +32,7 @@ export class MelonTodo extends Model {
 
   static associations = associations([
     Tables.users,
-    { type: 'has_many', foreignKey: UserColumn.todoId },
+    { type: 'has_many', foreignKey: UserColumn._id },
   ])
 
   @field(TodoColumn._tempSyncId) _tempSyncId!: string

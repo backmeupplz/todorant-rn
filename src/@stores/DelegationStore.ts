@@ -1,7 +1,4 @@
-import { mobxRealmCollection } from '@utils/mobx-realm/collection'
-import { DelegationUser } from '@models/DelegationUser'
-import { realm } from '@utils/realm'
-import { computed, makeObservable, observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { hydrate } from './hydration/hydrate'
 import { hydrateStore } from './hydration/hydrateStore'
@@ -16,29 +13,8 @@ class DelegationStore {
     makeObservable(this)
   }
 
-  @computed get delegators() {
-    return mobxRealmCollection(
-      realm
-        .objects(DelegationUser)
-        .filtered('deleted = false')
-        .filtered('isDelegator = true')
-    )
-  }
-
-  @computed get delegates() {
-    return mobxRealmCollection(
-      realm
-        .objects(DelegationUser)
-        .filtered('deleted = false')
-        .filtered('isDelegator = false')
-    )
-  }
-
   logout() {
     this.updatedAt = undefined
-    realm.write(() => {
-      realm.delete(realm.objects(DelegationUser))
-    })
   }
 }
 

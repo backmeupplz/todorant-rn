@@ -288,6 +288,7 @@ const EnhancedDraggableSectionList = enhance(
 
     return isCompleted ? (
       <DraggableSectionList
+        ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0}
         onEndReached={() => increaseOffset()}
         onViewableItemsChanged={() => {}}
@@ -329,6 +330,7 @@ const EnhancedDraggableSectionList = enhance(
       />
     ) : (
       <DraggableSectionList
+        ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
         onViewableItemsChanged={() => {}}
@@ -371,7 +373,7 @@ const EnhancedDraggableSectionList = enhance(
 async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   const { beforeChangesArr, dataArr, to, from, promise } = params
   // enable loader
-  sharedAppStateStore.changeLoading(true)
+  sharedAppStateStore.changeLoading(false)
   // check is calendar dragging
   if (sharedAppStateStore.activeDay) {
     const todo = dataArr[to] as MelonTodo

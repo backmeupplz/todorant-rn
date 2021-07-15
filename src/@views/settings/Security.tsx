@@ -14,7 +14,6 @@ import { _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
 import { TodoColumn } from '@utils/melondb'
-import { realm } from '@utils/realm'
 import { sharedColors } from '@utils/sharedColors'
 import { database, todosCollection } from '@utils/wmdb'
 import { makeObservable, observable } from 'mobx'
@@ -31,6 +30,17 @@ export class Security extends Component {
   @observable password = ''
   @observable passwordRepeat = ''
 
+  @observable unencryptedCount = 0
+  @observable encryptedCount = 0
+
+  unencryptedTodos = sharedTodoStore.undeletedTodos.extend(
+    Q.where(TodoColumn.encrypted, false)
+  )
+
+  encryptedTodos = sharedTodoStore.undeletedTodos.extend(
+    Q.where(TodoColumn.encrypted, true)
+  )
+
   UNSAFE_componentWillMount() {
     makeObservable(this)
   }
@@ -39,17 +49,21 @@ export class Security extends Component {
     this.encryptionOn = !!sharedSessionStore.encryptionKey
     this.password = sharedSessionStore.encryptionKey || ''
     this.passwordRepeat = sharedSessionStore.encryptionKey || ''
+    this.unencryptedTodos
+      .observeCount(false)
+      .subscribe((count) => (this.unencryptedCount = count))
+    this.encryptedTodos
+      .observeCount(false)
+      .subscribe((count) => (this.encryptedCount = count))
   }
 
   async changeEncrypted(encrypted: boolean) {
     this.loading = true
     try {
-      const todos = await todosCollection
-        .query(
-          Q.where(TodoColumn.deleted, false),
-          Q.where(TodoColumn.encrypted, !encrypted)
-        )
-        .fetch()
+      const todos = await (!encrypted
+        ? this.encryptedTodos
+        : this.unencryptedTodos
+      ).fetch()
       const toUpdate = [] as MelonTodo[]
       for (const todo of todos) {
         toUpdate.push(
@@ -194,10 +208,8 @@ export class Security extends Component {
                         alertConfirm(
                           translate('encryptionConfirm'),
                           translate('save'),
-                          () => {
-                            const encrytedTodos = realm
-                              .objects(Todo)
-                              .filtered('encrypted = true && deleted = false')
+                          async () => {
+                            const encrytedTodos = await this.encryptedTodos.fetch()
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
                               const decryptedText = _d(
@@ -230,11 +242,7 @@ export class Security extends Component {
               {translate('encryptedTodos')}
             </Text>
             <Text {...sharedColors.regularTextExtraStyle}>
-              {
-                realm
-                  .objects(Todo)
-                  .filtered('encrypted = true && deleted = false').length
-              }
+              {this.encryptedCount}
             </Text>
           </TableItem>
           <TableItem>
@@ -242,11 +250,7 @@ export class Security extends Component {
               {translate('unencryptedTodos')}
             </Text>
             <Text {...sharedColors.regularTextExtraStyle}>
-              {
-                realm
-                  .objects(Todo)
-                  .filtered('encrypted = false && deleted = false').length
-              }
+              {this.unencryptedCount}
             </Text>
           </TableItem>
           {/* General */}
@@ -270,10 +274,7 @@ export class Security extends Component {
                 )
               }}
               disabled={
-                !sharedSessionStore.encryptionKey ||
-                !realm
-                  .objects(Todo)
-                  .filtered('encrypted = false && deleted = false').length
+                !sharedSessionStore.encryptionKey || !this.unencryptedCount
               }
             >
               <Text>{translate('encryptAllButton')}</Text>
@@ -292,10 +293,7 @@ export class Security extends Component {
                 )
               }}
               disabled={
-                !sharedSessionStore.encryptionKey ||
-                !realm
-                  .objects(Todo)
-                  .filtered('encrypted = true && deleted = false').length
+                !sharedSessionStore.encryptionKey || !this.encryptedCount
               }
             >
               <Text>{translate('decryptAllButton')}</Text>

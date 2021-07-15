@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -51,6 +51,8 @@ import { InteractionManager, ScrollView } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
+import { useNavigation } from '@react-navigation/native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export let scrollViewRef: ScrollView
 export let supportButtonNodeId: number
@@ -245,6 +247,15 @@ export class SettingsContent extends Component {
 }
 
 export function Settings() {
+  const navigation = useNavigation()
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      sharedSync.sync(SyncRequestEvent.All)
+    })
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe
+  }, [navigation])
+
   return (
     <Observer>
       {() => (

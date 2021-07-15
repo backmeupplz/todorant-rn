@@ -1,23 +1,14 @@
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { realmTimestampFromDate } from '@utils/realmTimestampFromDate'
 import { Tag, cloneTag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
-import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
-import { realm } from '@utils/realm'
-import uuid from 'uuid'
 import { cloneTodo, getTitle, Todo } from '@models/Todo'
 import { getTodoById } from '@utils/getTodoById'
 import { decrypt, encrypt } from '@utils/encryption'
-import {
-  observableNowEventEmitter,
-  ObservableNowEventEmitterEvent,
-} from '@utils/ObservableNow'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import {
   cloneDelegation,
-  getLocalDelegation,
   getMismatchesWithServer,
   removeDelegation,
   updateOrCreateDelegation,
@@ -323,17 +314,24 @@ export async function onTodosObjectsFromServer(
       if (newTodo.encrypted) {
         newTodo.text = decrypt(newTodo.text)
       }
-      const user = newTodo.user
-        ? await getLocalDelegation(newTodo.user, false)
-        : undefined
-      const delegator = newTodo.delegator
-        ? await getLocalDelegation(newTodo.delegator, true)
-        : undefined
+
+      let user: MelonUser | undefined
+      let delegator: MelonUser | undefined
+      if (newTodo.user && newTodo.delegator) {
+        user = newTodo.user
+          ? await updateOrCreateDelegation(newTodo.user, false, true)
+          : undefined
+        delegator = newTodo.delegator
+          ? await updateOrCreateDelegation(newTodo.delegator, true, true)
+          : undefined
+      }
       toCreate.push(
         todosCollection.prepareCreate((todo) => {
           Object.assign(todo, omit(newTodo, 'user', 'delegator'))
-          if (user) todo.user?.set(user)
-          if (delegator) todo.delegator?.set(delegator)
+          if (user && delegator) {
+            todo.user?.set(user)
+            todo.delegator?.set(delegator)
+          }
         })
       )
     }
@@ -370,7 +368,6 @@ export async function onTodosObjectsFromServer(
         return v
       }) as any
   )
-  console.log(savedPushedTodos)
   // Modify dates
   savedPushedTodos.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)

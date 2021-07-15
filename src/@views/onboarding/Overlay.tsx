@@ -17,8 +17,6 @@ import {
   Keyboard,
   Platform,
 } from 'react-native'
-import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
 import { navigate } from '@utils/navigation'
 
@@ -43,10 +41,6 @@ export class Overlay extends Component {
     makeObservable(this)
   }
 
-  todosExists() {
-    return !!realm.objects(Todo).length
-  }
-
   componentDidMount() {
     Dimensions.addEventListener(
       'change',
@@ -68,7 +62,7 @@ export class Overlay extends Component {
     reaction(
       () => sharedOnboardingStore.hydrated,
       () => {
-        if (this.todosExists() && !sharedOnboardingStore.savedStep) {
+        if (!sharedOnboardingStore.savedStep) {
           sharedOnboardingStore.tutorialIsShown = true
           return
         }

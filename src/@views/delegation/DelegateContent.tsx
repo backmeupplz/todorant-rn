@@ -16,9 +16,9 @@ import { sharedColors } from '@utils/sharedColors'
 import { makeObservable, observable } from 'mobx'
 import { SectionList, SectionListData } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
-import { getTitle, Todo } from '@models/Todo'
+import { Todo } from '@models/Todo'
+import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
@@ -29,16 +29,27 @@ const enhance = withObservables(['todo'], ({ todo }) => {
 })
 
 const EnhancedDraggableSectionList = enhance(
-  ({ todo }: { todo: MelonTodo[] }) => {
+  ({
+    todo,
+    completed,
+    byMe,
+  }: {
+    todo: MelonTodo[]
+    completed: boolean
+    byMe: boolean
+  }) => {
     const [ready, setReady] = useState(false)
     const [map, setMap] = useState()
+    const [completedCopy, setCompleted] = useState()
+    const [byMeCopy, setByMe] = useState()
+    const [length, setLength] = useState(0)
 
     async function build() {
       const todoSectionMap = {} as any
       let currentTitle: string | undefined
       let sectionIndex = 0
       for (const realmTodo of todo) {
-        const user = await realmTodo.delegator
+        const user = await (byMe ? realmTodo.user : realmTodo.delegator)
         if (!user) continue
         const titleKey = user?._id
         if (!titleKey) continue
@@ -62,7 +73,15 @@ const EnhancedDraggableSectionList = enhance(
       setReady(true)
     }
 
-    if (!ready) build()
+    if (
+      !(completed === completedCopy && byMeCopy === byMe) ||
+      length !== todo.length
+    ) {
+      build()
+      setCompleted(completed)
+      setByMe(byMe)
+      setLength(todo.length)
+    }
 
     return ready ? (
       <SectionList
@@ -96,16 +115,20 @@ const EnhancedDraggableSectionList = enhance(
 export class DelegateContent extends Component {
   renderDelegationSectionList(byMe: boolean, completed = false) {
     let todosMapToRender: SectionListData<Todo>[]
-    if (true) {
-      todosMapToRender = sharedTodoStore.delegatedToMeTodo
+    if (byMe && completed) {
+      todosMapToRender = sharedTodoStore.delegatedByMeCompleted
     } else if (byMe) {
-      todosMapToRender = sharedTodoStore.delegatedByMeTodosMap
+      todosMapToRender = sharedTodoStore.delegatedByMe
     } else {
-      todosMapToRender = sharedTodoStore.delegatedToMeTodosMap
+      todosMapToRender = sharedTodoStore.delegatedToMe
     }
 
     return (
-      <EnhancedDraggableSectionList todo={sharedTodoStore.delegatedToMeTodo} />
+      <EnhancedDraggableSectionList
+        todo={todosMapToRender}
+        byMe={byMe}
+        completed={completed}
+      />
     )
   }
 
@@ -113,7 +136,8 @@ export class DelegateContent extends Component {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe) {
       return (
         <>
-          {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
+          {!sharedTodoStore?.delegatedToMeCount && <NoDelegatedTasks />}
+          {!!sharedTodoStore?.delegatedToMeCount &&
             this.renderDelegationSectionList(false)}
         </>
       )
@@ -121,10 +145,8 @@ export class DelegateContent extends Component {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ByMe) {
       return (
         <>
-          {!sharedTodoStore?.delegatedByMeTodosMap?.length && (
-            <NoDelegatedTasks />
-          )}
-          {!!sharedTodoStore?.delegatedByMeTodosMap?.length &&
+          {!sharedTodoStore?.delegatedByMeCount && <NoDelegatedTasks />}
+          {!!sharedTodoStore?.delegatedByMeCount &&
             this.renderDelegationSectionList(true)}
         </>
       )
@@ -134,10 +156,10 @@ export class DelegateContent extends Component {
     ) {
       return (
         <>
-          {!sharedTodoStore?.delegatedByMeCompleted?.length && (
+          {!sharedTodoStore?.delegatedByMeCompletedCount && (
             <NoDelegatedTasks />
           )}
-          {!!sharedTodoStore?.delegatedByMeCompleted?.length &&
+          {!!sharedTodoStore?.delegatedByMeCompletedCount &&
             this.renderDelegationSectionList(true, true)}
         </>
       )
@@ -147,7 +169,8 @@ export class DelegateContent extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: sharedColors.backgroundColor }}>
-        {this.renderDelegationSectionList(false)}
+        {!sharedSessionStore.user && <SignupPlaceholder />}
+        {!!sharedSessionStore.user && this.renderDelegation()}
       </Container>
     )
   }

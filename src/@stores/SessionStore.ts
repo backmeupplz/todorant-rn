@@ -5,7 +5,6 @@ import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
-import { realm } from '@utils/realm'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { sharedSettingsStore } from './SettingsStore'
@@ -19,7 +18,7 @@ import {
 } from '@utils/ObservableNow'
 import uuid from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
-import { database, todosCollection } from '@utils/wmdb'
+import { database } from '@utils/wmdb'
 
 class SessionStore {
   constructor() {

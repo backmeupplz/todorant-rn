@@ -1,15 +1,3 @@
-import { sharedSync } from '@sync/Sync'
-import { getTitle, Todo } from '@models/Todo'
-import { realm } from '@utils/realm'
-import {
-  getDateDateString,
-  getDateMonthAndYearString,
-  getTodayWithStartOfDay,
-} from '@utils/time'
-import { Alert } from 'react-native'
-import { translate } from '@utils/i18n'
-import { navigate } from '@utils/navigation'
-import { DragEndParams } from '@upacyxou/react-native-draggable-sectionlist'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { EventEmitter } from 'events'
@@ -17,8 +5,7 @@ import { isTodoOld } from '@utils/isTodoOld'
 import { debounce } from 'lodash'
 import { todosCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
-import { Tables, TodoColumn, UserColumn } from '@utils/melondb'
-import { sharedSessionStore } from '@stores/SessionStore'
+import { TodoColumn } from '@utils/melondb'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -40,12 +27,11 @@ export class PlanningVM {
 
   getTodos(completed: boolean) {
     return todosCollection.query(
-      Q.experimentalJoinTables([Tables.users]),
       Q.where(TodoColumn.deleted, false),
       Q.where(TodoColumn.completed, completed),
       Q.or(
         Q.where(TodoColumn.user, null),
-        Q.on(Tables.users, UserColumn._id, sharedSessionStore.user?._id || null)
+        Q.where(TodoColumn.user, 'ntv8x8yuk48okm8o')
       ),
       Q.or(
         Q.where(TodoColumn.delegator, null),

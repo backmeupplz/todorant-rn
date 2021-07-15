@@ -13,14 +13,14 @@ import { makeObservable, observable } from 'mobx'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { removeDelegation } from '@utils/delegations'
-import { realm } from '@utils/realm'
 import { usersCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { UserColumn } from '@utils/melondb'
+import { MelonUser } from '@models/MelonTodo'
 
 @observer
 class Row extends Component<{
-  delegationUser: DelegationUser
+  delegationUser: MelonUser
   delegationType: string
 }> {
   @observable loading = false
@@ -47,13 +47,17 @@ class Row extends Component<{
                   if (
                     this.props.delegationType === DelegationUserType.delegate
                   ) {
-                    realm.write(() => {
-                      removeDelegation(this.props.delegationUser, false)
-                    })
+                    await removeDelegation(
+                      this.props.delegationUser,
+                      false,
+                      true
+                    )
                   } else {
-                    realm.write(() => {
-                      removeDelegation(this.props.delegationUser, true)
-                    })
+                    await removeDelegation(
+                      this.props.delegationUser,
+                      true,
+                      true
+                    )
                   }
                   sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {
@@ -85,7 +89,7 @@ export class DelegationUserScreenContent extends Component<{
     string
   >
 }> {
-  @observable list: any
+  @observable list?: MelonUser[]
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)

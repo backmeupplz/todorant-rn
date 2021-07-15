@@ -86,7 +86,7 @@ export class TodoCardTextBlock extends Component<{
                 if (p.type === 'link' && p.url) {
                   Linking.openURL(p.url)
                 } else if (p.type === 'hash') {
-                  sharedAppStateStore.changeLoading(true)
+                  sharedAppStateStore.changeLoading(false)
                   setTimeout(() => {
                     if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
                       sharedAppStateStore.hash.push(p.value)

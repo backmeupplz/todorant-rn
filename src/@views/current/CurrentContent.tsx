@@ -15,19 +15,12 @@ import { PlusButton } from '@components/PlusButton'
 import { sharedTagStore } from '@stores/TagStore'
 import { EpicProgress } from './EpicProgress'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import { realm } from '@utils/realm'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { makeObservable, observable } from 'mobx'
-import { v4 } from 'uuid'
-import { getTitle } from '@models/Todo'
-import { SectionList } from 'react-native'
-import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
-import { Q } from '@nozbe/watermelondb'
-import { IconButton } from '@components/IconButton'
-import { database, todosCollection } from '@utils/wmdb'
+import { database } from '@utils/wmdb'
 import { MelonTag } from '@models/MelonTag'
 
 export let currentTodoNodeId: number
@@ -59,17 +52,19 @@ export class CurrentContent extends Component {
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           {!!this.epicsAmount && <EnhancedEpics epics={sharedTagStore.epics} />}
-          <SegmentedProgressView
-            completed={sharedTodoStore.progress.completed}
-            total={sharedTodoStore.progress.count}
-          />
+          {!!sharedTodoStore.progress.count && (
+            <SegmentedProgressView
+              completed={sharedTodoStore.progress.completed}
+              total={sharedTodoStore.progress.count}
+            />
+          )}
           {!!sharedTodoStore.uncompletedTodayAmount && (
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 currentTodoNodeId = target
               }}
             >
-              <EnhancedTodoCard todo={this.vm.currentTodo} />
+              <EnhancedTodoCard todo={sharedTodoStore.todayUncompletedTodos} />
             </View>
           )}
           {!!sharedTodoStore.progress.count &&

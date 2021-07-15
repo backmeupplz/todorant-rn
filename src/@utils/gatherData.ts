@@ -1,6 +1,3 @@
-import { Tag } from '@models/Tag'
-import { Todo } from '@models/Todo'
-import { realm } from '@utils/realm'
 import { tagsCollection, todosCollection } from './wmdb'
 
 export async function gatherData() {

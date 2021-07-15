@@ -95,13 +95,14 @@ export default observer(() => {
               name = 'settings'
               icon = <SettingsRotatingIcon focused={focused} size={size} />
             }
+            1
             return (
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
                   {icon}
                   {((route.name === 'Settings' && !sharedSessionStore.user) ||
                     (route.name === 'Delegation' &&
-                      !!sharedTodoStore.delegatedToMe.length)) && (
+                      !!sharedTodoStore.delegatedToMeCount)) && (
                     <View
                       style={{
                         position: 'absolute',

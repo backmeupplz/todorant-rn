@@ -1,20 +1,29 @@
 import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
-import { Results } from 'realm'
 import { UserColumn } from './melondb'
-import { realm } from './realm'
-import { usersCollection } from './wmdb'
+import { database, usersCollection } from './wmdb'
+
+export async function getOrCreateDelegation(
+  delegation: MelonUser,
+  delegator: boolean
+) {
+  const localUser = await getLocalDelegation(delegation, delegator)
+  if (localUser) {
+  }
+}
 
 export async function removeDelegation(
   delegation: MelonUser,
-  delegator: boolean
+  delegator: boolean,
+  forceWrite = false
 ) {
   const localDelegation = await getLocalDelegation(delegation, delegator)
   if (!localDelegation) {
     console.error('Local delegation not found')
     return
   }
+  if (forceWrite) return await localDelegation.delete()
   return localDelegation.prepareUpdate(
     (delegation) => (delegation.deleted = true)
   )
@@ -23,7 +32,7 @@ export async function removeDelegation(
 export async function getLocalDelegation(
   delegation: MelonUser,
   delegator: boolean
-) {
+): Promise<MelonUser | undefined> {
   return (
     await usersCollection
       .query(
@@ -42,7 +51,7 @@ export async function getLocalDelegation(
 
 // Should be placed inside of realm.write
 export function getMismatchesWithServer(
-  localDelegations: MelonUser[] | Results<MelonUser>,
+  localDelegations: MelonUser[],
   serverDelegations: MelonUser[]
 ) {
   const missMatches = [] as MelonUser[]
@@ -61,18 +70,35 @@ export function getMismatchesWithServer(
 
 export async function updateOrCreateDelegation(
   delegation: MelonUser,
-  delegator: boolean
+  delegator: boolean,
+  forceWrite = false
 ) {
+  // Get local user if exists
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
+    if (forceWrite) {
+      const updatedUser = localDelegate.updateUser(localDelegate)
+      return updatedUser
+    }
     return localDelegate.prepareUpdate((delegate) =>
       Object.assign(delegate, delegation)
     )
-  } else
-    return usersCollection.prepareCreate((delegate) => {
-      Object.assign(delegate, delegation)
-      delegate.isDelegator = delegator
+  }
+  // Create new user in place if need
+  if (forceWrite) {
+    let createdUser!: MelonUser
+    await database.write(async () => {
+      createdUser = await usersCollection.create((delegate) => {
+        Object.assign(delegate, delegation)
+        delegate.isDelegator = delegator
+      })
     })
+    return createdUser || undefined
+  }
+  return usersCollection.prepareCreate((delegate) => {
+    Object.assign(delegate, delegation)
+    delegate.isDelegator = delegator
+  })
 }
 
 export function cloneDelegation(delegation: MelonUser) {

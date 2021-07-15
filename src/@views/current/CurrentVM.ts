@@ -1,9 +1,13 @@
 import { Q } from '@nozbe/watermelondb'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { computed, makeObservable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 
 export class CurrentVM {
-  currentTodo = sharedTodoStore.todayUncompletedTodos.extend(
+  @observable currentTodo = sharedTodoStore.todayUncompletedTodos?.extend(
     Q.experimentalTake(1)
   )
+
+  constructor() {
+    makeObservable(this)
+  }
 }

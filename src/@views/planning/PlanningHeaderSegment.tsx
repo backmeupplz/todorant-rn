@@ -25,7 +25,7 @@ export class PlanningHeaderSegment extends Component {
             sharedAppStateStore.todoSection === TodoSectionType.planning ? 0 : 1
           }
           onChange={(event) => {
-            sharedAppStateStore.changeLoading(true)
+            sharedAppStateStore.changeLoading(false)
             const selectedSegmentIndex = event.nativeEvent.selectedSegmentIndex
             setTimeout(() => {
               if (selectedSegmentIndex === 0) {
