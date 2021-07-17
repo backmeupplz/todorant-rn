@@ -131,6 +131,18 @@ android {
 
     packagingOptions {
         exclude "META-INF/watermelondb_debug.kotlin_module"
+        pickFirst '**/*.so'
+        pickFirst 'lib/armeabi-v7a/libblasV8.so'
+        pickFirst 'lib/mips/librsjni.so'
+        pickFirst 'lib/x86/libblasV8.so'
+        pickFirst 'lib/mips/libRSSupport.so'
+        pickFirst 'lib/mips/libblasV8.so'
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
     }
 
     defaultConfig {
@@ -199,13 +211,15 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-reanimated')
+    //implementation project(':react-native-gesture-handler')
+    //implementation project(':react-native-reanimated')
     // implementation project(':watermelondb')  // ⬅️ This!
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    implementation project(':react-native-mmkv')
+    implementation project(':react-native-multithreading')
+    implementation project(':watermelondb-jsi')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

@@ -223,10 +223,6 @@ class AddTodoContent extends Component<{
           completedAtCreation.push(vm.text)
         }
 
-        if (!vm.editedTodo) {
-          return
-        }
-
         const editedTodo = vm.editedTodo.prepareUpdate((todo) => {
           todo.text = vm.text
           todo.completed = vm.completed

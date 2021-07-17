@@ -1,10 +1,17 @@
 rootProject.name = 'Todorant'
-include ':react-native-gesture-handler'
-project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
-include ':react-native-reanimated'
-project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
+//include ':react-native-gesture-handler'
+//project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+//include ':react-native-reanimated'
+//project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
 // include ':watermelondb'
 // project(':watermelondb').projectDir = new File(rootProject.projectDir, '../node_modules/@nozbe/watermelondb/native/android')
+include ':react-native-mmkv'
+project(':react-native-mmkv').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mmkv/android/')
+include ':react-native-multithreading'
+project(':react-native-multithreading').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-multithreading/android/')
+include ':watermelondb-jsi'
+project(':watermelondb-jsi').projectDir =
+    new File(rootProject.projectDir, '../node_modules/@nozbe/watermelondb/native/android-jsi')
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app', ':react-native-code-push'
 project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')
