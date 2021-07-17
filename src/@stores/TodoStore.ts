@@ -32,7 +32,7 @@ class TodoStore {
   wmdbUserId?: string
   wmdbUserAsDelegatorId?: string
 
-  async getWmDbUser(delegator: boolean) {
+  async getWmDbUser(delegator: boolean): Promise<string | undefined> {
     return (
       await usersCollection
         .query(
@@ -40,7 +40,7 @@ class TodoStore {
           Q.where(UserColumn.isDelegator, delegator)
         )
         .fetch()
-    )[0].id
+    )[0]?.id
   }
 
   getDelegationTodos(byMe: boolean, completed = false) {

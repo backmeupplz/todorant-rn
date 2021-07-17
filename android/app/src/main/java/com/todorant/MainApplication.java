@@ -15,6 +15,7 @@ import com.microsoft.codepush.react.CodePush;
  //import com.nozbe.watermelondb.WatermelonDBPackage; // ⬅️ This!
  import com.facebook.react.bridge.JSIModulePackage; // <- add
  import com.todorant.ExampleJSIPackage;
+ import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated, { Easing, EasingNode } from 'react-native-reanimated'
 import { MessageBox } from '@views/onboarding/MessageBox'
 import {
   ERNHoleViewTimingFunction,
@@ -88,7 +88,7 @@ export class Overlay extends Component {
                 Animated.timing(this.infoBoxY, {
                   toValue: 0,
                   duration: 500,
-                  easing: Easing.ease,
+                  easing: EasingNode.ease,
                 }).start()
               } else if (
                 sharedOnboardingStore.currentHole &&
@@ -111,7 +111,7 @@ export class Overlay extends Component {
                       sharedOnboardingStore.currentHole.y -
                       (totalSize + avatarPadding),
                     duration: 500,
-                    easing: Easing.ease,
+                    easing: EasingNode.ease,
                   }).start()
                 } else {
                   // Move bubble under the hole
@@ -123,7 +123,7 @@ export class Overlay extends Component {
                       messageBoxPosition.y +
                       sharedOnboardingStore.currentHole.height,
                     duration: 500,
-                    easing: Easing.ease,
+                    easing: EasingNode.ease,
                   }).start()
                 }
               }
@@ -138,7 +138,7 @@ export class Overlay extends Component {
     Animated.timing(this.opacityAnimationValue, {
       toValue: show ? 1 : 0,
       duration: 500,
-      easing: Easing.linear,
+      easing: EasingNode.linear,
     }).start(() => {
       this.shouldRender = !sharedOnboardingStore.tutorialIsShown
     })

@@ -5,10 +5,6 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import DraggableSectionList, {
-  DragEndParams,
-  AnimatedSectionList,
-} from '@upacyxou/react-native-draggable-sectionlist'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { PlanningVM } from '@views/planning/PlanningVM'

@@ -1,11 +1,5 @@
 import { logEvent } from '@utils/logEvent'
 import { translate } from '@utils/i18n'
-import RNIap, {
-  purchaseUpdatedListener,
-  purchaseErrorListener,
-  SubscriptionPurchase,
-  PurchaseError,
-} from 'react-native-iap'
 import { makeObservable, observable } from 'mobx'
 import * as rest from '@utils/rest'
 import { alertError } from '@utils/alert'
@@ -151,3 +145,10 @@ export async function restorePurchases() {
     purchaseListener.isPurchasing = false
   }
 }
+function purchaseUpdatedListener(
+  tryPurchase: (
+    purchase?: any,
+    appleReceipt?: string | undefined
+  ) => Promise<void>
+) {}
+function purchaseErrorListener(arg0: (error: any) => void) {}

@@ -1,7 +1,7 @@
 import { sharedSync } from '@sync/Sync'
 import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
 import { daysBetween } from '@utils/daysBetween'
-import { hydrate } from '@stores/hydration/hydrate'
+import { hydrate, MMKV } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
@@ -11,7 +11,6 @@ import { sharedSettingsStore } from './SettingsStore'
 import { sharedTodoStore } from './TodoStore'
 import { sharedDelegationStore } from './DelegationStore'
 import { sharedHeroStore } from './HeroStore'
-import AsyncStorage from '@react-native-community/async-storage'
 import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
@@ -108,7 +107,7 @@ class SessionStore {
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       await database.write(async () => await database.unsafeResetDatabase())
-      await AsyncStorage.clear()
+      await MMKV.clearStore()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()
