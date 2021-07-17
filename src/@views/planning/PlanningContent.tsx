@@ -16,6 +16,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
+import DraggableSectionList from '@upacyxou/react-native-draggable-sectionlist'
 import { Month } from '@upacyxou/react-native-month'
 import {
   computed,

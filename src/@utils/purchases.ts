@@ -5,6 +5,12 @@ import * as rest from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import RNIap, {
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+  SubscriptionPurchase,
+  PurchaseError,
+} from 'react-native-iap'
 
 class PurchaseListener {
   constructor() {
@@ -145,10 +151,3 @@ export async function restorePurchases() {
     purchaseListener.isPurchasing = false
   }
 }
-function purchaseUpdatedListener(
-  tryPurchase: (
-    purchase?: any,
-    appleReceipt?: string | undefined
-  ) => Promise<void>
-) {}
-function purchaseErrorListener(arg0: (error: any) => void) {}

@@ -59,6 +59,13 @@ export class Overlay extends Component {
         this.trigger(!sharedOnboardingStore.tutorialIsShown)
       }
     )
+    if (sharedOnboardingStore.hydrated) {
+      if (sharedOnboardingStore.savedStep) {
+        sharedOnboardingStore.tutorialIsShown = true
+        return
+      }
+      this.trigger(!sharedOnboardingStore.tutorialIsShown)
+    }
     reaction(
       () => sharedOnboardingStore.hydrated,
       () => {

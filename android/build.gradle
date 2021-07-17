@@ -8,6 +8,8 @@ buildscript {
         targetSdkVersion = 29
         kotlinVersion = "1.3.72"
         firebaseMessagingVersion = "21.1.0"
+        androidXAnnotation = "1.1.0"
+        androidXBrowser = "1.0.0"
     }
     repositories {
         google()
