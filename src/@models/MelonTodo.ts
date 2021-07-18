@@ -10,6 +10,9 @@ export class MelonUser extends Model {
     { type: 'belongs_to', key: UserColumn._id },
   ])
 
+  // Set is not properly typed in WMDB model yet, so we need to use this hack
+  set!: (user: MelonUser) => void
+
   @writer async delete() {
     return await this.update((user) => (user.deleted = true))
   }

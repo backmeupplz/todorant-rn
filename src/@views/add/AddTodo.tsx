@@ -231,7 +231,7 @@ class AddTodoContent extends Component<{
             vm.monthAndYear || getDateMonthAndYearString(new Date())
           todo.date = vm.date
           todo.time = vm.time
-          todo._exactDate = new Date(getTitle(vm.editedTodo))
+          todo._exactDate = new Date(getTitle(vm.editedTodo!))
           if (failed && todo.date) {
             todo.frogFails++
             if (todo.frogFails > 1) {

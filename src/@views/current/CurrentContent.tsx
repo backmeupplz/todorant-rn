@@ -33,8 +33,6 @@ export class CurrentContent extends Component {
 
   @observable epicsAmount = 0
 
-  state = { completedToday: 0 }
-
   async UNSAFE_componentWillMount() {
     makeObservable(this)
     sharedTagStore.epics

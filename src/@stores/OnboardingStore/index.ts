@@ -353,9 +353,10 @@ export const AllStages = {
   },
   [TutorialStep.Breakdown]: async () => {
     const gotItButton = new OnboardingButton(
-      () => {
+      async () => {
         navigate('BreakdownTodo', {
-          breakdownTodo: sharedTodoStore.currentTodo,
+          breakdownTodo:
+            (await sharedTodoStore.todayUncompletedTodos?.fetch())![0],
         })
       },
       undefined,

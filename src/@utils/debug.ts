@@ -2,7 +2,7 @@ import { getTitle, Todo } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
-import uuid from 'uuid'
+import { v4 } from 'uuid'
 import { database } from './wmdb'
 import { todosCollection } from '@utils/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
@@ -26,10 +26,10 @@ class TodoSample {
   deleted: boolean = true
   date: string = getDateDateString(dateS)
   time: string | undefined = undefined
-  text: string = uuid()
+  text: string = v4()
   _exactDate = new Date(getTitle(this))
 
-  _tempSyncId: string = uuid()
+  _tempSyncId: string = v4()
 }
 
 export async function add5000Todos() {

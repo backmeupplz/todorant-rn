@@ -78,11 +78,11 @@ export class Data extends Component {
           <Row title={translate('tagsCount')} subtitle={`${this.tagsAmount}`} />
           <Row
             title={translate('delegate.delegators')}
-            subtitle={`${sharedDelegationStore.delegators.length}`}
+            subtitle={`${sharedDelegationStore.delegatorsCount}`}
           />
           <Row
             title={translate('delegate.delegates')}
-            subtitle={`${sharedDelegationStore.delegates.length}`}
+            subtitle={`${sharedDelegationStore.delegatesCount}`}
           />
           {/* Sync */}
           <Divider />

@@ -13,10 +13,13 @@ import { PlusButton } from '@components/PlusButton'
 import {
   Alert,
   SectionListData,
+  SectionListRenderItem,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
-import DraggableSectionList from '@upacyxou/react-native-draggable-sectionlist'
+import DraggableSectionList, {
+  DragEndParams,
+} from '@upacyxou/react-native-draggable-sectionlist'
 import { Month } from '@upacyxou/react-native-month'
 import {
   computed,
@@ -242,6 +245,11 @@ export class PlanningContent extends Component {
   }
 }
 
+interface Section {
+  section: string
+  data: MelonTodo[]
+}
+
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
     todo: todo.observeWithColumns(
@@ -284,7 +292,7 @@ const EnhancedDraggableSectionList = enhance(
     })
 
     return isCompleted ? (
-      <DraggableSectionList
+      <DraggableSectionList<MelonTodo, Section>
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0}
         onEndReached={() => increaseOffset()}
@@ -326,7 +334,7 @@ const EnhancedDraggableSectionList = enhance(
         keyExtractor={(item) => item.id}
       />
     ) : (
-      <DraggableSectionList
+      <DraggableSectionList<MelonTodo, Section>
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
@@ -375,20 +383,20 @@ async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   if (sharedAppStateStore.activeDay) {
     const todo = dataArr[to] as MelonTodo
     if (todo) {
-      realm.write(() => {
-        todo.date = getDateDateString(sharedAppStateStore.activeDay!)
-        todo.monthAndYear = getDateMonthAndYearString(
-          sharedAppStateStore.activeDay!
-        )
-        const newTitle = getTitle(todo)
-        todo._exactDate = new Date(newTitle)
-        todo.updatedAt = new Date()
-      })
+      //realm.write(() => {
+      todo.date = getDateDateString(sharedAppStateStore.activeDay!)
+      todo.monthAndYear = getDateMonthAndYearString(
+        sharedAppStateStore.activeDay!
+      )
+      const newTitle = getTitle(todo)
+      todo._exactDate = new Date(newTitle)
+      todo.updatedAt = new Date()
+      //})
     }
     // discard calendar after applying changes
     sharedAppStateStore.activeDay = undefined
     sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
-    this.setCoordinates.cancel()
+    //this.setCoordinates.cancel()
     promise()
   } else {
     // help us to find closest section (looks from bottom to the top)
@@ -427,12 +435,20 @@ async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
   }
 }
 
-const renderItem = ({ item, drag, index, isActive }) => {
+const renderItem = ({
+  item,
+  drag,
+  isActive,
+}: {
+  item: MelonTodo
+  drag: () => void
+  isActive: boolean
+}) => {
   if (!item) return
   return (
     <View style={{ padding: false ? 10 : 0 }} key={item.id}>
       <TodoCard
-        todo={item as Todo}
+        todo={item}
         type={
           sharedAppStateStore.todoSection === TodoSectionType.planning
             ? CardType.planning
@@ -444,3 +460,13 @@ const renderItem = ({ item, drag, index, isActive }) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  circle: {
+    position: 'absolute',
+    backgroundColor: sharedColors.primaryColor,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+})

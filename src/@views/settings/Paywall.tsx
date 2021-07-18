@@ -24,11 +24,12 @@ import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, Platform } from 'react-native'
+import { Subscription, Product, clearTransactionIOS } from 'react-native-iap'
 import RNRestart from 'react-native-restart'
 import { uniqBy } from 'lodash'
 
 class PaywallVM {
-  @observable products: [] = []
+  @observable products: (Subscription | Product)[] = []
 
   @observable loading = false
 
@@ -194,6 +195,7 @@ class PaywallContent extends Component<{
                   }}
                   onPress={() => {
                     if (Platform.OS === 'ios') {
+                      clearTransactionIOS()
                     }
                     purchase(product.productId)
                   }}
@@ -267,14 +269,18 @@ class PaywallContent extends Component<{
 }
 
 export const Paywall = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { type: string | undefined } | undefined>, string>
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { type: string | undefined } | undefined>,
+        string
+      >
+    >()
   return <PaywallContent route={route} />
 }
 
 const productOrder = ['monthly', 'yearly', 'perpetual']
-function sortProducts(products: []) {
+function sortProducts(products: (Subscription | Product)[]) {
   return products.sort((a, b) => {
     const productOrderStringA = productOrder.find((s) =>
       a.productId.includes(s)

@@ -13,7 +13,6 @@ export async function fixOrder(
   timeTodosToYield = [] as MelonTodo[],
   sync = true
 ) {
-  const startSSS = Date.now()
   // Deduplicate
   const titlesInvolvedSet = new Set(titlesInvolved)
   // Get ids
@@ -57,8 +56,9 @@ export async function fixOrder(
         toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
       }
     })
-    await database.write(async () => await database.batch(...toUpdate))
   }
+
+  await database.write(async () => await database.batch(...toUpdate))
 
   // Refresh
   sharedTodoStore.refreshTodos()

@@ -21,7 +21,9 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { DelegationUser } from '@models/DelegationUser'
 import { translate } from '@utils/i18n'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
+import { TagColumn } from '@utils/melondb'
 
 export class TodoVM {
   @observable text =
@@ -42,7 +44,7 @@ export class TodoVM {
     : undefined
   @observable time?: string
 
-  @observable delegate?: DelegationUser
+  @observable delegate?: MelonUser
   @observable delegateAccepted?: boolean
 
   @observable showDatePicker = false
@@ -82,10 +84,12 @@ export class TodoVM {
         : []
     }
     const match = matches[0]
-    //return sharedTagStore.undeletedTags.filtered(
-    //  `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
-    //)
-    return []
+    return sharedTagStore.undeletedTags.extend(
+      Q.where(
+        TagColumn.tag,
+        Q.like(`%${Q.sanitizeLikeString(match.substr(1))}%`)
+      )
+    )
   }
 
   focus() {

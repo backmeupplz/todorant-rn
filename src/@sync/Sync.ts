@@ -21,6 +21,7 @@ import {
 } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -28,7 +29,7 @@ class Sync {
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
-  private todoSyncManager: SyncManager<Todo[]>
+  private todoSyncManager: SyncManager<MelonTodo[]>
   private tagsSyncManager: SyncManager<MelonTag[]>
   private delegationSyncManager: SyncManager<any>
 
@@ -83,17 +84,16 @@ class Sync {
         )
       }
     )
-    this.todoSyncManager = new SyncManager<Todo[]>(
+    this.todoSyncManager = new SyncManager<MelonTodo[]>(
       this.socketConnection,
       'todos',
       () => sharedTodoStore.updatedAt,
-      (objects, pushBack, completeSync) => {
-        return onTodosObjectsFromServer(
+      (objects, pushBack, completeSync) =>
+        onTodosObjectsFromServer(
           objects,
-          pushBack as () => Promise<Todo[]>,
+          pushBack as () => Promise<MelonTodo[]>,
           completeSync
-        )
-      },
+        ),
       async (lastSyncDate) => {
         sharedTodoStore.updatedAt = lastSyncDate
       }

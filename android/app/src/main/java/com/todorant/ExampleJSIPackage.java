@@ -17,10 +17,9 @@ public class ExampleJSIPackage extends ReanimatedJSIModulePackage {
     @Override
     public List<JSIModuleSpec> getJSIModules(ReactApplicationContext reactApplicationContext, JavaScriptContextHolder jsContext) {
         super.getJSIModules(reactApplicationContext, jsContext);
-        System.out.println(reactApplicationContext.getFilesDir().getAbsolutePath());
         MultithreadingModule.install(reactApplicationContext, jsContext);
         reactApplicationContext.getNativeModule(RNMMKVModule.class).installLib(jsContext, reactApplicationContext.getFilesDir().getAbsolutePath() + "/mmkv");
-        WatermelonDBJSIPackage test = new WatermelonDBJSIPackage();
-        return test.getJSIModules(reactApplicationContext, jsContext);
+        WatermelonDBJSIPackage wmdb = new WatermelonDBJSIPackage();
+        return wmdb.getJSIModules(reactApplicationContext, jsContext);
     }
 }

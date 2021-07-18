@@ -24,7 +24,7 @@ export let currentTodoNodeId: number
 export class TodoCardContent extends Component<{
   vm: TodoCardVM
   todo: MelonTodo
-  delegator: MelonUser
+  delegator?: MelonUser
   type: CardType
   drag?: () => void
   active?: boolean

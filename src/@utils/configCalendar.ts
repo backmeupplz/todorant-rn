@@ -10,6 +10,7 @@ export function configCalendar(defaultLocale: string) {
 }
 
 LocaleConfig.locales['ru'] = {
+  today: 'сегодня',
   monthNames: [
     'Январь',
     'Февраль',
@@ -93,6 +94,7 @@ LocaleConfig.locales['en'] = {
   dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   amDesignator: 'AM',
   pmDesignator: 'PM',
+  today: 'Today',
 }
 
 LocaleConfig.locales['uk'] = {
@@ -136,6 +138,7 @@ LocaleConfig.locales['uk'] = {
   dayNamesShort: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
   amDesignator: 'ранку',
   pmDesignator: 'вечора',
+  today: 'сьогодні',
 }
 
 LocaleConfig.locales['it'] = {
@@ -179,6 +182,7 @@ LocaleConfig.locales['it'] = {
   dayNamesShort: ['Do', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
   amDesignator: 'AM',
   pmDesignator: 'PM',
+  today: 'Oggi',
 }
 
 LocaleConfig.locales['es'] = {
@@ -222,6 +226,7 @@ LocaleConfig.locales['es'] = {
   dayNamesShort: ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'],
   amDesignator: 'AM',
   pmDesignator: 'PM',
+  today: 'Hoy',
 }
 
 LocaleConfig.locales['pt-BR'] = {
@@ -265,4 +270,5 @@ LocaleConfig.locales['pt-BR'] = {
   dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
   amDesignator: 'AM',
   pmDesignator: 'PM',
+  today: 'Hoje',
 }

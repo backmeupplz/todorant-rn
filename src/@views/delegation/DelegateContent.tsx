@@ -17,8 +17,9 @@ import { makeObservable, observable } from 'mobx'
 import { SectionList, SectionListData } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
 import { Todo } from '@models/Todo'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
+import { Query } from '@nozbe/watermelondb'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
@@ -39,13 +40,20 @@ const EnhancedDraggableSectionList = enhance(
     byMe: boolean
   }) => {
     const [ready, setReady] = useState(false)
-    const [map, setMap] = useState()
-    const [completedCopy, setCompleted] = useState()
-    const [byMeCopy, setByMe] = useState()
+    const [map, setMap] = useState<
+      {
+        userInSection: MelonUser
+        data: MelonTodo[]
+      }[]
+    >()
+    const [completedCopy, setCompleted] = useState<boolean>()
+    const [byMeCopy, setByMe] = useState<boolean>()
     const [length, setLength] = useState(0)
 
     async function build() {
-      const todoSectionMap = {} as any
+      const todoSectionMap = {} as {
+        [key: string]: { userInSection: MelonUser; data: MelonTodo[] }
+      }
       let currentTitle: string | undefined
       let sectionIndex = 0
       for (const realmTodo of todo) {
@@ -83,7 +91,7 @@ const EnhancedDraggableSectionList = enhance(
       setLength(todo.length)
     }
 
-    return ready ? (
+    return ready && map ? (
       <SectionList
         keyExtractor={(item) => item.id}
         removeClippedSubviews={true}
@@ -114,7 +122,7 @@ const EnhancedDraggableSectionList = enhance(
 @observer
 export class DelegateContent extends Component {
   renderDelegationSectionList(byMe: boolean, completed = false) {
-    let todosMapToRender: SectionListData<Todo>[]
+    let todosMapToRender: Query<MelonTodo> | undefined
     if (byMe && completed) {
       todosMapToRender = sharedTodoStore.delegatedByMeCompleted
     } else if (byMe) {

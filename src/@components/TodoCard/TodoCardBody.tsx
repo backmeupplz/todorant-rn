@@ -17,7 +17,7 @@ export class TodoCardBody extends Component<{
   vm: TodoCardVM
   type: CardType
   todo: MelonTodo
-  delegator: MelonUser
+  delegator?: MelonUser
   drag?: () => void
 }> {
   render() {

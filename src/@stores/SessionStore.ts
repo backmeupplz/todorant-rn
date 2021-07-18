@@ -15,7 +15,7 @@ import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
-import uuid from 'uuid'
+import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/wmdb'
 
@@ -25,7 +25,7 @@ class SessionStore {
   }
 
   @persist('date') @observable appInstalled = new Date()
-  @persist @observable installationId = uuid()
+  @persist @observable installationId = v4()
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 

@@ -46,6 +46,8 @@ import { Divider } from '@components/Divider'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
 import { sharedDelegationStore } from '@stores/DelegationStore'
+import withObservables from '@nozbe/with-observables'
+import { MelonTag } from '@models/MelonTag'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -276,44 +278,45 @@ class TextRow extends Component<{
   }
 }
 
-@observer
-class TagsRow extends Component<{
-  vm: TodoVM
-}> {
-  render() {
-    return (
-      <View
-        style={{
-          paddingBottom: verticalSpacing / 2,
-        }}
-      >
-        <FlatList
-          horizontal
-          data={this.props.vm.tags}
-          keyExtractor={(_, index) => `${index}`}
-          renderItem={({ item }: { item: any }) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.vm.applyTag(item)
-                }}
-                style={{ paddingHorizontal: 4 }}
-              >
-                <Text
-                  style={{
-                    color: item.color || 'dodgerblue',
-                  }}
-                >
-                  #{item.tag}
-                </Text>
-              </TouchableOpacity>
-            )
-          }}
-        />
-      </View>
-    )
+const enhanceTags = withObservables(['tags', 'vm'], (items) => {
+  return {
+    tags: items.vm.tags,
   }
-}
+})
+
+const TagsRow = enhanceTags((props: { tags: MelonTag[]; vm: TodoVM }) => {
+  return (
+    <View
+      style={{
+        paddingBottom: verticalSpacing / 2,
+      }}
+    >
+      <FlatList
+        horizontal
+        data={props.tags}
+        keyExtractor={(_, index) => `${index}`}
+        renderItem={({ item }: { item: any }) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                props.vm.applyTag(item)
+              }}
+              style={{ paddingHorizontal: 4 }}
+            >
+              <Text
+                style={{
+                  color: item.color || 'dodgerblue',
+                }}
+              >
+                #{item.tag}
+              </Text>
+            </TouchableOpacity>
+          )
+        }}
+      />
+    </View>
+  )
+})
 
 @observer
 class DateRow extends Component<{
@@ -398,8 +401,8 @@ class MonthRow extends Component<{
               return
             }
           }
-          this.props.vm.showMonthAndYearPicker = !this.props.vm
-            .showMonthAndYearPicker
+          this.props.vm.showMonthAndYearPicker =
+            !this.props.vm.showMonthAndYearPicker
           if (!!this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
             this.props.vm.date = undefined
@@ -533,9 +536,10 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             fontFamily: fonts.SFProTextRegular,
             fontSize: fontSize,
           }}
-          onPress={() => {
+          onPress={async () => {
             if (!sharedOnboardingStore.tutorialIsShown) return
-            const options = sharedDelegationStore.delegates
+            const delegates = await sharedDelegationStore.delegates.fetch()
+            const options = delegates
               .map((delegate) => delegate.name)
               .filter((delegate) => !!delegate)
               .concat([translate('cancel')]) as string[]
@@ -548,8 +552,7 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
               },
               (buttonIndex) => {
                 if (buttonIndex + 1 !== options.length)
-                  this.props.vm.delegate =
-                    sharedDelegationStore.delegates[buttonIndex]
+                  this.props.vm.delegate = delegates[buttonIndex]
               }
             )
           }}
@@ -665,7 +668,7 @@ export class AddTodoForm extends Component<{
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
             <TextRow vm={this.props.vm} showCross={this.props.showCross} />
-            {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
+            <TagsRow vm={this.props.vm} />
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 dateRowNodeId = target as number
@@ -762,7 +765,7 @@ export class AddTodoForm extends Component<{
               <View>
                 <TimeRow vm={this.props.vm} />
                 {sharedSessionStore.user &&
-                  !!sharedDelegationStore.delegates.length &&
+                  !!sharedDelegationStore.delegatesCount &&
                   !this.props.vm.editedTodo && (
                     <DelegationRow vm={this.props.vm} />
                   )}

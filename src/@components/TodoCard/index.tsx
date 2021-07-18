@@ -4,11 +4,28 @@ import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { TodoCardContent } from '@components/TodoCard/TodoCardContent'
-import withObservables from '@nozbe/with-observables'
+import withObservables, { ObservableifyProps } from '@nozbe/with-observables'
 import { Text, View } from 'native-base'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
-const TodoC1ard = (props) => {
+type InputProps = ObservableifyProps<Props, 'delegator'>
+
+interface Props {
+  todo: MelonTodo
+  delegator?: MelonUser
+  type: CardType
+  drag?: () => void
+  active?: boolean
+}
+
+const enhance = withObservables(['todo'], (items: InputProps) => {
+  return {
+    todo: items.todo,
+    delegator: items.todo.delegator,
+  }
+})
+
+export const TodoCard = enhance((props: Props) => {
   const vm = new TodoCardVM()
 
   return (
@@ -19,13 +36,4 @@ const TodoC1ard = (props) => {
       active={props.active}
     />
   )
-}
-
-const enhance = withObservables(['todos'], (items) => {
-  return {
-    todo: items.todo,
-    delegator: items.todo.delegator,
-  }
 })
-
-export const TodoCard = enhance(TodoC1ard)
