@@ -11,7 +11,7 @@ import { Settings } from '@models/Settings'
 import { SyncManager } from '@sync/SyncManager'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { computed, makeObservable } from 'mobx'
+import { computed, makeObservable, observable, when } from 'mobx'
 import { Todo } from '@models/Todo'
 import { Tag } from '@models/Tag'
 import {
@@ -22,6 +22,8 @@ import {
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo } from '@models/MelonTodo'
+import { synchronize } from '@nozbe/watermelondb/sync'
+import { database } from '@utils/wmdb'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -44,9 +46,54 @@ class Sync {
     )
   }
 
+  @observable gotWmDb = false
+  serverTimeStamp: undefined | number
+  serverObjects: any
+
+  wmDbSybcFunc = async () => {
+    console.log('тестус')
+    await synchronize({
+      database,
+      pullChanges: async ({ lastPulledAt }) => {
+        if (this.gotWmDb) {
+          this.gotWmDb = false
+        }
+        this.socketConnection.socketIO.emit('get_wmdb', lastPulledAt)
+        await when(() => this.gotWmDb)
+        this.gotWmDb = false
+        return {
+          changes: this.serverObjects,
+          timestamp: this.serverTimeStamp!,
+        }
+      },
+      pushChanges: async ({ changes, lastPulledAt }) => {
+        console.log(changes)
+        this.socketConnection.socketIO.emit('push_wmdb', changes, lastPulledAt)
+      },
+      migrationsEnabledAtVersion: 1,
+    })
+  }
+
   constructor() {
     makeObservable(this)
     this.setupSyncListeners()
+
+    this.socketConnection.socketIO.on('wmdb', this.wmDbSybcFunc)
+
+    this.socketConnection.socketIO.on(
+      'return_wmdb',
+      async (serverObjects: any, serverTimeStamp: number) => {
+        this.serverTimeStamp = serverTimeStamp
+        this.serverObjects = serverObjects
+        this.gotWmDb = true
+      }
+    )
+
+    this.socketConnection.socketIO.on('complete_wmdb', () => {
+      this.serverTimeStamp = undefined
+      this.serverObjects = undefined
+    })
+
     // Setup sync managers
     this.settingsSyncManager = new SyncManager<Settings>(
       this.socketConnection,
