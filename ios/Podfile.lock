@@ -9,15 +9,15 @@ PODS:
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
-  - CodePush (7.0.0):
+  - CodePush (7.0.1):
     - Base64 (~> 1.1)
     - JWT (~> 3.0.0-beta.12)
     - React-Core
     - SSZipArchive (~> 2.2.2)
-  - CountlyReactNative (20.11.5):
-    - CountlyReactNative/NotificationService (= 20.11.5)
+  - CountlyReactNative (20.11.7):
+    - CountlyReactNative/NotificationService (= 20.11.7)
     - React
-  - CountlyReactNative/NotificationService (20.11.5):
+  - CountlyReactNative/NotificationService (20.11.7):
     - React
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.2)
@@ -47,9 +47,12 @@ PODS:
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
   - KeychainAccess (4.2.1)
-  - Permission-Camera (2.1.4):
+  - MMKV (1.2.7):
+    - MMKVCore (~> 1.2.7)
+  - MMKVCore (1.2.10)
+  - Permission-Camera (2.2.2):
     - RNPermissions
-  - Permission-Siri (2.1.4):
+  - Permission-Siri (2.2.2):
     - RNPermissions
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
@@ -246,22 +249,32 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
-  - react-native-camera (3.23.1):
+  - react-native-camera (3.44.3):
+    - React-Core
+    - react-native-camera/RCT (= 3.44.3)
+    - react-native-camera/RN (= 3.44.3)
+  - react-native-camera/RCT (3.44.3):
+    - React-Core
+  - react-native-camera/RN (3.44.3):
+    - React-Core
+  - react-native-mmkv (1.2.0):
+    - MMKV
+    - React-Core
+  - react-native-mmkv-storage (0.6.0):
+    - MMKV (= 1.2.7)
+    - React-Core
+  - react-native-multithreading (1.1.1):
     - React
-    - react-native-camera/RCT (= 3.23.1)
-    - react-native-camera/RN (= 3.23.1)
-  - react-native-camera/RCT (3.23.1):
-    - React
-  - react-native-camera/RN (3.23.1):
-    - React
-  - react-native-netinfo (5.7.0):
-    - React
+    - React-callinvoker
+    - React-Core
+  - react-native-netinfo (5.9.10):
+    - React-Core
   - react-native-receive-sharing-intent (1.0.4):
     - React
-  - react-native-safe-area-context (3.1.9):
+  - react-native-safe-area-context (3.2.0):
     - React-Core
-  - react-native-segmented-control (2.0.1):
-    - React
+  - react-native-segmented-control (2.2.2):
+    - React-Core
   - react-native-splash-screen (3.2.0):
     - React
   - react-native-webview (8.2.1):
@@ -332,52 +345,82 @@ PODS:
     - React-perflogger (= 0.64.2)
   - ReactNativeDarkMode (0.2.2):
     - React
-  - RealmJS (6.1.5):
+  - RealmJS (10.6.0):
     - GCDWebServer
     - React
-  - RNAppleAuthentication (2.0.1):
+  - RNAppleAuthentication (2.1.2):
     - React-Core
-  - RNCAsyncStorage (1.13.0):
+  - RNCAsyncStorage (1.12.1):
     - React-Core
-  - RNCClipboard (1.2.1):
-    - React
-  - RNCMaskedView (0.1.10):
-    - React
-  - RNCPushNotificationIOS (1.5.0):
-    - React
-  - RNDateTimePicker (3.0.2):
-    - React
-  - RNDeviceInfo (8.0.2):
+  - RNCClipboard (1.5.1):
     - React-Core
-  - RNGestureHandler (1.9.0):
+  - RNCMaskedView (0.1.11):
+    - React
+  - RNCPushNotificationIOS (1.8.0):
+    - React-Core
+  - RNDateTimePicker (3.5.2):
+    - React-Core
+  - RNDeviceInfo (8.1.3):
+    - React-Core
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
     - React
   - RNHoleView (3.0.1):
     - React
-  - RNIap (6.0.2):
+  - RNIap (7.0.5):
     - React-Core
-  - RNLocalize (1.4.0):
-    - React
-  - RNPermissions (2.1.4):
-    - React
-  - RNReanimated (1.13.2):
+  - RNLocalize (1.4.3):
     - React-Core
-  - RNScreens (2.15.2):
+  - RNPermissions (2.2.2):
+    - React-Core
+  - RNReanimated (2.2.0):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - glog
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - React-RCTVibration
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNScreens (2.18.1):
     - React-Core
   - RNSound (0.11.0):
     - React
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
-  - RNSVG (12.1.0):
+  - RNSVG (12.1.1):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
     - React
+  - simdjson (0.9.6-fix2)
   - SSZipArchive (2.2.3)
   - SwiftKeychainWrapper (4.0.1)
-  - WatermelonDB (0.22.0):
+  - toolbar-android (0.1.0-rc.2):
+    - React
+  - WatermelonDB (0.23.0-12):
     - React
     - React-jsi
   - Yoga (1.14.0)
@@ -409,6 +452,9 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
+  - react-native-mmkv-storage (from `../node_modules/react-native-mmkv-storage`)
+  - react-native-multithreading (from `../node_modules/react-native-multithreading`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-receive-sharing-intent (from `../node_modules/react-native-receive-sharing-intent`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -430,7 +476,7 @@ DEPENDENCIES:
   - ReactNativeDarkMode (from `../node_modules/react-native-dark-mode`)
   - RealmJS (from `../node_modules/realm`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
-  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
@@ -447,7 +493,9 @@ DEPENDENCIES:
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - "simdjson (from `../node_modules/@nozbe/simdjson`)"
   - SwiftKeychainWrapper
+  - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - "WatermelonDB (from `../node_modules/@nozbe/watermelondb`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -463,6 +511,8 @@ SPEC REPOS:
     - GTMSessionFetcher
     - JWT
     - KeychainAccess
+    - MMKV
+    - MMKVCore
     - SSZipArchive
     - SwiftKeychainWrapper
 
@@ -511,6 +561,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-mmkv:
+    :path: "../node_modules/react-native-mmkv"
+  react-native-mmkv-storage:
+    :path: "../node_modules/react-native-mmkv-storage"
+  react-native-multithreading:
+    :path: "../node_modules/react-native-multithreading"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-receive-sharing-intent:
@@ -554,7 +610,7 @@ EXTERNAL SOURCES:
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
-    :path: "../node_modules/@react-native-async-storage/async-storage"
+    :path: "../node_modules/@react-native-community/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
@@ -587,6 +643,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  simdjson:
+    :path: "../node_modules/@nozbe/simdjson"
+  toolbar-android:
+    :path: "../node_modules/@react-native-community/toolbar-android"
   WatermelonDB:
     :path: "../node_modules/@nozbe/watermelondb"
   Yoga:
@@ -598,11 +658,11 @@ SPEC CHECKSUMS:
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
-  CodePush: 4e72e70067c1442ddfe25e3e53b23a6fa573f5c6
-  CountlyReactNative: 95172a57adc428ceb3d33b7af1002ee897c514a4
+  CodePush: 9bb93f52a44ee80b72739d89dead9c7e86c3bd3a
+  CountlyReactNative: 251d0aaca20510398d643fa354cf424c5e3709ba
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 62b7501d0351e61d4a5e371ae90964a9dd32015f
+  FBReactNativeSpec: 1c67c9acf532cec2ed8f83c6fcdcef40e0b22163
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
@@ -610,8 +670,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
-  Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
-  Permission-Siri: 782f6152006ace9ea1103160104f2f9fff4193c2
+  MMKV: 22e5136f7d00197bc0fc9694b7f71519f0d1ca12
+  MMKVCore: b00e7a09ec77a1b916aef336eedd3b99ec249978
+  Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
+  Permission-Siri: c50c434a91af15ed47fe2b5b2fb705d567ba1d77
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
   RCTRestart: 3915cac548a37703970941ca33de79a304b8b247
@@ -624,11 +686,14 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-camera: 1b52abea404d04e040edb3e74b7c5523c01a3089
-  react-native-netinfo: becc6dd2bb2335aa85a8adbaefc8e206125e6177
+  react-native-camera: b8cc03e2feec0c04403d0998e37cf519d8fd4c6f
+  react-native-mmkv: 5c79537aa27c9c8a8d2c5010dd9c3a624a4b7b66
+  react-native-mmkv-storage: 684f1adf671592c18fb023e0cf1305a84108b59d
+  react-native-multithreading: 5e18f82a1e034a3b8ede96ff471e1ec0c97eb2b7
+  react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
   react-native-receive-sharing-intent: feba0a332a07977549a85aa58b496eb44368366a
-  react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
-  react-native-segmented-control: b922568e7ff4e1ee241c9b747a29cea89f68548c
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-segmented-control: 65df6cd0619b780b3843d574a72d4c7cec396097
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webview: 160ac8d6bb974e2933f2de6bb7464a8e934ff31d
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
@@ -644,30 +709,32 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
-  RealmJS: efb0b7b52759192752ef8b6f061e2c3dd0ea14cd
-  RNAppleAuthentication: 35162025d279d135a7be78b37d9f3e29dc786cfb
-  RNCAsyncStorage: a52e45079e7df6cee380be6af676a8441d38c42a
-  RNCClipboard: b238c952b0f8d5a6fa5ff96eacb9898608946540
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
-  RNDateTimePicker: a84d2b439666c9243d42a8396c588d4d1d36e3f3
-  RNDeviceInfo: a9601119924a67d2479d3facf04cec7b658f44ed
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RealmJS: c903034b0d767fcef11dc8207e91b6f07e60d7b8
+  RNAppleAuthentication: e95bcfbd044013667f35c5ca20ae17d39500c009
+  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
+  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
+  RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
+  RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
+  RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNHoleView: 78fe2ca0ed1be643c0d245fea09e582cc8ee0d51
-  RNIap: 1189e94ec4cb30a449f3f182c8d4a7d8ece8028d
-  RNLocalize: b6df30cc25ae736d37874f9bce13351db2f56796
-  RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
-  RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: 3d682bcaba69a4f8e55543d90818704f34338db1
+  RNIap: fe96d36b1dd7e7df896a0b73bfee8803b37ac963
+  RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
+  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
-  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
+  simdjson: 85016870cd17207312b718ef6652eb6a1cd6a2b0
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
-  WatermelonDB: 1da309a2b3fe35360e92f5a6bda2156543447955
+  toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
+  WatermelonDB: 3cbedf3ea1f8b544df1916f348e6fd128470c276
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: 01e0720c5a1b15cac2264ac7038d3f05182ce6a6
+PODFILE CHECKSUM: 230f49256feadb16b49e0f7e425ab180db873201
 
 COCOAPODS: 1.10.1
