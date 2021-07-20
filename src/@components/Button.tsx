@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import { Button as NativeBaseButton, View, NativeBase } from 'native-base'
 import { Platform } from 'react-native'
 
+const removeFalsyElement = (object: any) => {
+  if (object.style.backgroundColor) return object
+  delete object.style.backgroundColor
+  return object
+}
+
 export class Button extends Component<NativeBase.Button> {
   render() {
     return Platform.OS === 'android' ? (
@@ -12,10 +18,10 @@ export class Button extends Component<NativeBase.Button> {
         }}
         removeClippedSubviews
       >
-        <NativeBaseButton {...this.props} />
+        <NativeBaseButton {...removeFalsyElement(this.props)} />
       </View>
     ) : (
-      <NativeBaseButton {...this.props} />
+      <NativeBaseButton {...removeFalsyElement(this.props)} />
     )
   }
 }

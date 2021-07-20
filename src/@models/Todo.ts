@@ -4,7 +4,7 @@ import {
   getTodayWithStartOfDay,
 } from '@utils/time'
 import { DelegationUser } from './DelegationUser'
-import { MelonTodo } from './MelonTodo'
+import { MelonTodo, MelonUser } from './MelonTodo'
 import { User } from './User'
 
 export class Todo {
@@ -112,7 +112,7 @@ export function getTitle(todo: { monthAndYear?: string; date?: string }) {
   }`
 }
 
-export function cloneTodo(todo: MelonTodo) {
+export async function cloneTodo(todo: MelonTodo) {
   return {
     _tempSyncId: todo._tempSyncId,
     _exactDate: todo._exactDate,
@@ -132,11 +132,13 @@ export function cloneTodo(todo: MelonTodo) {
     date: todo.date,
     time: todo.time,
 
-    //user: cloneDelegator(todo.user),
-    //delegator: cloneDelegator(todo.delegator),
+    user: await cloneDelegator(todo.user),
+    delegator: await cloneDelegator(todo.delegator),
     delegateAccepted: todo.delegateAccepted,
   }
 }
 
-export const cloneDelegator = (u: DelegationUser | User | undefined) =>
-  u ? { _id: u._id, name: u.name } : undefined
+export const cloneDelegator = async (u: MelonUser | undefined) => {
+  u = u ? await u : undefined
+  return u ? { _id: u._id, name: u.name } : undefined
+}

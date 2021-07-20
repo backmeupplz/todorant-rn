@@ -6,6 +6,7 @@ import { debounce } from 'lodash'
 import { todosCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/melondb'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -31,7 +32,7 @@ export class PlanningVM {
       Q.where(TodoColumn.completed, completed),
       Q.or(
         Q.where(TodoColumn.user, null),
-        Q.where(TodoColumn.user, 'ntv8x8yuk48okm8o')
+        Q.where(TodoColumn.user, sharedTodoStore.wmdbUserId || null)
       ),
       Q.or(
         Q.where(TodoColumn.delegator, null),

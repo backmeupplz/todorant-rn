@@ -278,7 +278,7 @@ class TextRow extends Component<{
   }
 }
 
-const enhanceTags = withObservables(['tags', 'vm'], (items) => {
+const enhanceTags = withObservables(['vm'], (items) => {
   return {
     tags: items.vm.tags,
   }

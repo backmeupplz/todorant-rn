@@ -19,7 +19,6 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 @observer
 export class TodoHeader extends Component<{
   item: string
-  vm?: PlanningVM
   drag?: () => void
   isActive?: boolean
   date?: boolean

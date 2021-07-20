@@ -326,12 +326,11 @@ const EnhancedDraggableSectionList = enhance(
               isActive={isActive}
               item={item.section}
               key={item.section}
-              vm={undefined}
             />
           )
         }}
         data={todosMap}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id || item}
       />
     ) : (
       <DraggableSectionList<MelonTodo, Section>
@@ -364,12 +363,12 @@ const EnhancedDraggableSectionList = enhance(
               isActive={isActive}
               item={item.section}
               key={item.section}
-              vm={undefined}
             />
           )
         }}
         data={todosMap}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id || item}
+        layoutInvalidationKey={v4()}
       />
     )
   }
@@ -427,6 +426,67 @@ async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
         if (item === undefined) break
         if (typeof item === 'string') break
         toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
+        lastOrder++
+      }
+    } else {
+      const lowerDay = Math.min(closestFrom, closestTo)
+      const maxDay = Math.max(closestFrom, closestTo)
+      let lastOrder = 0
+      let lastSection = dataArr[lowerDay] as string
+      for (let i = lowerDay + 1; ; i++) {
+        const item = dataArr[i]
+        if (item === undefined) break
+        if (typeof item === 'string') {
+          // if new section, outside of our draggable items begin
+          if (
+            new Date(item).getTime() >
+            new Date(dataArr[maxDay] as string).getTime()
+          )
+            break
+          lastOrder = 0
+          lastSection = item
+          continue
+        }
+        if (i === to) {
+          if (isTodoOld(item)) {
+            if (item.frogFails < 3) {
+              toUpdate.push(
+                item.prepareUpdate((todo) => {
+                  if (todo.frogFails >= 1) {
+                    todo.frog = true
+                  }
+                  todo.frogFails++
+                })
+              )
+            } else {
+              Alert.alert(translate('error'), translate('breakdownRequest'), [
+                {
+                  text: translate('cancel'),
+                  style: 'cancel',
+                },
+                {
+                  text: translate('breakdownButton'),
+                  onPress: () => {
+                    navigate('BreakdownTodo', {
+                      breakdownTodo: item,
+                    })
+                  },
+                },
+              ])
+              lastOrder++
+              disableLoading = true
+              continue
+            }
+          }
+        }
+        toUpdate.push(
+          item.prepareUpdate((todo) => {
+            todo.date = getDateDateString(lastSection)
+            todo.monthAndYear = getDateMonthAndYearString(lastSection)
+            todo._exactDate = new Date(lastSection)
+            todo.order = lastOrder
+          })
+        )
         lastOrder++
       }
     }

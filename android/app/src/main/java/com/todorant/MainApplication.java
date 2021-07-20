@@ -32,8 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          // packages.add(new MainReactPackage());
-          // packages.add(new WatermelonDBPackage());
           return packages;
         }
 
@@ -46,7 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSBundleFile() {
             return CodePush.getJSBundleFile();
         }
-        // Add this method here!
+        
+        // JSI Modules
         @Override
         protected JSIModulePackage getJSIModulePackage() {
           return new ExampleJSIPackage(); // <-- your package's name

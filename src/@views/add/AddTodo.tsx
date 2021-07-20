@@ -63,8 +63,9 @@ import { pick } from 'lodash'
 import { DelegationUser } from '@models/DelegationUser'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
-import { MelonTodo } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from '@utils/wmdb'
+import { updateOrCreateDelegation } from '@utils/delegations'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -174,8 +175,22 @@ class AddTodoContent extends Component<{
         if (todo.completed) {
           completedAtCreation.push(todo.text)
         }
+        let user: MelonUser | undefined
+        let delegator: MelonUser | undefined
+        if (vm.delegate) {
+          user = await updateOrCreateDelegation(vm.delegate, false, true)
+          delegator = await updateOrCreateDelegation(
+            sharedSessionStore.user,
+            true,
+            true
+          )
+        }
         const dbtodo = todosCollection.prepareCreate((dbtodo) => {
           Object.assign(dbtodo, todo)
+          if (user && delegator) {
+            dbtodo.delegator?.set(delegator)
+            dbtodo.user?.set(user)
+          }
         })
         toCreate.push(dbtodo)
         involvedTodos.push(dbtodo)

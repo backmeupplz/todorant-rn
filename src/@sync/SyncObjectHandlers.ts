@@ -359,14 +359,16 @@ export async function onTodosObjectsFromServer(
     return
   }
   const savedPushedTodos = await pushBack(
-    todosToPush
-      .map((v) => ({ ...cloneTodo(v) }))
-      .map((v) => {
-        if (v.encrypted) {
-          v.text = encrypt(v.text)
-        }
-        return v
-      }) as any
+    (
+      await Promise.all(
+        todosToPush.map(async (v) => ({ ...(await cloneTodo(v)) }))
+      )
+    ).map((v) => {
+      if (v.encrypted) {
+        v.text = encrypt(v.text)
+      }
+      return v
+    }) as any
   )
   // Modify dates
   savedPushedTodos.forEach((todo) => {

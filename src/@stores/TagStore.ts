@@ -17,6 +17,8 @@ class TagStore {
 
   @observable tagColorMap = {} as { [index: string]: string }
 
+  @observable undeletedTagsCount = 0
+
   undeletedTags = tagsCollection.query(
     Q.where(TagColumn.deleted, false),
     Q.experimentalSortBy(TagColumn.epic, Q.desc),
@@ -30,6 +32,7 @@ class TagStore {
   constructor() {
     makeObservable(this)
     this.refreshTags()
+    this.undeletedTags.observeCount(false).subscribe(count => this.undeletedTagsCount = count)
   }
 
   logout = () => {

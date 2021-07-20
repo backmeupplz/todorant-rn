@@ -81,7 +81,7 @@ export class TodoVM {
     if (!matches.length) {
       return sharedSettingsStore.showMoreByDefault || this.showMore
         ? sharedTagStore.undeletedTags
-        : []
+        : sharedTagStore.undeletedTags.extend(Q.where(TagColumn.tag, null))
     }
     const match = matches[0]
     return sharedTagStore.undeletedTags.extend(
