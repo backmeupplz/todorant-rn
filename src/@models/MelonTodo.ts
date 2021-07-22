@@ -73,4 +73,8 @@ export class MelonTodo extends Model {
   @writer async accept() {
     await this.update((todo) => (todo.delegateAccepted = true))
   }
+
+  @writer async setServerId(serverId: string) {
+    await this.update((todo) => (todo._id = serverId))
+  }
 }

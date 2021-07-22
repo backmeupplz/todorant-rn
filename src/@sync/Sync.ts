@@ -23,7 +23,8 @@ import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo } from '@models/MelonTodo'
 import { synchronize } from '@nozbe/watermelondb/sync'
-import { database } from '@utils/wmdb'
+import { database, todosCollection } from '@utils/wmdb'
+import { v4 } from 'uuid'
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -51,27 +52,32 @@ class Sync {
   serverObjects: any
 
   wmDbSybcFunc = async () => {
-    console.log('тестус')
+    if (!this.socketConnection.connected) {
+      return Promise.reject('Socket sync: not connected to sockets')
+    }
+    if (!this.socketConnection.authorized) {
+      return Promise.reject('Socket sync: not authorized')
+    }
+    if (!this.socketConnection.token) {
+      return Promise.reject('Socket sync: no authorization token provided')
+    }
+    if (this.gotWmDb) return
     await synchronize({
       database,
       pullChanges: async ({ lastPulledAt }) => {
-        if (this.gotWmDb) {
-          this.gotWmDb = false
-        }
         this.socketConnection.socketIO.emit('get_wmdb', lastPulledAt)
         await when(() => this.gotWmDb)
-        this.gotWmDb = false
         return {
           changes: this.serverObjects,
           timestamp: this.serverTimeStamp!,
         }
       },
       pushChanges: async ({ changes, lastPulledAt }) => {
-        console.log(changes)
         this.socketConnection.socketIO.emit('push_wmdb', changes, lastPulledAt)
       },
       migrationsEnabledAtVersion: 1,
     })
+    this.gotWmDb = false
   }
 
   constructor() {
@@ -89,10 +95,21 @@ class Sync {
       }
     )
 
-    this.socketConnection.socketIO.on('complete_wmdb', () => {
-      this.serverTimeStamp = undefined
-      this.serverObjects = undefined
-    })
+    this.socketConnection.socketIO.on(
+      'complete_wmdb',
+      async (pushedBack?: MelonTodo[]) => {
+        this.serverTimeStamp = undefined
+        this.serverObjects = undefined
+        if (this.gotWmDb) await when(() => !this.gotWmDb)
+        if (pushedBack && pushedBack.length) {
+          pushedBack.map(async (todo) => {
+            const localTodo = await todosCollection.find(todo._tempSyncId)
+            if (!localTodo || !todo._id) return
+            await localTodo.setServerId(todo._id)
+          })
+        }
+      }
+    )
 
     // Setup sync managers
     this.settingsSyncManager = new SyncManager<Settings>(
@@ -218,9 +235,9 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
-          this.todoSyncManager.sync(),
-          this.tagsSyncManager.sync(),
-          this.delegationSyncManager.sync(),
+          this.wmDbSybcFunc(),
+          //this.tagsSyncManager.sync(),
+          //this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:
@@ -231,7 +248,7 @@ class Sync {
         return this.heroSyncManager.sync()
       // Realm syncs
       case SyncRequestEvent.Todo:
-        return this.todoSyncManager.sync()
+        return this.wmDbSybcFunc()
       case SyncRequestEvent.Tag:
         return this.tagsSyncManager.sync()
       case SyncRequestEvent.Delegation:

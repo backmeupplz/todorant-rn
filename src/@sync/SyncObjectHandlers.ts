@@ -175,6 +175,8 @@ export async function onTagsObjectsFromServer(
   pushBack: (objects: MelonTag[]) => Promise<MelonTag[]>,
   completeSync: () => void
 ) {
+  completeSync()
+  return
   // Modify dates
   tagsChangedOnServer.forEach((tag) => {
     tag.updatedAt = new Date(tag.updatedAt)
@@ -264,6 +266,9 @@ export async function onTodosObjectsFromServer(
   pushBack: (objects: MelonTodo[]) => Promise<MelonTodo[]>,
   completeSync: () => void
 ) {
+  completeSync()
+
+  return
   // Modify dates
   todosChangedOnServer.forEach((todo) => {
     todo.updatedAt = new Date(todo.updatedAt)
