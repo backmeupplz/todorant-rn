@@ -7,6 +7,7 @@ import { todosCollection } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/melondb'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 export const planningEventEmitter = new EventEmitter()
 
@@ -32,7 +33,8 @@ export class PlanningVM {
       Q.where(TodoColumn.completed, completed),
       Q.or(
         Q.where(TodoColumn.user, null),
-        Q.where(TodoColumn.user, sharedTodoStore.wmdbUserId || null)
+        Q.where(TodoColumn.user, sharedTodoStore.wmdbUserId || null),
+        Q.where(TodoColumn.user, sharedSessionStore.user?._id || null)
       ),
       Q.or(
         Q.where(TodoColumn.delegator, null),

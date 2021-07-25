@@ -26,6 +26,12 @@ import { synchronize } from '@nozbe/watermelondb/sync'
 import { database, todosCollection } from '@utils/wmdb'
 import { v4 } from 'uuid'
 
+import 'react-native-reanimated'
+import { spawnThread } from 'react-native-multithreading'
+import { debounce } from 'lodash'
+import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from '@utils/melondb'
+
 class Sync {
   socketConnection = new SocketConnection()
 
@@ -63,10 +69,12 @@ class Sync {
     }
     if (this.gotWmDb) return
     await synchronize({
+      sendCreatedAsUpdated: true,
       database,
       pullChanges: async ({ lastPulledAt }) => {
-        this.socketConnection.socketIO.emit('get_wmdb', lastPulledAt)
+        this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
         await when(() => this.gotWmDb)
+        console.log(this.serverObjects)
         return {
           changes: this.serverObjects,
           timestamp: this.serverTimeStamp!,
@@ -76,6 +84,13 @@ class Sync {
         this.socketConnection.socketIO.emit('push_wmdb', changes, lastPulledAt)
       },
       migrationsEnabledAtVersion: 1,
+      //conflictResolver: (_, local, remote, resolved) => {
+      //  const localDate = new Date(local.updated_at)
+      //  const remoteDate = new Date(remote.updated_at)
+      //  remote.updated_at = Date.now()
+      //  local.updated_at = Date.now()
+      //  return Object.assign(resolved, remoteDate > localDate ? remote : local)
+      //},
     })
     this.gotWmDb = false
   }
@@ -90,6 +105,21 @@ class Sync {
       'return_wmdb',
       async (serverObjects: any, serverTimeStamp: number) => {
         this.serverTimeStamp = serverTimeStamp
+        serverObjects.todos.updated = await Promise.all(
+          serverObjects.todos.updated.map(async (updated, index) => {
+            const localTodo = (
+              await todosCollection
+                .query(Q.where(TodoColumn._id, updated.server_id))
+                .fetch()
+            )[0]
+            if (localTodo) {
+              updated.id = localTodo.id
+              return updated
+            }
+            updated.id = updated.server_id
+            return updated
+          })
+        )
         this.serverObjects = serverObjects
         this.gotWmDb = true
       }
@@ -102,11 +132,13 @@ class Sync {
         this.serverObjects = undefined
         if (this.gotWmDb) await when(() => !this.gotWmDb)
         if (pushedBack && pushedBack.length) {
-          pushedBack.map(async (todo) => {
+          for (const todo of pushedBack) {
             const localTodo = await todosCollection.find(todo._tempSyncId)
-            if (!localTodo || !todo._id) return
+            if (!localTodo || !todo._id) {
+              return
+            }
             await localTodo.setServerId(todo._id)
-          })
+          }
         }
       }
     )

@@ -24,6 +24,8 @@ class TodoStore {
 
   @persist('date') @observable updatedAt?: Date
 
+  @persist isFirstSync = false
+
   undeletedTodos = todosCollection.query(Q.where(TodoColumn.deleted, false))
   undeletedUncompleted = this.undeletedTodos.extend(
     Q.where(TodoColumn.completed, false)

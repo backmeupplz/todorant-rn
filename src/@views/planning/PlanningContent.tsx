@@ -330,7 +330,10 @@ const EnhancedDraggableSectionList = enhance(
           )
         }}
         data={todosMap}
-        keyExtractor={(item) => item.id || item}
+        keyExtractor={(item) => {
+          console.log(item.id || item.server)
+          return item.id || item
+        }}
       />
     ) : (
       <DraggableSectionList<MelonTodo, Section>
@@ -368,7 +371,6 @@ const EnhancedDraggableSectionList = enhance(
         }}
         data={todosMap}
         keyExtractor={(item) => item.id || item}
-        layoutInvalidationKey={v4()}
       />
     )
   }
