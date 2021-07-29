@@ -272,6 +272,7 @@ const EnhancedDraggableSectionList = enhance(
     let currentTitle: string | undefined
     let sectionIndex = 0
     for (const realmTodo of todo) {
+      console.log(realmTodo)
       const realmTodoTitle = getTitle(realmTodo)
       if (currentTitle && currentTitle !== realmTodoTitle) {
         sectionIndex++

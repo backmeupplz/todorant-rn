@@ -152,6 +152,11 @@ export class TodoCardVM {
     // sharedTagStore.incrementEpicPoints(todo.text)
 
     await todo.complete()
+    const completedTitle = getTitle(todo)
+    const todos = await sharedTodoStore
+      .todosForDate(completedTitle)
+      .extend(Q.experimentalSortBy('order', Q.desc))
+      .fetch()
 
     await fixOrder([getTitle(todo)])
     // sharedSessionStore.numberOfTodosCompleted++

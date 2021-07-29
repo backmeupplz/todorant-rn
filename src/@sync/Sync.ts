@@ -12,7 +12,7 @@ import { SyncManager } from '@sync/SyncManager'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { computed, makeObservable, observable, when } from 'mobx'
-import { Todo } from '@models/Todo'
+import { getTitle, Todo } from '@models/Todo'
 import { Tag } from '@models/Tag'
 import {
   onDelegationObjectsFromServer,
@@ -31,6 +31,10 @@ import { spawnThread } from 'react-native-multithreading'
 import { debounce } from 'lodash'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/melondb'
+import { updateOrCreateDelegation } from '@utils/delegations'
+
+const wmdbGetLastPullAt =
+  require('@nozbe/watermelondb/sync/impl').getLastPulledAt
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -57,6 +61,8 @@ class Sync {
   serverTimeStamp: undefined | number
   serverObjects: any
 
+  $promise: any
+
   wmDbSybcFunc = async () => {
     if (!this.socketConnection.connected) {
       return Promise.reject('Socket sync: not connected to sockets')
@@ -67,14 +73,15 @@ class Sync {
     if (!this.socketConnection.token) {
       return Promise.reject('Socket sync: no authorization token provided')
     }
-    if (this.gotWmDb) return
+    if (this.gotWmDb || this.$promise) return
+    const lastPulledAt = await wmdbGetLastPullAt(database)
+    this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
+    this.$promise = when(() => this.gotWmDb)
+    await this.$promise
     await synchronize({
       sendCreatedAsUpdated: true,
       database,
-      pullChanges: async ({ lastPulledAt }) => {
-        this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
-        await when(() => this.gotWmDb)
-        console.log(this.serverObjects)
+      pullChanges: async () => {
         return {
           changes: this.serverObjects,
           timestamp: this.serverTimeStamp!,
@@ -84,15 +91,17 @@ class Sync {
         this.socketConnection.socketIO.emit('push_wmdb', changes, lastPulledAt)
       },
       migrationsEnabledAtVersion: 1,
-      //conflictResolver: (_, local, remote, resolved) => {
-      //  const localDate = new Date(local.updated_at)
-      //  const remoteDate = new Date(remote.updated_at)
-      //  remote.updated_at = Date.now()
-      //  local.updated_at = Date.now()
-      //  return Object.assign(resolved, remoteDate > localDate ? remote : local)
-      //},
+      conflictResolver: (_, local, remote, resolved) => {
+        const localDate = new Date(local.updated_at)
+        const remoteDate = new Date(remote.updated_at)
+        remote.updated_at = Date.now()
+        local.updated_at = Date.now()
+        //return remote
+        return Object.assign(resolved, remoteDate > localDate ? remote : local)
+      },
     })
     this.gotWmDb = false
+    this.$promise = undefined
   }
 
   constructor() {
@@ -105,21 +114,33 @@ class Sync {
       'return_wmdb',
       async (serverObjects: any, serverTimeStamp: number) => {
         this.serverTimeStamp = serverTimeStamp
-        serverObjects.todos.updated = await Promise.all(
-          serverObjects.todos.updated.map(async (updated, index) => {
-            const localTodo = (
-              await todosCollection
-                .query(Q.where(TodoColumn._id, updated.server_id))
-                .fetch()
-            )[0]
-            if (localTodo) {
-              updated.id = localTodo.id
-              return updated
-            }
-            updated.id = updated.server_id
-            return updated
-          })
-        )
+        const newS = []
+        for (const updated of serverObjects.todos.updated) {
+          if (!!updated.delegator_id) {
+            updated.user_id = (
+              await updateOrCreateDelegation(updated.user_id, false, true)
+            ).id
+            updated.delegator_id = (
+              await updateOrCreateDelegation(updated.delegator_id, true, true)
+            ).id
+          }
+          const localTodo = (
+            await todosCollection
+              .query(Q.where(TodoColumn._id, updated.server_id))
+              .fetch()
+          )[0]
+          if (localTodo) {
+            updated.id = localTodo.id
+            newS.push(updated)
+            continue
+          }
+          updated.id = updated.server_id
+          updated._exactDate = updated.monthAndYear
+            ? new Date(getTitle(updated))
+            : new Date()
+          newS.push(updated)
+        }
+        serverObjects.todos.updated = newS
         this.serverObjects = serverObjects
         this.gotWmDb = true
       }
@@ -282,9 +303,9 @@ class Sync {
       case SyncRequestEvent.Todo:
         return this.wmDbSybcFunc()
       case SyncRequestEvent.Tag:
-        return this.tagsSyncManager.sync()
+      // return this.tagsSyncManager.sync()
       case SyncRequestEvent.Delegation:
-        return this.delegationSyncManager.sync()
+      // return this.delegationSyncManager.sync()
     }
   }
 

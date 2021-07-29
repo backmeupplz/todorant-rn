@@ -35,6 +35,7 @@ class TodoStore {
   wmdbUserAsDelegatorId?: string
 
   async getWmDbUser(delegator: boolean): Promise<string | undefined> {
+    console.log(await usersCollection.query().fetch())
     return (
       await usersCollection
         .query(
@@ -73,9 +74,20 @@ class TodoStore {
       Q.where(TodoColumn.completed, completed),
       Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
       dateQuery,
-      Q.where(
-        TodoColumn.delegator,
-        this.wmdbUserAsDelegatorId ? Q.notEq(this.wmdbUserAsDelegatorId) : null
+      Q.or(
+        Q.and(
+          Q.where(TodoColumn.delegateAccepted, Q.notEq(true)),
+          Q.where(TodoColumn.delegator, null)
+        ),
+        Q.and(
+          Q.where(TodoColumn.delegateAccepted, true),
+          Q.where(
+            TodoColumn.delegator,
+            this.wmdbUserAsDelegatorId
+              ? Q.notEq(this.wmdbUserAsDelegatorId)
+              : null
+          )
+        )
       ),
       Q.experimentalSortBy(TodoColumn.frog, Q.desc),
       Q.experimentalSortBy(TodoColumn.order, Q.asc)
@@ -187,6 +199,8 @@ class TodoStore {
 
   async initDelegation() {
     await when(() => hydration.isHydrated)
+
+    console.log(await usersCollection.query().fetch())
 
     this.wmdbUserId = await this.getWmDbUser(false)
     this.wmdbUserAsDelegatorId = await this.getWmDbUser(true)

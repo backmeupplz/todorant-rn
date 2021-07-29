@@ -40,6 +40,8 @@ export async function onDelegationObjectsFromServer(
   }>,
   completeSync: () => void
 ) {
+  completeSync()
+  return
   const lastSyncDate = sharedDelegationStore.updatedAt
   // Get local delegators
   const realmDelegators = usersCollection.query(

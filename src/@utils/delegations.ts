@@ -72,7 +72,7 @@ export async function updateOrCreateDelegation(
   delegation: MelonUser,
   delegator: boolean,
   forceWrite = false
-) {
+): Promise<MelonUser> {
   // Get local user if exists
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
