@@ -32,7 +32,7 @@ const codeToName = {
   uk: 'Українськa',
   it: 'Italiano',
   es: 'Español',
-  'pt-BR': 'Português Brasileiro',
+  'pt-br': 'Português Brasileiro',
 }
 
 export let integrationButtonsNodeId: number
@@ -74,7 +74,7 @@ export class GeneralSettings extends Component {
               { label: 'Українська', code: 'uk' },
               { label: 'Italiano', code: 'it' },
               { label: 'Español', code: 'es' },
-              { label: 'Português Brasileiro', code: 'pt-BR' },
+              { label: 'Português Brasileiro', code: 'pt-br' },
             ]
             ActionSheet.show(
               {

@@ -3,7 +3,7 @@
 app_apk_path("app/build/outputs/apk/debug/app-debug.apk")
 tests_apk_path("app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk")
 app_package_name("com.todorant")
-locales ['pt-BR', 'es', 'uk', 'it-IT', 'en-US', 'ru-RU']
+locales ['pt-br', 'es', 'uk', 'it-IT', 'en-US', 'ru-RU']
 clear_previous_screenshots true
 use_adb_root true
 reinstall_app true

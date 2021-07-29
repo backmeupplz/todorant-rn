@@ -1,7 +1,7 @@
 import { LocaleConfig } from 'react-native-calendars'
 
 export function configCalendar(defaultLocale: string) {
-  const locales = ['ru', 'en', 'uk', 'it', 'es', 'pt-BR']
+  const locales = ['ru', 'en', 'uk', 'it', 'es', 'pt-br']
   if (locales.indexOf(defaultLocale) > -1) {
     LocaleConfig.defaultLocale = defaultLocale
   } else {
@@ -224,7 +224,7 @@ LocaleConfig.locales['es'] = {
   pmDesignator: 'PM',
 }
 
-LocaleConfig.locales['pt-BR'] = {
+LocaleConfig.locales['pt-br'] = {
   monthNames: [
     'Janeiro',
     'Fevereiro',

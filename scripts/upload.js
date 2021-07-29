@@ -56,7 +56,7 @@ keys.forEach((key) => {
 
 // iOS permissions
 
-const locales = ['en', 'es', 'it', 'pt-BR', 'ru', 'uk']
+const locales = ['en', 'es', 'it', 'pt-br', 'ru', 'uk']
 const iosStrings = {}
 for (const locale of locales) {
   iosStrings[locale] = i18nStringsFiles.readFileSync(
@@ -76,7 +76,7 @@ for (const locale in iosStrings) {
 
 // Metadata iOS
 
-const languages = ['en-US', 'es-ES', 'es-MX', 'it', 'pt-BR', 'ru', 'uk']
+const languages = ['en-US', 'es-ES', 'es-MX', 'it', 'pt-br', 'ru', 'uk']
 const iosMetadata = {}
 for (const language of languages) {
   const description = fs.readFileSync(

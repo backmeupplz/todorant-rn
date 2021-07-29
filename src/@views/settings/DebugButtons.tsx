@@ -102,7 +102,7 @@ export class DebugButtons extends Component {
           onPress={() => {
             addTodosPtBR()
           }}
-          text="add pt-BR todos"
+          text="add pt-br todos"
           testId="add_pt_br"
         />
         <DebugButton
