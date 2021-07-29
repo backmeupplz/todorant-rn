@@ -5,7 +5,7 @@ devices([
 ])
 
 languages([
-  "pt-BR",
+  "pt-br",
   "es-ES",
   "uk",
   "en-US",
