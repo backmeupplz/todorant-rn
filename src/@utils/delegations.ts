@@ -1,6 +1,7 @@
 import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { UserColumn } from './melondb'
 import { database, usersCollection } from './wmdb'
 
@@ -93,7 +94,7 @@ export async function updateOrCreateDelegation(
         delegate.isDelegator = delegator
       })
     })
-    return createdUser || undefined
+    return createdUser
   }
   return usersCollection.prepareCreate((delegate) => {
     Object.assign(delegate, delegation)

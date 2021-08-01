@@ -12,8 +12,7 @@ import { SyncManager } from '@sync/SyncManager'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { computed, makeObservable, observable, when } from 'mobx'
-import { getTitle, Todo } from '@models/Todo'
-import { Tag } from '@models/Tag'
+import { getTitle } from '@models/Todo'
 import {
   onDelegationObjectsFromServer,
   onTagsObjectsFromServer,
@@ -21,17 +20,30 @@ import {
 } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
-import { MelonTodo } from '@models/MelonTodo'
-import { synchronize } from '@nozbe/watermelondb/sync'
-import { database, todosCollection } from '@utils/wmdb'
-import { v4 } from 'uuid'
-
-import 'react-native-reanimated'
-import { spawnThread } from 'react-native-multithreading'
-import { debounce } from 'lodash'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { SyncArgs, synchronize } from '@nozbe/watermelondb/sync'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+  usersCollection,
+} from '@utils/wmdb'
+import { cloneDeep } from 'lodash'
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from '@utils/melondb'
+import { TagColumn, TodoColumn } from '@utils/melondb'
 import { updateOrCreateDelegation } from '@utils/delegations'
+import { RawRecord } from '@nozbe/watermelondb/RawRecord'
+
+type SyncRecord = RawRecord & { updated_at: number }
+
+type SyncType = SyncArgs & {
+  conflictResolver: (
+    lastSyncDate: Date,
+    local: SyncRecord,
+    remote: SyncRecord,
+    resolved: SyncRecord
+  ) => void
+}
 
 const wmdbGetLastPullAt =
   require('@nozbe/watermelondb/sync/impl').getLastPulledAt
@@ -61,7 +73,7 @@ class Sync {
   serverTimeStamp: undefined | number
   serverObjects: any
 
-  $promise: any
+  $promise?: Promise<void>
 
   wmDbSybcFunc = async () => {
     if (!this.socketConnection.connected) {
@@ -88,7 +100,26 @@ class Sync {
         }
       },
       pushChanges: async ({ changes, lastPulledAt }) => {
-        this.socketConnection.socketIO.emit('push_wmdb', changes, lastPulledAt)
+        const test = []
+        const deepClone = cloneDeep(changes)
+        for (const sqlRaw of deepClone.todos.created) {
+          if (sqlRaw.user_id) {
+            sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+          }
+          if (sqlRaw.delegator_id) {
+            sqlRaw.delegator_id = (
+              await usersCollection.find(sqlRaw.delegator_id)
+            )._id
+          }
+          test.push(sqlRaw)
+          console.log(sqlRaw)
+        }
+        deepClone.todos.created = test
+        this.socketConnection.socketIO.emit(
+          'push_wmdb',
+          deepClone,
+          lastPulledAt
+        )
       },
       migrationsEnabledAtVersion: 1,
       conflictResolver: (_, local, remote, resolved) => {
@@ -99,7 +130,7 @@ class Sync {
         //return remote
         return Object.assign(resolved, remoteDate > localDate ? remote : local)
       },
-    })
+    } as SyncType)
     this.gotWmDb = false
     this.$promise = undefined
   }
@@ -115,6 +146,21 @@ class Sync {
       async (serverObjects: any, serverTimeStamp: number) => {
         this.serverTimeStamp = serverTimeStamp
         const newS = []
+        const newT = []
+        for (const updated of serverObjects.tags.updated) {
+          const localTodo = (
+            await tagsCollection
+              .query(Q.where(TagColumn._id, updated.server_id))
+              .fetch()
+          )[0]
+          if (localTodo) {
+            updated.id = localTodo.id
+            newT.push(updated)
+            continue
+          }
+          updated.id = updated.server_id
+          newT.push(updated)
+        }
         for (const updated of serverObjects.todos.updated) {
           if (!!updated.delegator_id) {
             updated.user_id = (
@@ -141,6 +187,7 @@ class Sync {
           newS.push(updated)
         }
         serverObjects.todos.updated = newS
+        serverObjects.tags.updated = newT
         this.serverObjects = serverObjects
         this.gotWmDb = true
       }
@@ -152,13 +199,22 @@ class Sync {
         this.serverTimeStamp = undefined
         this.serverObjects = undefined
         if (this.gotWmDb) await when(() => !this.gotWmDb)
-        if (pushedBack && pushedBack.length) {
-          for (const todo of pushedBack) {
+        if (pushedBack.todos.length) {
+          for (const todo of pushedBack.todos) {
             const localTodo = await todosCollection.find(todo._tempSyncId)
             if (!localTodo || !todo._id) {
               return
             }
             await localTodo.setServerId(todo._id)
+          }
+        }
+        if (pushedBack.tags.length) {
+          for (const tag of pushedBack.tags) {
+            const localTag = await tagsCollection.find(tag._tempSyncId)
+            if (!localTag || !tag._id) {
+              return
+            }
+            await localTag.setServerId(tag._id)
           }
         }
       }
@@ -290,7 +346,7 @@ class Sync {
           this.heroSyncManager.sync(),
           this.wmDbSybcFunc(),
           //this.tagsSyncManager.sync(),
-          //this.delegationSyncManager.sync(),
+          this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:
@@ -303,9 +359,9 @@ class Sync {
       case SyncRequestEvent.Todo:
         return this.wmDbSybcFunc()
       case SyncRequestEvent.Tag:
-      // return this.tagsSyncManager.sync()
+        return this.wmDbSybcFunc()
       case SyncRequestEvent.Delegation:
-      // return this.delegationSyncManager.sync()
+        return this.delegationSyncManager.sync()
     }
   }
 

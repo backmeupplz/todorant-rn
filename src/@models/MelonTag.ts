@@ -39,14 +39,11 @@ export class MelonTag extends Model {
     await this.update((tag) => (tag.deleted = true))
   }
 
-  @writer async changeColorToDefault() {
-    await this.update((tag) => (tag.color = ''))
-  }
-
   @writer async turnTagToEpic(goal: number) {
     await this.update((tag) => {
       tag.epic = true
       tag.epicGoal = goal
+      tag.epicPoints = 0
     })
   }
 
@@ -56,6 +53,10 @@ export class MelonTag extends Model {
 
   @writer async changeText(text: string) {
     await this.update((tag) => (tag.tag = text))
+  }
+
+  @writer async setServerId(serverId: string) {
+    await this.update((tag) => (tag._id = serverId))
   }
 }
 

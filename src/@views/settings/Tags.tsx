@@ -40,7 +40,7 @@ class TagsVM {
   }
 
   async changeColorToDefault(tag: MelonTag) {
-    await tag.changeColorToDefault()
+    await tag.changeColor('')
     await sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }

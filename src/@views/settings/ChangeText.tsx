@@ -19,7 +19,7 @@ import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { database, notDeletedTodos } from '@utils/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
-import { MelonTag } from '@models/MelonTag'
+import { cloneTag, MelonTag } from '@models/MelonTag'
 
 const ChangeTextStore = {
   save: () => {},
@@ -48,9 +48,9 @@ export class ChangeTextHeaderRight extends Component {
 
 @observer
 class ChangeTextContent extends Component<{
-  route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
 }> {
-  @observable tag = this.props.route.params?.tag!
+  @observable tag = cloneTag(this.props.route.params?.tag!)
   @observable newName: string = ''
 
   @observable colorPickerEnabled = false
@@ -210,7 +210,7 @@ class ChangeTextContent extends Component<{
 
 export const ChangeText = () => {
   const route = useRoute<
-    RouteProp<Record<string, { tag: Tag } | undefined>, string>
+    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
   >()
   return <ChangeTextContent route={route} />
 }
