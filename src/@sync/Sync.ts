@@ -13,11 +13,7 @@ import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { computed, makeObservable, observable, when } from 'mobx'
 import { getTitle } from '@models/Todo'
-import {
-  onDelegationObjectsFromServer,
-  onTagsObjectsFromServer,
-  onTodosObjectsFromServer,
-} from '@sync/SyncObjectHandlers'
+import { onDelegationObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
@@ -54,8 +50,6 @@ class Sync {
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
-  private todoSyncManager: SyncManager<MelonTodo[]>
-  private tagsSyncManager: SyncManager<MelonTag[]>
   private delegationSyncManager: SyncManager<any>
 
   @computed get isSyncing() {
@@ -63,8 +57,6 @@ class Sync {
       this.settingsSyncManager.isSyncing ||
       this.userSyncManager.isSyncing ||
       this.heroSyncManager.isSyncing ||
-      this.todoSyncManager.isSyncing ||
-      this.tagsSyncManager.isSyncing ||
       this.delegationSyncManager.isSyncing
     )
   }
@@ -194,11 +186,11 @@ class Sync {
 
     this.socketConnection.socketIO.on(
       'complete_wmdb',
-      async (pushedBack?: MelonTodo[]) => {
+      async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
         this.serverTimeStamp = undefined
         this.serverObjects = undefined
         if (this.gotWmDb) await when(() => !this.gotWmDb)
-        if (pushedBack.todos.length) {
+        if (pushedBack?.todos.length) {
           for (const todo of pushedBack.todos) {
             const localTodo = await todosCollection.find(todo._tempSyncId)
             if (!localTodo || !todo._id) {
@@ -207,7 +199,7 @@ class Sync {
             await localTodo.setServerId(todo._id)
           }
         }
-        if (pushedBack.tags.length) {
+        if (pushedBack?.tags.length) {
           for (const tag of pushedBack.tags) {
             const localTag = await tagsCollection.find(tag._tempSyncId)
             if (!localTag || !tag._id) {
@@ -254,35 +246,6 @@ class Sync {
           pushBack,
           completeSync
         )
-      }
-    )
-    this.todoSyncManager = new SyncManager<MelonTodo[]>(
-      this.socketConnection,
-      'todos',
-      () => sharedTodoStore.updatedAt,
-      (objects, pushBack, completeSync) =>
-        onTodosObjectsFromServer(
-          objects,
-          pushBack as () => Promise<MelonTodo[]>,
-          completeSync
-        ),
-      async (lastSyncDate) => {
-        sharedTodoStore.updatedAt = lastSyncDate
-      }
-    )
-    this.tagsSyncManager = new SyncManager<MelonTag[]>(
-      this.socketConnection,
-      'tags',
-      () => sharedTagStore.updatedAt,
-      (objects, pushBack, completeSync) => {
-        return onTagsObjectsFromServer(
-          objects,
-          pushBack as () => Promise<MelonTag[]>,
-          completeSync
-        )
-      },
-      async (lastSyncDate) => {
-        sharedTagStore.updatedAt = lastSyncDate
       }
     )
     this.delegationSyncManager = new SyncManager<any>(

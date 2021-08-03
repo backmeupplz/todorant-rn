@@ -331,7 +331,7 @@ const EnhancedDraggableSectionList = enhance(
         }}
         data={todosMap}
         keyExtractor={(item) => {
-          return item.id || item
+          return item.id || (item as unknown as string)
         }}
       />
     ) : (
@@ -370,7 +370,7 @@ const EnhancedDraggableSectionList = enhance(
           )
         }}
         data={todosMap}
-        keyExtractor={(item) => item.id || item}
+        keyExtractor={(item) => item.id || (item as unknown as string)}
       />
     )
   }
@@ -430,32 +430,33 @@ async function onDragEnd({
     // if inside one day
     if (closestDayFrom === closestDayTo) {
       let lastOrder = 0
-      const fromItem = beforeChangesArr[from]
-      const toItem = beforeChangesArr[to]
+      let fromItem = beforeChangesArr[from]
+      let toItem = beforeChangesArr[to]
       // if both of moved items are todos, and no one of them are section header
       if (fromItem !== 'string' && toItem !== 'string') {
         const fromBottomToTop = from > to
-        const first = beforeChangesArr[to] as MelonTodo
-        const second = beforeChangesArr[
+        const nearItem = beforeChangesArr[
           fromBottomToTop ? to - 1 : to + 1
         ] as MelonTodo
+        toItem = toItem as MelonTodo
+        fromItem = fromItem as MelonTodo
         let secondOrder =
-          second && typeof second !== 'string' ? second.order : -1
-        let firstOrder = first ? first.order : -1
-        if (second && second.frog && !fromItem.frog) secondOrder = -1
+          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+        let firstOrder = toItem ? toItem.order : -1
+        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
         let average = (firstOrder + secondOrder) / 2
         // if there is nothing under or under is a section
         if (
           (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
           typeof beforeChangesArr[to + 1] === 'undefined'
         )
-          average = beforeChangesArr[to].order + 1
+          average = toItem.order + 1
         if (
-          first.frog &&
-          !second.frog &&
+          toItem.frog &&
+          !nearItem.frog &&
           typeof beforeChangesArr[to - 1] !== 'string'
         )
-          average = beforeChangesArr[to].order + 1
+          average = toItem.order + 1
         toUpdate.push(
           (fromItem as MelonTodo).prepareUpdate(
             (todo) => (todo.order = average)

@@ -31,7 +31,7 @@ export async function removeDelegation(
 }
 
 export async function getLocalDelegation(
-  delegation: MelonUser,
+  delegation: Partial<MelonUser>,
   delegator: boolean
 ): Promise<MelonUser | undefined> {
   return (
@@ -70,7 +70,7 @@ export function getMismatchesWithServer(
 }
 
 export async function updateOrCreateDelegation(
-  delegation: MelonUser,
+  delegation: Partial<MelonUser>,
   delegator: boolean,
   forceWrite = false
 ): Promise<MelonUser> {

@@ -180,7 +180,7 @@ class AddTodoContent extends Component<{
         if (vm.delegate) {
           user = await updateOrCreateDelegation(vm.delegate, false, true)
           delegator = await updateOrCreateDelegation(
-            sharedSessionStore.user,
+            sharedSessionStore.user!,
             true,
             true
           )
