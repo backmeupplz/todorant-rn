@@ -112,7 +112,6 @@ class Sync {
             )._id
           }
           test.push(sqlRaw)
-          console.log(sqlRaw)
         }
         deepClone.todos.created = test
         this.socketConnection.socketIO.emit(

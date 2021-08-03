@@ -12,6 +12,7 @@ import {
   getDateDateString,
   getDateMonthAndYearString,
   getTodayWithStartOfDay,
+  getDateString,
 } from '@utils/time'
 import { startConfetti } from '@components/Confetti'
 import { makeObservable, observable } from 'mobx'
@@ -20,6 +21,10 @@ import { MelonTodo } from '@models/MelonTodo'
 import { database } from '@utils/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/melondb'
+import { sharedHeroStore } from '@stores/HeroStore'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import { sharedTagStore } from '@stores/TagStore'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -89,17 +94,17 @@ export class TodoCardVM {
   }
 
   async moveToToday(todo: MelonTodo) {
-    const oldTitle = getTitle(todo)
-    const today = getTodayWithStartOfDay()
+    const today = getDateString(getTodayWithStartOfDay())
+    const todosOnDate = await sharedTodoStore.todosForDate(today).fetch()
+    const lastTodoOrder = todosOnDate[todosOnDate.length - 1].order
     await database.write(async () => {
       await todo.update((todo) => {
+        todo.order = lastTodoOrder + 1
         todo.date = getDateDateString(today)
         todo.monthAndYear = getDateMonthAndYearString(today)
         todo._exactDate = new Date(getTitle(todo))
       })
     })
-
-    fixOrder([oldTitle, getTitle(todo)], undefined, undefined, [todo])
   }
 
   async delete(todo: MelonTodo) {
@@ -111,12 +116,10 @@ export class TodoCardVM {
         translate('delete'),
         async () => {
           await todo.delete()
-          fixOrder([getTitle(todo)])
         }
       )
     } else {
       await todo.delete()
-      fixOrder([getTitle(todo)])
     }
   }
 
@@ -132,8 +135,6 @@ export class TodoCardVM {
 
   async uncomplete(todo: MelonTodo) {
     await todo.uncomplete()
-
-    fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
   async complete(todo: MelonTodo) {
@@ -148,20 +149,13 @@ export class TodoCardVM {
       }
       playTaskComplete()
     }
-    // sharedHeroStore.incrementPoints()
-    // sharedTagStore.incrementEpicPoints(todo.text)
+    sharedHeroStore.incrementPoints()
+    await sharedTagStore.incrementEpicPoints(todo.text)
 
     await todo.complete()
-    const completedTitle = getTitle(todo)
-    const todos = await sharedTodoStore
-      .todosForDate(completedTitle)
-      .extend(Q.experimentalSortBy('order', Q.desc))
-      .fetch()
-
-    await fixOrder([getTitle(todo)])
-    // sharedSessionStore.numberOfTodosCompleted++
+    sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
-    // checkDayCompletionRoutine()
+    checkDayCompletionRoutine()
   }
 
   isOld(type: CardType, todo: MelonTodo) {

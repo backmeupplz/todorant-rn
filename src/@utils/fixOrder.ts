@@ -22,7 +22,6 @@ export async function fixOrder(
   )
   const toUpdate: any[] = []
   // Fix every title
-  // database.batch(())
   for (const titleInvolved of titlesInvolvedSet) {
     const todos = sharedTodoStore.todosForDate(titleInvolved)
     const completedForDate = await todos

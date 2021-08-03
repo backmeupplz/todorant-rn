@@ -35,7 +35,6 @@ class TodoStore {
   wmdbUserAsDelegatorId?: string
 
   async getWmDbUser(delegator: boolean): Promise<string | undefined> {
-    console.log(await usersCollection.query().fetch())
     return (
       await usersCollection
         .query(
@@ -199,8 +198,6 @@ class TodoStore {
 
   async initDelegation() {
     await when(() => hydration.isHydrated)
-
-    console.log(await usersCollection.query().fetch())
 
     this.wmdbUserId = await this.getWmDbUser(false)
     this.wmdbUserAsDelegatorId = await this.getWmDbUser(true)

@@ -21,7 +21,7 @@ class TodoSample {
   frog: boolean = false
   frogFails: number = 0
   skipped: boolean = false
-  order: number = 0
+  order: number = Math.random() * 10
   monthAndYear: string = getDateMonthAndYearString(dateS)
   deleted: boolean = true
   date: string = getDateDateString(dateS)
@@ -42,6 +42,8 @@ export async function add5000Todos() {
       dateS.setUTCFullYear(lastYear)
       lastYear++
     }
+    const todoSample = new TodoSample()
+    todoSample.order = Math.random() * 10
     todos.push(new TodoSample())
   }
 
@@ -55,6 +57,8 @@ export async function add5000Todos() {
           todo.completed = false
           todo.deleted = false
           todo.date = todo1.date
+          todo.order = todo1.order
+          todo._exactDate = new Date(getTitle(todo))
         })
       })
     )

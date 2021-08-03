@@ -336,6 +336,7 @@ const EnhancedDraggableSectionList = enhance(
       />
     ) : (
       <DraggableSectionList<MelonTodo, Section>
+        layoutInvalidationKey={v4()}
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
@@ -375,8 +376,13 @@ const EnhancedDraggableSectionList = enhance(
   }
 )
 
-async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
-  const { beforeChangesArr, dataArr, to, from, promise } = params
+async function onDragEnd({
+  beforeChangesArr,
+  dataArr,
+  to,
+  from,
+  promise,
+}: DragEndParams<MelonTodo | string>) {
   // enable loader
   sharedAppStateStore.changeLoading(false)
   // check is calendar dragging
@@ -418,20 +424,55 @@ async function onDragEnd(params: DragEndParams<MelonTodo | string>) {
 
     let disableLoading = false
 
-    const closestFrom = findClosestSection(from, beforeChangesArr)
-    const closestTo = findClosestSection(to, dataArr)
-    if (closestFrom === closestTo) {
+    const closestDayFrom = findClosestSection(from, beforeChangesArr)
+    const closestDayTo = findClosestSection(to, dataArr)
+
+    // if inside one day
+    if (closestDayFrom === closestDayTo) {
       let lastOrder = 0
-      for (let i = closestTo + 1; ; i++) {
-        const item = dataArr[i]
-        if (item === undefined) break
-        if (typeof item === 'string') break
-        toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
-        lastOrder++
+      const fromItem = beforeChangesArr[from]
+      const toItem = beforeChangesArr[to]
+      // if both of moved items are todos, and no one of them are section header
+      if (fromItem !== 'string' && toItem !== 'string') {
+        const fromBottomToTop = from > to
+        const first = beforeChangesArr[to] as MelonTodo
+        const second = beforeChangesArr[
+          fromBottomToTop ? to - 1 : to + 1
+        ] as MelonTodo
+        let secondOrder =
+          second && typeof second !== 'string' ? second.order : -1
+        let firstOrder = first ? first.order : -1
+        if (second && second.frog && !fromItem.frog) secondOrder = -1
+        let average = (firstOrder + secondOrder) / 2
+        // if there is nothing under or under is a section
+        if (
+          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
+          typeof beforeChangesArr[to + 1] === 'undefined'
+        )
+          average = beforeChangesArr[to].order + 1
+        if (
+          first.frog &&
+          !second.frog &&
+          typeof beforeChangesArr[to - 1] !== 'string'
+        )
+          average = beforeChangesArr[to].order + 1
+        toUpdate.push(
+          (fromItem as MelonTodo).prepareUpdate(
+            (todo) => (todo.order = average)
+          )
+        )
+      } else {
+        for (let i = closestDayTo + 1; ; i++) {
+          const item = dataArr[i]
+          if (item === undefined) break
+          if (typeof item === 'string') break
+          toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
+          lastOrder++
+        }
       }
     } else {
-      const lowerDay = Math.min(closestFrom, closestTo)
-      const maxDay = Math.max(closestFrom, closestTo)
+      const lowerDay = Math.min(closestDayFrom, closestDayTo)
+      const maxDay = Math.max(closestDayFrom, closestDayTo)
       let lastOrder = 0
       let lastSection = dataArr[lowerDay] as string
       for (let i = lowerDay + 1; ; i++) {
