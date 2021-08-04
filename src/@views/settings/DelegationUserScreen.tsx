@@ -1,24 +1,25 @@
-import React, { Component, Fragment } from 'react'
 import { Container, Content, Text } from 'native-base'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { TableItem } from '@components/TableItem'
-import { RouteProp, useRoute } from '@react-navigation/native'
 import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
-import { sharedDelegationStore } from '@stores/DelegationStore'
-import { IconButton } from '@components/IconButton'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { Q, Query } from '@nozbe/watermelondb'
+import React, { Component, Fragment } from 'react'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
-import { sharedSync } from '@sync/Sync'
+
+import { IconButton } from '@components/IconButton'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { removeDelegation } from '@utils/delegations'
-import { usersCollection } from '@utils/wmdb'
-import { Q, Query } from '@nozbe/watermelondb'
+import { TableItem } from '@components/TableItem'
 import { UserColumn } from '@utils/melondb'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import withObservables from '@nozbe/with-observables'
+import { observer } from 'mobx-react'
+import { removeDelegation } from '@utils/delegations'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSync } from '@sync/Sync'
+import { translate } from '@utils/i18n'
+import { usersCollection } from '@utils/wmdb'
+import withObservables from '@nozbe/with-observables'
 
 @observer
 class Row extends Component<{
@@ -163,7 +164,7 @@ const enhance = withObservables(['list'], (items) => {
 
 const EnhancedList = enhance(
   ({ list, type }: { list: MelonUser[]; type: DelegationUserType }) => (
-    <Fragment>
+    <>
       {list.length ? (
         list.map((u, i) => (
           <Row key={i} delegationUser={u} delegationType={type} />
@@ -179,6 +180,6 @@ const EnhancedList = enhance(
           </Text>
         </TableItem>
       )}
-    </Fragment>
+    </>
   )
 )
