@@ -1,11 +1,16 @@
-import React, { Component } from 'react'
-import { Button as NativeBaseButton, View, NativeBase } from 'native-base'
-import { Platform } from 'react-native'
+import React, { Component, ReactNode } from 'react'
+import {
+  Button as NativeBaseButton,
+  View,
+  NativeBase,
+  RnViewStyleProp,
+} from 'native-base'
+import { Platform, StyleSheet, ViewStyle } from 'react-native'
 
-const removeFalsyElement = (object: any) => {
-  if (object.style.backgroundColor) return object
-  delete object.style.backgroundColor
-  return object
+const fixStyle = (style: any) => {
+  if (style.backgroundColor) return style
+  delete style.backgroundColor
+  return style
 }
 
 export class Button extends Component<NativeBase.Button> {
@@ -18,10 +23,16 @@ export class Button extends Component<NativeBase.Button> {
         }}
         removeClippedSubviews
       >
-        <NativeBaseButton {...removeFalsyElement(this.props)} />
+        <NativeBaseButton
+          {...this.props}
+          {...{ style: fixStyle(this.props.style) }}
+        />
       </View>
     ) : (
-      <NativeBaseButton {...removeFalsyElement(this.props)} />
+      <NativeBaseButton
+        {...this.props}
+        {...{ style: fixStyle(this.props.style) }}
+      />
     )
   }
 }
