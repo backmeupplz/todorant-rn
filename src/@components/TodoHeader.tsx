@@ -4,17 +4,14 @@ import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { IconButton } from '@components/IconButton'
-import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import fonts from '@utils/fonts'
 import moment from 'moment'
-import i18n from 'i18n-js'
 import { capitalizeSentence } from '@utils/capitalizeSentence'
 import { PlanningVM } from '@views/planning/PlanningVM'
-import { SectionListData } from 'react-native'
-import { Todo } from '@models/Todo'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 
 @observer
 export class TodoHeader extends Component<{
@@ -85,7 +82,9 @@ export class TodoHeader extends Component<{
               onPress={() => {
                 this.props.onPlusPress
                   ? this.props.onPlusPress()
-                  : navigate('AddTodo', { date: this.props.item })
+                  : checkSubscriptionAndNavigate('AddTodo', {
+                      date: this.props.item,
+                    })
               }}
               size={20}
               name="add_outline_28"

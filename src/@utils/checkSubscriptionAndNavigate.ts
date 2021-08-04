@@ -2,8 +2,16 @@ import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { Todo } from '@models/Todo'
 
-export function plusButtonAction() {
+export function checkSubscriptionAndNavigate(
+  screen: 'AddTodo' | 'EditTodo' | 'BreakdownTodo',
+  params?: {
+    date?: string
+    editedTodo?: Todo
+    breakdownTodo?: Todo
+  }
+) {
   if (Platform.OS === 'ios' && sharedOnboardingStore.tutorialIsShown) {
     if (!sharedSessionStore.user && !sharedSessionStore.localAppleReceipt) {
       navigate('Paywall', { type: 'appleUnauthorized' })
@@ -20,7 +28,7 @@ export function plusButtonAction() {
     !sharedSessionStore.user?.token ||
     sharedSessionStore.isSubscriptionActive
   ) {
-    navigate('AddTodo')
+    navigate(screen, { ...params })
   } else {
     navigate(
       'Paywall',

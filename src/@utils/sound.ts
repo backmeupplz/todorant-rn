@@ -3,7 +3,7 @@ import Sound from 'react-native-sound'
 import { Platform } from 'react-native'
 
 Sound.setMode('Default')
-Sound.setCategory('Ambient', true)
+Sound.setCategory('Playback', true)
 
 const sounds = {} as { [index: string]: Sound }
 

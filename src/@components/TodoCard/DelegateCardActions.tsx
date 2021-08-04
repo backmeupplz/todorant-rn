@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
-import { CardItem, Icon, Text, View } from 'native-base'
+import { Text, View } from 'native-base'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { Todo } from '@models/Todo'
-import { navigate } from '@utils/navigation'
 import {
   DelegateSectionType,
   sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
 import { IconButton } from '@components/IconButton'
 import { MelonTodo } from '@models/MelonTodo'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+
 
 @observer
 export class DelegateCardActions extends Component<{
@@ -64,7 +65,9 @@ export class DelegateCardActions extends Component<{
               />
               <IconButton
                 onPress={() => {
-                  navigate('EditTodo', { editedTodo: this.props.todo })
+                  checkSubscriptionAndNavigate('EditTodo', {
+                    editedTodo: this.props.todo,
+                  })
                 }}
                 name="edit_outline_28"
               />

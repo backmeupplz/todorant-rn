@@ -356,7 +356,7 @@
 		BB3A7A02242694A60014DE92 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		BB47AC002523D2E0000475E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB47AC052523D2E2000475E6 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = it; path = it.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
-		BB47AC0A2523D2E5000475E6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "pt-BR"; path = "pt-BR.lproj/AppIntentVocabulary.plist"; sourceTree = "<group>"; };
+		BB47AC0A2523D2E5000475E6 /* pt-br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "pt-br"; path = "pt-br.lproj/AppIntentVocabulary.plist"; sourceTree = "<group>"; };
 		BB47AC0B2523D2E6000475E6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB47AC0C2523D2E7000475E6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = uk; path = uk.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		BB6DF11A252BAB6800CAAE17 /* WidgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetManager.swift; sourceTree = "<group>"; };
@@ -369,10 +369,10 @@
 		BBC0BDF32527CBC300B6C41D /* customColorControl.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = customColorControl.xcassets; sourceTree = "<group>"; };
 		BBC0EFFD24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BBC0EFFE24734FC2000B9C72 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		BBC0EFFF2473500B000B9C72 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		BBC0F0002473500B000B9C72 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		BBC0EFFF2473500B000B9C72 /* pt-br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-br"; path = "pt-br.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		BBC0F0002473500B000B9C72 /* pt-br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-br"; path = "pt-br.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		BBCD6A50252E9367007B8826 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BBCD6A51252E93C7007B8826 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		BBCD6A51252E93C7007B8826 /* pt-br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-br"; path = "pt-br.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BBCD6A52252E943E007B8826 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BBCD6A53252E9483007B8826 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BBDD6A7725239A8F0064DE60 /* TodorantIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodorantIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1025,7 +1025,7 @@
 				uk,
 				it,
 				es,
-				"pt-BR",
+				"pt-br",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -1512,7 +1512,7 @@
 				BBE891C92436B1E400A9CA36 /* uk */,
 				BB093AB424508A14007616A5 /* it */,
 				BBC0EFFD24734FC2000B9C72 /* es */,
-				BBC0EFFF2473500B000B9C72 /* pt-BR */,
+				BBC0EFFF2473500B000B9C72 /* pt-br */,
 			);
 			name = LaunchScreen.xib;
 			path = Todorant;
@@ -1524,7 +1524,7 @@
 				668AFA4B252E40A20046205C /* en */,
 				668AFA53252E40B00046205C /* ru */,
 				BBCD6A50252E9367007B8826 /* it */,
-				BBCD6A51252E93C7007B8826 /* pt-BR */,
+				BBCD6A51252E93C7007B8826 /* pt-br */,
 				BBCD6A52252E943E007B8826 /* es */,
 				BBCD6A53252E9483007B8826 /* uk */,
 			);
@@ -1547,7 +1547,7 @@
 				BB78173C245CE050004EF3E5 /* ru */,
 				BB78173D245CE051004EF3E5 /* uk */,
 				BBC0EFFE24734FC2000B9C72 /* es */,
-				BBC0F0002473500B000B9C72 /* pt-BR */,
+				BBC0F0002473500B000B9C72 /* pt-br */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1558,7 +1558,7 @@
 				BBDD6B142523A0100064DE60 /* ru */,
 				BB47AC002523D2E0000475E6 /* en */,
 				BB47AC052523D2E2000475E6 /* it */,
-				BB47AC0A2523D2E5000475E6 /* pt-BR */,
+				BB47AC0A2523D2E5000475E6 /* pt-br */,
 				BB47AC0B2523D2E6000475E6 /* es */,
 				BB47AC0C2523D2E7000475E6 /* uk */,
 			);
@@ -1578,7 +1578,7 @@
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
@@ -1611,7 +1611,7 @@
 				CODE_SIGN_ENTITLEMENTS = Todorant/Todorant.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				INFOPLIST_FILE = Todorant/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1714,7 +1714,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Todorant-watchOS/Todorant-watchOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1754,7 +1754,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1790,7 +1790,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Todorant-watchOS Extension/Todorant-watchOS Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_ASSET_PATHS = "\"Todorant-watchOS Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
@@ -1831,7 +1831,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Todorant-watchOS Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
@@ -2031,7 +2031,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = TodorantToday/TodorantToday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2066,7 +2066,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2152,7 +2152,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = TodorantIntents/TodorantIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2186,7 +2186,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 135;
+				CURRENT_PROJECT_VERSION = 136;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ACWP4F58HZ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

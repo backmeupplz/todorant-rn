@@ -149,8 +149,8 @@ android {
         applicationId "com.todorant"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 117
-        versionName "1.0.112"
+        versionCode 121
+        versionName "1.0.116"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         missingDimensionStrategy 'react-native-camera', 'general'

@@ -1858,10 +1858,10 @@
     react-native-intersection-observer "^0.0.7"
     react-native-reanimated "^1.13.1"
 
-"@upacyxou/react-native-todorant-widget@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-todorant-widget/-/react-native-todorant-widget-0.3.0.tgz#bab2c2aa4beac380cb6a966aa5ea2aa8dcd30d99"
-  integrity sha512-JJDEVbzOrKl4nse2ZYX165JqwmuJsll8cy2vKPNXd1cpyEGCF1YDAN70UR2KDCKLEuXtsxdZszyA6NYcyx1VPw==
+"@upacyxou/react-native-todorant-widget@^0.3.0-beta.0":
+  version "0.3.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-todorant-widget/-/react-native-todorant-widget-0.3.0-beta.1.tgz#8cd18a663c1b892373651c80d0580d6dd25219e3"
+  integrity sha512-/1n6lPDJYszBKI88ScZX2C6ynRNgWW9HxWE92/rrO3otPQBucRZGBMLUteGq0fMrMQw9Yj2l+aywEx5VXWq9dw==
 
 abort-controller@^3.0.0:
   version "3.0.0"

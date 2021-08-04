@@ -5,7 +5,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { navigate } from '@utils/navigation'
 import { IconButton } from '@components/IconButton'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { isTodoOld } from '@utils/isTodoOld'
@@ -15,6 +14,8 @@ import { v4 } from 'uuid'
 import { database } from '@utils/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 import { makeObservable, observable } from 'mobx'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+
 export let todoActionsNodeId: number
 export let breakdownNodeId: number
 
@@ -97,7 +98,9 @@ export class TodoCardActions extends Component<{
             <IconButton
               disabled={!sharedOnboardingStore.tutorialIsShown}
               onPress={() => {
-                navigate('EditTodo', { editedTodo: this.props.todo })
+                checkSubscriptionAndNavigate('EditTodo', {
+                  editedTodo: this.props.todo,
+                })
               }}
               name="edit_outline_28"
             />
@@ -124,7 +127,7 @@ export class TodoCardActions extends Component<{
                     sharedOnboardingStore.step !== TutorialStep.Breakdown
                   }
                   onPress={() => {
-                    navigate('BreakdownTodo', {
+                    checkSubscriptionAndNavigate('BreakdownTodo', {
                       breakdownTodo: this.props.todo,
                     })
                   }}

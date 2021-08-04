@@ -5,5 +5,5 @@ export enum Language {
   uk = 'uk',
   it = 'it',
   es = 'es',
-  'pt-BR' = 'pt-BR',
+  'pt-br' = 'pt-br',
 }

@@ -204,6 +204,15 @@ export class TodoSettings extends Component {
             sharedSync.sync(SyncRequestEvent.Settings)
           }}
         />
+        <TextAndSwitch
+          title="settingsObject.removeCompletedFromCalendar"
+          value={sharedSettingsStore.removeCompletedFromCalendar}
+          onValueChange={(value) => {
+            sharedSettingsStore.removeCompletedFromCalendar = value
+            sharedSettingsStore.updatedAt = new Date()
+            sharedSync.sync(SyncRequestEvent.Settings)
+          }}
+        />
         <TableItem
           onPress={() => {
             ActionSheet.show(

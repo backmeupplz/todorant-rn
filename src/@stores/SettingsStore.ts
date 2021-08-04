@@ -5,7 +5,6 @@ import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { getLanguageTag } from '@utils/i18n'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import RNRestart from 'react-native-restart'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
 
@@ -27,6 +26,7 @@ class SettingsStore {
   @persist @observable preserveOrderByTime?: boolean
   @persist @observable duplicateTagInBreakdown?: boolean
   @persist @observable showMoreByDefault?: boolean
+  @persist @observable removeCompletedFromCalendar?: boolean
   @persist @observable language?: string
   @persist('object', GoogleCalendarCredentials)
   @observable
@@ -92,6 +92,7 @@ class SettingsStore {
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
       this.showMoreByDefault = settings.showMoreByDefault
       this.language = settings.language
+      this.removeCompletedFromCalendar = settings.removeCompletedFromCalendar
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       if (settings.updatedAt) {
         this.updatedAt = new Date(settings.updatedAt)
@@ -106,6 +107,7 @@ class SettingsStore {
           showMoreByDefault: this.showMoreByDefault,
           language: this.language,
           googleCalendarCredentials: this.googleCalendarCredentials,
+          removeCompletedFromCalendar: this.removeCompletedFromCalendar,
         })
         this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
         this.firstDayOfWeek = pushedSettings.firstDayOfWeek
@@ -115,6 +117,8 @@ class SettingsStore {
         this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
         this.showMoreByDefault = pushedSettings.showMoreByDefault
         this.language = pushedSettings.language
+        this.removeCompletedFromCalendar =
+          pushedSettings.removeCompletedFromCalendar
         this.googleCalendarCredentials =
           pushedSettings.googleCalendarCredentials
         this.updatedAt = pushedSettings.updatedAt
@@ -133,6 +137,7 @@ class SettingsStore {
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
         showMoreByDefault: this.showMoreByDefault,
         language: this.language,
+        removeCompletedFromCalendar: this.removeCompletedFromCalendar,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
@@ -143,6 +148,8 @@ class SettingsStore {
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
       this.showMoreByDefault = pushedSettings.showMoreByDefault
       this.language = pushedSettings.language
+      this.removeCompletedFromCalendar =
+        pushedSettings.removeCompletedFromCalendar
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -161,6 +168,7 @@ class SettingsStore {
       this.duplicateTagInBreakdown = settings.duplicateTagInBreakdown
       this.showMoreByDefault = settings.showMoreByDefault
       this.language = settings.language
+      this.removeCompletedFromCalendar = settings.removeCompletedFromCalendar
       this.googleCalendarCredentials = settings.googleCalendarCredentials
       this.updatedAt = new Date(settings.updatedAt)
     }
@@ -175,6 +183,7 @@ class SettingsStore {
         duplicateTagInBreakdown: this.duplicateTagInBreakdown,
         showMoreByDefault: this.showMoreByDefault,
         language: this.language,
+        removeCompletedFromCalendar: this.removeCompletedFromCalendar,
         googleCalendarCredentials: this.googleCalendarCredentials,
       })
       this.showTodayOnAddTodo = pushedSettings.showTodayOnAddTodo
@@ -185,6 +194,8 @@ class SettingsStore {
       this.duplicateTagInBreakdown = pushedSettings.duplicateTagInBreakdown
       this.showMoreByDefault = pushedSettings.showMoreByDefault
       this.language = pushedSettings.language
+      this.removeCompletedFromCalendar =
+        pushedSettings.removeCompletedFromCalendar
       this.googleCalendarCredentials = pushedSettings.googleCalendarCredentials
       this.updatedAt = pushedSettings.updatedAt
         ? new Date(pushedSettings.updatedAt)
@@ -202,6 +213,7 @@ class SettingsStore {
     this.duplicateTagInBreakdown = undefined
     this.showMoreByDefault = undefined
     this.language = undefined
+    this.removeCompletedFromCalendar = undefined
     this.googleCalendarCredentials = undefined
     this.updatedAt = undefined
     this.soundOn = true
