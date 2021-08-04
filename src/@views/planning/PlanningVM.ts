@@ -28,8 +28,7 @@ export class PlanningVM {
   }
 
   getTodos(completed: boolean) {
-    return todosCollection.query(
-      Q.where(TodoColumn.deleted, false),
+    return sharedTodoStore.undeletedTodos.extend(
       Q.where(TodoColumn.completed, completed),
       Q.or(
         Q.where(TodoColumn.user, null),

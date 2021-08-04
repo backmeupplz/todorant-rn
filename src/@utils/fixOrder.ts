@@ -5,6 +5,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
 import { database } from './wmdb'
 import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from './melondb'
 
 export async function fixOrder(
   titlesInvolved: string[],
@@ -24,9 +25,7 @@ export async function fixOrder(
   // Fix every title
   for (const titleInvolved of titlesInvolvedSet) {
     const todos = sharedTodoStore.todosForDate(titleInvolved)
-    const completedForDate = await todos
-      .extend(Q.where('is_completed', true))
-      .fetch()
+    const completedForDate = await sharedTodoStore.completedTodos.fetch()
     // Go over completed
     const orderedCompleted = completedForDate.sort(
       sortTodos(addTodosOnTopIds, addTodosToBottomIds)
@@ -38,7 +37,7 @@ export async function fixOrder(
     })
     // Go over uncompleted
     const uncompletedForDate = await todos
-      .extend(Q.where('is_completed', false))
+      .extend(Q.where(TodoColumn.completed, false))
       .fetch()
     const orderedUncompleted = uncompletedForDate.sort(
       sortTodos(addTodosOnTopIds, addTodosToBottomIds)

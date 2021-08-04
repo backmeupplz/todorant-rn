@@ -26,9 +26,14 @@ class TodoStore {
 
   @persist isFirstSync = false
 
+  completedTodos = todosCollection.query(Q.where(TodoColumn.completed, true))
   undeletedTodos = todosCollection.query(Q.where(TodoColumn.deleted, false))
+  deletedTodos = todosCollection.query(Q.where(TodoColumn.deleted, true))
   undeletedUncompleted = this.undeletedTodos.extend(
     Q.where(TodoColumn.completed, false)
+  )
+  undeletedCompleted = this.undeletedTodos.extend(
+    Q.where(TodoColumn.completed, true)
   )
 
   wmdbUserId?: string
@@ -67,8 +72,7 @@ class TodoStore {
             Q.where(TodoColumn.date, ''),
             Q.where(TodoColumn.date, Q.eq(null))
           )
-    return todosCollection.query(
-      Q.where(TodoColumn.deleted, false),
+    return this.undeletedTodos.extend(
       Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
       Q.where(TodoColumn.completed, completed),
       Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
@@ -101,8 +105,7 @@ class TodoStore {
             Q.where(TodoColumn.date, ''),
             Q.where(TodoColumn.date, Q.eq(null))
           )
-    return todosCollection.query(
-      Q.where(TodoColumn.deleted, false),
+    return this.undeletedTodos.extend(
       Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
       Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
       dateQuery,
@@ -112,9 +115,7 @@ class TodoStore {
 
   todosBeforeDate = (title: string) => {
     const todayWithTimezoneOffset = new Date(title)
-    let realmResultsWithoutDelegation = todosCollection.query(
-      Q.where(TodoColumn.deleted, false),
-      Q.where(TodoColumn.completed, false),
+    let realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
       Q.where(TodoColumn._exactDate, Q.lt(todayWithTimezoneOffset.getTime())),
       Q.or(
         Q.where(TodoColumn.user, null),

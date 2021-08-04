@@ -85,9 +85,8 @@ export class Security extends Component {
   async encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = await todosCollection
-        .query(
-          Q.where(TodoColumn.deleted, false),
+      const todos = await sharedTodoStore.deletedTodos
+        .extend(
           Q.where(TodoColumn.encrypted, true),
           Q.where(TodoColumn.delegator, null)
         )

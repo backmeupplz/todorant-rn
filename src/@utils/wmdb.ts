@@ -23,6 +23,3 @@ export const database = new Database({
 export const todosCollection = database.collections.get<MelonTodo>(Tables.todos)
 export const tagsCollection = database.collections.get<MelonTag>(Tables.tags)
 export const usersCollection = database.collections.get<MelonUser>(Tables.users)
-export const notDeletedTodos = todosCollection.query(
-  Q.where(TodoColumn.deleted, false)
-)

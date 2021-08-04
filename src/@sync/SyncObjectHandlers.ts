@@ -43,7 +43,9 @@ export async function onDelegationObjectsFromServer(
   ).fetch()
   // Filter delegates that changed locally
   const delegatesChangedLocally = await (lastSyncDate
-    ? realmDelegates.extend(Q.where('updated_at', Q.gt(lastSyncDate.getTime())))
+    ? realmDelegates.extend(
+        Q.where(UserColumn.updatedAt, Q.gt(lastSyncDate.getTime()))
+      )
     : realmDelegates
   ).fetch()
   const toDelete = [] as MelonUser[]

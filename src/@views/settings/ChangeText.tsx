@@ -17,7 +17,7 @@ import { TouchableOpacity } from 'react-native'
 import { IconButton } from '@components/IconButton'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { database, notDeletedTodos } from '@utils/wmdb'
+import { database } from '@utils/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 import { cloneTag, MelonTag } from '@models/MelonTag'
 
@@ -96,7 +96,7 @@ class ChangeTextContent extends Component<{
     }
     if (this.newName && !this.newName.match(/^[\S]+$/)) this.newName = ''
     const toUpdate = [] as (MelonTodo | MelonTag)[]
-    for (const todo of await notDeletedTodos.fetch()) {
+    for (const todo of await sharedTodoStore.undeletedTodos.fetch()) {
       toUpdate.push(
         todo.prepareUpdate((todoToUpdate) => {
           todoToUpdate.text = todo.text
@@ -209,8 +209,7 @@ class ChangeTextContent extends Component<{
 }
 
 export const ChangeText = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
-  >()
+  const route =
+    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
   return <ChangeTextContent route={route} />
 }
