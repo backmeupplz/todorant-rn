@@ -184,12 +184,6 @@ class Sync {
             continue
           }
           updated.id = updated.server_id
-          console.log(
-            getTitle({
-              monthAndYear: updated.month_and_year,
-              date: updated.date,
-            })
-          )
           updated.exact_date_at = new Date(
             getTitle({
               monthAndYear: updated.month_and_year,

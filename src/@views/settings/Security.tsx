@@ -212,7 +212,6 @@ export class Security extends Component {
                           translate('encryptionConfirm'),
                           translate('save'),
                           async () => {
-                            console.log('yes yes yes yes!')
                             const encrytedTodos =
                               await this.encryptedTodos.fetch()
                             if (encrytedTodos.length) {

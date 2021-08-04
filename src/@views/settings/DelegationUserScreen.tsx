@@ -16,7 +16,7 @@ import { removeDelegation } from '@utils/delegations'
 import { usersCollection } from '@utils/wmdb'
 import { Q, Query } from '@nozbe/watermelondb'
 import { UserColumn } from '@utils/melondb'
-import { MelonUser } from '@models/MelonTodo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { sharedSessionStore } from '@stores/SessionStore'
 
@@ -156,28 +156,29 @@ export const DelegationUserScreen = () => {
 }
 
 const enhance = withObservables(['list'], (items) => {
-  console.log(items)
   return {
     list: items.list,
   }
 })
 
-const EnhancedList = enhance((props) => (
-  <Fragment>
-    {props.list.length ? (
-      props.list.map((u, i) => (
-        <Row key={i} delegationUser={u} delegationType={props.type} />
-      ))
-    ) : (
-      <TableItem>
-        <Text {...sharedColors.textExtraStyle}>
-          {translate(
-            props.type === DelegationUserType.delegate
-              ? 'delegate.noDelegates'
-              : 'delegate.noDelegators'
-          )}
-        </Text>
-      </TableItem>
-    )}
-  </Fragment>
-))
+const EnhancedList = enhance(
+  ({ list, type }: { list: MelonUser[]; type: DelegationUserType }) => (
+    <Fragment>
+      {list.length ? (
+        list.map((u, i) => (
+          <Row key={i} delegationUser={u} delegationType={type} />
+        ))
+      ) : (
+        <TableItem>
+          <Text {...sharedColors.textExtraStyle}>
+            {translate(
+              type === DelegationUserType.delegate
+                ? 'delegate.noDelegates'
+                : 'delegate.noDelegators'
+            )}
+          </Text>
+        </TableItem>
+      )}
+    </Fragment>
+  )
+)
