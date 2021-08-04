@@ -540,7 +540,10 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             if (!sharedOnboardingStore.tutorialIsShown) return
             const delegates = await sharedDelegationStore.delegates.fetch()
             const options = delegates
-              .map((delegate) => delegate.name)
+              .map((delegate) => {
+                if (delegate._id === sharedSessionStore.user?._id) return null
+                return delegate.name
+              })
               .filter((delegate) => !!delegate)
               .concat([translate('cancel')]) as string[]
             ActionSheet.show(

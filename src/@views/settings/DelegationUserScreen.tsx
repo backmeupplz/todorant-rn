@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Container, Content, Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { translate } from '@utils/i18n'
@@ -14,9 +14,11 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { removeDelegation } from '@utils/delegations'
 import { usersCollection } from '@utils/wmdb'
-import { Q } from '@nozbe/watermelondb'
+import { Q, Query } from '@nozbe/watermelondb'
 import { UserColumn } from '@utils/melondb'
 import { MelonUser } from '@models/MelonTodo'
+import withObservables from '@nozbe/with-observables'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 @observer
 class Row extends Component<{
@@ -59,7 +61,7 @@ class Row extends Component<{
                       true
                     )
                   }
-                  sharedSync.sync(SyncRequestEvent.Delegation)
+                  await sharedSync.sync(SyncRequestEvent.Delegation)
                 } catch (err) {
                   alertError(err)
                 } finally {
@@ -89,15 +91,28 @@ export class DelegationUserScreenContent extends Component<{
     string
   >
 }> {
-  @observable list?: MelonUser[]
+  @observable list?: Query<MelonUser>
 
   async UNSAFE_componentWillMount() {
     makeObservable(this)
-    this.list = await (this.props.route.params.delegationType ===
-    DelegationUserType.delegate
-      ? usersCollection.query(Q.where(UserColumn.isDelegator, false))
-      : usersCollection.query(Q.where(UserColumn.isDelegator, true))
-    ).fetch()
+    this.list =
+      this.props.route.params.delegationType === DelegationUserType.delegate
+        ? usersCollection.query(
+            Q.where(UserColumn.isDelegator, false),
+            Q.where(UserColumn.deleted, Q.notEq(true)),
+            Q.where(
+              UserColumn._id,
+              Q.notEq(sharedSessionStore.user?._id || null)
+            )
+          )
+        : usersCollection.query(
+            Q.where(UserColumn.isDelegator, true),
+            Q.where(UserColumn.deleted, Q.notEq(true)),
+            Q.where(
+              UserColumn._id,
+              Q.notEq(sharedSessionStore.user?._id || null)
+            )
+          )
   }
 
   render() {
@@ -109,14 +124,11 @@ export class DelegationUserScreenContent extends Component<{
             paddingTop: 16,
           }}
         >
-          {!!this.list && this.list.length ? (
-            this.list.map((u, i) => (
-              <Row
-                key={i}
-                delegationUser={u}
-                delegationType={this.props.route.params.delegationType}
-              />
-            ))
+          {!!this.list && this.list ? (
+            <EnhancedList
+              list={this.list}
+              type={this.props.route.params.delegationType}
+            />
           ) : (
             <TableItem>
               <Text {...sharedColors.textExtraStyle}>
@@ -136,8 +148,36 @@ export class DelegationUserScreenContent extends Component<{
 }
 
 export const DelegationUserScreen = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { delegationType: DelegationUserType }>, string>
-  >()
+  const route =
+    useRoute<
+      RouteProp<Record<string, { delegationType: DelegationUserType }>, string>
+    >()
   return <DelegationUserScreenContent route={route} />
 }
+
+const enhance = withObservables(['list'], (items) => {
+  console.log(items)
+  return {
+    list: items.list,
+  }
+})
+
+const EnhancedList = enhance((props) => (
+  <Fragment>
+    {props.list.length ? (
+      props.list.map((u, i) => (
+        <Row key={i} delegationUser={u} delegationType={props.type} />
+      ))
+    ) : (
+      <TableItem>
+        <Text {...sharedColors.textExtraStyle}>
+          {translate(
+            props.type === DelegationUserType.delegate
+              ? 'delegate.noDelegates'
+              : 'delegate.noDelegators'
+          )}
+        </Text>
+      </TableItem>
+    )}
+  </Fragment>
+))

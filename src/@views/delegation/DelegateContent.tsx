@@ -57,21 +57,23 @@ const EnhancedDraggableSectionList = enhance(
       let currentTitle: string | undefined
       let sectionIndex = 0
       for (const realmTodo of todo) {
-        const user = await (byMe ? realmTodo.user : realmTodo.delegator)
-        if (!user) continue
-        const titleKey = user?._id
-        if (!titleKey) continue
-        if (currentTitle && currentTitle !== titleKey) {
-          sectionIndex++
-        }
-        if (todoSectionMap[titleKey]) {
-          todoSectionMap[titleKey].data.push(realmTodo)
-        } else {
-          todoSectionMap[titleKey] = {
-            userInSection: user,
-            data: [realmTodo],
+        try {
+          const user = await (byMe ? realmTodo.user : realmTodo.delegator)
+          if (!user) continue
+          const titleKey = user?._id
+          if (!titleKey) continue
+          if (currentTitle && currentTitle !== titleKey) {
+            sectionIndex++
           }
-        }
+          if (todoSectionMap[titleKey]) {
+            todoSectionMap[titleKey].data.push(realmTodo)
+          } else {
+            todoSectionMap[titleKey] = {
+              userInSection: user,
+              data: [realmTodo],
+            }
+          }
+        } catch (e) {}
       }
 
       const todosMap = Object.keys(todoSectionMap).map((key) => {
@@ -93,6 +95,7 @@ const EnhancedDraggableSectionList = enhance(
 
     return ready && map ? (
       <SectionList
+        ListEmptyComponent={<NoDelegatedTasks />}
         keyExtractor={(item) => item.id}
         removeClippedSubviews={true}
         maxToRenderPerBatch={1}
@@ -142,35 +145,15 @@ export class DelegateContent extends Component {
 
   renderDelegation() {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedToMeCount && <NoDelegatedTasks />}
-          {!!sharedTodoStore?.delegatedToMeCount &&
-            this.renderDelegationSectionList(false)}
-        </>
-      )
+      return <>{this.renderDelegationSectionList(false)}</>
     }
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ByMe) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedByMeCount && <NoDelegatedTasks />}
-          {!!sharedTodoStore?.delegatedByMeCount &&
-            this.renderDelegationSectionList(true)}
-        </>
-      )
+      return <>{this.renderDelegationSectionList(true)}</>
     }
     if (
       sharedDelegateStateStore.todoSection === DelegateSectionType.Completed
     ) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedByMeCompletedCount && (
-            <NoDelegatedTasks />
-          )}
-          {!!sharedTodoStore?.delegatedByMeCompletedCount &&
-            this.renderDelegationSectionList(true, true)}
-        </>
-      )
+      return <>{this.renderDelegationSectionList(true, true)}</>
     }
   }
 

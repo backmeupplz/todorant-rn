@@ -84,10 +84,11 @@ function handleUrl(url: string) {
           alertError(translate('pleaseLogin'))
           return
         }
-        const localDelegator = getLocalDelegation(
+        const localDelegator = await getLocalDelegation(
           { delegateInviteToken } as MelonUser,
           true
         )
+        console.log(localDelegator)
         if (!localDelegator) {
           await updateOrCreateDelegation(
             { delegateInviteToken } as MelonUser,

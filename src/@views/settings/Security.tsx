@@ -10,7 +10,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertConfirm, alertError } from '@utils/alert'
-import { _d, _e } from '@utils/encryption'
+import { decrypt, _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
 import { TodoColumn } from '@utils/melondb'
@@ -67,7 +67,10 @@ export class Security extends Component {
       const toUpdate = [] as MelonTodo[]
       for (const todo of todos) {
         toUpdate.push(
-          todo.prepareUpdate((todo) => (todo.encrypted = encrypted))
+          todo.prepareUpdate((todo) => {
+            todo.encrypted = encrypted
+            if (!encrypted) todo.text = decrypt(todo.text)
+          })
         )
       }
       await database.write(async () => await database.batch(...toUpdate))
@@ -85,7 +88,7 @@ export class Security extends Component {
       const todos = await todosCollection
         .query(
           Q.where(TodoColumn.deleted, false),
-          Q.where(TodoColumn.encrypted, encrypt),
+          Q.where(TodoColumn.encrypted, true),
           Q.where(TodoColumn.delegator, null)
         )
         .fetch()
@@ -131,22 +134,22 @@ export class Security extends Component {
               onValueChange={(value) => {
                 if (value) {
                   this.encryptionOn = value
+                  return
+                }
+                if (sharedSessionStore.encryptionKey) {
+                  alertConfirm(
+                    translate('encryptionDisableConfirm'),
+                    translate('disable'),
+                    () => {
+                      const key = sharedSessionStore.encryptionKey!
+                      sharedSessionStore.encryptionKey = undefined
+                      removePassword()
+                      this.encryptionOn = false
+                      this.encryptEncrypted(true, key)
+                    }
+                  )
                 } else {
-                  if (sharedSessionStore.encryptionKey) {
-                    alertConfirm(
-                      translate('encryptionDisableConfirm'),
-                      translate('disable'),
-                      () => {
-                        const key = sharedSessionStore.encryptionKey!
-                        sharedSessionStore.encryptionKey = undefined
-                        removePassword()
-                        this.encryptionOn = false
-                        this.encryptEncrypted(true, key)
-                      }
-                    )
-                  } else {
-                    this.encryptionOn = false
-                  }
+                  this.encryptionOn = false
                 }
               }}
               thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
@@ -209,7 +212,9 @@ export class Security extends Component {
                           translate('encryptionConfirm'),
                           translate('save'),
                           async () => {
-                            const encrytedTodos = await this.encryptedTodos.fetch()
+                            console.log('yes yes yes yes!')
+                            const encrytedTodos =
+                              await this.encryptedTodos.fetch()
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
                               const decryptedText = _d(

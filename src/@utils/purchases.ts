@@ -5,12 +5,7 @@ import * as rest from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
-import RNIap, {
-  purchaseUpdatedListener,
-  purchaseErrorListener,
-  SubscriptionPurchase,
-  PurchaseError,
-} from 'react-native-iap'
+import * as RNIap from 'react-native-iap'
 
 class PurchaseListener {
   constructor() {
@@ -20,7 +15,7 @@ class PurchaseListener {
   @observable isPurchasing = false
 
   success?: () => void
-  fail?: (err: PurchaseError | Error) => void
+  fail?: (err: RNIap.PurchaseError | Error) => void
 }
 
 export const purchaseListener = new PurchaseListener()
@@ -37,7 +32,7 @@ export async function getProducts(skus?: string[]) {
 }
 
 async function tryPurchase(
-  purchase?: SubscriptionPurchase,
+  purchase?: RNIap.SubscriptionPurchase,
   appleReceipt?: string
 ) {
   purchaseListener.isPurchasing = true
@@ -96,10 +91,11 @@ function delay(s: number) {
   })
 }
 
-export const purchaseUpdateSubscription = purchaseUpdatedListener(tryPurchase)
+export const purchaseUpdateSubscription =
+  RNIap.purchaseUpdatedListener(tryPurchase)
 
-export const purchaseErrorSubscription = purchaseErrorListener(
-  (error: PurchaseError) => {
+export const purchaseErrorSubscription = RNIap.purchaseErrorListener(
+  (error: RNIap.PurchaseError) => {
     console.log(`Purchase error: ${error}`)
     logEvent('subscription_purchase_error_local')
     if (purchaseListener.fail) {

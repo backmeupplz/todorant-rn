@@ -140,7 +140,7 @@ export async function onDelegationObjectsFromServer(
         if (localMarked) toDelete.push(localMarked)
         return
       }
-      toUpdateOrCreate.push(await updateOrCreateDelegation(delegator, true))
+      //toUpdateOrCreate.push(await updateOrCreateDelegation(delegator, true))
     })
   )
   await Promise.all(

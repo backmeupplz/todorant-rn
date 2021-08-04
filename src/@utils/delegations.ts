@@ -25,9 +25,7 @@ export async function removeDelegation(
     return
   }
   if (forceWrite) return await localDelegation.delete()
-  return localDelegation.prepareUpdate(
-    (delegation) => (delegation.deleted = true)
-  )
+  return localDelegation.prepareDestroyPermanently()
 }
 
 export async function getLocalDelegation(
@@ -63,7 +61,7 @@ export function getMismatchesWithServer(
         (delegation) => delegation._id === localDelegation._id
       )
     ) {
-      missMatches.push(localDelegation.prepareMarkAsDeleted())
+      missMatches.push(localDelegation.prepareDestroyPermanently())
     }
   })
   return missMatches

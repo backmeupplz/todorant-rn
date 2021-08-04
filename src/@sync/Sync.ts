@@ -29,6 +29,7 @@ import { Q } from '@nozbe/watermelondb'
 import { TagColumn, TodoColumn } from '@utils/melondb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
+import { encrypt, _e } from '@utils/encryption'
 
 type SyncRecord = RawRecord & { updated_at: number }
 
@@ -92,9 +93,10 @@ class Sync {
         }
       },
       pushChanges: async ({ changes, lastPulledAt }) => {
-        const test = []
-        const deepClone = cloneDeep(changes)
-        for (const sqlRaw of deepClone.todos.created) {
+        const createdTodos = []
+        const updatedTodos = []
+        const clonedChanges = cloneDeep(changes)
+        for (const sqlRaw of clonedChanges.todos.created) {
           if (sqlRaw.user_id) {
             sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
           }
@@ -103,12 +105,22 @@ class Sync {
               await usersCollection.find(sqlRaw.delegator_id)
             )._id
           }
-          test.push(sqlRaw)
+          if (sqlRaw.is_encrypted) {
+            sqlRaw.text = encrypt(sqlRaw.text)
+          }
+          createdTodos.push(sqlRaw)
         }
-        deepClone.todos.created = test
+        for (const sqlRaw of clonedChanges.todos.updated) {
+          if (sqlRaw.is_encrypted) {
+            sqlRaw.text = encrypt(sqlRaw.text)
+          }
+          updatedTodos.push(sqlRaw)
+        }
+        clonedChanges.todos.created = createdTodos
+        clonedChanges.todos.updated = updatedTodos
         this.socketConnection.socketIO.emit(
           'push_wmdb',
-          deepClone,
+          clonedChanges,
           lastPulledAt
         )
       },
@@ -172,9 +184,18 @@ class Sync {
             continue
           }
           updated.id = updated.server_id
-          updated._exactDate = updated.monthAndYear
-            ? new Date(getTitle(updated))
-            : new Date()
+          console.log(
+            getTitle({
+              monthAndYear: updated.month_and_year,
+              date: updated.date,
+            })
+          )
+          updated.exact_date_at = new Date(
+            getTitle({
+              monthAndYear: updated.month_and_year,
+              date: updated.date,
+            })
+          ).getTime()
           newS.push(updated)
         }
         serverObjects.todos.updated = newS
