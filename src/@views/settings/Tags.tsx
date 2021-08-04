@@ -72,7 +72,8 @@ class DeleteAllTagsButton extends Component {
               {
                 text: translate('delete'),
                 onPress: async () => {
-                  const undeletedTags = await sharedTagStore.undeletedTags.fetch()
+                  const undeletedTags =
+                    await sharedTagStore.undeletedTags.fetch()
                   const toUpdate = [] as MelonTag[]
                   for (const tag of undeletedTags) {
                     toUpdate.push(
@@ -107,15 +108,6 @@ class DeleteAllTagsButton extends Component {
 
 @observer
 export class Tags extends Component {
-  @observable tagsAmount = 0
-
-  UNSAFE_componentWillMount() {
-    makeObservable(this)
-    sharedTagStore.undeletedTags
-      .observeCount()
-      .subscribe((amount) => (this.tagsAmount = amount))
-  }
-
   render() {
     return (
       <Container
@@ -123,19 +115,7 @@ export class Tags extends Component {
           backgroundColor: sharedColors.backgroundColor,
         }}
       >
-        {!!this.tagsAmount ? (
-          <EnhancedTagList tags={sharedTagStore.undeletedTags} />
-        ) : (
-          <Text
-            style={{
-              ...sharedColors.regularTextExtraStyle.style,
-              textAlign: 'center',
-              padding: 20,
-            }}
-          >
-            {translate('emptyHashtags')}
-          </Text>
-        )}
+        <EnhancedTagList tags={sharedTagStore.undeletedTags} />
       </Container>
     )
   }
@@ -154,6 +134,17 @@ const EnhancedTagList = enhance(({ tags }: { tags: MelonTag[] }) => {
 
   return (
     <FlatList
+      ListEmptyComponent={
+        <Text
+          style={{
+            ...sharedColors.regularTextExtraStyle.style,
+            textAlign: 'center',
+            padding: 20,
+          }}
+        >
+          {translate('emptyHashtags')}
+        </Text>
+      }
       ListHeaderComponent={DeleteAllTagsButton}
       data={tags}
       renderItem={({ item }) => {

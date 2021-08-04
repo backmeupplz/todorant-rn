@@ -1,10 +1,13 @@
 import { getDateString, getTodayWithStartOfDay } from '@utils/time'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+
+import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from './melondb'
 import { dayCompleteOverlayRef } from '@components/DayCompleteOverlay'
 import { playDayComplete } from '@utils/sound'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 
-export function shouldShowDayCompletionRoutine() {
+export async function shouldShowDayCompletionRoutine() {
   if (!sharedSettingsStore.soundOn && !sharedSettingsStore.endOfDaySoundOn) {
     return false
   }
@@ -12,8 +15,10 @@ export function shouldShowDayCompletionRoutine() {
   const todayTodos = sharedTodoStore.todosForDate(getDateString(today))
 
   const progress = {
-    count: 0,
-    completed: 0,
+    count: await todayTodos.fetchCount(),
+    completed: await todayTodos
+      .extend(Q.where(TodoColumn.completed, true))
+      .fetchCount(),
   }
 
   if (!!progress.count && progress.count === progress.completed) {

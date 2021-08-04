@@ -138,7 +138,7 @@ export async function cloneTodo(todo: MelonTodo) {
   }
 }
 
-export const cloneDelegator = async (u: MelonUser | undefined) => {
-  u = u ? await u : undefined
-  return u ? { _id: u._id, name: u.name } : undefined
+export const cloneDelegator = async (user: MelonUser | undefined) => {
+  user = user ? await user : undefined
+  return user ? { _id: user._id, name: user.name } : undefined
 }

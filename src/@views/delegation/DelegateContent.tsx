@@ -1,11 +1,10 @@
 import React, { Component, Fragment, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Container, Text, View } from 'native-base'
+import { Container } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
 import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { FlatList } from 'react-native-gesture-handler'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import {
@@ -13,10 +12,8 @@ import {
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { makeObservable, observable } from 'mobx'
-import { SectionList, SectionListData } from 'react-native'
+import { SectionList } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
-import { Todo } from '@models/Todo'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { Query } from '@nozbe/watermelondb'
@@ -39,13 +36,12 @@ const EnhancedDraggableSectionList = enhance(
     completed: boolean
     byMe: boolean
   }) => {
-    const [ready, setReady] = useState(false)
     const [map, setMap] = useState<
       {
         userInSection: MelonUser
         data: MelonTodo[]
       }[]
-    >()
+    >([])
     const [completedCopy, setCompleted] = useState<boolean>()
     const [byMeCopy, setByMe] = useState<boolean>()
     const [length, setLength] = useState(0)
@@ -54,17 +50,12 @@ const EnhancedDraggableSectionList = enhance(
       const todoSectionMap = {} as {
         [key: string]: { userInSection: MelonUser; data: MelonTodo[] }
       }
-      let currentTitle: string | undefined
-      let sectionIndex = 0
       for (const realmTodo of todo) {
         try {
           const user = await (byMe ? realmTodo.user : realmTodo.delegator)
           if (!user) continue
           const titleKey = user?._id
           if (!titleKey) continue
-          if (currentTitle && currentTitle !== titleKey) {
-            sectionIndex++
-          }
           if (todoSectionMap[titleKey]) {
             todoSectionMap[titleKey].data.push(realmTodo)
           } else {
@@ -80,7 +71,6 @@ const EnhancedDraggableSectionList = enhance(
         return todoSectionMap[key]
       })
       setMap(todosMap)
-      setReady(true)
     }
 
     if (
@@ -93,7 +83,7 @@ const EnhancedDraggableSectionList = enhance(
       setLength(todo.length)
     }
 
-    return ready && map ? (
+    return (
       <SectionList
         ListEmptyComponent={<NoDelegatedTasks />}
         keyExtractor={(item) => item.id}
@@ -102,7 +92,7 @@ const EnhancedDraggableSectionList = enhance(
         initialNumToRender={10}
         updateCellsBatchingPeriod={1}
         sections={map}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <Fragment key={item.id}>
               <TodoCard todo={item} type={CardType.delegation} />
@@ -118,7 +108,7 @@ const EnhancedDraggableSectionList = enhance(
           )
         }}
       />
-    ) : null
+    )
   }
 )
 

@@ -17,7 +17,12 @@ import { onDelegationObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { SyncArgs, synchronize } from '@nozbe/watermelondb/sync'
+import {
+  SyncArgs,
+  SyncDatabaseChangeSet,
+  synchronize,
+  SyncPullResult,
+} from '@nozbe/watermelondb/sync'
 import {
   database,
   tagsCollection,
@@ -63,12 +68,12 @@ class Sync {
   }
 
   @observable gotWmDb = false
-  serverTimeStamp: undefined | number
-  serverObjects: any
+  serverTimeStamp?: number
+  serverObjects?: SyncDatabaseChangeSet
 
   $promise?: Promise<void>
 
-  wmDbSybcFunc = async () => {
+  wmDbSyncFunc = async () => {
     if (!this.socketConnection.connected) {
       return Promise.reject('Socket sync: not connected to sockets')
     }
@@ -88,7 +93,7 @@ class Sync {
       database,
       pullChanges: async () => {
         return {
-          changes: this.serverObjects,
+          changes: this.serverObjects!,
           timestamp: this.serverTimeStamp!,
         }
       },
@@ -142,14 +147,14 @@ class Sync {
     makeObservable(this)
     this.setupSyncListeners()
 
-    this.socketConnection.socketIO.on('wmdb', this.wmDbSybcFunc)
+    this.socketConnection.socketIO.on('wmdb', this.wmDbSyncFunc)
 
     this.socketConnection.socketIO.on(
       'return_wmdb',
-      async (serverObjects: any, serverTimeStamp: number) => {
+      async (serverObjects: SyncDatabaseChangeSet, serverTimeStamp: number) => {
         this.serverTimeStamp = serverTimeStamp
-        const newS = []
-        const newT = []
+        const todos = []
+        const tags = []
         for (const updated of serverObjects.tags.updated) {
           const localTodo = (
             await tagsCollection
@@ -158,19 +163,27 @@ class Sync {
           )[0]
           if (localTodo) {
             updated.id = localTodo.id
-            newT.push(updated)
+            tags.push(updated)
             continue
           }
           updated.id = updated.server_id
-          newT.push(updated)
+          tags.push(updated)
         }
         for (const updated of serverObjects.todos.updated) {
-          if (!!updated.delegator_id) {
+          if (updated.delegator_id) {
             updated.user_id = (
-              await updateOrCreateDelegation(updated.user_id, false, true)
+              await updateOrCreateDelegation(
+                updated.user_id as MelonUser,
+                false,
+                true
+              )
             ).id
             updated.delegator_id = (
-              await updateOrCreateDelegation(updated.delegator_id, true, true)
+              await updateOrCreateDelegation(
+                updated.delegator_id as MelonUser,
+                true,
+                true
+              )
             ).id
           }
           const localTodo = (
@@ -180,7 +193,7 @@ class Sync {
           )[0]
           if (localTodo) {
             updated.id = localTodo.id
-            newS.push(updated)
+            todos.push(updated)
             continue
           }
           updated.id = updated.server_id
@@ -190,10 +203,10 @@ class Sync {
               date: updated.date,
             })
           ).getTime()
-          newS.push(updated)
+          todos.push(updated)
         }
-        serverObjects.todos.updated = newS
-        serverObjects.tags.updated = newT
+        serverObjects.todos.updated = todos
+        serverObjects.tags.updated = tags
         this.serverObjects = serverObjects
         this.gotWmDb = true
       }
@@ -321,7 +334,7 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
-          this.wmDbSybcFunc(),
+          this.wmDbSyncFunc(),
           //this.tagsSyncManager.sync(),
           this.delegationSyncManager.sync(),
         ])
@@ -334,9 +347,9 @@ class Sync {
         return this.heroSyncManager.sync()
       // Realm syncs
       case SyncRequestEvent.Todo:
-        return this.wmDbSybcFunc()
+        return this.wmDbSyncFunc()
       case SyncRequestEvent.Tag:
-        return this.wmDbSybcFunc()
+        return this.wmDbSyncFunc()
       case SyncRequestEvent.Delegation:
         return this.delegationSyncManager.sync()
     }
