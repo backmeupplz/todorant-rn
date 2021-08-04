@@ -1,25 +1,26 @@
-import React, { Component } from 'react'
 import { Button, Text } from 'native-base'
+import { ColorMode, sharedSettingsStore } from '@stores/SettingsStore'
+import React, { Component } from 'react'
 import {
-  deleteAllTodos,
-  addTodosRu,
-  addTodosEn,
-  addTodosUk,
-  addTodosIt,
-  addTodosEs,
-  addTodosPtBR,
   add5000Todos,
+  addTodosEn,
+  addTodosEs,
+  addTodosIt,
+  addTodosPtBR,
+  addTodosRu,
+  addTodosUk,
+  deleteAllTodos,
 } from '@utils/debug'
-import { observer } from 'mobx-react'
-import { sharedColors } from '@utils/sharedColors'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
-import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import {
   playDayComplete,
   playFrogComplete,
   playTaskComplete,
 } from '@utils/sound'
+
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 @observer
 class DebugButton extends Component<{
@@ -47,7 +48,7 @@ class DebugButton extends Component<{
 @observer
 export class DebugButtons extends Component {
   render() {
-    return true ? (
+    return false ? (
       <>
         <DebugButton
           onPress={() => {
