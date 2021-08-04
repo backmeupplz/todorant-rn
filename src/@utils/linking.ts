@@ -88,7 +88,6 @@ function handleUrl(url: string) {
           { delegateInviteToken } as MelonUser,
           true
         )
-        console.log(localDelegator)
         if (!localDelegator) {
           await updateOrCreateDelegation(
             { delegateInviteToken } as MelonUser,
