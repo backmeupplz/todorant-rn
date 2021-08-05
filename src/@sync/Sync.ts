@@ -36,6 +36,7 @@ import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { encrypt, _e } from '@utils/encryption'
 import { migrateRealmToWMDB } from '@utils/realm'
+import { alertError } from '@utils/alert'
 
 type SyncRecord = RawRecord & { updated_at: number }
 
@@ -86,7 +87,6 @@ class Sync {
     }
     if (this.gotWmDb || this.$promise) return
     const lastPulledAt = await wmdbGetLastPullAt(database)
-    await migrateRealmToWMDB()
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
     this.$promise = when(() => this.gotWmDb)
     await this.$promise
@@ -383,3 +383,10 @@ class Sync {
 }
 
 export const sharedSync = new Sync()
+;(async () => {
+  try {
+    await migrateRealmToWMDB()
+  } catch (err) {
+    alertError('A error occur while transfering data between databases')
+  }
+})()
