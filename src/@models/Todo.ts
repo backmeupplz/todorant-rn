@@ -1,3 +1,4 @@
+import { MobxRealmModel } from '@utils/mobx-realm/model'
 import {
   getDateString,
   getDateStringFromTodo,
@@ -7,7 +8,7 @@ import { DelegationUser } from './DelegationUser'
 import { MelonTodo, MelonUser } from './MelonTodo'
 import { User } from './User'
 
-export class Todo {
+export class Todo extends MobxRealmModel {
   public static schema = {
     name: 'Todo',
     properties: {
