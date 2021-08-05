@@ -11,4 +11,5 @@ export interface Settings {
   updatedAt?: Date
   googleCalendarCredentials?: GoogleCalendarCredentials
   language?: string
+  removeCompletedFromCalendar?: boolean
 }

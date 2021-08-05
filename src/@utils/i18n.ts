@@ -12,7 +12,7 @@ const translationGetters = {
   uk: () => require('@assets/translations/uk.json'),
   it: () => require('@assets/translations/it.json'),
   es: () => require('@assets/translations/es.json'),
-  'pt-BR': () => require('@assets/translations/pt-BR.json'),
+  'pt-br': () => require('@assets/translations/pt-BR.json'),
 } as { [index: string]: any }
 
 export const translate = (key: any, config?: any) => {
@@ -44,14 +44,15 @@ export function setI18nConfig() {
     uk: translationGetters['uk'](),
     it: translationGetters['it'](),
     es: translationGetters['es'](),
-    'pt-BR': translationGetters['pt-BR'](),
+    'pt-br': translationGetters['pt-br'](),
   }
   i18n.fallbacks = true
   i18n.defaultLocale = 'en'
 }
 
 export async function setI18nConfigAsync() {
-  const languageTag = await getLanguageTag()
+  let languageTag = await getLanguageTag()
+  if (languageTag === 'pt-BR') languageTag = 'pt-br'
   i18n.locale = languageTag
   sharedSettingsStore.language = languageTag
   configCalendar(languageTag)

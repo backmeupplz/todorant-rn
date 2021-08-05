@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View } from 'native-base'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { plusButtonAction } from '@utils/plusButtonAction'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import LinearGradient from 'react-native-linear-gradient'
 import CustomIcon from '@components/CustomIcon'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
@@ -30,7 +30,9 @@ export class PlusButton extends Component {
         }}
       >
         <TouchableOpacity
-          onPress={plusButtonAction}
+          onPress={() => {
+            checkSubscriptionAndNavigate('AddTodo')
+          }}
           disabled={
             !sharedOnboardingStore.tutorialIsShown &&
             sharedOnboardingStore.step !== TutorialStep.AddTask
