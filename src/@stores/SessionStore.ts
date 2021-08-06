@@ -1,7 +1,7 @@
 import { sharedSync } from '@sync/Sync'
 import { areUsersPartiallyEqual, SubscriptionStatus, User } from '@models/User'
 import { daysBetween } from '@utils/daysBetween'
-import { hydrate, MMKV } from '@stores/hydration/hydrate'
+import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
@@ -107,7 +107,6 @@ class SessionStore {
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       await database.write(async () => await database.unsafeResetDatabase())
-      await MMKV.clearStore()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()

@@ -23,8 +23,8 @@ target 'Todorant' do
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
-  pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
+  # RN 64.*pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
+  # RN 64.*pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
 end
 
 target 'TodorantToday' do

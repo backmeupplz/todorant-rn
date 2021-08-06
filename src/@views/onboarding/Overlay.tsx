@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Animated, { Easing, EasingNode } from 'react-native-reanimated'
+import Animated, { Easing } from 'react-native-reanimated'
 import { MessageBox } from '@views/onboarding/MessageBox'
 import {
   ERNHoleViewTimingFunction,
@@ -19,6 +19,7 @@ import {
 } from 'react-native'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
 import { navigate } from '@utils/navigation'
+// RN 64.* import {  EasingNode } from 'react-native-reanimated'
 
 @observer
 export class Overlay extends Component {
@@ -95,7 +96,8 @@ export class Overlay extends Component {
                 Animated.timing(this.infoBoxY, {
                   toValue: 0,
                   duration: 500,
-                  easing: EasingNode.ease,
+                  // RN 64.* easing: EasingNode.linear,
+                  easing: Easing.ease,
                 }).start()
               } else if (
                 sharedOnboardingStore.currentHole &&
@@ -118,7 +120,8 @@ export class Overlay extends Component {
                       sharedOnboardingStore.currentHole.y -
                       (totalSize + avatarPadding),
                     duration: 500,
-                    easing: EasingNode.ease,
+                    // RN 64.* easing: EasingNode.linear,
+                    easing: Easing.ease,
                   }).start()
                 } else {
                   // Move bubble under the hole
@@ -130,7 +133,8 @@ export class Overlay extends Component {
                       messageBoxPosition.y +
                       sharedOnboardingStore.currentHole.height,
                     duration: 500,
-                    easing: EasingNode.ease,
+                    // RN 64.* easing: EasingNode.linear,
+                    easing: Easing.ease,
                   }).start()
                 }
               }
@@ -145,7 +149,8 @@ export class Overlay extends Component {
     Animated.timing(this.opacityAnimationValue, {
       toValue: show ? 1 : 0,
       duration: 500,
-      easing: EasingNode.linear,
+      // RN 64.* easing: EasingNode.linear,
+      easing: Easing.linear,
     }).start(() => {
       this.shouldRender = !sharedOnboardingStore.tutorialIsShown
     })

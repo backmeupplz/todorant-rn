@@ -1,12 +1,13 @@
 import { Settings } from '@models/Settings'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { hydrate, MMKV } from '@stores/hydration/hydrate'
+import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { getLanguageTag } from '@utils/i18n'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
+import { AsyncStorage } from 'react-native'
 
 export enum ColorMode {
   auto = 'auto',
@@ -158,7 +159,7 @@ class SettingsStore {
     // Consequent pull
     else if (this.updatedAt < settings.updatedAt) {
       if (settings.language !== this.language && settings.language) {
-        await MMKV.setItem('languageSelect', settings.language)
+        await AsyncStorage.setItem('languageSelect', settings.language)
       }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek

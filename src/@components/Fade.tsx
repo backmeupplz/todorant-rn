@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ViewStyle } from 'react-native'
-import Animated, { Easing, EasingNode } from 'react-native-reanimated'
+import Animated, { Easing } from 'react-native-reanimated'
+// RN 64.* import { EasingNode } from 'react-native-reanimated'
 
 const { Value, timing } = Animated
 
@@ -28,7 +29,8 @@ function Fade(props: FadeProps) {
     if (!isReady) return
     const animationConfig = {
       duration: duration || 200,
-      easing: EasingNode.linear,
+      // RN 64.* easing: EasingNode.linear,
+      easing: Easing.linear,
       useNativeDriver: true,
     }
     const opacityConfig = {

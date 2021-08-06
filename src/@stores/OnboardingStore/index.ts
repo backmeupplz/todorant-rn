@@ -15,7 +15,8 @@ import {
   Keyboard,
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
-import Animated, { Easing, EasingNode } from 'react-native-reanimated'
+import Animated, { Easing } from 'react-native-reanimated'
+// RN 64.* import { EasingNode } from 'react-native-reanimated'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { navigate } from '@utils/navigation'
@@ -115,7 +116,8 @@ class OnboardingStore {
     Animated.timing(this.animatedOpacity, {
       toValue: 0,
       duration: 250,
-      easing: EasingNode.linear,
+      // RN 64.* easing: EasingNode.linear,
+      easing: Easing.linear,
     }).start(() => {
       this.step = step
       if (stepObject) {
@@ -124,7 +126,8 @@ class OnboardingStore {
       Animated.timing(this.animatedOpacity, {
         toValue: 1,
         duration: 250,
-        easing: EasingNode.linear,
+        // RN 64.* easing: EasingNode.linear,
+        easing: Easing.linear,
       }).start()
     })
   }
