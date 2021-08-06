@@ -383,10 +383,3 @@ class Sync {
 }
 
 export const sharedSync = new Sync()
-;(async () => {
-  try {
-    await migrateRealmToWMDB()
-  } catch (err) {
-    alertError('A error occur while transfering data between databases')
-  }
-})()

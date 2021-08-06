@@ -49,23 +49,8 @@ export async function migrateRealmToWMDB() {
 
   const createdTodos = nonServerTodos.map((todo) => {
     return todosCollection.prepareCreate((todoToCreate) => {
-      Object.assign(todoToCreate, todo)
+      todoToCreate.text = todo.text
     })
   })
-  const createdTags = nonServerTags.map((tag) => {
-    return todosCollection.prepareCreate((tagToCreate) => {
-      Object.assign(tagToCreate, tag)
-    })
-  })
-  const createdUser = [...nonServerDelegators, ...nonServerDelegates].map(
-    (user) => {
-      return usersCollection.prepareCreate((userToCreate) => {
-        Object.assign(userToCreate, user)
-      })
-    }
-  )
-  await database.write(
-    async () =>
-      await database.batch(...createdUser, ...createdTags, ...createdTodos)
-  )
+  await database.write(async () => await database.batch(...createdTodos))
 }

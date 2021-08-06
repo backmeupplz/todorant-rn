@@ -54,6 +54,8 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
 import { hydration } from '@stores/hydration/hydratedStores'
+import { migrateRealmToWMDB } from '@utils/realm'
+import { alertError } from '@utils/alert'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -101,6 +103,14 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
+
+    try {
+      await migrateRealmToWMDB()
+    } catch (err) {
+      alertError('A error occur while transfering data between databases')
+      alertError(err)
+    }
+
     SplashScreen.hide()
     checkOnboardingStep()
   }
