@@ -345,7 +345,7 @@ PODS:
     - React-perflogger (= 0.64.2)
   - ReactNativeDarkMode (0.2.2):
     - React
-  - RealmJS (10.6.0):
+  - RealmJS (10.6.1):
     - GCDWebServer
     - React
   - RNAppleAuthentication (2.1.2):
@@ -420,7 +420,7 @@ PODS:
   - SwiftKeychainWrapper (4.0.1)
   - toolbar-android (0.1.0-rc.2):
     - React
-  - WatermelonDB (0.23.0-12):
+  - WatermelonDB (0.23.0):
     - React
     - React-jsi
   - Yoga (1.14.0)
@@ -709,7 +709,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
-  RealmJS: c903034b0d767fcef11dc8207e91b6f07e60d7b8
+  RealmJS: 550ecbe8a0d55bd0e2abb79a63313d4da08bcf25
   RNAppleAuthentication: e95bcfbd044013667f35c5ca20ae17d39500c009
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
@@ -732,9 +732,9 @@ SPEC CHECKSUMS:
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
-  WatermelonDB: 3cbedf3ea1f8b544df1916f348e6fd128470c276
+  WatermelonDB: 577c61fceff16e9f9103b59d14aee4850c0307b6
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: 230f49256feadb16b49e0f7e425ab180db873201
+PODFILE CHECKSUM: a5b26040b7665408cb497b7eb12dd21b5de9e3f3
 
 COCOAPODS: 1.10.1
