@@ -23,8 +23,11 @@ target 'Todorant' do
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  # RN 64.*pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
-  # RN 64.*pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
+  # NOTE: Do not remove, needed to keep WatermelonDB compiling:
+  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
+
+  # NOTE: This is required as of v0.23
+  pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
 end
 
 target 'TodorantToday' do
