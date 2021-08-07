@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.reanimated.ReanimatedPackage; // REMOVE IN RN 64.*
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -13,7 +14,6 @@ import java.util.List;
 import com.microsoft.codepush.react.CodePush;
 // RN 64.* import com.facebook.react.bridge.JSIModulePackage; 
 // RN 64.* import com.todorant.ExampleJSIPackage;
-// RN 64.* import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

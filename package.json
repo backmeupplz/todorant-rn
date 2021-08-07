@@ -18,11 +18,10 @@
     "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.13.0",
     "@invertase/react-native-apple-authentication": "^2.0.1",
     "@nozbe/watermelondb": "^0.23.0",
     "@nozbe/with-observables": "^1.3.0",
-    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-async-storage/async-storage": "^1.13.0",
     "@react-native-community/clipboard": "^1.2.1",
     "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/google-signin": "^3.0.4",
