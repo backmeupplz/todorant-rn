@@ -34,6 +34,8 @@ class SessionStore {
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
 
+  @persist @observable migrationCompleted = false
+
   @observable loggingOut = false
   @observable isInitialSync = false
 
