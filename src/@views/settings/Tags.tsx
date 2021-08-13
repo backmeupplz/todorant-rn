@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Container, ActionSheet, View } from 'native-base'
+import { Text, Container, View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { FlatList } from 'react-native-gesture-handler'
 import { sharedTagStore } from '@stores/TagStore'
@@ -49,6 +49,26 @@ class TagsVM {
   }
   makeAnEpic(tag: Tag) {
     navigate('AddEpic', { tag: { ...cloneTag(tag) } })
+  }
+  unEpic(tag: Tag) {
+    alertConfirm(
+      `${translate('unEpicConfirm')} "#${
+        tag.tag.length > 50 ? `${tag.tag.substr(0, 50)}...` : tag.tag
+      }"?`,
+      translate('unEpic'),
+      () => {
+        realm.write(() => {
+          tag.epicCompleted = false
+          tag.epicGoal = 0
+          tag.epicOrder = 0
+          tag.epicPoints = 0
+          tag.epic = false
+          tag.updatedAt = new Date()
+        })
+        sharedTagStore.refreshTags()
+        sharedSync.sync(SyncRequestEvent.Tag)
+      }
+    )
   }
   editText(tag: Tag) {
     navigate('ChangeText', { tag: { ...cloneTag(tag) } })
@@ -133,14 +153,15 @@ export class Tags extends Component {
                       #{item.tag}
                     </Text>
                     <View style={{ flexDirection: 'row' }}>
-                      {!item.epic && (
-                        <IconButton
-                          onPress={() => {
-                            this.vm.makeAnEpic(item)
-                          }}
-                          name="target_outline_28"
-                        />
-                      )}
+                      <IconButton
+                        onPress={() => {
+                          item.epic
+                            ? this.vm.unEpic(item)
+                            : this.vm.makeAnEpic(item)
+                        }}
+                        name="target_outline_28"
+                        color={item.epic ? 'gray' : undefined}
+                      />
                       <IconButton
                         onPress={() => {
                           this.vm.editText(item)
