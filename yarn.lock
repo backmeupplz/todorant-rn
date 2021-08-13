@@ -1821,10 +1821,10 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
-"@upacyxou/react-native-draggable-sectionlist@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.1.5.tgz#ed9fc5b558b74e7abeabe0fcff880d5ed8ad3758"
-  integrity sha512-bDJDSzwfpe+K0F+3T2WFe+wb3xfgwFwaWVkvpcWMVoi0Ek03FKctDhjK4KShBxacMqhyKbIguJQhz4gEwTJ6uA==
+"@upacyxou/react-native-draggable-sectionlist@0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@upacyxou/react-native-draggable-sectionlist/-/react-native-draggable-sectionlist-0.1.7.tgz#c5c7081a1fb604325433170facde2d0a34958135"
+  integrity sha512-5hlkpSvIuap/Mf1gRVGEc3NJ+cclpMYZMGbhud/tipMR1a3uVG6dZyk28vpPCwzhdXxvZGuTDH4b59vQoIfscA==
   dependencies:
     "@types/lodash.isequal" "^4.5.5"
     "@types/object-hash" "^1.3.4"
@@ -7121,7 +7121,7 @@ react-native-store-rating@backmeupplz/react-native-store-rating#803b83b701a4f926
   resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/803b83b701a4f926fcacfe5e775d57cf69c72088"
   dependencies:
     lodash.times "^4.3.2"
-    react-native-ratings "^6.5.0"
+    react-native-ratings "^6.3.1"
 
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
