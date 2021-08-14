@@ -476,5 +476,7 @@
   },
   "subscriptionYear": "year (≈40% discount)",
   "editHashtag": "Edit hashtag",
-  "addDevices": "Add devices"
+  "addDevices": "Add devices",
+  "unEpicConfirm": "Are you sure you want to reset the epic",
+  "unEpic": "Reset epic"
 }
