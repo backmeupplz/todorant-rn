@@ -13,6 +13,7 @@ import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
+import { decrypt } from '@utils/encryption'
 
 const debug = false
 
@@ -25,7 +26,7 @@ export class TodoCardTextBlock extends Component<{
   vm: TodoCardVM
 }> {
   get linkifiedText() {
-    return l(this.props.todo.text)
+    return l(decrypt(this.props.todo.text))
   }
 
   render() {
