@@ -534,6 +534,7 @@ async function onDragEnd({
       }
     }
     await database.write(async () => await database.batch(...toUpdate))
+    sharedSync.sync(SyncRequestEvent.Todo)
     promise()
   }
 }
