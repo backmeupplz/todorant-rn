@@ -25,6 +25,8 @@ import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -105,6 +107,7 @@ export class TodoCardVM {
         todo._exactDate = new Date(getTitle(todo))
       })
     })
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
   async delete(todo: MelonTodo) {
@@ -121,6 +124,7 @@ export class TodoCardVM {
     } else {
       await todo.delete()
     }
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
   async accept(todo: MelonTodo) {
@@ -135,6 +139,7 @@ export class TodoCardVM {
 
   async uncomplete(todo: MelonTodo) {
     await todo.uncomplete()
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
   async complete(todo: MelonTodo) {
@@ -156,6 +161,7 @@ export class TodoCardVM {
     sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
     checkDayCompletionRoutine()
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
   isOld(type: CardType, todo: MelonTodo) {
