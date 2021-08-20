@@ -118,6 +118,14 @@ class Sync {
           createdTodos.push(sqlRaw)
         }
         for (const sqlRaw of clonedChanges.todos.updated) {
+          if (sqlRaw.user_id) {
+            sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+          }
+          if (sqlRaw.delegator_id) {
+            sqlRaw.delegator_id = (
+              await usersCollection.find(sqlRaw.delegator_id)
+            )._id
+          }
           if (sqlRaw.is_encrypted) {
             sqlRaw.text = encrypt(sqlRaw.text)
           }
