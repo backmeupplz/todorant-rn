@@ -34,9 +34,7 @@ import { Q } from '@nozbe/watermelondb'
 import { TagColumn, TodoColumn } from '@utils/melondb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
-import { encrypt, _e } from '@utils/encryption'
-import { migrateRealmToWMDB } from '@utils/realm'
-import { alertError } from '@utils/alert'
+import { decrypt, encrypt, _e } from '@utils/encryption'
 
 type SyncRecord = RawRecord & { updated_at: number }
 
@@ -113,7 +111,7 @@ class Sync {
             )._id
           }
           if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(sqlRaw.text)
+            sqlRaw.text = encrypt(decrypt(sqlRaw.text) || sqlRaw.text)
           }
           createdTodos.push(sqlRaw)
         }
@@ -127,7 +125,7 @@ class Sync {
             )._id
           }
           if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(sqlRaw.text)
+            sqlRaw.text = encrypt(decrypt(sqlRaw.text) || sqlRaw.text)
           }
           updatedTodos.push(sqlRaw)
         }

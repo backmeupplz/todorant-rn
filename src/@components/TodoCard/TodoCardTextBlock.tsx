@@ -14,6 +14,7 @@ import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
 import { decrypt } from '@utils/encryption'
+import { computed, makeObservable } from 'mobx'
 
 const debug = false
 
@@ -26,7 +27,8 @@ export class TodoCardTextBlock extends Component<{
   vm: TodoCardVM
 }> {
   get linkifiedText() {
-    if (this.props.todo.encrypted) return l(decrypt(this.props.todo.text))
+    if (this.props.todo.encrypted)
+      return l(decrypt(this.props.todo.text) || this.props.todo.text)
     return l(this.props.todo.text)
   }
 
