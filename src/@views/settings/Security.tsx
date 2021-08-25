@@ -34,11 +34,13 @@ export class Security extends Component {
   @observable encryptedCount = 0
 
   unencryptedTodos = sharedTodoStore.undeletedTodos.extend(
-    Q.where(TodoColumn.encrypted, false)
+    Q.where(TodoColumn.encrypted, false),
+    Q.where(TodoColumn.delegator, null)
   )
 
   encryptedTodos = sharedTodoStore.undeletedTodos.extend(
-    Q.where(TodoColumn.encrypted, true)
+    Q.where(TodoColumn.encrypted, true),
+    Q.where(TodoColumn.delegator, null)
   )
 
   UNSAFE_componentWillMount() {
