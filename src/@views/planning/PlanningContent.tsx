@@ -490,17 +490,15 @@ async function onDragEnd({
           lastSection = item
           continue
         }
+        let markAsFrog = false
+        let failed = false
         if (i === to) {
           if (isTodoOld(item)) {
             if (item.frogFails < 3) {
-              toUpdate.push(
-                item.prepareUpdate((todo) => {
-                  if (todo.frogFails >= 1) {
-                    todo.frog = true
-                  }
-                  todo.frogFails++
-                })
-              )
+              if (item.frogFails >= 1) {
+                markAsFrog = true
+              }
+              failed = true
             } else {
               Alert.alert(translate('error'), translate('breakdownRequest'), [
                 {
@@ -524,6 +522,8 @@ async function onDragEnd({
         }
         toUpdate.push(
           item.prepareUpdate((todo) => {
+            if (markAsFrog) todo.frog = true
+            if (failed) todo.frogFails++
             todo.date = getDateDateString(lastSection)
             todo.monthAndYear = getDateMonthAndYearString(lastSection)
             todo._exactDate = new Date(lastSection)
