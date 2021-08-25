@@ -64,7 +64,9 @@ const EnhancedDraggableSectionList = enhance(
               data: [realmTodo],
             }
           }
-        } catch (e) {}
+        } catch (e) {
+          // Do nothing
+        }
       }
 
       const todosMap = Object.keys(todoSectionMap).map((key) => {
@@ -72,9 +74,9 @@ const EnhancedDraggableSectionList = enhance(
       })
       setMap(todosMap)
     }
-
     if (
-      !(completed === completedCopy && byMeCopy === byMe) ||
+      completed !== completedCopy ||
+      byMeCopy !== byMe ||
       length !== todo.length
     ) {
       build()
