@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from 'react'
+import React, { Component, Fragment, useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Container } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -42,9 +42,6 @@ const EnhancedDraggableSectionList = enhance(
         data: MelonTodo[]
       }[]
     >([])
-    const [completedCopy, setCompleted] = useState<boolean>()
-    const [byMeCopy, setByMe] = useState<boolean>()
-    const [length, setLength] = useState(0)
 
     async function build() {
       const todoSectionMap = {} as {
@@ -74,16 +71,10 @@ const EnhancedDraggableSectionList = enhance(
       })
       setMap(todosMap)
     }
-    if (
-      completed !== completedCopy ||
-      byMeCopy !== byMe ||
-      length !== todo.length
-    ) {
+
+    useMemo(() => {
       build()
-      setCompleted(completed)
-      setByMe(byMe)
-      setLength(todo.length)
-    }
+    }, [completed, todo.length, byMe])
 
     return (
       <SectionList
@@ -142,11 +133,7 @@ export class DelegateContent extends Component {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ByMe) {
       return <>{this.renderDelegationSectionList(true)}</>
     }
-    if (
-      sharedDelegateStateStore.todoSection === DelegateSectionType.Completed
-    ) {
-      return <>{this.renderDelegationSectionList(true, true)}</>
-    }
+    return <>{this.renderDelegationSectionList(true, true)}</>
   }
 
   render() {

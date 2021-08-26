@@ -97,7 +97,7 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
     <View style={{ marginTop: 16 }}>
       <DraggableFlatList
         data={epics}
-        renderItem={({ item, index, drag, isActive }) => {
+        renderItem={({ item, drag }) => {
           return <EpicProgress epic={item} key={item._tempSyncId} drag={drag} />
         }}
         keyExtractor={(epic) => epic._tempSyncId}

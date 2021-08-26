@@ -99,6 +99,7 @@ class SessionStore {
     } finally {
       this.isInitialSync = false
     }
+    sharedTodoStore.initDelegation()
     logEvent('login_success')
   }
 

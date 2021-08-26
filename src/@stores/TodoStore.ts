@@ -232,6 +232,10 @@ class TodoStore {
   logout = () => {
     this.updatedAt = undefined
     this.refreshTodos()
+    this.currentSubscription?.unsubscribe()
+    this.oldTodosSubscribtion?.unsubscribe()
+    this.uncompletedTodayAmount = 0
+    this.completedTodayAmount = 0
   }
 
   refreshTodos = () => {
