@@ -59,10 +59,6 @@ import {
 } from '@utils/ObservableNow'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import { pick } from 'lodash'
-import { DelegationUser } from '@models/DelegationUser'
-import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
 
 export const addTodoEventEmitter = new EventEmitter()
@@ -164,6 +160,7 @@ class AddTodoContent extends Component<{
             deleted: false,
             date: vm.date,
             time: vm.time,
+            repetitive: vm.repetitive,
             user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
             delegator: !!vm.delegate
               ? cloneDelegator(sharedSessionStore.user)
@@ -231,6 +228,7 @@ class AddTodoContent extends Component<{
             vm.monthAndYear || getDateMonthAndYearString(new Date())
           vm.editedTodo.date = vm.date
           vm.editedTodo.time = vm.time
+          vm.editedTodo.repetitive = vm.repetitive
           vm.editedTodo.updatedAt = new Date()
           vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
           if (failed && vm.editedTodo.date) {
@@ -398,7 +396,8 @@ class AddTodoContent extends Component<{
           vm.editedTodo?.frog != vm.frog ||
           vm.editedTodo?.monthAndYear != vm.monthAndYear ||
           vm.editedTodo?.date != vm.date ||
-          vm.editedTodo?.time != vm.time
+          vm.editedTodo?.time != vm.time ||
+          vm.editedTodo?.repetitive != vm.repetitive
         ) {
           return true
         }
@@ -409,10 +408,11 @@ class AddTodoContent extends Component<{
         vm.frog ||
         vm.monthAndYear ||
         vm.date ||
-        vm.time
+        vm.time ||
+        vm.repetitive
       ) {
         if (
-          !(vm.text || vm.completed || vm.frog || vm.time) &&
+          !(vm.text || vm.completed || vm.frog || vm.time || vm.repetitive) &&
           vm.monthAndYear &&
           vm.date &&
           isToday(vm.monthAndYear, vm.date)

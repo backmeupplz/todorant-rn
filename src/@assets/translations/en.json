@@ -478,5 +478,9 @@
   "editHashtag": "Edit hashtag",
   "addDevices": "Add devices",
   "unEpicConfirm": "Are you sure you want to reset the epic",
-  "unEpic": "Reset epic"
+  "unEpic": "Reset epic",
+  "breakdownMessage": {
+    "title": "Repetitive task",
+    "text": "Want to breakdown a task and add it again?"
+  }
 }
