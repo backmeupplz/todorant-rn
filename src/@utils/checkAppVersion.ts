@@ -32,7 +32,6 @@ export async function checkAppVersion() {
         { cancelable: false }
       )
     }
-    console.log(version)
   } catch (err) {
     console.warn(err)
   }
