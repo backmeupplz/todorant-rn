@@ -20,6 +20,7 @@ import {
   playFrogComplete,
   playTaskComplete,
 } from '@utils/sound'
+import { checkAppVersion } from '@utils/checkAppVersion'
 
 @observer
 class DebugButton extends Component<{
@@ -47,7 +48,7 @@ class DebugButton extends Component<{
 @observer
 export class DebugButtons extends Component {
   render() {
-    return false ? (
+    return __DEV__ ? (
       <>
         <DebugButton
           onPress={() => {
@@ -156,6 +157,13 @@ export class DebugButtons extends Component {
           }}
           text="play task complete sound"
           testId="play_task_complete"
+        />
+        <DebugButton
+          onPress={() => {
+            checkAppVersion()
+          }}
+          text="check app version"
+          testId="check_version"
         />
       </>
     ) : null

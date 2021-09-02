@@ -49,7 +49,7 @@ import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { configure, when } from 'mobx'
-import { checkupVersion } from '@utils/checkupVersion'
+import { checkAppVersion } from '@utils/checkAppVersion'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
@@ -94,7 +94,9 @@ class App extends Component {
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
-    checkupVersion()
+    if (!__DEV__) {
+      checkAppVersion()
+    }
     AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') {
         checkAndroidLaunchArgs()
