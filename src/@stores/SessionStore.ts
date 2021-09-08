@@ -116,6 +116,7 @@ class SessionStore {
       sharedDelegationStore.logout()
       sharedHeroStore.logout()
       sharedDelegationStore.logout()
+      sharedTodoStore.oldTodosCount = 0
       removeToken()
       removePassword()
       logEvent('logout_success')
