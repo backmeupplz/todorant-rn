@@ -32,8 +32,12 @@ export async function migrateRealmToWMDB() {
   const lastTagSync = sharedTagStore.updatedAt
   const lastDelegationSync = sharedDelegationStore.updatedAt
 
-  const nonServerTodos = realm.objects(Todo)
-  const nonServerTags = realm.objects(Tag)
+  const nonServerTodos = lastTodoSync
+    ? realm.objects(Todo).filtered(`_id = null`)
+    : realm.objects(Todo)
+  const nonServerTags = lastTagSync
+    ? realm.objects(Tag).filtered(`_id = null`)
+    : realm.objects(Tag)
   // Get local delegators
   const delegators = realm
     .objects(DelegationUser)
@@ -43,9 +47,13 @@ export async function migrateRealmToWMDB() {
     .objects(DelegationUser)
     .filtered('isDelegator != true')
   // Filter delegators that changed locally
-  const nonServerDelegators = delegators
+  const nonServerDelegators = lastDelegationSync
+    ? delegators.filtered(`_id = null`)
+    : delegators
   // Filter delegates that changed locally
-  const nonServerDelegates = delegates
+  const nonServerDelegates = lastDelegationSync
+    ? delegates.filtered(`_id = null`)
+    : delegates
 
   const createdTodos = await Promise.all(
     nonServerTodos.map(async (todo) => {
