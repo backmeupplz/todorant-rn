@@ -27,8 +27,13 @@ export class TodoCardTextBlock extends Component<{
   vm: TodoCardVM
 }> {
   get linkifiedText() {
-    if (this.props.todo.encrypted)
-      return l(decrypt(this.props.todo.text) || this.props.todo.text)
+    if (this.props.todo.encrypted) {
+      try {
+        return l(decrypt(this.props.todo.text) || this.props.todo.text)
+      } catch (err) {
+        // Do nothing
+      }
+    }
     return l(this.props.todo.text)
   }
 
