@@ -93,6 +93,9 @@ export async function migrateRealmToWMDB() {
       })
     })
   )
+
+  sharedDelegationStore.updatedAt = undefined
+
   await database.write(
     async () =>
       await database.batch(
