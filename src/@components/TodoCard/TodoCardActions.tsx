@@ -47,6 +47,13 @@ export class TodoCardActions extends Component<{
               style={{ color: 'grey', fontSize: 15 }}
             />
           )}
+          {this.props.todo.repetitive && (
+            <Icon
+              type="MaterialIcons"
+              name="repeat"
+              style={{ color: 'grey', fontSize: 15 }}
+            />
+          )}
         </View>
         <View
           style={{
