@@ -5,6 +5,7 @@ import { sharedSync } from '@sync/Sync'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { migrateRealmToWMDB } from '@utils/realm'
 import { alertError } from '@utils/alert'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 const authorizationTimeout = 20
 
@@ -142,6 +143,7 @@ export class SocketConnection {
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
     if (!sharedSessionStore.migrationCompleted) {
+      sharedDelegationStore.updatedAt = undefined
       try {
         await migrateRealmToWMDB()
         sharedSessionStore.migrationCompleted = true
