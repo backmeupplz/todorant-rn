@@ -58,6 +58,7 @@ import { migrateRealmToWMDB } from '@utils/realm'
 import { alertError } from '@utils/alert'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
+import { sharedDelegationStore } from '@stores/DelegationStore'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -105,6 +106,12 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
+    console.log(
+      'test test test test test test test test test test test test test test test'
+    )
+    if (!sharedSessionStore.migrationCompleted) {
+      sharedDelegationStore.logout()
+    }
     SplashScreen.hide()
     checkOnboardingStep()
   }
