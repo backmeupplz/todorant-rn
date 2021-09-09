@@ -105,19 +105,6 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
-    if (
-      sharedSync.socketConnection.connected &&
-      sharedSync.socketConnection.authorized &&
-      !sharedSessionStore.migrationCompleted
-    ) {
-      try {
-        await migrateRealmToWMDB()
-        sharedSessionStore.migrationCompleted = true
-      } catch (err) {
-        alertError('A error occur while transfering data between databases')
-        alertError(err)
-      }
-    }
     SplashScreen.hide()
     checkOnboardingStep()
   }

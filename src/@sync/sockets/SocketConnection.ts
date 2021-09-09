@@ -2,6 +2,9 @@ import { observable, makeObservable } from 'mobx'
 import SocketIO from 'socket.io-client'
 import NetInfo from '@react-native-community/netinfo'
 import { sharedSync } from '@sync/Sync'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { migrateRealmToWMDB } from '@utils/realm'
+import { alertError } from '@utils/alert'
 
 const authorizationTimeout = 20
 
@@ -134,9 +137,18 @@ export class SocketConnection {
     console.warn('ws error', err)
   }
 
-  private onAuthorized = () => {
+  private onAuthorized = async () => {
     this.authorized = true
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
+    if (!sharedSessionStore.migrationCompleted) {
+      try {
+        await migrateRealmToWMDB()
+        sharedSessionStore.migrationCompleted = true
+      } catch (err) {
+        alertError('A error occur while transfering data between databases')
+        alertError(err)
+      }
+    }
   }
 }

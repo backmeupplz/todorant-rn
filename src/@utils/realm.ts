@@ -57,7 +57,7 @@ export async function migrateRealmToWMDB() {
 
   const createdTodos = await Promise.all(
     nonServerTodos.map(async (todo) => {
-      const clonedTodo = await cloneTodo((todo as unknown) as MelonTodo)
+      const clonedTodo = await cloneTodo(todo as unknown as MelonTodo)
       delete clonedTodo.delegator
       delete clonedTodo.user
       delete (clonedTodo as any)._tempSyncId
@@ -68,7 +68,7 @@ export async function migrateRealmToWMDB() {
   )
   const createdTags = await Promise.all(
     nonServerTags.map(async (tag) => {
-      const clonedTag = await cloneTag((tag as unknown) as MelonTag)
+      const clonedTag = await cloneTag(tag as unknown as MelonTag)
       delete (clonedTag as any)._tempSyncId
       return tagsCollection.prepareCreate((tagToCreate) => {
         Object.assign(tagToCreate, clonedTag)
@@ -77,7 +77,7 @@ export async function migrateRealmToWMDB() {
   )
   const createdDelegates = await Promise.all(
     nonServerDelegates.map(async (user) => {
-      const clonedUser = cloneDelegation((user as unknown) as MelonUser)
+      const clonedUser = cloneDelegation(user as unknown as MelonUser)
       clonedUser.isDelegator = false
       return usersCollection.prepareCreate((userToCreate) => {
         Object.assign(userToCreate, clonedUser)
@@ -86,7 +86,7 @@ export async function migrateRealmToWMDB() {
   )
   const createdDelegators = await Promise.all(
     nonServerDelegators.map(async (user) => {
-      const clonedUser = cloneDelegation((user as unknown) as MelonUser)
+      const clonedUser = cloneDelegation(user as unknown as MelonUser)
       clonedUser.isDelegator = true
       return usersCollection.prepareCreate((userToCreate) => {
         Object.assign(userToCreate, clonedUser)
