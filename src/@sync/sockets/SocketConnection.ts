@@ -144,6 +144,7 @@ export class SocketConnection {
     this.pendingAuthorization = undefined
     if (!sharedSessionStore.migrationCompleted) {
       sharedDelegationStore.updatedAt = undefined
+      sharedDelegationStore.lastSyncDate = undefined
       try {
         await migrateRealmToWMDB()
         sharedSessionStore.migrationCompleted = true
