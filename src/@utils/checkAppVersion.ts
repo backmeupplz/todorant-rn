@@ -1,12 +1,17 @@
 import { translate } from '@utils/i18n'
 import { Alert, Linking, NativeModules, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-const axios = require('axios')
-const semver = require('semver')
+import axios from 'axios'
+import semver, { SemVer } from 'semver'
 
 const platform = Platform.OS
 const bundleId = NativeModules.RNDeviceInfo.bundleId
 const currentVersion = NativeModules.RNDeviceInfo.appVersion
+
+interface RequestError {
+  message: string
+  response: { status: number }
+}
 
 export async function checkAppVersion() {
   try {
@@ -72,10 +77,11 @@ async function lookupVersion(
       try {
         data = await axios.get(url)
       } catch (err) {
+        const typedErr = err as RequestError
         if (
-          err.response &&
-          err.response.status &&
-          err.response.status === 404
+          typedErr.response &&
+          typedErr.response.status &&
+          typedErr.response.status === 404
         ) {
           throw new Error(
             `App with bundle ID "${bundleId}" not found in Google Play.`
@@ -128,7 +134,8 @@ async function versionCompare(currentVersion: string, latestVersion: string) {
       needsUpdate,
       updateType,
     }
-  } catch (e) {
+  } catch (err) {
+    const typedErr = err as RequestError
     let needsUpdate =
       currentVersion !== latestVersion && latestVersion > currentVersion
     if (!latestVersion.includes('.')) {
@@ -138,7 +145,7 @@ async function versionCompare(currentVersion: string, latestVersion: string) {
     return {
       needsUpdate,
       updateType,
-      notice: e.message.replace(
+      notice: typedErr.message.replace(
         /^Invalid Version:/,
         'Not a valid semver version:'
       ),
@@ -155,7 +162,7 @@ function diffLoose(currentVersion: string, latestVersion: string) {
   const latest = semver.parse(latestVersion, true)
   let prefix = ''
   let defaultResult = null
-  if (current.prerelease.length || latest.prerelease.length) {
+  if (current?.prerelease.length || latest?.prerelease.length) {
     prefix = 'pre'
     defaultResult = 'prerelease'
   }
