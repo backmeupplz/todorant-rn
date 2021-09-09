@@ -375,6 +375,7 @@ class AddTodoContent extends Component<{
           .join(' ')
         newVM.text = newText
       }
+      newVM.repetitive = this.breakdownTodo.repetitive
     }
     if (this.props.route.params?.date) {
       newVM.monthAndYear = this.props.route.params?.date.substr(0, 7)
