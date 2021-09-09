@@ -25,14 +25,12 @@ export function alertConfirm(
   confirmButtonText: string,
   confirm: () => void,
   title?: string,
-  cancel?: () => void
 ) {
   setTimeout(() => {
     Alert.alert(title || translate('pleaseConfirm'), message, [
       {
         text: translate('cancel'),
         style: 'cancel',
-        onPress: cancel,
       },
       { text: confirmButtonText, onPress: confirm },
     ])

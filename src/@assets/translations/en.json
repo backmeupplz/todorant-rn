@@ -481,6 +481,7 @@
   "unEpic": "Reset epic",
   "breakdownMessage": {
     "title": "Repetitive task",
-    "text": "Want to breakdown a task and add it again?"
+    "text": "This is a repetitive task, do you want to break down it or complete it?",
+    "complete": "Complete"
   }
 }
