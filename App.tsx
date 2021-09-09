@@ -57,6 +57,7 @@ import { hydration } from '@stores/hydration/hydratedStores'
 import { migrateRealmToWMDB } from '@utils/realm'
 import { alertError } from '@utils/alert'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSync } from '@sync/Sync'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -104,7 +105,11 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
-    if (!sharedSessionStore.migrationCompleted) {
+    if (
+      sharedSync.socketConnection.connected &&
+      sharedSync.socketConnection.authorized &&
+      !sharedSessionStore.migrationCompleted
+    ) {
       try {
         await migrateRealmToWMDB()
         sharedSessionStore.migrationCompleted = true
