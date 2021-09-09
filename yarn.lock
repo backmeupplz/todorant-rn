@@ -7170,11 +7170,6 @@ react-native-mmkv-storage@^0.6.0:
   resolved "https://registry.yarnpkg.com/react-native-mmkv-storage/-/react-native-mmkv-storage-0.6.0.tgz#d197d059668f7bd4b86052f9d702eb421c83b0eb"
   integrity sha512-FqmxwOMiL7AnjCBOEa/IABLWcHLcHXAjA52lKjD8Ajj2gPtY7zT+lSoppv8oN1pKfrAviwljrbtLylFXImu1fw==
 
-react-native-mmkv@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-1.2.0.tgz#27fc51ce448ed775f5debd8539dd2ba0f41334c2"
-  integrity sha512-UCEhaD/pdGmLTBPeVRGseRIu/Ye8h3EMzVCJr1SSyHTIQpJIb3GI3Z07UWoojRVubrd+nTCFTw5JhU52VrW6+Q==
-
 react-native-month-picker@backmeupplz/react-native-month-picker:
   version "1.0.1"
   resolved "https://codeload.github.com/backmeupplz/react-native-month-picker/tar.gz/c1362e8a27c6c3636e37ec0d902c3fe47f825574"
@@ -7263,7 +7258,7 @@ react-native-store-rating@backmeupplz/react-native-store-rating#803b83b701a4f926
   resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/803b83b701a4f926fcacfe5e775d57cf69c72088"
   dependencies:
     lodash.times "^4.3.2"
-    react-native-ratings "^6.5.0"
+    react-native-ratings "^6.3.1"
 
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
