@@ -106,12 +106,12 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
-    console.log(
-      'test test test test test test test test test test test test test test test'
-    )
-    if (!sharedSessionStore.migrationCompleted) {
-      sharedDelegationStore.logout()
-    }
+    // console.log(
+    //   'test test test test test test test test test test test test test test test'
+    // )
+    // if (!sharedSessionStore.migrationCompleted) {
+    //   sharedDelegationStore.logout()
+    // }
     SplashScreen.hide()
     checkOnboardingStep()
   }
