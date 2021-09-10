@@ -287,7 +287,10 @@ class Sync {
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => undefined,
+      () => {
+        if (!sharedSessionStore.migrationCompleted) return undefined
+        return sharedDelegationStore.updatedAt
+      },
       (objects, pushBack, completeSync) => {
         return onDelegationObjectsFromServer(objects, pushBack, completeSync)
       },
