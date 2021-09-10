@@ -71,7 +71,6 @@ export class Security extends Component {
         toUpdate.push(
           todo.prepareUpdate((todo) => {
             todo.encrypted = encrypted
-            if (!encrypted) todo.text = decrypt(todo.text)
           })
         )
       }
@@ -87,7 +86,7 @@ export class Security extends Component {
   async encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = await sharedTodoStore.deletedTodos
+      const todos = await sharedTodoStore.undeletedTodos
         .extend(
           Q.where(TodoColumn.encrypted, true),
           Q.where(TodoColumn.delegator, null)

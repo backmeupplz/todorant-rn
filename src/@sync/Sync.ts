@@ -111,7 +111,7 @@ class Sync {
             )._id
           }
           if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(decrypt(sqlRaw.text) || sqlRaw.text)
+            sqlRaw.text = encrypt(sqlRaw.text)
           }
           createdTodos.push(sqlRaw)
         }
@@ -125,7 +125,7 @@ class Sync {
             )._id
           }
           if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(decrypt(sqlRaw.text) || sqlRaw.text)
+            sqlRaw.text = encrypt(sqlRaw.text)
           }
           updatedTodos.push(sqlRaw)
         }
@@ -194,6 +194,7 @@ class Sync {
               )
             ).id
           }
+          updated.text = decrypt(updated.text) || updated.text
           const localTodo = (
             await todosCollection
               .query(Q.where(TodoColumn._id, updated.server_id))
