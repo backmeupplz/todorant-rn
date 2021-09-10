@@ -773,7 +773,7 @@ export class AddTodoForm extends Component<{
                 textColor={sharedColors.textColor}
                 value={this.props.vm.timePickerValue || new Date()}
                 mode="time"
-                onChange={(event, date) => {
+                onChange={(event: { type: string }, date: Date | undefined) => {
                   if (Platform.OS === 'android') {
                     this.props.vm.showTimePicker = false
                   }
@@ -845,6 +845,16 @@ export class AddTodoForm extends Component<{
                   }}
                 />
               </View>
+            )}
+            {(sharedSettingsStore.showMoreByDefault ||
+              this.props.vm.showMore) && (
+              <SwitchRow
+                name={translate('breakdownMessage.title')}
+                value={this.props.vm.repetitive}
+                onValueChange={(value) => {
+                  this.props.vm.repetitive = value
+                }}
+              />
             )}
             {((sharedSettingsStore.showMoreByDefault &&
               sharedOnboardingStore.tutorialIsShown) ||

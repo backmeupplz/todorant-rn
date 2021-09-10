@@ -21,6 +21,8 @@ import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { Alert } from 'react-native'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -140,6 +142,35 @@ export class TodoCardVM {
     })
 
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
+  }
+
+  breakdownOrComplete(todo: Todo) {
+    if (todo.repetitive) {
+      setTimeout(() => {
+        Alert.alert(
+          translate('breakdownMessage.title'),
+          translate('breakdownMessage.text'),
+          [
+            {
+              text: translate('breakdownMessage.complete'),
+              onPress: () => {
+                this.complete(todo)
+              },
+            },
+            {
+              text: translate('breakdownButton'),
+              onPress: () => {
+                checkSubscriptionAndNavigate('BreakdownTodo', {
+                  breakdownTodo: todo,
+                })
+              },
+            },
+          ]
+        )
+      }, 100)
+    } else {
+      this.complete(todo)
+    }
   }
 
   complete(todo: Todo) {

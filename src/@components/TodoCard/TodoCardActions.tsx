@@ -47,6 +47,13 @@ export class TodoCardActions extends Component<{
               style={{ color: 'grey', fontSize: 15 }}
             />
           )}
+          {this.props.todo.repetitive && (
+            <Icon
+              type="MaterialIcons"
+              name="repeat"
+              style={{ color: 'grey', fontSize: 15 }}
+            />
+          )}
         </View>
         <View
           style={{
@@ -138,7 +145,7 @@ export class TodoCardActions extends Component<{
               <IconButton
                 disabled={!sharedOnboardingStore.tutorialIsShown}
                 onPress={() => {
-                  this.props.vm.complete(this.props.todo)
+                  this.props.vm.breakdownOrComplete(this.props.todo)
                 }}
                 name="done_outline_28--check"
                 color={sharedColors.successIconColor}

@@ -59,10 +59,6 @@ import {
 } from '@utils/ObservableNow'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import { pick } from 'lodash'
-import { DelegationUser } from '@models/DelegationUser'
-import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { EventEmitter } from 'events'
 
 export const addTodoEventEmitter = new EventEmitter()
@@ -164,6 +160,7 @@ class AddTodoContent extends Component<{
             deleted: false,
             date: vm.date,
             time: vm.time,
+            repetitive: vm.repetitive,
             user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
             delegator: !!vm.delegate
               ? cloneDelegator(sharedSessionStore.user)
@@ -231,6 +228,7 @@ class AddTodoContent extends Component<{
             vm.monthAndYear || getDateMonthAndYearString(new Date())
           vm.editedTodo.date = vm.date
           vm.editedTodo.time = vm.time
+          vm.editedTodo.repetitive = vm.repetitive
           vm.editedTodo.updatedAt = new Date()
           vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
           if (failed && vm.editedTodo.date) {
@@ -367,7 +365,9 @@ class AddTodoContent extends Component<{
     })
     const newVM = new TodoVM()
     if (this.breakdownTodo) {
-      if (sharedSettingsStore.duplicateTagInBreakdown) {
+      if (this.vms.length === 0 && this.breakdownTodo.repetitive) {
+        newVM.text = this.breakdownTodo.text
+      } else if (sharedSettingsStore.duplicateTagInBreakdown) {
         let matches = linkify.match(this.breakdownTodo.text) || []
         const newText = matches
           .map((v) =>
@@ -377,6 +377,7 @@ class AddTodoContent extends Component<{
           .join(' ')
         newVM.text = newText
       }
+      newVM.repetitive = this.breakdownTodo.repetitive
     }
     if (this.props.route.params?.date) {
       newVM.monthAndYear = this.props.route.params?.date.substr(0, 7)
@@ -398,7 +399,8 @@ class AddTodoContent extends Component<{
           vm.editedTodo?.frog != vm.frog ||
           vm.editedTodo?.monthAndYear != vm.monthAndYear ||
           vm.editedTodo?.date != vm.date ||
-          vm.editedTodo?.time != vm.time
+          vm.editedTodo?.time != vm.time ||
+          vm.editedTodo?.repetitive != vm.repetitive
         ) {
           return true
         }
@@ -409,10 +411,11 @@ class AddTodoContent extends Component<{
         vm.frog ||
         vm.monthAndYear ||
         vm.date ||
-        vm.time
+        vm.time ||
+        vm.repetitive
       ) {
         if (
-          !(vm.text || vm.completed || vm.frog || vm.time) &&
+          !(vm.text || vm.completed || vm.frog || vm.time || vm.repetitive) &&
           vm.monthAndYear &&
           vm.date &&
           isToday(vm.monthAndYear, vm.date)
