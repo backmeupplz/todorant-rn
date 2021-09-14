@@ -195,7 +195,11 @@ class Sync {
               )
             ).id
           }
-          if (updated.encrypted) updated.text = decrypt(updated.text)
+          try {
+            updated.text = decrypt(updated.text) || updated.text
+          } catch (e) {
+            // Do nothing
+          }
           const localTodo = (
             await todosCollection
               .query(Q.where(TodoColumn._id, updated.server_id))
