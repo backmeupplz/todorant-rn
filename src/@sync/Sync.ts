@@ -87,6 +87,7 @@ class Sync {
     const lastPulledAt = await wmdbGetLastPullAt(database)
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
     this.$promise = when(() => this.gotWmDb)
+    console.log(this.serverObjects)
     await this.$promise
     await synchronize({
       sendCreatedAsUpdated: true,
@@ -194,7 +195,7 @@ class Sync {
               )
             ).id
           }
-          updated.text = decrypt(updated.text) || updated.text
+          if (updated.encrypted) updated.text = decrypt(updated.text)
           const localTodo = (
             await todosCollection
               .query(Q.where(TodoColumn._id, updated.server_id))
