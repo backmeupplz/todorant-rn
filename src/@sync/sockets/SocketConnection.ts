@@ -143,13 +143,7 @@ export class SocketConnection {
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
     if (!sharedSessionStore.migrationCompleted) {
-      try {
-        await migrateRealmToWMDB()
-        sharedSessionStore.migrationCompleted = true
-      } catch (err) {
-        alertError('A error occur while transfering data between databases')
-        alertError(err)
-      }
+      sharedSessionStore.migrationCompleted = true
     }
   }
 }
