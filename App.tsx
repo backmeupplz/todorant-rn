@@ -106,12 +106,15 @@ class App extends Component {
       }
     })
     await when(() => hydration.isHydrated)
-    // console.log(
-    //   'test test test test test test test test test test test test test test test'
-    // )
-    // if (!sharedSessionStore.migrationCompleted) {
-    //   sharedDelegationStore.logout()
-    // }
+    if (!sharedSessionStore.localMigrationCompleted) {
+      try {
+        await migrateRealmToWMDB()
+        sharedSessionStore.localMigrationCompleted = true
+      } catch (err) {
+        alertError('A error occur while transfering data between databases')
+        alertError(err as string)
+      }
+    }
     SplashScreen.hide()
     checkOnboardingStep()
   }
