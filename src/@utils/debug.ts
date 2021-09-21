@@ -62,7 +62,6 @@ export async function add5000Todos() {
         })
       })
     )
-    console.log((await todosCollection.query().fetch()).length)
   })
   sharedTodoStore.refreshTodos()
 }

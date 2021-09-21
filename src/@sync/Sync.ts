@@ -90,7 +90,6 @@ class Sync {
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
     this.wmdbSyncing = true
     this.$promise = when(() => this.gotWmDb)
-    console.log(this.serverObjects)
     await this.$promise
     await synchronize({
       sendCreatedAsUpdated: true,
