@@ -26,7 +26,7 @@ export enum TodoColumn {
   encrypted = 'is_encrypted',
   date = 'date',
   time = 'time',
-  repetitive = 'repetitive',
+  repetitive = 'is_repetitive',
 
   user = 'user_id',
   delegator = 'delegator_id',
