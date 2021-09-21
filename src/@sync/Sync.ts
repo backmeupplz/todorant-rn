@@ -63,10 +63,12 @@ class Sync {
       this.settingsSyncManager.isSyncing ||
       this.userSyncManager.isSyncing ||
       this.heroSyncManager.isSyncing ||
-      this.delegationSyncManager.isSyncing
+      this.delegationSyncManager.isSyncing ||
+      this.wmdbSyncing
     )
   }
 
+  @observable wmdbSyncing = false
   @observable gotWmDb = false
   serverTimeStamp?: number
   serverObjects?: SyncDatabaseChangeSet
@@ -86,6 +88,7 @@ class Sync {
     if (this.gotWmDb || this.$promise) return
     const lastPulledAt = await wmdbGetLastPullAt(database)
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
+    this.wmdbSyncing = true
     this.$promise = when(() => this.gotWmDb)
     console.log(this.serverObjects)
     await this.$promise
@@ -150,6 +153,7 @@ class Sync {
     } as SyncType)
     this.gotWmDb = false
     this.$promise = undefined
+    this.wmdbSyncing = false
   }
 
   constructor() {
