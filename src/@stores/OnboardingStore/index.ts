@@ -101,8 +101,10 @@ class OnboardingStore {
   }
 
   changeSavedSreen(screen: OnboardingSreens) {
-    navigate(screen)
-    this.screen = screen
+    requestAnimationFrame(() => {
+      navigate(screen)
+      this.screen = screen
+    })
   }
 
   changeStepAndHole(
