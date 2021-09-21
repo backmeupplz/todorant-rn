@@ -55,6 +55,7 @@ export class MelonTodo extends Model {
   @field(TodoColumn.date) date?: string
   @field(TodoColumn.time) time?: string
   @field(TodoColumn.delegateAccepted) delegateAccepted?: boolean
+  @field(TodoColumn.repetitive) repetitive!: boolean
   @relation(Tables.users, TodoColumn.user) user?: MelonUser
   @relation(Tables.users, TodoColumn.delegator) delegator?: MelonUser
 

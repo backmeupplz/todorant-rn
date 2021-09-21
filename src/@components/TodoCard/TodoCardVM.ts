@@ -27,6 +27,8 @@ import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { Alert } from 'react-native'
 
 export class TodoCardVM {
   @observable expanded = false
@@ -140,6 +142,35 @@ export class TodoCardVM {
   async uncomplete(todo: MelonTodo) {
     await todo.uncomplete()
     sharedSync.sync(SyncRequestEvent.Todo)
+  }
+
+  async breakdownOrComplete(todo: MelonTodo) {
+    if (todo.repetitive) {
+      setTimeout(() => {
+        Alert.alert(
+          translate('breakdownMessage.title'),
+          translate('breakdownMessage.text'),
+          [
+            {
+              text: translate('breakdownMessage.complete'),
+              onPress: () => {
+                this.complete(todo)
+              },
+            },
+            {
+              text: translate('breakdownButton'),
+              onPress: () => {
+                checkSubscriptionAndNavigate('BreakdownTodo', {
+                  breakdownTodo: todo,
+                })
+              },
+            },
+          ]
+        )
+      }, 100)
+    } else {
+      this.complete(todo)
+    }
   }
 
   async complete(todo: MelonTodo) {

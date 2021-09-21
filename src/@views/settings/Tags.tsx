@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Container, ActionSheet, View } from 'native-base'
+import { Text, Container, View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { FlatList } from 'react-native-gesture-handler'
 import { sharedTagStore } from '@stores/TagStore'
@@ -48,7 +48,20 @@ class TagsVM {
     navigate('AddEpic', { tag })
   }
   editText(tag: MelonTag) {
-    navigate('ChangeText', { tag })
+    navigate('ChangeText', { tag: { ...cloneTag(tag) } })
+  }
+  unEpic(tag: MelonTag) {
+    alertConfirm(
+      `${translate('unEpicConfirm')} "#${
+        tag.tag.length > 50 ? `${tag.tag.substr(0, 50)}...` : tag.tag
+      }"?`,
+      translate('unEpic'),
+      async () => {
+        await tag.unEpic()
+        sharedTagStore.refreshTags()
+        sharedSync.sync(SyncRequestEvent.Tag)
+      }
+    )
   }
 }
 
@@ -172,9 +185,10 @@ const EnhancedTagList = enhance(({ tags }: { tags: MelonTag[] }) => {
                 {!item.epic && (
                   <IconButton
                     onPress={() => {
-                      vm.makeAnEpic(item)
+                      item.epic ? vm.unEpic(item) : vm.makeAnEpic(item)
                     }}
                     name="target_outline_28"
+                    color={item.epic ? 'gray' : undefined}
                   />
                 )}
                 <IconButton

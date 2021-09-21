@@ -29,6 +29,7 @@ export class Todo extends MobxRealmModel {
       encrypted: { type: 'bool', indexed: true, default: false },
       date: { type: 'string?', indexed: true },
       time: 'string?',
+      repetitive: { type: 'bool', indexed: true, default: false },
 
       user: 'DelegationUser?',
       delegator: 'DelegationUser?',
@@ -54,6 +55,7 @@ export class Todo extends MobxRealmModel {
   encrypted!: boolean
   date?: string
   time?: string
+  repetitive!: boolean
 
   user?: DelegationUser
   delegator?: DelegationUser
@@ -132,6 +134,7 @@ export async function cloneTodo(todo: MelonTodo) {
     encrypted: todo.encrypted,
     date: todo.date,
     time: todo.time,
+    repetitive: todo.repetitive,
 
     user: await cloneDelegator(todo.user),
     delegator: await cloneDelegator(todo.delegator),

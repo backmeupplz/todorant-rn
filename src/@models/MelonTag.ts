@@ -58,6 +58,16 @@ export class MelonTag extends Model {
   @writer async setServerId(serverId: string) {
     await this.update((tag) => (tag._id = serverId))
   }
+
+  @writer async unEpic() {
+    await this.update((tag) => {
+      tag.epicCompleted = false
+      tag.epicGoal = 0
+      tag.epicOrder = 0
+      tag.epicPoints = 0
+      tag.epic = false
+    })
+  }
 }
 
 export function cloneTag(tag: MelonTag) {

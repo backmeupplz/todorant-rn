@@ -43,6 +43,7 @@ export class TodoVM {
     ? getDateDateString(getTodayWithStartOfDay())
     : undefined
   @observable time?: string
+  @observable repetitive = false
 
   @observable delegate?: MelonUser
   @observable delegateAccepted?: boolean
@@ -227,6 +228,7 @@ export class TodoVM {
     this.date = todo.date
     this.time = todo.time
     this.delegateAccepted = todo.delegateAccepted
+    this.repetitive = todo.repetitive
 
     this.showMore = true
   }

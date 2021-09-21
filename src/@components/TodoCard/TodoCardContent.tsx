@@ -54,7 +54,7 @@ export class TodoCardContent extends Component<{
           }}
           onSwipeableLeftOpen={() => {
             row.close()
-            this.props.vm.complete(this.props.todo)
+            this.props.vm.breakdownOrComplete(this.props.todo)
           }}
           onSwipeableRightOpen={() => {
             row.close()
