@@ -110,22 +110,24 @@ class OnboardingStore {
     hole: RNHole = this.defaultHole,
     stepObject?: Step
   ) {
-    logEvent(step)
-    this.currentHole = hole
-    Animated.timing(this.animatedOpacity, {
-      toValue: 0,
-      duration: 250,
-      easing: Easing.linear,
-    }).start(() => {
-      this.step = step
-      if (stepObject) {
-        this.stepObject = stepObject
-      }
+    requestAnimationFrame(() => {
+      logEvent(step)
+      this.currentHole = hole
       Animated.timing(this.animatedOpacity, {
-        toValue: 1,
+        toValue: 0,
         duration: 250,
         easing: Easing.linear,
-      }).start()
+      }).start(() => {
+        this.step = step
+        if (stepObject) {
+          this.stepObject = stepObject
+        }
+        Animated.timing(this.animatedOpacity, {
+          toValue: 1,
+          duration: 250,
+          easing: Easing.linear,
+        }).start()
+      })
     })
   }
 
