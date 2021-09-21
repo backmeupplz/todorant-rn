@@ -99,6 +99,7 @@ export const watermelon = appSchema({
           isIndexed: true,
         },
         { name: TodoColumn.time, type: 'string', isOptional: true },
+        { name: TodoColumn.repetitive, type: 'boolean', isIndexed: true },
         {
           name: TodoColumn.delegateAccepted,
           type: 'boolean',
