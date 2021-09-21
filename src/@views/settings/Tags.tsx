@@ -182,15 +182,13 @@ const EnhancedTagList = enhance(({ tags }: { tags: MelonTag[] }) => {
                 #{item.tag}
               </Text>
               <View style={{ flexDirection: 'row' }}>
-                {!item.epic && (
-                  <IconButton
-                    onPress={() => {
-                      item.epic ? vm.unEpic(item) : vm.makeAnEpic(item)
-                    }}
-                    name="target_outline_28"
-                    color={item.epic ? 'gray' : undefined}
-                  />
-                )}
+                <IconButton
+                  onPress={() => {
+                    item.epic ? vm.unEpic(item) : vm.makeAnEpic(item)
+                  }}
+                  name="target_outline_28"
+                  color={item.epic ? 'gray' : undefined}
+                />
                 <IconButton
                   onPress={() => {
                     vm.editText(item)
