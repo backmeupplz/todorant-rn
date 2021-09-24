@@ -117,7 +117,10 @@ export class SocketConnection {
     this.connected = true
     this.connectionError = undefined
     await this.authorize()
-    sharedSync.sync()
+    await sharedSync.sync()
+    if (!sharedSessionStore.migrationCompleted && this.authorized) {
+      sharedSessionStore.migrationCompleted = true
+    }
   }
 
   private onDisconnect = () => {
@@ -142,8 +145,5 @@ export class SocketConnection {
     this.authorized = true
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
-    if (!sharedSessionStore.migrationCompleted) {
-      sharedSessionStore.migrationCompleted = true
-    }
   }
 }
