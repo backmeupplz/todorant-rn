@@ -10,6 +10,15 @@ import * as RNIap from 'react-native-iap'
 class PurchaseListener {
   constructor() {
     makeObservable(this)
+    this.initIAP()
+  }
+
+  private async initIAP() {
+    try { 
+      await RNIap.initConnection()
+    } catch (err) {
+      alertError(err as string)
+    }
   }
 
   @observable isPurchasing = false
