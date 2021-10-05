@@ -208,18 +208,18 @@ class Sync {
               .query(Q.where(TodoColumn._id, updated.server_id))
               .fetch()
           )[0]
-          if (localTodo) {
-            updated.id = localTodo.id
-            todos.push(updated)
-            continue
-          }
-          updated.id = updated.server_id
           updated.exact_date_at = new Date(
             getTitle({
               monthAndYear: updated.month_and_year,
               date: updated.date,
             })
           ).getTime()
+          if (localTodo) {
+            updated.id = localTodo.id
+            todos.push(updated)
+            continue
+          }
+          updated.id = updated.server_id
           todos.push(updated)
         }
         serverObjects.todos.updated = todos
