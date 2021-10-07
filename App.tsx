@@ -59,6 +59,7 @@ import { alertError } from '@utils/alert'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedDelegationStore } from '@stores/DelegationStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -114,6 +115,15 @@ class App extends Component {
         sharedSessionStore.localMigrationCompleted = true
       } catch (err) {
         alertError('A error occur while transfering data between databases')
+        alertError(err as string)
+      }
+    }
+    if (!sharedSessionStore.exactDatesRecalculated) {
+      try {
+        await sharedTodoStore.recalculateExactDates()
+        sharedSessionStore.exactDatesRecalculated = true
+      } catch (err) {
+        alertError('A error occur while recalculating exact date at')
         alertError(err as string)
       }
     }

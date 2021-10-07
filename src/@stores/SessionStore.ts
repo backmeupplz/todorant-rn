@@ -34,8 +34,11 @@ class SessionStore {
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
 
+  // Temporary variables. Should me removed after deleting realmdb.
   @persist @observable migrationCompleted = false
   @persist @observable localMigrationCompleted = false
+  // Temporary variable. Should be removed after releasing beta-version as main version.
+  @persist @observable exactDatesRecalculated = false
 
   @observable loggingOut = false
   @observable isInitialSync = false
