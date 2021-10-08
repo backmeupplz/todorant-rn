@@ -18,6 +18,7 @@ import {
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/wmdb'
+import { updateOrCreateDelegation } from '@utils/delegations'
 
 class SessionStore {
   constructor() {
@@ -179,12 +180,22 @@ class SessionStore {
 }
 
 export const sharedSessionStore = new SessionStore()
-hydrate('SessionStore', sharedSessionStore).then(() => {
+hydrate('SessionStore', sharedSessionStore).then(async () => {
   sharedSessionStore.hydrated = true
   hydrateStore('SessionStore')
   if (sharedSessionStore.user?.token) {
     sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      false,
+      true
+    )
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      true,
+      true
+    )
   } else {
     removeToken()
   }

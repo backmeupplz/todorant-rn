@@ -121,12 +121,13 @@ export class TodoCardVM {
         translate('delete'),
         async () => {
           await todo.delete()
+          sharedSync.sync(SyncRequestEvent.Todo)
         }
       )
     } else {
       await todo.delete()
+      sharedSync.sync(SyncRequestEvent.Todo)
     }
-    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
   async accept(todo: MelonTodo) {
@@ -155,6 +156,7 @@ export class TodoCardVM {
               text: translate('breakdownMessage.complete'),
               onPress: () => {
                 this.complete(todo)
+                sharedSync.sync(SyncRequestEvent.Todo)
               },
             },
             {
@@ -170,6 +172,7 @@ export class TodoCardVM {
       }, 100)
     } else {
       this.complete(todo)
+      sharedSync.sync(SyncRequestEvent.Todo)
     }
   }
 
