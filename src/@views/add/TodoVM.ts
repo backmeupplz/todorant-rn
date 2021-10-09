@@ -95,10 +95,12 @@ export class TodoVM {
 
   focus() {
     // Drop currentFocusedItem inside React-Native
-    focusInput({})
-    if (this.todoTextField.current) {
-      ;(this.todoTextField.current as any)._root.focus()
-    }
+    requestAnimationFrame(() => {
+      focusInput({})
+      if (this.todoTextField.current) {
+        ;(this.todoTextField.current as any)._root.focus()
+      }
+    })
   }
 
   applyTag(tag: Tag) {
@@ -114,13 +116,13 @@ export class TodoVM {
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
       this.text = `${before}${tag.tag}${after} `
-      ;(this.todoTextField.current as any)._root.focus()
+      this.focus()
       return
     }
     const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
     if (!matches.length) {
       this.text = `${before}${insertText}${after} `
-      ;(this.todoTextField.current as any)._root.focus()
+      this.focus()
       return
     }
     const match = matches[0]
@@ -128,7 +130,7 @@ export class TodoVM {
       0,
       before.length - match.length
     )}${insertText}${after} `
-    ;(this.todoTextField.current as any)._root.focus()
+    this.focus()
   }
 
   @computed
