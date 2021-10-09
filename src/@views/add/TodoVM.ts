@@ -13,9 +13,10 @@ import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { Keyboard, TextInput } from 'react-native'
+import { InteractionManager, Keyboard, TextInput } from 'react-native'
 const {
-  focusInput,
+  focusTextInput,
+  blurInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
@@ -93,14 +94,18 @@ export class TodoVM {
     )
   }
 
-  focus() {
-    // Drop currentFocusedItem inside React-Native
-    requestAnimationFrame(() => {
-      focusInput({})
-      if (this.todoTextField.current) {
-        ;(this.todoTextField.current as any)._root.focus()
-      }
-    })
+  focus(tag = false) {
+    const refocus = () => {
+      blurInput((this.todoTextField.current as any)._root)
+      requestAnimationFrame(() => {
+        focusTextInput((this.todoTextField.current as any)._root)
+      })
+    }
+    if (tag) {
+      InteractionManager.runAfterInteractions(refocus)
+    } else {
+      requestAnimationFrame(refocus)
+    }
   }
 
   applyTag(tag: Tag) {
@@ -116,13 +121,13 @@ export class TodoVM {
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
       this.text = `${before}${tag.tag}${after} `
-      this.focus()
+      this.focus(true)
       return
     }
     const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
     if (!matches.length) {
       this.text = `${before}${insertText}${after} `
-      this.focus()
+      this.focus(true)
       return
     }
     const match = matches[0]
@@ -130,7 +135,7 @@ export class TodoVM {
       0,
       before.length - match.length
     )}${insertText}${after} `
-    this.focus()
+    this.focus(true)
   }
 
   @computed

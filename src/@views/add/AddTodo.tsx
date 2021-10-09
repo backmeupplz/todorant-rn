@@ -377,7 +377,7 @@ class AddTodoContent extends Component<{
     this.backHandler?.remove()
   }
 
-  addTodo = () => {
+  addTodo = async () => {
     this.vms.forEach((vm) => {
       vm.collapsed = true
     })
@@ -403,8 +403,9 @@ class AddTodoContent extends Component<{
     }
     this.vms.push(newVM)
 
-    if (this.scrollView && Platform.OS === 'ios') {
-      this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
+    if (this.scrollView) {
+      await this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
+      newVM.focus()
     }
   }
 
