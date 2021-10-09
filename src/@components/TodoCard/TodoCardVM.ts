@@ -189,7 +189,7 @@ export class TodoCardVM {
       playTaskComplete()
     }
     sharedHeroStore.incrementPoints()
-    await sharedTagStore.incrementEpicPoints(todo.text)
+    await sharedTagStore.incrementEpicPoints(todo.text, false)
 
     await todo.complete()
     sharedSessionStore.numberOfTodosCompleted++

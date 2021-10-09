@@ -135,7 +135,8 @@ class AddTodoContent extends Component<{
       return
     }
     this.savingTodo = true
-    const dayCompletinRoutineDoneInitially = shouldShowDayCompletionRoutine()
+    const dayCompletinRoutineDoneInitially =
+      await shouldShowDayCompletionRoutine()
 
     const titlesToFixOrder = [] as string[]
     const addTodosOnTop = [] as MelonTodo[]
@@ -305,7 +306,7 @@ class AddTodoContent extends Component<{
       }
     }
     // Add tags
-    await sharedTagStore.addTags(this.vms)
+    await sharedTagStore.addTags(this.vms, false)
     // Sync todos
     await fixOrder(
       titlesToFixOrder,

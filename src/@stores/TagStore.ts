@@ -32,7 +32,9 @@ class TagStore {
   constructor() {
     makeObservable(this)
     this.refreshTags()
-    this.undeletedTags.observeCount(false).subscribe(count => this.undeletedTagsCount = count)
+    this.undeletedTags
+      .observeCount(false)
+      .subscribe((count) => (this.undeletedTagsCount = count))
   }
 
   logout = () => {
@@ -57,7 +59,7 @@ class TagStore {
     sharedSync.sync(SyncRequestEvent.Tag)
   }
 
-  incrementEpicPoints = async (text: string) => {
+  incrementEpicPoints = async (text: string, sync = true) => {
     const tagsInTodo = l(text)
       .filter((c) => c.type === 'hash')
       .map((c) => c.url?.substr(1))
@@ -80,10 +82,12 @@ class TagStore {
     })
     await database.write(async () => await database.batch(...toUpdate))
     await this.refreshTags()
-    sharedSync.sync(SyncRequestEvent.Tag)
+    if (sync) {
+      sharedSync.sync(SyncRequestEvent.Tag)
+    }
   }
 
-  async addTags(vms: TodoVM[]) {
+  async addTags(vms: TodoVM[], sync = true) {
     const toUpdate = [] as MelonTag[]
     const toCreate = [] as MelonTag[]
     const tags = vms
@@ -127,7 +131,9 @@ class TagStore {
       async () => await database.batch(...toUpdate, ...toCreate)
     )
     this.refreshTags()
-    sharedSync.sync(SyncRequestEvent.Tag)
+    if (sync) {
+      sharedSync.sync(SyncRequestEvent.Tag)
+    }
   }
 }
 
