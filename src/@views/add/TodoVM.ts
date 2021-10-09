@@ -96,9 +96,10 @@ export class TodoVM {
 
   focus(tag = false) {
     const refocus = () => {
-      blurInput((this.todoTextField.current as any)._root)
+      const rootTextField = (this.todoTextField.current as any)?._root
+      blurInput(rootTextField)
       requestAnimationFrame(() => {
-        focusTextInput((this.todoTextField.current as any)._root)
+        focusTextInput(rootTextField)
       })
     }
     if (tag) {
