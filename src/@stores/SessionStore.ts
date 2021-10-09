@@ -18,6 +18,7 @@ import {
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/wmdb'
+import { updateOrCreateDelegation } from '@utils/delegations'
 
 class SessionStore {
   constructor() {
@@ -34,8 +35,11 @@ class SessionStore {
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
 
+  // Temporary variables. Should me removed after deleting realmdb.
   @persist @observable migrationCompleted = false
   @persist @observable localMigrationCompleted = false
+  // Temporary variable. Should be removed after releasing beta-version as main version.
+  @persist @observable exactDatesRecalculated = false
 
   @observable loggingOut = false
   @observable isInitialSync = false
@@ -176,12 +180,22 @@ class SessionStore {
 }
 
 export const sharedSessionStore = new SessionStore()
-hydrate('SessionStore', sharedSessionStore).then(() => {
+hydrate('SessionStore', sharedSessionStore).then(async () => {
   sharedSessionStore.hydrated = true
   hydrateStore('SessionStore')
   if (sharedSessionStore.user?.token) {
     sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      false,
+      true
+    )
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      true,
+      true
+    )
   } else {
     removeToken()
   }

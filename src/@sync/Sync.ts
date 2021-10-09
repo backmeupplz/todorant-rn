@@ -75,6 +75,8 @@ class Sync {
 
   $promise?: Promise<void>
 
+  _error: true[] = []
+
   wmDbSyncFunc = async () => {
     if (!this.socketConnection.connected) {
       return Promise.reject('Socket sync: not connected to sockets')
@@ -85,71 +87,103 @@ class Sync {
     if (!this.socketConnection.token) {
       return Promise.reject('Socket sync: no authorization token provided')
     }
-    if (this.gotWmDb || this.$promise) return
+    // Fix concurrent errors
+    if (this._error.includes(true)) {
+      this._error.pop()
+      this.gotWmDb = false
+      this.$promise = undefined
+      return
+    }
+    // Check for potential concurrent state
+    if (this.gotWmDb || this.$promise) {
+      return
+    }
+    // Get last wmdb sync date
     const lastPulledAt = await wmdbGetLastPullAt(database)
+    // Request for changes from server
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
+    // Set syncing for preventing concurrent sync
     this.wmdbSyncing = true
+    // Wait until get server changes
     this.$promise = when(() => this.gotWmDb)
     await this.$promise
-    await synchronize({
-      sendCreatedAsUpdated: true,
-      database,
-      pullChanges: async () => {
-        return {
-          changes: this.serverObjects!,
-          timestamp: this.serverTimeStamp!,
-        }
-      },
-      pushChanges: async ({ changes, lastPulledAt }) => {
-        const createdTodos = []
-        const updatedTodos = []
-        const clonedChanges = cloneDeep(changes)
-        for (const sqlRaw of clonedChanges.todos.created) {
-          if (sqlRaw.user_id) {
-            sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+    // Check for concurrent state error
+    if (lastPulledAt !== (await wmdbGetLastPullAt(database))) return
+    if (lastPulledAt === this.serverTimeStamp) return
+    // Start sync
+    try {
+      await synchronize({
+        sendCreatedAsUpdated: true,
+        database,
+        pullChanges: async () => {
+          return {
+            changes: this.serverObjects!,
+            timestamp: this.serverTimeStamp!,
           }
-          if (sqlRaw.delegator_id) {
-            sqlRaw.delegator_id = (
-              await usersCollection.find(sqlRaw.delegator_id)
-            )._id
+        },
+        pushChanges: async ({ changes, lastPulledAt }) => {
+          const createdTodos = []
+          const updatedTodos = []
+          const clonedChanges = cloneDeep(changes)
+          for (const sqlRaw of clonedChanges.todos.created) {
+            if (sqlRaw.user_id) {
+              sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+            }
+            if (sqlRaw.delegator_id) {
+              sqlRaw.delegator_id = (
+                await usersCollection.find(sqlRaw.delegator_id)
+              )._id
+            }
+            if (sqlRaw.is_encrypted) {
+              sqlRaw.text = encrypt(sqlRaw.text)
+            }
+            createdTodos.push(sqlRaw)
           }
-          if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(sqlRaw.text)
+          for (const sqlRaw of clonedChanges.todos.updated) {
+            if (sqlRaw.user_id) {
+              sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+            }
+            if (sqlRaw.delegator_id) {
+              sqlRaw.delegator_id = (
+                await usersCollection.find(sqlRaw.delegator_id)
+              )._id
+            }
+            if (sqlRaw.is_encrypted) {
+              sqlRaw.text = encrypt(sqlRaw.text)
+            }
+            updatedTodos.push(sqlRaw)
           }
-          createdTodos.push(sqlRaw)
-        }
-        for (const sqlRaw of clonedChanges.todos.updated) {
-          if (sqlRaw.user_id) {
-            sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
-          }
-          if (sqlRaw.delegator_id) {
-            sqlRaw.delegator_id = (
-              await usersCollection.find(sqlRaw.delegator_id)
-            )._id
-          }
-          if (sqlRaw.is_encrypted) {
-            sqlRaw.text = encrypt(sqlRaw.text)
-          }
-          updatedTodos.push(sqlRaw)
-        }
-        clonedChanges.todos.created = createdTodos
-        clonedChanges.todos.updated = updatedTodos
-        this.socketConnection.socketIO.emit(
-          'push_wmdb',
-          clonedChanges,
-          lastPulledAt
-        )
-      },
-      migrationsEnabledAtVersion: 1,
-      conflictResolver: (_, local, remote, resolved) => {
-        const localDate = new Date(local.updated_at)
-        const remoteDate = new Date(remote.updated_at)
-        remote.updated_at = Date.now()
-        local.updated_at = Date.now()
-        //return remote
-        return Object.assign(resolved, remoteDate > localDate ? remote : local)
-      },
-    } as SyncType)
+          clonedChanges.todos.created = createdTodos
+          clonedChanges.todos.updated = updatedTodos
+          this.socketConnection.socketIO.emit(
+            'push_wmdb',
+            clonedChanges,
+            lastPulledAt
+          )
+        },
+        migrationsEnabledAtVersion: 1,
+        conflictResolver: (_, local, remote, resolved) => {
+          const localDate = new Date(local.updated_at)
+          const remoteDate = new Date(remote.updated_at)
+          remote.updated_at = Date.now()
+          local.updated_at = Date.now()
+          //return remote
+          return Object.assign(
+            resolved,
+            remoteDate > localDate ? remote : local
+          )
+        },
+      } as SyncType)
+    } catch (err) {
+      // Drop sync state for preventing concurrent errors
+      this.gotWmDb = false
+      this.$promise = undefined
+      this.wmdbSyncing = false
+      this.serverObjects = undefined
+      // Push concurrent error
+      this._error.push(true)
+    }
+    // Drop sync state
     this.gotWmDb = false
     this.$promise = undefined
     this.wmdbSyncing = false
@@ -208,18 +242,18 @@ class Sync {
               .query(Q.where(TodoColumn._id, updated.server_id))
               .fetch()
           )[0]
-          if (localTodo) {
-            updated.id = localTodo.id
-            todos.push(updated)
-            continue
-          }
-          updated.id = updated.server_id
           updated.exact_date_at = new Date(
             getTitle({
               monthAndYear: updated.month_and_year,
               date: updated.date,
             })
           ).getTime()
+          if (localTodo) {
+            updated.id = localTodo.id
+            todos.push(updated)
+            continue
+          }
+          updated.id = updated.server_id
           todos.push(updated)
         }
         serverObjects.todos.updated = todos

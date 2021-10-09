@@ -65,8 +65,7 @@ export function scheduleReminders(time: string) {
     date,
     repeatType: 'day',
     allowWhileIdle: true,
-    // Have to cast it because of allowWhileIdle https://github.com/DefinitelyTyped/DefinitelyTyped/pull/48214
-  } as any)
+  })
 }
 
 export function stopReminders() {

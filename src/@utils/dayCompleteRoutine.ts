@@ -28,8 +28,8 @@ export async function shouldShowDayCompletionRoutine() {
   return false
 }
 
-export function checkDayCompletionRoutine() {
-  if (shouldShowDayCompletionRoutine()) {
+export async function checkDayCompletionRoutine() {
+  if (await shouldShowDayCompletionRoutine()) {
     startDayCompleteRoutine()
   }
 }
