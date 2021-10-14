@@ -153,6 +153,12 @@ export class TodoCardVM {
           translate('breakdownMessage.text'),
           [
             {
+              text: translate('cancel'),
+              onPress: () => {
+                // Do nothing
+              },
+            },
+            {
               text: translate('breakdownMessage.complete'),
               onPress: () => {
                 this.complete(todo)
