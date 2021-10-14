@@ -277,9 +277,8 @@ export class TodoSettings extends Component {
             const permissions = await getNotificationPermissions()
             if (!permissions.alert && Platform.OS === 'ios') {
               try {
-                const gotPermissions = await PushNotification.requestPermissions(
-                  ['alert']
-                )
+                const gotPermissions =
+                  await PushNotification.requestPermissions(['alert'])
                 if (gotPermissions.alert) {
                   this.startReminders(date)
                 } else {

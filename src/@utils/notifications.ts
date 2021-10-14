@@ -6,6 +6,17 @@ import PushNotification, {
   PushNotificationPermissions,
 } from 'react-native-push-notification'
 
+PushNotification.createChannel(
+  {
+    channelId: 'todorant',
+    channelName: 'Todorant-channel',
+    vibrate: true,
+  },
+  () => {
+    // Do nothing
+  }
+)
+
 PushNotification.configure({
   onRegister: (token) => {
     console.log('Push notification token:', token)
@@ -61,6 +72,7 @@ export function scheduleReminders(time: string) {
   }
   // Schedule notifications
   PushNotification.localNotificationSchedule({
+    channelId: 'todorant',
     message: translate('planningReminderText'),
     date,
     repeatType: 'day',

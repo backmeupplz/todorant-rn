@@ -1484,10 +1484,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.1.tgz#7d0adaf5cd8b7f77561a8e2d534cc61d6c25a0f6"
   integrity sha512-hajGhBGr4QsC6/mclyb2TlBBY8D3wiMxskO4u7zcQoYtX3CHrYjRJjgQFOwOIxLU+HaK1d7Kdk+kSxMlnMs4Kg==
 
-"@react-native-community/push-notification-ios@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.5.0.tgz#b41802b58d2388c8cb76cd219bbeec9ac9a4c06d"
-  integrity sha512-88Uwu6S8oRVnuMfBMGN+MtTyUjiVmMKwfObYrPmm+b2E2Aqk0WlZ4clfECukG8QIzv1pfELJZ5uZMVTYMI6klg==
+"@react-native-community/push-notification-ios@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.10.1.tgz#d52a6d69ac1112df0f79e1d17978077629b76784"
+  integrity sha512-k6bZWUKLif4GjenyTD3aQLwA2VT3bNmt22INO/34lexnpmqkPDZF7nreqbckTHG0Zso9wDTe4N/AZJUC/d8iRg==
   dependencies:
     invariant "^2.2.4"
 
@@ -1680,10 +1680,10 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
-"@types/react-native-push-notification@^5.0.3":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-5.0.6.tgz#8316744c6bf20c0154bf8721ebcd440948698f91"
-  integrity sha512-X/68PvqmCfAi4pzNRXex0sZyhcWOFLPOmLCvbzOGF6icWg7RBVQKMSMN/PLXAnEDiyxqXHSurIH/CcwNROxEkg==
+"@types/react-native-push-notification@^7.3.2":
+  version "7.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-7.3.2.tgz#fa4ca52925ac82f8c2520b1524e02310493369c1"
+  integrity sha512-iTJJMdC8US/s8Q9VmMyHTsQl9ivAYijH0eHG2XU8LzxYBg0ItJmM7E5xzZcdARiJK8Hui2PDxceEHqS31BETvA==
 
 "@types/react-native-vector-icons@^6.4.5":
   version "6.4.8"
@@ -7188,10 +7188,10 @@ react-native-permissions@^2.0.2, react-native-permissions@^2.1.4:
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.2.2.tgz#3d2a63f6b7d6be52fc86e30f77412a9566283028"
   integrity sha512-ihf4shQDSX5Oo9ChQXb9kr13mmyyNem5MaEvOpr3dCjhBOBWyEMztXm9/uPK1Qg5PsNpaYLa1KpcPZDCw87LXg==
 
-react-native-push-notification@^7.4.0:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.4.0.tgz#81192356eddfee8eeaf72a9a696c7c90bf5b0ece"
-  integrity sha512-Ac3Ep71e2D8Q/Vy0OHBAO5JwhsFsNSuf9knkpXQWS0B9488nIZJLEMuTpF8610xPvGw7XxVrL/q0oZO5F1pOzw==
+react-native-push-notification@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz#a41d20c70ea5a7709417e96261b225461f8dc73a"
+  integrity sha512-XpBtG/w+a6WXTxu6l1dNYyTiHnbgnvjoc3KxPTxYkaIABRmvuJZkFxqruyGvfCw7ELAlZEAJO+dthdTabCe1XA==
 
 react-native-qrcode-scanner@^1.4.0:
   version "1.5.4"
@@ -7202,7 +7202,7 @@ react-native-qrcode-scanner@^1.4.0:
     prop-types "^15.5.10"
     react-native-permissions "^2.0.2"
 
-react-native-ratings@^6.5.0:
+react-native-ratings@^6.3.1, react-native-ratings@^6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
   integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==
@@ -7256,7 +7256,7 @@ react-native-store-rating@backmeupplz/react-native-store-rating#803b83b701a4f926
   resolved "https://codeload.github.com/backmeupplz/react-native-store-rating/tar.gz/803b83b701a4f926fcacfe5e775d57cf69c72088"
   dependencies:
     lodash.times "^4.3.2"
-    react-native-ratings "^6.5.0"
+    react-native-ratings "^6.3.1"
 
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
