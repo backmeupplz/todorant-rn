@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react'
+import React, { PureComponent } from 'react'
 import {
   Button as NativeBaseButton,
   View,
@@ -13,7 +13,7 @@ const fixStyle = (style: any) => {
   return style
 }
 
-export class Button extends Component<NativeBase.Button> {
+export class Button extends PureComponent<NativeBase.Button> {
   render() {
     return Platform.OS === 'android' ? (
       <View
