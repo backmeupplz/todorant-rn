@@ -48,7 +48,7 @@ export class Data extends Component {
 
   UNSAFE_componentWillMount() {
     makeObservable(this)
-    sharedTodoStore.deletedTodos
+    sharedTodoStore.undeletedTodos
       .observeCount(false)
       .subscribe((amount) => (this.todosAmount = amount))
     tagsCollection

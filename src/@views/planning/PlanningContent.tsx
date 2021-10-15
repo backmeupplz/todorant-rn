@@ -233,7 +233,9 @@ export class PlanningContent extends Component {
             }
             isCompleted={this.isCompleted}
             increaseOffset={async () => {
-              const todosAmount = await todosCollection.query().fetchCount()
+              const todosAmount = await (this.isCompleted
+                ? sharedTodoStore.undeletedCompleted.fetchCount()
+                : sharedTodoStore.undeletedUncompleted.fetchCount())
               if (todosAmount <= this.offset) return
               this.offset += 15
             }}
@@ -291,50 +293,7 @@ const EnhancedDraggableSectionList = enhance(
       return todoSectionMap[key]
     })
 
-    return isCompleted ? (
-      <DraggableSectionList<MelonTodo, Section>
-        ListEmptyComponent={<NoTodosPlaceholder />}
-        onEndReachedThreshold={0}
-        onEndReached={() => increaseOffset()}
-        onViewableItemsChanged={() => {}}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
-          if (!sharedAppStateStore.calendarEnabled) return
-          // TODO calendar actions
-          //this.currentX.setValue(absoluteX as any)
-          //this.currentY.setValue((absoluteY - this.todoHeight) as any)
-          //this.vm?.setCoordinates(absoluteY, absoluteX)
-        }}
-        autoscrollSpeed={200}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={5}
-        initialNumToRender={10}
-        updateCellsBatchingPeriod={1}
-        onDragEnd={onDragEnd}
-        isSectionHeader={(a: any) => {
-          if (a === undefined) {
-            return false
-          }
-          return !a.text
-        }}
-        renderItem={renderItem}
-        renderSectionHeader={({ item, drag, index, isActive }) => {
-          return (
-            <TodoHeader
-              date={true}
-              drag={drag}
-              isActive={isActive}
-              item={item.section}
-              key={item.section}
-            />
-          )
-        }}
-        data={todosMap}
-        keyExtractor={(item) => {
-          return item.id || (item as unknown as string)
-        }}
-      />
-    ) : (
+    return (
       <DraggableSectionList<MelonTodo, Section>
         layoutInvalidationKey={v4()}
         ListEmptyComponent={<NoTodosPlaceholder />}

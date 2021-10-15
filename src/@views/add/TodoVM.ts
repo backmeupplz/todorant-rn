@@ -25,6 +25,7 @@ import { translate } from '@utils/i18n'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { TagColumn } from '@utils/melondb'
+import { MelonTag } from '@models/MelonTag'
 
 export class TodoVM {
   @observable text =
@@ -109,7 +110,7 @@ export class TodoVM {
     }
   }
 
-  applyTag(tag: Tag) {
+  applyTag(tag: MelonTag) {
     const text = this.text
     const len = text.length
     const before = text.substr(0, this.cursorPosition)

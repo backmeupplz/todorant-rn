@@ -278,9 +278,9 @@ class TextRow extends Component<{
   }
 }
 
-const enhanceTags = withObservables(['vm'], (items) => {
+const enhanceTags = withObservables(['tags'], (items) => {
   return {
-    tags: items.vm.tags,
+    tags: items.tags,
   }
 })
 
@@ -289,31 +289,34 @@ const TagsRow = enhanceTags((props: { tags: MelonTag[]; vm: TodoVM }) => {
     <View
       style={{
         paddingBottom: verticalSpacing / 2,
+        display: 'flex',
+        flexDirection: 'row',
+        maxWidth: '100%',
+        width: '100%',
+        flexWrap: 'wrap',
       }}
     >
-      <FlatList
-        horizontal
-        data={props.tags}
-        keyExtractor={(_, index) => `${index}`}
-        renderItem={({ item }: { item: any }) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                props.vm.applyTag(item)
-              }}
-              style={{ paddingHorizontal: 4 }}
-            >
-              <Text
-                style={{
-                  color: item.color || 'dodgerblue',
+      {props.tags.length
+        ? props.tags.map((tag) => {
+            return (
+              <TouchableOpacity
+                key={tag._tempSyncId}
+                onPress={() => {
+                  props.vm.applyTag(tag)
                 }}
+                style={{ paddingHorizontal: 4 }}
               >
-                #{item.tag}
-              </Text>
-            </TouchableOpacity>
-          )
-        }}
-      />
+                <Text
+                  style={{
+                    color: tag.color || 'dodgerblue',
+                  }}
+                >
+                  #{tag.tag}
+                </Text>
+              </TouchableOpacity>
+            )
+          })
+        : null}
     </View>
   )
 })
@@ -671,7 +674,7 @@ export class AddTodoForm extends Component<{
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
             <TextRow vm={this.props.vm} showCross={this.props.showCross} />
-            <TagsRow vm={this.props.vm} />
+            <TagsRow tags={this.props.vm.tags} vm={this.props.vm} />
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 dateRowNodeId = target as number

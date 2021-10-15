@@ -25,7 +25,9 @@ export async function fixOrder(
   // Fix every title
   for (const titleInvolved of titlesInvolvedSet) {
     const todos = sharedTodoStore.todosForDate(titleInvolved)
-    const completedForDate = await sharedTodoStore.completedTodos.fetch()
+    const completedForDate = await todos
+      .extend(Q.where(TodoColumn.completed, true))
+      .fetch()
     // Go over completed
     const orderedCompleted = completedForDate.sort(
       sortTodos(addTodosOnTopIds, addTodosToBottomIds)
