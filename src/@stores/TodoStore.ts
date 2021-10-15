@@ -14,9 +14,13 @@ import { sharedSessionStore } from './SessionStore'
 import { hydration } from './hydration/hydratedStores'
 import { MelonTodo } from '@models/MelonTodo'
 import { Q, Query } from '@nozbe/watermelondb'
-import { database, todosCollection, usersCollection } from '@utils/wmdb'
+import {
+  database,
+  todosCollection,
+  usersCollection,
+} from '@utils/watermelondb/wmdb'
 import { Subscription } from 'rxjs'
-import { TodoColumn, UserColumn } from '@utils/melondb'
+import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 
 class TodoStore {
   hydrated = false

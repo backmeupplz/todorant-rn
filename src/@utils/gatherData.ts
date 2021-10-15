@@ -1,4 +1,4 @@
-import { tagsCollection, todosCollection } from './wmdb'
+import { tagsCollection, todosCollection } from './watermelondb/wmdb'
 
 export async function gatherData() {
   const todos = todosCollection.query().fetch()

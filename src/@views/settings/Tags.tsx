@@ -18,7 +18,7 @@ import { Divider } from '@components/Divider'
 import { MelonTag } from '@models/MelonTag'
 import withObservables from '@nozbe/with-observables'
 import { makeObservable, observable } from 'mobx'
-import { database } from '@utils/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 
 class TagsVM {
   deleteTag(tag: MelonTag) {

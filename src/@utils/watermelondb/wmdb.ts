@@ -1,17 +1,14 @@
-import { Database, Q } from '@nozbe/watermelondb'
-import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
-import {
-  Tables,
-  TodoColumn,
-  watermelon,
-  watertmelonMigration,
-} from '@utils/melondb'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { MelonTag } from '@models/MelonTag'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { Database } from '@nozbe/watermelondb'
+import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
+import { wmdbMigrations } from './migration'
+import { wmdbSchema } from './schema'
+import { Tables } from './tables'
 
 const adapter = new SQLiteAdapter({
-  schema: watermelon,
-  migrations: watertmelonMigration,
+  schema: wmdbSchema,
+  migrations: wmdbMigrations,
   jsi: true,
 })
 

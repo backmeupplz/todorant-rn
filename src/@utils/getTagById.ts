@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
-import { TagColumn } from './melondb'
-import { tagsCollection } from './wmdb'
+import { TagColumn } from './watermelondb/tables'
+import { tagsCollection } from './watermelondb/wmdb'
 
 export async function getTagById(id?: string) {
   if (!id) {

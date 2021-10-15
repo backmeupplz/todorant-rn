@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from './melondb'
-import { todosCollection } from './wmdb'
+import { TodoColumn } from './watermelondb/tables'
+import { todosCollection } from './watermelondb/wmdb'
 
 export async function getTodoById(id?: string) {
   if (!id) {

@@ -20,7 +20,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { makeObservable, observable } from 'mobx'
-import { database } from '@utils/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { MelonTag } from '@models/MelonTag'
 
 export let currentTodoNodeId: number

@@ -17,7 +17,7 @@ import { TouchableOpacity } from 'react-native'
 import { IconButton } from '@components/IconButton'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { database } from '@utils/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 import { cloneTag, MelonTag } from '@models/MelonTag'
 

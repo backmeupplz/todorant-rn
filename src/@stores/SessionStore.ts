@@ -17,7 +17,7 @@ import {
 } from '@utils/ObservableNow'
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
-import { database } from '@utils/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 
 class SessionStore {

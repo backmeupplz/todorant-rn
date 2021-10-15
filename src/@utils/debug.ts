@@ -3,8 +3,8 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { v4 } from 'uuid'
-import { database } from './wmdb'
-import { todosCollection } from '@utils/wmdb'
+import { database } from './watermelondb/wmdb'
+import { todosCollection } from '@utils/watermelondb/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 
 export function deleteAllTodos() {

@@ -6,10 +6,10 @@ import { TodoVM } from '@views/add/TodoVM'
 import { makeObservable, observable } from 'mobx'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { persist } from 'mobx-persist'
-import { database, tagsCollection } from '@utils/wmdb'
+import { database, tagsCollection } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonTag } from '@models/MelonTag'
-import { TagColumn } from '@utils/melondb'
+import { TagColumn } from '@utils/watermelondb/tables'
 
 class TagStore {
   hydrated = false

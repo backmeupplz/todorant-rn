@@ -5,10 +5,10 @@ import {
   removeDelegation,
   updateOrCreateDelegation,
 } from '@utils/delegations'
-import { database, usersCollection } from '@utils/wmdb'
+import { database, usersCollection } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonUser } from '@models/MelonTodo'
-import { UserColumn } from '@utils/melondb'
+import { UserColumn } from '@utils/watermelondb/tables'
 
 export async function onDelegationObjectsFromServer(
   objects: {

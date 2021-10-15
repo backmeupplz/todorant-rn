@@ -1,7 +1,7 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
 import { associations } from '@nozbe/watermelondb/Model'
-import { Tables, TodoColumn, UserColumn } from '@utils/melondb'
+import { Tables, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 
 export class MelonUser extends Model {
   static table = Tables.users

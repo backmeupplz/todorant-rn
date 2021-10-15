@@ -15,7 +15,7 @@ import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { getLocalDelegation, updateOrCreateDelegation } from './delegations'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { database, todosCollection } from './wmdb'
+import { database, todosCollection } from './watermelondb/wmdb'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()

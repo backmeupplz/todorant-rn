@@ -7,7 +7,7 @@ import {
   relation,
   writer,
 } from '@nozbe/watermelondb/decorators'
-import { Tables, TagColumn } from '@utils/melondb'
+import { Tables, TagColumn } from '@utils/watermelondb/tables'
 
 export class MelonTag extends Model {
   static table = Tables.tags

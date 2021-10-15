@@ -24,7 +24,7 @@ import { DelegationUser } from '@models/DelegationUser'
 import { translate } from '@utils/i18n'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
-import { TagColumn } from '@utils/melondb'
+import { TagColumn } from '@utils/watermelondb/tables'
 import { MelonTag } from '@models/MelonTag'
 
 export class TodoVM {

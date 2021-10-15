@@ -60,7 +60,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { database, todosCollection } from '@utils/wmdb'
+import { database, todosCollection } from '@utils/watermelondb/wmdb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 
 export const addTodoEventEmitter = new EventEmitter()

@@ -14,7 +14,7 @@ import {
   tagsCollection,
   todosCollection,
   usersCollection,
-} from './wmdb'
+} from './watermelondb/wmdb'
 
 export const realm = new Realm({
   schema: [DelegationUser, Todo, Tag, DelegationUserInTodo],

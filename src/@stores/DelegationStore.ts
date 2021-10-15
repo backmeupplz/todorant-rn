@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
-import { UserColumn } from '@utils/melondb'
-import { usersCollection } from '@utils/wmdb'
+import { UserColumn } from '@utils/watermelondb/tables'
+import { usersCollection } from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { hydrate } from './hydration/hydrate'

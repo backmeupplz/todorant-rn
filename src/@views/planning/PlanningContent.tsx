@@ -48,10 +48,11 @@ import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { v4 } from 'uuid'
 import { isTodoOld } from '@utils/isTodoOld'
-import { database, todosCollection } from '@utils/wmdb'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { TodoColumn } from '@utils/melondb'
+import { sanitizeLikeString } from '@utils/textSanitizer'
+import { TodoColumn } from '@utils/watermelondb/tables'
+import { database } from '@utils/watermelondb/wmdb'
 
 @observer
 export class PlanningContent extends Component {
@@ -84,7 +85,7 @@ export class PlanningContent extends Component {
       Q.where(
         TodoColumn.text,
         Q.like(
-          `%${Q.sanitizeLikeString(
+          `%${sanitizeLikeString(
             sharedAppStateStore.searchQuery[0] ||
               sharedAppStateStore.hash.join(' ')
           )}%`

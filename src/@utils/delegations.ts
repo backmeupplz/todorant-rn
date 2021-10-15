@@ -2,8 +2,8 @@ import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { UserColumn } from './melondb'
-import { database, usersCollection } from './wmdb'
+import { UserColumn } from './watermelondb/tables'
+import { database, usersCollection } from './watermelondb/wmdb'
 
 export async function getOrCreateDelegation(
   delegation: MelonUser,

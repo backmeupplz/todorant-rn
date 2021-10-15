@@ -28,10 +28,10 @@ import {
   tagsCollection,
   todosCollection,
   usersCollection,
-} from '@utils/wmdb'
+} from '@utils/watermelondb/wmdb'
 import { cloneDeep } from 'lodash'
 import { Q } from '@nozbe/watermelondb'
-import { TagColumn, TodoColumn } from '@utils/melondb'
+import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { decrypt, encrypt, _e } from '@utils/encryption'
