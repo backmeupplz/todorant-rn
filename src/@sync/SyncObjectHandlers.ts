@@ -5,7 +5,7 @@ import {
   removeDelegation,
   updateOrCreateDelegation,
 } from '@utils/delegations'
-import { database, usersCollection } from '@utils/watermelondb/wmdb'
+import { usersCollection, wmdbBatch } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonUser } from '@models/MelonTodo'
 import { UserColumn } from '@utils/watermelondb/tables'
@@ -108,9 +108,7 @@ export async function onDelegationObjectsFromServer(
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
     // Complete sync
-    await database.write(
-      async () => await database.batch(...toUpdateOrCreate, ...toDelete)
-    )
+    await wmdbBatch(...toUpdateOrCreate, ...toDelete)
     completeSync()
     return
   }
@@ -150,9 +148,7 @@ export async function onDelegationObjectsFromServer(
       toUpdateOrCreate.push(await updateOrCreateDelegation(delegate, false))
     })
   )
-  await database.write(
-    async () => await database.batch(...toUpdateOrCreate, ...toDelete)
-  )
+  await wmdbBatch(...toUpdateOrCreate, ...toDelete)
   // Complete sync
   completeSync()
 }

@@ -17,7 +17,7 @@ import {
 } from '@utils/ObservableNow'
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
-import { database } from '@utils/watermelondb/wmdb'
+import { dropDatabase } from '@utils/watermelondb/wmdb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 
 class SessionStore {
@@ -114,7 +114,7 @@ class SessionStore {
       this.user = undefined
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
-      await database.write(async () => await database.unsafeResetDatabase())
+      await dropDatabase()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()

@@ -18,7 +18,7 @@ import { Divider } from '@components/Divider'
 import { MelonTag } from '@models/MelonTag'
 import withObservables from '@nozbe/with-observables'
 import { makeObservable, observable } from 'mobx'
-import { database } from '@utils/watermelondb/wmdb'
+import { wmdbBatch } from '@utils/watermelondb/wmdb'
 
 class TagsVM {
   deleteTag(tag: MelonTag) {
@@ -95,9 +95,7 @@ class DeleteAllTagsButton extends Component {
                       )
                     )
                   }
-                  await database.write(
-                    async () => await database.batch(...toUpdate)
-                  )
+                  await wmdbBatch(...toUpdate)
                   await sharedTagStore.refreshTags()
                   sharedSync.sync(SyncRequestEvent.Tag)
                 },

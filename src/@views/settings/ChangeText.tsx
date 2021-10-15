@@ -17,7 +17,7 @@ import { TouchableOpacity } from 'react-native'
 import { IconButton } from '@components/IconButton'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { database } from '@utils/watermelondb/wmdb'
+import { wmdbBatch } from '@utils/watermelondb/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 import { cloneTag, MelonTag } from '@models/MelonTag'
 
@@ -111,7 +111,7 @@ class ChangeTextContent extends Component<{
         })
       )
     }
-    await database.write(async () => await database.batch(...toUpdate))
+    wmdbBatch(...toUpdate)
     await dbtag.changeText(this.newName || dbtag.tag)
     await dbtag.changeColor(this.tag.color || dbtag.color!)
 

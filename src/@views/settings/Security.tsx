@@ -15,7 +15,7 @@ import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { sharedColors } from '@utils/sharedColors'
-import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { todosCollection, wmdbBatch } from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
@@ -74,7 +74,7 @@ export class Security extends Component {
           })
         )
       }
-      await database.write(async () => await database.batch(...toUpdate))
+      await wmdbBatch(...toUpdate)
       sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
       alertError(err)
@@ -104,7 +104,7 @@ export class Security extends Component {
           )
         }
       }
-      await database.write(async () => await database.batch(...toUpdate))
+      await wmdbBatch(...toUpdate)
 
       await sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()

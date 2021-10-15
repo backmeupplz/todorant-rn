@@ -6,7 +6,7 @@ import { TodoVM } from '@views/add/TodoVM'
 import { makeObservable, observable } from 'mobx'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { persist } from 'mobx-persist'
-import { database, tagsCollection } from '@utils/watermelondb/wmdb'
+import { tagsCollection, wmdbBatch } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonTag } from '@models/MelonTag'
 import { TagColumn } from '@utils/watermelondb/tables'
@@ -80,7 +80,7 @@ class TagStore {
           })
         )
     })
-    await database.write(async () => await database.batch(...toUpdate))
+    await wmdbBatch(...toUpdate)
     await this.refreshTags()
     if (sync) {
       sharedSync.sync(SyncRequestEvent.Tag)
@@ -127,9 +127,7 @@ class TagStore {
         })
       )
     }
-    await database.write(
-      async () => await database.batch(...toUpdate, ...toCreate)
-    )
+    await wmdbBatch(...toUpdate, ...toCreate)
     this.refreshTags()
     if (sync) {
       sharedSync.sync(SyncRequestEvent.Tag)

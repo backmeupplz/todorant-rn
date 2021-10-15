@@ -3,7 +3,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { v4 } from 'uuid'
-import { database } from './watermelondb/wmdb'
+import { wmdbBatch } from './watermelondb/wmdb'
 import { todosCollection } from '@utils/watermelondb/wmdb'
 import { MelonTodo } from '@models/MelonTodo'
 
@@ -47,22 +47,20 @@ export async function add5000Todos() {
     todos.push(new TodoSample())
   }
 
-  await database.write(async () => {
-    await database.batch(
-      ...todos.map((todo1) => {
-        return todosCollection.prepareCreate((todo) => {
-          todo.text = todo1.text
-          todo.monthAndYear = todo1.monthAndYear
-          todo.time = todo1.time
-          todo.completed = false
-          todo.deleted = false
-          todo.date = todo1.date
-          todo.order = todo1.order
-          todo._exactDate = new Date(getTitle(todo))
-        })
+  await wmdbBatch(
+    ...todos.map((todo1) => {
+      return todosCollection.prepareCreate((todo) => {
+        todo.text = todo1.text
+        todo.monthAndYear = todo1.monthAndYear
+        todo.time = todo1.time
+        todo.completed = false
+        todo.deleted = false
+        todo.date = todo1.date
+        todo.order = todo1.order
+        todo._exactDate = new Date(getTitle(todo))
       })
-    )
-  })
+    })
+  )
   sharedTodoStore.refreshTodos()
 }
 
@@ -129,7 +127,7 @@ export async function addTodosRu() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }
@@ -197,7 +195,7 @@ export async function addTodosUk() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }
@@ -265,7 +263,7 @@ export async function addTodosEn() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }
@@ -333,7 +331,7 @@ export async function addTodosIt() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }
@@ -401,7 +399,7 @@ export async function addTodosEs() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }
@@ -469,7 +467,7 @@ export async function addTodosPtBR() {
       )
     )
   }
-  await database.write(async () => await database.batch(...toCreate))
+  await wmdbBatch(...toCreate)
 
   sharedTodoStore.refreshTodos()
 }

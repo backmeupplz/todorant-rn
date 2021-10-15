@@ -1,7 +1,14 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
 import { associations } from '@nozbe/watermelondb/Model'
+import {
+  getDateDateString,
+  getDateMonthAndYearString,
+  getDateString,
+  getTodayWithStartOfDay,
+} from '@utils/time'
 import { Tables, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
+import { getTitle } from './Todo'
 
 export class MelonUser extends Model {
   static table = Tables.users
@@ -77,5 +84,15 @@ export class MelonTodo extends Model {
 
   @writer async setServerId(serverId: string) {
     await this.update((todo) => (todo._id = serverId))
+  }
+
+  @writer async moveToToday(lastTodoOnDayOrder: number) {
+    const today = getDateString(getTodayWithStartOfDay())
+    await this.update((todo) => {
+      todo.order = lastTodoOnDayOrder
+      todo.date = getDateDateString(today)
+      todo.monthAndYear = getDateMonthAndYearString(today)
+      todo._exactDate = new Date(getTitle(todo))
+    })
   }
 }

@@ -60,7 +60,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { todosCollection, wmdbBatch } from '@utils/watermelondb/wmdb'
 import { updateOrCreateDelegation } from '@utils/delegations'
 
 export const addTodoEventEmitter = new EventEmitter()
@@ -259,9 +259,7 @@ class AddTodoContent extends Component<{
         titlesToFixOrder.push(oldTitle, getTitle(editedTodo))
       }
     }
-    await database.write(
-      async () => await database.batch(...toCreate, ...toUpdate)
-    )
+    await wmdbBatch(...toCreate, ...toUpdate)
     completedAtCreation.forEach((todoText) => {
       sharedTagStore.incrementEpicPoints(todoText)
       // Increment hero store

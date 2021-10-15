@@ -3,7 +3,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
-import { database } from './watermelondb/wmdb'
+import { wmdbBatch } from './watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from './watermelondb/tables'
 
@@ -58,7 +58,7 @@ export async function fixOrder(
     })
   }
 
-  await database.write(async () => await database.batch(...toUpdate))
+  await wmdbBatch(...toUpdate)
 
   // Refresh
   sharedTodoStore.refreshTodos()
