@@ -20,7 +20,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { makeObservable, observable } from 'mobx'
-import { wmdbBatch } from '@utils/watermelondb/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { MelonTag } from '@models/MelonTag'
 
 export let currentTodoNodeId: number
@@ -107,7 +107,7 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
               (epicToUpdate) => (epicToUpdate.epicOrder = index)
             )
           })
-          await wmdbBatch(...toUpdate)
+          await database.write(async () => await database.batch(...toUpdate))
           await sharedTagStore.refreshTags()
           sharedSync.sync(SyncRequestEvent.Tag)
         }}

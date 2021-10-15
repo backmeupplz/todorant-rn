@@ -3,7 +3,7 @@ import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { UserColumn } from './watermelondb/tables'
-import { usersCollection, wmdbWriter } from './watermelondb/wmdb'
+import { database, usersCollection } from './watermelondb/wmdb'
 
 export async function getOrCreateDelegation(
   delegation: MelonUser,
@@ -86,7 +86,7 @@ export async function updateOrCreateDelegation(
   // Create new user in place if need
   if (forceWrite) {
     let createdUser!: MelonUser
-    await wmdbWriter(async () => {
+    await database.write(async () => {
       createdUser = await usersCollection.create((delegate) => {
         Object.assign(delegate, delegation)
         delegate.isDelegator = delegator

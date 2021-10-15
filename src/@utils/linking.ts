@@ -15,7 +15,7 @@ import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { getLocalDelegation, updateOrCreateDelegation } from './delegations'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { todosCollection, wmdbWriter } from './watermelondb/wmdb'
+import { database, todosCollection } from './watermelondb/wmdb'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -122,7 +122,7 @@ async function addTodo(text: string) {
 
   let createdTodo!: MelonTodo
 
-  await wmdbWriter(async () => {
+  await database.write(async () => {
     createdTodo = await todosCollection.create((todo) =>
       Object.assign(todo, newTodo)
     )

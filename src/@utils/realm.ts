@@ -10,10 +10,10 @@ import Realm from 'realm'
 import { cloneDelegation } from './delegations'
 import { realmTimestampFromDate } from './realmTimestampFromDate'
 import {
+  database,
   tagsCollection,
   todosCollection,
   usersCollection,
-  wmdbBatch,
 } from './watermelondb/wmdb'
 
 export const realm = new Realm({
@@ -93,10 +93,14 @@ export async function migrateRealmToWMDB() {
       })
     })
   )
-  await wmdbBatch(
-    ...createdTodos,
-    ...createdTags,
-    ...createdDelegates,
-    ...createdDelegators
+
+  await database.write(
+    async () =>
+      await database.batch(
+        ...createdTodos,
+        ...createdTags,
+        ...createdDelegates,
+        ...createdDelegators
+      )
   )
 }

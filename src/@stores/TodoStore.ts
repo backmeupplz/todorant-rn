@@ -15,9 +15,9 @@ import { hydration } from './hydration/hydratedStores'
 import { MelonTodo } from '@models/MelonTodo'
 import { Q, Query } from '@nozbe/watermelondb'
 import {
+  database,
   todosCollection,
   usersCollection,
-  wmdbBatch,
 } from '@utils/watermelondb/wmdb'
 import { Subscription } from 'rxjs'
 import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
@@ -257,7 +257,7 @@ class TodoStore {
         )
       )
     }
-    await wmdbBatch(...toUpdate)
+    await database.write(async () => await database.batch(...toUpdate))
   }
 }
 

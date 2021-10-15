@@ -18,7 +18,7 @@ import { startConfetti } from '@components/Confetti'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
-import { wmdbBatch, wmdbUpdate } from '@utils/watermelondb/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { sharedHeroStore } from '@stores/HeroStore'
@@ -45,7 +45,7 @@ export class TodoCardVM {
     let startOffseting = false
     let offset = 0
     const toUpdate: MelonTodo[] = []
-    await wmdbBatch(...toUpdate)
+    await database.write(async () => await database.batch(...toUpdate))
 
     let foundValidNeighbour = false
     for (const t of neighbours) {
@@ -81,7 +81,7 @@ export class TodoCardVM {
       })
     )
 
-    await wmdbBatch(...toUpdate)
+    await database.write(async () => await database.batch(...toUpdate))
 
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
@@ -101,7 +101,14 @@ export class TodoCardVM {
     const today = getDateString(getTodayWithStartOfDay())
     const todosOnDate = await sharedTodoStore.todosForDate(today).fetch()
     const lastTodoOrder = todosOnDate[todosOnDate.length - 1].order
-    await todo.moveToToday(lastTodoOrder)
+    await database.write(async () => {
+      await todo.update((todo) => {
+        todo.order = lastTodoOrder + 1
+        todo.date = getDateDateString(today)
+        todo.monthAndYear = getDateMonthAndYearString(today)
+        todo._exactDate = new Date(getTitle(todo))
+      })
+    })
     sharedSync.sync(SyncRequestEvent.Todo)
   }
 

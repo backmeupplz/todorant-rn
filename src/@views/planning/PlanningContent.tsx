@@ -52,7 +52,7 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { sanitizeLikeString } from '@utils/textSanitizer'
 import { TodoColumn } from '@utils/watermelondb/tables'
-import { wmdbBatch } from '@utils/watermelondb/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 
 @observer
 export class PlanningContent extends Component {
@@ -493,7 +493,7 @@ async function onDragEnd({
         lastOrder++
       }
     }
-    await wmdbBatch(...toUpdate)
+    await database.write(async () => await database.batch(...toUpdate))
     sharedSync.sync(SyncRequestEvent.Todo)
     promise()
   }
