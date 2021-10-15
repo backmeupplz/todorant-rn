@@ -305,6 +305,7 @@ class AddTodoContent extends Component<{
         playTaskComplete()
       }
     }
+    goBack()
     // Add tags
     await sharedTagStore.addTags(this.vms, false)
     // Sync todos
@@ -314,7 +315,6 @@ class AddTodoContent extends Component<{
       addTodosToBottom,
       involvedTodos
     )
-    goBack()
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
