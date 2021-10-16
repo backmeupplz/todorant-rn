@@ -327,8 +327,8 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPushNotificationIOS (1.5.0):
-    - React
+  - RNCPushNotificationIOS (1.10.1):
+    - React-Core
   - RNDateTimePicker (3.5.2):
     - React-Core
   - RNDeviceInfo (8.1.3):
@@ -642,7 +642,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 56a3355a10b5d660c48c6e37325ac85ebfd09885
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
+  RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
   RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
