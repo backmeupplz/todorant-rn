@@ -9,7 +9,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { alertConfirm, alertError } from '@utils/alert'
+import { alertConfirm, alertError, alertMessage } from '@utils/alert'
 import { decrypt, _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
@@ -228,6 +228,7 @@ export class Security extends Component {
                             sharedSessionStore.encryptionKey = this.password
                             this.encryptEncrypted(false, this.password)
                             setPassword(sharedSessionStore.encryptionKey)
+                            alertMessage(translate('encryption.encryption'), translate('encryption.encryptionSaved'))
                           }
                         )
                       }}

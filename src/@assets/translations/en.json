@@ -254,7 +254,9 @@
   "rank12800Description": "You breakdown the tasks like you split the atoms. Keep up the good work!",
   "sendDataToServer": "Send data to the server",
   "encryption": {
-    "repeatPassword": "Repeat password"
+    "repeatPassword": "Repeat password",
+    "encryptionSaved": "Everything is ready! Now all of your new tasks will be encrypted",
+    "encryption": "Encryption"
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
