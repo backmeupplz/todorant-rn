@@ -82,8 +82,6 @@ class Sync {
 
   private _promise?: Promise<void>
 
-  private _error: true[] = []
-
   private waitingSync?: boolean
 
   async startWaiting() {
@@ -103,13 +101,6 @@ class Sync {
     }
     if (!this.socketConnection.token) {
       return Promise.reject('Socket sync: no authorization token provided')
-    }
-    // Fix concurrent errors
-    if (this._error.includes(true)) {
-      this._error.pop()
-      this.gotWmDb = false
-      this._promise = undefined
-      return
     }
     if (this.wmdbSyncing) {
       this.startWaiting()
@@ -197,15 +188,12 @@ class Sync {
         },
       } as SyncType)
     } catch (err) {
-      console.log(`error occured! test`)
-      console.log(err)
+      console.error(err)
       // Drop sync state for preventing concurrent errors
       this.gotWmDb = false
       this._promise = undefined
       this.wmdbSyncing = false
       this.serverObjects = undefined
-      // Push concurrent error
-      this._error.push(true)
     } finally {
       if (__DEV__) {
         console.log(logger.formattedLogs)
