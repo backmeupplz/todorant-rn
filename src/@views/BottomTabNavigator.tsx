@@ -37,7 +37,7 @@ class SettingsRotatingIcon extends Component<{
     Animated.loop(
       Animated.timing(this.spinAnimation, {
         toValue: 1,
-        duration: 5000,
+        duration: 3000,
         easing: Easing.linear,
         useNativeDriver: true,
       })
