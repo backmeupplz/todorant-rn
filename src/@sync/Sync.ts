@@ -36,6 +36,10 @@ import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { decrypt, encrypt, _e } from '@utils/encryption'
 
+// Using built-in SyncLogger
+const SyncLogger = require('@nozbe/watermelondb/sync/SyncLogger').default
+const logger = new SyncLogger(1 /* limit of sync logs to keep in memory */)
+
 type SyncRecord = RawRecord & { updated_at: number }
 
 type SyncType = SyncArgs & {
@@ -68,14 +72,27 @@ class Sync {
     )
   }
 
+  // Do not touch this variable, used only for debuging purpose
+  @observable _debugSync = false
+
   @observable wmdbSyncing = false
   @observable gotWmDb = false
-  serverTimeStamp?: number
-  serverObjects?: SyncDatabaseChangeSet
+  private serverTimeStamp?: number
+  private serverObjects?: SyncDatabaseChangeSet
 
-  $promise?: Promise<void>
+  private _promise?: Promise<void>
 
-  _error: true[] = []
+  private _error: true[] = []
+
+  private waitingSync?: boolean
+
+  async startWaiting() {
+    if (this.waitingSync) return
+    this.waitingSync = true
+    await when(() => !this.wmdbSyncing)
+    await this.wmDbSyncFunc()
+    this.waitingSync = false
+  }
 
   wmDbSyncFunc = async () => {
     if (!this.socketConnection.connected) {
@@ -91,22 +108,26 @@ class Sync {
     if (this._error.includes(true)) {
       this._error.pop()
       this.gotWmDb = false
-      this.$promise = undefined
+      this._promise = undefined
       return
     }
-    // Check for potential concurrent state
-    if (this.gotWmDb || this.$promise) {
+    if (this.wmdbSyncing) {
+      this.startWaiting()
       return
     }
+    if (this.gotWmDb || this._promise) {
+      // Check for potential concurrent state
+      return
+    }
+    // Set syncing for preventing concurrent sync
+    this.wmdbSyncing = true
     // Get last wmdb sync date
     const lastPulledAt = await wmdbGetLastPullAt(database)
     // Request for changes from server
     this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
-    // Set syncing for preventing concurrent sync
-    this.wmdbSyncing = true
     // Wait until get server changes
-    this.$promise = when(() => this.gotWmDb)
-    await this.$promise
+    this._promise = when(() => this.gotWmDb)
+    await this._promise
     // Check for concurrent state error
     if (lastPulledAt !== (await wmdbGetLastPullAt(database))) return
     if (lastPulledAt === this.serverTimeStamp) return
@@ -121,6 +142,7 @@ class Sync {
             timestamp: this.serverTimeStamp!,
           }
         },
+        log: __DEV__ ? logger.newLog() : undefined,
         pushChanges: async ({ changes, lastPulledAt }) => {
           const createdTodos = []
           const updatedTodos = []
@@ -175,17 +197,23 @@ class Sync {
         },
       } as SyncType)
     } catch (err) {
+      console.log(`error occured! test`)
+      console.log(err)
       // Drop sync state for preventing concurrent errors
       this.gotWmDb = false
-      this.$promise = undefined
+      this._promise = undefined
       this.wmdbSyncing = false
       this.serverObjects = undefined
       // Push concurrent error
       this._error.push(true)
+    } finally {
+      if (__DEV__) {
+        console.log(logger.formattedLogs)
+      }
     }
     // Drop sync state
     this.gotWmDb = false
-    this.$promise = undefined
+    this._promise = undefined
     this.wmdbSyncing = false
   }
 

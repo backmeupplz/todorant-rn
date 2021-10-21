@@ -431,6 +431,54 @@ async function onDragEnd({
           lastOrder++
         }
       }
+    } else if (typeof beforeChangesArr[from] !== 'string') {
+      let fromItem = beforeChangesArr[from]
+      let toItem = beforeChangesArr[to]
+      // if both of moved items are todos, and no one of them are section header
+      if (fromItem !== 'string' && toItem !== 'string') {
+        const fromBottomToTop = from > to
+        const nearItem = beforeChangesArr[
+          fromBottomToTop ? to - 1 : to + 1
+        ] as MelonTodo
+        toItem = toItem as MelonTodo
+        fromItem = fromItem as MelonTodo
+        let secondOrder =
+          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+        let firstOrder = toItem ? toItem.order : -1
+        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
+        let average = (firstOrder + secondOrder) / 2
+        // if there is nothing under or under is a section
+        if (
+          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
+          typeof beforeChangesArr[to + 1] === 'undefined'
+        )
+          average = toItem.order + 1
+        if (
+          toItem.frog &&
+          !nearItem.frog &&
+          typeof beforeChangesArr[to - 1] !== 'string'
+        )
+          average = toItem.order + 1
+        if (
+          typeof firstOrder === 'undefined' ||
+          typeof secondOrder === 'undefined'
+        ) {
+          if (!fromBottomToTop) {
+            average = secondOrder - 1
+          } else {
+            average = secondOrder + 1
+          }
+        }
+        toUpdate.push(
+          (fromItem as MelonTodo).prepareUpdate((todo) => {
+            todo.order = average
+            todo.date = nearItem?.date || (toItem as MelonTodo).date
+            todo.monthAndYear =
+              nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
+            todo._exactDate = new Date(getTitle(todo))
+          })
+        )
+      }
     } else {
       const lowerDay = Math.min(closestDayFrom, closestDayTo)
       const maxDay = Math.max(closestDayFrom, closestDayTo)

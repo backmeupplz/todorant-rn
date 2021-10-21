@@ -22,6 +22,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import { sharedSync } from '@sync/Sync'
 
 @observer
 class DebugButton extends Component<{
@@ -165,6 +166,16 @@ export class DebugButtons extends Component {
           }}
           text="check app version"
           testId="check_version"
+        />
+        <DebugButton
+          onPress={() => {
+            sharedSync._debugSync = true
+            setTimeout(() => {
+              sharedSync._debugSync = false
+            }, 5000)
+          }}
+          text="start spinning"
+          testId="start_spinning"
         />
       </>
     ) : null

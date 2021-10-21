@@ -33,15 +33,19 @@ class SettingsRotatingIcon extends Component<{
 }> {
   spinAnimation = new Animated.Value(0)
 
-  componentDidMount() {
+  private startSpinningAnimation() {
     Animated.loop(
       Animated.timing(this.spinAnimation, {
         toValue: 1,
-        duration: 3000,
+        duration: 5000,
         easing: Easing.linear,
         useNativeDriver: true,
       })
     ).start()
+  }
+
+  componentDidMount() {
+    this.startSpinningAnimation()
   }
 
   render() {
@@ -49,7 +53,8 @@ class SettingsRotatingIcon extends Component<{
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     })
-    if (sharedSync.isSyncing) {
+    if (sharedSync.isSyncing || (__DEV__ && sharedSync._debugSync)) {
+      this.startSpinningAnimation()
       return (
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
           {this.props.focused

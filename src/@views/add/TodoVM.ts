@@ -26,6 +26,7 @@ import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { TagColumn } from '@utils/watermelondb/tables'
 import { MelonTag } from '@models/MelonTag'
+import { sanitizeLikeString } from '@utils/textSanitizer'
 
 export class TodoVM {
   @observable text =
@@ -88,10 +89,7 @@ export class TodoVM {
     }
     const match = matches[0]
     return sharedTagStore.undeletedTags.extend(
-      Q.where(
-        TagColumn.tag,
-        Q.like(`%${Q.sanitizeLikeString(match.substr(1))}%`)
-      )
+      Q.where(TagColumn.tag, Q.like(`%${sanitizeLikeString(match.substr(1))}%`))
     )
   }
 
