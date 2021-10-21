@@ -365,6 +365,10 @@ async function onDragEnd({
     //this.setCoordinates.cancel()
     promise()
   } else {
+    if (from === 0) {
+      promise()
+      return
+    }
     // help us to find closest section (looks from bottom to the top)
     const findClosestSection = (
       index: number,
@@ -412,6 +416,7 @@ async function onDragEnd({
         )
           average = toItem.order + 1
         if (
+          nearItem &&
           toItem.frog &&
           !nearItem.frog &&
           typeof beforeChangesArr[to - 1] !== 'string'
@@ -469,8 +474,38 @@ async function onDragEnd({
             average = secondOrder + 1
           }
         }
+        let markAsFrog = false
+        let failed = false
+        if (isTodoOld(fromItem)) {
+          if (fromItem.frogFails < 3) {
+            if (fromItem.frogFails >= 1) {
+              markAsFrog = true
+            }
+            failed = true
+          } else {
+            Alert.alert(translate('error'), translate('breakdownRequest'), [
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+              {
+                text: translate('breakdownButton'),
+                onPress: () => {
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: fromItem,
+                  })
+                },
+              },
+            ])
+            sharedSync.sync(SyncRequestEvent.Todo)
+            promise()
+            return
+          }
+        }
         toUpdate.push(
           (fromItem as MelonTodo).prepareUpdate((todo) => {
+            if (markAsFrog) todo.frog = true
+            if (failed) todo.frogFails++
             todo.order = average
             todo.date = nearItem?.date || (toItem as MelonTodo).date
             todo.monthAndYear =
