@@ -102,8 +102,10 @@ class OnboardingStore {
   }
 
   changeSavedSreen(screen: OnboardingSreens) {
-    navigate(screen)
-    this.screen = screen
+    requestAnimationFrame(() => {
+      navigate(screen)
+      this.screen = screen
+    })
   }
 
   changeStepAndHole(
@@ -124,11 +126,21 @@ class OnboardingStore {
         this.stepObject = stepObject
       }
       Animated.timing(this.animatedOpacity, {
-        toValue: 1,
+        toValue: 0,
         duration: 250,
         // RN 64.* easing: EasingNode.linear,
         easing: Easing.linear,
-      }).start()
+      }).start(() => {
+        this.step = step
+        if (stepObject) {
+          this.stepObject = stepObject
+        }
+        Animated.timing(this.animatedOpacity, {
+          toValue: 1,
+          duration: 250,
+          easing: Easing.linear,
+        }).start()
+      })
     })
   }
 
