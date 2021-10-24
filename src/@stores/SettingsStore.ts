@@ -7,7 +7,10 @@ import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { AsyncStorage } from 'react-native'
+import { Platform } from 'react-native'
+import { alertError, alertSupport } from '@utils/alert'
+import { database } from '@utils/watermelondb/wmdb'
 
 export enum ColorMode {
   auto = 'auto',
@@ -229,3 +232,36 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   sharedSettingsStore.language = await getLanguageTag()
   updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
 })
+
+export async function fixDuplicatedTasks() {
+  console.log('test')
+  if (Platform.OS !== 'ios') {
+    return
+  }
+  const newAsyncStorage = AsyncStorage
+  const oldAsyncStorage = require('react-native')
+    .AsyncStorage as typeof AsyncStorage
+  alertError(JSON.stringify(await newAsyncStorage.getAllKeys()))
+  alertError(
+    JSON.parse(await newAsyncStorage.getItem('SessionStore')).user.token
+  )
+  const userInOldAsyncStorage = JSON.parse(
+    (await oldAsyncStorage.getItem('SessionStore')) || ''
+  ).user
+  if (!userInOldAsyncStorage) {
+    return
+  }
+  const userInNewAsyncStorage = JSON.parse(
+    (await newAsyncStorage.getItem('SessionStore')) || ''
+  ).user
+  if (userInNewAsyncStorage && userInOldAsyncStorage) {
+    // alertError(
+    //   "If you're seeing this message, you're probably have some problems related to duplicated data. If so, please, contact with us"
+    // )
+    // alertSupport()
+    return
+  }
+  if (!userInNewAsyncStorage && userInOldAsyncStorage) {
+    await database.write(async () => await database.unsafeResetDatabase())
+  }
+}

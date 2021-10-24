@@ -47,7 +47,7 @@ import { Rules } from '@views/settings/Rules'
 import { setupLinking } from '@utils/linking'
 import { checkAndroidLaunchArgs } from '@utils/checkAndroidLaunchArgs'
 import { setupAnalytics } from '@utils/logEvent'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { fixDuplicatedTasks, sharedSettingsStore } from '@stores/SettingsStore'
 import { configure, when } from 'mobx'
 import { checkAppVersion } from '@utils/checkAppVersion'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
@@ -108,6 +108,7 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
+    await fixDuplicatedTasks()
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
