@@ -239,20 +239,20 @@ export async function fixDuplicatedTasks() {
     return
   }
   const newAsyncStorage = AsyncStorage
-  const oldAsyncStorage = require('react-native')
-    .AsyncStorage as typeof AsyncStorage
-  alertError(JSON.stringify(await newAsyncStorage.getAllKeys()))
-  alertError(
-    JSON.parse(await newAsyncStorage.getItem('SessionStore')).user.token
-  )
+  const oldAsyncStorage = require('@react-native-async-storage/async-storage')
+    .default as typeof AsyncStorage
+  // alertError(JSON.stringify(await oldAsyncStorage.getAllKeys()))
+  // alertError(
+  //   JSON.parse(await newAsyncStorage.getItem('SessionStore')).user.token
+  // )
   const userInOldAsyncStorage = JSON.parse(
-    (await oldAsyncStorage.getItem('SessionStore')) || ''
+    (await oldAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
   if (!userInOldAsyncStorage) {
     return
   }
   const userInNewAsyncStorage = JSON.parse(
-    (await newAsyncStorage.getItem('SessionStore')) || ''
+    (await newAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
   if (userInNewAsyncStorage && userInOldAsyncStorage) {
     // alertError(
@@ -263,5 +263,12 @@ export async function fixDuplicatedTasks() {
   }
   if (!userInNewAsyncStorage && userInOldAsyncStorage) {
     await database.write(async () => await database.unsafeResetDatabase())
+    const allOldKeys = await oldAsyncStorage.getAllKeys()
+    await Promise.all(
+      allOldKeys.map(async (key) => {
+        const oldItem = (await oldAsyncStorage.getItem(key)) as string
+        return await newAsyncStorage.setItem(key, oldItem)
+      })
+    )
   }
 }
