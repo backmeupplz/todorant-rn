@@ -7,7 +7,7 @@ import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export enum ColorMode {
   auto = 'auto',

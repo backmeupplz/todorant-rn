@@ -4,7 +4,7 @@ import * as RNLocalize from 'react-native-localize'
 import { Language } from '@models/Language'
 import { configCalendar } from '@utils/configCalendar'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // RN 64.import { MMKV } from '@stores/hydration/hydrate'
 
 const translationGetters = {
