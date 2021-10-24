@@ -234,17 +234,12 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
 })
 
 export async function fixDuplicatedTasks() {
-  console.log('test')
   if (Platform.OS !== 'ios') {
     return
   }
   const newAsyncStorage = AsyncStorage
   const oldAsyncStorage = require('@react-native-async-storage/async-storage')
     .default as typeof AsyncStorage
-  // alertError(JSON.stringify(await oldAsyncStorage.getAllKeys()))
-  // alertError(
-  //   JSON.parse(await newAsyncStorage.getItem('SessionStore')).user.token
-  // )
   const userInOldAsyncStorage = JSON.parse(
     (await oldAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
@@ -255,10 +250,6 @@ export async function fixDuplicatedTasks() {
     (await newAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
   if (userInNewAsyncStorage && userInOldAsyncStorage) {
-    // alertError(
-    //   "If you're seeing this message, you're probably have some problems related to duplicated data. If so, please, contact with us"
-    // )
-    // alertSupport()
     return
   }
   if (!userInNewAsyncStorage && userInOldAsyncStorage) {
