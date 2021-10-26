@@ -94,6 +94,7 @@ export class TodoVM {
   }
 
   focus(tag = false) {
+    if (!sharedOnboardingStore.tutorialIsShown) return
     const refocus = () => {
       const rootTextField = (this.todoTextField.current as any)?._root
       blurInput(rootTextField)

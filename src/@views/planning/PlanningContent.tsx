@@ -53,6 +53,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { sanitizeLikeString } from '@utils/textSanitizer'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { database } from '@utils/watermelondb/wmdb'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 
 @observer
 export class PlanningContent extends Component {
@@ -202,7 +203,9 @@ export class PlanningContent extends Component {
               }}
               dark={sharedSettingsStore.isDark}
               onPress={(day: Date) => {
-                navigate('AddTodo', { date: getDateString(day) })
+                checkSubscriptionAndNavigate('AddTodo', {
+                  date: getDateString(day),
+                })
               }}
               emptyDays={(emptyDays: any) => {}}
               activeCoordinates={sharedAppStateStore.activeCoordinates}
