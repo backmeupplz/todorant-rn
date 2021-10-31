@@ -131,6 +131,7 @@ android {
 
     packagingOptions {
         exclude "META-INF/watermelondb_debug.kotlin_module"
+        exclude '**/libjscexecutor.so'
         pickFirst '**/*.so'
         pickFirst 'lib/armeabi-v7a/libblasV8.so'
         pickFirst 'lib/mips/librsjni.so'
