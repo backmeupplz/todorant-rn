@@ -71,8 +71,8 @@ class TagStore {
       if (!epic.epicGoal) {
         return
       }
-      if (!epic.epicPoints) epic.epicPoints = 0
-      if (epic.epicPoints < epic.epicGoal)
+      const epicPoints = epic.epicPoints ?? 0
+      if (epicPoints < epic.epicGoal)
         toUpdate.push(
           epic.prepareUpdate((epic) => {
             if (!epic.epicPoints) epic.epicPoints = 0
