@@ -82,7 +82,11 @@ export class PlanningContent extends Component {
   }
 
   @computed get querySearch() {
-    return this.uncompletedWithOffset?.extend(
+    return (
+      sharedAppStateStore.todoSection === TodoSectionType.completed
+        ? this.completedWithOffset
+        : this.uncompletedWithOffset
+    )?.extend(
       Q.where(
         TodoColumn.text,
         Q.like(
