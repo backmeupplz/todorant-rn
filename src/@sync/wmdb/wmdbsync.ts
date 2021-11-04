@@ -71,7 +71,7 @@ export class WMDBSync {
       async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
         this.serverTimeStamp = undefined
         this.serverObjects = undefined
-        if (this.gotWmDb) await when(() => !this.gotWmDb)
+        // if (this.gotWmDb) await when(() => !this.gotWmDb)
         if (pushedBack?.todos.length) {
           for (const todo of pushedBack.todos) {
             const localTodo = await todosCollection.find(todo._tempSyncId)
@@ -90,6 +90,7 @@ export class WMDBSync {
             await localTag.setServerId(tag._id)
           }
         }
+        this.gotWmDb = false
       }
     )
   }
@@ -174,6 +175,7 @@ export class WMDBSync {
         return Promise.reject('Socket sync: no authorization token provided')
       }
       this.isSyncing = true
+      let pushed = false
       // Get server data
       const { serverObjects: changes, serverTimeStamp: timestamp } =
         await this.getServerData()
@@ -186,7 +188,10 @@ export class WMDBSync {
               timestamp,
             }
           },
-          pushChanges: this.pushObjectsHandler,
+          pushChanges: (args) => {
+            pushed = true
+            return this.pushObjectsHandler(args)
+          },
           migrationsEnabledAtVersion: 1,
           log: __DEV__ ? logger.newLog() : undefined,
           sendCreatedAsUpdated: true,
@@ -199,6 +204,7 @@ export class WMDBSync {
         if (__DEV__) {
           console.log(logger.formattedLogs)
         }
+        if (pushed) await when(() => !this.gotWmDb)
         this.gotWmDb = false
         this.serverRequest = undefined
         this.isSyncing = false
