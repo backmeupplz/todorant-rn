@@ -35,6 +35,7 @@ import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { decrypt, encrypt, _e } from '@utils/encryption'
+import { WMDBSync } from './wmdb/wmdbsync'
 
 // Using built-in SyncLogger
 const SyncLogger = require('@nozbe/watermelondb/sync/SyncLogger').default
@@ -61,6 +62,7 @@ class Sync {
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
   private delegationSyncManager: SyncManager<any>
+  private wmdbSyncManager: WMDBSync
 
   @computed get isSyncing() {
     return (
@@ -68,245 +70,15 @@ class Sync {
       this.userSyncManager.isSyncing ||
       this.heroSyncManager.isSyncing ||
       this.delegationSyncManager.isSyncing ||
-      this.wmdbSyncing
+      this.wmdbSyncManager.isSyncing
     )
-  }
-
-  // Do not touch this variable, used only for debuging purpose
-  @observable _debugSync = false
-
-  @observable wmdbSyncing = false
-  @observable gotWmDb = false
-  private serverTimeStamp?: number
-  private serverObjects?: SyncDatabaseChangeSet
-
-  private _promise?: Promise<void>
-
-  private waitingSync?: boolean
-
-  async startWaiting() {
-    if (this.waitingSync) return
-    this.waitingSync = true
-    await when(() => !this.wmdbSyncing)
-    await this.wmDbSyncFunc()
-    this.waitingSync = false
-  }
-
-  wmDbSyncFunc = async () => {
-    if (!this.socketConnection.connected) {
-      return Promise.reject('Socket sync: not connected to sockets')
-    }
-    if (!this.socketConnection.authorized) {
-      return Promise.reject('Socket sync: not authorized')
-    }
-    if (!this.socketConnection.token) {
-      return Promise.reject('Socket sync: no authorization token provided')
-    }
-    if (this.wmdbSyncing) {
-      this.startWaiting()
-      return
-    }
-    if (this.gotWmDb || this._promise) {
-      // Check for potential concurrent state
-      return
-    }
-    // Set syncing for preventing concurrent sync
-    this.wmdbSyncing = true
-    // Get last wmdb sync date
-    const lastPulledAt = await wmdbGetLastPullAt(database)
-    // Request for changes from server
-    this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
-    // Wait until get server changes
-    this._promise = when(() => this.gotWmDb)
-    await this._promise
-    // Check for concurrent state error
-    if (lastPulledAt !== (await wmdbGetLastPullAt(database))) return
-    if (lastPulledAt === this.serverTimeStamp) return
-    // Start sync
-    try {
-      await synchronize({
-        sendCreatedAsUpdated: true,
-        database,
-        pullChanges: async () => {
-          return {
-            changes: this.serverObjects!,
-            timestamp: this.serverTimeStamp!,
-          }
-        },
-        log: __DEV__ ? logger.newLog() : undefined,
-        pushChanges: async ({ changes, lastPulledAt }) => {
-          const createdTodos = []
-          const updatedTodos = []
-          const clonedChanges = cloneDeep(changes)
-          for (const sqlRaw of clonedChanges.todos.created) {
-            if (sqlRaw.user_id) {
-              sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
-            }
-            if (sqlRaw.delegator_id) {
-              sqlRaw.delegator_id = (
-                await usersCollection.find(sqlRaw.delegator_id)
-              )._id
-            }
-            if (sqlRaw.is_encrypted) {
-              sqlRaw.text = encrypt(sqlRaw.text)
-            }
-            createdTodos.push(sqlRaw)
-          }
-          for (const sqlRaw of clonedChanges.todos.updated) {
-            if (sqlRaw.user_id) {
-              sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
-            }
-            if (sqlRaw.delegator_id) {
-              sqlRaw.delegator_id = (
-                await usersCollection.find(sqlRaw.delegator_id)
-              )._id
-            }
-            if (sqlRaw.is_encrypted) {
-              sqlRaw.text = encrypt(sqlRaw.text)
-            }
-            updatedTodos.push(sqlRaw)
-          }
-          clonedChanges.todos.created = createdTodos
-          clonedChanges.todos.updated = updatedTodos
-          this.socketConnection.socketIO.emit(
-            'push_wmdb',
-            clonedChanges,
-            lastPulledAt
-          )
-        },
-        migrationsEnabledAtVersion: 1,
-        conflictResolver: (_, local, remote, resolved) => {
-          const localDate = new Date(local.updated_at)
-          const remoteDate = new Date(remote.updated_at)
-          remote.updated_at = Date.now()
-          local.updated_at = Date.now()
-          //return remote
-          return Object.assign(
-            resolved,
-            remoteDate > localDate ? remote : local
-          )
-        },
-      } as SyncType)
-    } catch (err) {
-      console.error(err)
-      // Drop sync state for preventing concurrent errors
-      this.gotWmDb = false
-      this._promise = undefined
-      this.wmdbSyncing = false
-      this.serverObjects = undefined
-    } finally {
-      if (__DEV__) {
-        console.log(logger.formattedLogs)
-      }
-    }
-    // Drop sync state
-    this.gotWmDb = false
-    this._promise = undefined
-    this.wmdbSyncing = false
   }
 
   constructor() {
     makeObservable(this)
     this.setupSyncListeners()
-
-    this.socketConnection.socketIO.on('wmdb', this.wmDbSyncFunc)
-
-    this.socketConnection.socketIO.on(
-      'return_wmdb',
-      async (serverObjects: SyncDatabaseChangeSet, serverTimeStamp: number) => {
-        this.serverTimeStamp = serverTimeStamp
-        const todos = []
-        const tags = []
-        for (const updated of serverObjects.tags.updated) {
-          const localTodo = (
-            await tagsCollection
-              .query(Q.where(TagColumn._id, updated.server_id))
-              .fetch()
-          )[0]
-          if (localTodo) {
-            updated.id = localTodo.id
-            tags.push(updated)
-            continue
-          }
-          updated.id = updated.server_id
-          tags.push(updated)
-        }
-        for (const updated of serverObjects.todos.updated) {
-          if (updated.delegator_id) {
-            updated.user_id = (
-              await updateOrCreateDelegation(
-                updated.user_id as MelonUser,
-                false,
-                true
-              )
-            ).id
-            updated.delegator_id = (
-              await updateOrCreateDelegation(
-                updated.delegator_id as MelonUser,
-                true,
-                true
-              )
-            ).id
-          }
-          try {
-            updated.text = decrypt(updated.text) || updated.text
-          } catch (e) {
-            // Do nothing
-          }
-          const localTodo = (
-            await todosCollection
-              .query(Q.where(TodoColumn._id, updated.server_id))
-              .fetch()
-          )[0]
-          updated.exact_date_at = new Date(
-            getTitle({
-              monthAndYear: updated.month_and_year,
-              date: updated.date,
-            })
-          ).getTime()
-          if (localTodo) {
-            updated.id = localTodo.id
-            todos.push(updated)
-            continue
-          }
-          updated.id = updated.server_id
-          todos.push(updated)
-        }
-        serverObjects.todos.updated = todos
-        serverObjects.tags.updated = tags
-        this.serverObjects = serverObjects
-        this.gotWmDb = true
-      }
-    )
-
-    this.socketConnection.socketIO.on(
-      'complete_wmdb',
-      async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
-        this.serverTimeStamp = undefined
-        this.serverObjects = undefined
-        if (this.gotWmDb) await when(() => !this.gotWmDb)
-        if (pushedBack?.todos.length) {
-          for (const todo of pushedBack.todos) {
-            const localTodo = await todosCollection.find(todo._tempSyncId)
-            if (!localTodo || !todo._id) {
-              return
-            }
-            await localTodo.setServerId(todo._id)
-          }
-        }
-        if (pushedBack?.tags.length) {
-          for (const tag of pushedBack.tags) {
-            const localTag = await tagsCollection.find(tag._tempSyncId)
-            if (!localTag || !tag._id) {
-              return
-            }
-            await localTag.setServerId(tag._id)
-          }
-        }
-      }
-    )
-
     // Setup sync managers
+    this.wmdbSyncManager = new WMDBSync(this.socketConnection)
     this.settingsSyncManager = new SyncManager<Settings>(
       this.socketConnection,
       'settings',
@@ -404,8 +176,7 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
-          this.wmDbSyncFunc(),
-          //this.tagsSyncManager.sync(),
+          this.wmdbSyncManager.sync(),
           this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
@@ -417,9 +188,9 @@ class Sync {
         return this.heroSyncManager.sync()
       // Realm syncs
       case SyncRequestEvent.Todo:
-        return this.wmDbSyncFunc()
+        return this.wmdbSyncManager.sync()
       case SyncRequestEvent.Tag:
-        return this.wmDbSyncFunc()
+        return this.wmdbSyncManager.sync()
       case SyncRequestEvent.Delegation:
         return this.delegationSyncManager.sync()
     }

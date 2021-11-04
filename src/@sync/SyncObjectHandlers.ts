@@ -5,10 +5,18 @@ import {
   removeDelegation,
   updateOrCreateDelegation,
 } from '@utils/delegations'
-import { database, usersCollection } from '@utils/watermelondb/wmdb'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+  usersCollection,
+} from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { MelonUser } from '@models/MelonTodo'
-import { UserColumn } from '@utils/watermelondb/tables'
+import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
+import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
+import { decrypt } from '@utils/encryption'
+import { getTitle } from '@models/Todo'
 
 export async function onDelegationObjectsFromServer(
   objects: {
@@ -155,4 +163,68 @@ export async function onDelegationObjectsFromServer(
   )
   // Complete sync
   completeSync()
+}
+
+export async function onWMDBObjectsFromServer(
+  serverObjects: SyncDatabaseChangeSet
+) {
+  const todos = []
+  const tags = []
+  for (const updated of serverObjects.tags.updated) {
+    const localTodo = (
+      await tagsCollection
+        .query(Q.where(TagColumn._id, updated.server_id))
+        .fetch()
+    )[0]
+    if (localTodo) {
+      updated.id = localTodo.id
+      tags.push(updated)
+      continue
+    }
+    updated.id = updated.server_id
+    tags.push(updated)
+  }
+  for (const updated of serverObjects.todos.updated) {
+    if (updated.delegator_id) {
+      updated.user_id = (
+        await updateOrCreateDelegation(
+          updated.user_id as MelonUser,
+          false,
+          true
+        )
+      ).id
+      updated.delegator_id = (
+        await updateOrCreateDelegation(
+          updated.delegator_id as MelonUser,
+          true,
+          true
+        )
+      ).id
+    }
+    try {
+      updated.text = decrypt(updated.text) || updated.text
+    } catch (e) {
+      // Do nothing
+    }
+    const localTodo = (
+      await todosCollection
+        .query(Q.where(TodoColumn._id, updated.server_id))
+        .fetch()
+    )[0]
+    updated.exact_date_at = new Date(
+      getTitle({
+        monthAndYear: updated.month_and_year,
+        date: updated.date,
+      })
+    ).getTime()
+    if (localTodo) {
+      updated.id = localTodo.id
+      todos.push(updated)
+      continue
+    }
+    updated.id = updated.server_id
+    todos.push(updated)
+  }
+  serverObjects.todos.updated = todos
+  serverObjects.tags.updated = tags
 }
