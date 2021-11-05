@@ -11,6 +11,7 @@ import { AsyncStorage } from 'react-native'
 import { Platform } from 'react-native'
 import { alertError, alertSupport } from '@utils/alert'
 import { database } from '@utils/watermelondb/wmdb'
+import ReactNativeRestart from 'react-native-restart'
 
 export enum ColorMode {
   auto = 'auto',
@@ -262,4 +263,5 @@ export async function fixDuplicatedTasks() {
       })
     )
   }
+  ReactNativeRestart.Restart()
 }
