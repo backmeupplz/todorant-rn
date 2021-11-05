@@ -91,9 +91,12 @@ const Stack = createStackNavigator()
 @codePush(CodePushOptions)
 @observer
 class App extends Component {
+  async UNSAFE_componentWillMount() {
+    await fixDuplicatedTasks()
+  }
+
   async componentDidMount() {
     await setI18nConfigAsync()
-    await fixDuplicatedTasks()
     checkTokenAndPassword()
     checkSiriPermission()
     checkSharedContent()

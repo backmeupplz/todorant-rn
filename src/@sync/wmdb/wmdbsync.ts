@@ -9,6 +9,7 @@ import {
   SyncPushArgs,
 } from '@nozbe/watermelondb/sync'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
+import { alertError, alertMessage } from '@utils/alert'
 import { updateOrCreateDelegation } from '@utils/delegations'
 import { decrypt, encrypt } from '@utils/encryption'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
@@ -20,6 +21,7 @@ import {
 } from '@utils/watermelondb/wmdb'
 import { cloneDeep } from 'lodash'
 import { makeObservable, observable, when } from 'mobx'
+import { Alert } from 'react-native'
 import { SocketConnection } from '../sockets/SocketConnection'
 import { Mutex } from './mutex'
 
@@ -71,7 +73,7 @@ export class WMDBSync {
       async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
         this.serverTimeStamp = undefined
         this.serverObjects = undefined
-        if (this.gotWmDb) await when(() => !this.gotWmDb)
+        // if (this.gotWmDb) await when(() => !this.gotWmDb)
         if (pushedBack?.todos.length) {
           for (const todo of pushedBack.todos) {
             const localTodo = await todosCollection.find(todo._tempSyncId)
@@ -163,7 +165,7 @@ export class WMDBSync {
     return Object.assign(resolved, remoteDate > localDate ? remote : local)
   }
 
-  sync = async () =>
+  sync = () =>
     Mutex.dispatch(async () => {
       if (!this.socketConnection.connected) {
         return Promise.reject('Socket sync: not connected to sockets')
@@ -204,7 +206,7 @@ export class WMDBSync {
         if (__DEV__) {
           console.log(logger.formattedLogs)
         }
-        if (pushed) await when(() => !this.gotWmDb)
+        // if (pushed) await when(() => !this.gotWmDb)
         this.gotWmDb = false
         this.serverRequest = undefined
         this.isSyncing = false
