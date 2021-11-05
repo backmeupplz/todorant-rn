@@ -93,6 +93,7 @@ const Stack = createStackNavigator()
 class App extends Component {
   async componentDidMount() {
     await setI18nConfigAsync()
+    await fixDuplicatedTasks()
     checkTokenAndPassword()
     checkSiriPermission()
     checkSharedContent()
@@ -108,7 +109,6 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
-    await fixDuplicatedTasks()
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
