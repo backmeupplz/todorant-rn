@@ -117,9 +117,9 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
 })
 
 const EnhancedTodoCard = enhanceTodoCard(({ todo }: { todo: MelonTodo[] }) => {
-  return (
+  return todo[0] ? (
     <Fragment key={todo[0]._tempSyncId}>
       <TodoCard todo={todo[0]} type={CardType.current} />
     </Fragment>
-  )
+  ) : null
 })

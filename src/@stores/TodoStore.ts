@@ -185,17 +185,24 @@ class TodoStore {
     // Today date changed
     observableNowEventEmitter.on(
       ObservableNowEventEmitterEvent.ObservableNowChanged,
-      () => {
+      async () => {
         this.subscribeOldTodos()
 
         this.todayUncompletedTodos = this.getTodos(
           observableNow.todayTitle,
           false
         )
+        this.todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
         this.todayUncompletedTodos
           .extend(Q.where(TodoColumn.frog, true))
           .observeCount(false)
           .subscribe((count) => (this.incompleteFrogsExist = count))
+        this.currentSubscription = this.todayUncompletedTodos
+          .observeCount(false)
+          .subscribe((amount) => (this.uncompletedTodayAmount = amount))
+        this.uncompletedTodayAmount =
+          await this.todayUncompletedTodos.fetchCount()
+        this.completedTodayAmount = await this.todayCompletedTodos.fetchCount()
       }
     )
     this.initDelegation()
