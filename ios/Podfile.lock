@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.2.2)
+  - Alamofire (5.4.4)
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -9,15 +9,15 @@ PODS:
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
-  - CodePush (7.0.1):
+  - CodePush (7.0.4):
     - Base64 (~> 1.1)
     - JWT (~> 3.0.0-beta.12)
     - React-Core
     - SSZipArchive (~> 2.2.2)
-  - CountlyReactNative (20.11.7):
-    - CountlyReactNative/NotificationService (= 20.11.7)
+  - CountlyReactNative (20.11.10):
+    - CountlyReactNative/NotificationService (= 20.11.10)
     - React
-  - CountlyReactNative/NotificationService (20.11.7):
+  - CountlyReactNative/NotificationService (20.11.10):
     - React
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.63.4)
@@ -45,20 +45,16 @@ PODS:
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GTMAppAuth (1.1.0):
+  - GTMAppAuth (1.2.2):
     - AppAuth/Core (~> 1.4)
-    - GTMSessionFetcher (~> 1.4)
-  - GTMSessionFetcher (1.4.0):
-    - GTMSessionFetcher/Full (= 1.4.0)
-  - GTMSessionFetcher/Core (1.4.0)
-  - GTMSessionFetcher/Full (1.4.0):
-    - GTMSessionFetcher/Core (= 1.4.0)
-  - JWT (3.0.0-beta.12):
+    - GTMSessionFetcher/Core (~> 1.5)
+  - GTMSessionFetcher/Core (1.7.0)
+  - JWT (3.0.0-beta.14):
     - Base64 (~> 1.1.2)
-  - KeychainAccess (4.2.1)
-  - MMKV (1.2.7):
-    - MMKVCore (~> 1.2.7)
-  - MMKVCore (1.2.10)
+  - KeychainAccess (4.2.2)
+  - MMKV (1.2.10):
+    - MMKVCore (~> 1.2.10)
+  - MMKVCore (1.2.11)
   - Permission-Camera (2.2.2):
     - RNPermissions
   - Permission-Siri (2.2.2):
@@ -239,14 +235,14 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.44.3):
     - React-Core
-  - react-native-mmkv-storage (0.6.0):
-    - MMKV (= 1.2.7)
+  - react-native-mmkv-storage (0.6.6):
+    - MMKV (= 1.2.10)
     - React-Core
-  - react-native-netinfo (6.0.1):
+  - react-native-netinfo (6.2.1):
     - React-Core
   - react-native-receive-sharing-intent (1.0.4):
     - React
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-segmented-control (2.2.2):
     - React-Core
@@ -319,9 +315,9 @@ PODS:
   - RealmJS (10.6.0):
     - GCDWebServer
     - React
-  - RNAppleAuthentication (2.1.2):
+  - RNAppleAuthentication (2.1.5):
     - React-Core
-  - RNCAsyncStorage (1.15.5):
+  - RNCAsyncStorage (1.15.11):
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
@@ -331,7 +327,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.5.2):
     - React-Core
-  - RNDeviceInfo (8.1.3):
+  - RNDeviceInfo (8.4.8):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
@@ -350,11 +346,11 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - RNSound (0.11.0):
-    - React
-    - RNSound/Core (= 0.11.0)
-  - RNSound/Core (0.11.0):
-    - React
+  - RNSound (0.11.1):
+    - React-Core
+    - RNSound/Core (= 0.11.1)
+  - RNSound/Core (0.11.1):
+    - React-Core
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (6.7.0):
@@ -585,13 +581,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
-  CodePush: 9bb93f52a44ee80b72739d89dead9c7e86c3bd3a
-  CountlyReactNative: 251d0aaca20510398d643fa354cf424c5e3709ba
+  CodePush: b51b7ac64c07d4eacfc8cc5750a1dd28adbf2528
+  CountlyReactNative: bcf583ee6e66d13088e3d402aea73728074e2dc6
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
@@ -599,12 +595,12 @@ SPEC CHECKSUMS:
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
-  JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
-  KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
-  MMKV: 22e5136f7d00197bc0fc9694b7f71519f0d1ca12
-  MMKVCore: b00e7a09ec77a1b916aef336eedd3b99ec249978
+  GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  MMKV: 76033b9ace2006623308910a3afcc0e25eba3140
+  MMKVCore: f9e4f56742fdebbd042f7a273e278927f182cee7
   Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
   Permission-Siri: c50c434a91af15ed47fe2b5b2fb705d567ba1d77
   RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
@@ -619,10 +615,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-camera: b8cc03e2feec0c04403d0998e37cf519d8fd4c6f
-  react-native-mmkv-storage: 684f1adf671592c18fb023e0cf1305a84108b59d
-  react-native-netinfo: 7cb7877ff31ebeb3d03ce0b4fbb616f121ddd859
+  react-native-mmkv-storage: 28514ffe9e67c5223b3d00e725bc72c8194a9eee
+  react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-receive-sharing-intent: feba0a332a07977549a85aa58b496eb44368366a
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-segmented-control: 65df6cd0619b780b3843d574a72d4c7cec396097
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webview: 160ac8d6bb974e2933f2de6bb7464a8e934ff31d
@@ -638,13 +634,13 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
   RealmJS: c903034b0d767fcef11dc8207e91b6f07e60d7b8
-  RNAppleAuthentication: e95bcfbd044013667f35c5ca20ae17d39500c009
-  RNCAsyncStorage: 56a3355a10b5d660c48c6e37325ac85ebfd09885
+  RNAppleAuthentication: 63c2127ace11985b94f852fc480eb84145653712
+  RNCAsyncStorage: eb05c0284dd6b50b32f92fad55e2a41e03358c43
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
-  RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
+  RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNHoleView: 78fe2ca0ed1be643c0d245fea09e582cc8ee0d51
@@ -653,7 +649,7 @@ SPEC CHECKSUMS:
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
+  RNSound: 27e8268bdb0a1f191f219a33267f7e0445e8d62f
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   simdjson: 85016870cd17207312b718ef6652eb6a1cd6a2b0
