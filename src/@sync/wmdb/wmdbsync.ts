@@ -131,12 +131,21 @@ export class WMDBSync {
     }
     for (const sqlRaw of clonedChanges.todos.updated) {
       if (sqlRaw.user_id) {
-        sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
+        const user = await usersCollection.find(sqlRaw.user_id)
+        if (!user) {
+          sqlRaw.is_deleted = true
+          return
+        } else {
+          sqlRaw.user_id = user._id
+        }
       }
       if (sqlRaw.delegator_id) {
-        sqlRaw.delegator_id = (
-          await usersCollection.find(sqlRaw.delegator_id)
-        )._id
+        const delegator = await usersCollection.find(sqlRaw.delegator_id)
+        if (!delegator) {
+          sqlRaw.is_deleted = true
+        } else {
+          sqlRaw.delegator_id = delegator._id
+        }
       }
       if (sqlRaw.is_encrypted) {
         sqlRaw.text = encrypt(sqlRaw.text)
@@ -206,12 +215,10 @@ export class WMDBSync {
         if (__DEV__) {
           console.log(logger.formattedLogs)
         }
-        // if (pushed) await when(() => !this.gotWmDb)
         this.gotWmDb = false
         this.serverRequest = undefined
         this.isSyncing = false
         this.serverObjects = undefined
-        // TODO do something with complete_wmdb (idk what exactly, but do somethign)
       }
     })
 }

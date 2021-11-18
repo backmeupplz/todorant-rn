@@ -17,6 +17,7 @@ import { TodoHeader } from '@components/TodoHeader'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { Query } from '@nozbe/watermelondb'
+import { usersCollection } from '@utils/watermelondb/wmdb'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
@@ -50,6 +51,15 @@ const EnhancedDraggableSectionList = enhance(
       for (const realmTodo of todo) {
         try {
           const user = await (byMe ? realmTodo.user : realmTodo.delegator)
+          console.log('//////////////////////////////////////////////////')
+          // console.log(
+          //   await (
+          //     await usersCollection.query().fetch()
+          //   ).forEach((user) => {
+          //     console.log(user.name)
+          //   })
+          // )
+          console.log((await realmTodo.user).name)
           if (!user) continue
           const titleKey = user?._id
           if (!titleKey) continue

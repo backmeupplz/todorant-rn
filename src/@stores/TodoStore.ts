@@ -63,8 +63,8 @@ class TodoStore {
       : Q.where(TodoColumn.delegator, this.wmdbUserAsDelegatorId || null)
     return this.undeletedTodos.extend(
       Q.where(TodoColumn.delegator, Q.notEq(null)),
-      Q.where(TodoColumn.completed, completed),
-      query
+      Q.where(TodoColumn.completed, completed)
+      // query
     )
   }
 
@@ -187,7 +187,6 @@ class TodoStore {
       ObservableNowEventEmitterEvent.ObservableNowChanged,
       () => {
         this.subscribeOldTodos()
-
         this.todayUncompletedTodos = this.getTodos(
           observableNow.todayTitle,
           false
@@ -231,6 +230,12 @@ class TodoStore {
       .subscribe((count) => (this.delegatedByMeCompletedCount = count))
 
     this.subscribeOldTodos()
+
+    console.log(
+      await todosCollection
+        .query(Q.where(TodoColumn.delegator, Q.notEq(null)))
+        .fetch()
+    )
   }
 
   logout = () => {

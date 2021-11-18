@@ -2,6 +2,7 @@ import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { Falsy } from 'react-native'
 import { UserColumn } from './watermelondb/tables'
 import { database, usersCollection } from './watermelondb/wmdb'
 
@@ -31,11 +32,15 @@ export async function removeDelegation(
 export async function getLocalDelegation(
   delegation: Partial<MelonUser>,
   delegator: boolean
-): Promise<MelonUser | undefined> {
+): Promise<MelonUser | Falsy> {
+  if (!delegation) {
+    return null
+  }
   return (
     await usersCollection
       .query(
         Q.where(UserColumn.isDelegator, delegator),
+        // Q.where(UserColumn.name, Q.notEq(null)),
         Q.or(
           Q.where(UserColumn._id, delegation._id || null),
           Q.where(
@@ -72,12 +77,13 @@ export async function updateOrCreateDelegation(
   delegator: boolean,
   forceWrite = false
 ): Promise<MelonUser> {
+  return
   // Get local user if exists
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
     if (forceWrite) {
       const updatedUser = localDelegate.updateUser(localDelegate)
-      return updatedUser
+      return await updatedUser
     }
     return localDelegate.prepareUpdate((delegate) =>
       Object.assign(delegate, delegation)

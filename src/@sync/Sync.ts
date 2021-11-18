@@ -168,7 +168,7 @@ class Sync {
     return this.sync()
   }
 
-  sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
+  async sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
     switch (event) {
       // All
       case SyncRequestEvent.All:
@@ -176,8 +176,8 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
+          await this.delegationSyncManager.sync(),
           this.wmdbSyncManager.sync(),
-          this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:

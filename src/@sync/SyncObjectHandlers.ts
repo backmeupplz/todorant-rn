@@ -1,9 +1,9 @@
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import {
   cloneDelegation,
+  getLocalDelegation,
   getMismatchesWithServer,
   removeDelegation,
-  updateOrCreateDelegation,
 } from '@utils/delegations'
 import {
   database,
@@ -17,6 +17,41 @@ import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
 import { decrypt } from '@utils/encryption'
 import { getTitle } from '@models/Todo'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sanitizeLikeString } from '@nozbe/watermelondb/QueryDescription'
+
+export async function updateOrCreateDelegation(
+  delegation: Partial<MelonUser>,
+  delegator: boolean,
+  forceWrite = false
+): Promise<MelonUser> {
+  // Get local user if exists
+  const localDelegate = await getLocalDelegation(delegation, delegator)
+  if (localDelegate) {
+    if (forceWrite) {
+      const updatedUser = localDelegate.updateUser(localDelegate)
+      return await updatedUser
+    }
+    return localDelegate.prepareUpdate((delegate) =>
+      Object.assign(delegate, delegation)
+    )
+  }
+  // Create new user in place if need
+  if (forceWrite) {
+    let createdUser!: MelonUser
+    await database.write(async () => {
+      createdUser = await usersCollection.create((delegate) => {
+        Object.assign(delegate, delegation)
+        delegate.isDelegator = delegator
+      })
+    })
+    return createdUser
+  }
+  return usersCollection.prepareCreate((delegate) => {
+    Object.assign(delegate, delegation)
+    delegate.isDelegator = delegator
+  })
+}
 
 export async function onDelegationObjectsFromServer(
   objects: {
@@ -33,7 +68,21 @@ export async function onDelegationObjectsFromServer(
   }>,
   completeSync: () => void
 ) {
+  console.log(objects)
   const lastSyncDate = sharedDelegationStore.updatedAt
+  if (!lastSyncDate && sharedSessionStore.user) {
+    // console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\n\n\nn')
+    // await updateOrCreateDelegation(
+    //   { _id: sharedSessionStore.user._id },
+    //   false,
+    //   true
+    // )
+    // await updateOrCreateDelegation(
+    //   { _id: sharedSessionStore.user._id },
+    //   true,
+    //   true
+    // )
+  }
   // Get local delegators
   const realmDelegators = usersCollection.query(
     Q.where(UserColumn.isDelegator, true)
@@ -58,6 +107,20 @@ export async function onDelegationObjectsFromServer(
   ).fetch()
   const toDelete = [] as MelonUser[]
   const toUpdateOrCreate = [] as MelonUser[]
+  toUpdateOrCreate.push(
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user?._id },
+      false,
+      false
+    )
+  )
+  toUpdateOrCreate.push(
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user?._id },
+      true,
+      false
+    )
+  )
   // Pull
   // Create and delete delegates and delegators
   // Delegators
@@ -115,10 +178,23 @@ export async function onDelegationObjectsFromServer(
   )
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
+    const arrayTest = [
+      ...new Set([
+        ...toUpdateOrCreate.filter((user) => {
+          if (user._id !== sharedSessionStore.user?._id) {
+            return !!user.name
+          }
+          return true
+        }),
+        ...toDelete,
+      ]),
+    ]
+    // console.log([...toUpdateOrCreate, ...toDelete].length)
+    // arrayTest.forEach((user) => {
+    //   console.log(user.name)
+    // })
     // Complete sync
-    await database.write(
-      async () => await database.batch(...toUpdateOrCreate, ...toDelete)
-    )
+    await database.write(async () => await database.batch(...arrayTest))
     completeSync()
     return
   }
@@ -159,7 +235,8 @@ export async function onDelegationObjectsFromServer(
     })
   )
   await database.write(
-    async () => await database.batch(...toUpdateOrCreate, ...toDelete)
+    async () =>
+      await database.batch(...[...new Set([...toUpdateOrCreate, ...toDelete])])
   )
   // Complete sync
   completeSync()
@@ -184,22 +261,69 @@ export async function onWMDBObjectsFromServer(
     updated.id = updated.server_id
     tags.push(updated)
   }
+  let showed = false
   for (const updated of serverObjects.todos.updated) {
     if (updated.delegator_id) {
-      updated.user_id = (
-        await updateOrCreateDelegation(
-          updated.user_id as MelonUser,
-          false,
-          true
-        )
-      ).id
-      updated.delegator_id = (
-        await updateOrCreateDelegation(
-          updated.delegator_id as MelonUser,
-          true,
-          true
-        )
-      ).id
+      if (!showed) {
+        console.log(await usersCollection.query().fetch())
+        showed = true
+      }
+      console.log(updated.user_id)
+      // console.log('test')
+      const user = await (
+        await usersCollection
+          .query(
+            Q.where(UserColumn._id, sanitizeLikeString(updated.user_id._id)),
+            Q.where(UserColumn.isDelegator, false)
+          )
+          .fetch()
+      )[0] // getLocalDelegation(updated.delegator_id, true)// await getLocalDelegation(updated.user_id, false)
+      console.log(user)
+      console.log(user?.name)
+      if (user) {
+        updated.user_id = user.id
+      } else {
+        updated.user_id = null
+        updated.is_deleted = true
+      }
+      console.log(updated.user_id)
+      console.log(updated)
+      const delegator = await (
+        await usersCollection
+          .query(
+            Q.where(
+              UserColumn._id,
+              sanitizeLikeString(updated.delegator_id._id)
+            ),
+            Q.where(UserColumn.isDelegator, true)
+          )
+          .fetch()
+      )[0] // getLocalDelegation(updated.delegator_id, true)
+      console.log()
+      console.log(delegator)
+      console.log('lol')
+      console.log(delegator?.name)
+      if (delegator) {
+        updated.delegator_id = delegator.id
+      } else {
+        updated.delegator_id = null
+        updated.is_deleted = true
+      }
+      console.log(updated.delegator_id)
+      // updated.user_id = (
+      //   await updateOrCreateDelegation(
+      //     updated.user_id as MelonUser,
+      //     false,
+      //     true
+      //   )
+      // ).id
+      // updated.delegator_id = (
+      //   await updateOrCreateDelegation(
+      //     updated.delegator_id as MelonUser,
+      //     true,
+      //     true
+      //   )
+      // ).id
     }
     try {
       updated.text = decrypt(updated.text) || updated.text
@@ -228,3 +352,13 @@ export async function onWMDBObjectsFromServer(
   serverObjects.todos.updated = todos
   serverObjects.tags.updated = tags
 }
+
+// type Tuple<L extends number, T extends unknown[] = []> = T[`length`] extends L
+//   ? T
+//   : Tuple<L, [...T, unknown]>
+
+// type MinusOne<T extends number> = Tuple<T> extends [...infer K, unknown]
+//   ? K[`length`]
+//   : never
+
+// const test: MinusOne<5> = 4

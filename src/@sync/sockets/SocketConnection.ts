@@ -17,7 +17,7 @@ export class SocketConnection {
   @observable connectionError?: string = undefined
 
   socketIO = SocketIO(
-    __DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
+    !__DEV__ ? 'http://localhost:3000' : 'https://ws.todorant.com'
   )
 
   private pendingAuthorization?: {

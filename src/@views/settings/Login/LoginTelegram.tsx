@@ -10,7 +10,7 @@ import { makeObservable, observable } from 'mobx'
 import { Spinner } from '@components/Spinner'
 import { View } from 'native-base'
 
-const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
+const base = !__DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 
 @observer
 class LoginTelegramContent extends Component<{
@@ -66,11 +66,12 @@ class LoginTelegramContent extends Component<{
 }
 
 export const LoginTelegram = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { setLoadingToTrue: () => void } | undefined>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { setLoadingToTrue: () => void } | undefined>,
+        string
+      >
+    >()
   return <LoginTelegramContent route={route} />
 }
