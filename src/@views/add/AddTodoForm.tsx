@@ -558,7 +558,7 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
               },
               (buttonIndex) => {
                 if (buttonIndex + 1 !== options.length)
-                  this.props.vm.delegate = delegates[buttonIndex]
+                  this.props.vm.delegate = delegates[buttonIndex + 1]
               }
             )
           }}

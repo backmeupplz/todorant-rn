@@ -50,19 +50,21 @@ class Row extends Component<{
                   if (
                     this.props.delegationType === DelegationUserType.delegate
                   ) {
-                    await removeDelegation(
-                      this.props.delegationUser,
-                      false,
-                      true
-                    )
+                    await this.props.delegationUser.delete()
+                    // await removeDelegation(
+                    //   this.props.delegationUser,
+                    //   false,
+                    //   true
+                    // )
                   } else {
-                    await removeDelegation(
-                      this.props.delegationUser,
-                      true,
-                      true
-                    )
+                    await this.props.delegationUser.delete()
+                    // await removeDelegation(
+                    //   this.props.delegationUser,
+                    //   true,
+                    //   true
+                    // )
                   }
-                  await sharedSync.sync(SyncRequestEvent.Delegation)
+                  await sharedSync.sync()
                 } catch (err) {
                   alertError(err)
                 } finally {

@@ -3,8 +3,10 @@ import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Falsy } from 'react-native'
-import { UserColumn } from './watermelondb/tables'
-import { database, usersCollection } from './watermelondb/wmdb'
+import { TodoColumn, UserColumn } from './watermelondb/tables'
+import { database, todosCollection, usersCollection } from './watermelondb/wmdb'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export async function getOrCreateDelegation(
   delegation: MelonUser,
@@ -25,6 +27,27 @@ export async function removeDelegation(
     console.error('Local delegation not found')
     return
   }
+  const todosWithDelegate = await todosCollection
+    .query(
+      Q.where(
+        delegator ? TodoColumn.delegator : TodoColumn.user,
+        localDelegation.id
+      )
+    )
+    .fetch()
+  await Promise.all(
+    todosWithDelegate.map(async (todo) => {
+      await database.write(async () => {
+        await todo.update((todo) => {
+          todo.deleted = true
+          todo.delegateAccepted = true
+          if (delegator) {
+            todo.delegator?.set(null)
+          }
+        })
+      })
+    })
+  )
   if (forceWrite) return await localDelegation.delete()
   return localDelegation.prepareDestroyPermanently()
 }
@@ -58,8 +81,9 @@ export function getMismatchesWithServer(
   localDelegations: MelonUser[],
   serverDelegations: MelonUser[]
 ) {
+  const uniqueLocalDelegations = new Set(localDelegations)
   const missMatches = [] as MelonUser[]
-  localDelegations.forEach((localDelegation) => {
+  uniqueLocalDelegations.forEach((localDelegation) => {
     if (
       localDelegation &&
       !serverDelegations.find(

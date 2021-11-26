@@ -61,7 +61,10 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from '@utils/watermelondb/wmdb'
-import { updateOrCreateDelegation } from '@utils/delegations'
+import {
+  getLocalDelegation,
+  updateOrCreateDelegation,
+} from '@utils/delegations'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -176,12 +179,8 @@ class AddTodoContent extends Component<{
         let user: MelonUser | undefined
         let delegator: MelonUser | undefined
         if (vm.delegate) {
-          user = await updateOrCreateDelegation(vm.delegate, false, true)
-          delegator = await updateOrCreateDelegation(
-            sharedSessionStore.user!,
-            true,
-            true
-          )
+          user = await getLocalDelegation(vm.delegate, false)
+          delegator = await getLocalDelegation(sharedSessionStore.user!, true)
         }
         const dbtodo = todosCollection.prepareCreate((dbtodo) => {
           Object.assign(dbtodo, todo)

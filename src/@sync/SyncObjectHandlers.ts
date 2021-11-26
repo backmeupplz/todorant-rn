@@ -71,25 +71,26 @@ export async function onDelegationObjectsFromServer(
   console.log(objects)
   const lastSyncDate = sharedDelegationStore.updatedAt
   if (!lastSyncDate && sharedSessionStore.user) {
-    // console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\n\n\nn')
-    // await updateOrCreateDelegation(
-    //   { _id: sharedSessionStore.user._id },
-    //   false,
-    //   true
-    // )
-    // await updateOrCreateDelegation(
-    //   { _id: sharedSessionStore.user._id },
-    //   true,
-    //   true
-    // )
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      false,
+      true
+    )
+    await updateOrCreateDelegation(
+      { _id: sharedSessionStore.user._id },
+      true,
+      true
+    )
   }
   // Get local delegators
   const realmDelegators = usersCollection.query(
-    Q.where(UserColumn.isDelegator, true)
+    Q.where(UserColumn.isDelegator, true),
+    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id))
   )
   // Get local delegates
   const realmDelegates = usersCollection.query(
-    Q.where(UserColumn.isDelegator, Q.notEq(true))
+    Q.where(UserColumn.isDelegator, Q.notEq(true)),
+    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id))
   )
   // Filter delegators that changed locally
   const delegatorsChangedLocally = await (lastSyncDate
@@ -107,25 +108,11 @@ export async function onDelegationObjectsFromServer(
   ).fetch()
   const toDelete = [] as MelonUser[]
   const toUpdateOrCreate = [] as MelonUser[]
-  toUpdateOrCreate.push(
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user?._id },
-      false,
-      false
-    )
-  )
-  toUpdateOrCreate.push(
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user?._id },
-      true,
-      false
-    )
-  )
   // Pull
   // Create and delete delegates and delegators
   // Delegators
   // Check if delegators list changed on server
-  if (objects.delegateUpdated) {
+  if (objects.delegateUpdated && lastSyncDate) {
     // If so then remove that delegates which exists locally but not on server
     toDelete.push(
       ...getMismatchesWithServer(
@@ -144,7 +131,7 @@ export async function onDelegationObjectsFromServer(
   )
   // Delegates
   // Check if delegates list changed on server
-  if (objects.delegateUpdated) {
+  if (objects.delegateUpdated && lastSyncDate) {
     // If so then remove that delegates which exists locally but not on server
     toDelete.push(
       ...getMismatchesWithServer(

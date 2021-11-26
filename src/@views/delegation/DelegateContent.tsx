@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useMemo, useState } from 'react'
+import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Container } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -82,7 +82,7 @@ const EnhancedDraggableSectionList = enhance(
       setMap(todosMap)
     }
 
-    useMemo(() => {
+    useEffect(() => {
       build()
     }, [completed, todo.length, byMe])
 

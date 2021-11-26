@@ -63,8 +63,8 @@ class TodoStore {
       : Q.where(TodoColumn.delegator, this.wmdbUserAsDelegatorId || null)
     return this.undeletedTodos.extend(
       Q.where(TodoColumn.delegator, Q.notEq(null)),
-      Q.where(TodoColumn.completed, completed)
-      // query
+      Q.where(TodoColumn.completed, completed),
+      query
     )
   }
 
