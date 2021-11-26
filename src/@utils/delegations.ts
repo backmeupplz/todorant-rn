@@ -1,4 +1,3 @@
-import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'

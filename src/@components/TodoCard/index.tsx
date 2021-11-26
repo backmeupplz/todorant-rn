@@ -1,5 +1,4 @@
 import React, { Component, useEffect } from 'react'
-import { Todo } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'

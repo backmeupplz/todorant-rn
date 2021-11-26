@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { Todo } from '@models/Todo'
 import { Text, Toast } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { l } from '@utils/linkify'

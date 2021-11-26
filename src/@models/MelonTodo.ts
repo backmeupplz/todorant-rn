@@ -11,7 +11,7 @@ export class MelonUser extends Model {
   ])
 
   // The set function is not properly typed in WMDB model yet, so we need to use this hack
-  set!: (user: MelonUser) => void
+  set!: (user: MelonUser | null) => void
 
   @writer async delete() {
     return await this.update((user) => (user.deleted = true))

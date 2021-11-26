@@ -96,8 +96,8 @@ class TodoStore {
           )
         )
       ),
-      Q.experimentalSortBy(TodoColumn.frog, Q.desc),
-      Q.experimentalSortBy(TodoColumn.order, Q.asc)
+      Q.sortBy(TodoColumn.frog, Q.desc),
+      Q.sortBy(TodoColumn.order, Q.asc)
     )
   }
 
@@ -113,7 +113,7 @@ class TodoStore {
       Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
       Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
       dateQuery,
-      Q.experimentalSortBy(TodoColumn.order, Q.asc)
+      Q.sortBy(TodoColumn.order, Q.asc)
     )
   }
 

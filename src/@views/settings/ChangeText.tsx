@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
-import { Tag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'

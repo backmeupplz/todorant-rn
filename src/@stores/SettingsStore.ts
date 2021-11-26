@@ -1,6 +1,6 @@
 import { Settings } from '@models/Settings'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { hydrate } from '@stores/hydration/hydrate'
+import { hydrate, MMKV } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { getLanguageTag } from '@utils/i18n'
 import { computed, makeObservable, observable } from 'mobx'
@@ -163,7 +163,7 @@ class SettingsStore {
     // Consequent pull
     else if (this.updatedAt < settings.updatedAt) {
       if (settings.language !== this.language && settings.language) {
-        await AsyncStorage.setItem('languageSelect', settings.language)
+        await MMKV.setItem('languageSelect', settings.language)
       }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek

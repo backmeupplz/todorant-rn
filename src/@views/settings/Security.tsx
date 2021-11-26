@@ -3,7 +3,6 @@ import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { MelonTodo } from '@models/MelonTodo'
-import { Todo } from '@models/Todo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -228,7 +227,10 @@ export class Security extends Component {
                             sharedSessionStore.encryptionKey = this.password
                             this.encryptEncrypted(false, this.password)
                             setPassword(sharedSessionStore.encryptionKey)
-                            alertMessage(translate('encryption.encryption'), translate('encryption.encryptionSaved'))
+                            alertMessage(
+                              translate('encryption.encryption'),
+                              translate('encryption.encryptionSaved')
+                            )
                           }
                         )
                       }}

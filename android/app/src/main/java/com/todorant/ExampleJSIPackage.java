@@ -1,25 +1,25 @@
-// RN 64.*package com.todorant;
-// RN 64.*
-// RN 64.*import com.facebook.react.bridge.JSIModuleSpec;
-// RN 64.*import com.facebook.react.bridge.JavaScriptContextHolder;
-// RN 64.*import com.facebook.react.bridge.ReactApplicationContext;
-// RN 64.*import com.swmansion.reanimated.ReanimatedJSIModulePackage;
-// RN 64.*import com.reactnativemmkv.MmkvModule;
-// RN 64.*import com.reactnativemultithreading.MultithreadingModule;
-// RN 64.*import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage; 
-// RN 64.*import com.ammarahmed.mmkv.RNMMKVModule;
-// RN 64.*
-// RN 64.*import java.util.Collections;
-// RN 64.*import java.util.List;
-// RN 64.*
-// RN 64.*// TODO: Remove all of this when MMKV and Reanimated can be autoinstalled (maybe RN 0.65)
-// RN 64.*public class ExampleJSIPackage extends ReanimatedJSIModulePackage {
-// RN 64.*    @Override
-// RN 64.*    public List<JSIModuleSpec> getJSIModules(ReactApplicationContext reactApplicationContext, JavaScriptContextHolder jsContext) {
-// RN 64.*        super.getJSIModules(reactApplicationContext, jsContext);
-// RN 64.*        MultithreadingModule.install(reactApplicationContext, jsContext);
-// RN 64.*        reactApplicationContext.getNativeModule(RNMMKVModule.class).installLib(jsContext, reactApplicationContext.getFilesDir().getAbsolutePath() + "/mmkv");
-// RN 64.*        WatermelonDBJSIPackage wmdb = new WatermelonDBJSIPackage();
-// RN 64.*        return wmdb.getJSIModules(reactApplicationContext, jsContext);
-// RN 64.*    }
-// RN 64.*}
+package com.todorant;
+
+import com.facebook.react.bridge.JSIModuleSpec;
+import com.facebook.react.bridge.JavaScriptContextHolder;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.swmansion.reanimated.ReanimatedJSIModulePackage;
+// import com.reactnativemmkv.MmkvModule;
+// import com.reactnativemultithreading.MultithreadingModule;
+import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage; 
+import com.ammarahmed.mmkv.RNMMKVModule;
+
+import java.util.Collections;
+import java.util.List;
+
+// TODO: Remove all of this when MMKV and Reanimated can be autoinstalled (maybe RN 0.65)
+public class ExampleJSIPackage extends ReanimatedJSIModulePackage {
+    @Override
+    public List<JSIModuleSpec> getJSIModules(ReactApplicationContext reactApplicationContext, JavaScriptContextHolder jsContext) {
+        super.getJSIModules(reactApplicationContext, jsContext);
+        // MultithreadingModule.install(reactApplicationContext, jsContext);
+        reactApplicationContext.getNativeModule(RNMMKVModule.class).installLib(jsContext, reactApplicationContext.getFilesDir().getAbsolutePath() + "/mmkv");
+        WatermelonDBJSIPackage wmdb = new WatermelonDBJSIPackage();
+        return wmdb.getJSIModules(reactApplicationContext, jsContext);
+    }
+}

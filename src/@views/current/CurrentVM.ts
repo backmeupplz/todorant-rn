@@ -4,7 +4,7 @@ import { computed, makeObservable, observable } from 'mobx'
 
 export class CurrentVM {
   @observable currentTodo = sharedTodoStore.todayUncompletedTodos?.extend(
-    Q.experimentalTake(1)
+    Q.take(1)
   )
 
   constructor() {

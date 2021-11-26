@@ -21,10 +21,10 @@ class TagStore {
 
   undeletedTags = tagsCollection.query(
     Q.where(TagColumn.deleted, false),
-    Q.experimentalSortBy(TagColumn.epic, Q.desc),
-    Q.experimentalSortBy(TagColumn.epicOrder, Q.asc),
-    Q.experimentalSortBy(TagColumn.numberOfUses, Q.desc),
-    Q.experimentalSortBy(TagColumn.tag, Q.asc)
+    Q.sortBy(TagColumn.epic, Q.desc),
+    Q.sortBy(TagColumn.epicOrder, Q.asc),
+    Q.sortBy(TagColumn.numberOfUses, Q.desc),
+    Q.sortBy(TagColumn.tag, Q.asc)
   )
 
   epics = this.undeletedTags.extend(Q.where(TagColumn.epic, true))

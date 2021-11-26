@@ -38,7 +38,7 @@ import {
 } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
-import { getTitle, Todo } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { debounce } from 'lodash'
 import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
@@ -74,11 +74,11 @@ export class PlanningContent extends Component {
   }
 
   @computed get completedWithOffset() {
-    return this.vm?.completedTodosData.extend(Q.experimentalTake(this.offset))
+    return this.vm?.completedTodosData.extend(Q.take(this.offset))
   }
 
   @computed get uncompletedWithOffset() {
-    return this.vm?.uncompletedTodosData.extend(Q.experimentalTake(this.offset))
+    return this.vm?.uncompletedTodosData.extend(Q.take(this.offset))
   }
 
   @computed get querySearch() {

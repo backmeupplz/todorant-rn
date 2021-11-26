@@ -1,4 +1,4 @@
-import { getTitle, Todo } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
@@ -117,7 +117,7 @@ async function addTodo(text: string) {
     monthAndYear,
     date: date,
     encrypted: !!sharedSessionStore.encryptionKey,
-  } as Todo
+  } as MelonTodo
   newTodo._exactDate = new Date(getTitle(newTodo))
 
   let createdTodo!: MelonTodo

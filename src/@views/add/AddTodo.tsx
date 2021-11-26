@@ -4,7 +4,7 @@ import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, cloneDelegator } from '@models/Todo'
+import { getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -171,7 +171,7 @@ class AddTodoContent extends Component<{
           //  ? cloneDelegator(sharedSessionStore.user)
           //  : undefined,
           encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
-        } as Todo
+        } as MelonTodo
         todo._exactDate = new Date(getTitle(todo))
         if (todo.completed) {
           completedAtCreation.push(todo.text)

@@ -1,5 +1,5 @@
 import { Container, Content, Text } from 'native-base'
-import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
+import { DelegationUserType } from '@models/DelegationUser'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q, Query } from '@nozbe/watermelondb'
 import React, { Component, Fragment } from 'react'
