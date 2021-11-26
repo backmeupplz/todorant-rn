@@ -1,70 +1,10 @@
-import { MobxRealmModel } from '@utils/mobx-realm/model'
 import {
   getDateString,
   getDateStringFromTodo,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { DelegationUser } from './DelegationUser'
 import { MelonTodo, MelonUser } from './MelonTodo'
 import { User } from './User'
-
-export class Todo extends MobxRealmModel {
-  public static schema = {
-    name: 'Todo',
-    properties: {
-      _tempSyncId: { type: 'string?', indexed: true },
-      _exactDate: { type: 'date', indexed: true },
-
-      _id: { type: 'string?', indexed: true },
-      createdAt: { type: 'date', indexed: true },
-      updatedAt: { type: 'date', indexed: true },
-      text: 'string',
-      completed: { type: 'bool', indexed: true },
-      frog: 'bool',
-      frogFails: 'int',
-      skipped: { type: 'bool', indexed: true },
-      order: 'int',
-      monthAndYear: { type: 'string?', indexed: true },
-      deleted: { type: 'bool', indexed: true },
-      encrypted: { type: 'bool', indexed: true, default: false },
-      date: { type: 'string?', indexed: true },
-      time: 'string?',
-      repetitive: { type: 'bool', indexed: true, default: false },
-
-      user: 'DelegationUser?',
-      delegator: 'DelegationUser?',
-      delegateAccepted: { type: 'bool?', indexed: true },
-    },
-  }
-
-  objectSchema() {
-    return Todo.schema
-  }
-
-  _id?: string
-  createdAt = new Date()
-  updatedAt = new Date()
-  text!: string
-  completed!: boolean
-  frog!: boolean
-  frogFails!: number
-  skipped!: boolean
-  order!: number
-  monthAndYear?: string
-  deleted!: boolean
-  encrypted!: boolean
-  date?: string
-  time?: string
-  repetitive!: boolean
-
-  user?: DelegationUser
-  delegator?: DelegationUser
-  delegateAccepted?: boolean
-
-  // Local values
-  _tempSyncId?: string
-  _exactDate!: Date
-}
 
 export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)

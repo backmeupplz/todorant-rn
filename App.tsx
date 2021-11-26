@@ -54,7 +54,6 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
 import { hydration } from '@stores/hydration/hydratedStores'
-import { migrateRealmToWMDB } from '@utils/realm'
 import { alertError } from '@utils/alert'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
@@ -115,7 +114,7 @@ class App extends Component {
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
-        await migrateRealmToWMDB()
+        // await migrateRealmToWMDB()
         sharedSessionStore.localMigrationCompleted = true
       } catch (err) {
         alertError('A error occur while transfering data between databases')
