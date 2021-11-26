@@ -385,6 +385,7 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo) {
       if (this.vms.length === 0 && this.breakdownTodo.repetitive) {
         newVM.text = this.breakdownTodo.text
+        newVM.time = this.breakdownTodo.time
       } else if (sharedSettingsStore.duplicateTagInBreakdown) {
         let matches = linkify.match(this.breakdownTodo.text) || []
         const newText = matches
