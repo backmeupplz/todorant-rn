@@ -60,6 +60,8 @@ import { sharedSync } from '@sync/Sync'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 
+sharedDelegationStore
+
 export let rootRef: any
 export let closeOnboardingButtonNode: number
 
