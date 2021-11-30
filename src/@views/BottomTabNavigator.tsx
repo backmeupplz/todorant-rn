@@ -83,6 +83,19 @@ export default observer(() => {
         {...({ language: sharedSettingsStore.language } as any)}
         backBehavior="none"
         screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarActiveTintColor: sharedColors.primaryColor,
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            backgroundColor: sharedColors.backgroundColor,
+            borderTopColor: sharedColors.borderColor,
+          },
+          tabBarLabelStyle: {
+            fontFamily: fonts.SFProTextRegular,
+          },
+          tabBarItemStyle: {
+            paddingTop: 6,
+          },
           tabBarIcon: ({ focused, size }) => {
             let name = 'current'
             let icon = focused ? CurrentActiveIcon({}) : CurrentIcon({})
@@ -125,20 +138,6 @@ export default observer(() => {
             )
           },
         })}
-        tabBarOptions={{
-          activeTintColor: sharedColors.primaryColor,
-          inactiveTintColor: 'gray',
-          style: {
-            backgroundColor: sharedColors.backgroundColor,
-            borderTopColor: sharedColors.borderColor,
-          },
-          labelStyle: {
-            fontFamily: fonts.SFProTextRegular,
-          },
-          tabStyle: {
-            paddingTop: 6,
-          },
-        }}
       >
         {!sharedSessionStore.loggingOut && !sharedSessionStore.isInitialSync && (
           <>

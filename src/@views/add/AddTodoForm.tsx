@@ -16,7 +16,6 @@ import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
 import {
   Platform,
-  Clipboard,
   ViewStyle,
   StyleProp,
   InteractionManager,
@@ -48,6 +47,7 @@ import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import withObservables from '@nozbe/with-observables'
 import { MelonTag } from '@models/MelonTag'
+import Clipboard from '@react-native-community/clipboard'
 
 const fontSize = 18
 const verticalSpacing = 8

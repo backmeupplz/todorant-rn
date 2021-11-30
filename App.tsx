@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import 'react-native-get-random-values'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigate, navigationRef } from '@utils/navigation'
-import { GoogleSignin } from '@react-native-community/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import '@utils/purchases'
 import { Icon, Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
@@ -82,7 +83,6 @@ GoogleSignin.configure({
   webClientId:
     '989382323327-rou6lmk2umbnoaq55493v1kqm8fvp22q.apps.googleusercontent.com',
   offlineAccess: true,
-  forceConsentPrompt: true,
 })
 
 LogBox.ignoreAllLogs()

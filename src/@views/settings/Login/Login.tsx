@@ -5,7 +5,7 @@ import appleAuth, {
   AppleButton,
 } from '@invertase/react-native-apple-authentication'
 import { User } from '@models/User'
-import { GoogleSignin } from '@react-native-community/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { alertError } from '@utils/alert'
@@ -368,11 +368,12 @@ export class LoginContent extends Component<{
 }
 
 export const Login = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { loginWall: boolean | undefined } | undefined>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { loginWall: boolean | undefined } | undefined>,
+        string
+      >
+    >()
   return <LoginContent route={route} />
 }

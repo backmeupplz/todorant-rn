@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, Toast } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { l } from '@utils/linkify'
-import { Linking, Clipboard } from 'react-native'
+import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
@@ -14,6 +14,7 @@ import { navigate } from '@utils/navigation'
 import { MelonTodo } from '@models/MelonTodo'
 import { decrypt } from '@utils/encryption'
 import { computed, makeObservable } from 'mobx'
+import Clipboard from '@react-native-community/clipboard'
 
 const debug = false
 

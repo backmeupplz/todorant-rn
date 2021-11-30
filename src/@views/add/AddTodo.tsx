@@ -20,7 +20,6 @@ import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
 import {
   Alert,
-  Clipboard,
   BackHandler,
   KeyboardAvoidingView,
   Platform,
@@ -65,6 +64,7 @@ import {
   getLocalDelegation,
   updateOrCreateDelegation,
 } from '@utils/delegations'
+import Clipboard from '@react-native-community/clipboard'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
