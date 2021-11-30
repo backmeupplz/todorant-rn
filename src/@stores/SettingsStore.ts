@@ -235,32 +235,46 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
 })
 
 export async function fixDuplicatedTasks() {
-  // if (Platform.OS !== 'ios') {
-  //   return
-  // }
-  const MMKV = AsyncStorage
-  const oldAsyncStorage = AsyncStorage
+  const newAsyncStorage = AsyncStorage
+  const oldAsyncStorage = require('@react-native-async-storage/async-storage')
+    .default as typeof AsyncStorage
+  const mmkvStorage = MMKV
+
+  const userInMMKVStorage = JSON.parse(
+    (await mmkvStorage.getItem('SessionStore')) || '{}'
+  ).user
+
+  if (userInMMKVStorage) {
+    return
+  }
+
   const userInOldAsyncStorage = JSON.parse(
     (await oldAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
-  if (!userInOldAsyncStorage) {
-    return
-  }
-  const userInMMKV = JSON.parse(
-    (await MMKV.getItem('SessionStore')) || '{}'
+
+  const userInNewAsyncStorage = JSON.parse(
+    (await newAsyncStorage.getItem('SessionStore')) || '{}'
   ).user
-  if (userInMMKV && userInOldAsyncStorage) {
+
+  if (!userInMMKVStorage && !userInNewAsyncStorage && !userInOldAsyncStorage) {
     return
   }
-  if (!userInMMKV && userInOldAsyncStorage) {
-    await database.write(async () => await database.unsafeResetDatabase())
-    const allOldKeys = await oldAsyncStorage.getAllKeys()
+
+  async function moveStorage(from: AsyncStorage) {
+    const allOldKeys = await from.getAllKeys()
     await Promise.all(
       allOldKeys.map(async (key) => {
-        const oldItem = (await oldAsyncStorage.getItem(key)) as string
-        return await MMKV.setItem(key, oldItem)
+        const oldItem = (await from.getItem(key)) as string
+        return await mmkvStorage.setItem(key, oldItem)
       })
     )
   }
+
+  if (userInNewAsyncStorage) {
+    await moveStorage(newAsyncStorage)
+  } else if (userInOldAsyncStorage) {
+    await moveStorage(oldAsyncStorage)
+  }
+
   ReactNativeRestart.Restart()
 }
