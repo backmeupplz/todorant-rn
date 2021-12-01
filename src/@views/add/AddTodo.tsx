@@ -43,9 +43,13 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { backButtonStore } from '@components/BackButton'
-import DraggableFlatList from 'react-native-draggable-flatlist'
+import DraggableFlatList, {
+  OpacityDecorator,
+  ScaleDecorator,
+  ShadowDecorator,
+} from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
-import { HeaderHeightContext } from '@react-navigation/stack'
+import { HeaderHeightContext } from '@react-navigation/elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { isTodoOld } from '@utils/isTodoOld'
@@ -522,6 +526,7 @@ class AddTodoContent extends Component<{
   }
 
   onDragEnd = ({ data, from, to }: { data: any; from: number; to: number }) => {
+    console.log(data)
     if (from == 0 || to == 0) {
       return
     }
@@ -572,33 +577,35 @@ class AddTodoContent extends Component<{
                   </View>
                 )
               ) : (
-                <View
-                  key={index}
-                  style={{
-                    marginTop: index === 0 ? 10 : undefined,
-                  }}
-                >
-                  {item && (
-                    <AddTodoForm
-                      vm={item}
-                      deleteTodo={
-                        this.vms.length > 1
-                          ? () => {
-                              if (index) {
-                                this.vms.splice(index - 1, 1)
+                <ScaleDecorator>
+                  <View
+                    key={index}
+                    style={{
+                      marginTop: index === 0 ? 10 : undefined,
+                    }}
+                  >
+                    {item && (
+                      <AddTodoForm
+                        vm={item}
+                        deleteTodo={
+                          this.vms.length > 1
+                            ? () => {
+                                if (index) {
+                                  this.vms.splice(index - 1, 1)
+                                }
                               }
-                            }
-                          : undefined
-                      }
-                      drag={drag}
-                      showCross={
-                        !!this.breakdownTodo &&
-                        !!sharedSettingsStore.duplicateTagInBreakdown
-                      }
-                    />
-                  )}
-                  {index != this.vms.length && <Divider />}
-                </View>
+                            : undefined
+                        }
+                        drag={drag}
+                        showCross={
+                          !!this.breakdownTodo &&
+                          !!sharedSettingsStore.duplicateTagInBreakdown
+                        }
+                      />
+                    )}
+                    {index != this.vms.length && <Divider />}
+                  </View>
+                </ScaleDecorator>
               )
             }}
             keyExtractor={(item, index) => `draggable-item-${index}`}

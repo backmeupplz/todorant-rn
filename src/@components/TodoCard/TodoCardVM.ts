@@ -162,7 +162,6 @@ export class TodoCardVM {
               text: translate('breakdownMessage.complete'),
               onPress: () => {
                 this.complete(todo)
-                sharedSync.sync(SyncRequestEvent.Todo)
               },
             },
             {
@@ -178,7 +177,6 @@ export class TodoCardVM {
       }, 100)
     } else {
       this.complete(todo)
-      sharedSync.sync(SyncRequestEvent.Todo)
     }
   }
 
