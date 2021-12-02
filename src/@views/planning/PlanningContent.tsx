@@ -54,6 +54,9 @@ import { sanitizeLikeString } from '@utils/textSanitizer'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { database } from '@utils/watermelondb/wmdb'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist'
 
 @observer
 export class PlanningContent extends Component {
@@ -255,11 +258,6 @@ export class PlanningContent extends Component {
   }
 }
 
-interface Section {
-  section: string
-  data: MelonTodo[]
-}
-
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
     todo: todo.observeWithColumns(
@@ -267,6 +265,8 @@ const enhance = withObservables(['todo'], ({ todo }) => {
     ),
   }
 })
+
+let arrBeforeChanges = []
 
 const EnhancedDraggableSectionList = enhance(
   ({
@@ -278,104 +278,71 @@ const EnhancedDraggableSectionList = enhance(
     isCompleted: boolean
     increaseOffset: () => void
   }) => {
-    const todoSectionMap = {} as any
-    let currentTitle: string | undefined
-    let sectionIndex = 0
+    const usedSection = new Set<string>()
+    const todosAndDates: Array<MelonTodo | string> = []
     for (const realmTodo of todo) {
       const realmTodoTitle = getTitle(realmTodo)
-      if (currentTitle && currentTitle !== realmTodoTitle) {
-        sectionIndex++
+      if (!usedSection.has(realmTodoTitle)) {
+        usedSection.add(realmTodoTitle)
+        todosAndDates.push(realmTodoTitle)
       }
-      if (todoSectionMap[realmTodoTitle]) {
-        todoSectionMap[realmTodoTitle].data.push(realmTodo)
-      } else {
-        todoSectionMap[realmTodoTitle] = {
-          order: sectionIndex,
-          section: realmTodoTitle,
-          data: [realmTodo],
-        }
-      }
+      todosAndDates.push(realmTodo)
     }
 
-    const todosMap = Object.keys(todoSectionMap).map((key) => {
-      return todoSectionMap[key]
-    })
+    // TODO fix this
+    // let arrBeforeChanges: any
 
     return (
-      <DraggableSectionList<MelonTodo, Section>
-        layoutInvalidationKey={v4()}
+      <DraggableFlatList
+        onDragBegin={() => {
+          arrBeforeChanges = todosAndDates
+        }}
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
-        onViewableItemsChanged={() => {}}
         contentContainerStyle={{ paddingBottom: 100 }}
-        onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
-          if (!sharedAppStateStore.calendarEnabled) return
-        }}
         autoscrollSpeed={200}
         removeClippedSubviews={true}
         maxToRenderPerBatch={5}
         initialNumToRender={10}
         updateCellsBatchingPeriod={0.9}
         onDragEnd={onDragEnd}
-        isSectionHeader={(a: any) => {
-          if (a === undefined) {
-            return false
-          }
-          return !a.text
-        }}
         renderItem={renderItem}
-        renderSectionHeader={({ item, drag, index, isActive }) => {
-          return (
-            <TodoHeader
-              date={true}
-              drag={drag}
-              isActive={isActive}
-              item={item.section}
-              key={item.section}
-            />
-          )
-        }}
-        data={todosMap}
-        keyExtractor={(item) => item.id || (item as unknown as string)}
+        data={todosAndDates}
+        keyExtractor={(item) => (typeof item === 'string' ? item : item.id)}
       />
     )
   }
 )
 
-async function onDragEnd({
-  beforeChangesArr,
-  dataArr,
-  to,
-  from,
-  promise,
-}: DragEndParams<MelonTodo | string>) {
+async function onDragEnd({ data, from, to }) {
   // enable loader
   sharedAppStateStore.changeLoading(false)
   // check is calendar dragging
   if (sharedAppStateStore.activeDay) {
-    const todo = dataArr[to] as MelonTodo
-    if (todo) {
-      //realm.write(() => {
-      todo.date = getDateDateString(sharedAppStateStore.activeDay!)
-      todo.monthAndYear = getDateMonthAndYearString(
-        sharedAppStateStore.activeDay!
-      )
-      const newTitle = getTitle(todo)
-      todo._exactDate = new Date(newTitle)
-      todo.updatedAt = new Date()
-      //})
-    }
-    // discard calendar after applying changes
-    sharedAppStateStore.activeDay = undefined
-    sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
-    //this.setCoordinates.cancel()
-    promise()
+    // const todo = data[to] as MelonTodo
+    // if (todo) {
+    //   //realm.write(() => {
+    //   todo.date = getDateDateString(sharedAppStateStore.activeDay!)
+    //   todo.monthAndYear = getDateMonthAndYearString(
+    //     sharedAppStateStore.activeDay!
+    //   )
+    //   const newTitle = getTitle(todo)
+    //   todo._exactDate = new Date(newTitle)
+    //   todo.updatedAt = new Date()
+    //   //})
+    // }
+    // // discard calendar after applying changes
+    // sharedAppStateStore.activeDay = undefined
+    // sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
+    // //this.setCoordinates.cancel()
+    // promise()
   } else {
-    if (from === 0) {
-      promise()
-      return
-    }
+    // console.log(idk)
+    // if (from === 0) {
+    //   promise()
+    //   return
+    // }
     // help us to find closest section (looks from bottom to the top)
     const findClosestSection = (
       index: number,
@@ -395,18 +362,18 @@ async function onDragEnd({
 
     let disableLoading = false
 
-    const closestDayFrom = findClosestSection(from, beforeChangesArr)
-    const closestDayTo = findClosestSection(to, dataArr)
+    const closestDayFrom = findClosestSection(from, arrBeforeChanges)
+    const closestDayTo = findClosestSection(to, data)
 
     // if inside one day
     if (closestDayFrom === closestDayTo) {
       let lastOrder = 0
-      let fromItem = beforeChangesArr[from]
-      let toItem = beforeChangesArr[to]
+      let fromItem = arrBeforeChanges[from]
+      let toItem = arrBeforeChanges[to]
       // if both of moved items are todos, and no one of them are section header
       if (fromItem !== 'string' && toItem !== 'string') {
         const fromBottomToTop = from > to
-        const nearItem = beforeChangesArr[
+        const nearItem = arrBeforeChanges[
           fromBottomToTop ? to - 1 : to + 1
         ] as MelonTodo
         toItem = toItem as MelonTodo
@@ -418,15 +385,15 @@ async function onDragEnd({
         let average = (firstOrder + secondOrder) / 2
         // if there is nothing under or under is a section
         if (
-          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
-          typeof beforeChangesArr[to + 1] === 'undefined'
+          (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+          typeof arrBeforeChanges[to + 1] === 'undefined'
         )
           average = toItem.order + 1
         if (
           nearItem &&
           toItem.frog &&
           !nearItem.frog &&
-          typeof beforeChangesArr[to - 1] !== 'string'
+          typeof arrBeforeChanges[to - 1] !== 'string'
         )
           average = toItem.order + 1
         toUpdate.push(
@@ -436,20 +403,20 @@ async function onDragEnd({
         )
       } else {
         for (let i = closestDayTo + 1; ; i++) {
-          const item = dataArr[i]
+          const item = data[i]
           if (item === undefined) break
           if (typeof item === 'string') break
           toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
           lastOrder++
         }
       }
-    } else if (typeof beforeChangesArr[from] !== 'string') {
-      let fromItem = beforeChangesArr[from]
-      let toItem = beforeChangesArr[to]
+    } else if (typeof arrBeforeChanges[from] !== 'string') {
+      let fromItem = arrBeforeChanges[from]
+      let toItem = arrBeforeChanges[to]
       // if both of moved items are todos, and no one of them are section header
       if (fromItem !== 'string' && toItem !== 'string') {
         const fromBottomToTop = from > to
-        const nearItem = beforeChangesArr[
+        const nearItem = arrBeforeChanges[
           fromBottomToTop ? to - 1 : to + 1
         ] as MelonTodo
         toItem = toItem as MelonTodo
@@ -461,14 +428,14 @@ async function onDragEnd({
         let average = (firstOrder + secondOrder) / 2
         // if there is nothing under or under is a section
         if (
-          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
-          typeof beforeChangesArr[to + 1] === 'undefined'
+          (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+          typeof arrBeforeChanges[to + 1] === 'undefined'
         )
           average = toItem.order + 1
         if (
           toItem.frog &&
           !nearItem.frog &&
-          typeof beforeChangesArr[to - 1] !== 'string'
+          typeof arrBeforeChanges[to - 1] !== 'string'
         )
           average = toItem.order + 1
         if (
@@ -505,7 +472,7 @@ async function onDragEnd({
               },
             ])
             sharedSync.sync(SyncRequestEvent.Todo)
-            promise()
+            // promise()
             return
           }
         }
@@ -525,15 +492,15 @@ async function onDragEnd({
       const lowerDay = Math.min(closestDayFrom, closestDayTo)
       const maxDay = Math.max(closestDayFrom, closestDayTo)
       let lastOrder = 0
-      let lastSection = dataArr[lowerDay] as string
+      let lastSection = data[lowerDay] as string
       for (let i = lowerDay + 1; ; i++) {
-        const item = dataArr[i]
+        const item = data[i]
         if (item === undefined) break
         if (typeof item === 'string') {
           // if new section, outside of our draggable items begin
           if (
             new Date(item).getTime() >
-            new Date(dataArr[maxDay] as string).getTime()
+            new Date(data[maxDay] as string).getTime()
           )
             break
           lastOrder = 0
@@ -585,7 +552,7 @@ async function onDragEnd({
     }
     await database.write(async () => await database.batch(...toUpdate))
     sharedSync.sync(SyncRequestEvent.Todo)
-    promise()
+    // promise()
   }
 }
 
@@ -594,24 +561,37 @@ const renderItem = ({
   drag,
   isActive,
 }: {
-  item: MelonTodo
+  item: MelonTodo | string
   drag: () => void
   isActive: boolean
 }) => {
   if (!item) return
-  return (
-    <View style={{ padding: false ? 10 : 0 }} key={item.id}>
-      <TodoCard
-        todo={item}
-        type={
-          sharedAppStateStore.todoSection === TodoSectionType.planning
-            ? CardType.planning
-            : CardType.done
-        }
+  if (typeof item === 'string') {
+    return (
+      <TodoHeader
+        date={true}
         drag={drag}
-        active={isActive}
+        isActive={isActive}
+        item={item}
+        key={item}
       />
-    </View>
+    )
+  }
+  return (
+    <ScaleDecorator>
+      <View style={{ padding: false ? 10 : 0 }} key={item.id}>
+        <TodoCard
+          todo={item}
+          type={
+            sharedAppStateStore.todoSection === TodoSectionType.planning
+              ? CardType.planning
+              : CardType.done
+          }
+          drag={drag}
+          active={false}
+        />
+      </View>
+    </ScaleDecorator>
   )
 }
 

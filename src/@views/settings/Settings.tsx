@@ -261,6 +261,7 @@ export function Settings() {
       {() => (
         <Stack.Navigator
           screenOptions={{
+            detachPreviousScreen: false,
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         >

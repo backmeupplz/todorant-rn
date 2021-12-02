@@ -83,6 +83,7 @@ export default observer(() => {
         {...({ language: sharedSettingsStore.language } as any)}
         backBehavior="none"
         screenOptions={({ route }) => ({
+          detachPreviousScreen: false,
           headerShown: false,
           tabBarActiveTintColor: sharedColors.primaryColor,
           tabBarInactiveTintColor: 'gray',

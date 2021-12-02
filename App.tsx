@@ -154,6 +154,7 @@ class App extends Component {
             <Stack.Navigator
               screenOptions={{
                 cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                detachPreviousScreen: false,
               }}
             >
               <Stack.Screen
