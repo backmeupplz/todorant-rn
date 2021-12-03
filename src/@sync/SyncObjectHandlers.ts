@@ -11,7 +11,7 @@ import {
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { Q } from '@nozbe/watermelondb'
+import { Q, Query } from '@nozbe/watermelondb'
 import { MelonUser } from '@models/MelonTodo'
 import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
@@ -82,76 +82,37 @@ export async function onDelegationObjectsFromServer(
       true
     )
   }
-  // Get local delegators
-  const realmDelegators = usersCollection.query(
-    Q.where(UserColumn.isDelegator, true),
-    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id))
+
+  // Get local delegators and delegates
+  const wmdbDelegators = getDelegations(true)
+  const wmdbDelegates = getDelegations(false)
+  // Filter delegators and delegates that changed locally
+  const delegatorsChangedLocally = await changedLocallyDelegation(
+    wmdbDelegators,
+    lastSyncDate
   )
-  // Get local delegates
-  const realmDelegates = usersCollection.query(
-    Q.where(UserColumn.isDelegator, Q.notEq(true)),
-    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id))
+  const delegatesChangedLocally = await changedLocallyDelegation(
+    wmdbDelegates,
+    lastSyncDate
   )
-  // Filter delegators that changed locally
-  const delegatorsChangedLocally = await (lastSyncDate
-    ? realmDelegators.extend(
-        Q.where(UserColumn.updatedAt, Q.gt(lastSyncDate.getTime()))
-      )
-    : realmDelegators
-  ).fetch()
-  // Filter delegates that changed locally
-  const delegatesChangedLocally = await (lastSyncDate
-    ? realmDelegates.extend(
-        Q.where(UserColumn.updatedAt, Q.gt(lastSyncDate.getTime()))
-      )
-    : realmDelegates
-  ).fetch()
+
   const toDelete = [] as MelonUser[]
   const toUpdateOrCreate = [] as MelonUser[]
-  // Pull
-  // Create and delete delegates and delegators
-  // Delegators
-  // Check if delegators list changed on server
   if (objects.delegateUpdated && lastSyncDate) {
-    // If so then remove that delegates which exists locally but not on server
     toDelete.push(
-      ...getMismatchesWithServer(
-        await realmDelegators.fetch(),
-        objects.delegators
-      )
+      ...(await findMissMatches(wmdbDelegators, objects.delegators)),
+      ...(await findMissMatches(wmdbDelegates, objects.delegates))
     )
   }
-  // Create new or just update existing delegators
-  await Promise.all(
-    objects.delegators.map(async (delegator) => {
-      return toUpdateOrCreate.push(
-        await updateOrCreateDelegation(delegator, true)
-      )
-    })
+  toUpdateOrCreate.push(
+    ...(await getUpdatedOrCreated(objects.delegators, true)),
+    ...(await getUpdatedOrCreated(objects.delegates, false))
   )
-  // Delegates
-  // Check if delegates list changed on server
-  if (objects.delegateUpdated && lastSyncDate) {
-    // If so then remove that delegates which exists locally but not on server
-    toDelete.push(
-      ...getMismatchesWithServer(
-        await realmDelegates.fetch(),
-        objects.delegates
-      )
-    )
-  }
-  // Create new or just update existing delegates
-  await Promise.all(
-    objects.delegates.map(async (delegate) => {
-      return toUpdateOrCreate.push(
-        await updateOrCreateDelegation(delegate, false)
-      )
-    })
-  )
-  // Push
-  // Get delegators which should be removed
   const delegatorsToDelete = delegatorsChangedLocally.filter(
     (delegator) => !!delegator.deleted
+  )
+  const delegatesToDelete = delegatesChangedLocally.filter(
+    (delegate) => !!delegate.deleted
   )
   // Get delegates without data (they were accepted offline or didnt load data properly when accepted)
   const delegatorsWithoutData = delegatorsChangedLocally.filter(
@@ -159,10 +120,6 @@ export async function onDelegationObjectsFromServer(
   )
   // Get delegators which should be pushed on server
   const delegatorsToPush = [...delegatorsWithoutData, ...delegatorsToDelete]
-  // Get delegates which should be removed
-  const delegatesToDelete = delegatesChangedLocally.filter(
-    (delegate) => !!delegate.deleted
-  )
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
     const arrayTest = [
@@ -176,10 +133,6 @@ export async function onDelegationObjectsFromServer(
         ...toDelete,
       ]),
     ]
-    // console.log([...toUpdateOrCreate, ...toDelete].length)
-    // arrayTest.forEach((user) => {
-    //   console.log(user.name)
-    // })
     // Complete sync
     await database.write(async () => await database.batch(...arrayTest))
     completeSync()
@@ -213,7 +166,6 @@ export async function onDelegationObjectsFromServer(
         if (localMarked) toDelete.push(localMarked)
         return
       }
-      //toUpdateOrCreate.push(await updateOrCreateDelegation(delegator, true))
     })
   )
   await Promise.all(
@@ -340,12 +292,40 @@ export async function onWMDBObjectsFromServer(
   serverObjects.tags.updated = tags
 }
 
-// type Tuple<L extends number, T extends unknown[] = []> = T[`length`] extends L
-//   ? T
-//   : Tuple<L, [...T, unknown]>
+function getDelegations(delegator: boolean) {
+  return usersCollection.query(
+    Q.where(UserColumn.isDelegator, delegator),
+    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id!))
+  )
+}
 
-// type MinusOne<T extends number> = Tuple<T> extends [...infer K, unknown]
-//   ? K[`length`]
-//   : never
+async function changedLocallyDelegation(
+  query: Query<MelonUser>,
+  timestamp?: Date
+) {
+  return await (timestamp
+    ? query.extend(Q.where(UserColumn.updatedAt, Q.gt(timestamp.getTime())))
+    : query
+  ).fetch()
+}
 
-// const test: MinusOne<5> = 4
+async function findMissMatches(
+  localDelegation: Query<MelonUser>,
+  serverDelegation: MelonUser[]
+) {
+  return getMismatchesWithServer(
+    await localDelegation.fetch(),
+    serverDelegation
+  )
+}
+
+async function getUpdatedOrCreated(
+  delegations: MelonUser[],
+  delegator: boolean
+) {
+  const updatedOrCreated: MelonUser[] = []
+  for (const delegation of delegations) {
+    updatedOrCreated.push(await updateOrCreateDelegation(delegation, delegator))
+  }
+  return updatedOrCreated
+}

@@ -55,12 +55,12 @@ class TodoStore {
   }
 
   getDelegationTodos(byMe: boolean, completed = false) {
-    const query = !byMe
-      ? Q.and(
-          Q.where(TodoColumn.delegateAccepted, Q.notEq(true)),
+    const query = byMe
+      ? Q.where(TodoColumn.delegator, this.wmdbUserAsDelegatorId || null)
+      : Q.and(
+          Q.where(TodoColumn.delegateAccepted, Q.notEq(!completed)),
           Q.where(TodoColumn.user, this.wmdbUserId || null)
         )
-      : Q.where(TodoColumn.delegator, this.wmdbUserAsDelegatorId || null)
     return this.undeletedTodos.extend(
       Q.where(TodoColumn.delegator, Q.notEq(null)),
       Q.where(TodoColumn.completed, completed),
@@ -210,7 +210,7 @@ class TodoStore {
     this.todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
 
     this.delegatedByMe = this.getDelegationTodos(true)
-    this.delegatedByMeCompleted = this.getDelegationTodos(true, true)
+    this.delegatedByMeCompleted = this.getDelegationTodos(false, true)
     this.delegatedToMe = this.getDelegationTodos(false)
     this.todayCompletedTodos
       .observeCount(false)

@@ -57,6 +57,8 @@ import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigat
 import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
 @observer
 export class PlanningContent extends Component {
@@ -300,9 +302,9 @@ const EnhancedDraggableSectionList = enhance(
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        autoscrollSpeed={200}
-        removeClippedSubviews={true}
+        contentContainerStyle={{
+          paddingBottom: useBottomTabBarHeight() * 2.5,
+        }}
         maxToRenderPerBatch={5}
         initialNumToRender={10}
         updateCellsBatchingPeriod={0.9}
@@ -568,13 +570,15 @@ const renderItem = ({
   if (!item) return
   if (typeof item === 'string') {
     return (
-      <TodoHeader
-        date={true}
-        drag={drag}
-        isActive={isActive}
-        item={item}
-        key={item}
-      />
+      <ScaleDecorator>
+        <TodoHeader
+          date={true}
+          drag={drag}
+          isActive={false}
+          item={item}
+          key={item}
+        />
+      </ScaleDecorator>
     )
   }
   return (

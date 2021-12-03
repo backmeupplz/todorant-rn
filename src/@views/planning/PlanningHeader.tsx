@@ -5,7 +5,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { Text, Input, View } from 'native-base'
 import { PlanningHeaderSegment } from '@views/planning/PlanningHeaderSegment'
 import { translate } from '@utils/i18n'
-import { Dimensions } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 import { makeObservable, observable } from 'mobx'
 
 @observer
@@ -48,7 +48,12 @@ export class PlanningHeader extends Component {
         }}
       />
     ) : (
-      <View style={{ width: this.width * 0.65, marginLeft: -24 }}>
+      <View
+        style={{
+          width: this.width * 0.65,
+          marginLeft: Platform.OS === 'ios' ? -24 : 0,
+        }}
+      >
         <PlanningHeaderSegment />
       </View>
     )
