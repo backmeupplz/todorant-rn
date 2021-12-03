@@ -19,6 +19,7 @@ import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/watermelondb/wmdb'
 import { updateOrCreateDelegation } from '@utils/delegations'
+import { AsyncStorage } from 'react-native'
 
 class SessionStore {
   constructor() {
@@ -115,6 +116,12 @@ class SessionStore {
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       await database.write(async () => await database.unsafeResetDatabase())
+      const newAsyncStorage = AsyncStorage
+      const oldAsyncStorage =
+        require('@react-native-async-storage/async-storage')
+          .default as typeof AsyncStorage
+      await newAsyncStorage.clear()
+      await oldAsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()

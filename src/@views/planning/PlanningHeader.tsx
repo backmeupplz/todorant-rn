@@ -48,7 +48,7 @@ export class PlanningHeader extends Component {
         }}
       />
     ) : (
-      <View style={{ width: this.width * 0.65 }}>
+      <View style={{ width: this.width * 0.65, marginLeft: -24 }}>
         <PlanningHeaderSegment />
       </View>
     )
