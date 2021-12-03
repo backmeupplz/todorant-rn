@@ -10558,15 +10558,6 @@ mobx-persist@backmeupplz/mobx-persist:
   languageName: node
   linkType: hard
 
-"react-freeze@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "react-freeze@npm:1.0.0"
-  peerDependencies:
-    react: ^17.0.0
-  checksum: c746b9d369c77296c277626cf7dd5ff24d49657e2f16412d14f845d1b428588184c0009374119f7dec24be37ab8c134d15aa4ecd57360c874880af508dcc577b
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.12.0 || ^17.0.0, react-is@npm:^17.0.1, react-is@npm:^17.0.2":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
@@ -10966,16 +10957,13 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "react-native-screens@npm:3.9.0"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
+"react-native-screens@npm:^2.15.2":
+  version: 2.18.1
+  resolution: "react-native-screens@npm:2.18.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: bf2dff55c2f5ca2a7d9e564ce42c6601d443b39f73933c9943ae5ab280eb9d0d119621212b8e841d55c4d65ad283df67bd31371f49624ebf12ca5b652cb00f36
+  checksum: 30bcc2d650eec423f0d508b1b11bcfa849a5c69a79e0b0ead08b3076a2d8dee0ed07fc8dccf0a4656f6e1675d60bf452d3712926506077a7f8a4d534afa38182
   languageName: node
   linkType: hard
 
@@ -12873,7 +12861,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     react-native-receive-sharing-intent: backmeupplz/react-native-receive-sharing-intent
     react-native-restart: ^0.0.22
     react-native-safe-area-context: ^3.3.2
-    react-native-screens: ^3.9.0
+    react-native-screens: ^2.15.2
     react-native-shared-preferences: ^1.0.2
     react-native-sound: ^0.11.1
     react-native-splash-screen: ^3.2.0

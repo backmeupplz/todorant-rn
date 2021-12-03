@@ -60,6 +60,9 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { enableScreens } from 'react-native-screens'
+
+enableScreens(false)
 
 sharedDelegationStore
 
