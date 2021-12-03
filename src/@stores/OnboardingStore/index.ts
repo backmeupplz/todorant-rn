@@ -19,7 +19,7 @@ import Animated, { Easing } from 'react-native-reanimated'
 import { EasingNode } from 'react-native-reanimated'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { navigate } from '@utils/navigation'
+import { navigate, RootStackParamList } from '@utils/navigation'
 import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
@@ -103,7 +103,7 @@ class OnboardingStore {
 
   changeSavedSreen(screen: OnboardingSreens) {
     requestAnimationFrame(() => {
-      navigate(screen)
+      navigate(screen as keyof RootStackParamList)
       this.screen = screen
     })
   }

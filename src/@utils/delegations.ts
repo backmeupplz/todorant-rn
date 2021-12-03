@@ -7,15 +7,6 @@ import { database, todosCollection, usersCollection } from './watermelondb/wmdb'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
-export async function getOrCreateDelegation(
-  delegation: MelonUser,
-  delegator: boolean
-) {
-  const localUser = await getLocalDelegation(delegation, delegator)
-  if (localUser) {
-  }
-}
-
 export async function removeDelegation(
   delegation: MelonUser,
   delegator: boolean,
@@ -92,40 +83,6 @@ export function getMismatchesWithServer(
     }
   })
   return missMatches
-}
-
-export async function updateOrCreateDelegation(
-  delegation: Partial<MelonUser>,
-  delegator: boolean,
-  forceWrite = false
-): Promise<MelonUser> {
-  return
-  // Get local user if exists
-  const localDelegate = await getLocalDelegation(delegation, delegator)
-  if (localDelegate) {
-    if (forceWrite) {
-      const updatedUser = localDelegate.updateUser(localDelegate)
-      return await updatedUser
-    }
-    return localDelegate.prepareUpdate((delegate) =>
-      Object.assign(delegate, delegation)
-    )
-  }
-  // Create new user in place if need
-  if (forceWrite) {
-    let createdUser!: MelonUser
-    await database.write(async () => {
-      createdUser = await usersCollection.create((delegate) => {
-        Object.assign(delegate, delegation)
-        delegate.isDelegator = delegator
-      })
-    })
-    return createdUser
-  }
-  return usersCollection.prepareCreate((delegate) => {
-    Object.assign(delegate, delegation)
-    delegate.isDelegator = delegator
-  })
 }
 
 export function cloneDelegation(delegation: MelonUser) {

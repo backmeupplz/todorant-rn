@@ -52,7 +52,7 @@ class LoginTelegramContent extends Component<{
                 }
               } catch (err) {
                 goBack()
-                alertError(err)
+                alertError(err as string)
               }
             }}
             onLoadEnd={() => {

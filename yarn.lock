@@ -2474,15 +2474,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@react-native-community/datetimepicker@npm:4.0.0"
-  dependencies:
-    invariant: ^2.2.4
-  checksum: 4a86807ee3bb3437c1a57ef33e4066f58c5d23c8f22231007964247ea9c8c7abfc27342ee85cc42df0c2776061570cdf8e4eb802024fcccaf71ee7fe3ec319d9
-  languageName: node
-  linkType: hard
-
 "@react-native-community/eslint-config@npm:^3.0.1":
   version: 3.0.1
   resolution: "@react-native-community/eslint-config@npm:3.0.1"
@@ -2982,6 +2973,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-datepicker@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "@types/react-native-datepicker@npm:1.7.1"
+  dependencies:
+    "@types/react": "*"
+    "@types/react-native": "*"
+    moment: ">=2.14.0"
+  checksum: b93f64e31b49c52bae6909b44cbcb50074a7bda5b0db40d14615afdf5e9faf8df9ad2da84f38877f5fb17bad6774ea868da4c7f348e6c5b4322c64e30e9ec139
+  languageName: node
+  linkType: hard
+
 "@types/react-native-indicators@npm:^0.16.0":
   version: 0.16.1
   resolution: "@types/react-native-indicators@npm:0.16.1"
@@ -2996,6 +2998,15 @@ __metadata:
   version: 7.3.3
   resolution: "@types/react-native-push-notification@npm:7.3.3"
   checksum: 4ed1fcb79c24bb64472c9ef8f46677ca39e2a8b7a9ff0c1234c7e158d1d168aedb649f0a2978059a671ae6ec70cef8d191b5c5bbc9f123550904fdfc422558ea
+  languageName: node
+  linkType: hard
+
+"@types/react-native-restart@npm:^0.0.14":
+  version: 0.0.14
+  resolution: "@types/react-native-restart@npm:0.0.14"
+  dependencies:
+    react-native-restart: "*"
+  checksum: 04d6e9f386e1427f6e52445492e35029ae8f1e7f2592c00959c33f0ba681c679b3d0ae11f542b43c9ee0e1aacf41b1ddea683c3da4646414ebf95a090ba46647
   languageName: node
   linkType: hard
 
@@ -9374,7 +9385,7 @@ mobx-persist@backmeupplz/mobx-persist:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.24.0":
+"moment@npm:>=2.14.0, moment@npm:^2.24.0":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
@@ -10935,7 +10946,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
   languageName: node
   linkType: hard
 
-"react-native-restart@npm:^0.0.22":
+"react-native-restart@npm:*, react-native-restart@npm:^0.0.22":
   version: 0.0.22
   resolution: "react-native-restart@npm:0.0.22"
   peerDependencies:
@@ -12774,7 +12785,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     "@nozbe/with-observables": ^1.4.0
     "@react-native-async-storage/async-storage": ^1.13.0
     "@react-native-community/clipboard": ^1.5.1
-    "@react-native-community/datetimepicker": ^4.0.0
+    "@react-native-community/datetimepicker": ^3.0.2
     "@react-native-community/eslint-config": ^3.0.1
     "@react-native-community/masked-view": ^0.1.6
     "@react-native-community/netinfo": ^7.1.3
@@ -12796,8 +12807,10 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     "@types/randomcolor": ^0.5.5
     "@types/react-native": ^0.66.6
     "@types/react-native-calendars": ^1.1264.3
+    "@types/react-native-datepicker": ^1.7.1
     "@types/react-native-indicators": ^0.16.0
     "@types/react-native-push-notification": ^7.3.3
+    "@types/react-native-restart": ^0.0.14
     "@types/react-native-vector-icons": ^6.4.10
     "@types/react-test-renderer": ^17.0.1
     "@types/semver": ^7.3.9

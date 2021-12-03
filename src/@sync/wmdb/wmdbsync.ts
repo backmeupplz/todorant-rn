@@ -10,7 +10,6 @@ import {
 } from '@nozbe/watermelondb/sync'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { alertError, alertMessage } from '@utils/alert'
-import { updateOrCreateDelegation } from '@utils/delegations'
 import { decrypt, encrypt } from '@utils/encryption'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import {

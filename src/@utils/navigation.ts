@@ -1,9 +1,44 @@
 import * as React from 'react'
 import { NavigationContainerRef } from '@react-navigation/native'
+import { MelonTag } from '@models/MelonTag'
+import { User } from '@models/User'
+import { MelonTodo } from '@models/MelonTodo'
+import { DelegationUserType } from '@models/DelegationUser'
+import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
 
-export const navigationRef = React.createRef<NavigationContainerRef>()
+type DelegationsScreen = { delegationType: DelegationUserType }
 
-export function navigate(name: string, params?: object) {
+export type RootStackParamList = {
+  AddTodo: undefined | {}
+  Planning: undefined
+  HeroProfile: undefined
+  EditTodo: undefined
+  GoogleCalendar: undefined
+  Tags: undefined
+  ChangeText: { tag: MelonTag }
+  AddEpic: { tag: MelonTag }
+  ColorPicker: { tag: MelonTag }
+  Paywall: undefined
+  Privacy: undefined
+  Terms: undefined
+  Sockets: undefined
+  Data: undefined
+  Rules: undefined
+  Login: undefined
+  LoginQR: { getToken: (token: string) => void }
+  Security: undefined
+  LoginTelegram: { setLoadingToTrue: (user: User) => void }
+  LoginFacebook: { setLoadingToTrue: (user: User) => void }
+  Integrations: undefined
+  BreakdownTodo: { todo: MelonTodo }
+  Delegates: DelegationsScreen
+  Delegators: DelegationsScreen
+}
+
+export const navigationRef =
+  React.createRef<NavigationContainerRef<RootStackParamList>>()
+
+export function navigate(name: keyof RootStackParamList, params?: object) {
   navigationRef.current?.navigate(name, params)
 }
 

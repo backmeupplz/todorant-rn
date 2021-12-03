@@ -142,7 +142,7 @@ export class Data extends Component {
               try {
                 await sharedSync.sync(SyncRequestEvent.All)
               } catch (err) {
-                alertError(err)
+                alertError(err as string)
               }
             }}
           >
@@ -155,7 +155,7 @@ export class Data extends Component {
               try {
                 await sharedSync.hardSync()
               } catch (err) {
-                alertError(err)
+                alertError(err as string)
               }
             }}
           >
@@ -174,8 +174,11 @@ export class Data extends Component {
           </TableItem>
           <TableItem
             onPress={async () => {
+              if (!sharedSessionStore.user?.token) {
+                return
+              }
               const data = await gatherData()
-              await rest.sendData(data)
+              await rest.sendData(data, sharedSessionStore.user?.token)
               Toast.show({
                 text: '👍',
               })

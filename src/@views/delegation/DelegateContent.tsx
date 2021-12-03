@@ -98,7 +98,7 @@ const EnhancedDraggableSectionList = enhance(
         renderSectionHeader={(header) => {
           return (
             <TodoHeader
-              item={header.section.userInSection.name}
+              item={header.section.userInSection.name!}
               hidePlus={true}
             />
           )

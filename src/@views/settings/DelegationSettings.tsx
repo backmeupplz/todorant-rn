@@ -17,7 +17,12 @@ import Clipboard from '@react-native-community/clipboard'
 export class DelegationSettings extends Component {
   @observable reset = false
   async resetDelegateToken() {
-    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken()
+    if (!sharedSessionStore.user?.token) {
+      return
+    }
+    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken(
+      sharedSessionStore.user?.token
+    )
   }
 
   UNSAFE_componentWillMount() {

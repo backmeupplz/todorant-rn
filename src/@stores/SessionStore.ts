@@ -18,7 +18,6 @@ import {
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/watermelondb/wmdb'
-import { updateOrCreateDelegation } from '@utils/delegations'
 import { AsyncStorage } from 'react-native'
 
 class SessionStore {
@@ -180,8 +179,8 @@ class SessionStore {
       }
     }
     completeSync()
-    if (this.user && !this.user.delegateInviteToken) {
-      this.user.delegateInviteToken = await resetDelegateToken()
+    if (this.user && !this.user.delegateInviteToken && this.user.token) {
+      this.user.delegateInviteToken = await resetDelegateToken(this.user.token)
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, RefObject } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
@@ -27,6 +27,8 @@ import {
   Keyboard,
   InteractionManager,
   NativeEventSubscription,
+  FlatList,
+  Falsy,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -40,7 +42,7 @@ import {
 import { sharedHeroStore } from '@stores/HeroStore'
 import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList, {
@@ -64,10 +66,7 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from '@utils/watermelondb/wmdb'
-import {
-  getLocalDelegation,
-  updateOrCreateDelegation,
-} from '@utils/delegations'
+import { getLocalDelegation } from '@utils/delegations'
 import Clipboard from '@react-native-community/clipboard'
 
 export const addTodoEventEmitter = new EventEmitter()
@@ -105,7 +104,8 @@ class AddTodoContent extends Component<{
 
   backHandler: NativeEventSubscription | undefined
 
-  scrollView: DraggableFlatList<TodoVM | undefined> | null = null
+  // TODO: Test scrollview on ios
+  // scrollView: ScrollView | null = null
 
   completed = false
 
@@ -176,8 +176,8 @@ class AddTodoContent extends Component<{
         if (todo.completed) {
           completedAtCreation.push(todo.text)
         }
-        let user: MelonUser | undefined
-        let delegator: MelonUser | undefined
+        let user: MelonUser | Falsy
+        let delegator: MelonUser | Falsy
         if (vm.delegate) {
           user = await getLocalDelegation(vm.delegate, false)
           delegator = await getLocalDelegation(sharedSessionStore.user!, true)
@@ -402,10 +402,11 @@ class AddTodoContent extends Component<{
     }
     this.vms.push(newVM)
 
-    if (this.scrollView) {
-      await this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
-      newVM.focus()
-    }
+    // TODO: test this on ios
+    // if (this.scrollView) {
+    // await this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
+    // newVM.focus()
+    // }
   }
 
   isDirty = () => {
@@ -551,9 +552,7 @@ class AddTodoContent extends Component<{
           }
         >
           <DraggableFlatList
-            ref={(scrollView) => {
-              this.scrollView = scrollView
-            }}
+            // ref={this.scrollView}
             contentContainerStyle={{ paddingBottom: 10, paddingTop: 10 }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}

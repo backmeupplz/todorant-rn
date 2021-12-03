@@ -50,7 +50,7 @@ class LoginVM {
       await sharedSessionStore.login(todorantUserInfo)
       goBack()
     } catch (error) {
-      alertError(error)
+      alertError(error as string)
     } finally {
       this.syncLoading = false
       this.loading = false
@@ -145,7 +145,7 @@ class LoginVM {
       await sharedSessionStore.login(todorantUserInfo)
       goBack()
     } catch (error) {
-      alertError(error)
+      alertError(error as string)
     } finally {
       this.syncLoading = false
       this.loading = false

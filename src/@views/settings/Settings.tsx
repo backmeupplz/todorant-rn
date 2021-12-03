@@ -53,8 +53,9 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
 import { useNavigation } from '@react-navigation/native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { FlatList } from 'react-native-gesture-handler'
 
-export let scrollViewRef: ScrollView
+export let scrollViewRef: FlatList<any>
 export let supportButtonNodeId: number
 export let settingsRootRef: Container
 export let settingsBeforeFeedbackButton: number

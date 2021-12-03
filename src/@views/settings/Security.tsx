@@ -76,7 +76,7 @@ export class Security extends Component {
       await database.write(async () => await database.batch(...toUpdate))
       sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
@@ -108,7 +108,7 @@ export class Security extends Component {
       await sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
@@ -172,7 +172,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />
@@ -191,7 +191,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />

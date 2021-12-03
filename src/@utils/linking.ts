@@ -13,9 +13,10 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm, alertError } from './alert'
 import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { getLocalDelegation, updateOrCreateDelegation } from './delegations'
+import { getLocalDelegation } from './delegations'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from './watermelondb/wmdb'
+import { updateOrCreateDelegation } from '@sync/SyncObjectHandlers'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()

@@ -56,7 +56,7 @@ class Row extends Component<{
                   }
                   await sharedSync.sync()
                 } catch (err) {
-                  alertError(err)
+                  alertError(err as string)
                 } finally {
                   this.loading = false
                 }

@@ -17,9 +17,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
-import DraggableSectionList, {
-  DragEndParams,
-} from '@upacyxou/react-native-draggable-sectionlist'
 import { Month } from '@upacyxou/react-native-month'
 import {
   computed,
@@ -55,6 +52,7 @@ import { TodoColumn } from '@utils/watermelondb/tables'
 import { database } from '@utils/watermelondb/wmdb'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import DraggableFlatList, {
+  DragEndParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -268,8 +266,6 @@ const enhance = withObservables(['todo'], ({ todo }) => {
   }
 })
 
-let arrBeforeChanges = []
-
 const EnhancedDraggableSectionList = enhance(
   ({
     todo,
@@ -291,14 +287,8 @@ const EnhancedDraggableSectionList = enhance(
       todosAndDates.push(realmTodo)
     }
 
-    // TODO fix this
-    // let arrBeforeChanges: any
-
     return (
       <DraggableFlatList
-        onDragBegin={() => {
-          arrBeforeChanges = todosAndDates
-        }}
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
@@ -308,7 +298,7 @@ const EnhancedDraggableSectionList = enhance(
         maxToRenderPerBatch={5}
         initialNumToRender={10}
         updateCellsBatchingPeriod={0.9}
-        onDragEnd={onDragEnd}
+        onDragEnd={(params) => onDragEnd(params, todosAndDates)}
         renderItem={renderItem}
         data={todosAndDates}
         keyExtractor={(item) => (typeof item === 'string' ? item : item.id)}
@@ -317,7 +307,10 @@ const EnhancedDraggableSectionList = enhance(
   }
 )
 
-async function onDragEnd({ data, from, to }) {
+async function onDragEnd(
+  { data, from, to }: DragEndParams<string | MelonTodo>,
+  arrBeforeChanges: (string | MelonTodo)[]
+) {
   // help us to find closest section (looks from bottom to the top)
   const findClosestSection = (
     index: number,
@@ -502,7 +495,6 @@ async function onDragEnd({ data, from, to }) {
               },
             ])
             lastOrder++
-            disableLoading = true
             continue
           }
         }

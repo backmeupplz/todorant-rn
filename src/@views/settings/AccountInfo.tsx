@@ -141,9 +141,15 @@ export class AccountInfo extends Component {
                     this.nameChangingMenu = false
                     this.loading = true
                     try {
-                      await setUserName(this.name)
+                      if (!sharedSessionStore.user?.token) {
+                        return
+                      }
+                      await setUserName(
+                        this.name,
+                        sharedSessionStore.user?.token
+                      )
                     } catch (err) {
-                      alertError(err)
+                      alertError(err as string)
                     } finally {
                       this.loading = false
                     }
@@ -195,10 +201,13 @@ export class AccountInfo extends Component {
               navigate('LoginQR', {
                 getToken: async (uuid: string) => {
                   this.loading = true
+                  if (!sharedSessionStore.user?.token) {
+                    return
+                  }
                   try {
-                    await setQrToken(uuid)
+                    await setQrToken(uuid, sharedSessionStore.user?.token)
                   } catch (err) {
-                    alertError(err)
+                    alertError(err as string)
                   } finally {
                     this.loading = false
                   }

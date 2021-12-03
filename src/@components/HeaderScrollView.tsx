@@ -1,4 +1,10 @@
-import React, { Component } from 'react'
+import React, {
+  Component,
+  ForwardRefExoticComponent,
+  Ref,
+  RefAttributes,
+  useRef,
+} from 'react'
 import {
   View,
   ScrollView,
@@ -10,6 +16,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   NativeScrollPoint,
+  FlatListProps,
 } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
@@ -23,6 +30,7 @@ import fonts from '@utils/fonts'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { FlatList } from 'react-native-gesture-handler'
+import type {FlatList as FlatListType} from 'react-native-gesture-handler'
 
 export let infoButtonNodeId: number
 

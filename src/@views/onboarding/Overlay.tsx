@@ -18,7 +18,7 @@ import {
   Platform,
 } from 'react-native'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
-import { navigate } from '@utils/navigation'
+import { navigate, RootStackParamList } from '@utils/navigation'
 import { EasingNode } from 'react-native-reanimated'
 
 @observer
@@ -241,7 +241,9 @@ export function checkOnboardingStep() {
         !sharedOnboardingStore.savedStep
       )
         return
-      navigate(sharedOnboardingStore.screen)
+      navigate(
+        sharedOnboardingStore.screen as string as keyof RootStackParamList
+      )
       sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
     }, 500)
   })
