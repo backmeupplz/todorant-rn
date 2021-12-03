@@ -318,143 +318,171 @@ const EnhancedDraggableSectionList = enhance(
 )
 
 async function onDragEnd({ data, from, to }) {
-  // enable loader
-  sharedAppStateStore.changeLoading(false)
-  // check is calendar dragging
-  if (sharedAppStateStore.activeDay) {
-    // const todo = data[to] as MelonTodo
-    // if (todo) {
-    //   //realm.write(() => {
-    //   todo.date = getDateDateString(sharedAppStateStore.activeDay!)
-    //   todo.monthAndYear = getDateMonthAndYearString(
-    //     sharedAppStateStore.activeDay!
-    //   )
-    //   const newTitle = getTitle(todo)
-    //   todo._exactDate = new Date(newTitle)
-    //   todo.updatedAt = new Date()
-    //   //})
-    // }
-    // // discard calendar after applying changes
-    // sharedAppStateStore.activeDay = undefined
-    // sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
-    // //this.setCoordinates.cancel()
-    // promise()
-  } else {
-    // console.log(idk)
-    // if (from === 0) {
-    //   promise()
-    //   return
-    // }
-    // help us to find closest section (looks from bottom to the top)
-    const findClosestSection = (
-      index: number,
-      arrToSearch: (string | MelonTodo)[]
-    ) => {
-      let closestSection = 0
-      for (let i = index; i >= 0; --i) {
-        if (typeof arrToSearch[i] === 'string') {
-          closestSection = i
-          break
-        }
+  // help us to find closest section (looks from bottom to the top)
+  const findClosestSection = (
+    index: number,
+    arrToSearch: (string | MelonTodo)[]
+  ) => {
+    let closestSection = 0
+    for (let i = index; i >= 0; --i) {
+      if (typeof arrToSearch[i] === 'string') {
+        closestSection = i
+        break
       }
-      return closestSection
     }
+    return closestSection
+  }
 
-    const toUpdate = [] as MelonTodo[]
+  const toUpdate = [] as MelonTodo[]
 
-    let disableLoading = false
+  const closestDayFrom = findClosestSection(from, arrBeforeChanges)
+  const closestDayTo = findClosestSection(to, data)
 
-    const closestDayFrom = findClosestSection(from, arrBeforeChanges)
-    const closestDayTo = findClosestSection(to, data)
-
-    // if inside one day
-    if (closestDayFrom === closestDayTo) {
-      let lastOrder = 0
-      let fromItem = arrBeforeChanges[from]
-      let toItem = arrBeforeChanges[to]
-      // if both of moved items are todos, and no one of them are section header
-      if (fromItem !== 'string' && toItem !== 'string') {
-        const fromBottomToTop = from > to
-        const nearItem = arrBeforeChanges[
-          fromBottomToTop ? to - 1 : to + 1
-        ] as MelonTodo
-        toItem = toItem as MelonTodo
-        fromItem = fromItem as MelonTodo
-        let secondOrder =
-          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-        let firstOrder = toItem ? toItem.order : -1
-        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
-        let average = (firstOrder + secondOrder) / 2
-        // if there is nothing under or under is a section
-        if (
-          (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
-          typeof arrBeforeChanges[to + 1] === 'undefined'
-        )
-          average = toItem.order + 1
-        if (
-          nearItem &&
-          toItem.frog &&
-          !nearItem.frog &&
-          typeof arrBeforeChanges[to - 1] !== 'string'
-        )
-          average = toItem.order + 1
-        toUpdate.push(
-          (fromItem as MelonTodo).prepareUpdate(
-            (todo) => (todo.order = average)
-          )
-        )
-      } else {
-        for (let i = closestDayTo + 1; ; i++) {
-          const item = data[i]
-          if (item === undefined) break
-          if (typeof item === 'string') break
-          toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
-          lastOrder++
+  // if inside one day
+  if (closestDayFrom === closestDayTo) {
+    let lastOrder = 0
+    let fromItem = arrBeforeChanges[from]
+    let toItem = arrBeforeChanges[to]
+    // if both of moved items are todos, and no one of them are section header
+    if (fromItem !== 'string' && toItem !== 'string') {
+      const fromBottomToTop = from > to
+      const nearItem = arrBeforeChanges[
+        fromBottomToTop ? to - 1 : to + 1
+      ] as MelonTodo
+      toItem = toItem as MelonTodo
+      fromItem = fromItem as MelonTodo
+      let secondOrder =
+        nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+      let firstOrder = toItem ? toItem.order : -1
+      if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
+      let average = (firstOrder + secondOrder) / 2
+      // if there is nothing under or under is a section
+      if (
+        (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+        typeof arrBeforeChanges[to + 1] === 'undefined'
+      )
+        average = toItem.order + 1
+      if (
+        nearItem &&
+        toItem.frog &&
+        !nearItem.frog &&
+        typeof arrBeforeChanges[to - 1] !== 'string'
+      )
+        average = toItem.order + 1
+      toUpdate.push(
+        (fromItem as MelonTodo).prepareUpdate((todo) => (todo.order = average))
+      )
+    } else {
+      for (let i = closestDayTo + 1; ; i++) {
+        const item = data[i]
+        if (item === undefined) break
+        if (typeof item === 'string') break
+        toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
+        lastOrder++
+      }
+    }
+  } else if (typeof arrBeforeChanges[from] !== 'string') {
+    let fromItem = arrBeforeChanges[from]
+    let toItem = arrBeforeChanges[to]
+    // if both of moved items are todos, and no one of them are section header
+    if (fromItem !== 'string' && toItem !== 'string') {
+      const fromBottomToTop = from > to
+      const nearItem = arrBeforeChanges[
+        fromBottomToTop ? to - 1 : to + 1
+      ] as MelonTodo
+      toItem = toItem as MelonTodo
+      fromItem = fromItem as MelonTodo
+      let secondOrder =
+        nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+      let firstOrder = toItem ? toItem.order : -1
+      if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
+      let average = (firstOrder + secondOrder) / 2
+      // if there is nothing under or under is a section
+      if (
+        (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+        typeof arrBeforeChanges[to + 1] === 'undefined'
+      )
+        average = toItem.order + 1
+      if (
+        toItem.frog &&
+        !nearItem.frog &&
+        typeof arrBeforeChanges[to - 1] !== 'string'
+      )
+        average = toItem.order + 1
+      if (
+        typeof firstOrder === 'undefined' ||
+        typeof secondOrder === 'undefined'
+      ) {
+        if (!fromBottomToTop) {
+          average = secondOrder - 1
+        } else {
+          average = secondOrder + 1
         }
       }
-    } else if (typeof arrBeforeChanges[from] !== 'string') {
-      let fromItem = arrBeforeChanges[from]
-      let toItem = arrBeforeChanges[to]
-      // if both of moved items are todos, and no one of them are section header
-      if (fromItem !== 'string' && toItem !== 'string') {
-        const fromBottomToTop = from > to
-        const nearItem = arrBeforeChanges[
-          fromBottomToTop ? to - 1 : to + 1
-        ] as MelonTodo
-        toItem = toItem as MelonTodo
-        fromItem = fromItem as MelonTodo
-        let secondOrder =
-          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-        let firstOrder = toItem ? toItem.order : -1
-        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
-        let average = (firstOrder + secondOrder) / 2
-        // if there is nothing under or under is a section
-        if (
-          (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
-          typeof arrBeforeChanges[to + 1] === 'undefined'
-        )
-          average = toItem.order + 1
-        if (
-          toItem.frog &&
-          !nearItem.frog &&
-          typeof arrBeforeChanges[to - 1] !== 'string'
-        )
-          average = toItem.order + 1
-        if (
-          typeof firstOrder === 'undefined' ||
-          typeof secondOrder === 'undefined'
-        ) {
-          if (!fromBottomToTop) {
-            average = secondOrder - 1
-          } else {
-            average = secondOrder + 1
+      let markAsFrog = false
+      let failed = false
+      if (isTodoOld(fromItem)) {
+        if (fromItem.frogFails < 3) {
+          if (fromItem.frogFails >= 1) {
+            markAsFrog = true
           }
+          failed = true
+        } else {
+          Alert.alert(translate('error'), translate('breakdownRequest'), [
+            {
+              text: translate('cancel'),
+              style: 'cancel',
+            },
+            {
+              text: translate('breakdownButton'),
+              onPress: () => {
+                navigate('BreakdownTodo', {
+                  breakdownTodo: fromItem,
+                })
+              },
+            },
+          ])
+          sharedSync.sync(SyncRequestEvent.Todo)
+          // promise()
+          return
         }
-        let markAsFrog = false
-        let failed = false
-        if (isTodoOld(fromItem)) {
-          if (fromItem.frogFails < 3) {
-            if (fromItem.frogFails >= 1) {
+      }
+      toUpdate.push(
+        (fromItem as MelonTodo).prepareUpdate((todo) => {
+          if (markAsFrog) todo.frog = true
+          if (failed) todo.frogFails++
+          todo.order = average
+          todo.date = nearItem?.date || (toItem as MelonTodo).date
+          todo.monthAndYear =
+            nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
+          todo._exactDate = new Date(getTitle(todo))
+        })
+      )
+    }
+  } else {
+    const lowerDay = Math.min(closestDayFrom, closestDayTo)
+    const maxDay = Math.max(closestDayFrom, closestDayTo)
+    let lastOrder = 0
+    let lastSection = data[lowerDay] as string
+    for (let i = lowerDay + 1; ; i++) {
+      const item = data[i]
+      if (item === undefined) break
+      if (typeof item === 'string') {
+        // if new section, outside of our draggable items begin
+        if (
+          new Date(item).getTime() > new Date(data[maxDay] as string).getTime()
+        )
+          break
+        lastOrder = 0
+        lastSection = item
+        continue
+      }
+      let markAsFrog = false
+      let failed = false
+      if (i === to) {
+        if (isTodoOld(item)) {
+          if (item.frogFails < 3) {
+            if (item.frogFails >= 1) {
               markAsFrog = true
             }
             failed = true
@@ -468,94 +496,32 @@ async function onDragEnd({ data, from, to }) {
                 text: translate('breakdownButton'),
                 onPress: () => {
                   navigate('BreakdownTodo', {
-                    breakdownTodo: fromItem,
+                    breakdownTodo: item,
                   })
                 },
               },
             ])
-            sharedSync.sync(SyncRequestEvent.Todo)
-            // promise()
-            return
+            lastOrder++
+            disableLoading = true
+            continue
           }
         }
-        toUpdate.push(
-          (fromItem as MelonTodo).prepareUpdate((todo) => {
-            if (markAsFrog) todo.frog = true
-            if (failed) todo.frogFails++
-            todo.order = average
-            todo.date = nearItem?.date || (toItem as MelonTodo).date
-            todo.monthAndYear =
-              nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
-            todo._exactDate = new Date(getTitle(todo))
-          })
-        )
       }
-    } else {
-      const lowerDay = Math.min(closestDayFrom, closestDayTo)
-      const maxDay = Math.max(closestDayFrom, closestDayTo)
-      let lastOrder = 0
-      let lastSection = data[lowerDay] as string
-      for (let i = lowerDay + 1; ; i++) {
-        const item = data[i]
-        if (item === undefined) break
-        if (typeof item === 'string') {
-          // if new section, outside of our draggable items begin
-          if (
-            new Date(item).getTime() >
-            new Date(data[maxDay] as string).getTime()
-          )
-            break
-          lastOrder = 0
-          lastSection = item
-          continue
-        }
-        let markAsFrog = false
-        let failed = false
-        if (i === to) {
-          if (isTodoOld(item)) {
-            if (item.frogFails < 3) {
-              if (item.frogFails >= 1) {
-                markAsFrog = true
-              }
-              failed = true
-            } else {
-              Alert.alert(translate('error'), translate('breakdownRequest'), [
-                {
-                  text: translate('cancel'),
-                  style: 'cancel',
-                },
-                {
-                  text: translate('breakdownButton'),
-                  onPress: () => {
-                    navigate('BreakdownTodo', {
-                      breakdownTodo: item,
-                    })
-                  },
-                },
-              ])
-              lastOrder++
-              disableLoading = true
-              continue
-            }
-          }
-        }
-        toUpdate.push(
-          item.prepareUpdate((todo) => {
-            if (markAsFrog) todo.frog = true
-            if (failed) todo.frogFails++
-            todo.date = getDateDateString(lastSection)
-            todo.monthAndYear = getDateMonthAndYearString(lastSection)
-            todo._exactDate = new Date(lastSection)
-            todo.order = lastOrder
-          })
-        )
-        lastOrder++
-      }
+      toUpdate.push(
+        item.prepareUpdate((todo) => {
+          if (markAsFrog) todo.frog = true
+          if (failed) todo.frogFails++
+          todo.date = getDateDateString(lastSection)
+          todo.monthAndYear = getDateMonthAndYearString(lastSection)
+          todo._exactDate = new Date(lastSection)
+          todo.order = lastOrder
+        })
+      )
+      lastOrder++
     }
-    await database.write(async () => await database.batch(...toUpdate))
-    sharedSync.sync(SyncRequestEvent.Todo)
-    // promise()
   }
+  await database.write(async () => await database.batch(...toUpdate))
+  sharedSync.sync(SyncRequestEvent.Todo)
 }
 
 const renderItem = ({

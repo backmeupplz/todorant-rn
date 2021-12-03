@@ -230,12 +230,6 @@ class TodoStore {
       .subscribe((count) => (this.delegatedByMeCompletedCount = count))
 
     this.subscribeOldTodos()
-
-    console.log(
-      await todosCollection
-        .query(Q.where(TodoColumn.delegator, Q.notEq(null)))
-        .fetch()
-    )
   }
 
   logout = () => {

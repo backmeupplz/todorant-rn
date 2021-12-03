@@ -62,7 +62,6 @@ export async function getLocalDelegation(
     await usersCollection
       .query(
         Q.where(UserColumn.isDelegator, delegator),
-        // Q.where(UserColumn.name, Q.notEq(null)),
         Q.or(
           Q.where(UserColumn._id, delegation._id || null),
           Q.where(

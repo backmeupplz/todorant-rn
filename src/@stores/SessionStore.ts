@@ -160,8 +160,6 @@ class SessionStore {
       if (token) {
         this.user.token = token
       }
-      // await updateOrCreateDelegation({ _id: this.user._id }, true, true)
-      // await updateOrCreateDelegation({ _id: this.user._id }, false, true)
     } else {
       // Update the current user id
       this.user._id = user._id
@@ -195,16 +193,6 @@ hydrate('SessionStore', sharedSessionStore).then(async () => {
   if (sharedSessionStore.user?.token) {
     sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
-    // await updateOrCreateDelegation(
-    //   { _id: sharedSessionStore.user._id },
-    //   false,
-    //   true
-    // )
-    // await updateOrCreateDelegation(
-    //   { _id: sharedSessionStore.user._id },
-    //   true,
-    //   true
-    // )
   } else {
     removeToken()
   }

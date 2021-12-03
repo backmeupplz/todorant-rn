@@ -73,7 +73,6 @@ export class WMDBSync {
       async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
         this.serverTimeStamp = undefined
         this.serverObjects = undefined
-        // if (this.gotWmDb) await when(() => !this.gotWmDb)
         if (pushedBack?.todos.length) {
           for (const todo of pushedBack.todos) {
             const localTodo = await todosCollection.find(todo._tempSyncId)

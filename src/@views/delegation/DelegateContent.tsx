@@ -53,15 +53,6 @@ const EnhancedDraggableSectionList = enhance(
           const user = await (byMe && !completed
             ? realmTodo.user
             : realmTodo.delegator)
-          console.log('//////////////////////////////////////////////////')
-          // console.log(
-          //   await (
-          //     await usersCollection.query().fetch()
-          //   ).forEach((user) => {
-          //     console.log(user.name)
-          //   })
-          // )
-          console.log((await realmTodo.user).name)
           if (!user) continue
           const titleKey = user?._id
           if (!titleKey) continue

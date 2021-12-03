@@ -68,7 +68,6 @@ export async function onDelegationObjectsFromServer(
   }>,
   completeSync: () => void
 ) {
-  console.log(objects)
   const lastSyncDate = sharedDelegationStore.updatedAt
   if (!lastSyncDate && sharedSessionStore.user) {
     await updateOrCreateDelegation(
@@ -204,11 +203,8 @@ export async function onWMDBObjectsFromServer(
   for (const updated of serverObjects.todos.updated) {
     if (updated.delegator_id) {
       if (!showed) {
-        console.log(await usersCollection.query().fetch())
         showed = true
       }
-      console.log(updated.user_id)
-      // console.log('test')
       const user = await (
         await usersCollection
           .query(
@@ -216,17 +212,13 @@ export async function onWMDBObjectsFromServer(
             Q.where(UserColumn.isDelegator, false)
           )
           .fetch()
-      )[0] // getLocalDelegation(updated.delegator_id, true)// await getLocalDelegation(updated.user_id, false)
-      console.log(user)
-      console.log(user?.name)
+      )[0]
       if (user) {
         updated.user_id = user.id
       } else {
         updated.user_id = null
         updated.is_deleted = true
       }
-      console.log(updated.user_id)
-      console.log(updated)
       const delegator = await (
         await usersCollection
           .query(
@@ -237,32 +229,13 @@ export async function onWMDBObjectsFromServer(
             Q.where(UserColumn.isDelegator, true)
           )
           .fetch()
-      )[0] // getLocalDelegation(updated.delegator_id, true)
-      console.log()
-      console.log(delegator)
-      console.log('lol')
-      console.log(delegator?.name)
+      )[0]
       if (delegator) {
         updated.delegator_id = delegator.id
       } else {
         updated.delegator_id = null
         updated.is_deleted = true
       }
-      console.log(updated.delegator_id)
-      // updated.user_id = (
-      //   await updateOrCreateDelegation(
-      //     updated.user_id as MelonUser,
-      //     false,
-      //     true
-      //   )
-      // ).id
-      // updated.delegator_id = (
-      //   await updateOrCreateDelegation(
-      //     updated.delegator_id as MelonUser,
-      //     true,
-      //     true
-      //   )
-      // ).id
     }
     try {
       updated.text = decrypt(updated.text) || updated.text

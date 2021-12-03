@@ -113,7 +113,6 @@ class App extends Component {
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
-        // await migrateRealmToWMDB()
         sharedSessionStore.localMigrationCompleted = true
       } catch (err) {
         alertError('A error occur while transfering data between databases')

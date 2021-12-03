@@ -3,9 +3,6 @@ import SocketIO from 'socket.io-client'
 import NetInfo from '@react-native-community/netinfo'
 import { sharedSync } from '@sync/Sync'
 import { sharedSessionStore } from '@stores/SessionStore'
-// import { migrateRealmToWMDB } from '@utils/realm'
-import { alertError } from '@utils/alert'
-import { sharedDelegationStore } from '@stores/DelegationStore'
 
 const authorizationTimeout = 20
 

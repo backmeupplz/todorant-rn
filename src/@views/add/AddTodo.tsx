@@ -170,10 +170,6 @@ class AddTodoContent extends Component<{
           date: vm.date,
           time: vm.time,
           repetitive: vm.repetitive,
-          //user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-          //delegator: !!vm.delegate
-          //  ? cloneDelegator(sharedSessionStore.user)
-          //  : undefined,
           encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
         } as MelonTodo
         todo._exactDate = new Date(getTitle(todo))
@@ -526,7 +522,6 @@ class AddTodoContent extends Component<{
   }
 
   onDragEnd = ({ data, from, to }: { data: any; from: number; to: number }) => {
-    console.log(data)
     if (from == 0 || to == 0) {
       return
     }
