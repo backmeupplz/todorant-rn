@@ -100,17 +100,17 @@ export default observer(() => {
           tabBarIcon: ({ focused, size }) => {
             let name = 'current'
             let icon = focused ? CurrentActiveIcon({}) : CurrentIcon({})
-            if (route.name === 'Planning') {
+            if (route.name === 'BottomPlanning') {
               name = 'planning'
               icon = focused
                 ? PlanningActiveIcon({ width: size, height: size })
                 : PlanningIcon({ width: size, height: size })
-            } else if (route.name === 'Delegation') {
+            } else if (route.name === 'BottomDelegation') {
               name = 'delegation'
               icon = focused
                 ? DelegationActiveIcon({ width: size, height: size })
                 : DelegationIcon({ width: size, height: size })
-            } else if (route.name === 'Settings') {
+            } else if (route.name === 'BottomSettings') {
               name = 'settings'
               icon = <SettingsRotatingIcon focused={focused} size={size} />
             }
@@ -119,8 +119,9 @@ export default observer(() => {
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
                   {icon}
-                  {((route.name === 'Settings' && !sharedSessionStore.user) ||
-                    (route.name === 'Delegation' &&
+                  {((route.name === 'BottomSettings' &&
+                    !sharedSessionStore.user) ||
+                    (route.name === 'BottomDelegation' &&
                       !!sharedTodoStore.delegatedToMeCount)) && (
                     <View
                       style={{
@@ -144,26 +145,26 @@ export default observer(() => {
           <>
             {!sharedTodoStore.isPlanningRequired && (
               <Tab.Screen
-                name="Current"
+                name="BottomCurrent"
                 component={Current}
                 options={{ title: translate('current') }}
               />
             )}
             <Tab.Screen
-              name="Planning"
+              name="BottomPlanning"
               component={Planning}
               options={{ title: translate('planning') }}
             />
 
             <Tab.Screen
-              name="Delegation"
+              name="BottomDelegation"
               component={Delegation}
               options={{ title: translate('delegate.title') }}
             />
           </>
         )}
         <Tab.Screen
-          name="Settings"
+          name="BottomSettings"
           component={Settings}
           options={{ title: translate('settings') }}
         />

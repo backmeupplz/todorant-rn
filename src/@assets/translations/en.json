@@ -485,5 +485,6 @@
     "title": "Repetitive task",
     "text": "This is a repetitive task, do you want to break down it or complete it?",
     "complete": "Complete"
-  }
+  },
+  "syncError": "An error occurred during data synchronization"
 }

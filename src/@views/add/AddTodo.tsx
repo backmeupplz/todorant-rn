@@ -29,6 +29,7 @@ import {
   NativeEventSubscription,
   FlatList,
   Falsy,
+  Dimensions,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -553,7 +554,11 @@ class AddTodoContent extends Component<{
         >
           <DraggableFlatList
             // ref={this.scrollView}
-            contentContainerStyle={{ paddingBottom: 10, paddingTop: 10 }}
+            contentContainerStyle={{
+              paddingBottom: 10,
+              paddingTop: 10,
+            }}
+            style={{ maxHeight: '95%', height: '95%' }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}
             renderItem={({ item, index, drag, isActive }) => {
@@ -607,6 +612,7 @@ class AddTodoContent extends Component<{
           />
           <View
             style={{
+              marginTop: -40,
               flexDirection: 'row',
               paddingHorizontal: 16,
               justifyContent: 'center',
