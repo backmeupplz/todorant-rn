@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import React, { Component, createRef, useEffect } from 'react'
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -55,7 +55,7 @@ import { useNavigation } from '@react-navigation/native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { FlatList } from 'react-native-gesture-handler'
 
-export let scrollViewRef: FlatList<any>
+export let scrollViewRef = createRef<FlatList<any>>()
 export let supportButtonNodeId: number
 export let settingsRootRef: Container
 export let settingsBeforeFeedbackButton: number
@@ -75,10 +75,7 @@ export class SettingsContent extends Component {
           onScrollViewContentRef={(ref) => {
             settingsContentRef = ref
           }}
-          onscrollViewRef={(ref) => {
-            if (!ref) return
-            scrollViewRef = ref
-          }}
+          onscrollViewRef={scrollViewRef}
           onOffsetChange={setSettingsScrollOffset}
           title={translate('settings')}
           infoTitle="infoSettings"

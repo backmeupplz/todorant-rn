@@ -1,6 +1,6 @@
 export enum OnboardingSreens {
-  Planning = 'Planning',
-  Current = 'Current',
-  Settings = 'Settings',
+  Planning = 'BottomPlanning',
+  Current = 'BottomCurrent',
+  Settings = 'BottomSettings',
   AddTodo = 'AddTodo',
 }

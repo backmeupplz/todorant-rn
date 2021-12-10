@@ -519,8 +519,8 @@ export const AllStages = {
           scrollContentRef
         )
         // scrolling to our intergationButton
-        scrollView.scrollTo({
-          y: buttonWithOffset.y,
+        scrollView.current?.scrollToOffset({
+          offset: buttonWithOffset.y,
         })
         // Wait for the scroll
         setTimeout(() => {
@@ -558,7 +558,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollToEnd()
+        scrollView.current?.scrollToEnd()
         // Wait for the scroll
         setTimeout(() => {
           InteractionManager.runAfterInteractions(async () => {
@@ -581,7 +581,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollTo({ y: 0 })
+        scrollView.current?.scrollToOffset({ offset: 0 })
         const nodeId = (await import('@views/settings/Settings')).howToUseNodeId
         resolve({
           nodeId,
@@ -595,7 +595,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollTo({ y: 0 })
+        scrollView.current?.scrollToOffset({ offset: 0 })
         const nodeId = (await import('@components/InfoButton')).infoButtonNodeId
         resolve({
           nodeId: Platform.OS === 'android' ? nodeId : undefined,

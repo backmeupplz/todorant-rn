@@ -1,4 +1,4 @@
-import React, { Component, RefObject } from 'react'
+import React, { Component, createRef, RefObject } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
@@ -43,7 +43,7 @@ import {
 import { sharedHeroStore } from '@stores/HeroStore'
 import { Divider } from '@components/Divider'
 import LinearGradient from 'react-native-linear-gradient'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList, {
@@ -104,9 +104,6 @@ class AddTodoContent extends Component<{
   @observable savingTodo = false
 
   backHandler: NativeEventSubscription | undefined
-
-  // TODO: Test scrollview on ios
-  // scrollView: ScrollView | null = null
 
   completed = false
 
@@ -377,6 +374,8 @@ class AddTodoContent extends Component<{
     this.backHandler?.remove()
   }
 
+  flatlistref = createRef<FlatList>()
+
   addTodo = async () => {
     this.vms.forEach((vm) => {
       vm.collapsed = true
@@ -404,10 +403,10 @@ class AddTodoContent extends Component<{
     this.vms.push(newVM)
 
     // TODO: test this on ios
-    // if (this.scrollView) {
-    // await this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
-    // newVM.focus()
-    // }
+    if (this.flatlistref) {
+      await this.flatlistref.current?.scrollToEnd()
+      newVM.focus()
+    }
   }
 
   isDirty = () => {
@@ -553,7 +552,7 @@ class AddTodoContent extends Component<{
           }
         >
           <DraggableFlatList
-            // ref={this.scrollView}
+            ref={this.flatlistref}
             contentContainerStyle={{
               paddingBottom: 10,
               paddingTop: 10,
