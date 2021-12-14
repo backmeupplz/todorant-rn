@@ -558,7 +558,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.current?.scrollToEnd()
+        scrollView.current?.scrollToOffset({ offset: settingsScrollOffset.y })
         // Wait for the scroll
         setTimeout(() => {
           InteractionManager.runAfterInteractions(async () => {

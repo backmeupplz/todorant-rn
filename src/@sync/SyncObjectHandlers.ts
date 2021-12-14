@@ -242,9 +242,15 @@ export async function onWMDBObjectsFromServer(
     } catch (e) {
       // Do nothing
     }
+    // Todo: make same for tags
     const localTodo = (
       await todosCollection
-        .query(Q.where(TodoColumn._id, updated.server_id))
+        .query(
+          Q.or(
+            Q.where(TodoColumn._id, updated.server_id),
+            Q.where(TodoColumn._tempSyncId, updated.local_sync_id || null)
+          )
+        )
         .fetch()
     )[0]
     updated.exact_date_at = new Date(
