@@ -10974,12 +10974,12 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
   languageName: node
   linkType: hard
 
-"react-native-sound@npm:^0.11.1":
-  version: 0.11.1
-  resolution: "react-native-sound@npm:0.11.1"
+"react-native-sound@npm:0.11.0":
+  version: 0.11.0
+  resolution: "react-native-sound@npm:0.11.0"
   peerDependencies:
     react-native: ">=0.8.0"
-  checksum: b67373ae46b745309807568283030ae271471e8d6c123600695e8974a51ede1bc317f60bb0612bcfa4d38f72747632a9acefc28cc5531eac7a0b48b53b40db4e
+  checksum: b39506fb8347af5badbdabf3c010562cca593f6b3d9fff497a5fbe236fce53f9f94ebe3ae82dbbd3eab71943b91db93565b1bee2974fd6e20cc7b765ddf51b80
   languageName: node
   linkType: hard
 
@@ -12863,7 +12863,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     react-native-safe-area-context: ^3.3.2
     react-native-screens: ^2.15.2
     react-native-shared-preferences: ^1.0.2
-    react-native-sound: ^0.11.1
+    react-native-sound: 0.11.0
     react-native-splash-screen: ^3.2.0
     react-native-store-rating: "backmeupplz/react-native-store-rating#803b83b701a4f926fcacfe5e775d57cf69c72088"
     react-native-svg: ^12.1.0
@@ -13023,11 +13023,11 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
 
 "typescript@patch:typescript@^4.5.2#~builtin<compat/typescript>":
   version: 4.5.2
-  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=ddd1e8"
+  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 24a439e062a05e3285a4f0e8a40644116ecdca89f3e908bed01e5a01b9aee747e3bcf0e85fe9e017e5ebf0c0863437c39479f2616f55a244c2d82d37022cdc4f
+  checksum: 53838d56aba6fcc947d63aa0771e5d966b1b648fddafed6e221d7f38c71219c4e036ece8cfe9e35ed80cf5a35ff4eb958934c993f99c3233773ec4f9ccd53f69
   languageName: node
   linkType: hard
 
