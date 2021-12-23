@@ -402,7 +402,6 @@ class AddTodoContent extends Component<{
     }
     this.vms.push(newVM)
 
-    // TODO: test this on ios
     if (this.flatlistref) {
       InteractionManager.runAfterInteractions(async () => {
         await this.flatlistref.current?.scrollToEnd()

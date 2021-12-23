@@ -186,13 +186,18 @@ export async function onWMDBObjectsFromServer(
   const todos = []
   const tags = []
   for (const updated of serverObjects.tags.updated) {
-    const localTodo = (
+    const localTag = (
       await tagsCollection
-        .query(Q.where(TagColumn._id, updated.server_id))
+        .query(
+          Q.or(
+            Q.where(TagColumn._id, updated.server_id),
+            Q.where(TagColumn._tempSyncId, updated.client_id || null)
+          )
+        )
         .fetch()
     )[0]
-    if (localTodo) {
-      updated.id = localTodo.id
+    if (localTag) {
+      updated.id = localTag.id
       tags.push(updated)
       continue
     }
@@ -248,7 +253,7 @@ export async function onWMDBObjectsFromServer(
         .query(
           Q.or(
             Q.where(TodoColumn._id, updated.server_id),
-            Q.where(TodoColumn._tempSyncId, updated.local_sync_id || null)
+            Q.where(TodoColumn._tempSyncId, updated.client_id || null)
           )
         )
         .fetch()
