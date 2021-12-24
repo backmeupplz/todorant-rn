@@ -8,6 +8,7 @@ import {
   synchronize,
   SyncPushArgs,
 } from '@nozbe/watermelondb/sync'
+import { sharedTodoStore } from '@stores/TodoStore'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { alertError, alertMessage } from '@utils/alert'
 import { decrypt, encrypt } from '@utils/encryption'
@@ -159,6 +160,7 @@ export class WMDBSync {
 
   sync = () =>
     Mutex.dispatch(async () => {
+      sharedTodoStore.refreshTodos()
       if (!this.socketConnection.connected) {
         return Promise.reject('Socket sync: not connected to sockets')
       }
@@ -199,6 +201,7 @@ export class WMDBSync {
           console.log(logger.formattedLogs)
         }
         this.isSyncing = false
+        sharedTodoStore.refreshTodos()
       }
     })
 }
