@@ -59,7 +59,7 @@ export async function cloneTodo(todo: MelonTodo) {
   return {
     _tempSyncId: todo._tempSyncId,
     _exactDate: todo._exactDate,
-
+    id: todo.id,
     _id: todo._id,
     createdAt: todo.createdAt,
     updatedAt: todo.updatedAt,

@@ -15,12 +15,19 @@ import { translate } from '@utils/i18n'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
-import { tagsCollection, todosCollection } from '@utils/watermelondb/wmdb'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+} from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import moment from 'moment'
 import { Container, Content, Text, Toast } from 'native-base'
 import React, { Component } from 'react'
+import { cloneTag, MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
+import { cloneTodo } from '@models/Todo'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -178,7 +185,24 @@ export class Data extends Component {
                 return
               }
               const data = await gatherData()
-              await rest.sendData(data, sharedSessionStore.user?.token)
+              const clonedTodos = await Promise.all(data.todos.map(cloneTodo))
+              const clonedTags = await Promise.all(data.tags.map(cloneTag))
+              await rest.sendData(
+                { tags: clonedTags, todos: clonedTodos },
+                sharedSessionStore.user?.token
+              )
+              const todosAndTags = [...data.todos, ...data.tags]
+              const toSend = [] as (MelonTodo | MelonTag)[]
+              todosAndTags.map((todoOrTag) => {
+                toSend.push(
+                  todoOrTag.prepareUpdate((todoOrTagUpdate) => {
+                    todoOrTagUpdate.updatedAt = new Date()
+                  })
+                )
+              })
+
+              await database.write(async () => await database.batch(...toSend))
+              await sharedSync.globalSync()
               Toast.show({
                 text: '👍',
               })
