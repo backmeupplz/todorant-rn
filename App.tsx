@@ -115,11 +115,6 @@ class App extends Component {
     if (!__DEV__) {
       checkAppVersion()
     }
-    AppState.addEventListener('change', (nextState) => {
-      if (nextState === 'active') {
-        checkAndroidLaunchArgs()
-      }
-    })
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
@@ -138,6 +133,12 @@ class App extends Component {
         alertError(err as string)
       }
     }
+    AppState.addEventListener('change', (nextState) => {
+      sharedSync.globalSync()
+      if (nextState === 'active') {
+        checkAndroidLaunchArgs()
+      }
+    })
     SplashScreen.hide()
     checkOnboardingStep()
   }
