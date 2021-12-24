@@ -181,7 +181,6 @@ class TodoStore {
 
   constructor() {
     makeObservable(this)
-    this.refreshTodos()
     // Today date changed
     observableNowEventEmitter.on(
       ObservableNowEventEmitterEvent.ObservableNowChanged,
@@ -230,6 +229,7 @@ class TodoStore {
       .subscribe((count) => (this.delegatedByMeCompletedCount = count))
 
     this.subscribeOldTodos()
+    this.refreshTodos()
   }
 
   logout = () => {

@@ -108,7 +108,6 @@ class App extends Component {
     checkTokenAndPassword()
     checkSiriPermission()
     checkSharedContent()
-    refreshWidgetAndBadgeAndWatch()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
@@ -141,6 +140,7 @@ class App extends Component {
     })
     SplashScreen.hide()
     checkOnboardingStep()
+    refreshWidgetAndBadgeAndWatch()
   }
 
   render() {
