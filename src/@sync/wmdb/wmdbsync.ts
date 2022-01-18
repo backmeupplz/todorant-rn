@@ -57,6 +57,8 @@ export class WMDBSync {
 
   private completeSync?: () => void
 
+  private rejectSync?: () => void
+
   constructor(socketConnection: SocketConnection) {
     makeObservable(this)
     this.socketConnection = socketConnection
@@ -71,6 +73,16 @@ export class WMDBSync {
         alertError(translate('syncError'))
       }
     )
+    this.socketConnection.socketIO.on('complete_wmdb', async () => {
+      if (this.completeSync) {
+        this.completeSync()
+      }
+    })
+    this.socketConnection.socketIO.on('wmdb_sync_error', async () => {
+      if (this.rejectSync) {
+        this.rejectSync()
+      }
+    })
   }
 
   getServerData = async (lastPulledAt: number | null) => {
@@ -80,8 +92,9 @@ export class WMDBSync {
     const { serverObjects, serverTimeStamp } = await new Promise<{
       serverObjects: SyncDatabaseChangeSet
       serverTimeStamp: number | null
-    }>((resolve) => {
-      this.wmdbResponse = resolve
+    }>((res, rej) => {
+      this.wmdbResponse = res
+      this.rejectSync = rej
     })
     await onWMDBObjectsFromServer(serverObjects)
     return {
@@ -142,6 +155,10 @@ export class WMDBSync {
       clonedChanges,
       lastPulledAt
     )
+    await new Promise<void>((res, rej) => {
+      this.completeSync = res
+      this.rejectSync = rej
+    })
   }
 
   conflictResolver = (
