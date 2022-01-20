@@ -118,7 +118,6 @@ class Sync {
       this.socketConnection,
       'delegate',
       () => {
-        if (!sharedSessionStore.migrationCompleted) return undefined
         return sharedDelegationStore.updatedAt
       },
       (objects, pushBack, completeSync) => {

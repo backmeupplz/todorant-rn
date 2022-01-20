@@ -187,10 +187,14 @@ export class Data extends Component {
               const data = await gatherData()
               const clonedTodos = await Promise.all(data.todos.map(cloneTodo))
               const clonedTags = await Promise.all(data.tags.map(cloneTag))
-              await rest.sendData(
-                { tags: clonedTags, todos: clonedTodos },
-                sharedSessionStore.user?.token
-              )
+              try {
+                await rest.sendData(
+                  { tags: clonedTags, todos: clonedTodos },
+                  sharedSessionStore.user?.token
+                )
+              } catch (err) {
+                alertError(err as string)
+              }
               const todosAndTags = [...data.todos, ...data.tags]
               const toSend = [] as (MelonTodo | MelonTag)[]
               todosAndTags.map((todoOrTag) => {

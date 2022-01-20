@@ -58,7 +58,7 @@ export class WMDBSync {
 
   private completeSync?: () => void
 
-  private rejectSync?: () => void
+  private rejectSync?: (err: string) => void
 
   constructor(socketConnection: SocketConnection) {
     makeObservable(this)
@@ -79,11 +79,14 @@ export class WMDBSync {
         this.completeSync()
       }
     })
-    this.socketConnection.socketIO.on('wmdb_sync_error', async () => {
-      if (this.rejectSync) {
-        this.rejectSync()
+    this.socketConnection.socketIO.on(
+      'wmdb_sync_error',
+      async (error: string) => {
+        if (this.rejectSync) {
+          this.rejectSync(error)
+        }
       }
-    })
+    )
   }
 
   getServerData = async (lastPulledAt: number | null) => {
@@ -212,7 +215,7 @@ export class WMDBSync {
         } as SyncType)
       } catch (err) {
         console.error(err)
-        alertError(translate('syncError'))
+        alertError(err as string)
       } finally {
         if (__DEV__) {
           console.log(logger.formattedLogs)
