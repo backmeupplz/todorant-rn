@@ -99,11 +99,7 @@ class SessionStore {
     this.isInitialSync = true
     await sharedSync.login(user.token)
     setToken(user.token)
-    try {
-      await sharedSync.globalSync()
-    } finally {
-      this.isInitialSync = false
-    }
+    this.isInitialSync = false
     sharedTodoStore.initDelegation()
     logEvent('login_success')
   }
