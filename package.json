@@ -89,7 +89,7 @@
     "react-native-indicators": "^0.17.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^2.1.5",
-    "react-native-mmkv-storage": "0.6.0",
+    "react-native-mmkv-storage": "^0.6.12",
     "react-native-month-picker": "backmeupplz/react-native-month-picker",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-permissions": "^3.1.0",

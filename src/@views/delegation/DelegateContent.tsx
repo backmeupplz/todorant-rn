@@ -50,9 +50,7 @@ const EnhancedDraggableSectionList = enhance(
       }
       for (const realmTodo of todo) {
         try {
-          const user = await (byMe && !completed
-            ? realmTodo.user
-            : realmTodo.delegator)
+          const user = await (byMe ? realmTodo.user : realmTodo.delegator)
           if (!user) continue
           const titleKey = user?._id
           if (!titleKey) continue

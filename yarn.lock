@@ -10813,12 +10813,14 @@ mobx-persist@backmeupplz/mobx-persist:
   languageName: node
   linkType: hard
 
-"react-native-mmkv-storage@npm:0.6.0":
-  version: 0.6.0
-  resolution: "react-native-mmkv-storage@npm:0.6.0"
+"react-native-mmkv-storage@npm:^0.6.12":
+  version: 0.6.12
+  resolution: "react-native-mmkv-storage@npm:0.6.12"
   peerDependencies:
     react-native: "*"
-  checksum: 03436ed6423ddbac65e85a355d641d5a0385f5f05333077da9640c40e8edd948c1a93a4b482b4a085b452fa737bed33d7e19be663f33cf36e37a4f23c78b8a38
+  bin:
+    mmkv-link: autolink/postlink/run.js
+  checksum: 815030b3e8c90808926c71dc4a5639866b2202402098562f5ebee901348f7438335d8c4357dd44dd1083ae77842c46a593afcdcd16fc1634e89ff9cf606a8710
   languageName: node
   linkType: hard
 
@@ -12851,7 +12853,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     react-native-indicators: ^0.17.0
     react-native-linear-gradient: ^2.5.6
     react-native-localize: ^2.1.5
-    react-native-mmkv-storage: 0.6.0
+    react-native-mmkv-storage: ^0.6.12
     react-native-month-picker: backmeupplz/react-native-month-picker
     react-native-navigation-bar-color: ^2.0.1
     react-native-permissions: ^3.1.0

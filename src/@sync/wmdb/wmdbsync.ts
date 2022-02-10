@@ -9,7 +9,9 @@ import {
   SyncPushArgs,
 } from '@nozbe/watermelondb/sync'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
 import { decrypt, encrypt } from '@utils/encryption'
 import { translate } from '@utils/i18n'
@@ -20,9 +22,10 @@ import {
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { cloneDeep } from 'lodash'
+import { chunk, cloneDeep } from 'lodash'
 import { makeObservable, observable, reaction, when } from 'mobx'
 import { Alert } from 'react-native'
+import { v4 } from 'uuid'
 import { SocketConnection } from '../sockets/SocketConnection'
 import { Mutex } from './mutex'
 
@@ -131,38 +134,64 @@ export class WMDBSync {
     }
     for (const sqlRaw of clonedChanges.todos.updated) {
       if (sqlRaw.user_id) {
-        const user = await usersCollection.find(sqlRaw.user_id)
-        if (!user) {
-          sqlRaw.is_deleted = true
-          return
-        } else {
-          sqlRaw.user_id = user._id
+        try {
+          const user = await usersCollection.find(sqlRaw.user_id)
+          if (!user) {
+            sqlRaw.is_deleted = true
+            return
+          } else {
+            sqlRaw.user_id = user._id
+          }
+        } catch (err) {
+          delete sqlRaw.user_id
         }
       }
-      if (sqlRaw.delegator_id) {
-        const delegator = await usersCollection.find(sqlRaw.delegator_id)
-        if (!delegator) {
-          sqlRaw.is_deleted = true
-        } else {
-          sqlRaw.delegator_id = delegator._id
+      try {
+        if (sqlRaw.delegator_id) {
+          const delegator = await usersCollection.find(sqlRaw.delegator_id)
+          if (!delegator) {
+            sqlRaw.is_deleted = true
+          } else {
+            sqlRaw.delegator_id = delegator._id
+          }
         }
+      } catch (err) {
+        delete sqlRaw.delegator_id
       }
       if (sqlRaw.is_encrypted) {
         sqlRaw.text = encrypt(sqlRaw.text)
       }
+      if (sqlRaw.server_id) {
+        delete sqlRaw.id
+      }
       updatedTodos.push(sqlRaw)
     }
-    clonedChanges.todos.created = createdTodos
-    clonedChanges.todos.updated = updatedTodos
-    this.socketConnection.socketIO.emit(
-      'push_wmdb',
-      clonedChanges,
-      lastPulledAt
-    )
-    await new Promise<void>((res, rej) => {
-      this.completeSync = res
-      this.rejectSync = rej
-    })
+    const chunkedCreated = chunk(createdTodos, 1000)
+    const chunkedUpdated = chunk(updatedTodos, 1000)
+    let lastSelectedChunk = 0
+    while (
+      lastSelectedChunk !=
+      Math.max(chunkedUpdated.length, chunkedCreated.length)
+    ) {
+      if (chunkedUpdated[lastSelectedChunk]) {
+        clonedChanges.todos.updated = chunkedUpdated[lastSelectedChunk]
+      }
+      if (chunkedCreated[lastSelectedChunk]) {
+        clonedChanges.todos.created = chunkedCreated[lastSelectedChunk]
+      }
+      this.socketConnection.socketIO.emit(
+        'push_wmdb',
+        clonedChanges,
+        lastPulledAt
+      )
+      await new Promise<void>((res, rej) => {
+        this.completeSync = res
+        this.rejectSync = rej
+      })
+      clonedChanges.todos.updated = []
+      clonedChanges.todos.created = []
+      lastSelectedChunk++
+    }
   }
 
   conflictResolver = (
@@ -191,7 +220,6 @@ export class WMDBSync {
         return Promise.reject('Socket sync: no authorization token provided')
       }
       this.isSyncing = true
-
       // Start sync
       try {
         await synchronize({

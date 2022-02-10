@@ -53,6 +53,11 @@ export async function updateOrCreateDelegation(
   })
 }
 
+async function createAccountHolderDelegations(_id: string) {
+  await updateOrCreateDelegation({ _id }, false, true)
+  await updateOrCreateDelegation({ _id }, true, true)
+}
+
 export async function onDelegationObjectsFromServer(
   objects: {
     delegators: MelonUser[]
@@ -69,31 +74,14 @@ export async function onDelegationObjectsFromServer(
   completeSync: () => void
 ) {
   const lastSyncDate = sharedDelegationStore.updatedAt
-  if (!lastSyncDate && sharedSessionStore.user) {
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user._id },
-      false,
-      true
-    )
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user._id },
-      true,
-      true
-    )
+  if (!lastSyncDate && sharedSessionStore.user?._id) {
+    createAccountHolderDelegations(sharedSessionStore.user._id)
   }
-
-  // Get local delegators and delegates
-  const wmdbDelegators = getDelegations(true)
-  const wmdbDelegates = getDelegations(false)
+  // Get local delegates and delegators
+  const [wmdbDelegates, wmdbDelegators] = getDelegations()
   // Filter delegators and delegates that changed locally
-  const delegatorsChangedLocally = await changedLocallyDelegation(
-    wmdbDelegators,
-    lastSyncDate
-  )
-  const delegatesChangedLocally = await changedLocallyDelegation(
-    wmdbDelegates,
-    lastSyncDate
-  )
+  const [delegatesChangedLocally, delegatorsChangedLocally] =
+    await changedLocallyDelegation(wmdbDelegates, wmdbDelegators, lastSyncDate)
 
   const toDelete = [] as MelonUser[]
   const toUpdateOrCreate = [] as MelonUser[]
@@ -103,10 +91,8 @@ export async function onDelegationObjectsFromServer(
       ...(await findMissMatches(wmdbDelegates, objects.delegates))
     )
   }
-  toUpdateOrCreate.push(
-    ...(await getUpdatedOrCreated(objects.delegators, true)),
-    ...(await getUpdatedOrCreated(objects.delegates, false))
-  )
+  await getUpdatedOrCreated(objects.delegators, true)
+  await getUpdatedOrCreated(objects.delegates, false)
   const delegatorsToDelete = delegatorsChangedLocally.filter(
     (delegator) => !!delegator.deleted
   )
@@ -144,6 +130,14 @@ export async function onDelegationObjectsFromServer(
     ),
     delegators: delegatorsToPush.map((delegator) => cloneDelegation(delegator)),
   })
+  await Promise.all(
+    savedPushedDelegations.delegates.map(async (delegate) => {
+      toUpdateOrCreate.push(await updateOrCreateDelegation(delegate, false))
+    })
+  )
+  await database.write(
+    async () => await database.batch(...[...new Set([...toUpdateOrCreate])])
+  )
   // Delete after after sync
   await Promise.all(
     delegatorsToDelete.map(async (delegator) => {
@@ -167,14 +161,8 @@ export async function onDelegationObjectsFromServer(
       }
     })
   )
-  await Promise.all(
-    savedPushedDelegations.delegates.map(async (delegate) => {
-      toUpdateOrCreate.push(await updateOrCreateDelegation(delegate, false))
-    })
-  )
   await database.write(
-    async () =>
-      await database.batch(...[...new Set([...toUpdateOrCreate, ...toDelete])])
+    async () => await database.batch(...[...new Set([...toDelete])])
   )
   // Complete sync
   completeSync()
@@ -276,21 +264,28 @@ export async function onWMDBObjectsFromServer(
   serverObjects.tags.updated = tags
 }
 
-function getDelegations(delegator: boolean) {
-  return usersCollection.query(
-    Q.where(UserColumn.isDelegator, delegator),
+function getDelegations() {
+  const baseQuery = usersCollection.query(
     Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id!))
   )
+  const delegators = baseQuery.extend(Q.where(UserColumn.isDelegator, true))
+  const delegates = baseQuery.extend(Q.where(UserColumn.isDelegator, false))
+  return [delegates, delegators]
 }
 
 async function changedLocallyDelegation(
-  query: Query<MelonUser>,
+  delegatesQuery: Query<MelonUser>,
+  delegatorsQuery: Query<MelonUser>,
   timestamp?: Date
 ) {
-  return await (timestamp
-    ? query.extend(Q.where(UserColumn.updatedAt, Q.gt(timestamp.getTime())))
-    : query
-  ).fetch()
+  if (!timestamp) {
+    return Promise.all([delegatesQuery.fetch(), delegatorsQuery.fetch()])
+  }
+  const queryExtender = Q.where(UserColumn.updatedAt, Q.gt(timestamp.getTime()))
+  return Promise.all([
+    delegatesQuery.extend(queryExtender).fetch(),
+    delegatorsQuery.extend(queryExtender).fetch(),
+  ])
 }
 
 async function findMissMatches(
@@ -309,7 +304,9 @@ async function getUpdatedOrCreated(
 ) {
   const updatedOrCreated: MelonUser[] = []
   for (const delegation of delegations) {
-    updatedOrCreated.push(await updateOrCreateDelegation(delegation, delegator))
+    updatedOrCreated.push(
+      await updateOrCreateDelegation(delegation, delegator, true)
+    )
   }
   return updatedOrCreated
 }

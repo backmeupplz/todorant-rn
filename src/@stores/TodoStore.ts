@@ -209,7 +209,7 @@ class TodoStore {
     this.todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
 
     this.delegatedByMe = this.getDelegationTodos(true)
-    this.delegatedByMeCompleted = this.getDelegationTodos(false, true)
+    this.delegatedByMeCompleted = this.getDelegationTodos(true, true)
     this.delegatedToMe = this.getDelegationTodos(false)
     this.todayCompletedTodos
       .observeCount(false)

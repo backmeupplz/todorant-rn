@@ -47,13 +47,7 @@ class Row extends Component<{
               async () => {
                 this.loading = true
                 try {
-                  if (
-                    this.props.delegationType === DelegationUserType.delegate
-                  ) {
-                    await this.props.delegationUser.delete()
-                  } else {
-                    await this.props.delegationUser.delete()
-                  }
+                  await this.props.delegationUser.delete()
                   await sharedSync.sync()
                 } catch (err) {
                   alertError(err as string)
