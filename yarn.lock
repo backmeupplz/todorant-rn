@@ -4796,6 +4796,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"countly-sdk-react-native-bridge@npm:^20.11.12":
+  version: 20.11.12
+  resolution: "countly-sdk-react-native-bridge@npm:20.11.12"
+  checksum: 3d2657b342d3062597b116a75aaa2dfa9468102d59f4b68ac95c65a1da1637be180e0b3f6c05d374991d7d5d0fe0b333d98fe40bef60ac94d7001798c3a74fb6
+  languageName: node
+  linkType: hard
+
 "create-react-class@npm:^15.6.3":
   version: 15.7.0
   resolution: "create-react-class@npm:15.7.0"
@@ -12814,6 +12821,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     babel-jest: ^27.4.2
     babel-plugin-module-resolver: ^4.0.0
     color-scheme: ^1.0.1
+    countly-sdk-react-native-bridge: ^20.11.12
     crypto-js: ^4.1.1
     dotenv: ^10.0.0
     eslint: ^8.3.0

@@ -57,6 +57,7 @@
     "axios": "^0.24.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "color-scheme": "^1.0.1",
+    "countly-sdk-react-native-bridge": "^20.11.12",
     "crypto-js": "^4.1.1",
     "i18n-js": "^3.5.1",
     "linkify-it": "^3.0.3",
