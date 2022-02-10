@@ -14,6 +14,11 @@ PODS:
     - JWT (~> 3.0.0-beta.12)
     - React-Core
     - SSZipArchive (~> 2.2.2)
+  - CountlyReactNative (20.11.12):
+    - CountlyReactNative/NotificationService (= 20.11.12)
+    - React
+  - CountlyReactNative/NotificationService (20.11.12):
+    - React
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.66.3)
   - FBReactNativeSpec (0.66.3):
@@ -38,8 +43,8 @@ PODS:
     - Base64 (~> 1.1.2)
   - KeychainAccess (4.2.1)
   - libevent (2.1.12)
-  - MMKV (1.2.7):
-    - MMKVCore (~> 1.2.7)
+  - MMKV (1.2.10):
+    - MMKVCore (~> 1.2.10)
   - MMKVCore (1.2.10)
   - Permission-Camera (3.1.0):
     - RNPermissions
@@ -270,8 +275,8 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.7.1):
     - React-Core
-  - react-native-mmkv-storage (0.6.0):
-    - MMKV (= 1.2.7)
+  - react-native-mmkv-storage (0.6.12):
+    - MMKV (= 1.2.10)
     - React-Core
   - react-native-netinfo (7.1.3):
     - React-Core
@@ -436,6 +441,7 @@ DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CodePush (from `../node_modules/react-native-code-push`)
+  - CountlyReactNative (from `../node_modules/countly-sdk-react-native-bridge`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -532,6 +538,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-linear-gradient"
   CodePush:
     :path: "../node_modules/react-native-code-push"
+  CountlyReactNative:
+    :path: "../node_modules/countly-sdk-react-native-bridge"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -668,6 +676,7 @@ SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CodePush: 9bb93f52a44ee80b72739d89dead9c7e86c3bd3a
+  CountlyReactNative: 3d1a485e3dc2aaa1c045402272b41c669410f896
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: de148e8310b8b878db304ceea2fec13f2c02e3a0
   FBReactNativeSpec: 6192956c9e346013d5f1809ba049af720b11c6a4
@@ -680,7 +689,7 @@ SPEC CHECKSUMS:
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MMKV: 22e5136f7d00197bc0fc9694b7f71519f0d1ca12
+  MMKV: 76033b9ace2006623308910a3afcc0e25eba3140
   MMKVCore: b00e7a09ec77a1b916aef336eedd3b99ec249978
   Permission-Camera: 0db4fd6e1c556c1cf47f38b989a8084cea3ec3dd
   Permission-Siri: 8e13e75ffd197d7027ce22b8727d129cb1e6c6ad
@@ -699,7 +708,7 @@ SPEC CHECKSUMS:
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-get-random-values: 2c4ff6b44cb71291dabe9a8ae87d3877dcf387da
-  react-native-mmkv-storage: 684f1adf671592c18fb023e0cf1305a84108b59d
+  react-native-mmkv-storage: 88bcb10bbe85a8122061d17d03abcc64a02fe1c9
   react-native-netinfo: 42c0965fca99069b92e3f7360ab2d425985e5104
   react-native-receive-sharing-intent: feba0a332a07977549a85aa58b496eb44368366a
   react-native-restart: 733a51ad137f15b0f8dc34c4082e55af7da00979
