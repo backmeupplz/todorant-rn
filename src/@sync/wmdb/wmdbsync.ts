@@ -171,7 +171,7 @@ export class WMDBSync {
     let lastSelectedChunk = 0
     while (
       lastSelectedChunk !=
-      Math.max(chunkedUpdated.length, chunkedCreated.length)
+      Math.max(chunkedUpdated.length, chunkedCreated.length) + 1
     ) {
       if (chunkedUpdated[lastSelectedChunk]) {
         clonedChanges.todos.updated = chunkedUpdated[lastSelectedChunk]
