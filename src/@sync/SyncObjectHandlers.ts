@@ -107,7 +107,7 @@ export async function onDelegationObjectsFromServer(
   const delegatorsToPush = [...delegatorsWithoutData, ...delegatorsToDelete]
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
-    const arrayTest = [
+    const batchedItems = [
       ...new Set([
         ...toUpdateOrCreate.filter((user) => {
           if (user._id !== sharedSessionStore.user?._id) {
@@ -119,7 +119,7 @@ export async function onDelegationObjectsFromServer(
       ]),
     ]
     // Complete sync
-    await database.write(async () => await database.batch(...arrayTest))
+    await database.write(async () => await database.batch(...batchedItems))
     completeSync()
     return
   }
