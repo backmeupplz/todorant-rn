@@ -119,8 +119,8 @@ export async function onDelegationObjectsFromServer(
   const delegatorsToPush = [...delegatorsWithoutData, ...delegatorsToDelete]
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
-    const preparedToDelete = [...delegatesToDelete.values()].map((delegation) =>
-      delegation.prepareDestroyPermanently()
+    const preparedToDelete = [...delegationsToDelete.values()].map(
+      (delegation) => delegation.prepareDestroyPermanently()
     )
     const batchedItems = [
       ...new Set([
