@@ -8,6 +8,7 @@ import {
   synchronize,
   SyncPushArgs,
 } from '@nozbe/watermelondb/sync'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
@@ -182,7 +183,8 @@ export class WMDBSync {
       this.socketConnection.socketIO.emit(
         'push_wmdb',
         clonedChanges,
-        lastPulledAt
+        lastPulledAt,
+        sharedSessionStore.encryptionKey
       )
       await new Promise<void>((res, rej) => {
         this.completeSync = res
