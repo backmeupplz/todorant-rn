@@ -83,6 +83,10 @@ export async function cloneTodo(todo: MelonTodo) {
 }
 
 export const cloneDelegator = async (user: MelonUser | undefined) => {
-  user = user ? await user : undefined
-  return user ? { _id: user._id, name: user.name } : undefined
+  try {
+    user = user ? await user : undefined
+    return user ? { _id: user._id, name: user.name } : undefined
+  } catch (err) {
+    return undefined
+  }
 }
