@@ -16,6 +16,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
 import { decrypt, encrypt } from '@utils/encryption'
 import { translate } from '@utils/i18n'
+import { getDateMonthAndYearString } from '@utils/time'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import {
   database,
@@ -149,6 +150,9 @@ export class WMDBSync {
       }
       try {
         if (sqlRaw.delegator_id) {
+          if (!sqlRaw.month_and_year) {
+            sqlRaw.month_and_year = getDateMonthAndYearString(new Date())
+          }
           const delegator = await usersCollection.find(sqlRaw.delegator_id)
           if (!delegator) {
             sqlRaw.is_deleted = true

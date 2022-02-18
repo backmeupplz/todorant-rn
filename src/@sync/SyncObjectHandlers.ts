@@ -78,28 +78,28 @@ export async function onDelegationObjectsFromServer(
     createAccountHolderDelegations(sharedSessionStore.user._id)
   }
   // Get local delegates and delegators
-  const [wmdbDelegates, wmdbDelegators] = getDelegations()
+  const [delegatesQuery, delegatorsQuery] = getDelegations()
   // Filter delegators and delegates that changed locally
   const [delegatesChangedLocally, delegatorsChangedLocally] =
-    await changedLocallyDelegation(wmdbDelegates, wmdbDelegators, lastSyncDate)
+    await changedLocallyDelegation(
+      delegatesQuery,
+      delegatorsQuery,
+      lastSyncDate
+    )
 
   const delegationsToDelete = new Map<string, MelonUser>()
   const delegationsToUpdateOrCreate = new Map<string, MelonUser>()
 
-  const toUpdateOrCreate = [] as MelonUser[]
   if (objects.delegateUpdated && lastSyncDate) {
     const delegatesToRemove = await findMissMatches(
-      wmdbDelegates,
+      delegatesQuery,
       objects.delegates
     )
     const delegatorsToRemove = await findMissMatches(
-      wmdbDelegators,
+      delegatorsQuery,
       objects.delegators
     )
     ;[...delegatesToRemove, ...delegatorsToRemove].forEach((delegation) => {
-      if (delegationsToDelete.has(delegation.id)) {
-        return
-      }
       delegationsToDelete.set(delegation.id, delegation)
     })
   }
@@ -122,19 +122,8 @@ export async function onDelegationObjectsFromServer(
     const preparedToDelete = [...delegationsToDelete.values()].map(
       (delegation) => delegation.prepareDestroyPermanently()
     )
-    const batchedItems = [
-      ...new Set([
-        ...toUpdateOrCreate.filter((user) => {
-          if (user._id !== sharedSessionStore.user?._id) {
-            return !!user.name
-          }
-          return true
-        }),
-        ...preparedToDelete,
-      ]),
-    ]
     // Complete sync
-    await database.write(async () => await database.batch(...batchedItems))
+    await database.write(async () => await database.batch(...preparedToDelete))
     completeSync()
     return
   }
@@ -147,12 +136,30 @@ export async function onDelegationObjectsFromServer(
   })
   await Promise.all(
     savedPushedDelegations.delegates.map(async (delegate) => {
-      if (!delegationsToUpdateOrCreate.get(delegate.id)) {
+      if (
+        delegationsToUpdateOrCreate.has(delegate.id) ||
+        delegationsToDelete.has(delegate.id)
+      ) {
         return
       }
       delegationsToUpdateOrCreate.set(
         delegate.id,
         await updateOrCreateDelegation(delegate, false)
+      )
+    })
+  )
+  await Promise.all(
+    savedPushedDelegations.delegators.map(async (delegator) => {
+      if (
+        delegationsToUpdateOrCreate.has(delegator.id) ||
+        delegator.invalid ||
+        delegationsToDelete.has(delegator.id)
+      ) {
+        return
+      }
+      delegationsToUpdateOrCreate.set(
+        delegator.id,
+        await updateOrCreateDelegation(delegator, true)
       )
     })
   )
@@ -186,23 +193,19 @@ export async function onDelegationObjectsFromServer(
   // Fill delegations with missing info
   await Promise.all(
     savedPushedDelegations.delegators.map(async (delegator) => {
-      if (delegationsToDelete.has(delegator.id)) {
+      if (delegationsToDelete.has(delegator.id) || !delegator.invalid) {
         return
       }
-      if (delegator.invalid) {
-        const localMarked = await removeDelegation(delegator, true)
-        if (localMarked) {
-          delegationsToDelete.set(delegator.id, localMarked)
-        }
+      const localMarked = await removeDelegation(delegator, true)
+      if (localMarked) {
+        delegationsToDelete.set(delegator.id, localMarked)
       }
     })
   )
   const preparedToDelete = [...delegationsToDelete.values()].map((delegation) =>
     delegation.prepareDestroyPermanently()
   )
-  await database.write(
-    async () => await database.batch(...[...preparedToDelete])
-  )
+  await database.write(async () => await database.batch(...preparedToDelete))
   // Complete sync
   completeSync()
 }
