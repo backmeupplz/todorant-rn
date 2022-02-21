@@ -30,7 +30,7 @@ import {
   ColorPickerHeaderRight,
 } from '@views/settings/ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
-import { alertSupport } from '@utils/alert'
+import { alertError, alertSupport } from '@utils/alert'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { LoginQR } from '@views/settings/Login/LoginQR'
@@ -247,8 +247,13 @@ export class SettingsContent extends Component {
 export function Settings() {
   const navigation = useNavigation()
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      sharedSync.sync(SyncRequestEvent.All)
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        if (!sharedSync.socketConnection.authorized) return
+        await sharedSync.sync(SyncRequestEvent.All)
+      } catch (err) {
+        alertError(err as string)
+      }
     })
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe
