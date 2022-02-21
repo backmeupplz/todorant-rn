@@ -29,8 +29,8 @@ export async function updateOrCreateDelegation(
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
     if (forceWrite) {
-      const updatedUser = localDelegate.updateUser(localDelegate)
-      return await updatedUser
+      const updatedUser = await localDelegate.updateUser(localDelegate)
+      return updatedUser
     }
     return localDelegate.prepareUpdate((delegate) =>
       Object.assign(delegate, delegation)
@@ -68,8 +68,8 @@ export async function onDelegationObjectsFromServer(
     delegators: MelonUser[]
     delegates: MelonUser[]
   }) => Promise<{
-    delegators: (MelonUser & { invalid?: boolean })[]
-    delegates: MelonUser[]
+    delegators: (Omit<MelonUser, 'id'> & { invalid?: boolean })[]
+    delegates: Omit<MelonUser, 'id'>[]
   }>,
   completeSync: () => void
 ) {
@@ -135,33 +135,40 @@ export async function onDelegationObjectsFromServer(
     delegators: delegatorsToPush.map((delegator) => cloneDelegation(delegator)),
   })
   for (const delegate of savedPushedDelegations.delegates) {
+    const delegateLocally = await getLocalDelegation(delegate, false)
+    if (!delegateLocally) {
+      continue
+    }
     if (
-      delegationsToUpdateOrCreate.has(delegate.id) ||
-      delegationsToDelete.has(delegate.id)
+      delegationsToUpdateOrCreate.has(delegateLocally.id) ||
+      delegationsToDelete.has(delegateLocally.id)
     ) {
       continue
     }
     delegationsToUpdateOrCreate.set(
-      delegate.id,
+      delegateLocally.id,
       await updateOrCreateDelegation(delegate, false)
     )
   }
   for (const delegator of savedPushedDelegations.delegators) {
+    const delegatorLocally = await getLocalDelegation(delegator, true)
+    if (!delegatorLocally) {
+      continue
+    }
     if (
-      delegationsToUpdateOrCreate.has(delegator.id) ||
+      delegationsToUpdateOrCreate.has(delegatorLocally.id) ||
       delegator.invalid ||
-      delegationsToDelete.has(delegator.id)
+      delegationsToDelete.has(delegatorLocally.id)
     ) {
       continue
     }
     delegationsToUpdateOrCreate.set(
-      delegator.id,
+      delegatorLocally.id,
       await updateOrCreateDelegation(delegator, true)
     )
   }
   await database.write(
-    async () =>
-      await database.batch(...[...delegationsToUpdateOrCreate.values()])
+    async () => await database.batch(...delegationsToUpdateOrCreate.values())
   )
   // Delete after after sync
   for (const delegator of delegatorsToDelete) {
@@ -183,12 +190,16 @@ export async function onDelegationObjectsFromServer(
     }
   }
   for (const delegator of savedPushedDelegations.delegators) {
-    if (delegationsToDelete.has(delegator.id) || !delegator.invalid) {
+    const delegatorLocally = await getLocalDelegation(delegator, true)
+    if (!delegatorLocally) {
+      continue
+    }
+    if (delegationsToDelete.has(delegatorLocally.id) || !delegator.invalid) {
       continue
     }
     const localMarked = await removeDelegation(delegator, true)
     if (localMarked) {
-      delegationsToDelete.set(delegator.id, localMarked)
+      delegationsToDelete.set(delegatorLocally.id, localMarked)
     }
   }
   const preparedToDelete = [...delegationsToDelete.values()].map((delegation) =>

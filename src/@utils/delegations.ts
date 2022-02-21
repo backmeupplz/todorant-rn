@@ -8,7 +8,7 @@ import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export async function removeDelegation(
-  delegation: MelonUser,
+  delegation: Partial<MelonUser>,
   delegator: boolean,
   forceWrite = false
 ) {
