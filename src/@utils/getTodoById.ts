@@ -1,12 +1,15 @@
-import { Todo } from '@models/Todo'
-import { realm } from '@utils/realm'
+import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from './watermelondb/tables'
+import { todosCollection } from './watermelondb/wmdb'
 
-export function getTodoById(id?: string) {
+export async function getTodoById(id?: string) {
   if (!id) {
     return undefined
   }
-  const todos = realm
-    .objects(Todo)
-    .filtered(`_id = "${id}" || _tempSyncId = "${id}"`)
+  const todos = await todosCollection
+    .query(
+      Q.or(Q.where(TodoColumn._id, id), Q.where(TodoColumn._tempSyncId, id))
+    )
+    .fetch()
   return todos.length ? todos[0] : undefined
 }

@@ -14,7 +14,7 @@ export class PlanningHeaderRight extends Component {
     return sharedAppStateStore.hash.length ? (
       <TouchableOpacity
         onPress={() => {
-          sharedAppStateStore.changeLoading(true)
+          sharedAppStateStore.changeLoading(false)
           sharedAppStateStore.hash = []
         }}
         style={{ marginRight: 12 }}

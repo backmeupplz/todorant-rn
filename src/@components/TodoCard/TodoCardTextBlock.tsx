@@ -1,10 +1,9 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { Todo } from '@models/Todo'
 import { Text, Toast } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { l } from '@utils/linkify'
-import { Linking, Clipboard } from 'react-native'
+import { Linking } from 'react-native'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
@@ -12,12 +11,16 @@ import { CardType } from '@components/TodoCard/CardType'
 import fonts from '@utils/fonts'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { navigate } from '@utils/navigation'
+import { MelonTodo } from '@models/MelonTodo'
+import { decrypt } from '@utils/encryption'
+import { computed, makeObservable } from 'mobx'
+import Clipboard from '@react-native-community/clipboard'
 
 const debug = false
 
 @observer
 export class TodoCardTextBlock extends Component<{
-  todo: Todo
+  todo: MelonTodo
   isOld: boolean
   type: CardType
   drag?: () => void
@@ -85,7 +88,7 @@ export class TodoCardTextBlock extends Component<{
                 if (p.type === 'link' && p.url) {
                   Linking.openURL(p.url)
                 } else if (p.type === 'hash') {
-                  sharedAppStateStore.changeLoading(true)
+                  sharedAppStateStore.changeLoading(false)
                   setTimeout(() => {
                     if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
                       sharedAppStateStore.hash.push(p.value)

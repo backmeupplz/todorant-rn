@@ -1,7 +1,7 @@
-import { Todo } from '@models/Todo'
+import { MelonTodo } from '@models/MelonTodo'
 
 export interface TodoSection {
   section: string
-  data: Todo[]
+  data: MelonTodo[]
   order: number
 }

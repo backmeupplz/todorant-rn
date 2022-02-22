@@ -70,7 +70,7 @@ export function loginToken(token: string) {
     .then(cleanLocalAppleReceipt)
 }
 
-export async function setQrToken(uuid: string) {
+export async function setQrToken(uuid: string, token: string) {
   return (
     await axios.post(
       `${base}/login/qr_token`,
@@ -78,99 +78,102 @@ export async function setQrToken(uuid: string) {
         uuid,
         ...extraParams(),
       },
-      { headers: { token: sharedSessionStore.user?.token } }
+      { headers: { token } }
     )
   ).data as string
 }
 
-export function verifyPurchaseGoogle(payload: {
-  packageName: string
-  productId: string
-  purchaseToken: string
-}) {
+export function verifyPurchaseGoogle(
+  payload: {
+    packageName: string
+    productId: string
+    purchaseToken: string
+  },
+  token: string
+) {
   return axios.post<void>(`${base}/google/subscription`, payload, {
     headers: {
-      token: sharedSessionStore.user?.token,
+      token,
     },
   })
 }
 
-export function verifyPurchaseApple(receipt: string) {
+export function verifyPurchaseApple(receipt: string, token: string) {
   return axios.post<void>(
     `${base}/apple/subscription`,
     { receipt },
     {
       headers: {
-        token: sharedSessionStore.user?.token,
+        token,
       },
     }
   )
 }
 
-export function sendFeedback(state: object) {
+export function sendFeedback(state: object, token: string) {
   return axios.post<void>(
     `${base}/feedback`,
     { state },
     {
       headers: {
-        token: sharedSessionStore.user?.token,
+        token,
       },
     }
   )
 }
 
-export function sendData(data: any) {
+export function sendData(data: any, token: string) {
   return axios.post<void>(
     `${base}/data`,
     { data },
     {
       headers: {
-        token: sharedSessionStore.user?.token,
+        token,
       },
     }
   )
 }
 
-export function calendarAuthenticationURL() {
+export function calendarAuthenticationURL(token: string) {
   return axios.get<string>(`${base}/google/calendarAuthenticationURL`, {
     headers: {
-      token: sharedSessionStore.user?.token,
+      token,
     },
   })
 }
 
-export function calendarAuthorize(code: string) {
+export function calendarAuthorize(code: string, token: string) {
   return axios.post<GoogleCalendarCredentials>(
     `${base}/google/calendarAuthorize`,
     { code },
     {
       headers: {
-        token: sharedSessionStore.user?.token,
+        token,
       },
     }
   )
 }
 
-export async function setUserName(name: string) {
+export async function setUserName(name: string, token: string) {
   return axios.post(
     `${base}/settings/username`,
     { name: name },
     {
       headers: {
-        token: sharedSessionStore.user?.token,
+        token,
       },
     }
   )
 }
 
-export async function resetDelegateToken() {
+export async function resetDelegateToken(token: string) {
   return (
     await axios.post(
       `${base}/delegate/generateToken`,
       {},
       {
         headers: {
-          token: sharedSessionStore.user?.token,
+          token,
         },
       }
     )

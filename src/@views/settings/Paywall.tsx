@@ -24,12 +24,12 @@ import { observer } from 'mobx-react'
 import { Container, Content, Text, View } from 'native-base'
 import React, { Component } from 'react'
 import { Linking, Platform } from 'react-native'
-import { Subscription, Product, clearTransactionIOS } from 'react-native-iap'
+import * as RNIap from 'react-native-iap'
 import RNRestart from 'react-native-restart'
 import { uniqBy } from 'lodash'
 
 class PaywallVM {
-  @observable products: (Subscription | Product)[] = []
+  @observable products: (RNIap.Subscription | RNIap.Product)[] = []
 
   @observable loading = false
 
@@ -65,7 +65,7 @@ class PaywallContent extends Component<{
           await sharedSync.sync(SyncRequestEvent.All)
         }
       } catch (err) {
-        alertError(err)
+        alertError(err as string)
       }
       alertMessage(
         translate('purchaseThankYou'),
@@ -90,7 +90,7 @@ class PaywallContent extends Component<{
         )
       )
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.vm.loading = false
     }
@@ -195,7 +195,7 @@ class PaywallContent extends Component<{
                   }}
                   onPress={() => {
                     if (Platform.OS === 'ios') {
-                      clearTransactionIOS()
+                      RNIap.clearTransactionIOS()
                     }
                     purchase(product.productId)
                   }}
@@ -269,14 +269,18 @@ class PaywallContent extends Component<{
 }
 
 export const Paywall = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { type: string | undefined } | undefined>, string>
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { type: string | undefined } | undefined>,
+        string
+      >
+    >()
   return <PaywallContent route={route} />
 }
 
 const productOrder = ['monthly', 'yearly', 'perpetual']
-function sortProducts(products: (Subscription | Product)[]) {
+function sortProducts(products: (RNIap.Subscription | RNIap.Product)[]) {
   return products.sort((a, b) => {
     const productOrderStringA = productOrder.find((s) =>
       a.productId.includes(s)

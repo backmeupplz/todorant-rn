@@ -1,4 +1,10 @@
-import React, { Component } from 'react'
+import React, {
+  Component,
+  ForwardRefExoticComponent,
+  Ref,
+  RefAttributes,
+  useRef,
+} from 'react'
 import {
   View,
   ScrollView,
@@ -10,6 +16,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   NativeScrollPoint,
+  FlatListProps,
 } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Fade from '@components/Fade'
@@ -22,6 +29,8 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import fonts from '@utils/fonts'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { FlatList } from 'react-native-gesture-handler'
+import type {FlatList as FlatListType} from 'react-native-gesture-handler'
 
 export let infoButtonNodeId: number
 
@@ -123,7 +132,7 @@ export class HeaderScrollView extends Component<{
             </View>
           </Fade>
         </View>
-        <ScrollView
+        <FlatList
           ref={this.props.onscrollViewRef}
           onScroll={(event) => {
             Animated.event(
@@ -159,52 +168,54 @@ export class HeaderScrollView extends Component<{
             backgroundColor: sharedColors.backgroundColor,
           }}
           contentContainerStyle={this.props.contentContainerStyle}
-        >
-          <View ref={this.props.onScrollViewContentRef}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-              pointerEvents={
-                sharedOnboardingStore.tutorialIsShown ? 'auto' : 'none'
-              }
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Animated.Text
-                  style={[
-                    titleStyles,
-                    {
-                      fontSize: animatedFontSize,
-                      color: sharedColors.textColor,
-                    },
-                  ]}
-                  onLayout={(event) => {
-                    this.headerHeight = event.nativeEvent.layout.height
-                    this.headerY = event.nativeEvent.layout.y
-                  }}
-                >
-                  {this.props.title}
-                </Animated.Text>
-                {!!this.props.infoTitle && (
-                  <View style={{ marginHorizontal: 12 }}>
-                    <View
-                      onLayout={({ nativeEvent: { target } }: any) => {
-                        infoButtonNodeId = target
-                      }}
-                    >
-                      {InfoButton(this.props.infoTitle)()}
+          renderItem={null}
+          ListHeaderComponent={
+            <View ref={this.props.onScrollViewContentRef}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+                pointerEvents={
+                  sharedOnboardingStore.tutorialIsShown ? 'auto' : 'none'
+                }
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Animated.Text
+                    style={[
+                      titleStyles,
+                      {
+                        fontSize: animatedFontSize,
+                        color: sharedColors.textColor,
+                      },
+                    ]}
+                    onLayout={(event) => {
+                      this.headerHeight = event.nativeEvent.layout.height
+                      this.headerY = event.nativeEvent.layout.y
+                    }}
+                  >
+                    {this.props.title}
+                  </Animated.Text>
+                  {!!this.props.infoTitle && (
+                    <View style={{ marginHorizontal: 12 }}>
+                      <View
+                        onLayout={({ nativeEvent: { target } }: any) => {
+                          infoButtonNodeId = target
+                        }}
+                      >
+                        {InfoButton(this.props.infoTitle)()}
+                      </View>
                     </View>
-                  </View>
-                )}
+                  )}
+                </View>
+                {this.props.showsHeroButton &&
+                  sharedSettingsStore.gamificationOn && <HeroButton />}
               </View>
-              {this.props.showsHeroButton &&
-                sharedSettingsStore.gamificationOn && <HeroButton />}
+              {this.props.children}
             </View>
-            {this.props.children}
-          </View>
-        </ScrollView>
+          }
+        />
       </View>
     )
   }

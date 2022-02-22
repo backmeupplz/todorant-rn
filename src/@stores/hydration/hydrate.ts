@@ -1,6 +1,7 @@
 import { create } from 'mobx-persist'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import MMKVStorage from 'react-native-mmkv-storage'
+export const MMKV = new MMKVStorage.Loader().initialize() // Returns an MMKV Instance
 
 export const hydrate = create({
-  storage: AsyncStorage,
+  storage: MMKV,
 })

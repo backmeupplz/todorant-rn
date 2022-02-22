@@ -2,14 +2,14 @@ import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { Todo } from '@models/Todo'
+import { MelonTodo } from '@models/MelonTodo'
 
 export function checkSubscriptionAndNavigate(
   screen: 'AddTodo' | 'EditTodo' | 'BreakdownTodo',
   params?: {
     date?: string
-    editedTodo?: Todo
-    breakdownTodo?: Todo
+    editedTodo?: MelonTodo
+    breakdownTodo?: MelonTodo
   }
 ) {
   if (Platform.OS === 'ios' && sharedOnboardingStore.tutorialIsShown) {

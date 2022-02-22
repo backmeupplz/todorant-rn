@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef, useEffect } from 'react'
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -30,7 +30,7 @@ import {
   ColorPickerHeaderRight,
 } from '@views/settings/ColorPicker'
 import { headerBackButtonProps } from '@utils/headerBackButton'
-import { alertSupport } from '@utils/alert'
+import { alertError, alertSupport } from '@utils/alert'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { LoginQR } from '@views/settings/Login/LoginQR'
@@ -51,8 +51,11 @@ import { InteractionManager, ScrollView } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
+import { useNavigation } from '@react-navigation/native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { FlatList } from 'react-native-gesture-handler'
 
-export let scrollViewRef: ScrollView
+export let scrollViewRef = createRef<FlatList<any>>()
 export let supportButtonNodeId: number
 export let settingsRootRef: Container
 export let settingsBeforeFeedbackButton: number
@@ -72,10 +75,7 @@ export class SettingsContent extends Component {
           onScrollViewContentRef={(ref) => {
             settingsContentRef = ref
           }}
-          onscrollViewRef={(ref) => {
-            if (!ref) return
-            scrollViewRef = ref
-          }}
+          onscrollViewRef={scrollViewRef}
           onOffsetChange={setSettingsScrollOffset}
           title={translate('settings')}
           infoTitle="infoSettings"
@@ -245,11 +245,26 @@ export class SettingsContent extends Component {
 }
 
 export function Settings() {
+  const navigation = useNavigation()
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        if (!sharedSync.socketConnection.authorized) return
+        await sharedSync.sync(SyncRequestEvent.All)
+      } catch (err) {
+        alertError(err as string)
+      }
+    })
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe
+  }, [navigation])
+
   return (
     <Observer>
       {() => (
         <Stack.Navigator
           screenOptions={{
+            detachPreviousScreen: false,
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         >

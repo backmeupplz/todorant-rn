@@ -12,11 +12,11 @@ import { PlanningVM } from '@views/planning/PlanningVM'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import 'moment/min/locales'
 
 @observer
 export class TodoHeader extends Component<{
   item: string
-  vm?: PlanningVM
   drag?: () => void
   isActive?: boolean
   date?: boolean

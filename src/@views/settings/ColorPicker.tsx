@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Container, H1, View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { Tag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { makeObservable, observable } from 'mobx'
@@ -11,12 +10,12 @@ import {
   fromHsv,
 } from 'react-native-color-picker'
 import { extraButtonProps } from '@utils/extraButtonProps'
-import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { Button } from '@components/Button'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { MelonTag } from '@models/MelonTag'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 
@@ -47,9 +46,9 @@ export class ColorPickerHeaderRight extends Component {
 
 @observer
 class ColorPickerContent extends Component<{
-  route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
 }> {
-  @observable tag?: Tag
+  @observable tag?: MelonTag
   @observable color = 'dodgerblue'
 
   UNSAFE_componentWillMount() {
@@ -66,15 +65,8 @@ class ColorPickerContent extends Component<{
     }
   }
 
-  save() {
-    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
-    if (!dbtag) {
-      return
-    }
-    realm.write(() => {
-      dbtag.color = this.color
-      dbtag.updatedAt = new Date()
-    })
+  async save() {
+    await this.tag?.changeColor(this.color)
     goBack()
     sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
@@ -114,8 +106,7 @@ class ColorPickerContent extends Component<{
 }
 
 export const ColorPicker = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { tag: Tag } | undefined>, string>
-  >()
+  const route =
+    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
   return <ColorPickerContent route={route} />
 }

@@ -70,7 +70,7 @@ class LoginFacebookContent extends Component<{
                   }
                 } catch (err) {
                   goBack()
-                  alertError(err)
+                  alertError(err as string)
                 }
               }}
               onLoadEnd={() => {
@@ -85,11 +85,12 @@ class LoginFacebookContent extends Component<{
 }
 
 export const LoginFacebook = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { setLoadingToTrue: () => void } | undefined>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { setLoadingToTrue: () => void } | undefined>,
+        string
+      >
+    >()
   return <LoginFacebookContent route={route} />
 }

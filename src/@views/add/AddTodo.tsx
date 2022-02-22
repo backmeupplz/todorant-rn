@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, createRef, RefObject } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, cloneDelegator } from '@models/Todo'
+import { getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
-import { realm } from '@utils/realm'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
 import { addButtonStore } from '@components/AddButton'
@@ -21,7 +20,6 @@ import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
 import {
   Alert,
-  Clipboard,
   BackHandler,
   KeyboardAvoidingView,
   Platform,
@@ -29,6 +27,9 @@ import {
   Keyboard,
   InteractionManager,
   NativeEventSubscription,
+  FlatList,
+  Falsy,
+  Dimensions,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -45,9 +46,13 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { backButtonStore } from '@components/BackButton'
-import DraggableFlatList from 'react-native-draggable-flatlist'
+import DraggableFlatList, {
+  OpacityDecorator,
+  ScaleDecorator,
+  ShadowDecorator,
+} from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
-import { HeaderHeightContext } from '@react-navigation/stack'
+import { HeaderHeightContext } from '@react-navigation/elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { isTodoOld } from '@utils/isTodoOld'
@@ -60,6 +65,10 @@ import {
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { getLocalDelegation } from '@utils/delegations'
+import Clipboard from '@react-native-community/clipboard'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -75,8 +84,8 @@ class AddTodoContent extends Component<{
     Record<
       string,
       | {
-          editedTodo?: Todo
-          breakdownTodo?: Todo
+          editedTodo?: MelonTodo
+          breakdownTodo?: MelonTodo
           date?: string
           text?: string
           delegateId?: string
@@ -89,14 +98,12 @@ class AddTodoContent extends Component<{
 }> {
   @observable screenType = AddTodoScreenType.add
   @observable vms: TodoVM[] = []
-  breakdownTodo?: Todo
+  breakdownTodo?: MelonTodo
   @observable isBreakdown = false
 
   @observable savingTodo = false
 
   backHandler: NativeEventSubscription | undefined
-
-  scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
   completed = false
 
@@ -116,7 +123,7 @@ class AddTodoContent extends Component<{
     return [firstTodo, secondTodo, thirdTodo]
   }
 
-  saveTodo() {
+  async saveTodo() {
     if (this.savingTodo) {
       Toast.show({
         text: '🤔',
@@ -133,116 +140,125 @@ class AddTodoContent extends Component<{
       return
     }
     this.savingTodo = true
-    const dayCompletinRoutineDoneInitially = shouldShowDayCompletionRoutine()
+    const dayCompletinRoutineDoneInitially =
+      await shouldShowDayCompletionRoutine()
 
     const titlesToFixOrder = [] as string[]
-    const addTodosOnTop = [] as Todo[]
-    const addTodosToBottom = [] as Todo[]
-    const involvedTodos = [] as Todo[]
+    const addTodosOnTop = [] as MelonTodo[]
+    const addTodosToBottom = [] as MelonTodo[]
+    const involvedTodos = [] as MelonTodo[]
     this.vms.forEach((vm, i) => {
       vm.order = i
     })
     const completedAtCreation: string[] = []
-    realm.write(() => {
-      for (const vm of this.vms) {
-        if (this.screenType === AddTodoScreenType.add) {
-          const todo = {
-            updatedAt: new Date(),
-            createdAt: new Date(),
-            text: vm.text,
-            completed: vm.completed,
-            frog: vm.frog,
-            frogFails: 0,
-            skipped: false,
-            order: vm.order,
-            monthAndYear:
-              vm.monthAndYear || getDateMonthAndYearString(new Date()),
-            deleted: false,
-            date: vm.date,
-            time: vm.time,
-            repetitive: vm.repetitive,
-            user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-            delegator: !!vm.delegate
-              ? cloneDelegator(sharedSessionStore.user)
-              : undefined,
-            encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
-            _tempSyncId: uuid(),
-          } as Todo
-          todo._exactDate = new Date(getTitle(todo))
-          if (todo.completed) {
-            completedAtCreation.push(todo.text)
+    const toCreate = [] as MelonTodo[]
+    const toUpdate = [] as MelonTodo[]
+    for (const vm of this.vms) {
+      if (this.screenType === AddTodoScreenType.add) {
+        const todo = {
+          text: vm.text,
+          completed: vm.completed,
+          frog: vm.frog,
+          frogFails: 0,
+          skipped: false,
+          order: vm.order,
+          monthAndYear:
+            vm.monthAndYear || getDateMonthAndYearString(new Date()),
+          deleted: false,
+          date: vm.date,
+          time: vm.time,
+          repetitive: vm.repetitive,
+          encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
+        } as MelonTodo
+        todo._exactDate = new Date(getTitle(todo))
+        if (todo.completed) {
+          completedAtCreation.push(todo.text)
+        }
+        let user: MelonUser | Falsy
+        let delegator: MelonUser | Falsy
+        if (vm.delegate) {
+          user = await getLocalDelegation(vm.delegate, false)
+          delegator = await getLocalDelegation(sharedSessionStore.user!, true)
+        }
+        const dbtodo = todosCollection.prepareCreate((dbtodo) => {
+          Object.assign(dbtodo, todo)
+          if (user && delegator) {
+            dbtodo.delegator?.set(delegator)
+            dbtodo.user?.set(user)
           }
-          const dbtodo = realm.create(Todo, todo)
-          involvedTodos.push(dbtodo)
-          titlesToFixOrder.push(getTitle(todo))
-          if (vm.addOnTop) {
-            addTodosOnTop.push(todo)
-          } else {
-            addTodosToBottom.push(todo)
-          }
-        } else if (vm.editedTodo) {
-          const oldTitle = getTitle(vm.editedTodo)
-          const failed =
-            isTodoOld(vm.editedTodo) &&
-            (vm.editedTodo.date !== vm.date ||
-              vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
-            !vm.editedTodo.completed
+        })
+        toCreate.push(dbtodo)
+        involvedTodos.push(dbtodo)
+        titlesToFixOrder.push(getTitle(dbtodo))
+        if (vm.addOnTop) {
+          addTodosOnTop.push(dbtodo)
+        } else {
+          addTodosToBottom.push(dbtodo)
+        }
+      } else if (vm.editedTodo) {
+        const oldTitle = getTitle(vm.editedTodo)
+        const failed =
+          isTodoOld(vm.editedTodo) &&
+          (vm.editedTodo.date !== vm.date ||
+            vm.editedTodo.monthAndYear !== vm.monthAndYear) &&
+          !vm.editedTodo.completed
 
-          if (
-            vm.editedTodo.frogFails > 2 &&
-            (vm.editedTodo.monthAndYear !==
-              (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
-              vm.editedTodo.date !== vm.date)
-          ) {
-            setTimeout(() => {
-              Alert.alert(translate('error'), translate('breakdownRequest'), [
-                {
-                  text: translate('cancel'),
-                  style: 'cancel',
+        if (
+          vm.editedTodo.frogFails > 2 &&
+          (vm.editedTodo.monthAndYear !==
+            (vm.monthAndYear || getDateMonthAndYearString(new Date())) ||
+            vm.editedTodo.date !== vm.date)
+        ) {
+          setTimeout(() => {
+            Alert.alert(translate('error'), translate('breakdownRequest'), [
+              {
+                text: translate('cancel'),
+                style: 'cancel',
+              },
+              {
+                text: translate('breakdownButton'),
+                onPress: () => {
+                  goBack()
+                  navigate('BreakdownTodo', {
+                    breakdownTodo: vm.editedTodo,
+                  })
                 },
-                {
-                  text: translate('breakdownButton'),
-                  onPress: () => {
-                    goBack()
-                    navigate('BreakdownTodo', {
-                      breakdownTodo: vm.editedTodo,
-                    })
-                  },
-                },
-              ])
-            }, 100)
-            return
-          }
+              },
+            ])
+          }, 100)
+          return
+        }
 
-          if (vm.completed && !vm.editedTodo.completed) {
-            completedAtCreation.push(vm.text)
-          }
+        if (vm.completed && !vm.editedTodo.completed) {
+          completedAtCreation.push(vm.text)
+        }
 
-          if (!vm.editedTodo) {
-            return
-          }
-          vm.editedTodo.text = vm.text
-          vm.editedTodo.completed = vm.completed
-          vm.editedTodo.frog = vm.frog
-          vm.editedTodo.monthAndYear =
+        const editedTodo = vm.editedTodo.prepareUpdate((todo) => {
+          todo.text = vm.text
+          todo.completed = vm.completed
+          todo.frog = vm.frog
+          todo.monthAndYear =
             vm.monthAndYear || getDateMonthAndYearString(new Date())
-          vm.editedTodo.date = vm.date
-          vm.editedTodo.time = vm.time
-          vm.editedTodo.repetitive = vm.repetitive
-          vm.editedTodo.updatedAt = new Date()
-          vm.editedTodo._exactDate = new Date(getTitle(vm.editedTodo))
-          if (failed && vm.editedTodo.date) {
-            vm.editedTodo.frogFails++
-            if (vm.editedTodo.frogFails > 1) {
-              vm.editedTodo.frog = true
+          todo.date = vm.date
+          todo.time = vm.time
+          todo.repetitive = vm.repetitive
+          todo._exactDate = new Date(getTitle(vm.editedTodo!))
+          if (failed && todo.date) {
+            todo.frogFails++
+            if (todo.frogFails > 1) {
+              todo.frog = true
             }
           }
-          vm.editedTodo.delegateAccepted = vm.delegateAccepted
-          involvedTodos.push(vm.editedTodo)
-          titlesToFixOrder.push(oldTitle, getTitle(vm.editedTodo))
-        }
+          todo.delegateAccepted = vm.delegateAccepted
+        })
+        toUpdate.push(editedTodo)
+        involvedTodos.push(editedTodo)
+        titlesToFixOrder.push(oldTitle, getTitle(editedTodo))
       }
-    })
+    }
+    await database.write(
+      async () => await database.batch(...toCreate, ...toUpdate)
+    )
     completedAtCreation.forEach((todoText) => {
       sharedTagStore.incrementEpicPoints(todoText)
       // Increment hero store
@@ -258,13 +274,10 @@ class AddTodoContent extends Component<{
       sharedHeroStore.points++
       sharedHeroStore.updatedAt = new Date()
 
-      realm.write(() => {
-        if (!this.breakdownTodo) {
-          return
-        }
-        this.breakdownTodo.completed = true
-        this.breakdownTodo.updatedAt = new Date()
-      })
+      if (this.breakdownTodo) {
+        await this.breakdownTodo.complete()
+      }
+
       titlesToFixOrder.push(breakdownTodoTitle)
       sharedSessionStore.numberOfTodosCompleted++
       startConfetti()
@@ -289,14 +302,16 @@ class AddTodoContent extends Component<{
         playTaskComplete()
       }
     }
-    // Add tags
-    sharedTagStore.addTags(this.vms)
-    observableNowEventEmitter.emit(
-      ObservableNowEventEmitterEvent.ObservableNowChanged
-    )
-    // Sync todos
-    fixOrder(titlesToFixOrder, addTodosOnTop, addTodosToBottom, involvedTodos)
     goBack()
+    // Add tags
+    await sharedTagStore.addTags(this.vms, false)
+    // Sync todos
+    await fixOrder(
+      titlesToFixOrder,
+      addTodosOnTop,
+      addTodosToBottom,
+      involvedTodos
+    )
     if (this.breakdownTodo && !dayCompletinRoutineDoneInitially) {
       checkDayCompletionRoutine()
     }
@@ -359,7 +374,9 @@ class AddTodoContent extends Component<{
     this.backHandler?.remove()
   }
 
-  addTodo = () => {
+  flatlistref = createRef<FlatList>()
+
+  addTodo = async () => {
     this.vms.forEach((vm) => {
       vm.collapsed = true
     })
@@ -367,6 +384,7 @@ class AddTodoContent extends Component<{
     if (this.breakdownTodo) {
       if (this.vms.length === 0 && this.breakdownTodo.repetitive) {
         newVM.text = this.breakdownTodo.text
+        newVM.time = this.breakdownTodo.time
       } else if (sharedSettingsStore.duplicateTagInBreakdown) {
         let matches = linkify.match(this.breakdownTodo.text) || []
         const newText = matches
@@ -385,8 +403,11 @@ class AddTodoContent extends Component<{
     }
     this.vms.push(newVM)
 
-    if (this.scrollView && Platform.OS === 'ios') {
-      this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
+    if (this.flatlistref) {
+      InteractionManager.runAfterInteractions(async () => {
+        await this.flatlistref.current?.scrollToEnd()
+        newVM.focus()
+      })
     }
   }
 
@@ -533,10 +554,12 @@ class AddTodoContent extends Component<{
           }
         >
           <DraggableFlatList
-            ref={(scrollView) => {
-              this.scrollView = scrollView
+            ref={this.flatlistref}
+            contentContainerStyle={{
+              paddingBottom: 10,
+              paddingTop: 10,
             }}
-            contentContainerStyle={{ paddingBottom: 10, paddingTop: 10 }}
+            style={{ maxHeight: '95%', height: '95%' }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}
             renderItem={({ item, index, drag, isActive }) => {
@@ -554,33 +577,35 @@ class AddTodoContent extends Component<{
                   </View>
                 )
               ) : (
-                <View
-                  key={index}
-                  style={{
-                    marginTop: index === 0 ? 10 : undefined,
-                  }}
-                >
-                  {item && (
-                    <AddTodoForm
-                      vm={item}
-                      deleteTodo={
-                        this.vms.length > 1
-                          ? () => {
-                              if (index) {
-                                this.vms.splice(index - 1, 1)
+                <ScaleDecorator>
+                  <View
+                    key={index}
+                    style={{
+                      marginTop: index === 0 ? 10 : undefined,
+                    }}
+                  >
+                    {item && (
+                      <AddTodoForm
+                        vm={item}
+                        deleteTodo={
+                          this.vms.length > 1
+                            ? () => {
+                                if (index) {
+                                  this.vms.splice(index - 1, 1)
+                                }
                               }
-                            }
-                          : undefined
-                      }
-                      drag={drag}
-                      showCross={
-                        !!this.breakdownTodo &&
-                        !!sharedSettingsStore.duplicateTagInBreakdown
-                      }
-                    />
-                  )}
-                  {index != this.vms.length && <Divider />}
-                </View>
+                            : undefined
+                        }
+                        drag={drag}
+                        showCross={
+                          !!this.breakdownTodo &&
+                          !!sharedSettingsStore.duplicateTagInBreakdown
+                        }
+                      />
+                    )}
+                    {index != this.vms.length && <Divider />}
+                  </View>
+                </ScaleDecorator>
               )
             }}
             keyExtractor={(item, index) => `draggable-item-${index}`}
@@ -588,6 +613,7 @@ class AddTodoContent extends Component<{
           />
           <View
             style={{
+              marginTop: -40,
               flexDirection: 'row',
               paddingHorizontal: 16,
               justifyContent: 'center',
@@ -741,8 +767,8 @@ export const AddTodo = () => {
       Record<
         string,
         | {
-            editedTodo?: Todo
-            breakdownTodo?: Todo
+            editedTodo?: MelonTodo
+            breakdownTodo?: MelonTodo
             date?: string
             text?: string
           }

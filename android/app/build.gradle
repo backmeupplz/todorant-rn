@@ -78,7 +78,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -129,15 +129,34 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        exclude "META-INF/watermelondb_debug.kotlin_module"
+        exclude '**/libjscexecutor.so'
+        pickFirst '**/*.so'
+        pickFirst 'lib/armeabi-v7a/libblasV8.so'
+        pickFirst 'lib/mips/librsjni.so'
+        pickFirst 'lib/x86/libblasV8.so'
+        pickFirst 'lib/mips/libRSSupport.so'
+        pickFirst 'lib/mips/libblasV8.so'
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }
+
     defaultConfig {
         applicationId "com.todorant"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 121
-        versionName "1.0.116"
+        versionCode 160
+        versionName "1.0.160"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         missingDimensionStrategy 'react-native-camera', 'general'
+        // react-native-iap: we only use the Google Play flavor
+        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {
@@ -196,11 +215,10 @@ android {
 
 dependencies {
     implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-reanimated')
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    implementation project(':watermelondb-jsi')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

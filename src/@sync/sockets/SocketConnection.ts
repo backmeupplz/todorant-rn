@@ -2,6 +2,7 @@ import { observable, makeObservable } from 'mobx'
 import SocketIO from 'socket.io-client'
 import NetInfo from '@react-native-community/netinfo'
 import { sharedSync } from '@sync/Sync'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 const authorizationTimeout = 20
 
@@ -113,7 +114,7 @@ export class SocketConnection {
     this.connected = true
     this.connectionError = undefined
     await this.authorize()
-    sharedSync.sync()
+    await sharedSync.sync()
   }
 
   private onDisconnect = () => {
@@ -134,9 +135,12 @@ export class SocketConnection {
     console.warn('ws error', err)
   }
 
-  private onAuthorized = () => {
+  private onAuthorized = async () => {
     this.authorized = true
     this.pendingAuthorization?.res()
     this.pendingAuthorization = undefined
+    if (!sharedSessionStore.migrationCompleted) {
+      sharedSessionStore.migrationCompleted = true
+    }
   }
 }

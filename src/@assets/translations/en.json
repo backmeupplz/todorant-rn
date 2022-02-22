@@ -254,7 +254,9 @@
   "rank12800Description": "You breakdown the tasks like you split the atoms. Keep up the good work!",
   "sendDataToServer": "Send data to the server",
   "encryption": {
-    "repeatPassword": "Repeat password"
+    "repeatPassword": "Repeat password",
+    "encryptionSaved": "Everything is ready! Now all of your new tasks will be encrypted",
+    "encryption": "Encryption"
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Copy hashtags during a breakdown",
@@ -297,6 +299,16 @@
     },
     "epic": {
       "numberError": "Should be a number"
+    },
+    "errorDuring": "Error occured during: {{reason}}. Original error: {{originalError}}",
+    "sync": {
+      "updatingOrCreating": "updating or creating",
+      "updatingPushedDelegates": "updating or creating pushed delegates",
+      "updatingPushedDelegators": "updating or creating pushed delegators",
+      "removingDelegators": "removing locally marked as deleted delegators",
+      "removingDelegates": "removing locally marked as deleted delegates",
+      "removingPushedDelegators": "removing pushed delegators",
+      "preapringDelegationsForDeleting": "preparing delegations for deleting: delegation id: {{delegationId}}"
     }
   },
   "epic": {
@@ -483,5 +495,6 @@
     "title": "Repetitive task",
     "text": "This is a repetitive task, do you want to break down it or complete it?",
     "complete": "Complete"
-  }
+  },
+  "syncError": "An error occurred during data synchronization"
 }

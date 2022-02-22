@@ -7,7 +7,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { computed, makeObservable } from 'mobx'
 import RNRestart from 'react-native-restart'
 import { Platform } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { navigate } from '@utils/navigation'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { TableItem } from '@components/TableItem'
@@ -25,6 +24,7 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { View } from 'react-native'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { configCalendar } from '@utils/configCalendar'
+import { MMKV } from '@stores/hydration/hydrate'
 
 const codeToName = {
   en: 'English',
@@ -87,11 +87,11 @@ export class GeneralSettings extends Component {
               },
               async (i) => {
                 if (i === 0) {
-                  await AsyncStorage.setItem('languageSelect', Language.auto)
+                  await MMKV.setItem('languageSelect', Language.auto)
                 } else if (i < 7) {
                   sharedSettingsStore.language = options[i].code
                   sharedSettingsStore.updatedAt = new Date()
-                  await AsyncStorage.setItem('languageSelect', options[i].code)
+                  await MMKV.setItem('languageSelect', options[i].code)
                   configCalendar(options[i].code)
                   await sharedSync.sync(SyncRequestEvent.Settings)
                 }
@@ -207,9 +207,8 @@ export class GeneralSettings extends Component {
               const permissions = await getNotificationPermissions()
               if (!permissions.badge && Platform.OS === 'ios') {
                 try {
-                  const gotPermissions = await PushNotification.requestPermissions(
-                    ['badge']
-                  )
+                  const gotPermissions =
+                    await PushNotification.requestPermissions(['badge'])
                   if (gotPermissions.badge) {
                     sharedSettingsStore.badgeIconCurrentCount = true
                     updateBadgeNumber()

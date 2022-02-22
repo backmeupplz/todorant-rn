@@ -1,4 +1,3 @@
-import { Tag } from '@models/Tag'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
@@ -8,19 +7,23 @@ import {
   getDateDateString,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { Todo } from '@models/Todo'
 import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
 import React from 'react'
-import { Keyboard, TextInput } from 'react-native'
+import { InteractionManager, Keyboard, TextInput } from 'react-native'
 const {
-  focusInput,
+  focusTextInput,
+  blurInput,
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { DelegationUser } from '@models/DelegationUser'
 import { translate } from '@utils/i18n'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
+import { TagColumn } from '@utils/watermelondb/tables'
+import { MelonTag } from '@models/MelonTag'
+import { sanitizeLikeString } from '@utils/textSanitizer'
 
 export class TodoVM {
   @observable text =
@@ -42,14 +45,14 @@ export class TodoVM {
   @observable time?: string
   @observable repetitive = false
 
-  @observable delegate?: DelegationUser
+  @observable delegate?: MelonUser
   @observable delegateAccepted?: boolean
 
   @observable showDatePicker = false
   @observable showMonthAndYearPicker = false
   @observable showTimePicker = false
 
-  editedTodo?: Todo
+  editedTodo?: MelonTodo
   @observable showMore = false
 
   @observable order = 0
@@ -79,23 +82,31 @@ export class TodoVM {
     if (!matches.length) {
       return sharedSettingsStore.showMoreByDefault || this.showMore
         ? sharedTagStore.undeletedTags
-        : []
+        : sharedTagStore.undeletedTags.extend(Q.where(TagColumn.tag, null))
     }
     const match = matches[0]
-    return sharedTagStore.undeletedTags.filtered(
-      `tag CONTAINS "${match.substr(1)}" AND tag != "${match.substr(1)}"`
+    return sharedTagStore.undeletedTags.extend(
+      Q.where(TagColumn.tag, Q.like(`%${sanitizeLikeString(match.substr(1))}%`))
     )
   }
 
-  focus() {
-    // Drop currentFocusedItem inside React-Native
-    focusInput({})
-    if (this.todoTextField.current) {
-      ;(this.todoTextField.current as any)._root.focus()
+  focus(tag = false) {
+    if (!sharedOnboardingStore.tutorialIsShown) return
+    const refocus = () => {
+      const rootTextField = (this.todoTextField.current as any)?._root
+      blurInput(rootTextField)
+      requestAnimationFrame(() => {
+        focusTextInput(rootTextField)
+      })
+    }
+    if (tag) {
+      InteractionManager.runAfterInteractions(refocus)
+    } else {
+      requestAnimationFrame(refocus)
     }
   }
 
-  applyTag(tag: Tag) {
+  applyTag(tag: MelonTag) {
     const text = this.text
     const len = text.length
     const before = text.substr(0, this.cursorPosition)
@@ -111,13 +122,13 @@ export class TodoVM {
     const emptyMatches = this.text.match(/#$/g) || []
     if (emptyMatches.length) {
       this.text = `${before}${tag.tag}${after} `
-      ;(this.todoTextField.current as any)._root.focus()
+      this.focus(true)
       return
     }
     const matches = this.text.match(/#[\u0400-\u04FFa-zA-Z_0-9]+$/g) || []
     if (!matches.length) {
       this.text = `${before}${insertText}${after} `
-      ;(this.todoTextField.current as any)._root.focus()
+      this.focus(true)
       return
     }
     const match = matches[0]
@@ -125,7 +136,7 @@ export class TodoVM {
       0,
       before.length - match.length
     )}${insertText}${after} `
-    ;(this.todoTextField.current as any)._root.focus()
+    this.focus(true)
   }
 
   @computed
@@ -213,7 +224,7 @@ export class TodoVM {
     }
   }
 
-  setEditedTodo(todo: Todo) {
+  setEditedTodo(todo: MelonTodo) {
     this.editedTodo = todo
 
     requestAnimationFrame(() => {

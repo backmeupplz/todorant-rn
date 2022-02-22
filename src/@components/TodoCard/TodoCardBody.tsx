@@ -3,11 +3,12 @@ import { observer } from 'mobx-react'
 import { CardItem, Body, View, Text } from 'native-base'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { CardType } from '@components/TodoCard/CardType'
-import { Todo, getTitle } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
 import { translate } from '@utils/i18n'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
 const showDebugInfo = false
 
@@ -15,7 +16,8 @@ const showDebugInfo = false
 export class TodoCardBody extends Component<{
   vm: TodoCardVM
   type: CardType
-  todo: Todo
+  todo: MelonTodo
+  delegator?: MelonUser
   drag?: () => void
 }> {
   render() {
@@ -43,7 +45,7 @@ export class TodoCardBody extends Component<{
                 justifyContent: 'space-between',
               }}
             >
-              {!!this.props.todo.delegator?.name &&
+              {!!this.props.delegator?.name &&
                 this.props.type !== CardType.delegation && (
                   <Text>
                     <Text
@@ -52,8 +54,7 @@ export class TodoCardBody extends Component<{
                       }}
                       {...sharedColors.regularTextExtraStyle}
                     >
-                      {translate('delegate.from')}:{' '}
-                      {this.props.todo.delegator?.name}
+                      {translate('delegate.from')}: {this.props.delegator?.name}
                     </Text>
                     {this.props.todo.delegateAccepted === false && (
                       <Text {...sharedColors.regularTextExtraStyle}>

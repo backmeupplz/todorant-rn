@@ -1,26 +1,26 @@
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { mobxRealmObject } from '@utils/mobx-realm/object'
 import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
 import { observableNow } from '@utils/ObservableNow'
-import { getTitle, Todo } from '@models/Todo'
-import {
-  mobxRealmCollection,
-  shallowMobxRealmCollection,
-} from '@utils/mobx-realm/collection'
-import { realm } from '@utils/realm'
+import { getTitle } from '@models/Todo'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
-import { computed, makeObservable, observable } from 'mobx'
+import { computed, makeObservable, observable, when } from 'mobx'
 import { persist } from 'mobx-persist'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from './SessionStore'
 import { hydration } from './hydration/hydratedStores'
-import { Results } from 'realm'
-import { DelegationUser } from '@models/DelegationUser'
-import { SectionListData } from 'react-native'
+import { MelonTodo } from '@models/MelonTodo'
+import { Q, Query } from '@nozbe/watermelondb'
+import {
+  database,
+  todosCollection,
+  usersCollection,
+} from '@utils/watermelondb/wmdb'
+import { Subscription } from 'rxjs'
+import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 
 class TodoStore {
   hydrated = false
@@ -28,248 +28,242 @@ class TodoStore {
 
   @persist('date') @observable updatedAt?: Date
 
-  getDelegationTodos(byMe: boolean, completed = false) {
-    let todosWithoutDelegationPredicate = realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('delegator != null')
-      .filtered(`completed = ${completed}`)
+  @persist isFirstSync = false
 
-    if (!byMe) {
-      const todosWithDelegationPredicate = todosWithoutDelegationPredicate
-        .filtered('delegateAccepted != true')
-        .filtered(`user._id = "${sharedSessionStore.user?._id}"`)
-      todosWithoutDelegationPredicate = todosWithDelegationPredicate
-    } else {
-      const todosWithDelegationPredicate = todosWithoutDelegationPredicate.filtered(
-        `delegator._id = "${sharedSessionStore.user?._id}"`
-      )
-      todosWithoutDelegationPredicate = todosWithDelegationPredicate
-    }
-    return todosWithoutDelegationPredicate
+  completedTodos = todosCollection.query(Q.where(TodoColumn.completed, true))
+  undeletedTodos = todosCollection.query(Q.where(TodoColumn.deleted, false))
+  deletedTodos = todosCollection.query(Q.where(TodoColumn.deleted, true))
+  undeletedUncompleted = this.undeletedTodos.extend(
+    Q.where(TodoColumn.completed, false)
+  )
+  undeletedCompleted = this.undeletedTodos.extend(
+    Q.where(TodoColumn.completed, true)
+  )
+
+  wmdbUserId?: string
+  wmdbUserAsDelegatorId?: string
+
+  async getWmDbUser(delegator: boolean): Promise<string | undefined> {
+    return (
+      await usersCollection
+        .query(
+          Q.where(UserColumn._id, sharedSessionStore.user?._id || null),
+          Q.where(UserColumn.isDelegator, delegator)
+        )
+        .fetch()
+    )[0]?.id
   }
 
-  getRealmTodos(title: string, completed: boolean) {
-    let realmResultsWithoutDelegation = realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
-      .filtered(`completed = ${completed ? 'true' : 'false'}`)
-      .filtered(
-        title.length === 10
-          ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
-              8,
-              2
-            )}"`
-          : `monthAndYear = "${title.substr(
-              0,
-              7
-            )}" && (date == "" || date == null)`
-      )
-    if (sharedSessionStore && sharedSessionStore.hydrated) {
-      realmResultsWithoutDelegation = realmResultsWithoutDelegation.filtered(
-        `delegator._id != "${sharedSessionStore.user?._id}"`
-      )
-    }
-    return realmResultsWithoutDelegation.sorted([
-      ['frog', true],
-      ['order', false],
-    ])
+  getDelegationTodos(byMe: boolean, completed = false) {
+    const query = byMe
+      ? Q.where(TodoColumn.delegator, this.wmdbUserAsDelegatorId || null)
+      : Q.and(
+          Q.where(TodoColumn.delegateAccepted, Q.notEq(!completed)),
+          Q.where(TodoColumn.user, this.wmdbUserId || null)
+        )
+    return this.undeletedTodos.extend(
+      Q.where(TodoColumn.delegator, Q.notEq(null)),
+      Q.where(TodoColumn.completed, completed),
+      query
+    )
+  }
+
+  getTodos(title: string, completed: boolean) {
+    const dateQuery =
+      title.length === 10
+        ? Q.where(TodoColumn.date, title.substr(8, 2))
+        : Q.or(
+            Q.where(TodoColumn.date, ''),
+            Q.where(TodoColumn.date, Q.eq(null))
+          )
+    return this.undeletedTodos.extend(
+      Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
+      Q.where(TodoColumn.completed, completed),
+      Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
+      dateQuery,
+      Q.or(
+        Q.and(
+          Q.where(TodoColumn.delegateAccepted, Q.notEq(true)),
+          Q.where(TodoColumn.delegator, null)
+        ),
+        Q.and(
+          Q.where(TodoColumn.delegateAccepted, true),
+          Q.where(
+            TodoColumn.delegator,
+            this.wmdbUserAsDelegatorId
+              ? Q.notEq(this.wmdbUserAsDelegatorId)
+              : null
+          )
+        )
+      ),
+      Q.sortBy(TodoColumn.frog, Q.desc),
+      Q.sortBy(TodoColumn.order, Q.asc)
+    )
   }
 
   todosForDate = (title: string) => {
-    return realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('delegateAccepted != false')
-      .filtered(
-        title.length === 10
-          ? `monthAndYear = "${title.substr(0, 7)}" && date = "${title.substr(
-              8,
-              2
-            )}"`
-          : `monthAndYear = "${title.substr(
-              0,
-              7
-            )}" && (date == "" || date == null)`
-      )
-      .sorted('order')
+    const dateQuery =
+      title.length === 10
+        ? Q.where(TodoColumn.date, title.substr(8, 2))
+        : Q.or(
+            Q.where(TodoColumn.date, ''),
+            Q.where(TodoColumn.date, Q.eq(null))
+          )
+    return this.undeletedTodos.extend(
+      Q.where(TodoColumn.delegateAccepted, Q.notEq(false)),
+      Q.where(TodoColumn.monthAndYear, title.substr(0, 7)),
+      dateQuery,
+      Q.sortBy(TodoColumn.order, Q.asc)
+    )
   }
 
   todosBeforeDate = (title: string) => {
     const todayWithTimezoneOffset = new Date(title)
-    const todayString = `T${
-      Math.floor(todayWithTimezoneOffset.getTime() / 1000) - 1
-    }:000`
-    let realmResultsWithoutDelegation = realm
-      .objects(Todo)
-      .filtered('deleted = false')
-      .filtered('completed = false')
-      .filtered(`_exactDate < ${todayString}`)
-    if (hydration.isHydrated && sharedSessionStore.user?._id) {
-      realmResultsWithoutDelegation = realmResultsWithoutDelegation
-        .filtered(`user = null || user._id = "${sharedSessionStore.user?._id}"`)
-        .filtered(
-          'delegator = null || (delegator != null && delegateAccepted = true)'
+    let realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
+      Q.where(TodoColumn._exactDate, Q.lt(todayWithTimezoneOffset.getTime())),
+      Q.or(
+        Q.where(TodoColumn.user, null),
+        Q.where(TodoColumn.user, this.wmdbUserId || null)
+      ),
+      Q.or(
+        Q.where(TodoColumn.delegator, null),
+        Q.and(
+          Q.where(TodoColumn.delegator, Q.notEq(null)),
+          Q.where(TodoColumn.delegateAccepted, true)
         )
-    }
+      )
+    )
     return realmResultsWithoutDelegation
   }
 
-  @computed get currentTodo() {
-    return this.shallowTodayUncompletedTodos.length
-      ? mobxRealmObject(this.shallowTodayUncompletedTodos[0])
-      : undefined
-  }
+  delegatedByMe?: Query<MelonTodo>
 
-  @computed get delegatedByMe() {
-    return this.getDelegationTodos(true)
-  }
-  @computed get delegatedByMeCompleted() {
-    return this.getDelegationTodos(true, true)
-  }
-  @computed get delegatedToMe() {
-    return this.getDelegationTodos(false)
-  }
+  delegatedByMeCompleted?: Query<MelonTodo>
 
-  getDelegatedTodosMap(todos: Results<Todo>, byMe: boolean) {
-    const todoSectionMap = {} as {
-      [key: string]: {
-        userInSection: DelegationUser
-        data: Todo[]
-      }
-    }
+  delegatedToMe?: Query<MelonTodo>
 
-    let currentTitle: string | undefined
-    let sectionIndex = 0
-    for (const realmTodo of todos) {
-      const user = byMe ? realmTodo.user : realmTodo.delegator
-      if (!user) continue
-      const titleKey = user?._id
-      if (!titleKey) continue
-      if (currentTitle && currentTitle !== titleKey) {
-        sectionIndex++
-      }
-      if (todoSectionMap[titleKey]) {
-        todoSectionMap[titleKey].data.push(mobxRealmObject(realmTodo))
-      } else {
-        todoSectionMap[titleKey] = {
-          userInSection: user,
-          data: [mobxRealmObject(realmTodo)],
-        }
-      }
-    }
-    return Object.keys(todoSectionMap).map((key) => {
-      return todoSectionMap[key]
-    }) as SectionListData<Todo>[]
-  }
+  @observable todayUncompletedTodos?: Query<MelonTodo>
 
-  @computed get delegatedByMeTodosMap() {
-    const key = this.observableKey
-    const delegatedByMeMap = this.getDelegatedTodosMap(this.delegatedByMe, true)
-    return delegatedByMeMap
-  }
-
-  @computed get delegatedByMeCompletedTodosMap() {
-    const key = this.observableKey
-    const delegatedByMeMap = this.getDelegatedTodosMap(
-      this.delegatedByMeCompleted,
-      true
-    )
-    return delegatedByMeMap
-  }
-
-  @computed get delegatedToMeTodosMap() {
-    const key = this.observableKey
-    const delegatedByMeMap = this.getDelegatedTodosMap(
-      this.delegatedToMe,
-      false
-    )
-    return delegatedByMeMap
-  }
-
-  @observable shallowTodayUncompletedTodos = shallowMobxRealmCollection(
-    this.getRealmTodos(observableNow.todayTitle, false)
-  )
-
-  @observable shallowTodayCompletedTodos = shallowMobxRealmCollection(
-    this.getRealmTodos(observableNow.todayTitle, true)
-  )
+  @observable todayCompletedTodos?: Query<MelonTodo>
 
   @computed get progress() {
     return {
-      count:
-        this.shallowTodayUncompletedTodos.length +
-        this.shallowTodayCompletedTodos.length,
-      completed: this.shallowTodayCompletedTodos.length,
+      count: this.uncompletedTodayAmount + this.completedTodayAmount,
+      completed: this.completedTodayAmount,
     }
   }
 
-  @observable oldTodos = shallowMobxRealmCollection(
-    this.todosBeforeDate(observableNow.todayTitle)
-  )
+  @observable oldTodosCount = 0
 
   @computed get isPlanningRequired() {
-    return !!this.oldTodos.length && sharedOnboardingStore.tutorialIsShown
+    return !!this.oldTodosCount && sharedOnboardingStore.tutorialIsShown
   }
 
-  @computed get incompleteFrogsExist() {
-    const date = observableNow.todayTitle
-    return realm
-      .objects(Todo)
-      .filtered(
-        date.length === 10
-          ? `monthAndYear = "${date.substr(0, 7)}" && date = "${date.substr(
-              8,
-              2
-            )}"`
-          : `monthAndYear = "${date.substr(
-              0,
-              7
-            )}" && (date == "" || date == null)`
-      )
-      .filtered(
-        'deleted = false && delegateAccepted != false && completed = false && frog = true'
-      ).length
+  @observable incompleteFrogsExist = 0
+
+  @observable uncompletedTodayAmount = 0
+  @observable completedTodayAmount = 0
+
+  @observable delegatedToMeCount = 0
+  @observable delegatedByMeCount = 0
+  @observable delegatedByMeCompletedCount = 0
+
+  currentSubscription?: Subscription
+
+  oldTodosSubscribtion?: Subscription
+
+  subscribeOldTodos() {
+    this.oldTodosSubscribtion?.unsubscribe()
+    this.oldTodosSubscribtion = this.todosBeforeDate(observableNow.todayTitle)
+      .observeCount(false)
+      .subscribe((count) => (this.oldTodosCount = count))
   }
 
   constructor() {
     makeObservable(this)
-    this.refreshTodos()
     // Today date changed
     observableNowEventEmitter.on(
       ObservableNowEventEmitterEvent.ObservableNowChanged,
-      () => {
-        this.observableKey = Date.now()
-        this.oldTodos = shallowMobxRealmCollection(
-          this.todosBeforeDate(observableNow.todayTitle)
+      async () => {
+        this.subscribeOldTodos()
+        this.todayUncompletedTodos = this.getTodos(
+          observableNow.todayTitle,
+          false
         )
-        this.shallowTodayUncompletedTodos = shallowMobxRealmCollection(
-          this.getRealmTodos(observableNow.todayTitle, false)
-        )
-        this.shallowTodayCompletedTodos = shallowMobxRealmCollection(
-          this.getRealmTodos(observableNow.todayTitle, true)
-        )
+        this.todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
+        this.todayUncompletedTodos
+          .extend(Q.where(TodoColumn.frog, true))
+          .observeCount(false)
+          .subscribe((count) => (this.incompleteFrogsExist = count))
+        this.currentSubscription = this.todayUncompletedTodos
+          .observeCount(false)
+          .subscribe((amount) => (this.uncompletedTodayAmount = amount))
+        this.uncompletedTodayAmount =
+          await this.todayUncompletedTodos.fetchCount()
+        this.completedTodayAmount = await this.todayCompletedTodos.fetchCount()
       }
     )
+    this.initDelegation()
+  }
+
+  async initDelegation() {
+    await when(() => hydration.isHydrated)
+
+    this.wmdbUserId = await this.getWmDbUser(false)
+    this.wmdbUserAsDelegatorId = await this.getWmDbUser(true)
+
+    this.todayUncompletedTodos = this.getTodos(observableNow.todayTitle, false)
+    this.todayCompletedTodos = this.getTodos(observableNow.todayTitle, true)
+
+    this.delegatedByMe = this.getDelegationTodos(true)
+    this.delegatedByMeCompleted = this.getDelegationTodos(true, true)
+    this.delegatedToMe = this.getDelegationTodos(false)
+    this.todayCompletedTodos
+      .observeCount(false)
+      .subscribe((amount) => (this.completedTodayAmount = amount))
+    this.currentSubscription = this.todayUncompletedTodos
+      .observeCount(false)
+      .subscribe((amount) => (this.uncompletedTodayAmount = amount))
+
+    this.delegatedToMe
+      .observeCount(false)
+      .subscribe((count) => (this.delegatedToMeCount = count))
+    this.delegatedByMe
+      .observeCount(false)
+      .subscribe((count) => (this.delegatedByMeCount = count))
+    this.delegatedByMeCompleted
+      .observeCount(false)
+      .subscribe((count) => (this.delegatedByMeCompletedCount = count))
+
+    this.subscribeOldTodos()
+    this.refreshTodos()
   }
 
   logout = () => {
     this.updatedAt = undefined
     this.refreshTodos()
+    this.currentSubscription?.unsubscribe()
+    this.oldTodosSubscribtion?.unsubscribe()
+    this.uncompletedTodayAmount = 0
+    this.completedTodayAmount = 0
   }
 
   refreshTodos = () => {
     refreshWidgetAndBadgeAndWatch()
   }
 
-  recalculateExactDates() {
-    const todos = realm.objects(Todo)
-    realm.write(() => {
-      for (const todo of todos) {
-        todo._exactDate = new Date(getTitle(todo))
-      }
-    })
+  async recalculateExactDates() {
+    const todos = await todosCollection.query().fetch()
+    const toUpdate = [] as MelonTodo[]
+
+    for (const todo of todos) {
+      toUpdate.push(
+        todo.prepareUpdate(
+          (todoToUpdate) => (todoToUpdate._exactDate = new Date(getTitle(todo)))
+        )
+      )
+    }
+    await database.write(async () => await database.batch(...toUpdate))
   }
 }
 

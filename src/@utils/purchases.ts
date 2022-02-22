@@ -1,26 +1,31 @@
 import { logEvent } from '@utils/logEvent'
 import { translate } from '@utils/i18n'
-import RNIap, {
-  purchaseUpdatedListener,
-  purchaseErrorListener,
-  SubscriptionPurchase,
-  PurchaseError,
-} from 'react-native-iap'
 import { makeObservable, observable } from 'mobx'
 import * as rest from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Platform } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
+import * as RNIap from 'react-native-iap'
+import { PurchaseError } from 'react-native-iap'
 
 class PurchaseListener {
   constructor() {
     makeObservable(this)
+    this.initIAP()
+  }
+
+  private async initIAP() {
+    try {
+      await RNIap.initConnection()
+    } catch (err) {
+      alertError(err as string)
+    }
   }
 
   @observable isPurchasing = false
 
   success?: () => void
-  fail?: (err: PurchaseError | Error) => void
+  fail?: (err: RNIap.PurchaseError | Error) => void
 }
 
 export const purchaseListener = new PurchaseListener()
@@ -37,26 +42,32 @@ export async function getProducts(skus?: string[]) {
 }
 
 async function tryPurchase(
-  purchase?: SubscriptionPurchase,
+  purchase?: RNIap.SubscriptionPurchase,
   appleReceipt?: string
 ) {
   purchaseListener.isPurchasing = true
   try {
     const receipt = appleReceipt || purchase?.transactionReceipt
 
-    if (receipt) {
+    if (receipt && sharedSessionStore.user?.token) {
       if (Platform.OS === 'android' && purchase?.purchaseToken) {
-        await rest.verifyPurchaseGoogle({
-          packageName: 'com.todorant',
-          productId: purchase.productId,
-          purchaseToken: purchase.purchaseToken,
-        })
+        await rest.verifyPurchaseGoogle(
+          {
+            packageName: 'com.todorant',
+            productId: purchase.productId,
+            purchaseToken: purchase.purchaseToken,
+          },
+          sharedSessionStore.user?.token
+        )
       } else {
         if (sharedSessionStore.user) {
           if (Platform.OS === 'ios') {
             await delay(5)
           }
-          await rest.verifyPurchaseApple(receipt)
+          await rest.verifyPurchaseApple(
+            receipt,
+            sharedSessionStore.user?.token
+          )
         } else {
           sharedSessionStore.localAppleReceipt = receipt
         }
@@ -66,7 +77,11 @@ async function tryPurchase(
           await RNIap.finishTransaction(purchase, false)
         }
       } catch (err) {
-        if (!err.message.includes('purchase is not suitable to be purchased')) {
+        if (
+          !(err as Error).message.includes(
+            'purchase is not suitable to be purchased'
+          )
+        ) {
           throw err
         }
       }
@@ -81,7 +96,7 @@ async function tryPurchase(
   } catch (err) {
     logEvent('subscription_purchase_error_server')
     if (purchaseListener.fail) {
-      purchaseListener.fail(err)
+      purchaseListener.fail(err as Error | PurchaseError)
     }
   } finally {
     purchaseListener.isPurchasing = false
@@ -96,10 +111,11 @@ function delay(s: number) {
   })
 }
 
-export const purchaseUpdateSubscription = purchaseUpdatedListener(tryPurchase)
+export const purchaseUpdateSubscription =
+  RNIap.purchaseUpdatedListener(tryPurchase)
 
-export const purchaseErrorSubscription = purchaseErrorListener(
-  (error: PurchaseError) => {
+export const purchaseErrorSubscription = RNIap.purchaseErrorListener(
+  (error: RNIap.PurchaseError) => {
     console.log(`Purchase error: ${error}`)
     logEvent('subscription_purchase_error_local')
     if (purchaseListener.fail) {
@@ -145,7 +161,7 @@ export async function restorePurchases() {
     }
   } catch (err) {
     if (purchaseListener.fail) {
-      purchaseListener.fail(err)
+      purchaseListener.fail(err as Error | PurchaseError)
     }
   } finally {
     purchaseListener.isPurchasing = false

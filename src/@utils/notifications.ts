@@ -6,6 +6,17 @@ import PushNotification, {
   PushNotificationPermissions,
 } from 'react-native-push-notification'
 
+PushNotification.createChannel(
+  {
+    channelId: 'todorant',
+    channelName: 'Todorant-channel',
+    vibrate: true,
+  },
+  () => {
+    // Do nothing
+  }
+)
+
 PushNotification.configure({
   onRegister: (token) => {
     console.log('Push notification token:', token)
@@ -32,7 +43,7 @@ export function updateBadgeNumber() {
   }
   if (sharedSettingsStore.badgeIconCurrentCount) {
     PushNotification.setApplicationIconBadgeNumber(
-      sharedTodoStore.shallowTodayUncompletedTodos.length
+      sharedTodoStore.uncompletedTodayAmount
     )
   } else {
     resetBadgeNumber()
@@ -61,12 +72,12 @@ export function scheduleReminders(time: string) {
   }
   // Schedule notifications
   PushNotification.localNotificationSchedule({
+    channelId: 'todorant',
     message: translate('planningReminderText'),
     date,
     repeatType: 'day',
     allowWhileIdle: true,
-    // Have to cast it because of allowWhileIdle https://github.com/DefinitelyTyped/DefinitelyTyped/pull/48214
-  } as any)
+  })
 }
 
 export function stopReminders() {

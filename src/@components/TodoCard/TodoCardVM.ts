@@ -1,26 +1,32 @@
 import { isTodoOld } from '@utils/isTodoOld'
-import { sharedHeroStore } from '@stores/HeroStore'
 import { playFrogComplete, playTaskComplete } from '@utils/sound'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { CardType } from './CardType'
 import { translate } from '@utils/i18n'
 import { alertConfirm, alertMessage } from '@utils/alert'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { Todo, getTitle } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import {
   getDateStringFromTodo,
   getDateDateString,
   getDateMonthAndYearString,
   getTodayWithStartOfDay,
+  getDateString,
 } from '@utils/time'
-import { realm } from '@utils/realm'
 import { startConfetti } from '@components/Confetti'
-import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
-import { sharedTagStore } from '@stores/TagStore'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
+import { MelonTodo } from '@models/MelonTodo'
+import { database } from '@utils/watermelondb/wmdb'
+import { Q } from '@nozbe/watermelondb'
+import { TodoColumn } from '@utils/watermelondb/tables'
+import { sharedHeroStore } from '@stores/HeroStore'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import { sharedTagStore } from '@stores/TagStore'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import { Alert } from 'react-native'
 
@@ -31,126 +37,127 @@ export class TodoCardVM {
     makeObservable(this)
   }
 
-  skip(todo: Todo) {
-    const neighbours = sharedTodoStore
+  async skip(todo: MelonTodo) {
+    const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .filtered(`completed = ${todo.completed}`)
+      .extend(Q.where(TodoColumn.completed, todo.completed))
+      .fetch()
     let startOffseting = false
     let offset = 0
-    realm.write(() => {
-      let foundValidNeighbour = false
-      for (const t of neighbours) {
-        if (
-          (t._id && todo._id && t._id === todo._id) ||
-          (t._tempSyncId &&
-            todo._tempSyncId &&
-            t._tempSyncId === todo._tempSyncId)
-        ) {
-          startOffseting = true
-          continue
-        }
-        if (startOffseting) {
-          offset++
-          if (!t.skipped) {
-            t.order -= offset
-            t.updatedAt = new Date()
-            foundValidNeighbour = true
-            break
-          }
+    const toUpdate: MelonTodo[] = []
+    await database.write(async () => await database.batch(...toUpdate))
+
+    let foundValidNeighbour = false
+    for (const t of neighbours) {
+      if (
+        (t._id && todo._id && t._id === todo._id) ||
+        (t._tempSyncId &&
+          todo._tempSyncId &&
+          t._tempSyncId === todo._tempSyncId)
+      ) {
+        startOffseting = true
+        continue
+      }
+      if (startOffseting) {
+        offset++
+        if (!t.skipped) {
+          toUpdate.push(t.prepareUpdate((todo) => (todo.order -= offset)))
+          foundValidNeighbour = true
+          break
         }
       }
-      if (!foundValidNeighbour) {
-        neighbours.forEach((n, i) => {
-          if (i > 0) {
-            n.order--
-            n.updatedAt = new Date()
-          }
-        })
-      }
-      todo.order += offset
-      todo.skipped = true
-      todo.updatedAt = new Date()
-    })
+    }
+    if (!foundValidNeighbour) {
+      neighbours.forEach((n, i) => {
+        if (i > 0) {
+          toUpdate.push(n.prepareUpdate((todo) => todo.order--))
+        }
+      })
+    }
+    toUpdate.push(
+      todo.prepareUpdate((todo) => {
+        todo.order += offset
+        todo.skipped = true
+      })
+    )
+
+    await database.write(async () => await database.batch(...toUpdate))
 
     fixOrder([getTitle(todo)], undefined, undefined, [todo])
   }
 
-  isSkippable(todo: Todo) {
+  async isSkippable(todo: MelonTodo) {
     if (todo.frog || todo.time) {
       return false
     }
-    const neighbours = sharedTodoStore
+    const neighbours = await sharedTodoStore
       .todosForDate(getDateStringFromTodo(todo))
-      .filtered(`completed = ${todo.completed}`)
+      .extend(Q.where(TodoColumn.completed, todo.completed))
+      .fetch()
     return neighbours.length > 1
   }
 
-  moveToToday(todo: Todo) {
-    const oldTitle = getTitle(todo)
-    const today = getTodayWithStartOfDay()
-    realm.write(() => {
-      todo.date = getDateDateString(today)
-      todo.monthAndYear = getDateMonthAndYearString(today)
-      todo._exactDate = new Date(getTitle(todo))
-      todo.updatedAt = new Date()
+  async moveToToday(todo: MelonTodo) {
+    const today = getDateString(getTodayWithStartOfDay())
+    const todosOnDate = await sharedTodoStore.todosForDate(today).fetch()
+    const lastTodoOrder = todosOnDate[todosOnDate.length - 1].order
+    await database.write(async () => {
+      await todo.update((todo) => {
+        todo.order = lastTodoOrder + 1
+        todo.date = getDateDateString(today)
+        todo.monthAndYear = getDateMonthAndYearString(today)
+        todo._exactDate = new Date(getTitle(todo))
+      })
     })
-
-    fixOrder([oldTitle, getTitle(todo)], undefined, undefined, [todo])
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
-  delete(todo: Todo) {
+  async delete(todo: MelonTodo) {
     if (sharedSettingsStore.askBeforeDelete) {
       alertConfirm(
         `${translate('deleteTodo')} "${
           todo.text.length > 50 ? `${todo.text.substr(0, 50)}...` : todo.text
         }"?`,
         translate('delete'),
-        () => {
-          realm.write(() => {
-            todo.deleted = true
-            todo.updatedAt = new Date()
-          })
-          fixOrder([getTitle(todo)])
+        async () => {
+          await todo.delete()
+          sharedSync.sync(SyncRequestEvent.Todo)
         }
       )
     } else {
-      realm.write(() => {
-        todo.deleted = true
-        todo.updatedAt = new Date()
-      })
-      fixOrder([getTitle(todo)])
+      await todo.delete()
+      sharedSync.sync(SyncRequestEvent.Todo)
     }
   }
 
-  accept(todo: Todo) {
+  async accept(todo: MelonTodo) {
     if (!todo.date && !todo.monthAndYear) {
       navigate('EditTodo', { editedTodo: todo })
       return
     }
-    realm.write(() => {
-      todo.delegateAccepted = true
-      todo.updatedAt = new Date()
-    })
+    await todo.accept()
 
     fixOrder([getTitle(todo)])
   }
 
-  uncomplete(todo: Todo) {
-    realm.write(() => {
-      todo.completed = false
-      todo.updatedAt = new Date()
-    })
-
-    fixOrder([getTitle(todo)], undefined, undefined, [todo])
+  async uncomplete(todo: MelonTodo) {
+    await todo.uncomplete()
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
-  breakdownOrComplete(todo: Todo) {
+  async breakdownOrComplete(todo: MelonTodo) {
     if (todo.repetitive) {
       setTimeout(() => {
         Alert.alert(
           translate('breakdownMessage.title'),
           translate('breakdownMessage.text'),
           [
+            {
+              text: translate('cancel'),
+              onPress: () => {
+                // Do nothing
+              },
+            },
             {
               text: translate('breakdownMessage.complete'),
               onPress: () => {
@@ -173,7 +180,7 @@ export class TodoCardVM {
     }
   }
 
-  complete(todo: Todo) {
+  async complete(todo: MelonTodo) {
     if (todo.frog) {
       playFrogComplete()
     } else {
@@ -186,20 +193,16 @@ export class TodoCardVM {
       playTaskComplete()
     }
     sharedHeroStore.incrementPoints()
-    sharedTagStore.incrementEpicPoints(todo.text)
+    await sharedTagStore.incrementEpicPoints(todo.text, false)
 
-    realm.write(() => {
-      todo.completed = true
-      todo.updatedAt = new Date()
-    })
-
-    fixOrder([getTitle(todo)])
+    await todo.complete()
     sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
     checkDayCompletionRoutine()
+    sharedSync.sync(SyncRequestEvent.Todo)
   }
 
-  isOld(type: CardType, todo: Todo) {
+  isOld(type: CardType, todo: MelonTodo) {
     return (
       type !== CardType.done && type !== CardType.delegation && isTodoOld(todo)
     )

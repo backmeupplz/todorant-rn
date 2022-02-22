@@ -2,17 +2,19 @@ import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
-import { Todo } from '@models/Todo'
+import { MelonTodo } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { alertConfirm, alertError } from '@utils/alert'
-import { _d, _e } from '@utils/encryption'
+import { alertConfirm, alertError, alertMessage } from '@utils/alert'
+import { decrypt, _d, _e } from '@utils/encryption'
 import { translate } from '@utils/i18n'
 import { removePassword, setPassword } from '@utils/keychain'
-import { realm } from '@utils/realm'
+import { TodoColumn } from '@utils/watermelondb/tables'
 import { sharedColors } from '@utils/sharedColors'
+import { database, todosCollection } from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
@@ -27,6 +29,19 @@ export class Security extends Component {
   @observable password = ''
   @observable passwordRepeat = ''
 
+  @observable unencryptedCount = 0
+  @observable encryptedCount = 0
+
+  unencryptedTodos = sharedTodoStore.undeletedTodos.extend(
+    Q.where(TodoColumn.encrypted, false),
+    Q.where(TodoColumn.delegator, null)
+  )
+
+  encryptedTodos = sharedTodoStore.undeletedTodos.extend(
+    Q.where(TodoColumn.encrypted, true),
+    Q.where(TodoColumn.delegator, null)
+  )
+
   UNSAFE_componentWillMount() {
     makeObservable(this)
   }
@@ -35,47 +50,65 @@ export class Security extends Component {
     this.encryptionOn = !!sharedSessionStore.encryptionKey
     this.password = sharedSessionStore.encryptionKey || ''
     this.passwordRepeat = sharedSessionStore.encryptionKey || ''
+    this.unencryptedTodos
+      .observeCount(false)
+      .subscribe((count) => (this.unencryptedCount = count))
+    this.encryptedTodos
+      .observeCount(false)
+      .subscribe((count) => (this.encryptedCount = count))
   }
 
-  changeEncrypted(encrypted: boolean) {
+  async changeEncrypted(encrypted: boolean) {
     this.loading = true
     try {
-      const todos = realm
-        .objects(Todo)
-        .filtered(`encrypted = ${!encrypted} && deleted = false`)
-      realm.write(() => {
-        for (const todo of todos) {
-          todo.encrypted = encrypted
-          todo.updatedAt = new Date()
-        }
-      })
+      const todos = await (!encrypted
+        ? this.encryptedTodos
+        : this.unencryptedTodos
+      ).fetch()
+      const toUpdate = [] as MelonTodo[]
+      for (const todo of todos) {
+        toUpdate.push(
+          todo.prepareUpdate((todo) => {
+            todo.encrypted = encrypted
+          })
+        )
+      }
+      await database.write(async () => await database.batch(...toUpdate))
       sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
   }
 
-  encryptEncrypted(encrypt: boolean, key: string) {
+  async encryptEncrypted(encrypt: boolean, key: string) {
     this.loading = true
     try {
-      const todos = realm
-        .objects(Todo)
-        .filtered(`encrypted = true && deleted = false && delegator = null`)
-      realm.write(() => {
-        for (const todo of todos) {
-          if (encrypt) {
-            todo.text = _e(todo.text, key)
-          } else {
-            todo.text = _d(todo.text, key)
-          }
+      const todos = await sharedTodoStore.undeletedTodos
+        .extend(
+          Q.where(TodoColumn.encrypted, true),
+          Q.where(TodoColumn.delegator, null)
+        )
+        .fetch()
+      const toUpdate = [] as MelonTodo[]
+      for (const todo of todos) {
+        if (encrypt) {
+          toUpdate.push(
+            todo.prepareUpdate((todo) => (todo.text = _e(todo.text, key)))
+          )
+        } else {
+          toUpdate.push(
+            todo.prepareUpdate((todo) => (todo.text = _d(todo.text, key)))
+          )
         }
-      })
-      sharedSync.sync(SyncRequestEvent.Todo)
+      }
+      await database.write(async () => await database.batch(...toUpdate))
+
+      await sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
@@ -100,22 +133,22 @@ export class Security extends Component {
               onValueChange={(value) => {
                 if (value) {
                   this.encryptionOn = value
+                  return
+                }
+                if (sharedSessionStore.encryptionKey) {
+                  alertConfirm(
+                    translate('encryptionDisableConfirm'),
+                    translate('disable'),
+                    () => {
+                      const key = sharedSessionStore.encryptionKey!
+                      sharedSessionStore.encryptionKey = undefined
+                      removePassword()
+                      this.encryptionOn = false
+                      this.encryptEncrypted(true, key)
+                    }
+                  )
                 } else {
-                  if (sharedSessionStore.encryptionKey) {
-                    alertConfirm(
-                      translate('encryptionDisableConfirm'),
-                      translate('disable'),
-                      () => {
-                        const key = sharedSessionStore.encryptionKey!
-                        sharedSessionStore.encryptionKey = undefined
-                        removePassword()
-                        this.encryptionOn = false
-                        this.encryptEncrypted(true, key)
-                      }
-                    )
-                  } else {
-                    this.encryptionOn = false
-                  }
+                  this.encryptionOn = false
                 }
               }}
               thumbColor={Platform.OS === 'android' ? 'lightgrey' : undefined}
@@ -139,7 +172,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />
@@ -158,7 +191,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />
@@ -177,10 +210,9 @@ export class Security extends Component {
                         alertConfirm(
                           translate('encryptionConfirm'),
                           translate('save'),
-                          () => {
-                            const encrytedTodos = realm
-                              .objects(Todo)
-                              .filtered('encrypted = true && deleted = false')
+                          async () => {
+                            const encrytedTodos =
+                              await this.encryptedTodos.fetch()
                             if (encrytedTodos.length) {
                               const encryptedTodo = encrytedTodos[0]
                               const decryptedText = _d(
@@ -195,6 +227,10 @@ export class Security extends Component {
                             sharedSessionStore.encryptionKey = this.password
                             this.encryptEncrypted(false, this.password)
                             setPassword(sharedSessionStore.encryptionKey)
+                            alertMessage(
+                              translate('encryption.encryption'),
+                              translate('encryption.encryptionSaved')
+                            )
                           }
                         )
                       }}
@@ -213,11 +249,7 @@ export class Security extends Component {
               {translate('encryptedTodos')}
             </Text>
             <Text {...sharedColors.regularTextExtraStyle}>
-              {
-                realm
-                  .objects(Todo)
-                  .filtered('encrypted = true && deleted = false').length
-              }
+              {this.encryptedCount}
             </Text>
           </TableItem>
           <TableItem>
@@ -225,11 +257,7 @@ export class Security extends Component {
               {translate('unencryptedTodos')}
             </Text>
             <Text {...sharedColors.regularTextExtraStyle}>
-              {
-                realm
-                  .objects(Todo)
-                  .filtered('encrypted = false && deleted = false').length
-              }
+              {this.unencryptedCount}
             </Text>
           </TableItem>
           {/* General */}
@@ -253,10 +281,7 @@ export class Security extends Component {
                 )
               }}
               disabled={
-                !sharedSessionStore.encryptionKey ||
-                !realm
-                  .objects(Todo)
-                  .filtered('encrypted = false && deleted = false').length
+                !sharedSessionStore.encryptionKey || !this.unencryptedCount
               }
             >
               <Text>{translate('encryptAllButton')}</Text>
@@ -275,10 +300,7 @@ export class Security extends Component {
                 )
               }}
               disabled={
-                !sharedSessionStore.encryptionKey ||
-                !realm
-                  .objects(Todo)
-                  .filtered('encrypted = true && deleted = false').length
+                !sharedSessionStore.encryptionKey || !this.encryptedCount
               }
             >
               <Text>{translate('decryptAllButton')}</Text>

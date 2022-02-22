@@ -8,7 +8,10 @@ import { sharedColors } from '@utils/sharedColors'
 import { navigate } from '@utils/navigation'
 import { TableItem } from '@components/TableItem'
 import { Platform } from 'react-native'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, {
+  AndroidEvent,
+  Event,
+} from '@react-native-community/datetimepicker'
 import { observable, computed, makeObservable } from 'mobx'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
 import {
@@ -89,7 +92,7 @@ class TimePickerRow extends Component<{
             mode={'time'}
             is24Hour={true}
             display="default"
-            onChange={(event, date) => {
+            onChange={(event: Event, date?: Date) => {
               if (Platform.OS === 'android') {
                 this.showTimePicker = false
               }
@@ -277,9 +280,8 @@ export class TodoSettings extends Component {
             const permissions = await getNotificationPermissions()
             if (!permissions.alert && Platform.OS === 'ios') {
               try {
-                const gotPermissions = await PushNotification.requestPermissions(
-                  ['alert']
-                )
+                const gotPermissions =
+                  await PushNotification.requestPermissions(['alert'])
                 if (gotPermissions.alert) {
                   this.startReminders(date)
                 } else {

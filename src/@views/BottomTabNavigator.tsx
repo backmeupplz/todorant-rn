@@ -33,7 +33,7 @@ class SettingsRotatingIcon extends Component<{
 }> {
   spinAnimation = new Animated.Value(0)
 
-  componentDidMount() {
+  private startSpinningAnimation() {
     Animated.loop(
       Animated.timing(this.spinAnimation, {
         toValue: 1,
@@ -44,12 +44,17 @@ class SettingsRotatingIcon extends Component<{
     ).start()
   }
 
+  componentDidMount() {
+    this.startSpinningAnimation()
+  }
+
   render() {
     const spin = this.spinAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     })
     if (sharedSync.isSyncing) {
+      this.startSpinningAnimation()
       return (
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
           {this.props.focused
@@ -78,30 +83,46 @@ export default observer(() => {
         {...({ language: sharedSettingsStore.language } as any)}
         backBehavior="none"
         screenOptions={({ route }) => ({
+          detachPreviousScreen: false,
+          headerShown: false,
+          tabBarActiveTintColor: sharedColors.primaryColor,
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            backgroundColor: sharedColors.backgroundColor,
+            borderTopColor: sharedColors.borderColor,
+          },
+          tabBarLabelStyle: {
+            fontFamily: fonts.SFProTextRegular,
+          },
+          tabBarItemStyle: {
+            paddingTop: 6,
+          },
           tabBarIcon: ({ focused, size }) => {
             let name = 'current'
             let icon = focused ? CurrentActiveIcon({}) : CurrentIcon({})
-            if (route.name === 'Planning') {
+            if (route.name === 'BottomPlanning') {
               name = 'planning'
               icon = focused
                 ? PlanningActiveIcon({ width: size, height: size })
                 : PlanningIcon({ width: size, height: size })
-            } else if (route.name === 'Delegation') {
+            } else if (route.name === 'BottomDelegation') {
               name = 'delegation'
               icon = focused
                 ? DelegationActiveIcon({ width: size, height: size })
                 : DelegationIcon({ width: size, height: size })
-            } else if (route.name === 'Settings') {
+            } else if (route.name === 'BottomSettings') {
               name = 'settings'
               icon = <SettingsRotatingIcon focused={focused} size={size} />
             }
+            1
             return (
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
                   {icon}
-                  {((route.name === 'Settings' && !sharedSessionStore.user) ||
-                    (route.name === 'Delegation' &&
-                      !!sharedTodoStore.delegatedToMe.length)) && (
+                  {((route.name === 'BottomSettings' &&
+                    !sharedSessionStore.user) ||
+                    (route.name === 'BottomDelegation' &&
+                      !!sharedTodoStore.delegatedToMeCount)) && (
                     <View
                       style={{
                         position: 'absolute',
@@ -119,45 +140,31 @@ export default observer(() => {
             )
           },
         })}
-        tabBarOptions={{
-          activeTintColor: sharedColors.primaryColor,
-          inactiveTintColor: 'gray',
-          style: {
-            backgroundColor: sharedColors.backgroundColor,
-            borderTopColor: sharedColors.borderColor,
-          },
-          labelStyle: {
-            fontFamily: fonts.SFProTextRegular,
-          },
-          tabStyle: {
-            paddingTop: 6,
-          },
-        }}
       >
         {!sharedSessionStore.loggingOut && !sharedSessionStore.isInitialSync && (
           <>
             {!sharedTodoStore.isPlanningRequired && (
               <Tab.Screen
-                name="Current"
+                name="BottomCurrent"
                 component={Current}
                 options={{ title: translate('current') }}
               />
             )}
             <Tab.Screen
-              name="Planning"
+              name="BottomPlanning"
               component={Planning}
               options={{ title: translate('planning') }}
             />
 
             <Tab.Screen
-              name="Delegation"
+              name="BottomDelegation"
               component={Delegation}
               options={{ title: translate('delegate.title') }}
             />
           </>
         )}
         <Tab.Screen
-          name="Settings"
+          name="BottomSettings"
           component={Settings}
           options={{ title: translate('settings') }}
         />

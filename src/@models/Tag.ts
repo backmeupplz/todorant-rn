@@ -1,49 +1,6 @@
-import { MobxRealmModel } from '@utils/mobx-realm/model'
+import { MelonTag } from './MelonTag'
 
-export class Tag extends MobxRealmModel {
-  public static schema = {
-    name: 'Tag',
-    properties: {
-      _tempSyncId: { type: 'string?', indexed: true },
-      _id: { type: 'string?', indexed: true },
-      createdAt: { type: 'date', indexed: true },
-      updatedAt: { type: 'date', indexed: true },
-      deleted: { type: 'bool', indexed: true },
-
-      tag: 'string',
-      color: 'string?',
-      numberOfUses: { type: 'int', indexed: true, default: 0 },
-
-      epic: 'bool?',
-      epicGoal: 'int?',
-      epicCompleted: 'bool?',
-      epicPoints: 'int?',
-      epicOrder: 'int?',
-    },
-  }
-
-  objectSchema() {
-    return Tag.schema
-  }
-
-  _tempSyncId?: string
-  _id?: string
-  createdAt = new Date()
-  updatedAt = new Date()
-  deleted!: boolean
-
-  tag!: string
-  color?: string
-  numberOfUses!: number
-
-  epic?: boolean
-  epicGoal?: number
-  epicCompleted?: boolean
-  epicPoints?: number
-  epicOrder?: number
-}
-
-export function cloneTag(tag: Tag) {
+export function cloneTag(tag: MelonTag) {
   return {
     _tempSyncId: tag._tempSyncId,
     _id: tag._id,

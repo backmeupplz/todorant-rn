@@ -2,9 +2,9 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import i18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
 import { Language } from '@models/Language'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { configCalendar } from '@utils/configCalendar'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { MMKV } from '@stores/hydration/hydrate'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),
@@ -26,8 +26,7 @@ export const translate = (key: any, config?: any) => {
 }
 
 export async function getLanguageTag() {
-  const language =
-    (await AsyncStorage.getItem('languageSelect')) || Language.auto
+  const language = (await MMKV.getItem('languageSelect')) || Language.auto
   if (language !== Language.auto) {
     return language
   }

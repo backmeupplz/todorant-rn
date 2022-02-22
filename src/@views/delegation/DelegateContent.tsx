@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Container, Text, View } from 'native-base'
+import { Container } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
 import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { FlatList } from 'react-native-gesture-handler'
 import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
 import {
@@ -13,78 +12,129 @@ import {
   DelegateSectionType,
 } from '@stores/DelegateScreenStateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { makeObservable, observable } from 'mobx'
-import { SectionList, SectionListData } from 'react-native'
+import { SectionList } from 'react-native'
 import { TodoHeader } from '@components/TodoHeader'
-import { Todo } from '@models/Todo'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import withObservables from '@nozbe/with-observables'
+import { Query } from '@nozbe/watermelondb'
+import { usersCollection } from '@utils/watermelondb/wmdb'
 
-@observer
-export class DelegateContent extends Component {
-  renderDelegationSectionList(byMe: boolean, completed = false) {
-    let todosMapToRender: SectionListData<Todo>[]
-    if (byMe && completed) {
-      todosMapToRender = sharedTodoStore.delegatedByMeCompletedTodosMap
-    } else if (byMe) {
-      todosMapToRender = sharedTodoStore.delegatedByMeTodosMap
-    } else {
-      todosMapToRender = sharedTodoStore.delegatedToMeTodosMap
+const enhance = withObservables(['todo'], ({ todo }) => {
+  return {
+    todo: todo.observeWithColumns(
+      Object.keys(todo.collection.database.schema.tables.todos.columns)
+    ),
+  }
+})
+
+const EnhancedDraggableSectionList = enhance(
+  ({
+    todo,
+    completed,
+    byMe,
+  }: {
+    todo: MelonTodo[]
+    completed: boolean
+    byMe: boolean
+  }) => {
+    const [map, setMap] = useState<
+      {
+        userInSection: MelonUser
+        data: MelonTodo[]
+      }[]
+    >([])
+
+    async function build() {
+      const todoSectionMap = {} as {
+        [key: string]: { userInSection: MelonUser; data: MelonTodo[] }
+      }
+      for (const realmTodo of todo) {
+        try {
+          const user = await (byMe ? realmTodo.user : realmTodo.delegator)
+          if (!user) continue
+          const titleKey = user?._id
+          if (!titleKey) continue
+          if (todoSectionMap[titleKey]) {
+            todoSectionMap[titleKey].data.push(realmTodo)
+          } else {
+            todoSectionMap[titleKey] = {
+              userInSection: user,
+              data: [realmTodo],
+            }
+          }
+        } catch (e) {
+          // Do nothing
+        }
+      }
+
+      const todosMap = Object.keys(todoSectionMap).map((key) => {
+        return todoSectionMap[key]
+      })
+      setMap(todosMap)
     }
+
+    useEffect(() => {
+      build()
+    }, [completed, todo.length, byMe])
 
     return (
       <SectionList
-        renderItem={({ item, index }) => {
-          return <TodoCard key={index} todo={item} type={CardType.delegation} />
+        ListEmptyComponent={<NoDelegatedTasks />}
+        keyExtractor={(item) => item.id}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={1}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={1}
+        sections={map}
+        renderItem={({ item }) => {
+          return (
+            <Fragment key={item.id}>
+              <TodoCard todo={item} type={CardType.delegation} />
+            </Fragment>
+          )
         }}
         renderSectionHeader={(header) => {
           return (
             <TodoHeader
-              item={header.section.userInSection.name}
+              item={header.section.userInSection.name!}
               hidePlus={true}
             />
           )
         }}
-        sections={todosMapToRender}
-        keyExtractor={(item) => (item._id || item._tempSyncId) as string}
+      />
+    )
+  }
+)
+
+@observer
+export class DelegateContent extends Component {
+  renderDelegationSectionList(byMe: boolean, completed = false) {
+    let todosMapToRender: Query<MelonTodo> | undefined
+    if (byMe && completed) {
+      todosMapToRender = sharedTodoStore.delegatedByMeCompleted
+    } else if (byMe) {
+      todosMapToRender = sharedTodoStore.delegatedByMe
+    } else {
+      todosMapToRender = sharedTodoStore.delegatedToMe
+    }
+
+    return (
+      <EnhancedDraggableSectionList
+        todo={todosMapToRender}
+        byMe={byMe}
+        completed={completed}
       />
     )
   }
 
   renderDelegation() {
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedToMeTodosMap?.length && (
-            <NoDelegatedTasks />
-          )}
-          {!!sharedTodoStore?.delegatedToMeTodosMap?.length &&
-            this.renderDelegationSectionList(false)}
-        </>
-      )
+      return <>{this.renderDelegationSectionList(false)}</>
     }
     if (sharedDelegateStateStore.todoSection === DelegateSectionType.ByMe) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedByMeTodosMap?.length && (
-            <NoDelegatedTasks />
-          )}
-          {!!sharedTodoStore?.delegatedByMeTodosMap?.length &&
-            this.renderDelegationSectionList(true)}
-        </>
-      )
+      return <>{this.renderDelegationSectionList(true)}</>
     }
-    if (
-      sharedDelegateStateStore.todoSection === DelegateSectionType.Completed
-    ) {
-      return (
-        <>
-          {!sharedTodoStore?.delegatedByMeCompleted?.length && (
-            <NoDelegatedTasks />
-          )}
-          {!!sharedTodoStore?.delegatedByMeCompleted?.length &&
-            this.renderDelegationSectionList(true, true)}
-        </>
-      )
-    }
+    return <>{this.renderDelegationSectionList(true, true)}</>
   }
 
   render() {

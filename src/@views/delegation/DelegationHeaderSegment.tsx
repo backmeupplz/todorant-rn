@@ -7,8 +7,6 @@ import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
 import SegmentedControl from '@react-native-community/segmented-control'
 import { sharedColors } from '@utils/sharedColors'
-import { Platform } from 'react-native'
-import fonts from '@utils/fonts'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 
 @observer

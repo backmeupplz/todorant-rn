@@ -77,7 +77,7 @@ export function getTodayWithStartOfDay() {
   today.setHours(parseInt(startTimeOfDay.substr(0, 2)))
   today.setMinutes(parseInt(startTimeOfDay.substr(3)))
 
-  if (now < today || !sharedSettingsStore.hydrated) {
+  if (now < today) {
     const yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - 1)
     return yesterday

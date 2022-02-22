@@ -5,20 +5,20 @@ import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { logEvent } from '@utils/logEvent'
-import { realm } from '@utils/realm'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { sharedSettingsStore } from './SettingsStore'
 import { sharedTodoStore } from './TodoStore'
 import { sharedDelegationStore } from './DelegationStore'
 import { sharedHeroStore } from './HeroStore'
-import AsyncStorage from '@react-native-community/async-storage'
 import {
   observableNowEventEmitter,
   ObservableNowEventEmitterEvent,
 } from '@utils/ObservableNow'
-import uuid from 'uuid'
+import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
+import { database } from '@utils/watermelondb/wmdb'
+import { AsyncStorage } from 'react-native'
 
 class SessionStore {
   constructor() {
@@ -26,7 +26,7 @@ class SessionStore {
   }
 
   @persist('date') @observable appInstalled = new Date()
-  @persist @observable installationId = uuid()
+  @persist @observable installationId = v4()
   @persist('object', User) @observable user?: User
   @persist @observable localAppleReceipt?: string
 
@@ -34,6 +34,12 @@ class SessionStore {
 
   @persist @observable numberOfTodosCompleted = 0
   @persist @observable askedToRate = false
+
+  // Temporary variables. Should me removed after deleting realmdb.
+  @persist @observable migrationCompleted = false
+  @persist @observable localMigrationCompleted = false
+  // Temporary variable. Should be removed after releasing beta-version as main version.
+  @persist @observable exactDatesRecalculated = false
 
   @observable loggingOut = false
   @observable isInitialSync = false
@@ -93,11 +99,8 @@ class SessionStore {
     this.isInitialSync = true
     await sharedSync.login(user.token)
     setToken(user.token)
-    try {
-      await sharedSync.globalSync()
-    } finally {
-      this.isInitialSync = false
-    }
+    this.isInitialSync = false
+    sharedTodoStore.initDelegation()
     logEvent('login_success')
   }
 
@@ -107,19 +110,20 @@ class SessionStore {
       this.user = undefined
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
-      realm.write(() => {
-        realm.deleteAll()
-      })
-      observableNowEventEmitter.emit(
-        ObservableNowEventEmitterEvent.ObservableNowChanged
-      )
-      await AsyncStorage.clear()
+      await database.write(async () => await database.unsafeResetDatabase())
+      const newAsyncStorage = AsyncStorage
+      const oldAsyncStorage =
+        require('@react-native-async-storage/async-storage')
+          .default as typeof AsyncStorage
+      await newAsyncStorage.clear()
+      await oldAsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()
       sharedDelegationStore.logout()
       sharedHeroStore.logout()
       sharedDelegationStore.logout()
+      sharedTodoStore.oldTodosCount = 0
       removeToken()
       removePassword()
       logEvent('logout_success')
@@ -171,14 +175,14 @@ class SessionStore {
       }
     }
     completeSync()
-    if (this.user && !this.user.delegateInviteToken) {
-      this.user.delegateInviteToken = await resetDelegateToken()
+    if (this.user && !this.user.delegateInviteToken && this.user.token) {
+      this.user.delegateInviteToken = await resetDelegateToken(this.user.token)
     }
   }
 }
 
 export const sharedSessionStore = new SessionStore()
-hydrate('SessionStore', sharedSessionStore).then(() => {
+hydrate('SessionStore', sharedSessionStore).then(async () => {
   sharedSessionStore.hydrated = true
   hydrateStore('SessionStore')
   if (sharedSessionStore.user?.token) {

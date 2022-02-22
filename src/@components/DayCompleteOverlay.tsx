@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text } from 'native-base'
 import Animated, { Easing } from 'react-native-reanimated'
+import { EasingNode } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
 
 export let dayCompleteOverlayRef: any
@@ -22,12 +23,12 @@ export class DayCompleteOverlay extends Component {
     Animated.timing(this.transparrency, {
       toValue: 1,
       duration: 9000,
-      easing: Easing.linear,
+      easing: EasingNode.linear,
     }).start(() => {
       Animated.timing(this.transparrency, {
         toValue: 0,
         duration: 1000,
-        easing: Easing.linear,
+        easing: EasingNode.linear,
       }).start(() => {
         this.animating = false
       })

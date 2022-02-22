@@ -254,7 +254,9 @@
   "rank12800Description": "Вы разбиваете задачи, как будто расщипляете атомы. Продолжайте быть офигенными!",
   "sendDataToServer": "Отправить данные на сервер",
   "encryption": {
-    "repeatPassword": "Повторите пароль"
+    "repeatPassword": "Повторите пароль",
+    "encryptionSaved": "Всё готово! Теперь ваши новые задачи будут зашифрованы",
+    "encryption": "Шифрование"
   },
   "settingsObject": {
     "duplicateTagInBreakdown": "Копировать хештеги при разбивке",

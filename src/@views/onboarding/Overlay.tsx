@@ -17,10 +17,9 @@ import {
   Keyboard,
   Platform,
 } from 'react-native'
-import { realm } from '@utils/realm'
-import { Todo } from '@models/Todo'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
-import { navigate } from '@utils/navigation'
+import { navigate, RootStackParamList } from '@utils/navigation'
+import { EasingNode } from 'react-native-reanimated'
 
 @observer
 export class Overlay extends Component {
@@ -43,10 +42,6 @@ export class Overlay extends Component {
     makeObservable(this)
   }
 
-  todosExists() {
-    return !!realm.objects(Todo).length
-  }
-
   componentDidMount() {
     Dimensions.addEventListener(
       'change',
@@ -65,13 +60,16 @@ export class Overlay extends Component {
         this.trigger(!sharedOnboardingStore.tutorialIsShown)
       }
     )
+    if (sharedOnboardingStore.hydrated) {
+      if (sharedOnboardingStore.savedStep) {
+        sharedOnboardingStore.tutorialIsShown = true
+        return
+      }
+      this.trigger(!sharedOnboardingStore.tutorialIsShown)
+    }
     reaction(
       () => sharedOnboardingStore.hydrated,
       () => {
-        if (this.todosExists() && !sharedOnboardingStore.savedStep) {
-          sharedOnboardingStore.tutorialIsShown = true
-          return
-        }
         this.trigger(!sharedOnboardingStore.tutorialIsShown)
       }
     )
@@ -94,7 +92,7 @@ export class Overlay extends Component {
                 Animated.timing(this.infoBoxY, {
                   toValue: 0,
                   duration: 500,
-                  easing: Easing.ease,
+                  easing: EasingNode.linear,
                 }).start()
               } else if (
                 sharedOnboardingStore.currentHole &&
@@ -117,7 +115,7 @@ export class Overlay extends Component {
                       sharedOnboardingStore.currentHole.y -
                       (totalSize + avatarPadding),
                     duration: 500,
-                    easing: Easing.ease,
+                    easing: EasingNode.linear,
                   }).start()
                 } else {
                   // Move bubble under the hole
@@ -129,7 +127,7 @@ export class Overlay extends Component {
                       messageBoxPosition.y +
                       sharedOnboardingStore.currentHole.height,
                     duration: 500,
-                    easing: Easing.ease,
+                    easing: EasingNode.linear,
                   }).start()
                 }
               }
@@ -144,7 +142,7 @@ export class Overlay extends Component {
     Animated.timing(this.opacityAnimationValue, {
       toValue: show ? 1 : 0,
       duration: 500,
-      easing: Easing.linear,
+      easing: EasingNode.linear,
     }).start(() => {
       this.shouldRender = !sharedOnboardingStore.tutorialIsShown
     })
@@ -243,7 +241,9 @@ export function checkOnboardingStep() {
         !sharedOnboardingStore.savedStep
       )
         return
-      navigate(sharedOnboardingStore.screen)
+      navigate(
+        sharedOnboardingStore.screen as string as keyof RootStackParamList
+      )
       sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
     }, 500)
   })

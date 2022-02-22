@@ -1,9 +1,7 @@
 import { Divider } from '@components/Divider'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
-import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
-import { Tag } from '@models/Tag'
-import { Todo } from '@models/Todo'
+import { Q } from '@nozbe/watermelondb'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -14,13 +12,22 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError } from '@utils/alert'
 import { gatherData } from '@utils/gatherData'
 import { translate } from '@utils/i18n'
-import { realm } from '@utils/realm'
+import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import * as rest from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+} from '@utils/watermelondb/wmdb'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import moment from 'moment'
 import { Container, Content, Text, Toast } from 'native-base'
 import React, { Component } from 'react'
+import { cloneTag, MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
+import { cloneTodo } from '@models/Todo'
 
 @observer
 class Row extends Component<{ title: string; subtitle: string }> {
@@ -40,6 +47,20 @@ class Row extends Component<{ title: string; subtitle: string }> {
 
 @observer
 export class Data extends Component {
+  @observable todosAmount = 0
+  @observable tagsAmount = 0
+
+  UNSAFE_componentWillMount() {
+    makeObservable(this)
+    sharedTodoStore.undeletedTodos
+      .observeCount(false)
+      .subscribe((amount) => (this.todosAmount = amount))
+    tagsCollection
+      .query(Q.where(TagColumn.deleted, false))
+      .observeCount(false)
+      .subscribe((amount) => (this.tagsAmount = amount))
+  }
+
   render() {
     return (
       <Container>
@@ -55,23 +76,16 @@ export class Data extends Component {
           <SectionHeader title={translate('count')} />
           <Row
             title={translate('todoCount')}
-            subtitle={`${
-              realm.objects(Todo).filtered('deleted = false').length
-            }`}
+            subtitle={`${this.todosAmount}`}
           />
-          <Row
-            title={translate('tagsCount')}
-            subtitle={`${
-              realm.objects(Tag).filtered('deleted = false').length
-            }`}
-          />
+          <Row title={translate('tagsCount')} subtitle={`${this.tagsAmount}`} />
           <Row
             title={translate('delegate.delegators')}
-            subtitle={`${sharedDelegationStore.delegators.length}`}
+            subtitle={`${sharedDelegationStore.delegatorsCount}`}
           />
           <Row
             title={translate('delegate.delegates')}
-            subtitle={`${sharedDelegationStore.delegates.length}`}
+            subtitle={`${sharedDelegationStore.delegatesCount}`}
           />
           {/* Sync */}
           <Divider />
@@ -135,7 +149,7 @@ export class Data extends Component {
               try {
                 await sharedSync.sync(SyncRequestEvent.All)
               } catch (err) {
-                alertError(err)
+                alertError(err as string)
               }
             }}
           >
@@ -148,7 +162,7 @@ export class Data extends Component {
               try {
                 await sharedSync.hardSync()
               } catch (err) {
-                alertError(err)
+                alertError(err as string)
               }
             }}
           >
@@ -167,8 +181,32 @@ export class Data extends Component {
           </TableItem>
           <TableItem
             onPress={async () => {
-              const data = gatherData()
-              await rest.sendData(data)
+              if (!sharedSessionStore.user?.token) {
+                return
+              }
+              const data = await gatherData()
+              const clonedTodos = await Promise.all(data.todos.map(cloneTodo))
+              const clonedTags = await Promise.all(data.tags.map(cloneTag))
+              try {
+                await rest.sendData(
+                  { tags: clonedTags, todos: clonedTodos },
+                  sharedSessionStore.user?.token
+                )
+              } catch (err) {
+                alertError(err as string)
+              }
+              const todosAndTags = [...data.todos, ...data.tags]
+              const toSend = [] as (MelonTodo | MelonTag)[]
+              todosAndTags.map((todoOrTag) => {
+                toSend.push(
+                  todoOrTag.prepareUpdate((todoOrTagUpdate) => {
+                    todoOrTagUpdate.updatedAt = new Date()
+                  })
+                )
+              })
+
+              await database.write(async () => await database.batch(...toSend))
+              await sharedSync.globalSync()
               Toast.show({
                 text: '👍',
               })

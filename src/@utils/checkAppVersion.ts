@@ -170,7 +170,7 @@ function diffLoose(currentVersion: string, latestVersion: string) {
     if (
       current.hasOwnProperty(key) &&
       ['major', 'minor', 'patch'].includes(key) &&
-      current[key] !== latest[key]
+      current[key as keyof SemVer] !== latest![key as keyof SemVer]
     ) {
       return prefix + key
     }

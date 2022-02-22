@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Tag } from '@models/Tag'
 import { View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import fonts from '@utils/fonts'
@@ -10,6 +9,7 @@ import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { navigate } from '@utils/navigation'
+import { MelonTag } from '@models/MelonTag'
 
 @observer
 export class EpicText extends Component<{
@@ -44,7 +44,7 @@ export class EpicText extends Component<{
 
 @observer
 export class EpicProgress extends Component<{
-  epic: Tag
+  epic: MelonTag
   drag?: () => void
 }> {
   render() {

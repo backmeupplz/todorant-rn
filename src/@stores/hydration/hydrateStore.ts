@@ -1,5 +1,5 @@
-import { sharedSync } from '@sync/Sync'
 import { hydration } from '@stores/hydration/hydratedStores'
+import { sharedSync } from '@sync/Sync'
 import { requestSync } from '@sync/syncEventEmitter'
 
 export function hydrateStore(name: string) {

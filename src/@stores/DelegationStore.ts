@@ -1,7 +1,7 @@
-import { mobxRealmCollection } from '@utils/mobx-realm/collection'
-import { DelegationUser } from '@models/DelegationUser'
-import { realm } from '@utils/realm'
-import { computed, makeObservable, observable } from 'mobx'
+import { Q } from '@nozbe/watermelondb'
+import { UserColumn } from '@utils/watermelondb/tables'
+import { usersCollection } from '@utils/watermelondb/wmdb'
+import { makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { hydrate } from './hydration/hydrate'
 import { hydrateStore } from './hydration/hydrateStore'
@@ -12,33 +12,24 @@ class DelegationStore {
   @persist('date') @observable lastSyncDate?: Date
   @persist('date') @observable updatedAt?: Date
 
+  @observable delegatesCount = 0
+  @observable delegatorsCount = 0
+
+  delegates = usersCollection.query(Q.where(UserColumn.isDelegator, false))
+  delegators = usersCollection.query(Q.where(UserColumn.isDelegator, true))
+
   constructor() {
     makeObservable(this)
-  }
-
-  @computed get delegators() {
-    return mobxRealmCollection(
-      realm
-        .objects(DelegationUser)
-        .filtered('deleted = false')
-        .filtered('isDelegator = true')
-    )
-  }
-
-  @computed get delegates() {
-    return mobxRealmCollection(
-      realm
-        .objects(DelegationUser)
-        .filtered('deleted = false')
-        .filtered('isDelegator = false')
-    )
+    this.delegates
+      .observeCount(false)
+      .subscribe((count) => (this.delegatesCount = count - 1))
+    this.delegators
+      .observeCount(false)
+      .subscribe((count) => (this.delegatorsCount = count - 1))
   }
 
   logout() {
     this.updatedAt = undefined
-    realm.write(() => {
-      realm.delete(realm.objects(DelegationUser))
-    })
   }
 }
 

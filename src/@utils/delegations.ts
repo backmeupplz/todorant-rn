@@ -1,73 +1,96 @@
-import { DelegationUser } from '@models/DelegationUser'
-import { Results } from 'realm'
-import { realm } from './realm'
+import { MelonUser } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { Falsy } from 'react-native'
+import { TodoColumn, UserColumn } from './watermelondb/tables'
+import { database, todosCollection, usersCollection } from './watermelondb/wmdb'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
-export function removeDelegation(
-  delegation: DelegationUser,
-  delegator: boolean
+export async function removeDelegation(
+  delegation: Partial<MelonUser>,
+  delegator: boolean,
+  forceWrite = false
 ) {
-  const localDelegation = getLocalDelegation(delegation, delegator)
+  const localDelegation = await getLocalDelegation(delegation, delegator)
   if (!localDelegation) {
     console.error('Local delegation not found')
     return
   }
-  localDelegation.deleted = true
-  localDelegation.updatedAt = new Date()
+  const todosWithDelegate = await todosCollection
+    .query(
+      Q.where(
+        delegator ? TodoColumn.delegator : TodoColumn.user,
+        localDelegation.id
+      )
+    )
+    .fetch()
+  await Promise.all(
+    todosWithDelegate.map(async (todo) => {
+      await database.write(async () => {
+        await todo.update((todo) => {
+          todo.deleted = true
+          todo.delegateAccepted = true
+          if (delegator) {
+            todo.delegator?.set(null)
+          }
+        })
+      })
+    })
+  )
+  if (forceWrite) return await localDelegation.delete()
+  return localDelegation
 }
 
-export function getLocalDelegation(
-  delegation: DelegationUser,
+export async function getLocalDelegation(
+  delegation: Partial<MelonUser>,
   delegator: boolean
-) {
-  const delegationIdPredicate = `_id = "${delegation._id}"`
-  const delegationTokenPredicate = `delegateInviteToken = "${delegation.delegateInviteToken}"`
-  let delegations = realm.objects(DelegationUser)
-  let predicateToSearch: string = `(${delegationIdPredicate} || ${delegationTokenPredicate})`
-  return delegations.filtered(
-    `isDelegator = ${delegator} && ${predicateToSearch}`
+): Promise<MelonUser | Falsy> {
+  if (!delegation) {
+    return null
+  }
+  return (
+    await usersCollection
+      .query(
+        Q.where(UserColumn.isDelegator, delegator),
+        Q.or(
+          Q.where(UserColumn._id, delegation._id || null),
+          Q.where(
+            UserColumn.delegateInviteToken,
+            delegation.delegateInviteToken || null
+          )
+        )
+      )
+      .fetch()
   )[0]
 }
 
 // Should be placed inside of realm.write
-export function removeMismatchesWithServer(
-  localDelegations: DelegationUser[] | Results<DelegationUser>,
-  serverDelegations: DelegationUser[]
+export function getMismatchesWithServer(
+  localDelegations: MelonUser[],
+  serverDelegations: MelonUser[]
 ) {
-  localDelegations.forEach((localDelegation) => {
+  const uniqueLocalDelegations = new Set(localDelegations)
+  const missMatches = [] as MelonUser[]
+  uniqueLocalDelegations.forEach((localDelegation) => {
     if (
       localDelegation &&
       !serverDelegations.find(
         (delegation) => delegation._id === localDelegation._id
       )
     ) {
-      realm.delete(localDelegation)
+      missMatches.push(localDelegation)
     }
   })
+  return missMatches
 }
 
-export function updateOrCreateDelegation(
-  delegation: DelegationUser,
-  delegator: boolean
-) {
-  const localDelegate = getLocalDelegation(delegation, delegator)
-  if (localDelegate) {
-    Object.assign(localDelegate, delegation)
-    localDelegate.updatedAt = new Date()
-  } else
-    realm.create(DelegationUser, {
-      ...delegation,
-      isDelegator: delegator,
-      deleted: false,
-      updatedAt: new Date(),
-    } as DelegationUser)
-}
-
-export function cloneDelegation(delegation: DelegationUser) {
+export function cloneDelegation(delegation: MelonUser) {
   return {
     _id: delegation._id,
     name: delegation.name,
     updatedAt: delegation.updatedAt,
     delegateInviteToken: delegation.delegateInviteToken,
     deleted: delegation.deleted,
-  } as DelegationUser
+  } as MelonUser
 }

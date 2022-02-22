@@ -11,15 +11,48 @@ import { Settings } from '@models/Settings'
 import { SyncManager } from '@sync/SyncManager'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { computed, makeObservable } from 'mobx'
-import { Todo } from '@models/Todo'
-import { Tag } from '@models/Tag'
-import {
-  onDelegationObjectsFromServer,
-  onTagsObjectsFromServer,
-  onTodosObjectsFromServer,
-} from '@sync/SyncObjectHandlers'
+import { computed, makeObservable, observable, when } from 'mobx'
+import { getTitle } from '@models/Todo'
+import { onDelegationObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
+import { MelonTag } from '@models/MelonTag'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import {
+  SyncArgs,
+  SyncDatabaseChangeSet,
+  synchronize,
+  SyncPullResult,
+} from '@nozbe/watermelondb/sync'
+import {
+  database,
+  tagsCollection,
+  todosCollection,
+  usersCollection,
+} from '@utils/watermelondb/wmdb'
+import { cloneDeep } from 'lodash'
+import { Q } from '@nozbe/watermelondb'
+import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
+import { RawRecord } from '@nozbe/watermelondb/RawRecord'
+import { decrypt, encrypt, _e } from '@utils/encryption'
+import { WMDBSync } from './wmdb/wmdbsync'
+
+// Using built-in SyncLogger
+const SyncLogger = require('@nozbe/watermelondb/sync/SyncLogger').default
+const logger = new SyncLogger(1 /* limit of sync logs to keep in memory */)
+
+type SyncRecord = RawRecord & { updated_at: number }
+
+type SyncType = SyncArgs & {
+  conflictResolver: (
+    lastSyncDate: Date,
+    local: SyncRecord,
+    remote: SyncRecord,
+    resolved: SyncRecord
+  ) => void
+}
+
+const wmdbGetLastPullAt =
+  require('@nozbe/watermelondb/sync/impl').getLastPulledAt
 
 class Sync {
   socketConnection = new SocketConnection()
@@ -27,18 +60,16 @@ class Sync {
   private settingsSyncManager: SyncManager<Settings>
   private userSyncManager: SyncManager<User>
   private heroSyncManager: SyncManager<Hero>
-  private todoSyncManager: SyncManager<Todo[]>
-  private tagsSyncManager: SyncManager<Tag[]>
   private delegationSyncManager: SyncManager<any>
+  private wmdbSyncManager: WMDBSync
 
   @computed get isSyncing() {
     return (
       this.settingsSyncManager.isSyncing ||
       this.userSyncManager.isSyncing ||
       this.heroSyncManager.isSyncing ||
-      this.todoSyncManager.isSyncing ||
-      this.tagsSyncManager.isSyncing ||
-      this.delegationSyncManager.isSyncing
+      this.delegationSyncManager.isSyncing ||
+      this.wmdbSyncManager.isSyncing
     )
   }
 
@@ -46,6 +77,7 @@ class Sync {
     makeObservable(this)
     this.setupSyncListeners()
     // Setup sync managers
+    this.wmdbSyncManager = new WMDBSync(this.socketConnection)
     this.settingsSyncManager = new SyncManager<Settings>(
       this.socketConnection,
       'settings',
@@ -82,40 +114,12 @@ class Sync {
         )
       }
     )
-    this.todoSyncManager = new SyncManager<Todo[]>(
-      this.socketConnection,
-      'todos',
-      () => sharedTodoStore.updatedAt,
-      (objects, pushBack, completeSync) => {
-        return onTodosObjectsFromServer(
-          objects,
-          pushBack as () => Promise<Todo[]>,
-          completeSync
-        )
-      },
-      async (lastSyncDate) => {
-        sharedTodoStore.updatedAt = lastSyncDate
-      }
-    )
-    this.tagsSyncManager = new SyncManager<Tag[]>(
-      this.socketConnection,
-      'tags',
-      () => sharedTagStore.updatedAt,
-      (objects, pushBack, completeSync) => {
-        return onTagsObjectsFromServer(
-          objects,
-          pushBack as () => Promise<Tag[]>,
-          completeSync
-        )
-      },
-      async (lastSyncDate) => {
-        sharedTagStore.updatedAt = lastSyncDate
-      }
-    )
     this.delegationSyncManager = new SyncManager<any>(
       this.socketConnection,
       'delegate',
-      () => sharedDelegationStore.updatedAt,
+      () => {
+        return sharedDelegationStore.updatedAt
+      },
       (objects, pushBack, completeSync) => {
         return onDelegationObjectsFromServer(objects, pushBack, completeSync)
       },
@@ -162,7 +166,7 @@ class Sync {
     return this.sync()
   }
 
-  sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
+  async sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
     switch (event) {
       // All
       case SyncRequestEvent.All:
@@ -170,9 +174,8 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
-          this.todoSyncManager.sync(),
-          this.tagsSyncManager.sync(),
-          this.delegationSyncManager.sync(),
+          await this.delegationSyncManager.sync(),
+          this.wmdbSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:
@@ -183,9 +186,9 @@ class Sync {
         return this.heroSyncManager.sync()
       // Realm syncs
       case SyncRequestEvent.Todo:
-        return this.todoSyncManager.sync()
+        return this.wmdbSyncManager.sync()
       case SyncRequestEvent.Tag:
-        return this.tagsSyncManager.sync()
+        return this.wmdbSyncManager.sync()
       case SyncRequestEvent.Delegation:
         return this.delegationSyncManager.sync()
     }

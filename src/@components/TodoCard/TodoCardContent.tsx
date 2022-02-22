@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { Todo } from '@models/Todo'
 import { CardType } from '@components/TodoCard/CardType'
 import { View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
@@ -16,13 +15,15 @@ import CustomIcon from '@components/CustomIcon'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { navigationRef } from '@utils/navigation'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 
 export let currentTodoNodeId: number
 
 @observer
 export class TodoCardContent extends Component<{
   vm: TodoCardVM
-  todo: Todo
+  todo: MelonTodo
+  delegator?: MelonUser
   type: CardType
   drag?: () => void
   active?: boolean
@@ -139,6 +140,7 @@ export class TodoCardContent extends Component<{
               </View>
             )}
             <TodoCardBody
+              delegator={this.props.delegator}
               vm={this.props.vm}
               todo={this.props.todo}
               type={this.props.type}
@@ -149,7 +151,6 @@ export class TodoCardContent extends Component<{
                   : undefined
               }
             />
-
             {this.props.type !== CardType.breakdown &&
               this.props.type !== CardType.delegation &&
               (this.props.vm.expanded ||

@@ -1,8 +1,19 @@
-import React, { Component } from 'react'
-import { Button as NativeBaseButton, View, NativeBase } from 'native-base'
-import { Platform } from 'react-native'
+import React, { PureComponent } from 'react'
+import {
+  Button as NativeBaseButton,
+  View,
+  NativeBase,
+  RnViewStyleProp,
+} from 'native-base'
+import { Platform, StyleSheet, ViewStyle } from 'react-native'
 
-export class Button extends Component<NativeBase.Button> {
+const fixStyle = (style: any) => {
+  if (style.backgroundColor) return style
+  delete style.backgroundColor
+  return style
+}
+
+export class Button extends PureComponent<NativeBase.Button> {
   render() {
     return Platform.OS === 'android' ? (
       <View
@@ -12,10 +23,16 @@ export class Button extends Component<NativeBase.Button> {
         }}
         removeClippedSubviews
       >
-        <NativeBaseButton {...this.props} />
+        <NativeBaseButton
+          {...this.props}
+          {...{ style: fixStyle(this.props.style) }}
+        />
       </View>
     ) : (
-      <NativeBaseButton {...this.props} />
+      <NativeBaseButton
+        {...this.props}
+        {...{ style: fixStyle(this.props.style) }}
+      />
     )
   }
 }

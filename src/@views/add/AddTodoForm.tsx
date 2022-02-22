@@ -16,7 +16,6 @@ import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
 import {
   Platform,
-  Clipboard,
   ViewStyle,
   StyleProp,
   InteractionManager,
@@ -28,7 +27,7 @@ import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import moment, { Moment } from 'moment'
 import MonthPicker from 'react-native-month-picker'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 import {
   Switch,
   FlatList,
@@ -46,6 +45,10 @@ import { Divider } from '@components/Divider'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
 import { sharedDelegationStore } from '@stores/DelegationStore'
+import withObservables from '@nozbe/with-observables'
+import { MelonTag } from '@models/MelonTag'
+import Clipboard from '@react-native-community/clipboard'
+import XDate from 'xdate'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -276,44 +279,48 @@ class TextRow extends Component<{
   }
 }
 
-@observer
-class TagsRow extends Component<{
-  vm: TodoVM
-}> {
-  render() {
-    return (
-      <View
-        style={{
-          paddingBottom: verticalSpacing / 2,
-        }}
-      >
-        <FlatList
-          horizontal
-          data={this.props.vm.tags}
-          keyExtractor={(_, index) => `${index}`}
-          renderItem={({ item }: { item: any }) => {
+const enhanceTags = withObservables(['tags'], (items) => {
+  return {
+    tags: items.tags,
+  }
+})
+
+const TagsRow = enhanceTags((props: { tags: MelonTag[]; vm: TodoVM }) => {
+  return (
+    <View
+      style={{
+        paddingBottom: verticalSpacing / 2,
+        display: 'flex',
+        flexDirection: 'row',
+        maxWidth: '100%',
+        width: '100%',
+        flexWrap: 'wrap',
+      }}
+    >
+      {props.tags.length
+        ? props.tags.map((tag) => {
             return (
               <TouchableOpacity
+                key={tag._tempSyncId}
                 onPress={() => {
-                  this.props.vm.applyTag(item)
+                  props.vm.applyTag(tag)
                 }}
                 style={{ paddingHorizontal: 4 }}
               >
                 <Text
                   style={{
-                    color: item.color || 'dodgerblue',
+                    color: tag.color || 'dodgerblue',
                   }}
                 >
-                  #{item.tag}
+                  #{tag.tag}
                 </Text>
               </TouchableOpacity>
             )
-          }}
-        />
-      </View>
-    )
-  }
-}
+          })
+        : null}
+    </View>
+  )
+})
 
 @observer
 class DateRow extends Component<{
@@ -398,8 +405,8 @@ class MonthRow extends Component<{
               return
             }
           }
-          this.props.vm.showMonthAndYearPicker = !this.props.vm
-            .showMonthAndYearPicker
+          this.props.vm.showMonthAndYearPicker =
+            !this.props.vm.showMonthAndYearPicker
           if (!!this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
             this.props.vm.date = undefined
@@ -533,10 +540,14 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
             fontFamily: fonts.SFProTextRegular,
             fontSize: fontSize,
           }}
-          onPress={() => {
+          onPress={async () => {
             if (!sharedOnboardingStore.tutorialIsShown) return
-            const options = sharedDelegationStore.delegates
-              .map((delegate) => delegate.name)
+            const delegates = await sharedDelegationStore.delegates.fetch()
+            const options = delegates
+              .map((delegate) => {
+                if (delegate._id === sharedSessionStore.user?._id) return null
+                return delegate.name
+              })
               .filter((delegate) => !!delegate)
               .concat([translate('cancel')]) as string[]
             ActionSheet.show(
@@ -548,8 +559,7 @@ class DelegationRow extends Component<{ vm: TodoVM }> {
               },
               (buttonIndex) => {
                 if (buttonIndex + 1 !== options.length)
-                  this.props.vm.delegate =
-                    sharedDelegationStore.delegates[buttonIndex]
+                  this.props.vm.delegate = delegates[buttonIndex + 1]
               }
             )
           }}
@@ -665,7 +675,7 @@ export class AddTodoForm extends Component<{
             style={{ paddingHorizontal: 16, paddingVertical: verticalSpacing }}
           >
             <TextRow vm={this.props.vm} showCross={this.props.showCross} />
-            {!!this.props.vm.tags.length && <TagsRow vm={this.props.vm} />}
+            <TagsRow tags={this.props.vm.tags} vm={this.props.vm} />
             <View
               onLayout={({ nativeEvent: { target } }: any) => {
                 dateRowNodeId = target as number
@@ -674,8 +684,12 @@ export class AddTodoForm extends Component<{
               <DateRow vm={this.props.vm} />
               {this.props.vm.showDatePicker && (
                 <Calendar
-                  minDate={__DEV__ ? undefined : getDateString(this.minDate)}
-                  current={this.props.vm.datePickerValue || new Date()}
+                  minDate={__DEV__ ? undefined : this.minDate}
+                  current={
+                    this.props.vm.datePickerValue
+                      ? new XDate(this.props.vm.datePickerValue)
+                      : new XDate()
+                  }
                   markedDates={this.props.vm.markedDate}
                   onDayPress={(day) => {
                     this.props.vm.datePickerValue = day.dateString
@@ -762,7 +776,7 @@ export class AddTodoForm extends Component<{
               <View>
                 <TimeRow vm={this.props.vm} />
                 {sharedSessionStore.user &&
-                  !!sharedDelegationStore.delegates.length &&
+                  !!sharedDelegationStore.delegatesCount &&
                   !this.props.vm.editedTodo && (
                     <DelegationRow vm={this.props.vm} />
                   )}
@@ -773,7 +787,7 @@ export class AddTodoForm extends Component<{
                 textColor={sharedColors.textColor}
                 value={this.props.vm.timePickerValue || new Date()}
                 mode="time"
-                onChange={(event: { type: string }, date: Date | undefined) => {
+                onChange={(event: Event, date?: Date) => {
                   if (Platform.OS === 'android') {
                     this.props.vm.showTimePicker = false
                   }

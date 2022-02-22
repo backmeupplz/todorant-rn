@@ -5,7 +5,7 @@ import {
 } from '@sync/sockets/checkPromiseMapForTimeout'
 import { PromiseMap } from '@sync/sockets/PromiseMap'
 import { SyncStage } from '@sync/sockets/SyncStage'
-import uuid from 'uuid'
+import { v4 } from 'uuid'
 import { makeObservable, observable } from 'mobx'
 
 export class SyncManager<T> {
@@ -71,7 +71,10 @@ export class SyncManager<T> {
             }
           )
         } catch (err) {
-          this.rejectSync(typeof err === 'string' ? err : err.message, syncId)
+          this.rejectSync(
+            typeof err === 'string' ? err : (err as Error).message,
+            syncId
+          )
         }
       }
     )
@@ -138,7 +141,7 @@ export class SyncManager<T> {
     // Set syncing flag to true
     this.isSyncing = true
     // Sync
-    const syncId = uuid()
+    const syncId = v4()
     if (this.queuedSyncPromise) {
       const queuedSyncPromise = this.queuedSyncPromise
       this.queuedSyncPromise = undefined

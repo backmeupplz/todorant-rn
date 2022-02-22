@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
-import { Tag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { realm } from '@utils/realm'
 import { sharedTagStore } from '@stores/TagStore'
 import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
@@ -14,11 +12,13 @@ import { translate } from '@utils/i18n'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { Todo } from '@models/Todo'
 import { TouchableOpacity } from 'react-native'
 import { IconButton } from '@components/IconButton'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { database } from '@utils/watermelondb/wmdb'
+import { MelonTodo } from '@models/MelonTodo'
+import { cloneTag, MelonTag } from '@models/MelonTag'
 
 const ChangeTextStore = {
   save: () => {},
@@ -47,9 +47,9 @@ export class ChangeTextHeaderRight extends Component {
 
 @observer
 class ChangeTextContent extends Component<{
-  route: RouteProp<Record<string, { tag: Tag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
 }> {
-  @observable tag = this.props.route.params?.tag!
+  @observable tag = cloneTag(this.props.route.params?.tag!)
   @observable newName: string = ''
 
   @observable colorPickerEnabled = false
@@ -88,31 +88,33 @@ class ChangeTextContent extends Component<{
         ]
   }
 
-  save() {
-    const dbtag = getTagById(this.tag?._id || this.tag?._tempSyncId)
+  async save() {
+    const dbtag = await getTagById(this.tag?._id || this.tag._tempSyncId)
     if (!dbtag) {
       return
     }
     if (this.newName && !this.newName.match(/^[\S]+$/)) this.newName = ''
-    realm.write(() => {
-      for (const todo of realm.objects(Todo).filtered('deleted = false')) {
-        todo.text = todo.text
-          .split(' ')
-          .map((word) => {
-            if (word !== `#${dbtag.tag}`) {
-              return word
-            }
-            return `#${this.newName || dbtag.tag}`
-          })
-          .join(' ')
-        todo.updatedAt = new Date()
-      }
-    })
-    realm.write(() => {
-      dbtag.tag = this.newName || dbtag.tag
-      dbtag.color = (this.tag.color || dbtag.color)!
-      dbtag.updatedAt = new Date()
-    })
+    const toUpdate = [] as (MelonTodo | MelonTag)[]
+    for (const todo of await sharedTodoStore.undeletedTodos.fetch()) {
+      if (!todo.text.includes(dbtag.tag)) continue
+      toUpdate.push(
+        todo.prepareUpdate((todoToUpdate) => {
+          todoToUpdate.text = todo.text
+            .split(' ')
+            .map((word) => {
+              if (word !== `#${dbtag.tag}`) {
+                return word
+              }
+              return `#${this.newName || dbtag.tag}`
+            })
+            .join(' ')
+        })
+      )
+    }
+    await database.write(async () => await database.batch(...toUpdate))
+    await dbtag.changeText(this.newName || dbtag.tag)
+    await dbtag.changeColor(this.tag.color || dbtag.color!)
+
     goBack()
     sharedTagStore.refreshTags()
     sharedTodoStore.refreshTodos()
@@ -207,8 +209,7 @@ class ChangeTextContent extends Component<{
 }
 
 export const ChangeText = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { tag: Tag } | undefined>, string>
-  >()
+  const route =
+    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
   return <ChangeTextContent route={route} />
 }

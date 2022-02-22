@@ -1,13 +1,17 @@
 import { Settings } from '@models/Settings'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { hydrate } from '@stores/hydration/hydrate'
+import { hydrate, MMKV } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { getLanguageTag } from '@utils/i18n'
 import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { initialMode, eventEmitter } from 'react-native-dark-mode'
+import { AsyncStorage } from 'react-native'
+import { Platform } from 'react-native'
+import { alertError, alertSupport } from '@utils/alert'
+import { database } from '@utils/watermelondb/wmdb'
+import ReactNativeRestart from 'react-native-restart'
 
 export enum ColorMode {
   auto = 'auto',
@@ -159,7 +163,7 @@ class SettingsStore {
     // Consequent pull
     else if (this.updatedAt < settings.updatedAt) {
       if (settings.language !== this.language && settings.language) {
-        await AsyncStorage.setItem('languageSelect', settings.language)
+        await MMKV.setItem('languageSelect', settings.language)
       }
       this.showTodayOnAddTodo = settings.showTodayOnAddTodo
       this.firstDayOfWeek = settings.firstDayOfWeek
@@ -229,3 +233,48 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   sharedSettingsStore.language = await getLanguageTag()
   updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
 })
+
+export async function fixDuplicatedTasks() {
+  const newAsyncStorage = AsyncStorage
+  const oldAsyncStorage = require('@react-native-async-storage/async-storage')
+    .default as typeof AsyncStorage
+  const mmkvStorage = MMKV
+
+  const userInMMKVStorage = JSON.parse(
+    (await mmkvStorage.getItem('SessionStore')) || '{}'
+  ).user
+
+  if (userInMMKVStorage) {
+    return
+  }
+
+  const userInOldAsyncStorage = JSON.parse(
+    (await oldAsyncStorage.getItem('SessionStore')) || '{}'
+  ).user
+
+  const userInNewAsyncStorage = JSON.parse(
+    (await newAsyncStorage.getItem('SessionStore')) || '{}'
+  ).user
+
+  if (!userInMMKVStorage && !userInNewAsyncStorage && !userInOldAsyncStorage) {
+    return
+  }
+
+  async function moveStorage(from: AsyncStorage) {
+    const allOldKeys = await from.getAllKeys()
+    await Promise.all(
+      allOldKeys.map(async (key) => {
+        const oldItem = (await from.getItem(key)) as string
+        return await mmkvStorage.setItem(key, oldItem)
+      })
+    )
+  }
+
+  if (userInNewAsyncStorage) {
+    await moveStorage(newAsyncStorage)
+  } else if (userInOldAsyncStorage) {
+    await moveStorage(oldAsyncStorage)
+  }
+
+  ReactNativeRestart.Restart()
+}
