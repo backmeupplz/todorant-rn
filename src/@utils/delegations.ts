@@ -10,7 +10,8 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 export async function removeDelegation(
   delegation: Partial<MelonUser>,
   delegator: boolean,
-  forceWrite = false
+  forceWrite = false,
+  description: string
 ) {
   const localDelegation = await getLocalDelegation(delegation, delegator)
   if (!localDelegation) {
@@ -28,17 +29,17 @@ export async function removeDelegation(
   await Promise.all(
     todosWithDelegate.map(async (todo) => {
       await database.write(async () => {
-        await todo.update((todo) => {
+        await todo.updateWithDescription((todo) => {
           todo.deleted = true
           todo.delegateAccepted = true
           if (delegator) {
             todo.delegator?.set(null)
           }
-        })
+        }, 'removing delegator from todos and mark them as deleted')
       })
     })
   )
-  if (forceWrite) return await localDelegation.delete()
+  if (forceWrite) return await localDelegation.delete(description)
   return localDelegation
 }
 

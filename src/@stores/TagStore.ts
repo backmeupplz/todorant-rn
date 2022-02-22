@@ -54,7 +54,7 @@ class TagStore {
   }
 
   completeEpic = async (epic: MelonTag) => {
-    await epic.completeEpic()
+    await epic.completeEpic('completing epic')
     await this.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }

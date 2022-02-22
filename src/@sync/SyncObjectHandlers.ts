@@ -30,7 +30,10 @@ export async function updateOrCreateDelegation(
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
     if (forceWrite) {
-      const updatedUser = await localDelegate.updateUser(localDelegate)
+      const updatedUser = await localDelegate.updateUser(
+        localDelegate,
+        'updating user'
+      )
       return updatedUser
     }
     return localDelegate.prepareUpdateWithDescription(
@@ -205,7 +208,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegator.id)) {
         continue
       }
-      const localMarked = await removeDelegation(delegator, true)
+      const localMarked = await removeDelegation(
+        delegator,
+        true,
+        false,
+        'removing locally marked as deleted delegators'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegator.id, localMarked)
       }
@@ -223,7 +231,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegate.id)) {
         continue
       }
-      const localMarked = await removeDelegation(delegate, false)
+      const localMarked = await removeDelegation(
+        delegate,
+        false,
+        false,
+        'removing locally marked as deleted delegates'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegate.id, localMarked)
       }
@@ -245,7 +258,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegatorLocally.id) || !delegator.invalid) {
         continue
       }
-      const localMarked = await removeDelegation(delegator, true)
+      const localMarked = await removeDelegation(
+        delegator,
+        true,
+        false,
+        'removing pushed delegators'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegatorLocally.id, localMarked)
       }

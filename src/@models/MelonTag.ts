@@ -27,6 +27,18 @@ export class MelonTag extends Model {
   @field(TagColumn.epicPoints) epicPoints?: number
   @field(TagColumn.epicOrder) epicOrder?: number
 
+  async updateWithDescription(
+    writer: ArgumentExctractor<typeof this.update>,
+    description: string
+  ) {
+    try {
+      const updated = await this.update(writer)
+      return updated
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
+
   prepareUpdateWithDescription(
     writer: ArgumentExctractor<typeof this.prepareUpdate>,
     description: string
@@ -37,47 +49,47 @@ export class MelonTag extends Model {
       throw Error(`${description} ${err}`)
     }
   }
-  @writer async completeEpic() {
-    await this.update((tag) => {
+  @writer async completeEpic(description: string) {
+    await this.updateWithDescription((tag) => {
       tag.epic = false
       tag.epicPoints = 0
       tag.epicGoal = 0
       tag.epicCompleted = true
-    })
+    }, description)
   }
 
-  @writer async delete() {
-    await this.update((tag) => (tag.deleted = true))
+  @writer async delete(description: string) {
+    await this.updateWithDescription((tag) => (tag.deleted = true), description)
   }
 
-  @writer async turnTagToEpic(goal: number) {
-    await this.update((tag) => {
+  @writer async turnTagToEpic(goal: number, description: string) {
+    await this.updateWithDescription((tag) => {
       tag.epic = true
       tag.epicGoal = goal
       tag.epicPoints = 0
-    })
+    }, description)
   }
 
-  @writer async changeColor(color: string) {
-    await this.update((tag) => (tag.color = color))
+  @writer async changeColor(color: string, description: string) {
+    await this.updateWithDescription((tag) => (tag.color = color), description)
   }
 
-  @writer async changeText(text: string) {
-    await this.update((tag) => (tag.tag = text))
+  @writer async changeText(text: string, description: string) {
+    await this.updateWithDescription((tag) => (tag.tag = text), description)
   }
 
-  @writer async setServerId(serverId: string) {
-    await this.update((tag) => (tag._id = serverId))
+  @writer async setServerId(serverId: string, description: string) {
+    await this.updateWithDescription((tag) => (tag._id = serverId), description)
   }
 
-  @writer async unEpic() {
-    await this.update((tag) => {
+  @writer async unEpic(description: string) {
+    await this.updateWithDescription((tag) => {
       tag.epicCompleted = false
       tag.epicGoal = 0
       tag.epicOrder = 0
       tag.epicPoints = 0
       tag.epic = false
-    })
+    }, description)
   }
 }
 

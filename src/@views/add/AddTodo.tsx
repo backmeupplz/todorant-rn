@@ -278,7 +278,7 @@ class AddTodoContent extends Component<{
       sharedHeroStore.updatedAt = new Date()
 
       if (this.breakdownTodo) {
-        await this.breakdownTodo.complete()
+        await this.breakdownTodo.complete('completing breakdown todo')
       }
 
       titlesToFixOrder.push(breakdownTodoTitle)

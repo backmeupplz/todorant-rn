@@ -112,12 +112,12 @@ export class TodoCardVM {
     const todosOnDate = await sharedTodoStore.todosForDate(today).fetch()
     const lastTodoOrder = todosOnDate[todosOnDate.length - 1].order
     await database.write(async () => {
-      await todo.update((todo) => {
+      await todo.updateWithDescription((todo) => {
         todo.order = lastTodoOrder + 1
         todo.date = getDateDateString(today)
         todo.monthAndYear = getDateMonthAndYearString(today)
         todo._exactDate = new Date(getTitle(todo))
-      })
+      }, 'moving to today')
     })
     sharedSync.sync(SyncRequestEvent.Todo)
   }
@@ -130,12 +130,12 @@ export class TodoCardVM {
         }"?`,
         translate('delete'),
         async () => {
-          await todo.delete()
+          await todo.delete('deleting todo with alert')
           sharedSync.sync(SyncRequestEvent.Todo)
         }
       )
     } else {
-      await todo.delete()
+      await todo.delete('deleting todo without alert')
       sharedSync.sync(SyncRequestEvent.Todo)
     }
   }
@@ -145,13 +145,13 @@ export class TodoCardVM {
       navigate('EditTodo', { editedTodo: todo })
       return
     }
-    await todo.accept()
+    await todo.accept('marking todo as accepted')
 
     fixOrder([getTitle(todo)])
   }
 
   async uncomplete(todo: MelonTodo) {
-    await todo.uncomplete()
+    await todo.uncomplete('uncompleting todo')
     sharedSync.sync(SyncRequestEvent.Todo)
   }
 
@@ -205,7 +205,7 @@ export class TodoCardVM {
     sharedHeroStore.incrementPoints()
     await sharedTagStore.incrementEpicPoints(todo.text, false)
 
-    await todo.complete()
+    await todo.complete('completing todo')
     sharedSessionStore.numberOfTodosCompleted++
     startConfetti()
     checkDayCompletionRoutine()

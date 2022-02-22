@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
 import { associations } from '@nozbe/watermelondb/Model'
+import { desc } from '@nozbe/watermelondb/QueryDescription'
 import { Tables, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 
 export class MelonUser extends Model {
@@ -9,6 +10,18 @@ export class MelonUser extends Model {
     Tables.todos,
     { type: 'belongs_to', key: UserColumn._id },
   ])
+
+  async updateWithDescription(
+    writer: ArgumentExctractor<typeof this.update>,
+    description: string
+  ) {
+    try {
+      const updated = await this.update(writer)
+      return updated
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
 
   prepareUpdateWithDescription(
     writer: ArgumentExctractor<typeof this.prepareUpdate>,
@@ -24,12 +37,18 @@ export class MelonUser extends Model {
   // The set function is not properly typed in WMDB model yet, so we need to use this hack
   set!: (user: MelonUser | null) => void
 
-  @writer async delete() {
-    return await this.update((user) => (user.deleted = true))
+  @writer async delete(description: string) {
+    return await this.updateWithDescription(
+      (user) => (user.deleted = true),
+      description
+    )
   }
 
-  @writer async updateUser(updatedUser: MelonUser) {
-    return await this.update((user) => Object.assign(user, updatedUser))
+  @writer async updateUser(updatedUser: MelonUser, description: string) {
+    return await this.updateWithDescription(
+      (user) => Object.assign(user, updatedUser),
+      description
+    )
   }
 
   @field(UserColumn._id) _id?: string
@@ -70,6 +89,18 @@ export class MelonTodo extends Model {
   @relation(Tables.users, TodoColumn.user) user?: MelonUser
   @relation(Tables.users, TodoColumn.delegator) delegator?: MelonUser
 
+  async updateWithDescription(
+    writer: ArgumentExctractor<typeof this.update>,
+    description: string
+  ) {
+    try {
+      const updated = await this.update(writer)
+      return updated
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
+
   prepareUpdateWithDescription(
     writer: ArgumentExctractor<typeof this.prepareUpdate>,
     description: string
@@ -81,24 +112,39 @@ export class MelonTodo extends Model {
     }
   }
 
-  @writer async complete() {
-    await this.update((todo) => (todo.completed = true))
+  @writer async complete(description: string) {
+    await this.updateWithDescription(
+      (todo) => (todo.completed = true),
+      description
+    )
   }
 
-  @writer async delete() {
-    await this.update((todo) => (todo.deleted = true))
+  @writer async delete(description: string) {
+    await this.updateWithDescription(
+      (todo) => (todo.deleted = true),
+      description
+    )
   }
 
-  @writer async uncomplete() {
-    await this.update((todo) => (todo.completed = false))
+  @writer async uncomplete(description: string) {
+    await this.updateWithDescription(
+      (todo) => (todo.completed = false),
+      description
+    )
   }
 
-  @writer async accept() {
-    await this.update((todo) => (todo.delegateAccepted = true))
+  @writer async accept(description: string) {
+    await this.updateWithDescription(
+      (todo) => (todo.delegateAccepted = true),
+      description
+    )
   }
 
-  @writer async setServerId(serverId: string) {
-    await this.update((todo) => (todo._id = serverId))
+  @writer async setServerId(serverId: string, description: string) {
+    await this.updateWithDescription(
+      (todo) => (todo._id = serverId),
+      description
+    )
   }
 }
 

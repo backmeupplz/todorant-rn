@@ -59,7 +59,7 @@ class AddEpicContent extends Component<{
     if (!this.epicGoal || +this.epicGoal <= 0) {
       return
     }
-    await this.tag?.turnTagToEpic(this.epicGoal)
+    await this.tag?.turnTagToEpic(this.epicGoal, 'turning tag in epic')
     goBack()
     sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
@@ -104,8 +104,7 @@ class AddEpicContent extends Component<{
 }
 
 export const AddEpic = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
-  >()
+  const route =
+    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
   return <AddEpicContent route={route} />
 }
