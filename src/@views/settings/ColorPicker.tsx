@@ -66,7 +66,10 @@ class ColorPickerContent extends Component<{
   }
 
   async save() {
-    await this.tag?.changeColor(this.color)
+    await this.tag?.changeColor(
+      this.color,
+      'changing tag color from colorpicker'
+    )
     goBack()
     sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)

@@ -30,11 +30,15 @@ export async function updateOrCreateDelegation(
   const localDelegate = await getLocalDelegation(delegation, delegator)
   if (localDelegate) {
     if (forceWrite) {
-      const updatedUser = await localDelegate.updateUser(localDelegate)
+      const updatedUser = await localDelegate.updateUser(
+        localDelegate,
+        'updating user'
+      )
       return updatedUser
     }
-    return localDelegate.prepareUpdate((delegate) =>
-      Object.assign(delegate, delegation)
+    return localDelegate.prepareUpdateWithDescription(
+      (delegate) => Object.assign(delegate, delegation),
+      'updaitng or creating delegation'
     )
   }
   // Create new user in place if need
@@ -130,7 +134,10 @@ export async function onDelegationObjectsFromServer(
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
     const preparedToDelete = [...delegationsToDelete.values()].map(
-      (delegation) => delegation.prepareDestroyPermanently()
+      (delegation) =>
+        delegation.prepareDestroyPermanentlyWithDescription(
+          'preparing destroy when nothing to push'
+        )
     )
     // Complete sync
     await database.write(async () => await database.batch(...preparedToDelete))
@@ -204,7 +211,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegator.id)) {
         continue
       }
-      const localMarked = await removeDelegation(delegator, true)
+      const localMarked = await removeDelegation(
+        delegator,
+        true,
+        false,
+        'removing locally marked as deleted delegators'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegator.id, localMarked)
       }
@@ -222,7 +234,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegate.id)) {
         continue
       }
-      const localMarked = await removeDelegation(delegate, false)
+      const localMarked = await removeDelegation(
+        delegate,
+        false,
+        false,
+        'removing locally marked as deleted delegates'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegate.id, localMarked)
       }
@@ -244,7 +261,12 @@ export async function onDelegationObjectsFromServer(
       if (delegationsToDelete.has(delegatorLocally.id) || !delegator.invalid) {
         continue
       }
-      const localMarked = await removeDelegation(delegator, true)
+      const localMarked = await removeDelegation(
+        delegator,
+        true,
+        false,
+        'removing pushed delegators'
+      )
       if (localMarked) {
         delegationsToDelete.set(delegatorLocally.id, localMarked)
       }
@@ -260,7 +282,9 @@ export async function onDelegationObjectsFromServer(
   const preparedToDelete = [...delegationsToDelete.values()].map(
     (delegation) => {
       try {
-        return delegation.prepareDestroyPermanently()
+        return delegation.prepareDestroyPermanentlyWithDescription(
+          'preparing destroy before batch'
+        )
       } catch (err) {
         throw Error(
           translate('errors.errorDuring', {

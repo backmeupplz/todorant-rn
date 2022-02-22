@@ -199,9 +199,9 @@ export class Data extends Component {
               const toSend = [] as (MelonTodo | MelonTag)[]
               todosAndTags.map((todoOrTag) => {
                 toSend.push(
-                  todoOrTag.prepareUpdate((todoOrTagUpdate) => {
+                  todoOrTag.prepareUpdateWithDescription((todoOrTagUpdate) => {
                     todoOrTagUpdate.updatedAt = new Date()
-                  })
+                  }, 'updating updated at while sendind todos and tags on server')
                 )
               })
 

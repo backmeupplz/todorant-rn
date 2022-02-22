@@ -34,7 +34,12 @@ export async function fixOrder(
     )
     orderedCompleted.forEach((todo, i) => {
       if (todo.order !== i) {
-        toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
+        toUpdate.push(
+          todo.prepareUpdateWithDescription(
+            (todo) => (todo.order = i),
+            'fixing order of completed'
+          )
+        )
       }
     })
     // Go over uncompleted
@@ -53,7 +58,12 @@ export async function fixOrder(
     // Save order
     orderedUncompleted.forEach((todo, i) => {
       if (todo.order !== i) {
-        toUpdate.push(todo.prepareUpdate((todo) => (todo.order = i)))
+        toUpdate.push(
+          todo.prepareUpdateWithDescription(
+            (todo) => (todo.order = i),
+            'fixing order of uncompleted'
+          )
+        )
       }
     })
   }

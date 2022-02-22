@@ -68,9 +68,9 @@ export class Security extends Component {
       const toUpdate = [] as MelonTodo[]
       for (const todo of todos) {
         toUpdate.push(
-          todo.prepareUpdate((todo) => {
+          todo.prepareUpdateWithDescription((todo) => {
             todo.encrypted = encrypted
-          })
+          }, 'encrypting or decrypting todos')
         )
       }
       await database.write(async () => await database.batch(...toUpdate))
@@ -95,11 +95,17 @@ export class Security extends Component {
       for (const todo of todos) {
         if (encrypt) {
           toUpdate.push(
-            todo.prepareUpdate((todo) => (todo.text = _e(todo.text, key)))
+            todo.prepareUpdateWithDescription(
+              (todo) => (todo.text = _e(todo.text, key)),
+              'encryintg todos'
+            )
           )
         } else {
           toUpdate.push(
-            todo.prepareUpdate((todo) => (todo.text = _d(todo.text, key)))
+            todo.prepareUpdateWithDescription(
+              (todo) => (todo.text = _d(todo.text, key)),
+              'decrypting todos'
+            )
           )
         }
       }

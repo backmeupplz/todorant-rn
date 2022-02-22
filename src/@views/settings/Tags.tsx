@@ -28,7 +28,7 @@ class TagsVM {
       }"?`,
       translate('delete'),
       async () => {
-        await tag.delete()
+        await tag.delete('deleting tag')
         await sharedTagStore.refreshTags()
         sharedSync.sync(SyncRequestEvent.Tag)
       }
@@ -40,7 +40,7 @@ class TagsVM {
   }
 
   async changeColorToDefault(tag: MelonTag) {
-    await tag.changeColor('')
+    await tag.changeColor('', 'changing color to default')
     await sharedTagStore.refreshTags()
     sharedSync.sync(SyncRequestEvent.Tag)
   }
@@ -57,7 +57,7 @@ class TagsVM {
       }"?`,
       translate('unEpic'),
       async () => {
-        await tag.unEpic()
+        await tag.unEpic('unepicing tag')
         sharedTagStore.refreshTags()
         sharedSync.sync(SyncRequestEvent.Tag)
       }
@@ -90,8 +90,9 @@ class DeleteAllTagsButton extends Component {
                   const toUpdate = [] as MelonTag[]
                   for (const tag of undeletedTags) {
                     toUpdate.push(
-                      tag.prepareUpdate(
-                        (tagToUpdate) => (tagToUpdate.deleted = true)
+                      tag.prepareUpdateWithDescription(
+                        (tagToUpdate) => (tagToUpdate.deleted = true),
+                        'deleting all tags'
                       )
                     )
                   }

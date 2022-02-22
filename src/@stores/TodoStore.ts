@@ -258,8 +258,10 @@ class TodoStore {
 
     for (const todo of todos) {
       toUpdate.push(
-        todo.prepareUpdate(
-          (todoToUpdate) => (todoToUpdate._exactDate = new Date(getTitle(todo)))
+        todo.prepareUpdateWithDescription(
+          (todoToUpdate) =>
+            (todoToUpdate._exactDate = new Date(getTitle(todo))),
+          'setting up new exact date'
         )
       )
     }

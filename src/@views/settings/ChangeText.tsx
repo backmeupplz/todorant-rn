@@ -98,7 +98,7 @@ class ChangeTextContent extends Component<{
     for (const todo of await sharedTodoStore.undeletedTodos.fetch()) {
       if (!todo.text.includes(dbtag.tag)) continue
       toUpdate.push(
-        todo.prepareUpdate((todoToUpdate) => {
+        todo.prepareUpdateWithDescription((todoToUpdate) => {
           todoToUpdate.text = todo.text
             .split(' ')
             .map((word) => {
@@ -108,12 +108,15 @@ class ChangeTextContent extends Component<{
               return `#${this.newName || dbtag.tag}`
             })
             .join(' ')
-        })
+        }, 'changing tag in todos')
       )
     }
     await database.write(async () => await database.batch(...toUpdate))
-    await dbtag.changeText(this.newName || dbtag.tag)
-    await dbtag.changeColor(this.tag.color || dbtag.color!)
+    await dbtag.changeText(this.newName || dbtag.tag, 'changing tag text')
+    await dbtag.changeColor(
+      this.tag.color || dbtag.color!,
+      'changing tag color'
+    )
 
     goBack()
     sharedTagStore.refreshTags()
