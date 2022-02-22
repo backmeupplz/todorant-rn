@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import 'react-native-get-random-values'
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native'
 import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigate, navigationRef } from '@utils/navigation'
-import { GoogleSignin } from '@react-native-community/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import '@utils/purchases'
 import { Icon, Root, StyleProvider, Text, View } from 'native-base'
 import getTheme from './native-base-theme/components'
@@ -52,14 +57,21 @@ import { configure, when } from 'mobx'
 import { checkAppVersion } from '@utils/checkAppVersion'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context'
+import {
+  SafeAreaInsetsContext,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context'
 import { hydration } from '@stores/hydration/hydratedStores'
-import { migrateRealmToWMDB } from '@utils/realm'
 import { alertError } from '@utils/alert'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import { enableScreens } from 'react-native-screens'
+
+enableScreens(false)
+
+sharedDelegationStore
 
 export let rootRef: any
 export let closeOnboardingButtonNode: number
@@ -81,7 +93,6 @@ GoogleSignin.configure({
   webClientId:
     '989382323327-rou6lmk2umbnoaq55493v1kqm8fvp22q.apps.googleusercontent.com',
   offlineAccess: true,
-  forceConsentPrompt: true,
 })
 
 LogBox.ignoreAllLogs()
@@ -91,31 +102,21 @@ const Stack = createStackNavigator()
 @codePush(CodePushOptions)
 @observer
 class App extends Component {
-  async UNSAFE_componentWillMount() {
-    await fixDuplicatedTasks()
-  }
-
   async componentDidMount() {
+    await fixDuplicatedTasks()
     await setI18nConfigAsync()
     checkTokenAndPassword()
     checkSiriPermission()
     checkSharedContent()
-    refreshWidgetAndBadgeAndWatch()
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
     if (!__DEV__) {
       checkAppVersion()
     }
-    AppState.addEventListener('change', (nextState) => {
-      if (nextState === 'active') {
-        checkAndroidLaunchArgs()
-      }
-    })
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
-        await migrateRealmToWMDB()
         sharedSessionStore.localMigrationCompleted = true
       } catch (err) {
         alertError('A error occur while transfering data between databases')
@@ -131,207 +132,220 @@ class App extends Component {
         alertError(err as string)
       }
     }
+    AppState.addEventListener('change', (nextState) => {
+      sharedSync.globalSync()
+      if (nextState === 'active') {
+        checkAndroidLaunchArgs()
+      }
+    })
     SplashScreen.hide()
     checkOnboardingStep()
+    refreshWidgetAndBadgeAndWatch()
   }
 
   render() {
     // Hack to make this reactive
     return (
-      <Root ref={(ref) => (rootRef = ref)}>
-        <NavigationContainer ref={navigationRef}>
-          <StatusBar
-            backgroundColor={sharedColors.backgroundColor}
-            barStyle={
-              sharedSettingsStore.isDark ? 'light-content' : 'dark-content'
-            }
-          />
-          <RateModal />
-          <StyleProvider
-            style={{
-              ...getTheme(),
-              pointerEvent: 'box-none',
-            }}
+      <SafeAreaProvider>
+        <Root ref={(ref) => (rootRef = ref)}>
+          <NavigationContainer
+            ref={navigationRef}
+            theme={sharedSettingsStore.isDark ? DarkTheme : DefaultTheme}
           >
-            <Stack.Navigator
-              screenOptions={{
-                cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            <StatusBar
+              backgroundColor={sharedColors.backgroundColor}
+              barStyle={
+                sharedSettingsStore.isDark ? 'light-content' : 'dark-content'
+              }
+            />
+            <RateModal />
+            <StyleProvider
+              style={{
+                ...getTheme(),
+                pointerEvent: 'box-none',
               }}
             >
-              <Stack.Screen
-                name="BottomTabNavigator"
-                component={BottomTabNavigator}
-                options={{
-                  headerShown: false,
-                  ...headerBackButtonProps(),
+              <Stack.Navigator
+                screenOptions={{
+                  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                  detachPreviousScreen: false,
                 }}
-              />
-              <Stack.Screen
-                name="AddTodo"
-                component={AddTodo}
-                options={{
-                  title: translate('addTodo'),
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: () => (
-                    <Observer>
-                      {() => (
-                        <View
-                          pointerEvents={
-                            sharedOnboardingStore.tutorialIsShown
-                              ? 'auto'
-                              : 'none'
-                          }
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <AddButton />
-                          {InfoButton('infoAdd')()}
-                        </View>
-                      )}
-                    </Observer>
-                  ),
-                  ...headerBackButtonProps(true),
-                }}
-              />
-              <Stack.Screen
-                name="BreakdownTodo"
-                component={AddTodo}
-                options={{
-                  title: translate('breakdownTodo'),
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: () => (
-                    <View style={{ flexDirection: 'row' }}>
-                      <AddButton />
-                      {InfoButton('infoBreakdown')()}
-                    </View>
-                  ),
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="EditTodo"
-                component={AddTodo}
-                options={{
-                  title: translate('editTodo'),
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton('infoEdit'),
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{
-                  title: translate('pleaseLogin'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Paywall"
-                component={Paywall}
-                options={{
-                  title: translate('subscription'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Terms"
-                component={TermsOfUse}
-                options={{
-                  title: translate('termsOfUse'),
-                  ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Privacy"
-                component={PrivacyPolicy}
-                options={{
-                  title: translate('privacyPolicy'),
-                  ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="LoginTelegram"
-                component={LoginTelegram}
-                options={{
-                  title: translate('loginTelegram'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="HeroProfile"
-                component={HeroProfile}
-                options={{
-                  title: translate('heroProfileTitle'),
-                  headerTitleAlign: 'center',
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton(
-                    'infoHero',
-                    undefined,
-                    sharedHeroStore.rankColor[2]
-                  ),
-                  ...headerBackButtonProps(),
-                }}
-              />
-              <Stack.Screen
-                name="Rules"
-                component={Rules}
-                options={{
-                  title: translate('howTo'),
-                  ...sharedColors.headerExtraStyle,
-                  headerRight: InfoButton('infoRules'),
-                  ...headerBackButtonProps(),
-                }}
-              />
-            </Stack.Navigator>
-          </StyleProvider>
-          <DayCompleteOverlay />
-          <ConfettiView />
-        </NavigationContainer>
-        <Overlay />
-        {!sharedOnboardingStore.tutorialIsShown &&
-          !sharedOnboardingStore.stepObject.notShowClose && (
-            <SafeAreaInsetsContext.Consumer>
-              {(insets) => {
-                return (
-                  <TouchableOpacity
-                    style={[
-                      sharedOnboardingStore.closeOnboardingStyle,
-                      { marginTop: insets?.top },
-                    ]}
-                    onPress={() => {
-                      Keyboard.dismiss()
-                      sharedOnboardingStore.nextStep(TutorialStep.Close)
-                    }}
-                  >
-                    {/* A quick hack to make insets reactive on iOS, I have no idea why this works */}
-                    <Text style={{ opacity: 0, fontSize: 0 }}>
-                      {insets?.top || 'none'}
-                    </Text>
-                    <Icon
-                      type="MaterialIcons"
-                      name="close"
-                      style={{
-                        color: 'white',
-                        fontSize: 48,
+              >
+                <Stack.Screen
+                  name="BottomTabNavigator"
+                  component={BottomTabNavigator}
+                  options={{
+                    headerShown: false,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="AddTodo"
+                  component={AddTodo}
+                  options={{
+                    title: translate('addTodo'),
+                    ...sharedColors.headerExtraStyle,
+                    headerRight: () => (
+                      <Observer>
+                        {() => (
+                          <View
+                            pointerEvents={
+                              sharedOnboardingStore.tutorialIsShown
+                                ? 'auto'
+                                : 'none'
+                            }
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <AddButton />
+                            {InfoButton('infoAdd')()}
+                          </View>
+                        )}
+                      </Observer>
+                    ),
+                    ...headerBackButtonProps(true),
+                  }}
+                />
+                <Stack.Screen
+                  name="BreakdownTodo"
+                  component={AddTodo}
+                  options={{
+                    title: translate('breakdownTodo'),
+                    ...sharedColors.headerExtraStyle,
+                    headerRight: () => (
+                      <View style={{ flexDirection: 'row' }}>
+                        <AddButton />
+                        {InfoButton('infoBreakdown')()}
+                      </View>
+                    ),
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="EditTodo"
+                  component={AddTodo}
+                  options={{
+                    title: translate('editTodo'),
+                    ...sharedColors.headerExtraStyle,
+                    headerRight: InfoButton('infoEdit'),
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{
+                    title: translate('pleaseLogin'),
+                    headerTitleAlign: 'center',
+                    ...sharedColors.headerExtraStyle,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="Paywall"
+                  component={Paywall}
+                  options={{
+                    title: translate('subscription'),
+                    headerTitleAlign: 'center',
+                    ...sharedColors.headerExtraStyle,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="Terms"
+                  component={TermsOfUse}
+                  options={{
+                    title: translate('termsOfUse'),
+                    ...sharedColors.headerExtraStyle,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="Privacy"
+                  component={PrivacyPolicy}
+                  options={{
+                    title: translate('privacyPolicy'),
+                    ...sharedColors.headerExtraStyle,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="LoginTelegram"
+                  component={LoginTelegram}
+                  options={{
+                    title: translate('loginTelegram'),
+                    headerTitleAlign: 'center',
+                    ...sharedColors.headerExtraStyle,
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="HeroProfile"
+                  component={HeroProfile}
+                  options={{
+                    title: translate('heroProfileTitle'),
+                    headerTitleAlign: 'center',
+                    ...sharedColors.headerExtraStyle,
+                    headerRight: InfoButton(
+                      'infoHero',
+                      undefined,
+                      sharedHeroStore.rankColor[2]
+                    ),
+                    ...headerBackButtonProps(),
+                  }}
+                />
+                <Stack.Screen
+                  name="Rules"
+                  component={Rules}
+                  options={{
+                    title: translate('howTo'),
+                    ...sharedColors.headerExtraStyle,
+                    headerRight: InfoButton('infoRules'),
+                    ...headerBackButtonProps(),
+                  }}
+                />
+              </Stack.Navigator>
+            </StyleProvider>
+            <DayCompleteOverlay />
+            <ConfettiView />
+          </NavigationContainer>
+          <Overlay />
+          {!sharedOnboardingStore.tutorialIsShown &&
+            !sharedOnboardingStore.stepObject.notShowClose && (
+              <SafeAreaInsetsContext.Consumer>
+                {(insets) => {
+                  return (
+                    <TouchableOpacity
+                      style={[
+                        sharedOnboardingStore.closeOnboardingStyle,
+                        { marginTop: insets?.top },
+                      ]}
+                      onPress={() => {
+                        Keyboard.dismiss()
+                        sharedOnboardingStore.nextStep(TutorialStep.Close)
                       }}
-                    />
-                  </TouchableOpacity>
-                )
-              }}
-            </SafeAreaInsetsContext.Consumer>
-          )}
-      </Root>
+                    >
+                      {/* A quick hack to make insets reactive on iOS, I have no idea why this works */}
+                      <Text style={{ opacity: 0, fontSize: 0 }}>
+                        {insets?.top || 'none'}
+                      </Text>
+                      <Icon
+                        type="MaterialIcons"
+                        name="close"
+                        style={{
+                          color: 'white',
+                          fontSize: 48,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )
+                }}
+              </SafeAreaInsetsContext.Consumer>
+            )}
+        </Root>
+      </SafeAreaProvider>
     )
   }
 }

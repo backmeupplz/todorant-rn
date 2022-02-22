@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
-import { Tag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { Text, Button, Icon, View, Input } from 'native-base'
 import { RouteProp, useRoute } from '@react-navigation/native'
@@ -97,6 +96,7 @@ class ChangeTextContent extends Component<{
     if (this.newName && !this.newName.match(/^[\S]+$/)) this.newName = ''
     const toUpdate = [] as (MelonTodo | MelonTag)[]
     for (const todo of await sharedTodoStore.undeletedTodos.fetch()) {
+      if (!todo.text.includes(dbtag.tag)) continue
       toUpdate.push(
         todo.prepareUpdate((todoToUpdate) => {
           todoToUpdate.text = todo.text

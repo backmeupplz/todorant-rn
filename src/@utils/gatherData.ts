@@ -1,7 +1,7 @@
 import { tagsCollection, todosCollection } from './watermelondb/wmdb'
 
 export async function gatherData() {
-  const todos = todosCollection.query().fetch()
-  const tags = tagsCollection.query().fetch()
+  const todos = await todosCollection.query().fetch()
+  const tags = await tagsCollection.query().fetch()
   return { todos, tags }
 }

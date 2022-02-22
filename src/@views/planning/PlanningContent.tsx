@@ -17,9 +17,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
-import DraggableSectionList, {
-  DragEndParams,
-} from '@upacyxou/react-native-draggable-sectionlist'
 import { Month } from '@upacyxou/react-native-month'
 import {
   computed,
@@ -38,7 +35,7 @@ import {
 } from '@utils/time'
 import Animated, { Value } from 'react-native-reanimated'
 import { navigate } from '@utils/navigation'
-import { getTitle, Todo } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { debounce } from 'lodash'
 import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
@@ -54,6 +51,12 @@ import { sanitizeLikeString } from '@utils/textSanitizer'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { database } from '@utils/watermelondb/wmdb'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import DraggableFlatList, {
+  DragEndParams,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
 @observer
 export class PlanningContent extends Component {
@@ -74,11 +77,11 @@ export class PlanningContent extends Component {
   }
 
   @computed get completedWithOffset() {
-    return this.vm?.completedTodosData.extend(Q.experimentalTake(this.offset))
+    return this.vm?.completedTodosData.extend(Q.take(this.offset))
   }
 
   @computed get uncompletedWithOffset() {
-    return this.vm?.uncompletedTodosData.extend(Q.experimentalTake(this.offset))
+    return this.vm?.uncompletedTodosData.extend(Q.take(this.offset))
   }
 
   @computed get querySearch() {
@@ -255,11 +258,6 @@ export class PlanningContent extends Component {
   }
 }
 
-interface Section {
-  section: string
-  data: MelonTodo[]
-}
-
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
     todo: todo.observeWithColumns(
@@ -278,214 +276,206 @@ const EnhancedDraggableSectionList = enhance(
     isCompleted: boolean
     increaseOffset: () => void
   }) => {
-    const todoSectionMap = {} as any
-    let currentTitle: string | undefined
-    let sectionIndex = 0
+    const usedSection = new Set<string>()
+    const todosAndDates: Array<MelonTodo | string> = []
     for (const realmTodo of todo) {
       const realmTodoTitle = getTitle(realmTodo)
-      if (currentTitle && currentTitle !== realmTodoTitle) {
-        sectionIndex++
+      if (!usedSection.has(realmTodoTitle)) {
+        usedSection.add(realmTodoTitle)
+        todosAndDates.push(realmTodoTitle)
       }
-      if (todoSectionMap[realmTodoTitle]) {
-        todoSectionMap[realmTodoTitle].data.push(realmTodo)
-      } else {
-        todoSectionMap[realmTodoTitle] = {
-          order: sectionIndex,
-          section: realmTodoTitle,
-          data: [realmTodo],
-        }
-      }
+      todosAndDates.push(realmTodo)
     }
 
-    const todosMap = Object.keys(todoSectionMap).map((key) => {
-      return todoSectionMap[key]
-    })
-
     return (
-      <DraggableSectionList<MelonTodo, Section>
-        layoutInvalidationKey={v4()}
+      <DraggableFlatList
         ListEmptyComponent={<NoTodosPlaceholder />}
         onEndReachedThreshold={0.5}
         onEndReached={() => increaseOffset()}
-        onViewableItemsChanged={() => {}}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        onMove={({ nativeEvent: { absoluteX, absoluteY } }) => {
-          if (!sharedAppStateStore.calendarEnabled) return
+        contentContainerStyle={{
+          paddingBottom: useBottomTabBarHeight() * 2.5,
         }}
-        autoscrollSpeed={200}
-        removeClippedSubviews={true}
         maxToRenderPerBatch={5}
         initialNumToRender={10}
         updateCellsBatchingPeriod={0.9}
-        onDragEnd={onDragEnd}
-        isSectionHeader={(a: any) => {
-          if (a === undefined) {
-            return false
-          }
-          return !a.text
-        }}
+        onDragEnd={(params) => onDragEnd(params, todosAndDates)}
         renderItem={renderItem}
-        renderSectionHeader={({ item, drag, index, isActive }) => {
-          return (
-            <TodoHeader
-              date={true}
-              drag={drag}
-              isActive={isActive}
-              item={item.section}
-              key={item.section}
-            />
-          )
-        }}
-        data={todosMap}
-        keyExtractor={(item) => item.id || (item as unknown as string)}
+        data={todosAndDates}
+        keyExtractor={(item) => (typeof item === 'string' ? item : item.id)}
       />
     )
   }
 )
 
-async function onDragEnd({
-  beforeChangesArr,
-  dataArr,
-  to,
-  from,
-  promise,
-}: DragEndParams<MelonTodo | string>) {
-  // enable loader
-  sharedAppStateStore.changeLoading(false)
-  // check is calendar dragging
-  if (sharedAppStateStore.activeDay) {
-    const todo = dataArr[to] as MelonTodo
-    if (todo) {
-      //realm.write(() => {
-      todo.date = getDateDateString(sharedAppStateStore.activeDay!)
-      todo.monthAndYear = getDateMonthAndYearString(
-        sharedAppStateStore.activeDay!
+async function onDragEnd(
+  { data, from, to }: DragEndParams<string | MelonTodo>,
+  arrBeforeChanges: (string | MelonTodo)[]
+) {
+  // help us to find closest section (looks from bottom to the top)
+  const findClosestSection = (
+    index: number,
+    arrToSearch: (string | MelonTodo)[]
+  ) => {
+    let closestSection = 0
+    for (let i = index; i >= 0; --i) {
+      if (typeof arrToSearch[i] === 'string') {
+        closestSection = i
+        break
+      }
+    }
+    return closestSection
+  }
+
+  const toUpdate = [] as MelonTodo[]
+
+  const closestDayFrom = findClosestSection(from, arrBeforeChanges)
+  const closestDayTo = findClosestSection(to, data)
+
+  // if inside one day
+  if (closestDayFrom === closestDayTo) {
+    let lastOrder = 0
+    let fromItem = arrBeforeChanges[from]
+    let toItem = arrBeforeChanges[to]
+    // if both of moved items are todos, and no one of them are section header
+    if (fromItem !== 'string' && toItem !== 'string') {
+      const fromBottomToTop = from > to
+      const nearItem = arrBeforeChanges[
+        fromBottomToTop ? to - 1 : to + 1
+      ] as MelonTodo
+      toItem = toItem as MelonTodo
+      fromItem = fromItem as MelonTodo
+      let secondOrder =
+        nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+      let firstOrder = toItem ? toItem.order : -1
+      if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
+      let average = (firstOrder + secondOrder) / 2
+      // if there is nothing under or under is a section
+      if (
+        (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+        typeof arrBeforeChanges[to + 1] === 'undefined'
       )
-      const newTitle = getTitle(todo)
-      todo._exactDate = new Date(newTitle)
-      todo.updatedAt = new Date()
-      //})
+        average = toItem.order + 1
+      if (
+        nearItem &&
+        toItem.frog &&
+        !nearItem.frog &&
+        typeof arrBeforeChanges[to - 1] !== 'string'
+      )
+        average = toItem.order + 1
+      toUpdate.push(
+        (fromItem as MelonTodo).prepareUpdate((todo) => (todo.order = average))
+      )
+    } else {
+      for (let i = closestDayTo + 1; ; i++) {
+        const item = data[i]
+        if (item === undefined) break
+        if (typeof item === 'string') break
+        toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
+        lastOrder++
+      }
     }
-    // discard calendar after applying changes
-    sharedAppStateStore.activeDay = undefined
-    sharedAppStateStore.activeCoordinates = { x: 0, y: 0 }
-    //this.setCoordinates.cancel()
-    promise()
-  } else {
-    if (from === 0) {
-      promise()
-      return
-    }
-    // help us to find closest section (looks from bottom to the top)
-    const findClosestSection = (
-      index: number,
-      arrToSearch: (string | MelonTodo)[]
-    ) => {
-      let closestSection = 0
-      for (let i = index; i >= 0; --i) {
-        if (typeof arrToSearch[i] === 'string') {
-          closestSection = i
-          break
+  } else if (typeof arrBeforeChanges[from] !== 'string') {
+    let fromItem = arrBeforeChanges[from]
+    let toItem = arrBeforeChanges[to]
+    // if both of moved items are todos, and no one of them are section header
+    if (fromItem !== 'string' && toItem !== 'string') {
+      const fromBottomToTop = from > to
+      const nearItem = arrBeforeChanges[
+        fromBottomToTop ? to - 1 : to + 1
+      ] as MelonTodo
+      toItem = toItem as MelonTodo
+      fromItem = fromItem as MelonTodo
+      let secondOrder =
+        nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
+      let firstOrder = toItem ? toItem.order : -1
+      if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
+      let average = (firstOrder + secondOrder) / 2
+      // if there is nothing under or under is a section
+      if (
+        (!fromBottomToTop && typeof arrBeforeChanges[to + 1] === 'string') ||
+        typeof arrBeforeChanges[to + 1] === 'undefined'
+      )
+        average = toItem.order + 1
+      if (
+        toItem.frog &&
+        !nearItem.frog &&
+        typeof arrBeforeChanges[to - 1] !== 'string'
+      )
+        average = toItem.order + 1
+      if (
+        typeof firstOrder === 'undefined' ||
+        typeof secondOrder === 'undefined'
+      ) {
+        if (!fromBottomToTop) {
+          average = secondOrder - 1
+        } else {
+          average = secondOrder + 1
         }
       }
-      return closestSection
-    }
-
-    const toUpdate = [] as MelonTodo[]
-
-    let disableLoading = false
-
-    const closestDayFrom = findClosestSection(from, beforeChangesArr)
-    const closestDayTo = findClosestSection(to, dataArr)
-
-    // if inside one day
-    if (closestDayFrom === closestDayTo) {
-      let lastOrder = 0
-      let fromItem = beforeChangesArr[from]
-      let toItem = beforeChangesArr[to]
-      // if both of moved items are todos, and no one of them are section header
-      if (fromItem !== 'string' && toItem !== 'string') {
-        const fromBottomToTop = from > to
-        const nearItem = beforeChangesArr[
-          fromBottomToTop ? to - 1 : to + 1
-        ] as MelonTodo
-        toItem = toItem as MelonTodo
-        fromItem = fromItem as MelonTodo
-        let secondOrder =
-          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-        let firstOrder = toItem ? toItem.order : -1
-        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
-        let average = (firstOrder + secondOrder) / 2
-        // if there is nothing under or under is a section
-        if (
-          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
-          typeof beforeChangesArr[to + 1] === 'undefined'
-        )
-          average = toItem.order + 1
-        if (
-          nearItem &&
-          toItem.frog &&
-          !nearItem.frog &&
-          typeof beforeChangesArr[to - 1] !== 'string'
-        )
-          average = toItem.order + 1
-        toUpdate.push(
-          (fromItem as MelonTodo).prepareUpdate(
-            (todo) => (todo.order = average)
-          )
-        )
-      } else {
-        for (let i = closestDayTo + 1; ; i++) {
-          const item = dataArr[i]
-          if (item === undefined) break
-          if (typeof item === 'string') break
-          toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
-          lastOrder++
-        }
-      }
-    } else if (typeof beforeChangesArr[from] !== 'string') {
-      let fromItem = beforeChangesArr[from]
-      let toItem = beforeChangesArr[to]
-      // if both of moved items are todos, and no one of them are section header
-      if (fromItem !== 'string' && toItem !== 'string') {
-        const fromBottomToTop = from > to
-        const nearItem = beforeChangesArr[
-          fromBottomToTop ? to - 1 : to + 1
-        ] as MelonTodo
-        toItem = toItem as MelonTodo
-        fromItem = fromItem as MelonTodo
-        let secondOrder =
-          nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-        let firstOrder = toItem ? toItem.order : -1
-        if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
-        let average = (firstOrder + secondOrder) / 2
-        // if there is nothing under or under is a section
-        if (
-          (!fromBottomToTop && typeof beforeChangesArr[to + 1] === 'string') ||
-          typeof beforeChangesArr[to + 1] === 'undefined'
-        )
-          average = toItem.order + 1
-        if (
-          toItem.frog &&
-          !nearItem.frog &&
-          typeof beforeChangesArr[to - 1] !== 'string'
-        )
-          average = toItem.order + 1
-        if (
-          typeof firstOrder === 'undefined' ||
-          typeof secondOrder === 'undefined'
-        ) {
-          if (!fromBottomToTop) {
-            average = secondOrder - 1
-          } else {
-            average = secondOrder + 1
+      let markAsFrog = false
+      let failed = false
+      if (isTodoOld(fromItem)) {
+        if (fromItem.frogFails < 3) {
+          if (fromItem.frogFails >= 1) {
+            markAsFrog = true
           }
+          failed = true
+        } else {
+          Alert.alert(translate('error'), translate('breakdownRequest'), [
+            {
+              text: translate('cancel'),
+              style: 'cancel',
+            },
+            {
+              text: translate('breakdownButton'),
+              onPress: () => {
+                navigate('BreakdownTodo', {
+                  breakdownTodo: fromItem,
+                })
+              },
+            },
+          ])
+          sharedSync.sync(SyncRequestEvent.Todo)
+          // promise()
+          return
         }
-        let markAsFrog = false
-        let failed = false
-        if (isTodoOld(fromItem)) {
-          if (fromItem.frogFails < 3) {
-            if (fromItem.frogFails >= 1) {
+      }
+      toUpdate.push(
+        (fromItem as MelonTodo).prepareUpdate((todo) => {
+          if (markAsFrog) todo.frog = true
+          if (failed) todo.frogFails++
+          todo.order = average
+          todo.date = nearItem?.date || (toItem as MelonTodo).date
+          todo.monthAndYear =
+            nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
+          todo._exactDate = new Date(getTitle(todo))
+        })
+      )
+    }
+  } else {
+    const lowerDay = Math.min(closestDayFrom, closestDayTo)
+    const maxDay = Math.max(closestDayFrom, closestDayTo)
+    let lastOrder = 0
+    let lastSection = data[lowerDay] as string
+    for (let i = lowerDay + 1; ; i++) {
+      const item = data[i]
+      if (item === undefined) break
+      if (typeof item === 'string') {
+        // if new section, outside of our draggable items begin
+        if (
+          new Date(item).getTime() > new Date(data[maxDay] as string).getTime()
+        )
+          break
+        lastOrder = 0
+        lastSection = item
+        continue
+      }
+      let markAsFrog = false
+      let failed = false
+      if (i === to) {
+        if (isTodoOld(item)) {
+          if (item.frogFails < 3) {
+            if (item.frogFails >= 1) {
               markAsFrog = true
             }
             failed = true
@@ -499,94 +489,31 @@ async function onDragEnd({
                 text: translate('breakdownButton'),
                 onPress: () => {
                   navigate('BreakdownTodo', {
-                    breakdownTodo: fromItem,
+                    breakdownTodo: item,
                   })
                 },
               },
             ])
-            sharedSync.sync(SyncRequestEvent.Todo)
-            promise()
-            return
+            lastOrder++
+            continue
           }
         }
-        toUpdate.push(
-          (fromItem as MelonTodo).prepareUpdate((todo) => {
-            if (markAsFrog) todo.frog = true
-            if (failed) todo.frogFails++
-            todo.order = average
-            todo.date = nearItem?.date || (toItem as MelonTodo).date
-            todo.monthAndYear =
-              nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
-            todo._exactDate = new Date(getTitle(todo))
-          })
-        )
       }
-    } else {
-      const lowerDay = Math.min(closestDayFrom, closestDayTo)
-      const maxDay = Math.max(closestDayFrom, closestDayTo)
-      let lastOrder = 0
-      let lastSection = dataArr[lowerDay] as string
-      for (let i = lowerDay + 1; ; i++) {
-        const item = dataArr[i]
-        if (item === undefined) break
-        if (typeof item === 'string') {
-          // if new section, outside of our draggable items begin
-          if (
-            new Date(item).getTime() >
-            new Date(dataArr[maxDay] as string).getTime()
-          )
-            break
-          lastOrder = 0
-          lastSection = item
-          continue
-        }
-        let markAsFrog = false
-        let failed = false
-        if (i === to) {
-          if (isTodoOld(item)) {
-            if (item.frogFails < 3) {
-              if (item.frogFails >= 1) {
-                markAsFrog = true
-              }
-              failed = true
-            } else {
-              Alert.alert(translate('error'), translate('breakdownRequest'), [
-                {
-                  text: translate('cancel'),
-                  style: 'cancel',
-                },
-                {
-                  text: translate('breakdownButton'),
-                  onPress: () => {
-                    navigate('BreakdownTodo', {
-                      breakdownTodo: item,
-                    })
-                  },
-                },
-              ])
-              lastOrder++
-              disableLoading = true
-              continue
-            }
-          }
-        }
-        toUpdate.push(
-          item.prepareUpdate((todo) => {
-            if (markAsFrog) todo.frog = true
-            if (failed) todo.frogFails++
-            todo.date = getDateDateString(lastSection)
-            todo.monthAndYear = getDateMonthAndYearString(lastSection)
-            todo._exactDate = new Date(lastSection)
-            todo.order = lastOrder
-          })
-        )
-        lastOrder++
-      }
+      toUpdate.push(
+        item.prepareUpdate((todo) => {
+          if (markAsFrog) todo.frog = true
+          if (failed) todo.frogFails++
+          todo.date = getDateDateString(lastSection)
+          todo.monthAndYear = getDateMonthAndYearString(lastSection)
+          todo._exactDate = new Date(lastSection)
+          todo.order = lastOrder
+        })
+      )
+      lastOrder++
     }
-    await database.write(async () => await database.batch(...toUpdate))
-    sharedSync.sync(SyncRequestEvent.Todo)
-    promise()
   }
+  await database.write(async () => await database.batch(...toUpdate))
+  sharedSync.sync(SyncRequestEvent.Todo)
 }
 
 const renderItem = ({
@@ -594,24 +521,39 @@ const renderItem = ({
   drag,
   isActive,
 }: {
-  item: MelonTodo
+  item: MelonTodo | string
   drag: () => void
   isActive: boolean
 }) => {
   if (!item) return
+  if (typeof item === 'string') {
+    return (
+      <ScaleDecorator>
+        <TodoHeader
+          date={true}
+          drag={drag}
+          isActive={false}
+          item={item}
+          key={item}
+        />
+      </ScaleDecorator>
+    )
+  }
   return (
-    <View style={{ padding: false ? 10 : 0 }} key={item.id}>
-      <TodoCard
-        todo={item}
-        type={
-          sharedAppStateStore.todoSection === TodoSectionType.planning
-            ? CardType.planning
-            : CardType.done
-        }
-        drag={drag}
-        active={isActive}
-      />
-    </View>
+    <ScaleDecorator>
+      <View style={{ padding: false ? 10 : 0 }} key={item.id}>
+        <TodoCard
+          todo={item}
+          type={
+            sharedAppStateStore.todoSection === TodoSectionType.planning
+              ? CardType.planning
+              : CardType.done
+          }
+          drag={drag}
+          active={false}
+        />
+      </View>
+    </ScaleDecorator>
   )
 }
 

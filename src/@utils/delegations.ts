@@ -1,21 +1,14 @@
-import { DelegationUser } from '@models/DelegationUser'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { UserColumn } from './watermelondb/tables'
-import { database, usersCollection } from './watermelondb/wmdb'
-
-export async function getOrCreateDelegation(
-  delegation: MelonUser,
-  delegator: boolean
-) {
-  const localUser = await getLocalDelegation(delegation, delegator)
-  if (localUser) {
-  }
-}
+import { Falsy } from 'react-native'
+import { TodoColumn, UserColumn } from './watermelondb/tables'
+import { database, todosCollection, usersCollection } from './watermelondb/wmdb'
+import { sharedSync } from '@sync/Sync'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export async function removeDelegation(
-  delegation: MelonUser,
+  delegation: Partial<MelonUser>,
   delegator: boolean,
   forceWrite = false
 ) {
@@ -24,14 +17,38 @@ export async function removeDelegation(
     console.error('Local delegation not found')
     return
   }
+  const todosWithDelegate = await todosCollection
+    .query(
+      Q.where(
+        delegator ? TodoColumn.delegator : TodoColumn.user,
+        localDelegation.id
+      )
+    )
+    .fetch()
+  await Promise.all(
+    todosWithDelegate.map(async (todo) => {
+      await database.write(async () => {
+        await todo.update((todo) => {
+          todo.deleted = true
+          todo.delegateAccepted = true
+          if (delegator) {
+            todo.delegator?.set(null)
+          }
+        })
+      })
+    })
+  )
   if (forceWrite) return await localDelegation.delete()
-  return localDelegation.prepareDestroyPermanently()
+  return localDelegation
 }
 
 export async function getLocalDelegation(
   delegation: Partial<MelonUser>,
   delegator: boolean
-): Promise<MelonUser | undefined> {
+): Promise<MelonUser | Falsy> {
+  if (!delegation) {
+    return null
+  }
   return (
     await usersCollection
       .query(
@@ -53,51 +70,19 @@ export function getMismatchesWithServer(
   localDelegations: MelonUser[],
   serverDelegations: MelonUser[]
 ) {
+  const uniqueLocalDelegations = new Set(localDelegations)
   const missMatches = [] as MelonUser[]
-  localDelegations.forEach((localDelegation) => {
+  uniqueLocalDelegations.forEach((localDelegation) => {
     if (
       localDelegation &&
       !serverDelegations.find(
         (delegation) => delegation._id === localDelegation._id
       )
     ) {
-      missMatches.push(localDelegation.prepareDestroyPermanently())
+      missMatches.push(localDelegation)
     }
   })
   return missMatches
-}
-
-export async function updateOrCreateDelegation(
-  delegation: Partial<MelonUser>,
-  delegator: boolean,
-  forceWrite = false
-): Promise<MelonUser> {
-  // Get local user if exists
-  const localDelegate = await getLocalDelegation(delegation, delegator)
-  if (localDelegate) {
-    if (forceWrite) {
-      const updatedUser = localDelegate.updateUser(localDelegate)
-      return updatedUser
-    }
-    return localDelegate.prepareUpdate((delegate) =>
-      Object.assign(delegate, delegation)
-    )
-  }
-  // Create new user in place if need
-  if (forceWrite) {
-    let createdUser!: MelonUser
-    await database.write(async () => {
-      createdUser = await usersCollection.create((delegate) => {
-        Object.assign(delegate, delegation)
-        delegate.isDelegator = delegator
-      })
-    })
-    return createdUser
-  }
-  return usersCollection.prepareCreate((delegate) => {
-    Object.assign(delegate, delegation)
-    delegate.isDelegator = delegator
-  })
 }
 
 export function cloneDelegation(delegation: MelonUser) {

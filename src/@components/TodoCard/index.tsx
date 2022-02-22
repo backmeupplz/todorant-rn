@@ -1,5 +1,4 @@
-import React, { Component, useEffect } from 'react'
-import { Todo } from '@models/Todo'
+import React, { Component, memo, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
@@ -25,15 +24,17 @@ const enhance = withObservables(['todo'], (items: InputProps) => {
   }
 })
 
-export const TodoCard = enhance((props: Props) => {
-  const vm = new TodoCardVM()
+export const TodoCard = memo(
+  enhance((props: Props) => {
+    const vm = new TodoCardVM()
 
-  return (
-    <TodoCardContent
-      {...props}
-      todo={props.todo}
-      vm={vm}
-      active={props.active}
-    />
-  )
-})
+    return (
+      <TodoCardContent
+        {...props}
+        todo={props.todo}
+        vm={vm}
+        active={props.active}
+      />
+    )
+  })
+)

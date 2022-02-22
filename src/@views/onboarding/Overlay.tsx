@@ -18,8 +18,8 @@ import {
   Platform,
 } from 'react-native'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
-import { navigate } from '@utils/navigation'
-// RN 64.* import {  EasingNode } from 'react-native-reanimated'
+import { navigate, RootStackParamList } from '@utils/navigation'
+import { EasingNode } from 'react-native-reanimated'
 
 @observer
 export class Overlay extends Component {
@@ -92,8 +92,7 @@ export class Overlay extends Component {
                 Animated.timing(this.infoBoxY, {
                   toValue: 0,
                   duration: 500,
-                  // RN 64.* easing: EasingNode.linear,
-                  easing: Easing.ease,
+                  easing: EasingNode.linear,
                 }).start()
               } else if (
                 sharedOnboardingStore.currentHole &&
@@ -116,8 +115,7 @@ export class Overlay extends Component {
                       sharedOnboardingStore.currentHole.y -
                       (totalSize + avatarPadding),
                     duration: 500,
-                    // RN 64.* easing: EasingNode.linear,
-                    easing: Easing.ease,
+                    easing: EasingNode.linear,
                   }).start()
                 } else {
                   // Move bubble under the hole
@@ -129,8 +127,7 @@ export class Overlay extends Component {
                       messageBoxPosition.y +
                       sharedOnboardingStore.currentHole.height,
                     duration: 500,
-                    // RN 64.* easing: EasingNode.linear,
-                    easing: Easing.ease,
+                    easing: EasingNode.linear,
                   }).start()
                 }
               }
@@ -145,8 +142,7 @@ export class Overlay extends Component {
     Animated.timing(this.opacityAnimationValue, {
       toValue: show ? 1 : 0,
       duration: 500,
-      // RN 64.* easing: EasingNode.linear,
-      easing: Easing.linear,
+      easing: EasingNode.linear,
     }).start(() => {
       this.shouldRender = !sharedOnboardingStore.tutorialIsShown
     })
@@ -245,7 +241,9 @@ export function checkOnboardingStep() {
         !sharedOnboardingStore.savedStep
       )
         return
-      navigate(sharedOnboardingStore.screen)
+      navigate(
+        sharedOnboardingStore.screen as string as keyof RootStackParamList
+      )
       sharedOnboardingStore.nextStep(sharedOnboardingStore.savedStep)
     }, 500)
   })

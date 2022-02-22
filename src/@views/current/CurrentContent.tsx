@@ -14,7 +14,9 @@ import { SegmentedProgressView } from '@components/SegmentedProgressView'
 import { PlusButton } from '@components/PlusButton'
 import { sharedTagStore } from '@stores/TagStore'
 import { EpicProgress } from './EpicProgress'
-import DraggableFlatList from 'react-native-draggable-flatlist'
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist'
 import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
@@ -98,7 +100,11 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
       <DraggableFlatList
         data={epics}
         renderItem={({ item, drag }) => {
-          return <EpicProgress epic={item} key={item._tempSyncId} drag={drag} />
+          return (
+            <ScaleDecorator>
+              <EpicProgress epic={item} key={item._tempSyncId} drag={drag} />
+            </ScaleDecorator>
+          )
         }}
         keyExtractor={(epic) => epic._tempSyncId}
         onDragEnd={async (epics) => {

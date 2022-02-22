@@ -1,4 +1,3 @@
-import { Tag } from '@models/Tag'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import {
@@ -8,7 +7,6 @@ import {
   getDateDateString,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { Todo } from '@models/Todo'
 import { observable, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as Animatable from 'react-native-animatable'
@@ -20,7 +18,6 @@ const {
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { DelegationUser } from '@models/DelegationUser'
 import { translate } from '@utils/i18n'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'

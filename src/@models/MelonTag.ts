@@ -74,6 +74,7 @@ export function cloneTag(tag: MelonTag) {
   return {
     _tempSyncId: tag._tempSyncId,
     _id: tag._id,
+    id: tag.id,
     createdAt: tag.createdAt,
     updatedAt: tag.updatedAt,
     deleted: tag.deleted,

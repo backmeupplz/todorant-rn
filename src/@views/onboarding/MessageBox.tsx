@@ -10,7 +10,7 @@ import Animated, { Easing } from 'react-native-reanimated'
 import { translate } from '@utils/i18n'
 import { makeObservable, observable, reaction } from 'mobx'
 import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
-// RN 64.* import {  EasingNode } from 'react-native-reanimated'
+import { EasingNode } from 'react-native-reanimated'
 
 const avatar = require('@assets/images/nikita.jpg')
 
@@ -46,8 +46,7 @@ export class MessageBox extends Component {
         Animated.timing(this.avatarOpacity, {
           toValue: 1,
           duration: 500,
-          // RN 64.* easing: EasingNode.linear,
-          easing: Easing.linear,
+          easing: EasingNode.linear,
         }).start()
       }
     )
@@ -62,15 +61,13 @@ export class MessageBox extends Component {
           Animated.timing(this.avatarOpacity, {
             toValue: 1,
             duration: 500,
-            // RN 64.* easing: EasingNode.linear,
-            easing: Easing.linear,
+            easing: EasingNode.linear,
           }).start()
         } else {
           Animated.timing(this.avatarOpacity, {
             toValue: 0,
             duration: 500,
-            // RN 64.* easing: EasingNode.linear,
-            easing: Easing.linear,
+            easing: EasingNode.linear,
           }).start(() => {
             this.showAvatar = false
           })

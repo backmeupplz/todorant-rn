@@ -5,15 +5,14 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.swmansion.reanimated.ReanimatedPackage; // REMOVE IN RN 64.*
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.microsoft.codepush.react.CodePush;
-// RN 64.* import com.facebook.react.bridge.JSIModulePackage; 
-// RN 64.* import com.todorant.ExampleJSIPackage;
+import com.facebook.react.bridge.JSIModulePackage; 
+import com.todorant.ExampleJSIPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -43,11 +42,11 @@ public class MainApplication extends Application implements ReactApplication {
             return CodePush.getJSBundleFile();
         }
         
-        // RN 64.*// JSI Modules
-        // RN 64.*@Override
-        // RN 64.*protected JSIModulePackage getJSIModulePackage() {
-        // RN 64.*  return new ExampleJSIPackage();
-        // RN 64.*}
+        // JSI Modules
+        @Override
+        protected JSIModulePackage getJSIModulePackage() {
+          return new ExampleJSIPackage();
+        }
       };
 
   @Override

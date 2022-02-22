@@ -52,7 +52,7 @@ class LoginTelegramContent extends Component<{
                 }
               } catch (err) {
                 goBack()
-                alertError(err)
+                alertError(err as string)
               }
             }}
             onLoadEnd={() => {
@@ -66,11 +66,12 @@ class LoginTelegramContent extends Component<{
 }
 
 export const LoginTelegram = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { setLoadingToTrue: () => void } | undefined>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { setLoadingToTrue: () => void } | undefined>,
+        string
+      >
+    >()
   return <LoginTelegramContent route={route} />
 }

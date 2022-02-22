@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import { TableItem } from '@components/TableItem'
-import { Clipboard } from 'react-native'
 import { Text, Icon, Toast, View, ActionSheet } from 'native-base'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
@@ -12,12 +11,18 @@ import { navigate } from '@utils/navigation'
 import fonts from '@utils/fonts'
 import { DelegationUserType } from '@models/DelegationUser'
 import { resetDelegateToken } from '@utils/rest'
+import Clipboard from '@react-native-community/clipboard'
 
 @observer
 export class DelegationSettings extends Component {
   @observable reset = false
   async resetDelegateToken() {
-    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken()
+    if (!sharedSessionStore.user?.token) {
+      return
+    }
+    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken(
+      sharedSessionStore.user?.token
+    )
   }
 
   UNSAFE_componentWillMount() {

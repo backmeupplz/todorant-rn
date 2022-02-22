@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Container, H1, View, Icon } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
-import { Tag } from '@models/Tag'
 import { getTagById } from '@utils/getTagById'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { makeObservable, observable } from 'mobx'
@@ -107,8 +106,7 @@ class ColorPickerContent extends Component<{
 }
 
 export const ColorPicker = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
-  >()
+  const route =
+    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
   return <ColorPickerContent route={route} />
 }

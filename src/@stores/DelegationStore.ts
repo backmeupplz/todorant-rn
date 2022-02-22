@@ -22,10 +22,10 @@ class DelegationStore {
     makeObservable(this)
     this.delegates
       .observeCount(false)
-      .subscribe((count) => (this.delegatesCount = count))
+      .subscribe((count) => (this.delegatesCount = count - 1))
     this.delegators
       .observeCount(false)
-      .subscribe((count) => (this.delegatorsCount = count))
+      .subscribe((count) => (this.delegatorsCount = count - 1))
   }
 
   logout() {

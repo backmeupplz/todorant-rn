@@ -1,4 +1,4 @@
-import { getTitle, Todo } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
@@ -114,7 +114,7 @@ export async function addTodosRu() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
@@ -182,7 +182,7 @@ export async function addTodosUk() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
@@ -250,7 +250,7 @@ export async function addTodosEn() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
@@ -318,7 +318,7 @@ export async function addTodosIt() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
@@ -386,7 +386,7 @@ export async function addTodosEs() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v
@@ -454,7 +454,7 @@ export async function addTodosPtBR() {
       },
     ].map((v) => {
       return Object.assign({}, template, v)
-    }) as Todo[]
+    }) as MelonTodo[]
   ).map((v) => {
     v._exactDate = new Date(getTitle(v))
     return v

@@ -65,7 +65,7 @@ class PaywallContent extends Component<{
           await sharedSync.sync(SyncRequestEvent.All)
         }
       } catch (err) {
-        alertError(err)
+        alertError(err as string)
       }
       alertMessage(
         translate('purchaseThankYou'),
@@ -90,7 +90,7 @@ class PaywallContent extends Component<{
         )
       )
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.vm.loading = false
     }

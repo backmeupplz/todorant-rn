@@ -5,7 +5,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 import { translate } from '@utils/i18n'
 import { sharedColors } from '@utils/sharedColors'
-import { Clipboard, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import fonts from '@utils/fonts'
@@ -15,6 +15,7 @@ import { setQrToken, setUserName } from '@utils/rest'
 import { alertError } from '@utils/alert'
 import { Spinner } from '@components/Spinner'
 import { navigate } from '@utils/navigation'
+import Clipboard from '@react-native-community/clipboard'
 
 @observer
 class InfoRow extends Component<{ title: string; value: string }> {
@@ -140,9 +141,15 @@ export class AccountInfo extends Component {
                     this.nameChangingMenu = false
                     this.loading = true
                     try {
-                      await setUserName(this.name)
+                      if (!sharedSessionStore.user?.token) {
+                        return
+                      }
+                      await setUserName(
+                        this.name,
+                        sharedSessionStore.user?.token
+                      )
                     } catch (err) {
-                      alertError(err)
+                      alertError(err as string)
                     } finally {
                       this.loading = false
                     }
@@ -194,10 +201,13 @@ export class AccountInfo extends Component {
               navigate('LoginQR', {
                 getToken: async (uuid: string) => {
                   this.loading = true
+                  if (!sharedSessionStore.user?.token) {
+                    return
+                  }
                   try {
-                    await setQrToken(uuid)
+                    await setQrToken(uuid, sharedSessionStore.user?.token)
                   } catch (err) {
-                    alertError(err)
+                    alertError(err as string)
                   } finally {
                     this.loading = false
                   }

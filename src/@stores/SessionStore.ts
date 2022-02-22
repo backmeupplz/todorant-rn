@@ -18,7 +18,7 @@ import {
 import { v4 } from 'uuid'
 import { resetDelegateToken } from '@utils/rest'
 import { database } from '@utils/watermelondb/wmdb'
-import { updateOrCreateDelegation } from '@utils/delegations'
+import { AsyncStorage } from 'react-native'
 
 class SessionStore {
   constructor() {
@@ -99,11 +99,7 @@ class SessionStore {
     this.isInitialSync = true
     await sharedSync.login(user.token)
     setToken(user.token)
-    try {
-      await sharedSync.globalSync()
-    } finally {
-      this.isInitialSync = false
-    }
+    this.isInitialSync = false
     sharedTodoStore.initDelegation()
     logEvent('login_success')
   }
@@ -115,6 +111,12 @@ class SessionStore {
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       await database.write(async () => await database.unsafeResetDatabase())
+      const newAsyncStorage = AsyncStorage
+      const oldAsyncStorage =
+        require('@react-native-async-storage/async-storage')
+          .default as typeof AsyncStorage
+      await newAsyncStorage.clear()
+      await oldAsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()
@@ -173,8 +175,8 @@ class SessionStore {
       }
     }
     completeSync()
-    if (this.user && !this.user.delegateInviteToken) {
-      this.user.delegateInviteToken = await resetDelegateToken()
+    if (this.user && !this.user.delegateInviteToken && this.user.token) {
+      this.user.delegateInviteToken = await resetDelegateToken(this.user.token)
     }
   }
 }
@@ -186,16 +188,6 @@ hydrate('SessionStore', sharedSessionStore).then(async () => {
   if (sharedSessionStore.user?.token) {
     sharedSync.login(sharedSessionStore.user.token)
     setToken(sharedSessionStore.user.token)
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user._id },
-      false,
-      true
-    )
-    await updateOrCreateDelegation(
-      { _id: sharedSessionStore.user._id },
-      true,
-      true
-    )
   } else {
     removeToken()
   }

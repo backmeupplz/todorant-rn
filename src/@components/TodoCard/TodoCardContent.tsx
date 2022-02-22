@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { Todo } from '@models/Todo'
 import { CardType } from '@components/TodoCard/CardType'
 import { View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'

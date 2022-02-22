@@ -25,6 +25,9 @@ export class Integrations extends Component {
   }
 
   async googleCalendarTapped() {
+    if (!sharedSessionStore.user?.token) {
+      return
+    }
     if (sharedSettingsStore.googleCalendarCredentials) {
       ActionSheet.show(
         {
@@ -44,13 +47,15 @@ export class Integrations extends Component {
     } else {
       this.loading = true
       try {
-        const url = (await rest.calendarAuthenticationURL()).data
+        const url = (
+          await rest.calendarAuthenticationURL(sharedSessionStore.user?.token)
+        ).data
         navigate('GoogleCalendar', {
           url,
           authorize: this.authorizeGoogleCalendar,
         })
       } catch (err) {
-        alertError(err)
+        alertError(err as string)
       } finally {
         this.loading = false
       }
@@ -58,14 +63,19 @@ export class Integrations extends Component {
   }
 
   authorizeGoogleCalendar = async (code: string) => {
+    if (!sharedSessionStore.user?.token) {
+      return
+    }
     this.loading = true
     try {
-      const googleCredentials = (await rest.calendarAuthorize(code)).data
+      const googleCredentials = (
+        await rest.calendarAuthorize(code, sharedSessionStore.user?.token)
+      ).data
       sharedSettingsStore.googleCalendarCredentials = googleCredentials
       sharedSettingsStore.updatedAt = new Date()
       sharedSync.sync(SyncRequestEvent.Settings)
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }

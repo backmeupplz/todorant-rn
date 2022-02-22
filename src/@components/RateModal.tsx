@@ -36,7 +36,10 @@ export class RateModal extends Component {
         }}
         sendContactUsForm={(state) => {
           sharedSessionStore.askedToRate = true
-          sendFeedback(state)
+          if (!sharedSessionStore.user?.token) {
+            return
+          }
+          sendFeedback(state, sharedSessionStore.user?.token)
         }}
         styles={{
           modalContainer: { backgroundColor: sharedColors.backgroundColor },

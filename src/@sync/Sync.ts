@@ -32,7 +32,6 @@ import {
 import { cloneDeep } from 'lodash'
 import { Q } from '@nozbe/watermelondb'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
-import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { decrypt, encrypt, _e } from '@utils/encryption'
 import { WMDBSync } from './wmdb/wmdbsync'
@@ -119,7 +118,6 @@ class Sync {
       this.socketConnection,
       'delegate',
       () => {
-        if (!sharedSessionStore.migrationCompleted) return undefined
         return sharedDelegationStore.updatedAt
       },
       (objects, pushBack, completeSync) => {
@@ -168,7 +166,7 @@ class Sync {
     return this.sync()
   }
 
-  sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
+  async sync(event: SyncRequestEvent = SyncRequestEvent.All): Promise<unknown> {
     switch (event) {
       // All
       case SyncRequestEvent.All:
@@ -176,8 +174,8 @@ class Sync {
           this.settingsSyncManager.sync(),
           this.userSyncManager.sync(),
           this.heroSyncManager.sync(),
+          await this.delegationSyncManager.sync(),
           this.wmdbSyncManager.sync(),
-          this.delegationSyncManager.sync(),
         ])
       // Non-realm syncs
       case SyncRequestEvent.Settings:

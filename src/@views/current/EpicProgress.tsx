@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Tag } from '@models/Tag'
 import { View, Text } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
 import fonts from '@utils/fonts'

@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useMemo, useState } from 'react'
+import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Container } from 'native-base'
 import { sharedSessionStore } from '@stores/SessionStore'
@@ -17,6 +17,7 @@ import { TodoHeader } from '@components/TodoHeader'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import withObservables from '@nozbe/with-observables'
 import { Query } from '@nozbe/watermelondb'
+import { usersCollection } from '@utils/watermelondb/wmdb'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {
@@ -72,7 +73,7 @@ const EnhancedDraggableSectionList = enhance(
       setMap(todosMap)
     }
 
-    useMemo(() => {
+    useEffect(() => {
       build()
     }, [completed, todo.length, byMe])
 
@@ -95,7 +96,7 @@ const EnhancedDraggableSectionList = enhance(
         renderSectionHeader={(header) => {
           return (
             <TodoHeader
-              item={header.section.userInSection.name}
+              item={header.section.userInSection.name!}
               hidePlus={true}
             />
           )

@@ -1,4 +1,4 @@
-import { getTitle, Todo } from '@models/Todo'
+import { getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { fixOrder } from '@utils/fixOrder'
@@ -13,9 +13,10 @@ import { sharedAppStateStore } from '@stores/AppStateStore'
 import { alertConfirm, alertError } from './alert'
 import { requestSync } from '@sync/syncEventEmitter'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { getLocalDelegation, updateOrCreateDelegation } from './delegations'
+import { getLocalDelegation } from './delegations'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from './watermelondb/wmdb'
+import { updateOrCreateDelegation } from '@sync/SyncObjectHandlers'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()
@@ -117,7 +118,7 @@ async function addTodo(text: string) {
     monthAndYear,
     date: date,
     encrypted: !!sharedSessionStore.encryptionKey,
-  } as Todo
+  } as MelonTodo
   newTodo._exactDate = new Date(getTitle(newTodo))
 
   let createdTodo!: MelonTodo

@@ -299,6 +299,16 @@
     },
     "epic": {
       "numberError": "Should be a number"
+    },
+    "errorDuring": "Error occured during: {{reason}}. Original error: {{originalError}}",
+    "sync": {
+      "updatingOrCreating": "updating or creating",
+      "updatingPushedDelegates": "updating or creating pushed delegates",
+      "updatingPushedDelegators": "updating or creating pushed delegators",
+      "removingDelegators": "removing locally marked as deleted delegators",
+      "removingDelegates": "removing locally marked as deleted delegates",
+      "removingPushedDelegators": "removing pushed delegators",
+      "preapringDelegationsForDeleting": "preparing delegations for deleting: delegation id: {{delegationId}}"
     }
   },
   "epic": {
@@ -485,5 +495,6 @@
     "title": "Repetitive task",
     "text": "This is a repetitive task, do you want to break down it or complete it?",
     "complete": "Complete"
-  }
+  },
+  "syncError": "An error occurred during data synchronization"
 }
