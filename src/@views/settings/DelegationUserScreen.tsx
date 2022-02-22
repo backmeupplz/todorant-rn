@@ -1,5 +1,5 @@
 import { Container, Content, Text } from 'native-base'
-import { DelegationUser, DelegationUserType } from '@models/DelegationUser'
+import { DelegationUserType } from '@models/DelegationUser'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q, Query } from '@nozbe/watermelondb'
 import React, { Component, Fragment } from 'react'
@@ -47,26 +47,10 @@ class Row extends Component<{
               async () => {
                 this.loading = true
                 try {
-                  if (
-                    this.props.delegationType === DelegationUserType.delegate
-                  ) {
-                    await this.props.delegationUser.delete()
-                    // await removeDelegation(
-                    //   this.props.delegationUser,
-                    //   false,
-                    //   true
-                    // )
-                  } else {
-                    await this.props.delegationUser.delete()
-                    // await removeDelegation(
-                    //   this.props.delegationUser,
-                    //   true,
-                    //   true
-                    // )
-                  }
+                  await this.props.delegationUser.delete()
                   await sharedSync.sync()
                 } catch (err) {
-                  alertError(err)
+                  alertError(err as string)
                 } finally {
                   this.loading = false
                 }

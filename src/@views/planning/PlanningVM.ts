@@ -39,9 +39,9 @@ export class PlanningVM {
         Q.where(TodoColumn.delegator, null),
         Q.where(TodoColumn.delegateAccepted, true)
       ),
-      Q.experimentalSortBy(TodoColumn._exactDate, completed ? Q.desc : Q.asc),
-      Q.experimentalSortBy(TodoColumn.frog, Q.desc),
-      Q.experimentalSortBy(TodoColumn.order, Q.asc)
+      Q.sortBy(TodoColumn._exactDate, completed ? Q.desc : Q.asc),
+      Q.sortBy(TodoColumn.frog, Q.desc),
+      Q.sortBy(TodoColumn.order, Q.asc)
     )
   }
 

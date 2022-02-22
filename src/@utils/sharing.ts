@@ -20,7 +20,7 @@ ReceiveSharingIntent.getReceivedFiles(
     }
   },
   (error: any) => {
-    alertError(error)
+    alertError(error as string)
   }
 )
 ReceiveSharingIntent.clearReceivedFiles()

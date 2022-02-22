@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Icon } from 'native-base'
-import { Todo, isTodoToday } from '@models/Todo'
+import { isTodoToday } from '@models/Todo'
 import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'

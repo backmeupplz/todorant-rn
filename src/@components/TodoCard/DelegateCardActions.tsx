@@ -5,7 +5,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { Todo } from '@models/Todo'
 import {
   DelegateSectionType,
   sharedDelegateStateStore,
@@ -13,7 +12,6 @@ import {
 import { IconButton } from '@components/IconButton'
 import { MelonTodo } from '@models/MelonTodo'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
-
 
 @observer
 export class DelegateCardActions extends Component<{

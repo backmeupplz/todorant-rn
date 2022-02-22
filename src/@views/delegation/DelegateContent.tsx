@@ -51,15 +51,6 @@ const EnhancedDraggableSectionList = enhance(
       for (const realmTodo of todo) {
         try {
           const user = await (byMe ? realmTodo.user : realmTodo.delegator)
-          console.log('//////////////////////////////////////////////////')
-          // console.log(
-          //   await (
-          //     await usersCollection.query().fetch()
-          //   ).forEach((user) => {
-          //     console.log(user.name)
-          //   })
-          // )
-          console.log((await realmTodo.user).name)
           if (!user) continue
           const titleKey = user?._id
           if (!titleKey) continue
@@ -105,7 +96,7 @@ const EnhancedDraggableSectionList = enhance(
         renderSectionHeader={(header) => {
           return (
             <TodoHeader
-              item={header.section.userInSection.name}
+              item={header.section.userInSection.name!}
               hidePlus={true}
             />
           )

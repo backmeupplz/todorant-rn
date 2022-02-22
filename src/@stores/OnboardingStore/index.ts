@@ -16,10 +16,10 @@ import {
 } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import Animated, { Easing } from 'react-native-reanimated'
-// RN 64.* import { EasingNode } from 'react-native-reanimated'
+import { EasingNode } from 'react-native-reanimated'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { navigate } from '@utils/navigation'
+import { navigate, RootStackParamList } from '@utils/navigation'
 import { Toast } from 'native-base'
 import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
@@ -103,7 +103,7 @@ class OnboardingStore {
 
   changeSavedSreen(screen: OnboardingSreens) {
     requestAnimationFrame(() => {
-      navigate(screen)
+      navigate(screen as keyof RootStackParamList)
       this.screen = screen
     })
   }
@@ -119,8 +119,7 @@ class OnboardingStore {
       Animated.timing(this.animatedOpacity, {
         toValue: 0,
         duration: 250,
-        // RN 64.* easing: EasingNode.linear,
-        easing: Easing.linear,
+        easing: EasingNode.linear,
       }).start(() => {
         this.step = step
         if (stepObject) {
@@ -129,7 +128,7 @@ class OnboardingStore {
         Animated.timing(this.animatedOpacity, {
           toValue: 1,
           duration: 250,
-          easing: Easing.linear,
+          easing: EasingNode.linear,
         }).start()
       })
     })
@@ -520,8 +519,8 @@ export const AllStages = {
           scrollContentRef
         )
         // scrolling to our intergationButton
-        scrollView.scrollTo({
-          y: buttonWithOffset.y,
+        scrollView.current?.scrollToOffset({
+          offset: buttonWithOffset.y,
         })
         // Wait for the scroll
         setTimeout(() => {
@@ -559,7 +558,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollToEnd()
+        scrollView.current?.scrollToOffset({ offset: settingsScrollOffset.y })
         // Wait for the scroll
         setTimeout(() => {
           InteractionManager.runAfterInteractions(async () => {
@@ -582,7 +581,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollTo({ y: 0 })
+        scrollView.current?.scrollToOffset({ offset: 0 })
         const nodeId = (await import('@views/settings/Settings')).howToUseNodeId
         resolve({
           nodeId,
@@ -596,7 +595,7 @@ export const AllStages = {
       InteractionManager.runAfterInteractions(async () => {
         const scrollView = (await import('@views/settings/Settings'))
           .scrollViewRef
-        scrollView.scrollTo({ y: 0 })
+        scrollView.current?.scrollToOffset({ offset: 0 })
         const nodeId = (await import('@components/InfoButton')).infoButtonNodeId
         resolve({
           nodeId: Platform.OS === 'android' ? nodeId : undefined,

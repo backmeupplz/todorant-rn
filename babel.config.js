@@ -12,6 +12,6 @@ module.exports = {
         },
       },
     ],
-    // RN 64.* 'react-native-reanimated/plugin',
+    'react-native-reanimated/plugin',
   ],
 }

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, createRef, RefObject } from 'react'
 import { Text, View, Toast, ActionSheet } from 'native-base'
 import { goBack, navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { observable, computed, makeObservable } from 'mobx'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { Todo, getTitle, cloneDelegator } from '@models/Todo'
+import { getTitle, cloneDelegator } from '@models/Todo'
 import { fixOrder } from '@utils/fixOrder'
 import uuid from 'uuid'
 import { useRoute, RouteProp } from '@react-navigation/native'
@@ -20,7 +20,6 @@ import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import { AddTodoForm } from '@views/add/AddTodoForm'
 import {
   Alert,
-  Clipboard,
   BackHandler,
   KeyboardAvoidingView,
   Platform,
@@ -28,6 +27,9 @@ import {
   Keyboard,
   InteractionManager,
   NativeEventSubscription,
+  FlatList,
+  Falsy,
+  Dimensions,
 } from 'react-native'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
@@ -44,9 +46,13 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomIcon from '@components/CustomIcon'
 import { backButtonStore } from '@components/BackButton'
-import DraggableFlatList from 'react-native-draggable-flatlist'
+import DraggableFlatList, {
+  OpacityDecorator,
+  ScaleDecorator,
+  ShadowDecorator,
+} from 'react-native-draggable-flatlist'
 import { logEvent } from '@utils/logEvent'
-import { HeaderHeightContext } from '@react-navigation/stack'
+import { HeaderHeightContext } from '@react-navigation/elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Animatable from 'react-native-animatable'
 import { isTodoOld } from '@utils/isTodoOld'
@@ -61,10 +67,8 @@ import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { EventEmitter } from 'events'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { database, todosCollection } from '@utils/watermelondb/wmdb'
-import {
-  getLocalDelegation,
-  updateOrCreateDelegation,
-} from '@utils/delegations'
+import { getLocalDelegation } from '@utils/delegations'
+import Clipboard from '@react-native-community/clipboard'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -100,8 +104,6 @@ class AddTodoContent extends Component<{
   @observable savingTodo = false
 
   backHandler: NativeEventSubscription | undefined
-
-  scrollView: DraggableFlatList<TodoVM | undefined> | null = null
 
   completed = false
 
@@ -166,18 +168,14 @@ class AddTodoContent extends Component<{
           date: vm.date,
           time: vm.time,
           repetitive: vm.repetitive,
-          //user: !!vm.delegate ? cloneDelegator(vm.delegate) : undefined,
-          //delegator: !!vm.delegate
-          //  ? cloneDelegator(sharedSessionStore.user)
-          //  : undefined,
           encrypted: !!sharedSessionStore.encryptionKey && !vm.delegate,
-        } as Todo
+        } as MelonTodo
         todo._exactDate = new Date(getTitle(todo))
         if (todo.completed) {
           completedAtCreation.push(todo.text)
         }
-        let user: MelonUser | undefined
-        let delegator: MelonUser | undefined
+        let user: MelonUser | Falsy
+        let delegator: MelonUser | Falsy
         if (vm.delegate) {
           user = await getLocalDelegation(vm.delegate, false)
           delegator = await getLocalDelegation(sharedSessionStore.user!, true)
@@ -376,6 +374,8 @@ class AddTodoContent extends Component<{
     this.backHandler?.remove()
   }
 
+  flatlistref = createRef<FlatList>()
+
   addTodo = async () => {
     this.vms.forEach((vm) => {
       vm.collapsed = true
@@ -402,9 +402,11 @@ class AddTodoContent extends Component<{
     }
     this.vms.push(newVM)
 
-    if (this.scrollView) {
-      await this.scrollView.scrollToAsync(Number.MAX_SAFE_INTEGER)
-      newVM.focus()
+    if (this.flatlistref) {
+      InteractionManager.runAfterInteractions(async () => {
+        await this.flatlistref.current?.scrollToEnd()
+        newVM.focus()
+      })
     }
   }
 
@@ -551,10 +553,12 @@ class AddTodoContent extends Component<{
           }
         >
           <DraggableFlatList
-            ref={(scrollView) => {
-              this.scrollView = scrollView
+            ref={this.flatlistref}
+            contentContainerStyle={{
+              paddingBottom: 10,
+              paddingTop: 10,
             }}
-            contentContainerStyle={{ paddingBottom: 10, paddingTop: 10 }}
+            style={{ maxHeight: '95%', height: '95%' }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}
             renderItem={({ item, index, drag, isActive }) => {
@@ -572,33 +576,35 @@ class AddTodoContent extends Component<{
                   </View>
                 )
               ) : (
-                <View
-                  key={index}
-                  style={{
-                    marginTop: index === 0 ? 10 : undefined,
-                  }}
-                >
-                  {item && (
-                    <AddTodoForm
-                      vm={item}
-                      deleteTodo={
-                        this.vms.length > 1
-                          ? () => {
-                              if (index) {
-                                this.vms.splice(index - 1, 1)
+                <ScaleDecorator>
+                  <View
+                    key={index}
+                    style={{
+                      marginTop: index === 0 ? 10 : undefined,
+                    }}
+                  >
+                    {item && (
+                      <AddTodoForm
+                        vm={item}
+                        deleteTodo={
+                          this.vms.length > 1
+                            ? () => {
+                                if (index) {
+                                  this.vms.splice(index - 1, 1)
+                                }
                               }
-                            }
-                          : undefined
-                      }
-                      drag={drag}
-                      showCross={
-                        !!this.breakdownTodo &&
-                        !!sharedSettingsStore.duplicateTagInBreakdown
-                      }
-                    />
-                  )}
-                  {index != this.vms.length && <Divider />}
-                </View>
+                            : undefined
+                        }
+                        drag={drag}
+                        showCross={
+                          !!this.breakdownTodo &&
+                          !!sharedSettingsStore.duplicateTagInBreakdown
+                        }
+                      />
+                    )}
+                    {index != this.vms.length && <Divider />}
+                  </View>
+                </ScaleDecorator>
               )
             }}
             keyExtractor={(item, index) => `draggable-item-${index}`}
@@ -606,6 +612,7 @@ class AddTodoContent extends Component<{
           />
           <View
             style={{
+              marginTop: -40,
               flexDirection: 'row',
               paddingHorizontal: 16,
               justifyContent: 'center',

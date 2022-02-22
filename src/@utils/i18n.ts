@@ -4,8 +4,7 @@ import * as RNLocalize from 'react-native-localize'
 import { Language } from '@models/Language'
 import { configCalendar } from '@utils/configCalendar'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { AsyncStorage } from 'react-native'
-// RN 64.import { MMKV } from '@stores/hydration/hydrate'
+import { MMKV } from '@stores/hydration/hydrate'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),
@@ -27,8 +26,7 @@ export const translate = (key: any, config?: any) => {
 }
 
 export async function getLanguageTag() {
-  const language =
-    (await AsyncStorage.getItem('languageSelect')) || Language.auto
+  const language = (await MMKV.getItem('languageSelect')) || Language.auto
   if (language !== Language.auto) {
     return language
   }

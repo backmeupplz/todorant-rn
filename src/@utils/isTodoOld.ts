@@ -1,5 +1,4 @@
 import { MelonTodo } from '@models/MelonTodo'
-import { Todo } from '@models/Todo'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 

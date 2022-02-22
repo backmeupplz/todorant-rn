@@ -8,10 +8,15 @@ import {
   synchronize,
   SyncPushArgs,
 } from '@nozbe/watermelondb/sync'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { sharedSync } from '@sync/Sync'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { alertError, alertMessage } from '@utils/alert'
-import { updateOrCreateDelegation } from '@utils/delegations'
 import { decrypt, encrypt } from '@utils/encryption'
+import { translate } from '@utils/i18n'
+import { getDateMonthAndYearString } from '@utils/time'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import {
   database,
@@ -19,9 +24,10 @@ import {
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { cloneDeep } from 'lodash'
-import { makeObservable, observable, when } from 'mobx'
+import { chunk, cloneDeep } from 'lodash'
+import { makeObservable, observable, reaction, when } from 'mobx'
 import { Alert } from 'react-native'
+import { v4 } from 'uuid'
 import { SocketConnection } from '../sockets/SocketConnection'
 import { Mutex } from './mutex'
 
@@ -47,12 +53,17 @@ export class WMDBSync {
   socketConnection: SocketConnection
   @observable isSyncing = false
 
-  serverRequest?: Promise<void>
+  private wmdbResponse?: ({
+    serverObjects,
+    serverTimeStamp,
+  }: {
+    serverTimeStamp: number
+    serverObjects: SyncDatabaseChangeSet
+  }) => void
 
-  @observable gotWmDb = false
+  private completeSync?: () => void
 
-  private serverTimeStamp?: number
-  private serverObjects?: SyncDatabaseChangeSet
+  private rejectSync?: (err: string) => void
 
   constructor(socketConnection: SocketConnection) {
     makeObservable(this)
@@ -61,53 +72,43 @@ export class WMDBSync {
     this.socketConnection.socketIO.on(
       'return_wmdb',
       async (serverObjects: SyncDatabaseChangeSet, serverTimeStamp: number) => {
-        await onWMDBObjectsFromServer(serverObjects)
-        this.serverTimeStamp = serverTimeStamp
-        this.serverObjects = serverObjects
-        this.gotWmDb = true
+        if (this.wmdbResponse) {
+          this.wmdbResponse({ serverObjects, serverTimeStamp })
+          return
+        }
+        alertError(translate('syncError'))
       }
     )
-
+    this.socketConnection.socketIO.on('complete_wmdb', async () => {
+      if (this.completeSync) {
+        this.completeSync()
+      }
+    })
     this.socketConnection.socketIO.on(
-      'complete_wmdb',
-      async (pushedBack?: { todos: MelonTodo[]; tags: MelonTag[] }) => {
-        this.serverTimeStamp = undefined
-        this.serverObjects = undefined
-        // if (this.gotWmDb) await when(() => !this.gotWmDb)
-        if (pushedBack?.todos.length) {
-          for (const todo of pushedBack.todos) {
-            const localTodo = await todosCollection.find(todo._tempSyncId)
-            if (!localTodo || !todo._id) {
-              return
-            }
-            await localTodo.setServerId(todo._id)
-          }
+      'wmdb_sync_error',
+      async (error: string) => {
+        if (this.rejectSync) {
+          this.rejectSync(error)
         }
-        if (pushedBack?.tags.length) {
-          for (const tag of pushedBack.tags) {
-            const localTag = await tagsCollection.find(tag._tempSyncId)
-            if (!localTag || !tag._id) {
-              return
-            }
-            await localTag.setServerId(tag._id)
-          }
-        }
-        this.gotWmDb = false
       }
     )
   }
 
-  getServerData = async () => {
+  getServerData = async (lastPulledAt: number | null) => {
     // Get last wmdb sync date
-    const lastPulledAt = await wmdbGetLastPullAt(database)
     // Request for changes from server
-    this.socketConnection.socketIO.emit('get_wmdb', new Date(lastPulledAt))
-    // Wait until get server changes
-    if (!this.serverRequest) this.serverRequest = when(() => this.gotWmDb)
-    await this.serverRequest
+    this.socketConnection.socketIO.emit('get_wmdb', lastPulledAt)
+    const { serverObjects, serverTimeStamp } = await new Promise<{
+      serverObjects: SyncDatabaseChangeSet
+      serverTimeStamp: number | null
+    }>((res, rej) => {
+      this.wmdbResponse = res
+      this.rejectSync = rej
+    })
+    await onWMDBObjectsFromServer(serverObjects)
     return {
-      serverObjects: this.serverObjects,
-      serverTimeStamp: this.serverTimeStamp,
+      serverObjects,
+      serverTimeStamp,
     }
   }
 
@@ -116,6 +117,10 @@ export class WMDBSync {
     const updatedTodos = []
     const clonedChanges = cloneDeep(changes)
     for (const sqlRaw of clonedChanges.todos.created) {
+      if (sqlRaw.server_id) {
+        updatedTodos.push(sqlRaw)
+        continue
+      }
       if (sqlRaw.user_id) {
         sqlRaw.user_id = (await usersCollection.find(sqlRaw.user_id))._id
       }
@@ -131,34 +136,68 @@ export class WMDBSync {
     }
     for (const sqlRaw of clonedChanges.todos.updated) {
       if (sqlRaw.user_id) {
-        const user = await usersCollection.find(sqlRaw.user_id)
-        if (!user) {
-          sqlRaw.is_deleted = true
-          return
-        } else {
-          sqlRaw.user_id = user._id
+        try {
+          const user = await usersCollection.find(sqlRaw.user_id)
+          if (!user) {
+            sqlRaw.is_deleted = true
+            return
+          } else {
+            sqlRaw.user_id = user._id
+          }
+        } catch (err) {
+          delete sqlRaw.user_id
         }
       }
-      if (sqlRaw.delegator_id) {
-        const delegator = await usersCollection.find(sqlRaw.delegator_id)
-        if (!delegator) {
-          sqlRaw.is_deleted = true
-        } else {
-          sqlRaw.delegator_id = delegator._id
+      try {
+        if (sqlRaw.delegator_id) {
+          if (!sqlRaw.month_and_year) {
+            sqlRaw.month_and_year = getDateMonthAndYearString(new Date())
+          }
+          const delegator = await usersCollection.find(sqlRaw.delegator_id)
+          if (!delegator) {
+            sqlRaw.is_deleted = true
+          } else {
+            sqlRaw.delegator_id = delegator._id
+          }
         }
+      } catch (err) {
+        delete sqlRaw.delegator_id
       }
       if (sqlRaw.is_encrypted) {
         sqlRaw.text = encrypt(sqlRaw.text)
       }
+      if (sqlRaw.server_id) {
+        delete sqlRaw.id
+      }
       updatedTodos.push(sqlRaw)
     }
-    clonedChanges.todos.created = createdTodos
-    clonedChanges.todos.updated = updatedTodos
-    this.socketConnection.socketIO.emit(
-      'push_wmdb',
-      clonedChanges,
-      lastPulledAt
-    )
+    const chunkedCreated = chunk(createdTodos, 1000)
+    const chunkedUpdated = chunk(updatedTodos, 1000)
+    let lastSelectedChunk = 0
+    while (
+      lastSelectedChunk !=
+      Math.max(chunkedUpdated.length, chunkedCreated.length) + 1
+    ) {
+      if (chunkedUpdated[lastSelectedChunk]) {
+        clonedChanges.todos.updated = chunkedUpdated[lastSelectedChunk]
+      }
+      if (chunkedCreated[lastSelectedChunk]) {
+        clonedChanges.todos.created = chunkedCreated[lastSelectedChunk]
+      }
+      this.socketConnection.socketIO.emit(
+        'push_wmdb',
+        clonedChanges,
+        lastPulledAt,
+        sharedSessionStore.encryptionKey
+      )
+      await new Promise<void>((res, rej) => {
+        this.completeSync = res
+        this.rejectSync = rej
+      })
+      clonedChanges.todos.updated = []
+      clonedChanges.todos.created = []
+      lastSelectedChunk++
+    }
   }
 
   conflictResolver = (
@@ -176,6 +215,7 @@ export class WMDBSync {
 
   sync = () =>
     Mutex.dispatch(async () => {
+      sharedTodoStore.refreshTodos()
       if (!this.socketConnection.connected) {
         return Promise.reject('Socket sync: not connected to sockets')
       }
@@ -186,22 +226,20 @@ export class WMDBSync {
         return Promise.reject('Socket sync: no authorization token provided')
       }
       this.isSyncing = true
-      let pushed = false
-      // Get server data
-      const { serverObjects: changes, serverTimeStamp: timestamp } =
-        await this.getServerData()
       // Start sync
       try {
         await synchronize({
-          pullChanges: async () => {
+          pullChanges: async ({ lastPulledAt }) => {
+            // Get server data
+            const { serverObjects: changes, serverTimeStamp: timestamp } =
+              await this.getServerData(lastPulledAt)
             return {
               changes,
               timestamp,
             }
           },
-          pushChanges: (args) => {
-            pushed = true
-            return this.pushObjectsHandler(args)
+          pushChanges: async (args) => {
+            await this.pushObjectsHandler(args)
           },
           migrationsEnabledAtVersion: 1,
           log: __DEV__ ? logger.newLog() : undefined,
@@ -211,14 +249,13 @@ export class WMDBSync {
         } as SyncType)
       } catch (err) {
         console.error(err)
+        alertError(err as string)
       } finally {
         if (__DEV__) {
           console.log(logger.formattedLogs)
         }
-        this.gotWmDb = false
-        this.serverRequest = undefined
         this.isSyncing = false
-        this.serverObjects = undefined
+        sharedTodoStore.refreshTodos()
       }
     })
 }

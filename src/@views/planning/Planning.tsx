@@ -19,6 +19,7 @@ export class Planning extends Component {
     return (
       <Stack.Navigator
         screenOptions={{
+          detachPreviousScreen: false,
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }}
       >

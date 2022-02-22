@@ -16,7 +16,6 @@ import { translate } from '@utils/i18n'
 import { CollapseButton } from './CollapseButton'
 import {
   Platform,
-  Clipboard,
   ViewStyle,
   StyleProp,
   InteractionManager,
@@ -28,7 +27,7 @@ import { getDateString, getDateMonthAndYearString } from '@utils/time'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import moment, { Moment } from 'moment'
 import MonthPicker from 'react-native-month-picker'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 import {
   Switch,
   FlatList,
@@ -48,6 +47,8 @@ import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import withObservables from '@nozbe/with-observables'
 import { MelonTag } from '@models/MelonTag'
+import Clipboard from '@react-native-community/clipboard'
+import XDate from 'xdate'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -683,8 +684,12 @@ export class AddTodoForm extends Component<{
               <DateRow vm={this.props.vm} />
               {this.props.vm.showDatePicker && (
                 <Calendar
-                  minDate={__DEV__ ? undefined : getDateString(this.minDate)}
-                  current={this.props.vm.datePickerValue || new Date()}
+                  minDate={__DEV__ ? undefined : this.minDate}
+                  current={
+                    this.props.vm.datePickerValue
+                      ? new XDate(this.props.vm.datePickerValue)
+                      : new XDate()
+                  }
                   markedDates={this.props.vm.markedDate}
                   onDayPress={(day) => {
                     this.props.vm.datePickerValue = day.dateString
@@ -782,7 +787,7 @@ export class AddTodoForm extends Component<{
                 textColor={sharedColors.textColor}
                 value={this.props.vm.timePickerValue || new Date()}
                 mode="time"
-                onChange={(event: { type: string }, date: Date | undefined) => {
+                onChange={(event: Event, date?: Date) => {
                   if (Platform.OS === 'android') {
                     this.props.vm.showTimePicker = false
                   }

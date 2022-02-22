@@ -3,7 +3,6 @@ import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { MelonTodo } from '@models/MelonTodo'
-import { Todo } from '@models/Todo'
 import { Q } from '@nozbe/watermelondb'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
@@ -77,7 +76,7 @@ export class Security extends Component {
       await database.write(async () => await database.batch(...toUpdate))
       sharedSync.sync(SyncRequestEvent.Todo)
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
@@ -109,7 +108,7 @@ export class Security extends Component {
       await sharedSync.sync(SyncRequestEvent.Todo)
       sharedTodoStore.refreshTodos()
     } catch (err) {
-      alertError(err)
+      alertError(err as string)
     } finally {
       this.loading = false
     }
@@ -173,7 +172,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />
@@ -192,7 +191,7 @@ export class Security extends Component {
                     paddingVertical: -10,
                   }}
                   secureTextEntry
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   maxLength={35}
                 />
@@ -228,7 +227,10 @@ export class Security extends Component {
                             sharedSessionStore.encryptionKey = this.password
                             this.encryptEncrypted(false, this.password)
                             setPassword(sharedSessionStore.encryptionKey)
-                            alertMessage(translate('encryption.encryption'), translate('encryption.encryptionSaved'))
+                            alertMessage(
+                              translate('encryption.encryption'),
+                              translate('encryption.encryptionSaved')
+                            )
                           }
                         )
                       }}

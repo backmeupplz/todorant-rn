@@ -15,6 +15,7 @@ export function Current() {
       {() => (
         <Stack.Navigator
           screenOptions={{
+            detachPreviousScreen: false,
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
           {...({ language: sharedSettingsStore.language } as any)}

@@ -32,7 +32,6 @@ import {
 import { cloneDeep } from 'lodash'
 import { Q } from '@nozbe/watermelondb'
 import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
-import { updateOrCreateDelegation } from '@utils/delegations'
 import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { decrypt, encrypt, _e } from '@utils/encryption'
 import { WMDBSync } from './wmdb/wmdbsync'
@@ -119,7 +118,6 @@ class Sync {
       this.socketConnection,
       'delegate',
       () => {
-        if (!sharedSessionStore.migrationCompleted) return undefined
         return sharedDelegationStore.updatedAt
       },
       (objects, pushBack, completeSync) => {

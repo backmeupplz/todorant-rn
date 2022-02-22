@@ -26,6 +26,7 @@ export function Delegation() {
       {() => (
         <Stack.Navigator
           screenOptions={{
+            detachPreviousScreen: false,
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         >
