@@ -8,6 +8,7 @@ import {
   writer,
 } from '@nozbe/watermelondb/decorators'
 import { Tables, TagColumn } from '@utils/watermelondb/tables'
+import { ArgumentExctractor } from './MelonTodo'
 
 export class MelonTag extends Model {
   static table = Tables.tags
@@ -26,6 +27,16 @@ export class MelonTag extends Model {
   @field(TagColumn.epicPoints) epicPoints?: number
   @field(TagColumn.epicOrder) epicOrder?: number
 
+  prepareUpdateWithDescription(
+    writer: ArgumentExctractor<typeof this.prepareUpdate>,
+    description: string
+  ) {
+    try {
+      return this.prepareUpdate(writer)
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
   @writer async completeEpic() {
     await this.update((tag) => {
       tag.epic = false

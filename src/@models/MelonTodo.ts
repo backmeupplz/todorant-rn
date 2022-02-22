@@ -10,6 +10,17 @@ export class MelonUser extends Model {
     { type: 'belongs_to', key: UserColumn._id },
   ])
 
+  prepareUpdateWithDescription(
+    writer: ArgumentExctractor<typeof this.prepareUpdate>,
+    description: string
+  ) {
+    try {
+      return this.prepareUpdate(writer)
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
+
   // The set function is not properly typed in WMDB model yet, so we need to use this hack
   set!: (user: MelonUser | null) => void
 
@@ -59,6 +70,17 @@ export class MelonTodo extends Model {
   @relation(Tables.users, TodoColumn.user) user?: MelonUser
   @relation(Tables.users, TodoColumn.delegator) delegator?: MelonUser
 
+  prepareUpdateWithDescription(
+    writer: ArgumentExctractor<typeof this.prepareUpdate>,
+    description: string
+  ) {
+    try {
+      return this.prepareUpdate(writer)
+    } catch (err) {
+      throw Error(`${description} ${err}`)
+    }
+  }
+
   @writer async complete() {
     await this.update((todo) => (todo.completed = true))
   }
@@ -79,3 +101,9 @@ export class MelonTodo extends Model {
     await this.update((todo) => (todo._id = serverId))
   }
 }
+
+export type ArgumentExctractor<F extends Function> = F extends (
+  args: infer A
+) => any
+  ? A
+  : never

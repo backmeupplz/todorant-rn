@@ -74,10 +74,10 @@ class TagStore {
       const epicPoints = epic.epicPoints ?? 0
       if (epicPoints < epic.epicGoal)
         toUpdate.push(
-          epic.prepareUpdate((epic) => {
+          epic.prepareUpdateWithDescription((epic) => {
             if (!epic.epicPoints) epic.epicPoints = 0
             epic.epicPoints++
-          })
+          }, 'adding epic points')
         )
     })
     await database.write(async () => await database.batch(...toUpdate))
@@ -108,7 +108,10 @@ class TagStore {
     for (const dbtag of dbtagsObjects) {
       if (tagsMap[dbtag.tag]) {
         toUpdate.push(
-          dbtag.prepareUpdate((tag) => (tag.numberOfUses += tagsMap[dbtag.tag]))
+          dbtag.prepareUpdateWithDescription(
+            (tag) => (tag.numberOfUses += tagsMap[dbtag.tag]),
+            'adding number of usage'
+          )
         )
       }
     }

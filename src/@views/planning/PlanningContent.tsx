@@ -363,14 +363,22 @@ async function onDragEnd(
       )
         average = toItem.order + 1
       toUpdate.push(
-        (fromItem as MelonTodo).prepareUpdate((todo) => (todo.order = average))
+        (fromItem as MelonTodo).prepareUpdateWithDescription(
+          (todo) => (todo.order = average),
+          'reordering and setting up average order'
+        )
       )
     } else {
       for (let i = closestDayTo + 1; ; i++) {
         const item = data[i]
         if (item === undefined) break
         if (typeof item === 'string') break
-        toUpdate.push(item.prepareUpdate((todo) => (todo.order = lastOrder)))
+        toUpdate.push(
+          item.prepareUpdateWithDescription(
+            (todo) => (todo.order = lastOrder),
+            'reordering and setting up closest order'
+          )
+        )
         lastOrder++
       }
     }
@@ -441,7 +449,7 @@ async function onDragEnd(
         }
       }
       toUpdate.push(
-        (fromItem as MelonTodo).prepareUpdate((todo) => {
+        (fromItem as MelonTodo).prepareUpdateWithDescription((todo) => {
           if (markAsFrog) todo.frog = true
           if (failed) todo.frogFails++
           todo.order = average
@@ -449,7 +457,7 @@ async function onDragEnd(
           todo.monthAndYear =
             nearItem?.monthAndYear || (toItem as MelonTodo).monthAndYear
           todo._exactDate = new Date(getTitle(todo))
-        })
+        }, 'reordering between days')
       )
     }
   } else {
@@ -500,14 +508,14 @@ async function onDragEnd(
         }
       }
       toUpdate.push(
-        item.prepareUpdate((todo) => {
+        item.prepareUpdateWithDescription((todo) => {
           if (markAsFrog) todo.frog = true
           if (failed) todo.frogFails++
           todo.date = getDateDateString(lastSection)
           todo.monthAndYear = getDateMonthAndYearString(lastSection)
           todo._exactDate = new Date(lastSection)
           todo.order = lastOrder
-        })
+        }, 'reordering section headers')
       )
       lastOrder++
     }

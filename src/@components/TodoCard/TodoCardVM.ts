@@ -61,7 +61,12 @@ export class TodoCardVM {
       if (startOffseting) {
         offset++
         if (!t.skipped) {
-          toUpdate.push(t.prepareUpdate((todo) => (todo.order -= offset)))
+          toUpdate.push(
+            t.prepareUpdateWithDescription(
+              (todo) => (todo.order -= offset),
+              'skipping not skipped previously todo'
+            )
+          )
           foundValidNeighbour = true
           break
         }
@@ -70,15 +75,20 @@ export class TodoCardVM {
     if (!foundValidNeighbour) {
       neighbours.forEach((n, i) => {
         if (i > 0) {
-          toUpdate.push(n.prepareUpdate((todo) => todo.order--))
+          toUpdate.push(
+            n.prepareUpdateWithDescription(
+              (todo) => todo.order--,
+              'skipping todo without valid neighbour'
+            )
+          )
         }
       })
     }
     toUpdate.push(
-      todo.prepareUpdate((todo) => {
+      todo.prepareUpdateWithDescription((todo) => {
         todo.order += offset
         todo.skipped = true
-      })
+      }, 'skipping todo')
     )
 
     await database.write(async () => await database.batch(...toUpdate))

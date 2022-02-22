@@ -233,24 +233,27 @@ class AddTodoContent extends Component<{
           completedAtCreation.push(vm.text)
         }
 
-        const editedTodo = vm.editedTodo.prepareUpdate((todo) => {
-          todo.text = vm.text
-          todo.completed = vm.completed
-          todo.frog = vm.frog
-          todo.monthAndYear =
-            vm.monthAndYear || getDateMonthAndYearString(new Date())
-          todo.date = vm.date
-          todo.time = vm.time
-          todo.repetitive = vm.repetitive
-          todo._exactDate = new Date(getTitle(vm.editedTodo!))
-          if (failed && todo.date) {
-            todo.frogFails++
-            if (todo.frogFails > 1) {
-              todo.frog = true
+        const editedTodo = vm.editedTodo.prepareUpdateWithDescription(
+          (todo) => {
+            todo.text = vm.text
+            todo.completed = vm.completed
+            todo.frog = vm.frog
+            todo.monthAndYear =
+              vm.monthAndYear || getDateMonthAndYearString(new Date())
+            todo.date = vm.date
+            todo.time = vm.time
+            todo.repetitive = vm.repetitive
+            todo._exactDate = new Date(getTitle(vm.editedTodo!))
+            if (failed && todo.date) {
+              todo.frogFails++
+              if (todo.frogFails > 1) {
+                todo.frog = true
+              }
             }
-          }
-          todo.delegateAccepted = vm.delegateAccepted
-        })
+            todo.delegateAccepted = vm.delegateAccepted
+          },
+          'updating edited todo'
+        )
         toUpdate.push(editedTodo)
         involvedTodos.push(editedTodo)
         titlesToFixOrder.push(oldTitle, getTitle(editedTodo))

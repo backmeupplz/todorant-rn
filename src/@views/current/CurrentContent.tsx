@@ -109,8 +109,9 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
         keyExtractor={(epic) => epic._tempSyncId}
         onDragEnd={async (epics) => {
           const toUpdate = epics.data.map((epic, index) => {
-            return epic.prepareUpdate(
-              (epicToUpdate) => (epicToUpdate.epicOrder = index)
+            return epic.prepareUpdateWithDescription(
+              (epicToUpdate) => (epicToUpdate.epicOrder = index),
+              'changing epic order'
             )
           })
           await database.write(async () => await database.batch(...toUpdate))

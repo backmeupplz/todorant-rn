@@ -90,8 +90,9 @@ class DeleteAllTagsButton extends Component {
                   const toUpdate = [] as MelonTag[]
                   for (const tag of undeletedTags) {
                     toUpdate.push(
-                      tag.prepareUpdate(
-                        (tagToUpdate) => (tagToUpdate.deleted = true)
+                      tag.prepareUpdateWithDescription(
+                        (tagToUpdate) => (tagToUpdate.deleted = true),
+                        'deleting all tags'
                       )
                     )
                   }

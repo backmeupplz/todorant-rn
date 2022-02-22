@@ -33,8 +33,9 @@ export async function updateOrCreateDelegation(
       const updatedUser = await localDelegate.updateUser(localDelegate)
       return updatedUser
     }
-    return localDelegate.prepareUpdate((delegate) =>
-      Object.assign(delegate, delegation)
+    return localDelegate.prepareUpdateWithDescription(
+      (delegate) => Object.assign(delegate, delegation),
+      'updaitng or creating delegation'
     )
   }
   // Create new user in place if need
