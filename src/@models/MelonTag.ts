@@ -35,7 +35,7 @@ export class MelonTag extends Model {
       const updated = await this.update(writer)
       return updated
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
 
@@ -46,7 +46,7 @@ export class MelonTag extends Model {
     try {
       return this.prepareUpdate(writer)
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
   @writer async completeEpic(description: string) {

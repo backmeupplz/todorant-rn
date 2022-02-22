@@ -134,7 +134,10 @@ export async function onDelegationObjectsFromServer(
   // If there's no data that should be pushed on server that just completeSync
   if (!delegatorsToPush.length && !delegatesChangedLocally.length) {
     const preparedToDelete = [...delegationsToDelete.values()].map(
-      (delegation) => delegation.prepareDestroyPermanently()
+      (delegation) =>
+        delegation.prepareDestroyPermanentlyWithDescription(
+          'preparing destroy when nothing to push'
+        )
     )
     // Complete sync
     await database.write(async () => await database.batch(...preparedToDelete))
@@ -279,7 +282,9 @@ export async function onDelegationObjectsFromServer(
   const preparedToDelete = [...delegationsToDelete.values()].map(
     (delegation) => {
       try {
-        return delegation.prepareDestroyPermanently()
+        return delegation.prepareDestroyPermanentlyWithDescription(
+          'preparing destroy before batch'
+        )
       } catch (err) {
         throw Error(
           translate('errors.errorDuring', {

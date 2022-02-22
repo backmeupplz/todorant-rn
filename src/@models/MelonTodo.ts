@@ -11,6 +11,14 @@ export class MelonUser extends Model {
     { type: 'belongs_to', key: UserColumn._id },
   ])
 
+  prepareDestroyPermanentlyWithDescription(description: string) {
+    try {
+      return this.prepareDestroyPermanently()
+    } catch (err) {
+      throw Error(`${err} ${description}`)
+    }
+  }
+
   async updateWithDescription(
     writer: ArgumentExctractor<typeof this.update>,
     description: string
@@ -19,7 +27,7 @@ export class MelonUser extends Model {
       const updated = await this.update(writer)
       return updated
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
 
@@ -30,7 +38,7 @@ export class MelonUser extends Model {
     try {
       return this.prepareUpdate(writer)
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
 
@@ -97,7 +105,7 @@ export class MelonTodo extends Model {
       const updated = await this.update(writer)
       return updated
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
 
@@ -108,7 +116,7 @@ export class MelonTodo extends Model {
     try {
       return this.prepareUpdate(writer)
     } catch (err) {
-      throw Error(`${description} ${err}`)
+      throw Error(`${err} ${description}`)
     }
   }
 
