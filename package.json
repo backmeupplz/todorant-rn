@@ -18,6 +18,7 @@
     "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release"
   },
   "dependencies": {
+    "@codler/react-native-keyboard-aware-scroll-view": "^2.0.1",
     "@invertase/react-native-apple-authentication": "^2.1.5",
     "@nozbe/watermelondb": "0.24.1-1",
     "@nozbe/with-observables": "^1.4.0",
