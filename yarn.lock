@@ -1824,14 +1824,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codler/react-native-keyboard-aware-scroll-view@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@codler/react-native-keyboard-aware-scroll-view@npm:1.0.1"
+"@codler/react-native-keyboard-aware-scroll-view@npm:2.0.1, @codler/react-native-keyboard-aware-scroll-view@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@codler/react-native-keyboard-aware-scroll-view@npm:2.0.1"
   dependencies:
     react-native-iphone-x-helper: ^1.0.3
   peerDependencies:
-    react-native: ">=0.63.0"
-  checksum: 14e10e1cbfb148edb3afc5c2b0b4e23a4711eca3c545ef86d469ebbf06dda88e09d99dc9cf4a16aadeb6d8f07ebf597503b04100b4cb8a0256d28b5e96f85324
+    react-native: ">=0.65.1"
+  checksum: 8f7ca3ddd0382af3a570ea7fed8d41ceda402a172c2595d45eee050adbc13be90933910ee695cabfbb49735b5716c901cd78b87f618102402ba6f3b63e2fb671
   languageName: node
   linkType: hard
 
@@ -9584,7 +9584,7 @@ mobx-persist@backmeupplz/mobx-persist:
   version: 2.15.2
   resolution: "native-base@npm:2.15.2"
   dependencies:
-    "@codler/react-native-keyboard-aware-scroll-view": 1.0.1
+    "@codler/react-native-keyboard-aware-scroll-view": 2.0.1
     "@react-native-community/datetimepicker": ^3.0.2
     "@react-native-picker/picker": ^1.9.7
     blueimp-md5: ^2.5.0
@@ -12899,6 +12899,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     "@babel/core": ^7.12.9
     "@babel/plugin-proposal-decorators": ^7.16.4
     "@babel/runtime": ^7.12.5
+    "@codler/react-native-keyboard-aware-scroll-view": ^2.0.1
     "@invertase/react-native-apple-authentication": ^2.1.5
     "@nozbe/watermelondb": 0.24.1-1
     "@nozbe/with-observables": ^1.4.0
