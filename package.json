@@ -15,7 +15,9 @@
     "download-translations": "node scripts/download.js",
     "adb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:1337 tcp:1337 && adb reverse tcp:3000 tcp:3000",
     "upload-to-appgallery": "cd android && bundle exec fastlane release_appgallery",
-    "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release"
+    "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release",
+    "pretty": "prettier --check src",
+    "lint": "yarn pretty && eslint --max-warnings 0 --ext ts,tsx src"
   },
   "dependencies": {
     "@codler/react-native-keyboard-aware-scroll-view": "^2.0.1",
@@ -131,7 +133,7 @@
     "@typescript-eslint/typescript-estree": "^5.17.0",
     "babel-jest": "^27.4.2",
     "dotenv": "^10.0.0",
-    "eslint": "^8.3.0",
+    "eslint": "^7.3.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-no-relative-import-paths": "^1.2.0",
     "eslint-plugin-node": "^11.1.0",

@@ -18,14 +18,12 @@ module.exports = {
   extends: [
     'plugin:prettier/recommended',
     // 'eslint:recommended',
-    // 'plugin:@typescript-eslint/eslint-recommended',
-    // 'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
     // '@react-native-community',
   ],
   rules: {
-    // '@typescript-eslint/no-explicit-any': 'error',
-    // '@typescript-eslint/explicit-module-boundary-types': 'warn',
-    'react-native/no-inline-styles': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'no-relative-import-paths/no-relative-import-paths': 'error',
     'prettier/prettier': [
       'error',
