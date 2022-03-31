@@ -71,8 +71,9 @@ class LoginQRContent extends Component<{
 }
 
 export const LoginQR = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { getToken: (token: string) => void }>, string>
-  >()
+  const route =
+    useRoute<
+      RouteProp<Record<string, { getToken: (token: string) => void }>, string>
+    >()
   return <LoginQRContent route={route} />
 }

@@ -53,14 +53,12 @@ export class InfoButtonContent extends Component<{
   }
 }
 
-export const InfoButton = (
-  message: string,
-  extraButtons?: AlertButton[],
-  tintColor?: string
-) => () => (
-  <InfoButtonContent
-    message={message}
-    extraButtons={extraButtons}
-    tintColor={tintColor}
-  />
-)
+export const InfoButton =
+  (message: string, extraButtons?: AlertButton[], tintColor?: string) => () =>
+    (
+      <InfoButtonContent
+        message={message}
+        extraButtons={extraButtons}
+        tintColor={tintColor}
+      />
+    )

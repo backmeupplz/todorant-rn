@@ -30,7 +30,7 @@ import fonts from '@utils/fonts'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { FlatList } from 'react-native-gesture-handler'
-import type {FlatList as FlatListType} from 'react-native-gesture-handler'
+import type { FlatList as FlatListType } from 'react-native-gesture-handler'
 
 export let infoButtonNodeId: number
 

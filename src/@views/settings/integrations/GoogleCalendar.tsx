@@ -40,11 +40,12 @@ export class GoogleCalendarContent extends Component<{
 }
 
 export const GoogleCalendar = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { url: string; authorize: (code: string) => void }>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { url: string; authorize: (code: string) => void }>,
+        string
+      >
+    >()
   return <GoogleCalendarContent route={route} />
 }

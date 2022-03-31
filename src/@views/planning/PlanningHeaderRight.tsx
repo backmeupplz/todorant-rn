@@ -35,7 +35,8 @@ export class PlanningHeaderRight extends Component {
           <TouchableOpacity
             disabled={!sharedOnboardingStore.tutorialIsShown}
             onPress={() => {
-              sharedAppStateStore.calendarEnabled = !sharedAppStateStore.calendarEnabled
+              sharedAppStateStore.calendarEnabled =
+                !sharedAppStateStore.calendarEnabled
             }}
           >
             <CustomIcon

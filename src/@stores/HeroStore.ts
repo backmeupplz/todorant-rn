@@ -8,25 +8,8 @@ import { persist } from 'mobx-persist'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 
 export const ranks = [
-  0,
-  5,
-  13,
-  42,
-  69,
-  85,
-  100,
-  221,
-  256,
-  300,
-  404,
-  777,
-  800,
-  1337,
-  1338,
-  2048,
-  9000,
-  12800,
-  1000000,
+  0, 5, 13, 42, 69, 85, 100, 221, 256, 300, 404, 777, 800, 1337, 1338, 2048,
+  9000, 12800, 1000000,
 ]
 
 class HeroStore {
