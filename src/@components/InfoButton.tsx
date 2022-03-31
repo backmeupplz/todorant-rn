@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { sharedColors } from '@utils/sharedColors'
-import { alertSupport } from '@utils/alert'
-import { translate } from '@utils/i18n'
 import { Alert, AlertButton } from 'react-native'
-import { observer } from 'mobx-react'
-import CustomIcon from '@components/CustomIcon'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { alertSupport } from '@utils/alert'
 import { navigationRef } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { translate } from '@utils/i18n'
+import CustomIcon from '@components/CustomIcon'
+import React, { Component } from 'react'
 
 export let infoButtonNodeId: number
 

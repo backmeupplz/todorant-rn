@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { View, Text } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
+import { Text, View } from 'native-base'
 import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

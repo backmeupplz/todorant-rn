@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
 import {
-  sharedDelegateStateStore,
   DelegateSectionType,
+  sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
-import { translate } from '@utils/i18n'
 import { observer } from 'mobx-react'
-import SegmentedControl from '@react-native-community/segmented-control'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { translate } from '@utils/i18n'
+import React, { Component } from 'react'
+import SegmentedControl from '@react-native-community/segmented-control'
 
 @observer
 export class DelegationHeaderSegment extends Component {

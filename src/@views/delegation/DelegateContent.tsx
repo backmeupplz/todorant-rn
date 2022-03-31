@@ -1,23 +1,23 @@
-import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
-import { observer } from 'mobx-react'
-import { Container } from 'native-base'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
-import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { TodoCard } from '@components/TodoCard'
 import { CardType } from '@components/TodoCard/CardType'
+import { Container } from 'native-base'
 import {
-  sharedDelegateStateStore,
   DelegateSectionType,
+  sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
-import { sharedColors } from '@utils/sharedColors'
-import { SectionList } from 'react-native'
-import { TodoHeader } from '@components/TodoHeader'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import withObservables from '@nozbe/with-observables'
+import { NoDelegatedTasks } from '@views/delegation/NoDelegatedTasks'
 import { Query } from '@nozbe/watermelondb'
+import { SectionList } from 'react-native'
+import { SignupPlaceholder } from '@views/delegation/SignupPlaceholder'
+import { TodoCard } from '@components/TodoCard'
+import { TodoHeader } from '@components/TodoHeader'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 import { usersCollection } from '@utils/watermelondb/wmdb'
+import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
+import withObservables from '@nozbe/with-observables'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
   return {

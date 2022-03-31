@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { View, Text } from 'native-base'
 import { Circle } from '@views/hero/Circle'
 import { Rank } from '@models/Rank'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
+import { Text, View } from 'native-base'
 import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
-import fonts from '@utils/fonts'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { translate } from '@utils/i18n'
+import React, { Component } from 'react'
+import fonts from '@utils/fonts'
 
 @observer
 class CircleWithText extends Component<{

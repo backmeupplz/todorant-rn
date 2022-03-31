@@ -1,10 +1,10 @@
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import i18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
 import { Language } from '@models/Language'
-import { configCalendar } from '@utils/configCalendar'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 import { MMKV } from '@stores/hydration/hydrate'
+import { configCalendar } from '@utils/configCalendar'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import i18n from 'i18n-js'
 
 const translationGetters = {
   en: () => require('@assets/translations/en.json'),

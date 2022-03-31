@@ -1,15 +1,15 @@
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { Dimensions, NativeModules, TouchableOpacity } from 'react-native'
+import { Text } from 'native-base'
 import { isDeviceSmall, isLandscapeAndNotAPad, isPad } from '@utils/deviceInfo'
-import { sharedColors } from '@utils/sharedColors'
+import { isLandscape } from 'react-native-device-info'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import { Text } from 'native-base'
-import React, { Component } from 'react'
-import { Dimensions, NativeModules, TouchableOpacity } from 'react-native'
-import { isLandscape } from 'react-native-device-info'
-import LinearGradient from 'react-native-linear-gradient'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import Animated from 'react-native-reanimated'
+import LinearGradient from 'react-native-linear-gradient'
+import React, { Component } from 'react'
 
 @observer
 export class OnboardingButton extends Component<{

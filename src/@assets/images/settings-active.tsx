@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View } from 'react-native'
-import Svg, { Path, Circle } from 'react-native-svg'
+import Svg, { Circle, Path } from 'react-native-svg'
 
 export let BottomTabSettingsgButton: number
 

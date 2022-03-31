@@ -1,10 +1,10 @@
+import { MelonTodo, MelonUser } from 'src/@models/MelonTodo'
+import { User } from 'src/@models/User'
 import {
   getDateString,
   getDateStringFromTodo,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { MelonTodo, MelonUser } from './MelonTodo'
-import { User } from './User'
 
 export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)

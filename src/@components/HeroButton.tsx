@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
+import { Platform } from 'react-native'
+import { ProgressView } from 'src/@components/ProgressView'
 import { Text } from 'native-base'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { ProgressView } from './ProgressView'
-import fonts from '@utils/fonts'
-import { Platform } from 'react-native'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import React, { Component } from 'react'
+import fonts from '@utils/fonts'
 const shortNum = require('number-shortener')
 
 @observer

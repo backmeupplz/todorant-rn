@@ -1,10 +1,10 @@
+import { Database } from '@nozbe/watermelondb'
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { Database } from '@nozbe/watermelondb'
+import { Tables } from 'src/@utils/watermelondb/tables'
+import { wmdbMigrations } from 'src/@utils/watermelondb/migration'
+import { wmdbSchema } from 'src/@utils/watermelondb/schema'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
-import { wmdbMigrations } from './migration'
-import { wmdbSchema } from './schema'
-import { Tables } from './tables'
 
 const adapter = new SQLiteAdapter({
   schema: wmdbSchema,

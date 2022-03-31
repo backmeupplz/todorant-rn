@@ -1,11 +1,11 @@
-import { sharedSync } from '@sync/Sync'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
-import { database } from './watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from './watermelondb/tables'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoColumn } from 'src/@utils/watermelondb/tables'
+import { database } from 'src/@utils/watermelondb/wmdb'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export async function fixOrder(
   titlesInvolved: string[],

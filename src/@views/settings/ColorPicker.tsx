@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
-import { Container, H1, View, Icon } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
-import { getTagById } from '@utils/getTagById'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { makeObservable, observable } from 'mobx'
+import { Button } from '@components/Button'
 import {
   ColorPicker as ColorPickerComponent,
   fromHsv,
 } from 'react-native-color-picker'
-import { extraButtonProps } from '@utils/extraButtonProps'
-import { sharedTagStore } from '@stores/TagStore'
-import { goBack } from '@utils/navigation'
-import { Button } from '@components/Button'
-import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { Container, H1, Icon, View } from 'native-base'
 import { MelonTag } from '@models/MelonTag'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { extraButtonProps } from '@utils/extraButtonProps'
+import { getTagById } from '@utils/getTagById'
+import { goBack } from '@utils/navigation'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSync } from '@sync/Sync'
+import { sharedTagStore } from '@stores/TagStore'
+import React, { Component } from 'react'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 

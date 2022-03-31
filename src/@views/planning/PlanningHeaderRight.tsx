@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react'
-import React, { Component } from 'react'
-import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
 import { Icon, Spinner, View } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
 import { InfoButton } from '@components/InfoButton'
+import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import CustomIcon from '@components/CustomIcon'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import CustomIcon from '@components/CustomIcon'
+import React, { Component } from 'react'
 
 @observer
 export class PlanningHeaderRight extends Component {

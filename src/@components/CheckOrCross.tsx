@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
 import { Icon } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
 import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import React, { Component } from 'react'
 
 @observer
 export class CheckOrCross extends Component<{ ok: boolean }> {

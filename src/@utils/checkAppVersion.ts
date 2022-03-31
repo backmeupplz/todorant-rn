@@ -1,5 +1,5 @@
-import { translate } from '@utils/i18n'
 import { Alert, Linking, NativeModules, Platform } from 'react-native'
+import { translate } from '@utils/i18n'
 import DeviceInfo from 'react-native-device-info'
 import axios from 'axios'
 import semver, { SemVer } from 'semver'

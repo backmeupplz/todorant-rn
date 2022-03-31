@@ -1,5 +1,5 @@
-import { translate } from '@utils/i18n'
 import { Alert, Linking } from 'react-native'
+import { translate } from '@utils/i18n'
 
 export function alertError(
   error: Error | string,

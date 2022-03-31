@@ -1,10 +1,10 @@
-import { translate } from '@utils/i18n'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import PushNotificationIOS from '@react-native-community/push-notification-ios'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { translate } from '@utils/i18n'
 import PushNotification, {
   PushNotificationPermissions,
 } from 'react-native-push-notification'
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 
 PushNotification.createChannel(
   {

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import RateModalExternal from '@tasumaniadiabori/react-native-store-rating'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sendFeedback } from '@utils/rest'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
 import { Alert, Linking, Platform } from 'react-native'
+import { observer } from 'mobx-react'
+import { sendFeedback } from '@utils/rest'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
+import RateModalExternal from '@tasumaniadiabori/react-native-store-rating'
+import React, { Component } from 'react'
 
 @observer
 export class RateModal extends Component {

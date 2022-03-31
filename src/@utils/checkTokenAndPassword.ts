@@ -1,8 +1,8 @@
 import {
-  setToken,
+  removePassword,
   removeToken,
   setPassword,
-  removePassword,
+  setToken,
 } from '@utils/keychain'
 import { sharedSessionStore } from '@stores/SessionStore'
 

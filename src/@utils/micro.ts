@@ -1,7 +1,7 @@
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { hydration } from '@stores/hydration/hydratedStores'
 import { Platform } from 'react-native'
+import { hydration } from '@stores/hydration/hydratedStores'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import Axios from 'axios'
 
 export function logEventToMicro(name: string) {

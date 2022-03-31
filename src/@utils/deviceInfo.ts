@@ -1,4 +1,4 @@
-import { NativeModules, Dimensions } from 'react-native'
+import { Dimensions, NativeModules } from 'react-native'
 
 export function getWidth() {
   return Dimensions.get('window').width

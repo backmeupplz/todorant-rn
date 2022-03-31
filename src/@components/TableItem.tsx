@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import CustomIcon from '@components/CustomIcon'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
+import { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View } from 'native-base'
-import { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import CustomIcon from '@components/CustomIcon'
+import React, { Component } from 'react'
 
 @observer
 export class TableItem extends Component<{

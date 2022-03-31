@@ -1,37 +1,37 @@
-import { Step } from '@stores/OnboardingStore/Step'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { translate } from '@utils/i18n'
-import { rootRef } from '../../../App'
-import { computed, makeObservable, observable } from 'mobx'
-import { persist } from 'mobx-persist'
+import {
+  AddTodoEventEmitterEvent,
+  addTodoEventEmitter,
+} from '@views/add/AddTodo'
 import {
   Dimensions,
-  findNodeHandle,
   InteractionManager,
+  Keyboard,
   Linking,
+  Platform,
   StyleProp,
   ViewStyle,
-  Platform,
-  Keyboard,
+  findNodeHandle,
 } from 'react-native'
-import { RNHole } from '@upacyxou/react-native-hole-view'
-import Animated, { Easing } from 'react-native-reanimated'
 import { EasingNode } from 'react-native-reanimated'
+import { OnboardingButton } from 'src/@stores/OnboardingStore/MessageBoxButton'
+import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
+import { RNHole } from '@upacyxou/react-native-hole-view'
+import { RootStackParamList, navigate } from '@utils/navigation'
+import { Step } from '@stores/OnboardingStore/Step'
+import { Toast } from 'native-base'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { computed, makeObservable, observable } from 'mobx'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { navigate, RootStackParamList } from '@utils/navigation'
-import { Toast } from 'native-base'
-import { startConfetti } from '@components/Confetti'
 import { logEvent } from '@utils/logEvent'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
+import { persist } from 'mobx-persist'
+import { rootRef } from 'App'
 import { settingsScrollOffset } from '@utils/settingsScrollOffset'
-import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
-import { OnboardingButton } from './MessageBoxButton'
 import { sharedTodoStore } from '@stores/TodoStore'
-import {
-  addTodoEventEmitter,
-  AddTodoEventEmitterEvent,
-} from '@views/add/AddTodo'
+import { startConfetti } from '@components/Confetti'
+import { translate } from '@utils/i18n'
+import Animated, { Easing } from 'react-native-reanimated'
 
 class OnboardingStore {
   constructor() {

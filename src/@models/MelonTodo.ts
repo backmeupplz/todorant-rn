@@ -1,8 +1,8 @@
 import { Model } from '@nozbe/watermelondb'
-import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
-import { associations } from '@nozbe/watermelondb/Model'
-import { desc } from '@nozbe/watermelondb/QueryDescription'
 import { Tables, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
+import { associations } from '@nozbe/watermelondb/Model'
+import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
+import { desc } from '@nozbe/watermelondb/QueryDescription'
 
 export class MelonUser extends Model {
   static table = Tables.users

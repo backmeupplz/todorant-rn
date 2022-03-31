@@ -1,13 +1,13 @@
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { EventEmitter } from 'events'
-import { isTodoOld } from '@utils/isTodoOld'
-import { debounce } from 'lodash'
-import { todosCollection } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TodoColumn } from '@utils/watermelondb/tables'
-import { sharedTodoStore } from '@stores/TodoStore'
+import { debounce } from 'lodash'
+import { isTodoOld } from '@utils/isTodoOld'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { todosCollection } from '@utils/watermelondb/wmdb'
 
 export const planningEventEmitter = new EventEmitter()
 

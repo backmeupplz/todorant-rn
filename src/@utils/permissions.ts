@@ -1,4 +1,4 @@
-import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
+import { PERMISSIONS, RESULTS, check, request } from 'react-native-permissions'
 import { Platform } from 'react-native'
 
 export async function checkSiriPermission() {

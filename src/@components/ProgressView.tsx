@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
 import { View } from 'native-base'
 import { observer } from 'mobx-react'
+import React, { Component } from 'react'
 
 @observer
 export class ProgressView extends Component<{

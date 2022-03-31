@@ -1,15 +1,3 @@
-import React, { Component, useEffect, useMemo, useRef } from 'react'
-import { Container, Text, View, Icon } from 'native-base'
-import { observer } from 'mobx-react'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { TodoCard } from '@components/TodoCard'
-import { CardType } from '@components/TodoCard/CardType'
-import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { PlanningVM } from '@views/planning/PlanningVM'
-import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
-import { PlusButton } from '@components/PlusButton'
 import {
   Alert,
   SectionListData,
@@ -17,7 +5,21 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
+import { CardType } from '@components/TodoCard/CardType'
+import { Container, Icon, Text, View } from 'native-base'
+import { MelonTodo } from '@models/MelonTodo'
 import { Month } from '@upacyxou/react-native-month'
+import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
+import { PlanningVM } from '@views/planning/PlanningVM'
+import { PlusButton } from '@components/PlusButton'
+import { Q } from '@nozbe/watermelondb'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoCard } from '@components/TodoCard'
+import { TodoColumn } from '@utils/watermelondb/tables'
+import { TodoHeader } from '@components/TodoHeader'
+import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import {
   computed,
   makeObservable,
@@ -26,37 +28,35 @@ import {
   runInAction,
   when,
 } from 'mobx'
-import moment from 'moment'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { database } from '@utils/watermelondb/wmdb'
+import { debounce } from 'lodash'
 import {
   getDateDateString,
   getDateMonthAndYearString,
   getDateString,
 } from '@utils/time'
-import Animated, { Value } from 'react-native-reanimated'
-import { navigate } from '@utils/navigation'
 import { getTitle } from '@models/Todo'
-import { debounce } from 'lodash'
-import { TodoHeader } from '@components/TodoHeader'
 import { hydration } from '@stores/hydration/hydratedStores'
-import { MelonTodo } from '@models/MelonTodo'
-import withObservables from '@nozbe/with-observables'
-import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
-import { Q } from '@nozbe/watermelondb'
-import { v4 } from 'uuid'
 import { isTodoOld } from '@utils/isTodoOld'
-import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
 import { sanitizeLikeString } from '@utils/textSanitizer'
-import { TodoColumn } from '@utils/watermelondb/tables'
-import { database } from '@utils/watermelondb/wmdb'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { translate } from '@utils/i18n'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { v4 } from 'uuid'
+import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
+import Animated, { Value } from 'react-native-reanimated'
 import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import React, { Component, useEffect, useMemo, useRef } from 'react'
+import moment from 'moment'
+import withObservables from '@nozbe/with-observables'
 
 @observer
 export class PlanningContent extends Component {

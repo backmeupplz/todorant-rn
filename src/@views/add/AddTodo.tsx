@@ -1,74 +1,74 @@
-import React, { Component, createRef, RefObject } from 'react'
-import { Text, View, Toast, ActionSheet } from 'native-base'
-import { goBack, navigate } from '@utils/navigation'
-import { observer } from 'mobx-react'
-import { observable, computed, makeObservable } from 'mobx'
-import { getDateMonthAndYearString, isToday } from '@utils/time'
-import { getTitle, cloneDelegator } from '@models/Todo'
-import { fixOrder } from '@utils/fixOrder'
-import uuid from 'uuid'
-import { useRoute, RouteProp } from '@react-navigation/native'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { addButtonStore } from '@components/AddButton'
-import { TodoCard } from '@components/TodoCard'
-import { CardType } from '@components/TodoCard/CardType'
-import { linkify } from '@utils/linkify'
-import { sharedTagStore } from '@stores/TagStore'
-import { TodoVM } from '@views/add/TodoVM'
-import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
+import * as Animatable from 'react-native-animatable'
+import { ActionSheet, Text, Toast, View } from 'native-base'
 import { AddTodoForm } from '@views/add/AddTodoForm'
+import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import {
   Alert,
   BackHandler,
+  Dimensions,
+  Falsy,
+  FlatList,
+  InteractionManager,
+  Keyboard,
   KeyboardAvoidingView,
+  NativeEventSubscription,
   Platform,
   StatusBar,
-  Keyboard,
-  InteractionManager,
-  NativeEventSubscription,
-  FlatList,
-  Falsy,
-  Dimensions,
 } from 'react-native'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { Button } from '@components/Button'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { startConfetti } from '@components/Confetti'
-import { playFrogComplete, playTaskComplete } from '@utils/sound'
+import { CardType } from '@components/TodoCard/CardType'
+import { Divider } from '@components/Divider'
+import { EventEmitter } from 'events'
+import { HeaderHeightContext } from '@react-navigation/elements'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import {
+  ObservableNowEventEmitterEvent,
+  observableNowEventEmitter,
+} from '@utils/ObservableNow'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoCard } from '@components/TodoCard'
+import { TodoVM } from '@views/add/TodoVM'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { addButtonStore } from '@components/AddButton'
+import { backButtonStore } from '@components/BackButton'
 import {
   checkDayCompletionRoutine,
   shouldShowDayCompletionRoutine,
 } from '@utils/dayCompleteRoutine'
+import { cloneDelegator, getTitle } from '@models/Todo'
+import { computed, makeObservable, observable } from 'mobx'
+import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { fixOrder } from '@utils/fixOrder'
+import { getDateMonthAndYearString, isToday } from '@utils/time'
+import { getLocalDelegation } from '@utils/delegations'
+import { goBack, navigate } from '@utils/navigation'
+import { isTodoOld } from '@utils/isTodoOld'
+import { linkify } from '@utils/linkify'
+import { logEvent } from '@utils/logEvent'
+import { observer } from 'mobx-react'
+import { playFrogComplete, playTaskComplete } from '@utils/sound'
+import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
-import { Divider } from '@components/Divider'
-import LinearGradient from 'react-native-linear-gradient'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTagStore } from '@stores/TagStore'
+import { startConfetti } from '@components/Confetti'
+import { translate } from '@utils/i18n'
+import Clipboard from '@react-native-community/clipboard'
 import CustomIcon from '@components/CustomIcon'
-import { backButtonStore } from '@components/BackButton'
 import DraggableFlatList, {
   OpacityDecorator,
   ScaleDecorator,
   ShadowDecorator,
 } from 'react-native-draggable-flatlist'
-import { logEvent } from '@utils/logEvent'
-import { HeaderHeightContext } from '@react-navigation/elements'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import * as Animatable from 'react-native-animatable'
-import { isTodoOld } from '@utils/isTodoOld'
-import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import {
-  observableNowEventEmitter,
-  ObservableNowEventEmitterEvent,
-} from '@utils/ObservableNow'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { EventEmitter } from 'events'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { database, todosCollection } from '@utils/watermelondb/wmdb'
-import { getLocalDelegation } from '@utils/delegations'
-import Clipboard from '@react-native-community/clipboard'
+import LinearGradient from 'react-native-linear-gradient'
+import React, { Component, RefObject, createRef } from 'react'
+import uuid from 'uuid'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {

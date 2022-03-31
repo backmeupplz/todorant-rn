@@ -1,12 +1,12 @@
+import { Dimensions, Platform } from 'react-native'
+import { Input, Text, View } from 'native-base'
+import { PlanningHeaderSegment } from '@views/planning/PlanningHeaderSegment'
+import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { Text, Input, View } from 'native-base'
-import { PlanningHeaderSegment } from '@views/planning/PlanningHeaderSegment'
 import { translate } from '@utils/i18n'
-import { Dimensions, Platform } from 'react-native'
-import { makeObservable, observable } from 'mobx'
+import React, { Component } from 'react'
 
 @observer
 export class PlanningHeader extends Component {

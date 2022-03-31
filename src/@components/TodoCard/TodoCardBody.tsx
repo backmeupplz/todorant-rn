@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { CardItem, Body, View, Text } from 'native-base'
-import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { Body, CardItem, Text, View } from 'native-base'
 import { CardType } from '@components/TodoCard/CardType'
-import { getTitle } from '@models/Todo'
-import { sharedColors } from '@utils/sharedColors'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
-import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
-import { translate } from '@utils/i18n'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
+import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { getTitle } from '@models/Todo'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { translate } from '@utils/i18n'
+import React, { Component } from 'react'
 
 const showDebugInfo = false
 

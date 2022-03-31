@@ -1,4 +1,7 @@
-import { sharedDelegationStore } from '@stores/DelegationStore'
+import { MelonUser } from '@models/MelonTodo'
+import { Q, Query } from '@nozbe/watermelondb'
+import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
+import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import {
   cloneDelegation,
   getLocalDelegation,
@@ -11,14 +14,11 @@ import {
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { Q, Query } from '@nozbe/watermelondb'
-import { MelonUser } from '@models/MelonTodo'
-import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
-import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
 import { decrypt } from '@utils/encryption'
 import { getTitle } from '@models/Todo'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { sanitizeLikeString } from '@nozbe/watermelondb/QueryDescription'
+import { sharedDelegationStore } from '@stores/DelegationStore'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 
 export async function updateOrCreateDelegation(

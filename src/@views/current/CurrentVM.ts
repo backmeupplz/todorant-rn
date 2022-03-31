@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { computed, makeObservable, observable } from 'mobx'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export class CurrentVM {
   @observable currentTodo = sharedTodoStore.todayUncompletedTodos?.extend(

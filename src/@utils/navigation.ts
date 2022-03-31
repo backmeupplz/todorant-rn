@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { NavigationContainerRef } from '@react-navigation/native'
-import { MelonTag } from '@models/MelonTag'
-import { User } from '@models/User'
-import { MelonTodo } from '@models/MelonTodo'
 import { DelegationUserType } from '@models/DelegationUser'
+import { MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
+import { User } from '@models/User'
 
 type DelegationsScreen = { delegationType: DelegationUserType }
 

@@ -1,10 +1,10 @@
 import { Q } from '@nozbe/watermelondb'
 import { UserColumn } from '@utils/watermelondb/tables'
-import { usersCollection } from '@utils/watermelondb/wmdb'
+import { hydrate } from 'src/@stores/hydration/hydrate'
+import { hydrateStore } from 'src/@stores/hydration/hydrateStore'
 import { makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import { hydrate } from './hydration/hydrate'
-import { hydrateStore } from './hydration/hydrateStore'
+import { usersCollection } from '@utils/watermelondb/wmdb'
 
 class DelegationStore {
   hydrated = false

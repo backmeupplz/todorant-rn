@@ -1,6 +1,6 @@
+import { Platform } from 'react-native'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Sound from 'react-native-sound'
-import { Platform } from 'react-native'
 
 Sound.setMode('Default')
 Sound.setCategory('Playback', true)

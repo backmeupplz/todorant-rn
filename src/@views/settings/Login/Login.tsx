@@ -1,24 +1,24 @@
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
-import appleAuth, {
-  appleAuthAndroid,
-  AppleButton,
-} from '@invertase/react-native-apple-authentication'
-import { User } from '@models/User'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { alertError } from '@utils/alert'
-import { translate } from '@utils/i18n'
-import { goBack, navigate } from '@utils/navigation'
 import * as rest from '@utils/rest'
-import { sharedColors } from '@utils/sharedColors'
+import { Button } from '@components/Button'
+import { Container, Content, Input, Text, View } from 'native-base'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { Platform, StyleProp, TextStyle } from 'react-native'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { Spinner } from '@components/Spinner'
+import { User } from '@models/User'
+import { alertError } from '@utils/alert'
+import { goBack, navigate } from '@utils/navigation'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import { Container, Content, Input, Text, View } from 'native-base'
-import React, { Component } from 'react'
-import { Platform, StyleProp, TextStyle } from 'react-native'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
 import { v4 as uuid } from 'uuid'
+import React, { Component } from 'react'
+import appleAuth, {
+  AppleButton,
+  appleAuthAndroid,
+} from '@invertase/react-native-apple-authentication'
 
 class LoginVM {
   @observable loading = false
