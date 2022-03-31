@@ -1,5 +1,5 @@
 import { Alert } from 'react-native'
-import { CardType } from 'src/@components/TodoCard/CardType'
+import { CardType } from '@components/TodoCard/CardType'
 import { MelonTodo } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'

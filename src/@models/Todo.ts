@@ -1,5 +1,4 @@
-import { MelonTodo, MelonUser } from 'src/@models/MelonTodo'
-import { User } from 'src/@models/User'
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import {
   getDateString,
   getDateStringFromTodo,
@@ -26,7 +25,7 @@ export function compareTodos(completed: boolean) {
     } else {
       if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
         return -1
-      } else if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
+      } else if (a.date && !b.date && a.monthAndYear === b.monthAndYear) {
         return 1
       } else if (!a.date || !b.date) {
         if (

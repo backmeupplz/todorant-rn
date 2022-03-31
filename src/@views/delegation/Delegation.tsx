@@ -2,8 +2,8 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack'
-import { DelegateContent } from 'src/@views/delegation/DelegateContent'
-import { DelegationHeader } from 'src/@views/delegation/DelegationHeader'
+import { DelegateContent } from '@views/delegation/DelegateContent'
+import { DelegationHeader } from '@views/delegation/DelegationHeader'
 import { InfoButton } from '@components/InfoButton'
 import { Observer, observer } from 'mobx-react'
 import { View } from 'native-base'

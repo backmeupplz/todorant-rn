@@ -8,9 +8,9 @@ import { Spinner } from '@components/Spinner'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TableItem } from '@components/TableItem'
 import { TodoColumn } from '@utils/watermelondb/tables'
-import { _d, _e, decrypt } from '@utils/encryption'
+import { _d, _e } from '@utils/encryption'
 import { alertConfirm, alertError, alertMessage } from '@utils/alert'
-import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { removePassword, setPassword } from '@utils/keychain'
@@ -146,7 +146,8 @@ export class Security extends Component {
                     translate('encryptionDisableConfirm'),
                     translate('disable'),
                     () => {
-                      const key = sharedSessionStore.encryptionKey!
+                      const key = sharedSessionStore.encryptionKey
+                      if (!key) return
                       sharedSessionStore.encryptionKey = undefined
                       removePassword()
                       this.encryptionOn = false

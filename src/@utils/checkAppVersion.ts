@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable no-fallthrough */
 import { Alert, Linking, NativeModules, Platform } from 'react-native'
 import { translate } from '@utils/i18n'
 import DeviceInfo from 'react-native-device-info'
@@ -170,7 +172,7 @@ function diffLoose(currentVersion: string, latestVersion: string) {
     if (
       current.hasOwnProperty(key) &&
       ['major', 'minor', 'patch'].includes(key) &&
-      current[key as keyof SemVer] !== latest![key as keyof SemVer]
+      current[key as keyof SemVer] !== latest?.[key as keyof SemVer]
     ) {
       return prefix + key
     }

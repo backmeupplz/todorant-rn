@@ -1,4 +1,4 @@
-import { Body, CardItem, Text, View } from 'native-base'
+import { Body, Text, View } from 'native-base'
 import { CardType } from '@components/TodoCard/CardType'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'

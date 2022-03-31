@@ -13,11 +13,11 @@ import { logEvent } from '@utils/logEvent'
 import { persist } from 'mobx-persist'
 import { removePassword, removeToken, setToken } from '@utils/keychain'
 import { resetDelegateToken } from '@utils/rest'
-import { sharedDelegationStore } from 'src/@stores/DelegationStore'
-import { sharedHeroStore } from 'src/@stores/HeroStore'
-import { sharedSettingsStore } from 'src/@stores/SettingsStore'
+import { sharedDelegationStore } from '@stores/DelegationStore'
+import { sharedHeroStore } from '@stores/HeroStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
-import { sharedTodoStore } from 'src/@stores/TodoStore'
+import { sharedTodoStore } from '@stores/TodoStore'
 import { v4 } from 'uuid'
 
 class SessionStore {
@@ -113,6 +113,7 @@ class SessionStore {
       await database.write(async () => await database.unsafeResetDatabase())
       const newAsyncStorage = AsyncStorage
       const oldAsyncStorage =
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         require('@react-native-async-storage/async-storage')
           .default as typeof AsyncStorage
       await newAsyncStorage.clear()

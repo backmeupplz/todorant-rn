@@ -30,6 +30,7 @@ export class RateModal extends Component {
           translate('starGreat'),
         ]}
         style={{}}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onStarSelected={() => {}}
         onClosed={() => {
           sharedSessionStore.askedToRate = true

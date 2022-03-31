@@ -77,7 +77,7 @@ class DeleteAllTagsButton extends Component {
   }
 
   render() {
-    return !!this.tagsAmount ? (
+    return this.tagsAmount ? (
       <TableItem
         onPress={() => {
           setTimeout(() => {

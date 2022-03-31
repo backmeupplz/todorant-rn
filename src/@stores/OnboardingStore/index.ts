@@ -13,7 +13,7 @@ import {
   findNodeHandle,
 } from 'react-native'
 import { EasingNode } from 'react-native-reanimated'
-import { OnboardingButton } from 'src/@stores/OnboardingStore/MessageBoxButton'
+import { OnboardingButton } from '@stores/OnboardingStore/MessageBoxButton'
 import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
 import { RNHole } from '@upacyxou/react-native-hole-view'
 import { RootStackParamList, navigate } from '@utils/navigation'
@@ -26,12 +26,11 @@ import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { logEvent } from '@utils/logEvent'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { persist } from 'mobx-persist'
-import { rootRef } from 'App'
 import { settingsScrollOffset } from '@utils/settingsScrollOffset'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { startConfetti } from '@components/Confetti'
 import { translate } from '@utils/i18n'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 
 class OnboardingStore {
   constructor() {
@@ -361,6 +360,7 @@ export const AllStages = {
       async () => {
         navigate('BreakdownTodo', {
           breakdownTodo:
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (await sharedTodoStore.todayUncompletedTodos?.fetch())![0],
         })
       },
@@ -369,6 +369,7 @@ export const AllStages = {
       true
     )
     return new Promise(async (resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       InteractionManager.runAfterInteractions(async () => {})
       const nodeId = (await import('@components/TodoCard/TodoCardActions'))
         .breakdownNodeId
@@ -510,6 +511,7 @@ export const AllStages = {
         const scrollContentNodeId = findNodeHandle(scrollContentRef)
         if (!scrollContentNodeId) return
         // height/width/x/y of settingsContent
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const measuredSettingsContent = await measurePosition(
           scrollContentNodeId
         )

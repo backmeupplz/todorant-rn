@@ -1,6 +1,5 @@
 import { H1, Text, View } from 'native-base'
 import { observer } from 'mobx-react'
-import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import React, { Component } from 'react'

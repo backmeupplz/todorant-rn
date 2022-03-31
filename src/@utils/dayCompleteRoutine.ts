@@ -1,7 +1,7 @@
 import { getDateString, getTodayWithStartOfDay } from '@utils/time'
 
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from 'src/@utils/watermelondb/tables'
+import { TodoColumn } from '@utils/watermelondb/tables'
 import { dayCompleteOverlayRef } from '@components/DayCompleteOverlay'
 import { playDayComplete } from '@utils/sound'
 import { sharedSettingsStore } from '@stores/SettingsStore'

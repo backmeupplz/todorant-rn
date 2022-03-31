@@ -1,4 +1,4 @@
-import { DelegationHeaderSegment } from 'src/@views/delegation/DelegationHeaderSegment'
+import { DelegationHeaderSegment } from '@views/delegation/DelegationHeaderSegment'
 import { Dimensions } from 'react-native'
 import { View } from 'native-base'
 import { makeObservable, observable } from 'mobx'

@@ -15,6 +15,7 @@ import moment from 'moment'
 const {
   focusTextInput,
   blurInput,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
 import { MelonTag } from '@models/MelonTag'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'

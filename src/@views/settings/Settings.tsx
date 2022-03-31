@@ -4,10 +4,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack'
-import {
-  ChangeText,
-  ChangeTextHeaderRight,
-} from 'src/@views/settings/ChangeText'
+import { ChangeText, ChangeTextHeaderRight } from '@views/settings/ChangeText'
 import { CheckOrCross } from '@components/CheckOrCross'
 import {
   ColorPicker,
@@ -16,8 +13,8 @@ import {
 import { Container, Text, View } from 'native-base'
 import { Data } from '@views/settings/Data'
 import { DebugButtons } from '@views/settings/DebugButtons'
-import { DelegationSettings } from 'src/@views/settings/DelegationSettings'
-import { DelegationUserScreen } from 'src/@views/settings/DelegationUserScreen'
+import { DelegationSettings } from '@views/settings/DelegationSettings'
+import { DelegationUserScreen } from '@views/settings/DelegationUserScreen'
 import { Divider } from '@components/Divider'
 import { FlatList } from 'react-native-gesture-handler'
 import { GeneralSettings } from '@views/settings/GeneralSettings'
@@ -25,7 +22,7 @@ import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { HeaderScrollView } from '@components/HeaderScrollView'
 import { InfoButton } from '@components/InfoButton'
 import { Integrations } from '@views/settings/integrations/Integrations'
-import { InteractionManager, ScrollView } from 'react-native'
+import { InteractionManager } from 'react-native'
 import { Login } from '@views/settings/Login/Login'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
@@ -68,6 +65,7 @@ export let settingsContentRef: View
 
 const Stack = createStackNavigator()
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const codePushVersion = require('@utils/version.json').version.split('.')[0]
 @observer
 export class SettingsContent extends Component {

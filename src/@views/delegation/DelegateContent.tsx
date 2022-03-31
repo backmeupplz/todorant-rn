@@ -15,8 +15,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { usersCollection } from '@utils/watermelondb/wmdb'
-import React, { Component, Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Component, Fragment, useEffect, useState } from 'react'
 import withObservables from '@nozbe/with-observables'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
@@ -94,9 +93,10 @@ const EnhancedDraggableSectionList = enhance(
           )
         }}
         renderSectionHeader={(header) => {
+          if (!header.section.userInSection.name) return null
           return (
             <TodoHeader
-              item={header.section.userInSection.name!}
+              item={header.section.userInSection.name}
               hidePlus={true}
             />
           )

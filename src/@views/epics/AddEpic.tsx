@@ -13,6 +13,7 @@ import { translate } from '@utils/i18n'
 import React, { Component } from 'react'
 
 const AddEpicStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   save: () => {},
 }
 

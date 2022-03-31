@@ -5,11 +5,8 @@ export async function checkSiriPermission() {
   if (Platform.OS === 'ios') {
     try {
       const result = await check(PERMISSIONS.IOS.SIRI)
-      switch (result) {
-        case RESULTS.DENIED:
-          await request(PERMISSIONS.IOS.SIRI)
-        default:
-          break
+      if (result === RESULTS.DENIED) {
+        await request(PERMISSIONS.IOS.SIRI)
       }
     } catch {
       // Do nothing

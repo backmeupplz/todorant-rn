@@ -1,40 +1,25 @@
-import { Alert } from 'react-native'
-import { MelonTag } from '@models/MelonTag'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { Mutex } from 'src/@sync/wmdb/mutex'
-import { Q, RawRecord } from '@nozbe/watermelondb'
-import { SocketConnection } from 'src/@sync/sockets/SocketConnection'
+import { Mutex } from '@sync/wmdb/mutex'
+import { RawRecord } from '@nozbe/watermelondb'
+import { SocketConnection } from '@sync/sockets/SocketConnection'
 import {
   SyncArgs,
   SyncDatabaseChangeSet,
   SyncPushArgs,
   synchronize,
 } from '@nozbe/watermelondb/sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
-import { alertError, alertMessage } from '@utils/alert'
+import { alertError } from '@utils/alert'
 import { chunk, cloneDeep } from 'lodash'
-import {
-  database,
-  tagsCollection,
-  todosCollection,
-  usersCollection,
-} from '@utils/watermelondb/wmdb'
-import { decrypt, encrypt } from '@utils/encryption'
+import { database, usersCollection } from '@utils/watermelondb/wmdb'
+import { encrypt } from '@utils/encryption'
 import { getDateMonthAndYearString } from '@utils/time'
-import { getTitle } from '@models/Todo'
-import { makeObservable, observable, reaction, when } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { onWMDBObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
-import { v4 } from 'uuid'
-
-const wmdbGetLastPullAt =
-  require('@nozbe/watermelondb/sync/impl').getLastPulledAt
 
 // Using built-in SyncLogger
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const SyncLogger = require('@nozbe/watermelondb/sync/SyncLogger').default
 const logger = new SyncLogger(1 /* limit of sync logs to keep in memory */)
 

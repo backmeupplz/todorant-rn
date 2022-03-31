@@ -17,10 +17,10 @@ import fonts from '@utils/fonts'
 export class DelegationSettings extends Component {
   @observable reset = false
   async resetDelegateToken() {
-    if (!sharedSessionStore.user?.token) {
+    if (!sharedSessionStore.user || !sharedSessionStore.user?.token) {
       return
     }
-    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken(
+    sharedSessionStore.user.delegateInviteToken = await resetDelegateToken(
       sharedSessionStore.user?.token
     )
   }
@@ -78,8 +78,7 @@ export class DelegationSettings extends Component {
                   title: translate('delegate.resetConfirmation'),
                 },
                 async (buttonIndex) => {
-                  if (buttonIndex === 0) {
-                  } else {
+                  if (buttonIndex !== 0) {
                     await this.resetDelegateToken()
                   }
                 }

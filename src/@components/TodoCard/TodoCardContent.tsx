@@ -1,7 +1,7 @@
 import { CardType } from '@components/TodoCard/CardType'
 import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
 import { Divider } from '@components/Divider'
-import { FailCircle } from 'src/@components/TodoCard/FailCircle'
+import { FailCircle } from '@components/TodoCard/FailCircle'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Platform, Vibration } from 'react-native'
 import { TodoCardActions } from '@components/TodoCard/TodoCardActions'

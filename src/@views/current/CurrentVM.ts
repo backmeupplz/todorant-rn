@@ -1,5 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
-import { computed, makeObservable, observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { sharedTodoStore } from '@stores/TodoStore'
 
 export class CurrentVM {

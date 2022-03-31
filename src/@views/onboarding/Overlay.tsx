@@ -18,7 +18,7 @@ import { makeObservable, observable, reaction } from 'mobx'
 import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { observer } from 'mobx-react'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import React, { Component } from 'react'
 
 @observer
@@ -75,7 +75,7 @@ export class Overlay extends Component {
     )
     reaction(
       () => sharedOnboardingStore.step,
-      (step) => {
+      () => {
         this.setState(
           {
             holes: [sharedOnboardingStore.currentHole],

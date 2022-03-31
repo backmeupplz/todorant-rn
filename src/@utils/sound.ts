@@ -10,7 +10,8 @@ const sounds = {} as { [index: string]: Sound }
 const level_up =
   Platform.OS === 'android'
     ? new Sound('level_up.mp3', Sound.MAIN_BUNDLE, setLevelUp)
-    : new Sound(require('@assets/audio/level_up.mp3'), setLevelUp)
+    : // eslint-disable-next-line @typescript-eslint/no-var-requires
+      new Sound(require('@assets/audio/level_up.mp3'), setLevelUp)
 function setLevelUp(error: any) {
   if (!error) {
     sounds.level_up = level_up
@@ -20,7 +21,8 @@ function setLevelUp(error: any) {
 const nice =
   Platform.OS === 'android'
     ? new Sound('nice.mp3', Sound.MAIN_BUNDLE, setNice)
-    : new Sound(require('@assets/audio/nice.mp3'), setNice)
+    : // eslint-disable-next-line @typescript-eslint/no-var-requires
+      new Sound(require('@assets/audio/nice.mp3'), setNice)
 function setNice(error: any) {
   if (!error) {
     sounds.nice = nice
@@ -30,7 +32,8 @@ function setNice(error: any) {
 const day_complete =
   Platform.OS === 'android'
     ? new Sound('day_compele.mp3', Sound.MAIN_BUNDLE, setDayComplete)
-    : new Sound(require('@assets/audio/day_compele.mp3'), setDayComplete)
+    : // eslint-disable-next-line @typescript-eslint/no-var-requires
+      new Sound(require('@assets/audio/day_compele.mp3'), setDayComplete)
 function setDayComplete(error: any) {
   if (!error) {
     sounds.day_complete = day_complete
@@ -40,7 +43,8 @@ function setDayComplete(error: any) {
 const task_done =
   Platform.OS === 'android'
     ? new Sound('task_done.mp3', Sound.MAIN_BUNDLE, setTaskDone)
-    : new Sound(require('@assets/audio/task_done.mp3'), setTaskDone)
+    : // eslint-disable-next-line @typescript-eslint/no-var-requires
+      new Sound(require('@assets/audio/task_done.mp3'), setTaskDone)
 function setTaskDone(error: any) {
   if (!error) {
     sounds.task_done = task_done

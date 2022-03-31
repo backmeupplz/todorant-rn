@@ -2,7 +2,6 @@ import { Model } from '@nozbe/watermelondb'
 import { Tables, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import { associations } from '@nozbe/watermelondb/Model'
 import { date, field, relation, writer } from '@nozbe/watermelondb/decorators'
-import { desc } from '@nozbe/watermelondb/QueryDescription'
 
 export class MelonUser extends Model {
   static table = Tables.users
@@ -156,6 +155,7 @@ export class MelonTodo extends Model {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type ArgumentExctractor<F extends Function> = F extends (
   args: infer A
 ) => any

@@ -21,6 +21,7 @@ import { translate } from '@utils/i18n'
 import React, { Component } from 'react'
 
 const ChangeTextStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   save: () => {},
 }
 
@@ -47,9 +48,9 @@ export class ChangeTextHeaderRight extends Component {
 
 @observer
 class ChangeTextContent extends Component<{
-  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag }>, string>
 }> {
-  @observable tag = cloneTag(this.props.route.params?.tag!)
+  @observable tag = cloneTag(this.props.route.params.tag)
   @observable newName: string = ''
 
   @observable colorPickerEnabled = false
@@ -113,10 +114,7 @@ class ChangeTextContent extends Component<{
     }
     await database.write(async () => await database.batch(...toUpdate))
     await dbtag.changeText(this.newName || dbtag.tag, 'changing tag text')
-    await dbtag.changeColor(
-      this.tag.color || dbtag.color!,
-      'changing tag color'
-    )
+    await dbtag.changeColor(this.tag.color || dbtag.color, 'changing tag color')
 
     goBack()
     sharedTagStore.refreshTags()
@@ -212,7 +210,6 @@ class ChangeTextContent extends Component<{
 }
 
 export const ChangeText = () => {
-  const route =
-    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
+  const route = useRoute<RouteProp<Record<string, { tag: MelonTag }>, string>>()
   return <ChangeTextContent route={route} />
 }

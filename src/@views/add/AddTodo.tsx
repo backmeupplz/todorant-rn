@@ -5,7 +5,6 @@ import { AddTodoScreenType } from '@views/add/AddTodoScreenType'
 import {
   Alert,
   BackHandler,
-  Dimensions,
   Falsy,
   FlatList,
   InteractionManager,
@@ -21,10 +20,6 @@ import { Divider } from '@components/Divider'
 import { EventEmitter } from 'events'
 import { HeaderHeightContext } from '@react-navigation/elements'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import {
-  ObservableNowEventEmitterEvent,
-  observableNowEventEmitter,
-} from '@utils/ObservableNow'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
@@ -38,12 +33,12 @@ import {
   checkDayCompletionRoutine,
   shouldShowDayCompletionRoutine,
 } from '@utils/dayCompleteRoutine'
-import { cloneDelegator, getTitle } from '@models/Todo'
 import { computed, makeObservable, observable } from 'mobx'
 import { database, todosCollection } from '@utils/watermelondb/wmdb'
 import { fixOrder } from '@utils/fixOrder'
 import { getDateMonthAndYearString, isToday } from '@utils/time'
 import { getLocalDelegation } from '@utils/delegations'
+import { getTitle } from '@models/Todo'
 import { goBack, navigate } from '@utils/navigation'
 import { isTodoOld } from '@utils/isTodoOld'
 import { linkify } from '@utils/linkify'
@@ -62,13 +57,10 @@ import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
 import CustomIcon from '@components/CustomIcon'
 import DraggableFlatList, {
-  OpacityDecorator,
   ScaleDecorator,
-  ShadowDecorator,
 } from 'react-native-draggable-flatlist'
 import LinearGradient from 'react-native-linear-gradient'
-import React, { Component, RefObject, createRef } from 'react'
-import uuid from 'uuid'
+import React, { Component, createRef } from 'react'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {
@@ -178,7 +170,9 @@ class AddTodoContent extends Component<{
         let delegator: MelonUser | Falsy
         if (vm.delegate) {
           user = await getLocalDelegation(vm.delegate, false)
-          delegator = await getLocalDelegation(sharedSessionStore.user!, true)
+          delegator = sharedSessionStore.user
+            ? await getLocalDelegation(sharedSessionStore.user, true)
+            : undefined
         }
         const dbtodo = todosCollection.prepareCreate((dbtodo) => {
           Object.assign(dbtodo, todo)
@@ -243,7 +237,7 @@ class AddTodoContent extends Component<{
             todo.date = vm.date
             todo.time = vm.time
             todo.repetitive = vm.repetitive
-            todo._exactDate = new Date(getTitle(vm.editedTodo!))
+            todo._exactDate = new Date(getTitle(todo))
             if (failed && todo.date) {
               todo.frogFails++
               if (todo.frogFails > 1) {
@@ -527,7 +521,7 @@ class AddTodoContent extends Component<{
     }
   }
 
-  onDragEnd = ({ data, from, to }: { data: any; from: number; to: number }) => {
+  onDragEnd = ({ from, to }: { data: any; from: number; to: number }) => {
     if (from == 0 || to == 0) {
       return
     }
@@ -565,7 +559,7 @@ class AddTodoContent extends Component<{
             style={{ maxHeight: '95%', height: '95%' }}
             autoscrollSpeed={200}
             data={[undefined, ...this.vms]}
-            renderItem={({ item, index, drag, isActive }) => {
+            renderItem={({ item, index, drag }) => {
               return index == 0 ? (
                 this.isBreakdown && !!this.breakdownTodo && (
                   <View

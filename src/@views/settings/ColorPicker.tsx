@@ -8,7 +8,6 @@ import { MelonTag } from '@models/MelonTag'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { extraButtonProps } from '@utils/extraButtonProps'
-import { getTagById } from '@utils/getTagById'
 import { goBack } from '@utils/navigation'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
@@ -20,6 +19,7 @@ import React, { Component } from 'react'
 const ColorPickerComponentAny: any = ColorPickerComponent
 
 const colorPickerStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   save: () => {},
 }
 

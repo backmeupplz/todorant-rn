@@ -7,14 +7,10 @@ import { Q } from '@nozbe/watermelondb'
 import { SectionHeader } from '@components/SectionHeader'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TableItem } from '@components/TableItem'
-import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
+import { TagColumn } from '@utils/watermelondb/tables'
 import { alertError } from '@utils/alert'
 import { cloneTodo } from '@models/Todo'
-import {
-  database,
-  tagsCollection,
-  todosCollection,
-} from '@utils/watermelondb/wmdb'
+import { database, tagsCollection } from '@utils/watermelondb/wmdb'
 import { gatherData } from '@utils/gatherData'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'

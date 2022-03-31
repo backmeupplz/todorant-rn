@@ -79,7 +79,10 @@ export class EpicProgress extends Component<{
             }}
           />
           <ProgressView
-            progress={this.props.epic.epicPoints! / this.props.epic.epicGoal!}
+            progress={
+              (this.props.epic.epicPoints || 1) /
+              (this.props.epic.epicGoal || 1)
+            }
             tintColor={this.props.epic.color || sharedColors.primaryColor}
             trackColor={sharedColors.progressBarBackground}
           />

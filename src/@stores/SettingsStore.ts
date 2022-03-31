@@ -1,11 +1,8 @@
 import { AsyncStorage } from 'react-native'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { MMKV, hydrate } from '@stores/hydration/hydrate'
-import { Platform } from 'react-native'
 import { Settings } from '@models/Settings'
-import { alertError, alertSupport } from '@utils/alert'
 import { computed, makeObservable, observable } from 'mobx'
-import { database } from '@utils/watermelondb/wmdb'
 import { eventEmitter, initialMode } from 'react-native-dark-mode'
 import { getLanguageTag } from '@utils/i18n'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
@@ -236,6 +233,7 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
 
 export async function fixDuplicatedTasks() {
   const newAsyncStorage = AsyncStorage
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const oldAsyncStorage = require('@react-native-async-storage/async-storage')
     .default as typeof AsyncStorage
   const mmkvStorage = MMKV

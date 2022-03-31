@@ -1,7 +1,6 @@
 import {
   Animated,
   Dimensions,
-  FlatListProps,
   NativeScrollEvent,
   NativeScrollPoint,
   NativeSyntheticEvent,
@@ -22,15 +21,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Fade from '@components/Fade'
-import React, {
-  Component,
-  ForwardRefExoticComponent,
-  Ref,
-  RefAttributes,
-  useRef,
-} from 'react'
+import React, { Component } from 'react'
 import fonts from '@utils/fonts'
-import type { FlatList as FlatListType } from 'react-native-gesture-handler'
 
 export let infoButtonNodeId: number
 

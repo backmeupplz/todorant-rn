@@ -1,58 +1,20 @@
 import { Hero } from '@models/Hero'
-import { MelonTag } from '@models/MelonTag'
-import { MelonTodo, MelonUser } from '@models/MelonTodo'
-import { Q } from '@nozbe/watermelondb'
-import { RawRecord } from '@nozbe/watermelondb/RawRecord'
 import { Settings } from '@models/Settings'
 import { SocketConnection } from '@sync/sockets/SocketConnection'
-import {
-  SyncArgs,
-  SyncDatabaseChangeSet,
-  SyncPullResult,
-  synchronize,
-} from '@nozbe/watermelondb/sync'
 import { SyncManager } from '@sync/SyncManager'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { TagColumn, TodoColumn } from '@utils/watermelondb/tables'
 import { User } from '@models/User'
-import { WMDBSync } from 'src/@sync/wmdb/wmdbsync'
-import { _e, decrypt, encrypt } from '@utils/encryption'
-import { cloneDeep } from 'lodash'
-import { computed, makeObservable, observable, when } from 'mobx'
-import {
-  database,
-  tagsCollection,
-  todosCollection,
-  usersCollection,
-} from '@utils/watermelondb/wmdb'
-import { getTitle } from '@models/Todo'
+import { WMDBSync } from '@sync/wmdb/wmdbsync'
+import { computed, makeObservable } from 'mobx'
 import { hydration } from '@stores/hydration/hydratedStores'
 import { onDelegationObjectsFromServer } from '@sync/SyncObjectHandlers'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTagStore } from '@stores/TagStore'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { syncEventEmitter } from '@sync/syncEventEmitter'
 
 // Using built-in SyncLogger
-const SyncLogger = require('@nozbe/watermelondb/sync/SyncLogger').default
-const logger = new SyncLogger(1 /* limit of sync logs to keep in memory */)
-
-type SyncRecord = RawRecord & { updated_at: number }
-
-type SyncType = SyncArgs & {
-  conflictResolver: (
-    lastSyncDate: Date,
-    local: SyncRecord,
-    remote: SyncRecord,
-    resolved: SyncRecord
-  ) => void
-}
-
-const wmdbGetLastPullAt =
-  require('@nozbe/watermelondb/sync/impl').getLastPulledAt
 
 class Sync {
   socketConnection = new SocketConnection()

@@ -1,10 +1,5 @@
-import {
-  NativeBase,
-  Button as NativeBaseButton,
-  RnViewStyleProp,
-  View,
-} from 'native-base'
-import { Platform, StyleSheet, ViewStyle } from 'react-native'
+import { NativeBase, Button as NativeBaseButton, View } from 'native-base'
+import { Platform } from 'react-native'
 import React, { PureComponent } from 'react'
 
 const fixStyle = (style: any) => {

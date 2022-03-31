@@ -37,6 +37,7 @@ export class InfoButtonContent extends Component<{
                   alertSupport()
                 },
               },
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               { text: translate('ok'), onPress: () => {} },
             ])
           }, 100)

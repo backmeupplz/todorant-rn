@@ -1,6 +1,6 @@
 import { EasingNode } from 'react-native-reanimated'
 import { ViewStyle } from 'react-native'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import React, { useEffect, useState } from 'react'
 
 const { Value, timing } = Animated

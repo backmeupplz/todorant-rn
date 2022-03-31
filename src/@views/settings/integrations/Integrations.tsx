@@ -121,7 +121,7 @@ export class Integrations extends Component {
             ) : (
               <Text {...sharedColors.textExtraStyle}>
                 {translate(
-                  !!sharedSettingsStore.googleCalendarCredentials
+                  sharedSettingsStore.googleCalendarCredentials
                     ? 'connected'
                     : 'notConnected'
                 )}

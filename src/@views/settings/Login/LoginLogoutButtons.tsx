@@ -20,7 +20,7 @@ export class LoginLogoutButtons extends Component {
           marginVertical: 16,
         }}
       >
-        {!!sharedSessionStore.user ? (
+        {sharedSessionStore.user ? (
           <Button
             style={{ flex: 1, borderRadius: 10 }}
             block

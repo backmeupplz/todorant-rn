@@ -1,5 +1,5 @@
 import { MelonTodo } from '@models/MelonTodo'
-import { database } from 'src/@utils/watermelondb/wmdb'
+import { database } from '@utils/watermelondb/wmdb'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'

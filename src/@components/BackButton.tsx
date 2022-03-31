@@ -9,6 +9,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import React, { Component } from 'react'
 
 export const backButtonStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   back: () => {},
 }
 

@@ -17,13 +17,11 @@ import {
 import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import PushNotification from 'react-native-push-notification'
-import RNRestart from 'react-native-restart'
 import React, { Component } from 'react'
 
 const codeToName = {
@@ -142,13 +140,13 @@ export class GeneralSettings extends Component {
             {this.colorModeLabel}
           </Text>
         </TableItem>
-        <View onLayout={({ nativeEvent: { target } }: any) => {}}>
+        <View>
           <TableItem
             onLayout={({ nativeEvent: { target } }: any) => {
               integrationButtonsNodeId = target
             }}
             onPress={() => {
-              !!sharedSessionStore.user
+              sharedSessionStore.user
                 ? navigate('Integrations')
                 : navigate('Login')
             }}

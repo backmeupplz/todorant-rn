@@ -1,15 +1,12 @@
 import { Falsy } from 'react-native'
 import { MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { TodoColumn, UserColumn } from 'src/@utils/watermelondb/tables'
+import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import {
   database,
   todosCollection,
   usersCollection,
-} from 'src/@utils/watermelondb/wmdb'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSync } from '@sync/Sync'
+} from '@utils/watermelondb/wmdb'
 
 export async function removeDelegation(
   delegation: Partial<MelonUser>,

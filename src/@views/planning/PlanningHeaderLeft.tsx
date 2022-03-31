@@ -1,7 +1,7 @@
 import { Icon } from 'native-base'
-import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { observer } from 'mobx-react'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import React, { Component } from 'react'

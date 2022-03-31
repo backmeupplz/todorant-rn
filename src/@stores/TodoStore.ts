@@ -15,12 +15,12 @@ import {
 import { getTitle } from '@models/Todo'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { hydration } from 'src/@stores/hydration/hydratedStores'
+import { hydration } from '@stores/hydration/hydratedStores'
 import { observableNow } from '@utils/ObservableNow'
 import { persist } from 'mobx-persist'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { sharedSessionStore } from 'src/@stores/SessionStore'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 class TodoStore {
   hydrated = false

@@ -6,6 +6,7 @@ import { sharedColors } from '@utils/sharedColors'
 import React, { Component } from 'react'
 
 export const addButtonStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   add: () => {},
 }
 

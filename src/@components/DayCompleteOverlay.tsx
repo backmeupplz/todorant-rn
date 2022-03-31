@@ -1,7 +1,7 @@
 import { EasingNode } from 'react-native-reanimated'
 import { Text } from 'native-base'
 import { translate } from '@utils/i18n'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import React, { Component } from 'react'
 
 export let dayCompleteOverlayRef: any

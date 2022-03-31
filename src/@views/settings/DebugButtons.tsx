@@ -21,7 +21,6 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSync } from '@sync/Sync'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 @observer

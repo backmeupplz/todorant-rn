@@ -1,6 +1,5 @@
 import 'moment/min/locales'
 import { IconButton } from '@components/IconButton'
-import { PlanningVM } from '@views/planning/PlanningVM'
 import { Text, View } from 'native-base'
 import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
 import { TouchableOpacity } from 'react-native-gesture-handler'

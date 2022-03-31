@@ -1,10 +1,4 @@
-import {
-  Alert,
-  SectionListData,
-  SectionListRenderItem,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import { CardType } from '@components/TodoCard/CardType'
 import { Container, Icon, Text, View } from 'native-base'
 import { MelonTodo } from '@models/MelonTodo'
@@ -13,23 +7,14 @@ import { NoTodosPlaceholder } from '@views/planning/NoTodosPlaceholder'
 import { PlanningVM } from '@views/planning/PlanningVM'
 import { PlusButton } from '@components/PlusButton'
 import { Q } from '@nozbe/watermelondb'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TodoCard } from '@components/TodoCard'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { TodoHeader } from '@components/TodoHeader'
 import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
-import {
-  computed,
-  makeObservable,
-  observable,
-  reaction,
-  runInAction,
-  when,
-} from 'mobx'
+import { computed, makeObservable, observable, runInAction, when } from 'mobx'
 import { database } from '@utils/watermelondb/wmdb'
-import { debounce } from 'lodash'
 import {
   getDateDateString,
   getDateMonthAndYearString,
@@ -47,14 +32,12 @@ import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-import { v4 } from 'uuid'
-import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import Animated, { Value } from 'react-native-reanimated'
 import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
-import React, { Component, useEffect, useMemo, useRef } from 'react'
+import React, { Component } from 'react'
 import moment from 'moment'
 import withObservables from '@nozbe/with-observables'
 
@@ -214,7 +197,9 @@ export class PlanningContent extends Component {
                   date: getDateString(day),
                 })
               }}
-              emptyDays={(emptyDays: any) => {}}
+              emptyDays={() => {
+                return
+              }}
               activeCoordinates={sharedAppStateStore.activeCoordinates}
               month={this.currentMonth}
               year={this.currentYear}
@@ -269,11 +254,9 @@ const enhance = withObservables(['todo'], ({ todo }) => {
 const EnhancedDraggableSectionList = enhance(
   ({
     todo,
-    isCompleted,
     increaseOffset,
   }: {
     todo: MelonTodo[]
-    isCompleted: boolean
     increaseOffset: () => void
   }) => {
     const usedSection = new Set<string>()
@@ -527,11 +510,9 @@ async function onDragEnd(
 const renderItem = ({
   item,
   drag,
-  isActive,
 }: {
   item: MelonTodo | string
   drag: () => void
-  isActive: boolean
 }) => {
   if (!item) return
   if (typeof item === 'string') {
@@ -549,7 +530,7 @@ const renderItem = ({
   }
   return (
     <ScaleDecorator>
-      <View style={{ padding: false ? 10 : 0 }} key={item.id}>
+      <View style={{ padding: 0 }} key={item.id}>
         <TodoCard
           todo={item}
           type={

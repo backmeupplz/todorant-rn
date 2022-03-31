@@ -1,44 +1,26 @@
 import * as Animatable from 'react-native-animatable'
-import {
-  ActionSheet,
-  Icon,
-  Input,
-  List,
-  ListItem,
-  Text,
-  View,
-} from 'native-base'
+import { ActionSheet, Icon, Input, Text, View } from 'native-base'
 import { Calendar } from 'react-native-calendars'
-import { CollapseButton } from 'src/@views/add/CollapseButton'
-import { Divider } from '@components/Divider'
-import {
-  FlatList,
-  Switch,
-  TouchableOpacity,
-} from 'react-native-gesture-handler'
+import { CollapseButton } from '@views/add/CollapseButton'
 import { IconButton } from '@components/IconButton'
 import {
   InteractionManager,
   Platform,
-  ScrollView,
   StyleProp,
-  StyleSheet,
   ViewStyle,
 } from 'react-native'
 import { MelonTag } from '@models/MelonTag'
+import { Switch, TouchableOpacity } from 'react-native-gesture-handler'
 import { TodoVM } from '@views/add/TodoVM'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { computed, makeObservable, observable } from 'mobx'
 import { getDateMonthAndYearString, getDateString } from '@utils/time'
 import { observer } from 'mobx-react'
-import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
-import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
 import { sharedDelegationStore } from '@stores/DelegationStore'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
 import CustomIcon from '@components/CustomIcon'
@@ -407,7 +389,7 @@ class MonthRow extends Component<{
           }
           this.props.vm.showMonthAndYearPicker =
             !this.props.vm.showMonthAndYearPicker
-          if (!!this.props.vm.date) {
+          if (this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
             this.props.vm.date = undefined
           }

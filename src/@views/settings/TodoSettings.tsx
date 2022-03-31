@@ -16,10 +16,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
-import DateTimePicker, {
-  AndroidEvent,
-  Event,
-} from '@react-native-community/datetimepicker'
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 import PushNotification from 'react-native-push-notification'
 import React, { Component } from 'react'
 

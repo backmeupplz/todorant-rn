@@ -9,9 +9,10 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { translate } from '@utils/i18n'
-import Animated, { Easing } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import React, { Component } from 'react'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const avatar = require('@assets/images/nikita.jpg')
 
 @observer
