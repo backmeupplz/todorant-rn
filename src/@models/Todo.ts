@@ -10,7 +10,7 @@ export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)
 }
 
-export function compareTodos(completed: Boolean) {
+export function compareTodos(completed: boolean) {
   return (a: MelonTodo, b: MelonTodo) => {
     if (a.date === b.date && a.monthAndYear === b.monthAndYear) {
       if (a.frog && b.frog) {

@@ -389,7 +389,7 @@ class AddTodoContent extends Component<{
         newVM.text = this.breakdownTodo.text
         newVM.time = this.breakdownTodo.time
       } else if (sharedSettingsStore.duplicateTagInBreakdown) {
-        let matches = linkify.match(this.breakdownTodo.text) || []
+        const matches = linkify.match(this.breakdownTodo.text) || []
         const newText = matches
           .map((v) =>
             /^#[\u0400-\u04FFa-zA-Z_0-9]+$/u.test(v.url) ? v.url : undefined
@@ -415,7 +415,7 @@ class AddTodoContent extends Component<{
   }
 
   isDirty = () => {
-    for (let vm of this.vms) {
+    for (const vm of this.vms) {
       if (vm.editedTodo) {
         if (
           vm.editedTodo?.text != vm.text ||

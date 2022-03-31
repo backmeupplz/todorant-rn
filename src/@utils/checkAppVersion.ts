@@ -45,7 +45,7 @@ export async function checkAppVersion() {
 async function lookupVersion(
   platform: string,
   bundleId: string,
-  country: string = 'us'
+  country = 'us'
 ) {
   // https://github.com/flexible-agency/react-native-check-version/blob/5d305a38064e7305eb372ffa61815822f3d839ef/backend/lib/utils.js#L5
   const installerPackageName = await DeviceInfo.getInstallerPackageName()
@@ -91,11 +91,11 @@ async function lookupVersion(
       }
       data = data.data
 
-      let startToken = 'Current Version'
-      let endToken = 'Requires'
-      let indexStart = data.indexOf(startToken)
+      const startToken = 'Current Version'
+      const endToken = 'Requires'
+      const indexStart = data.indexOf(startToken)
       data = data.substr(indexStart + startToken.length)
-      let indexEnd = data.indexOf(endToken)
+      const indexEnd = data.indexOf(endToken)
       data = data
         .substr(0, indexEnd)
         .replace(/<[^>]+>/g, '')
@@ -166,7 +166,7 @@ function diffLoose(currentVersion: string, latestVersion: string) {
     prefix = 'pre'
     defaultResult = 'prerelease'
   }
-  for (let key in current) {
+  for (const key in current) {
     if (
       current.hasOwnProperty(key) &&
       ['major', 'minor', 'patch'].includes(key) &&

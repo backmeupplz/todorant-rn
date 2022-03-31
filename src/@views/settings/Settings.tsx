@@ -58,7 +58,7 @@ import DeviceInfo from 'react-native-device-info'
 import React, { Component, createRef, useEffect } from 'react'
 import fonts from '@utils/fonts'
 
-export let scrollViewRef = createRef<FlatList<any>>()
+export const scrollViewRef = createRef<FlatList<any>>()
 export let supportButtonNodeId: number
 export let settingsRootRef: Container
 export let settingsBeforeFeedbackButton: number

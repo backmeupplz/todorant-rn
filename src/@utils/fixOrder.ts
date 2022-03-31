@@ -79,7 +79,7 @@ export async function fixOrder(
 }
 
 function isTimeSorted(todos: (MelonTodo & Partial<MelonTodo>)[]) {
-  let result = true
+  const result = true
   let time: number | undefined
   for (const todo of todos) {
     if (todo.time) {

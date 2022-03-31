@@ -33,7 +33,7 @@ class TodoSample {
 }
 
 export async function add5000Todos() {
-  let todos: any[] = []
+  const todos: any[] = []
   let counter = 0
   let lastYear = 2021
   for (let i = 0; i < 5000; i++) {

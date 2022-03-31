@@ -346,7 +346,7 @@ async function onDragEnd(
       fromItem = fromItem as MelonTodo
       let secondOrder =
         nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-      let firstOrder = toItem ? toItem.order : -1
+      const firstOrder = toItem ? toItem.order : -1
       if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
       let average = (firstOrder + secondOrder) / 2
       // if there is nothing under or under is a section
@@ -395,7 +395,7 @@ async function onDragEnd(
       fromItem = fromItem as MelonTodo
       let secondOrder =
         nearItem && typeof nearItem !== 'string' ? nearItem.order : -1
-      let firstOrder = toItem ? toItem.order : -1
+      const firstOrder = toItem ? toItem.order : -1
       if (nearItem && nearItem.frog && !fromItem.frog) secondOrder = -1
       let average = (firstOrder + secondOrder) / 2
       // if there is nothing under or under is a section

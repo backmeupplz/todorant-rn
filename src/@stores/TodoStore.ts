@@ -119,7 +119,7 @@ class TodoStore {
 
   todosBeforeDate = (title: string) => {
     const todayWithTimezoneOffset = new Date(title)
-    let realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
+    const realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
       Q.where(TodoColumn._exactDate, Q.lt(todayWithTimezoneOffset.getTime())),
       Q.or(
         Q.where(TodoColumn.user, null),
