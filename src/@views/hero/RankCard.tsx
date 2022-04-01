@@ -1,4 +1,5 @@
 import { Circle } from '@views/hero/Circle'
+import { Component } from 'react'
 import { Rank } from '@models/Rank'
 import { Text, View } from 'native-base'
 import { observer } from 'mobx-react'
@@ -6,7 +7,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

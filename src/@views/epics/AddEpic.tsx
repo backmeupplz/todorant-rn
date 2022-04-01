@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Text, View } from 'native-base'
+import { Component } from 'react'
 import { MelonTag } from '@models/MelonTag'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
@@ -10,7 +11,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 const AddEpicStore = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

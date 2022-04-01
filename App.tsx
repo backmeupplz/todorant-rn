@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import 'react-native-get-random-values'
 import {
   DarkTheme,

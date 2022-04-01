@@ -1,4 +1,5 @@
 import { ActionSheet, Icon, Text, View } from 'native-base'
+import { Component } from 'react'
 import { Platform } from 'react-native'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TableItem } from '@components/TableItem'
@@ -18,7 +19,6 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 import PushNotification from 'react-native-push-notification'
-import React, { Component } from 'react'
 
 @observer
 class TimePickerRow extends Component<{

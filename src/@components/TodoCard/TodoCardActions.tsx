@@ -1,4 +1,5 @@
 import { CardType } from '@components/TodoCard/CardType'
+import { Component } from 'react'
 import { Icon, View } from 'native-base'
 import { IconButton } from '@components/IconButton'
 import { MelonTodo } from '@models/MelonTodo'
@@ -12,7 +13,6 @@ import { observer } from 'mobx-react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import React, { Component } from 'react'
 
 export let todoActionsNodeId: number
 export let breakdownNodeId: number

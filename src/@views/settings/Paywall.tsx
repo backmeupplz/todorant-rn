@@ -1,5 +1,6 @@
 import * as RNIap from 'react-native-iap'
 import { Button } from '@components/Button'
+import { Component } from 'react'
 import { Container, Content, Text, View } from 'native-base'
 import { Divider } from '@components/Divider'
 import { Linking, Platform } from 'react-native'
@@ -26,7 +27,6 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { uniqBy } from 'lodash'
 import RNRestart from 'react-native-restart'
-import React, { Component } from 'react'
 
 class PaywallVM {
   @observable products: (RNIap.Subscription | RNIap.Product)[] = []

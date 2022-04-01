@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { Platform } from 'react-native'
 import { Switch } from 'react-native-gesture-handler'
 import { TableItem } from '@components/TableItem'
@@ -5,7 +6,6 @@ import { Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 @observer
 export class TextAndSwitch extends Component<{

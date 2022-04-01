@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { IconButton } from '@components/IconButton'
 import { MelonTag } from '@models/MelonTag'
 import { ProgressView } from '@components/ProgressView'
@@ -8,7 +9,6 @@ import { observer } from 'mobx-react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedTagStore } from '@stores/TagStore'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

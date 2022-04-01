@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import {
   DelegateSectionType,
   sharedDelegateStateStore,
@@ -6,7 +7,6 @@ import { H1, Text, View } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 @observer
 export class NoDelegatedTasks extends Component {

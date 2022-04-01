@@ -1,10 +1,10 @@
+import { Component } from 'react'
 import { Spinner } from '@components/Spinner'
 import { View } from 'native-base'
 import { WebView } from 'react-native-webview'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React, { Component } from 'react'
 
 @observer
 export class TermsOfUse extends Component {

@@ -1,8 +1,8 @@
+import { Component } from 'react'
 import { MelonTodo } from '@models/MelonTodo'
 import { Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React, { Component } from 'react'
 import moment from 'moment'
 
 @observer

@@ -1,5 +1,6 @@
 import { Button, Icon, Input, Text, View } from 'native-base'
 import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
+import { Component } from 'react'
 import { IconButton } from '@components/IconButton'
 import { MelonTag, cloneTag } from '@models/MelonTag'
 import { MelonTodo } from '@models/MelonTodo'
@@ -18,7 +19,6 @@ import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 const ChangeTextStore = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

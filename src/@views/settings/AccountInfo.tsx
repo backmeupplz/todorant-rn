@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { Icon, Input, Text, Toast } from 'native-base'
 import { Platform } from 'react-native'
 import { SectionHeader } from '@components/SectionHeader'
@@ -14,7 +15,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

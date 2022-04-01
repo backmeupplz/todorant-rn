@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { Container } from 'native-base'
 import { Observer, observer } from 'mobx-react'
 import { RouteProp, useRoute } from '@react-navigation/native'
@@ -6,7 +7,6 @@ import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import QRCodeScanner from 'react-native-qrcode-scanner'
-import React, { Component } from 'react'
 
 @observer
 class LoginQRContent extends Component<{

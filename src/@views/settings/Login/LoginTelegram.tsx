@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { Spinner } from '@components/Spinner'
 import { User } from '@models/User'
@@ -8,7 +9,6 @@ import { goBack } from '@utils/navigation'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React, { Component } from 'react'
 
 const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 

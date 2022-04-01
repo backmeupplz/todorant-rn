@@ -1,4 +1,5 @@
 import { Button } from '@components/Button'
+import { Component } from 'react'
 import { SubscriptionStatus } from '@models/User'
 import { TableItem } from '@components/TableItem'
 import { Text, View } from 'native-base'
@@ -9,7 +10,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { subscriptionStatusName } from '@utils/subscriptionStatusName'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

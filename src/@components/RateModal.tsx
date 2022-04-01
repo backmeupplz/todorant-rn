@@ -1,11 +1,11 @@
 import { Alert, Linking, Platform } from 'react-native'
+import { Component } from 'react'
 import { observer } from 'mobx-react'
 import { sendFeedback } from '@utils/rest'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import RateModalExternal from '@tasumaniadiabori/react-native-store-rating'
-import React, { Component } from 'react'
 
 @observer
 export class RateModal extends Component {

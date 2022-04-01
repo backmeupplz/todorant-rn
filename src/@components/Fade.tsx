@@ -1,7 +1,7 @@
 import { EasingNode } from 'react-native-reanimated'
 import { ViewStyle } from 'react-native'
+import { useEffect, useState } from 'react'
 import Animated from 'react-native-reanimated'
-import React, { useEffect, useState } from 'react'
 
 const { Value, timing } = Animated
 
@@ -23,6 +23,7 @@ function Fade(props: FadeProps) {
   useEffect(() => {
     opacityValue.setValue(visible ? 1 : (0 as any))
     setIsReady(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -46,6 +47,7 @@ function Fade(props: FadeProps) {
 
     timing(opacityValue, opacityConfig).start()
     if (direction) timing(translationValue, translationConfig).start()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible])
 
   return (

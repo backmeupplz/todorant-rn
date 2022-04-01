@@ -1,4 +1,5 @@
 import { CardType } from '@components/TodoCard/CardType'
+import { Component } from 'react'
 import { Linking } from 'react-native'
 import { MelonTodo } from '@models/MelonTodo'
 import { Text, Toast } from 'native-base'
@@ -11,7 +12,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 const debug = false

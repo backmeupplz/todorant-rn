@@ -1,4 +1,5 @@
 import * as rest from '@utils/rest'
+import { Component } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { Spinner } from '@components/Spinner'
 import { View } from 'native-base'
@@ -10,7 +11,6 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 @observer
 class LoginFacebookContent extends Component<{

@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { View } from 'native-base'
@@ -7,7 +8,6 @@ import { observer } from 'mobx-react'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import CustomIcon from '@components/CustomIcon'
 import LinearGradient from 'react-native-linear-gradient'
-import React, { Component } from 'react'
 
 export let PlusButtonLayout: number
 

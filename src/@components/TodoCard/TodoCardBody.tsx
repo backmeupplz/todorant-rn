@@ -1,5 +1,6 @@
 import { Body, Text, View } from 'native-base'
 import { CardType } from '@components/TodoCard/CardType'
+import { Component } from 'react'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
@@ -8,7 +9,6 @@ import { getTitle } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 const showDebugInfo = false
 

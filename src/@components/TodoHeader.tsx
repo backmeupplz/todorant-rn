@@ -1,4 +1,5 @@
 import 'moment/min/locales'
+import { Component } from 'react'
 import { IconButton } from '@components/IconButton'
 import { Text, View } from 'native-base'
 import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
@@ -9,7 +10,6 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 import moment from 'moment'
 

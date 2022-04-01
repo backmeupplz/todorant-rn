@@ -1,5 +1,6 @@
 import { ActionSheet, Text } from 'native-base'
 import { ColorMode, sharedSettingsStore } from '@stores/SettingsStore'
+import { Component } from 'react'
 import { Language } from '@models/Language'
 import { MMKV } from '@stores/hydration/hydrate'
 import { Platform } from 'react-native'
@@ -22,7 +23,6 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import PushNotification from 'react-native-push-notification'
-import React, { Component } from 'react'
 
 const codeToName = {
   en: 'English',

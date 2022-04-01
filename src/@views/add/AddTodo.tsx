@@ -16,6 +16,7 @@ import {
 } from 'react-native'
 import { Button } from '@components/Button'
 import { CardType } from '@components/TodoCard/CardType'
+import { Component, createRef } from 'react'
 import { Divider } from '@components/Divider'
 import { EventEmitter } from 'events'
 import { HeaderHeightContext } from '@react-navigation/elements'
@@ -60,7 +61,6 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import LinearGradient from 'react-native-linear-gradient'
-import React, { Component, createRef } from 'react'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {

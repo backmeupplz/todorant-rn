@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { Platform } from 'react-native'
 import { ProgressView } from '@components/ProgressView'
 import { Text } from 'native-base'
@@ -6,7 +7,6 @@ import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shortNum = require('number-shortener')

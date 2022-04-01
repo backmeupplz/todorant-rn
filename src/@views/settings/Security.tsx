@@ -1,4 +1,5 @@
 import { Button, Container, Content, Input, Switch, Text } from 'native-base'
+import { Component } from 'react'
 import { Divider } from '@components/Divider'
 import { MelonTodo } from '@models/MelonTodo'
 import { Platform } from 'react-native'
@@ -19,7 +20,6 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 @observer
 export class Security extends Component {

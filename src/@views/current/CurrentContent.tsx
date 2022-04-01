@@ -1,5 +1,6 @@
 import { AllDonePlaceholder } from '@views/current/AllDonePlaceholder'
 import { CardType } from '@components/TodoCard/CardType'
+import { Component, Fragment } from 'react'
 import { Container, View } from 'native-base'
 import { CurrentVM } from '@views/current/CurrentVM'
 import { EpicProgress } from '@views/current/EpicProgress'
@@ -22,7 +23,6 @@ import { translate } from '@utils/i18n'
 import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
-import React, { Component, Fragment } from 'react'
 import withObservables from '@nozbe/with-observables'
 
 export let currentTodoNodeId: number

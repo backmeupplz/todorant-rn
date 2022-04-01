@@ -1,5 +1,6 @@
 import * as rest from '@utils/rest'
 import { Button } from '@components/Button'
+import { Component } from 'react'
 import { Container, Content, Input, Text, View } from 'native-base'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { Platform, StyleProp, TextStyle } from 'react-native'
@@ -14,7 +15,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { v4 as uuid } from 'uuid'
-import React, { Component } from 'react'
 import appleAuth, {
   AppleButton,
   appleAuthAndroid,

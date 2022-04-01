@@ -1,4 +1,5 @@
 import { CardType } from '@components/TodoCard/CardType'
+import { Component, Fragment, useEffect, useState } from 'react'
 import { Container } from 'native-base'
 import {
   DelegateSectionType,
@@ -15,7 +16,6 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import React, { Component, Fragment, useEffect, useState } from 'react'
 import withObservables from '@nozbe/with-observables'
 
 const enhance = withObservables(['todo'], ({ todo }) => {
@@ -74,6 +74,7 @@ const EnhancedDraggableSectionList = enhance(
 
     useEffect(() => {
       build()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [completed, todo.length, byMe])
 
     return (

@@ -2,7 +2,7 @@ import { CardType } from '@components/TodoCard/CardType'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { TodoCardContent } from '@components/TodoCard/TodoCardContent'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import React, { memo } from 'react'
+import { memo } from 'react'
 import withObservables, { ObservableifyProps } from '@nozbe/with-observables'
 
 type InputProps = ObservableifyProps<Props, 'delegator'>

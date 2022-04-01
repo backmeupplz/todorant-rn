@@ -10,6 +10,7 @@ import {
   ColorPicker,
   ColorPickerHeaderRight,
 } from '@views/settings/ColorPicker'
+import { Component, createRef, useEffect } from 'react'
 import { Container, Text, View } from 'native-base'
 import { Data } from '@views/settings/Data'
 import { DebugButtons } from '@views/settings/DebugButtons'
@@ -52,7 +53,6 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { useNavigation } from '@react-navigation/native'
 import DeviceInfo from 'react-native-device-info'
-import React, { Component, createRef, useEffect } from 'react'
 import fonts from '@utils/fonts'
 
 export const scrollViewRef = createRef<FlatList<any>>()

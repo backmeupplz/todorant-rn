@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import { Dimensions, View } from 'react-native'
 import { EasingNode } from 'react-native-reanimated'
 import { OnboardingButton } from '@views/onboarding/OnboardingButton'
@@ -10,7 +11,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { translate } from '@utils/i18n'
 import Animated from 'react-native-reanimated'
-import React, { Component } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const avatar = require('@assets/images/nikita.jpg')

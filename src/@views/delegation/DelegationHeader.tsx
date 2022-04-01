@@ -1,9 +1,9 @@
+import { Component } from 'react'
 import { DelegationHeaderSegment } from '@views/delegation/DelegationHeaderSegment'
 import { Dimensions } from 'react-native'
 import { View } from 'native-base'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
 
 @observer
 export class DelegationHeader extends Component {

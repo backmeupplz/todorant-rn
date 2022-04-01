@@ -1,5 +1,6 @@
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import { CardType } from '@components/TodoCard/CardType'
+import { Component } from 'react'
 import { Container, Icon, Text, View } from 'native-base'
 import { MelonTodo } from '@models/MelonTodo'
 import { Month } from '@upacyxou/react-native-month'
@@ -37,7 +38,6 @@ import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
-import React, { Component } from 'react'
 import moment from 'moment'
 import withObservables from '@nozbe/with-observables'
 

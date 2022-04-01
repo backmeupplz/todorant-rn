@@ -1,4 +1,5 @@
 import { Alert } from 'react-native'
+import { Component } from 'react'
 import { Container, Text, View } from 'native-base'
 import { Divider } from '@components/Divider'
 import { FlatList } from 'react-native-gesture-handler'
@@ -16,7 +17,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 import withObservables from '@nozbe/with-observables'
 

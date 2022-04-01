@@ -1,3 +1,4 @@
+import { Component } from 'react'
 import {
   Dimensions,
   InteractionManager,
@@ -19,7 +20,6 @@ import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { observer } from 'mobx-react'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import Animated from 'react-native-reanimated'
-import React, { Component } from 'react'
 
 @observer
 export class Overlay extends Component {

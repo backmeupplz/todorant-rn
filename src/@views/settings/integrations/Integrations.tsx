@@ -1,5 +1,6 @@
 import * as rest from '@utils/rest'
 import { ActionSheet, Container, Content, Text } from 'native-base'
+import { Component } from 'react'
 import { Platform } from 'react-native'
 import { Spinner } from '@components/Spinner'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
@@ -14,7 +15,6 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 
 @observer
 export class Integrations extends Component {

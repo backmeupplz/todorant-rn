@@ -1,4 +1,5 @@
 import { ActionSheet, Icon, Text, Toast, View } from 'native-base'
+import { Component } from 'react'
 import { DelegationUserType } from '@models/DelegationUser'
 import { TableItem } from '@components/TableItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -10,7 +11,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 @observer

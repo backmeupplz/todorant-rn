@@ -10,6 +10,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import { Component } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
 import { HeroButton } from '@components/HeroButton'
 import { InfoButton } from '@components/InfoButton'
@@ -21,7 +22,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Fade from '@components/Fade'
-import React, { Component } from 'react'
 import fonts from '@utils/fonts'
 
 export let infoButtonNodeId: number

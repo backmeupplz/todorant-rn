@@ -3,6 +3,7 @@ import {
   ColorPicker as ColorPickerComponent,
   fromHsv,
 } from 'react-native-color-picker'
+import { Component } from 'react'
 import { Container, H1, Icon, View } from 'native-base'
 import { MelonTag } from '@models/MelonTag'
 import { RouteProp, useRoute } from '@react-navigation/native'
@@ -14,7 +15,6 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
-import React, { Component } from 'react'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 

@@ -1,4 +1,5 @@
 import * as rest from '@utils/rest'
+import { Component } from 'react'
 import { Container, Content, Text, Toast } from 'native-base'
 import { Divider } from '@components/Divider'
 import { MelonTag, cloneTag } from '@models/MelonTag'
@@ -22,7 +23,6 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
-import React, { Component } from 'react'
 import moment from 'moment'
 
 @observer

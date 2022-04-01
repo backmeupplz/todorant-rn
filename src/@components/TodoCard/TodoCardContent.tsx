@@ -1,4 +1,5 @@
 import { CardType } from '@components/TodoCard/CardType'
+import { Component } from 'react'
 import { DelegateCardActions } from '@components/TodoCard/DelegateCardActions'
 import { Divider } from '@components/Divider'
 import { FailCircle } from '@components/TodoCard/FailCircle'
@@ -14,7 +15,6 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import CustomIcon from '@components/CustomIcon'
-import React, { Component } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 export let currentTodoNodeId: number

@@ -3,7 +3,6 @@ import { Observer } from 'mobx-react'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { View } from 'native-base'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import React from 'react'
 
 export function headerBackButtonProps(useBackStore = false) {
   return {

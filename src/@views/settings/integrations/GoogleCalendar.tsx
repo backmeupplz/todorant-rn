@@ -1,10 +1,10 @@
+import { Component } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { View } from 'native-base'
 import { WebView } from 'react-native-webview'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React, { Component } from 'react'
 
 @observer
 export class GoogleCalendarContent extends Component<{
