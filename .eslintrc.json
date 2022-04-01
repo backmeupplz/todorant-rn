@@ -10,25 +10,28 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
+    "react",
+    "react-hooks",
     "@typescript-eslint",
     "prettier",
     "sort-imports-es6-autofix",
     "import",
-    "no-relative-import-paths",
-    "eslint-plugin-node"
+    "no-relative-import-paths"
   ],
   "extends": [
     "eslint:recommended",
+    "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
   "rules": {
     "no-relative-import-paths/no-relative-import-paths": "error",
+    "react-hooks/exhaustive-deps": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "no-async-promise-executor": "off",
     "no-prototype-builtins": "off",
+    "no-async-promise-executor": "off",
     "prettier/prettier": [
       "error",
       {

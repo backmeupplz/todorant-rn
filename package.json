@@ -139,6 +139,7 @@
     "eslint-plugin-no-relative-import-paths": "^1.2.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "flat": "^5.0.2",
     "i18n-strings-files": "^1.0.9",
