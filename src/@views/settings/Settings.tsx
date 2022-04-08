@@ -23,7 +23,7 @@ import { GoogleCalendar } from '@views/settings/integrations/GoogleCalendar'
 import { HeaderScrollView } from '@components/HeaderScrollView'
 import { InfoButton } from '@components/InfoButton'
 import { Integrations } from '@views/settings/integrations/Integrations'
-import { InteractionManager } from 'react-native'
+import { InteractionManager, FlatList as RNFlatList } from 'react-native'
 import { Login } from '@views/settings/Login/Login'
 import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
@@ -55,7 +55,7 @@ import { useNavigation } from '@react-navigation/native'
 import DeviceInfo from 'react-native-device-info'
 import fonts from '@utils/fonts'
 
-export const scrollViewRef = createRef<FlatList<any>>()
+export const scrollViewRef = createRef<RNFlatList<any>>()
 export let supportButtonNodeId: number
 export let settingsRootRef: Container
 export let settingsBeforeFeedbackButton: number

@@ -114,7 +114,10 @@ class ChangeTextContent extends Component<{
     }
     await database.write(async () => await database.batch(...toUpdate))
     await dbtag.changeText(this.newName || dbtag.tag, 'changing tag text')
-    await dbtag.changeColor(this.tag.color || dbtag.color, 'changing tag color')
+    const color = this.tag.color || dbtag.color
+    if (color) {
+      await dbtag.changeColor(color, 'changing tag color')
+    }
 
     goBack()
     sharedTagStore.refreshTags()

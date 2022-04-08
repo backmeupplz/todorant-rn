@@ -1,6 +1,7 @@
 import {
   Animated,
   Dimensions,
+  FlatListProps,
   NativeScrollEvent,
   NativeScrollPoint,
   NativeSyntheticEvent,
@@ -9,6 +10,7 @@ import {
   Text,
   View,
   ViewStyle,
+  FlatList as RNFLatList,
 } from 'react-native'
 import { Component } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
@@ -23,6 +25,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Fade from '@components/Fade'
 import fonts from '@utils/fonts'
+import { Ref } from 'react'
 
 export let infoButtonNodeId: number
 
@@ -35,7 +38,7 @@ export class HeaderScrollView extends Component<{
   showsHeroButton?: boolean
   infoTitle: string
   contentContainerStyle?: StyleProp<ViewStyle>
-  onscrollViewRef?: (ref: ScrollView | null) => void
+  onscrollViewRef?: Ref<RNFLatList<unknown>> | undefined
   onScrollViewContentRef?: (event: View) => void
   onOffsetChange?: (offset: NativeScrollPoint) => void
 }> {
@@ -125,6 +128,7 @@ export class HeaderScrollView extends Component<{
           </Fade>
         </View>
         <FlatList
+          data={[]}
           ref={this.props.onscrollViewRef}
           onScroll={(event) => {
             Animated.event(
