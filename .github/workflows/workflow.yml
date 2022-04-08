@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install yarn 3
-        run: yarn set version berry
       - name: Install modules
         run: yarn
       - name: Compile code
