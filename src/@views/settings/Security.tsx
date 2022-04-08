@@ -1,5 +1,5 @@
 import { Divider } from '@components/Divider'
-import { SectionHeader } from '@components/SectionHeader'
+import SectionHeader from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
 import { TableItem } from '@components/TableItem'
 import { MelonTodo } from '@models/MelonTodo'
