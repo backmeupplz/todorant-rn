@@ -7,13 +7,10 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@3.2.0
-        with:
-          cmd: install # will run `yarn install` command
-      - uses: borales/actions-yarn@3.2.0
-        with:
-          cmd: yarn tsc --skipLibCheck
-      - uses: borales/actions-yarn@3.2.0
-        with:
-          cmd: yarn lint
+      - uses: actions/checkout@v3
+      - name: Install modules
+        run: yarn install
+      - name: Compile code
+        run: yarn tsc --skipLibCheck
+      - name: Lint
+        run: yarn lint
