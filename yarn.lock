@@ -6052,18 +6052,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-native@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "eslint-plugin-react-native@npm:4.0.0"
-  dependencies:
-    "@babel/traverse": ^7.7.4
-    eslint-plugin-react-native-globals: ^0.1.1
-  peerDependencies:
-    eslint: ^3.17.0 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: 69fee2de6bad525b5e747112cd8007861be4ad014b96208f6b7d221eef0bac43b834115e4379d9f719e7aa24a5d41c281bbbd6a76ddfa363f939670a635ab0fa
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-react@npm:^7.20.0":
   version: 7.21.5
   resolution: "eslint-plugin-react@npm:7.21.5"
@@ -13687,7 +13675,6 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-react: ^7.29.4
-    eslint-plugin-react-native: ^4.0.0
     eslint-plugin-sort-imports-es6-autofix: ^0.6.0
     flat: ^5.0.2
     i18n-js: ^3.5.1
