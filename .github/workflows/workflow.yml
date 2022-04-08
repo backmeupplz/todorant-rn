@@ -11,7 +11,7 @@ jobs:
       - name: Install yarn 3
         run: yarn policies set-version 3.2.0
       - name: Install modules
-        run: yarn install --frozen-lockfile
+        run: yarn install
       - name: Compile code
         run: yarn tsc --skipLibCheck
       - name: Lint
