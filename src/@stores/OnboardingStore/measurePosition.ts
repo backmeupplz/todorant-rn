@@ -1,5 +1,6 @@
 import { InteractionManager, UIManager, findNodeHandle } from 'react-native'
 import { RNHole } from '@upacyxou/react-native-hole-view'
+// eslint-disable-next-line no-relative-import-paths/no-relative-import-paths
 import { rootRef } from '../../../App'
 
 export function measurePosition(nodeId: number, rootNode = rootRef) {

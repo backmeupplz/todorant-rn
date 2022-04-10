@@ -55,6 +55,7 @@ export class InfoButtonContent extends Component<{
 }
 
 export const InfoButton =
+  // eslint-disable-next-line react/display-name
   (message: string, extraButtons?: AlertButton[], tintColor?: string) => () =>
     (
       <InfoButtonContent

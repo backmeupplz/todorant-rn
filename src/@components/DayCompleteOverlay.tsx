@@ -8,6 +8,7 @@ export let dayCompleteOverlayRef: any
 
 export class DayCompleteOverlay extends Component {
   componentDidMount() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     dayCompleteOverlayRef = this
   }
 

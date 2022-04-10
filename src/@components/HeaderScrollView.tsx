@@ -1,21 +1,20 @@
 import {
   Animated,
   Dimensions,
-  FlatListProps,
   NativeScrollEvent,
   NativeScrollPoint,
   NativeSyntheticEvent,
-  ScrollView,
+  FlatList as RNFLatList,
   StyleProp,
   Text,
   View,
   ViewStyle,
-  FlatList as RNFLatList,
 } from 'react-native'
 import { Component } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
 import { HeroButton } from '@components/HeroButton'
 import { InfoButton } from '@components/InfoButton'
+import { Ref } from 'react'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import { makeObservable, observable } from 'mobx'
@@ -25,7 +24,6 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Fade from '@components/Fade'
 import fonts from '@utils/fonts'
-import { Ref } from 'react'
 
 export let infoButtonNodeId: number
 
