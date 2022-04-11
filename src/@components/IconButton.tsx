@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import CustomIcon from '@components/CustomIcon'
+import React from 'react'
 
 @observer
 export class IconButton extends Component<{

@@ -3,6 +3,7 @@ import { Icon, View } from 'native-base'
 import { MelonTodo } from '@models/MelonTodo'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class TodoCardBackground extends Component<{

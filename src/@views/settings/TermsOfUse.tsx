@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class TermsOfUse extends Component {

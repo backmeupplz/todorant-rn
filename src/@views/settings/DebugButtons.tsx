@@ -17,6 +17,7 @@ import {
   playFrogComplete,
   playTaskComplete,
 } from '@utils/sound'
+import React from 'react'
 
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'

@@ -4,6 +4,7 @@ import { TodoVM } from '@views/add/TodoVM'
 import { TouchableOpacity } from 'react-native'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class CollapseButton extends Component<{ vm: TodoVM }> {

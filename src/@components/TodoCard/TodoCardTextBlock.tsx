@@ -12,6 +12,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 const debug = false

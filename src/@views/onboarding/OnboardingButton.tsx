@@ -9,6 +9,7 @@ import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Animated from 'react-native-reanimated'
 import LinearGradient from 'react-native-linear-gradient'
+import React from 'react'
 
 @observer
 export class OnboardingButton extends Component<{

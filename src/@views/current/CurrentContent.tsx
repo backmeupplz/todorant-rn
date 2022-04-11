@@ -23,6 +23,7 @@ import { translate } from '@utils/i18n'
 import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
+import React from 'react'
 import withObservables from '@nozbe/with-observables'
 
 export let currentTodoNodeId: number

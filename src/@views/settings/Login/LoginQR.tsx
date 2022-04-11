@@ -7,6 +7,7 @@ import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import QRCodeScanner from 'react-native-qrcode-scanner'
+import React from 'react'
 
 @observer
 class LoginQRContent extends Component<{

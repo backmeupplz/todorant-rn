@@ -1,6 +1,7 @@
 import { NativeBase, Button as NativeBaseButton, View } from 'native-base'
 import { Platform } from 'react-native'
 import { PureComponent } from 'react'
+import React from 'react'
 
 const fixStyle = (style: any) => {
   if (style.backgroundColor) return style

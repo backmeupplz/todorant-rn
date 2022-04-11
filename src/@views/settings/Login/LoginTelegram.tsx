@@ -9,6 +9,7 @@ import { goBack } from '@utils/navigation'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 const base = __DEV__ ? 'http://localhost:8080' : 'https://todorant.com'
 

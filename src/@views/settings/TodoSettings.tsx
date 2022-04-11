@@ -19,6 +19,7 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 import PushNotification from 'react-native-push-notification'
+import React from 'react'
 
 @observer
 class TimePickerRow extends Component<{

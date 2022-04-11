@@ -27,6 +27,7 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { uniqBy } from 'lodash'
 import RNRestart from 'react-native-restart'
+import React from 'react'
 
 class PaywallVM {
   @observable products: (RNIap.Subscription | RNIap.Product)[] = []

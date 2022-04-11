@@ -15,6 +15,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 @observer

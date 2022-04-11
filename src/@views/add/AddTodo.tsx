@@ -61,6 +61,7 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import LinearGradient from 'react-native-linear-gradient'
+import React from 'react'
 
 export const addTodoEventEmitter = new EventEmitter()
 export enum AddTodoEventEmitterEvent {

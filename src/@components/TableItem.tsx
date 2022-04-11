@@ -5,6 +5,7 @@ import { View } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import CustomIcon from '@components/CustomIcon'
+import React from 'react'
 
 @observer
 export class TableItem extends Component<{

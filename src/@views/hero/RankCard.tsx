@@ -7,6 +7,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 @observer

@@ -15,6 +15,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
+import React from 'react'
 
 const ColorPickerComponentAny: any = ColorPickerComponent
 

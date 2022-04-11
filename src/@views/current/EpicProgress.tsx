@@ -9,6 +9,7 @@ import { observer } from 'mobx-react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedTagStore } from '@stores/TagStore'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 @observer

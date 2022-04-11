@@ -23,6 +23,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import Fade from '@components/Fade'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 export let infoButtonNodeId: number

@@ -23,6 +23,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 import moment from 'moment'
 
 @observer

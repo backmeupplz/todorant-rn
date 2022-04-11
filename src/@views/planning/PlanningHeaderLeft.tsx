@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import React from 'react'
 
 @observer
 export class PlanningHeaderLeft extends Component {

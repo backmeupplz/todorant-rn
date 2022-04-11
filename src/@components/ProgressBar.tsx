@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { Platform, ProgressBarAndroid, ProgressViewIOS } from 'react-native'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class ProgressBar extends Component<{

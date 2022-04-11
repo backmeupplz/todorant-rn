@@ -6,6 +6,7 @@ import { Text } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class TextAndSwitch extends Component<{

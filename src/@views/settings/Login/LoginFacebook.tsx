@@ -11,6 +11,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 class LoginFacebookContent extends Component<{

@@ -38,6 +38,7 @@ import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
+import React from 'react'
 import moment from 'moment'
 import withObservables from '@nozbe/with-observables'
 

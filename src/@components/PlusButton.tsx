@@ -8,6 +8,7 @@ import { observer } from 'mobx-react'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import CustomIcon from '@components/CustomIcon'
 import LinearGradient from 'react-native-linear-gradient'
+import React from 'react'
 
 export let PlusButtonLayout: number
 

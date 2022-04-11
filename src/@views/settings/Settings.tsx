@@ -52,6 +52,7 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { useNavigation } from '@react-navigation/native'
 import DeviceInfo from 'react-native-device-info'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 export const scrollViewRef = createRef<RNFlatList<any>>()

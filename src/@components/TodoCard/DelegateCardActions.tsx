@@ -12,6 +12,7 @@ import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigat
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class DelegateCardActions extends Component<{

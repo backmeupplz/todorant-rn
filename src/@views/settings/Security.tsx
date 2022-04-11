@@ -20,6 +20,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class Security extends Component {

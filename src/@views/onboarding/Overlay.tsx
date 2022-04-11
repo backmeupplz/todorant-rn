@@ -20,6 +20,7 @@ import { measurePosition } from '@stores/OnboardingStore/measurePosition'
 import { observer } from 'mobx-react'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import Animated from 'react-native-reanimated'
+import React from 'react'
 
 @observer
 export class Overlay extends Component {

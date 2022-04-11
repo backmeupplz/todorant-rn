@@ -7,6 +7,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 import SegmentedControl from '@react-native-community/segmented-control'
 
 @observer

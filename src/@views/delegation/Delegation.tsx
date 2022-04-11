@@ -10,6 +10,7 @@ import { Observer, observer } from 'mobx-react'
 import { View } from 'native-base'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 const Stack = createStackNavigator()
 

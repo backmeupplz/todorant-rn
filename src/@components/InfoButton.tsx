@@ -7,6 +7,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import CustomIcon from '@components/CustomIcon'
+import React from 'react'
 
 export let infoButtonNodeId: number
 

@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { PacmanIndicator } from 'react-native-indicators'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class Spinner extends Component<{

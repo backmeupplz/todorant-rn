@@ -17,6 +17,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 import fonts from '@utils/fonts'
 import withObservables from '@nozbe/with-observables'
 

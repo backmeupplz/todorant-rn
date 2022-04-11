@@ -7,6 +7,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import CustomIcon from '@components/CustomIcon'
+import React from 'react'
 
 @observer
 export class PlanningHeaderRight extends Component {

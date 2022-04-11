@@ -15,6 +15,7 @@ import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class Integrations extends Component {

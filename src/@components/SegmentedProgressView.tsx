@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { Text, View } from 'native-base'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 @observer

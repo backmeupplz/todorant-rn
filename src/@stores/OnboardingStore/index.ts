@@ -31,6 +31,7 @@ import { sharedTodoStore } from '@stores/TodoStore'
 import { startConfetti } from '@components/Confetti'
 import { translate } from '@utils/i18n'
 import Animated from 'react-native-reanimated'
+import React from 'react'
 
 class OnboardingStore {
   constructor() {

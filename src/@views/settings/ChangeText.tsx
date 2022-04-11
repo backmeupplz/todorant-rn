@@ -19,6 +19,7 @@ import { sharedSync } from '@sync/Sync'
 import { sharedTagStore } from '@stores/TagStore'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 const ChangeTextStore = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

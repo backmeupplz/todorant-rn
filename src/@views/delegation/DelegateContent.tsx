@@ -16,6 +16,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
+import React from 'react'
 import withObservables from '@nozbe/with-observables'
 
 const enhance = withObservables(['todo'], ({ todo }) => {

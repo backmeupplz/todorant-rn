@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { View } from 'native-base'
 import { observer } from 'mobx-react'
+import React from 'react'
 
 @observer
 export class Circle extends Component<{

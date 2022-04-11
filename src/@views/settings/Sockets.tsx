@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 class Row extends Component<{ title: string; ok: boolean }> {

@@ -6,6 +6,7 @@ import { Q, Query } from '@nozbe/watermelondb'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { alertConfirm, alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
+import React from 'react'
 
 import { IconButton } from '@components/IconButton'
 import { TableItem } from '@components/TableItem'

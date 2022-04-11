@@ -10,6 +10,7 @@ import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import React from 'react'
 import fonts from '@utils/fonts'
 import moment from 'moment'
 

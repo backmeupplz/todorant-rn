@@ -10,6 +10,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { subscriptionStatusName } from '@utils/subscriptionStatusName'
 import { translate } from '@utils/i18n'
+import React from 'react'
 import fonts from '@utils/fonts'
 
 @observer

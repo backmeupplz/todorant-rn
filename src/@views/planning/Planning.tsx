@@ -10,6 +10,7 @@ import { PlanningHeaderRight } from '@views/planning/PlanningHeaderRight'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 const Stack = createStackNavigator()
 

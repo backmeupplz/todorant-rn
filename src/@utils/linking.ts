@@ -17,6 +17,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { translate } from '@utils/i18n'
 import { updateOrCreateDelegation } from '@sync/SyncObjectHandlers'
 import QueryString from 'query-string'
+import React from 'react'
 
 export async function setupLinking() {
   const initialUrl = await Linking.getInitialURL()

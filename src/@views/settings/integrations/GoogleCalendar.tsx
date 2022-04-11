@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview'
 import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class GoogleCalendarContent extends Component<{

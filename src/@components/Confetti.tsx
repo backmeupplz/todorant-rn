@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { View } from 'native-base'
 import Confetti from 'react-native-confetti'
+import React from 'react'
 
 let confettiRef: any
 

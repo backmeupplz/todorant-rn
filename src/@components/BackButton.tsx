@@ -7,6 +7,7 @@ import { goBack } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import React from 'react'
 
 export const backButtonStore = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

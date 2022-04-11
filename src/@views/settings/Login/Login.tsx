@@ -15,6 +15,7 @@ import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 import { v4 as uuid } from 'uuid'
+import React from 'react'
 import appleAuth, {
   AppleButton,
   appleAuthAndroid,

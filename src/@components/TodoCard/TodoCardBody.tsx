@@ -9,6 +9,7 @@ import { getTitle } from '@models/Todo'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 const showDebugInfo = false
 

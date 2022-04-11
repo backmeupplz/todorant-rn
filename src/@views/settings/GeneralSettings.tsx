@@ -23,6 +23,7 @@ import { sharedSync } from '@sync/Sync'
 import { translate } from '@utils/i18n'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import PushNotification from 'react-native-push-notification'
+import React from 'react'
 
 const codeToName = {
   en: 'English',
