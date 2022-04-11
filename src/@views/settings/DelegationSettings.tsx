@@ -1,26 +1,27 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { makeObservable, observable } from 'mobx'
-import { TableItem } from '@components/TableItem'
-import { Text, Icon, Toast, View, ActionSheet } from 'native-base'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { navigate } from '@utils/navigation'
-import fonts from '@utils/fonts'
+import { ActionSheet, Icon, Text, Toast, View } from 'native-base'
+import { Component } from 'react'
 import { DelegationUserType } from '@models/DelegationUser'
+import { TableItem } from '@components/TableItem'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { makeObservable, observable } from 'mobx'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
 import { resetDelegateToken } from '@utils/rest'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
+import React from 'react'
+import fonts from '@utils/fonts'
 
 @observer
 export class DelegationSettings extends Component {
   @observable reset = false
   async resetDelegateToken() {
-    if (!sharedSessionStore.user?.token) {
+    if (!sharedSessionStore.user || !sharedSessionStore.user?.token) {
       return
     }
-    sharedSessionStore.user!.delegateInviteToken = await resetDelegateToken(
+    sharedSessionStore.user.delegateInviteToken = await resetDelegateToken(
       sharedSessionStore.user?.token
     )
   }
@@ -78,8 +79,7 @@ export class DelegationSettings extends Component {
                   title: translate('delegate.resetConfirmation'),
                 },
                 async (buttonIndex) => {
-                  if (buttonIndex === 0) {
-                  } else {
+                  if (buttonIndex !== 0) {
                     await this.resetDelegateToken()
                   }
                 }

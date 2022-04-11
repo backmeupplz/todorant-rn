@@ -6,7 +6,7 @@ let sharedText = ''
 
 ReceiveSharingIntent.getReceivedFiles(
   (files: any) => {
-    let result = [] as string[]
+    const result = [] as string[]
     for (const file of files) {
       if (file.text || file.weblink) {
         result.push(file.text || file.weblink)

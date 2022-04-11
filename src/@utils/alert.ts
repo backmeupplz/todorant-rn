@@ -1,5 +1,5 @@
-import { translate } from '@utils/i18n'
 import { Alert, Linking } from 'react-native'
+import { translate } from '@utils/i18n'
 
 export function alertError(
   error: Error | string,
@@ -24,7 +24,7 @@ export function alertConfirm(
   message: string,
   confirmButtonText: string,
   confirm: () => void,
-  title?: string,
+  title?: string
 ) {
   setTimeout(() => {
     Alert.alert(title || translate('pleaseConfirm'), message, [

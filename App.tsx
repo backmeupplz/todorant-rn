@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import 'react-native-get-random-values'
 import {
   DarkTheme,
@@ -10,6 +10,7 @@ import { navigate, navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import '@utils/purchases'
 import { Icon, Root, StyleProvider, Text, View } from 'native-base'
+import React from 'react'
 import getTheme from './native-base-theme/components'
 import { setI18nConfig, setI18nConfigAsync, translate } from '@utils/i18n'
 import codePush from 'react-native-code-push'

@@ -1,26 +1,28 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { makeObservable, observable } from 'mobx'
-import { getTagById } from '@utils/getTagById'
-import { Text, Button, Icon, View, Input } from 'native-base'
+import { Button, Icon, Input, Text, View } from 'native-base'
+import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
+import { Component } from 'react'
+import { IconButton } from '@components/IconButton'
+import { MelonTag, cloneTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { sharedTagStore } from '@stores/TagStore'
-import { goBack } from '@utils/navigation'
-import { sharedColors } from '@utils/sharedColors'
-import { extraButtonProps } from '@utils/extraButtonProps'
-import { translate } from '@utils/i18n'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TouchableOpacity } from 'react-native'
-import { IconButton } from '@components/IconButton'
-import { ColorPicker, fromHsv, toHsv } from 'react-native-color-picker'
-import { sharedSettingsStore } from '@stores/SettingsStore'
 import { database } from '@utils/watermelondb/wmdb'
-import { MelonTodo } from '@models/MelonTodo'
-import { cloneTag, MelonTag } from '@models/MelonTag'
+import { extraButtonProps } from '@utils/extraButtonProps'
+import { getTagById } from '@utils/getTagById'
+import { goBack } from '@utils/navigation'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTagStore } from '@stores/TagStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 const ChangeTextStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   save: () => {},
 }
 
@@ -47,9 +49,9 @@ export class ChangeTextHeaderRight extends Component {
 
 @observer
 class ChangeTextContent extends Component<{
-  route: RouteProp<Record<string, { tag: MelonTag } | undefined>, string>
+  route: RouteProp<Record<string, { tag: MelonTag }>, string>
 }> {
-  @observable tag = cloneTag(this.props.route.params?.tag!)
+  @observable tag = cloneTag(this.props.route.params.tag)
   @observable newName: string = ''
 
   @observable colorPickerEnabled = false
@@ -113,10 +115,10 @@ class ChangeTextContent extends Component<{
     }
     await database.write(async () => await database.batch(...toUpdate))
     await dbtag.changeText(this.newName || dbtag.tag, 'changing tag text')
-    await dbtag.changeColor(
-      this.tag.color || dbtag.color!,
-      'changing tag color'
-    )
+    const color = this.tag.color || dbtag.color
+    if (color) {
+      await dbtag.changeColor(color, 'changing tag color')
+    }
 
     goBack()
     sharedTagStore.refreshTags()
@@ -212,7 +214,6 @@ class ChangeTextContent extends Component<{
 }
 
 export const ChangeText = () => {
-  const route =
-    useRoute<RouteProp<Record<string, { tag: MelonTag } | undefined>, string>>()
+  const route = useRoute<RouteProp<Record<string, { tag: MelonTag }>, string>>()
   return <ChangeTextContent route={route} />
 }

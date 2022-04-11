@@ -1,15 +1,14 @@
 import * as React from 'react'
-import { NavigationContainerRef } from '@react-navigation/native'
-import { MelonTag } from '@models/MelonTag'
-import { User } from '@models/User'
-import { MelonTodo } from '@models/MelonTodo'
 import { DelegationUserType } from '@models/DelegationUser'
-import { OnboardingSreens } from '@stores/OnboardingStore/Screen'
+import { MelonTag } from '@models/MelonTag'
+import { MelonTodo } from '@models/MelonTodo'
+import { NavigationContainerRef } from '@react-navigation/native'
+import { User } from '@models/User'
 
 type DelegationsScreen = { delegationType: DelegationUserType }
 
 export type RootStackParamList = {
-  AddTodo: undefined | {}
+  AddTodo: undefined | Record<string, unknown>
   Planning: undefined
   HeroProfile: undefined
   EditTodo: undefined
@@ -38,7 +37,10 @@ export type RootStackParamList = {
 export const navigationRef =
   React.createRef<NavigationContainerRef<RootStackParamList>>()
 
-export function navigate(name: keyof RootStackParamList, params?: object) {
+export function navigate(
+  name: keyof RootStackParamList,
+  params?: Record<string, unknown>
+) {
   navigationRef.current?.navigate(name, params)
 }
 

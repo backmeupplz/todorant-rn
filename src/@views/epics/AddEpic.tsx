@@ -1,18 +1,20 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { makeObservable, observable } from 'mobx'
-import { Text, Button, Icon, View, Input } from 'native-base'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { sharedTagStore } from '@stores/TagStore'
-import { goBack } from '@utils/navigation'
-import { sharedColors } from '@utils/sharedColors'
-import { extraButtonProps } from '@utils/extraButtonProps'
-import { translate } from '@utils/i18n'
-import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { Button, Icon, Input, Text, View } from 'native-base'
+import { Component } from 'react'
 import { MelonTag } from '@models/MelonTag'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { extraButtonProps } from '@utils/extraButtonProps'
+import { goBack } from '@utils/navigation'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSync } from '@sync/Sync'
+import { sharedTagStore } from '@stores/TagStore'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 const AddEpicStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   save: () => {},
 }
 

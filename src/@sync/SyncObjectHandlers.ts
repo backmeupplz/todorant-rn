@@ -1,4 +1,7 @@
-import { sharedDelegationStore } from '@stores/DelegationStore'
+import { MelonUser } from '@models/MelonTodo'
+import { Q, Query } from '@nozbe/watermelondb'
+import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
+import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
 import {
   cloneDelegation,
   getLocalDelegation,
@@ -11,14 +14,11 @@ import {
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { Q, Query } from '@nozbe/watermelondb'
-import { MelonUser } from '@models/MelonTodo'
-import { TagColumn, TodoColumn, UserColumn } from '@utils/watermelondb/tables'
-import { SyncDatabaseChangeSet } from '@nozbe/watermelondb/sync'
 import { decrypt } from '@utils/encryption'
 import { getTitle } from '@models/Todo'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { sanitizeLikeString } from '@nozbe/watermelondb/QueryDescription'
+import { sharedDelegationStore } from '@stores/DelegationStore'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { translate } from '@utils/i18n'
 
 export async function updateOrCreateDelegation(
@@ -78,12 +78,17 @@ export async function onDelegationObjectsFromServer(
   }>,
   completeSync: () => void
 ) {
+  if (!sharedSessionStore?.user?._id) {
+    return
+  }
   const lastSyncDate = sharedDelegationStore.updatedAt
   if (!lastSyncDate && sharedSessionStore.user?._id) {
     createAccountHolderDelegations(sharedSessionStore.user._id)
   }
   // Get local delegates and delegators
-  const [delegatesQuery, delegatorsQuery] = getDelegations()
+  const [delegatesQuery, delegatorsQuery] = getDelegations(
+    sharedSessionStore?.user?._id
+  )
   // Filter delegators and delegates that changed locally
   const [delegatesChangedLocally, delegatorsChangedLocally] =
     await changedLocallyDelegation(
@@ -398,9 +403,9 @@ export async function onWMDBObjectsFromServer(
   serverObjects.tags.updated = tags
 }
 
-function getDelegations() {
+function getDelegations(userId: string) {
   const baseQuery = usersCollection.query(
-    Q.where(UserColumn._id, Q.notEq(sharedSessionStore?.user?._id!))
+    Q.where(UserColumn._id, Q.notEq(userId))
   )
   const delegators = baseQuery.extend(Q.where(UserColumn.isDelegator, true))
   const delegates = baseQuery.extend(Q.where(UserColumn.isDelegator, false))

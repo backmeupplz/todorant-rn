@@ -1,14 +1,16 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Icon } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { goBack } from '@utils/navigation'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { Keyboard } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { goBack } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import React from 'react'
 
 export const backButtonStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   back: () => {},
 }
 

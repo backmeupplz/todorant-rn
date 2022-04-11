@@ -1,6 +1,6 @@
+import { Platform } from 'react-native'
 import { navigate } from '@utils/navigation'
 import TodorantWidget from '@upacyxou/react-native-todorant-widget'
-import { Platform } from 'react-native'
 
 export function checkAndroidLaunchArgs() {
   if (Platform.OS !== 'android') {

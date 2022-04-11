@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import { sharedColors } from '@utils/sharedColors'
-import { alertSupport } from '@utils/alert'
-import { translate } from '@utils/i18n'
 import { Alert, AlertButton } from 'react-native'
-import { observer } from 'mobx-react'
-import CustomIcon from '@components/CustomIcon'
+import { Component } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { alertSupport } from '@utils/alert'
 import { navigationRef } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { translate } from '@utils/i18n'
+import CustomIcon from '@components/CustomIcon'
+import React from 'react'
 
 export let infoButtonNodeId: number
 
@@ -37,6 +38,7 @@ export class InfoButtonContent extends Component<{
                   alertSupport()
                 },
               },
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               { text: translate('ok'), onPress: () => {} },
             ])
           }, 100)
@@ -53,14 +55,13 @@ export class InfoButtonContent extends Component<{
   }
 }
 
-export const InfoButton = (
-  message: string,
-  extraButtons?: AlertButton[],
-  tintColor?: string
-) => () => (
-  <InfoButtonContent
-    message={message}
-    extraButtons={extraButtons}
-    tintColor={tintColor}
-  />
-)
+export const InfoButton =
+  // eslint-disable-next-line react/display-name
+  (message: string, extraButtons?: AlertButton[], tintColor?: string) => () =>
+    (
+      <InfoButtonContent
+        message={message}
+        extraButtons={extraButtons}
+        tintColor={tintColor}
+      />
+    )

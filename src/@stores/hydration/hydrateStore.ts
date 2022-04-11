@@ -1,6 +1,6 @@
 import { hydration } from '@stores/hydration/hydratedStores'
-import { sharedSync } from '@sync/Sync'
 import { requestSync } from '@sync/syncEventEmitter'
+import { sharedSync } from '@sync/Sync'
 
 export function hydrateStore(name: string) {
   hydration.hydratedStores[name] = true

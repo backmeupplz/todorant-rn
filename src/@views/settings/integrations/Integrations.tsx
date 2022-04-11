@@ -1,20 +1,21 @@
-import React, { Component } from 'react'
-import { Platform } from 'react-native'
-import { sharedColors } from '@utils/sharedColors'
-import { Container, Text, ActionSheet, Content } from 'native-base'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { navigate } from '@utils/navigation'
-import { makeObservable, observable } from 'mobx'
-import { alertConfirm, alertError, alertMessage } from '@utils/alert'
 import * as rest from '@utils/rest'
+import { ActionSheet, Container, Content, Text } from 'native-base'
+import { Component } from 'react'
+import { Platform } from 'react-native'
 import { Spinner } from '@components/Spinner'
-import { TableItem } from '@components/TableItem'
-import { setToken, removeToken } from '@utils/keychain'
-import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TableItem } from '@components/TableItem'
+import { alertConfirm, alertError, alertMessage } from '@utils/alert'
+import { makeObservable, observable } from 'mobx'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { removeToken, setToken } from '@utils/keychain'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class Integrations extends Component {
@@ -121,7 +122,7 @@ export class Integrations extends Component {
             ) : (
               <Text {...sharedColors.textExtraStyle}>
                 {translate(
-                  !!sharedSettingsStore.googleCalendarCredentials
+                  sharedSettingsStore.googleCalendarCredentials
                     ? 'connected'
                     : 'notConnected'
                 )}

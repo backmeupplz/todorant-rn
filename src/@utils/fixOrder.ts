@@ -1,11 +1,11 @@
-import { sharedSync } from '@sync/Sync'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { MelonTodo } from '@models/MelonTodo'
-import { database } from './watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from './watermelondb/tables'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoColumn } from '@utils/watermelondb/tables'
+import { database } from '@utils/watermelondb/wmdb'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export async function fixOrder(
   titlesInvolved: string[],
@@ -79,7 +79,7 @@ export async function fixOrder(
 }
 
 function isTimeSorted(todos: (MelonTodo & Partial<MelonTodo>)[]) {
-  let result = true
+  const result = true
   let time: number | undefined
   for (const todo of todos) {
     if (todo.time) {

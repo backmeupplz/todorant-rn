@@ -1,12 +1,12 @@
-import { logEvent } from '@utils/logEvent'
-import { translate } from '@utils/i18n'
-import { makeObservable, observable } from 'mobx'
-import * as rest from '@utils/rest'
-import { alertError } from '@utils/alert'
-import { Platform } from 'react-native'
-import { sharedSessionStore } from '@stores/SessionStore'
 import * as RNIap from 'react-native-iap'
+import * as rest from '@utils/rest'
+import { Platform } from 'react-native'
 import { PurchaseError } from 'react-native-iap'
+import { alertError } from '@utils/alert'
+import { logEvent } from '@utils/logEvent'
+import { makeObservable, observable } from 'mobx'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
 
 class PurchaseListener {
   constructor() {

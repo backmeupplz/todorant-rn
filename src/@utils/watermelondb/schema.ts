@@ -1,10 +1,10 @@
-import { appSchema, tableSchema } from '@nozbe/watermelondb'
 import {
   Tables,
   TagColumn,
   TodoColumn,
   UserColumn,
 } from '@utils/watermelondb/tables'
+import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export const wmdbSchema = appSchema({
   version: 1,

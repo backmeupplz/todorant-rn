@@ -1,11 +1,10 @@
-import React, { Component, memo, useEffect } from 'react'
-import { observer } from 'mobx-react'
 import { CardType } from '@components/TodoCard/CardType'
-import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
-import { TodoCardContent } from '@components/TodoCard/TodoCardContent'
-import withObservables, { ObservableifyProps } from '@nozbe/with-observables'
-import { Text, View } from 'native-base'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
+import { TodoCardContent } from '@components/TodoCard/TodoCardContent'
+import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { memo } from 'react'
+import React from 'react'
+import withObservables, { ObservableifyProps } from '@nozbe/with-observables'
 
 type InputProps = ObservableifyProps<Props, 'delegator'>
 

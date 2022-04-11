@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import { observer, Observer } from 'mobx-react'
-import { useRoute, RouteProp } from '@react-navigation/native'
-import { Text } from 'native-base'
-import QRCodeScanner from 'react-native-qrcode-scanner'
+import { Component } from 'react'
 import { Container } from 'native-base'
+import { Observer, observer } from 'mobx-react'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { Text } from 'native-base'
+import { goBack } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
-import { goBack } from '@utils/navigation'
+import QRCodeScanner from 'react-native-qrcode-scanner'
+import React from 'react'
 
 @observer
 class LoginQRContent extends Component<{
@@ -71,8 +72,9 @@ class LoginQRContent extends Component<{
 }
 
 export const LoginQR = () => {
-  const route = useRoute<
-    RouteProp<Record<string, { getToken: (token: string) => void }>, string>
-  >()
+  const route =
+    useRoute<
+      RouteProp<Record<string, { getToken: (token: string) => void }>, string>
+    >()
   return <LoginQRContent route={route} />
 }

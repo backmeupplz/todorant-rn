@@ -1,27 +1,25 @@
-import React, { Component } from 'react'
-import { Text, ActionSheet, View, Icon } from 'native-base'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { navigate } from '@utils/navigation'
-import { TableItem } from '@components/TableItem'
+import { ActionSheet, Icon, Text, View } from 'native-base'
+import { Component } from 'react'
 import { Platform } from 'react-native'
-import DateTimePicker, {
-  AndroidEvent,
-  Event,
-} from '@react-native-community/datetimepicker'
-import { observable, computed, makeObservable } from 'mobx'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TableItem } from '@components/TableItem'
 import { TextAndSwitch } from '@views/settings/TextAndSwitch'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { computed, makeObservable, observable } from 'mobx'
 import {
   getNotificationPermissions,
   scheduleReminders,
   stopReminders,
 } from '@utils/notifications'
-import PushNotification from 'react-native-push-notification'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { translate } from '@utils/i18n'
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
+import PushNotification from 'react-native-push-notification'
+import React from 'react'
 
 @observer
 class TimePickerRow extends Component<{

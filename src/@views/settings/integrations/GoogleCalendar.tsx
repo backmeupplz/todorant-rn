@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
-import { WebView } from 'react-native-webview'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
+import { Component } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { goBack } from '@utils/navigation'
 import { View } from 'native-base'
+import { WebView } from 'react-native-webview'
+import { goBack } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class GoogleCalendarContent extends Component<{
@@ -40,11 +41,12 @@ export class GoogleCalendarContent extends Component<{
 }
 
 export const GoogleCalendar = () => {
-  const route = useRoute<
-    RouteProp<
-      Record<string, { url: string; authorize: (code: string) => void }>,
-      string
-    >
-  >()
+  const route =
+    useRoute<
+      RouteProp<
+        Record<string, { url: string; authorize: (code: string) => void }>,
+        string
+      >
+    >()
   return <GoogleCalendarContent route={route} />
 }

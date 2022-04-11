@@ -1,25 +1,26 @@
+import { Button, Container, Content, Input, Switch, Text } from 'native-base'
+import { Component } from 'react'
 import { Divider } from '@components/Divider'
+import { MelonTodo } from '@models/MelonTodo'
+import { Platform } from 'react-native'
+import { Q } from '@nozbe/watermelondb'
 import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
-import { TableItem } from '@components/TableItem'
-import { MelonTodo } from '@models/MelonTodo'
-import { Q } from '@nozbe/watermelondb'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedSync } from '@sync/Sync'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { alertConfirm, alertError, alertMessage } from '@utils/alert'
-import { decrypt, _d, _e } from '@utils/encryption'
-import { translate } from '@utils/i18n'
-import { removePassword, setPassword } from '@utils/keychain'
+import { TableItem } from '@components/TableItem'
 import { TodoColumn } from '@utils/watermelondb/tables'
-import { sharedColors } from '@utils/sharedColors'
-import { database, todosCollection } from '@utils/watermelondb/wmdb'
+import { _d, _e } from '@utils/encryption'
+import { alertConfirm, alertError, alertMessage } from '@utils/alert'
+import { database } from '@utils/watermelondb/wmdb'
 import { makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import { Button, Container, Content, Input, Switch, Text } from 'native-base'
-import React, { Component } from 'react'
-import { Platform } from 'react-native'
+import { removePassword, setPassword } from '@utils/keychain'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSync } from '@sync/Sync'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class Security extends Component {
@@ -146,7 +147,8 @@ export class Security extends Component {
                     translate('encryptionDisableConfirm'),
                     translate('disable'),
                     () => {
-                      const key = sharedSessionStore.encryptionKey!
+                      const key = sharedSessionStore.encryptionKey
+                      if (!key) return
                       sharedSessionStore.encryptionKey = undefined
                       removePassword()
                       this.encryptionOn = false

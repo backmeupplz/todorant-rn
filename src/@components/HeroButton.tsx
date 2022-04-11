@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
-import { Text } from 'native-base'
-import { navigate } from '@utils/navigation'
-import { sharedColors } from '@utils/sharedColors'
-import { sharedHeroStore } from '@stores/HeroStore'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { ProgressView } from './ProgressView'
-import fonts from '@utils/fonts'
+import { Component } from 'react'
 import { Platform } from 'react-native'
+import { ProgressView } from '@components/ProgressView'
+import { Text } from 'native-base'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import React from 'react'
+import fonts from '@utils/fonts'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const shortNum = require('number-shortener')
 
 @observer

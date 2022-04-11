@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
-import { Text, View } from 'native-base'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { Component } from 'react'
 import {
   DelegateSectionType,
   sharedDelegateStateStore,
 } from '@stores/DelegateScreenStateStore'
 import { IconButton } from '@components/IconButton'
 import { MelonTodo } from '@models/MelonTodo'
+import { Text, View } from 'native-base'
+import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class DelegateCardActions extends Component<{

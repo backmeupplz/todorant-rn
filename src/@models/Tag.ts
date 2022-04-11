@@ -1,4 +1,4 @@
-import { MelonTag } from './MelonTag'
+import { MelonTag } from '@models/MelonTag'
 
 export function cloneTag(tag: MelonTag) {
   return {

@@ -1,5 +1,5 @@
-import { sharedSessionStore } from '@stores/SessionStore'
 import { AES, enc } from 'crypto-js'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 export function encrypt(str: string) {
   if (!sharedSessionStore.encryptionKey) {

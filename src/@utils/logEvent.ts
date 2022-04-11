@@ -1,5 +1,5 @@
-import Countly from 'countly-sdk-react-native-bridge'
 import { logEventToMicro } from '@utils/micro'
+import Countly from 'countly-sdk-react-native-bridge'
 
 export function logEvent(name: string) {
   asyncLogEvent(name)

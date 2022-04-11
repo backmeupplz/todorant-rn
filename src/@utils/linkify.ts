@@ -3,6 +3,7 @@ import Linkify from 'linkify-it'
 
 export const linkify = Linkify()
 linkify
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   .tlds(require('tlds'))
   .tlds('onion', true)
   .set({ fuzzyIP: true })

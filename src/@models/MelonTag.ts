@@ -1,14 +1,7 @@
+import { ArgumentExctractor } from '@models/MelonTodo'
 import { Model } from '@nozbe/watermelondb'
-import {
-  action,
-  date,
-  field,
-  readonly,
-  relation,
-  writer,
-} from '@nozbe/watermelondb/decorators'
 import { Tables, TagColumn } from '@utils/watermelondb/tables'
-import { ArgumentExctractor } from './MelonTodo'
+import { date, field, writer } from '@nozbe/watermelondb/decorators'
 
 export class MelonTag extends Model {
   static table = Tables.tags

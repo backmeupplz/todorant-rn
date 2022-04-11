@@ -1,32 +1,33 @@
+import * as RNIap from 'react-native-iap'
 import { Button } from '@components/Button'
+import { Component } from 'react'
+import { Container, Content, Text, View } from 'native-base'
 import { Divider } from '@components/Divider'
-import { Spinner } from '@components/Spinner'
-import { TableItem } from '@components/TableItem'
-import { SubscriptionStatus } from '@models/User'
+import { Linking, Platform } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { sharedSync } from '@sync/Sync'
+import { Spinner } from '@components/Spinner'
+import { SubscriptionStatus } from '@models/User'
 import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TableItem } from '@components/TableItem'
 import { alertError, alertMessage } from '@utils/alert'
-import { translate } from '@utils/i18n'
-import { logEvent } from '@utils/logEvent'
-import { navigate } from '@utils/navigation'
 import {
   getProducts,
   purchase,
   purchaseListener,
   restorePurchases,
 } from '@utils/purchases'
-import { sharedColors } from '@utils/sharedColors'
+import { logEvent } from '@utils/logEvent'
 import { makeObservable, observable } from 'mobx'
+import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
-import { Container, Content, Text, View } from 'native-base'
-import React, { Component } from 'react'
-import { Linking, Platform } from 'react-native'
-import * as RNIap from 'react-native-iap'
-import RNRestart from 'react-native-restart'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedSync } from '@sync/Sync'
+import { translate } from '@utils/i18n'
 import { uniqBy } from 'lodash'
+import RNRestart from 'react-native-restart'
+import React from 'react'
 
 class PaywallVM {
   @observable products: (RNIap.Subscription | RNIap.Product)[] = []

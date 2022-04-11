@@ -1,6 +1,6 @@
 import { Button, Text } from 'native-base'
 import { ColorMode, sharedSettingsStore } from '@stores/SettingsStore'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import {
   add5000Todos,
   addTodosEn,
@@ -11,18 +11,18 @@ import {
   addTodosUk,
   deleteAllTodos,
 } from '@utils/debug'
+import { checkAppVersion } from '@utils/checkAppVersion'
 import {
   playDayComplete,
   playFrogComplete,
   playTaskComplete,
 } from '@utils/sound'
-import { checkAppVersion } from '@utils/checkAppVersion'
+import React from 'react'
 
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { sharedSync } from '@sync/Sync'
 
 @observer
 class DebugButton extends Component<{

@@ -1,16 +1,15 @@
+import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import {
   getDateString,
   getDateStringFromTodo,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { MelonTodo, MelonUser } from './MelonTodo'
-import { User } from './User'
 
 export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)
 }
 
-export function compareTodos(completed: Boolean) {
+export function compareTodos(completed: boolean) {
   return (a: MelonTodo, b: MelonTodo) => {
     if (a.date === b.date && a.monthAndYear === b.monthAndYear) {
       if (a.frog && b.frog) {
@@ -26,7 +25,7 @@ export function compareTodos(completed: Boolean) {
     } else {
       if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
         return -1
-      } else if (!a.date && b.date && a.monthAndYear === b.monthAndYear) {
+      } else if (a.date && !b.date && a.monthAndYear === b.monthAndYear) {
         return 1
       } else if (!a.date || !b.date) {
         if (

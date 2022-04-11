@@ -1,8 +1,8 @@
-import { observable, makeObservable } from 'mobx'
-import SocketIO from 'socket.io-client'
-import NetInfo from '@react-native-community/netinfo'
-import { sharedSync } from '@sync/Sync'
+import { makeObservable, observable } from 'mobx'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSync } from '@sync/Sync'
+import NetInfo from '@react-native-community/netinfo'
+import SocketIO from 'socket.io-client'
 
 const authorizationTimeout = 20
 
