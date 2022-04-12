@@ -1,7 +1,6 @@
 import { NativeBase, Button as NativeBaseButton, View } from 'native-base'
 import { Platform } from 'react-native'
-import { PureComponent } from 'react'
-import React from 'react'
+import React, { FC } from 'react'
 
 const fixStyle = (style: any) => {
   if (style.backgroundColor) return style
@@ -9,26 +8,18 @@ const fixStyle = (style: any) => {
   return style
 }
 
-export class Button extends PureComponent<NativeBase.Button> {
-  render() {
-    return Platform.OS === 'android' ? (
-      <View
-        style={{
-          overflow: 'hidden',
-          width: this.props.block ? '100%' : undefined,
-        }}
-        removeClippedSubviews
-      >
-        <NativeBaseButton
-          {...this.props}
-          {...{ style: fixStyle(this.props.style) }}
-        />
-      </View>
-    ) : (
-      <NativeBaseButton
-        {...this.props}
-        {...{ style: fixStyle(this.props.style) }}
-      />
-    )
-  }
+export const Button: FC<NativeBase.Button> = (props) => {
+  return Platform.OS === 'android' ? (
+    <View
+      style={{
+        overflow: 'hidden',
+        width: props.block ? '100%' : undefined,
+      }}
+      removeClippedSubviews
+    >
+      <NativeBaseButton {...props} {...{ style: fixStyle(props.style) }} />
+    </View>
+  ) : (
+    <NativeBaseButton {...props} {...{ style: fixStyle(props.style) }} />
+  )
 }
