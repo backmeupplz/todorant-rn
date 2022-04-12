@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
-import { View, Text } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import fonts from '@utils/fonts'
 import { Observer } from 'mobx-react'
+import { Text, View } from 'native-base'
+import { sharedColors } from '@utils/sharedColors'
+import React, { FC } from 'react'
+import fonts from '@utils/fonts'
 
 export const SectionHeader: FC<{ title?: string }> = ({ title }) => {
   return (
