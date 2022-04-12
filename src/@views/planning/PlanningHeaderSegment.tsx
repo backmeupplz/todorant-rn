@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { sharedAppStateStore, TodoSectionType } from '@stores/AppStateStore'
-import { translate } from '@utils/i18n'
+import { Component } from 'react'
+import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
+import { View } from 'react-native'
 import { observer } from 'mobx-react'
-import SegmentedControl from '@react-native-community/segmented-control'
 import { sharedColors } from '@utils/sharedColors'
-import { Platform, View } from 'react-native'
-import fonts from '@utils/fonts'
 import { sharedSettingsStore } from '@stores/SettingsStore'
+import { translate } from '@utils/i18n'
+import React from 'react'
+import SegmentedControl from '@react-native-community/segmented-control'
 
 export let planningHeaderNodeId: number
 

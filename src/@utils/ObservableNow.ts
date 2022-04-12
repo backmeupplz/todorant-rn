@@ -1,6 +1,6 @@
+import { EventEmitter } from 'events'
 import { getDateString, getTodayWithStartOfDay } from '@utils/time'
 import { makeObservable, observable } from 'mobx'
-import { EventEmitter } from 'events'
 
 export enum ObservableNowEventEmitterEvent {
   ObservableNowChanged = 'ObservableNowChanged',

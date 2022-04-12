@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { Component } from 'react'
 import { View } from 'native-base'
+import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 @observer
 export class Divider extends Component<{

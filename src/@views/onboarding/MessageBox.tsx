@@ -1,17 +1,19 @@
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
-import { Text } from 'native-base'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Dimensions, View } from 'react-native'
-import { OnboardingButton } from '@views/onboarding/OnboardingButton'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import Animated, { Easing } from 'react-native-reanimated'
-import { translate } from '@utils/i18n'
-import { makeObservable, observable, reaction } from 'mobx'
-import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
 import { EasingNode } from 'react-native-reanimated'
+import { OnboardingButton } from '@views/onboarding/OnboardingButton'
+import { Text } from 'native-base'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
+import { makeObservable, observable, reaction } from 'mobx'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { translate } from '@utils/i18n'
+import Animated from 'react-native-reanimated'
+import React from 'react'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const avatar = require('@assets/images/nikita.jpg')
 
 @observer

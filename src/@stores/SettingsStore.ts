@@ -1,16 +1,13 @@
-import { Settings } from '@models/Settings'
-import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import { hydrate, MMKV } from '@stores/hydration/hydrate'
-import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { getLanguageTag } from '@utils/i18n'
-import { computed, makeObservable, observable } from 'mobx'
-import { persist } from 'mobx-persist'
-import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
-import { initialMode, eventEmitter } from 'react-native-dark-mode'
 import { AsyncStorage } from 'react-native'
-import { Platform } from 'react-native'
-import { alertError, alertSupport } from '@utils/alert'
-import { database } from '@utils/watermelondb/wmdb'
+import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
+import { MMKV, hydrate } from '@stores/hydration/hydrate'
+import { Settings } from '@models/Settings'
+import { computed, makeObservable, observable } from 'mobx'
+import { eventEmitter, initialMode } from 'react-native-dark-mode'
+import { getLanguageTag } from '@utils/i18n'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
+import { persist } from 'mobx-persist'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 import ReactNativeRestart from 'react-native-restart'
 
 export enum ColorMode {
@@ -236,6 +233,7 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
 
 export async function fixDuplicatedTasks() {
   const newAsyncStorage = AsyncStorage
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const oldAsyncStorage = require('@react-native-async-storage/async-storage')
     .default as typeof AsyncStorage
   const mmkvStorage = MMKV

@@ -1,5 +1,5 @@
-import { persist } from 'mobx-persist'
 import { makeObservable, observable } from 'mobx'
+import { persist } from 'mobx-persist'
 
 class Settings {
   @persist showTodayOnAddTodo?: boolean

@@ -1,32 +1,15 @@
-import { requestSync } from '@sync/syncEventEmitter'
 import { Hero } from '@models/Hero'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { computed, makeObservable, observable } from 'mobx'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
-import { sharedColors } from '@utils/sharedColors'
-import { computed, makeObservable, observable } from 'mobx'
 import { persist } from 'mobx-persist'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { requestSync } from '@sync/syncEventEmitter'
+import { sharedColors } from '@utils/sharedColors'
 
 export const ranks = [
-  0,
-  5,
-  13,
-  42,
-  69,
-  85,
-  100,
-  221,
-  256,
-  300,
-  404,
-  777,
-  800,
-  1337,
-  1338,
-  2048,
-  9000,
-  12800,
-  1000000,
+  0, 5, 13, 42, 69, 85, 100, 221, 256, 300, 404, 777, 800, 1337, 1338, 2048,
+  9000, 12800, 1000000,
 ]
 
 class HeroStore {

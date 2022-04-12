@@ -1,26 +1,26 @@
-import { hydrate } from '@stores/hydration/hydrate'
-import { hydrateStore } from '@stores/hydration/hydrateStore'
-import {
-  observableNowEventEmitter,
-  ObservableNowEventEmitterEvent,
-} from '@utils/ObservableNow'
-import { observableNow } from '@utils/ObservableNow'
-import { getTitle } from '@models/Todo'
-import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
-import { computed, makeObservable, observable, when } from 'mobx'
-import { persist } from 'mobx-persist'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { sharedSessionStore } from './SessionStore'
-import { hydration } from './hydration/hydratedStores'
 import { MelonTodo } from '@models/MelonTodo'
+import {
+  ObservableNowEventEmitterEvent,
+  observableNowEventEmitter,
+} from '@utils/ObservableNow'
 import { Q, Query } from '@nozbe/watermelondb'
+import { Subscription } from 'rxjs'
+import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
+import { computed, makeObservable, observable, when } from 'mobx'
 import {
   database,
   todosCollection,
   usersCollection,
 } from '@utils/watermelondb/wmdb'
-import { Subscription } from 'rxjs'
-import { TodoColumn, UserColumn } from '@utils/watermelondb/tables'
+import { getTitle } from '@models/Todo'
+import { hydrate } from '@stores/hydration/hydrate'
+import { hydrateStore } from '@stores/hydration/hydrateStore'
+import { hydration } from '@stores/hydration/hydratedStores'
+import { observableNow } from '@utils/ObservableNow'
+import { persist } from 'mobx-persist'
+import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 class TodoStore {
   hydrated = false
@@ -119,7 +119,7 @@ class TodoStore {
 
   todosBeforeDate = (title: string) => {
     const todayWithTimezoneOffset = new Date(title)
-    let realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
+    const realmResultsWithoutDelegation = this.undeletedUncompleted.extend(
       Q.where(TodoColumn._exactDate, Q.lt(todayWithTimezoneOffset.getTime())),
       Q.or(
         Q.where(TodoColumn.user, null),

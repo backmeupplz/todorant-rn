@@ -1,11 +1,11 @@
+import { MelonTodo } from '@models/MelonTodo'
+import { database } from '@utils/watermelondb/wmdb'
+import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { getTitle } from '@models/Todo'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedTodoStore } from '@stores/TodoStore'
-import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
-import { v4 } from 'uuid'
-import { database } from './watermelondb/wmdb'
 import { todosCollection } from '@utils/watermelondb/wmdb'
-import { MelonTodo } from '@models/MelonTodo'
+import { v4 } from 'uuid'
 
 export function deleteAllTodos() {
   sharedSessionStore.logout()
@@ -33,7 +33,7 @@ class TodoSample {
 }
 
 export async function add5000Todos() {
-  let todos: any[] = []
+  const todos: any[] = []
   let counter = 0
   let lastYear = 2021
   for (let i = 0; i < 5000; i++) {

@@ -1,34 +1,34 @@
-import { isTodoOld } from '@utils/isTodoOld'
-import { playFrogComplete, playTaskComplete } from '@utils/sound'
-import { CardType } from './CardType'
-import { translate } from '@utils/i18n'
+import { Alert } from 'react-native'
+import { CardType } from '@components/TodoCard/CardType'
+import { MelonTodo } from '@models/MelonTodo'
+import { Q } from '@nozbe/watermelondb'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
+import { TodoColumn } from '@utils/watermelondb/tables'
 import { alertConfirm, alertMessage } from '@utils/alert'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
+import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { database } from '@utils/watermelondb/wmdb'
 import { fixOrder } from '@utils/fixOrder'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { getTitle } from '@models/Todo'
 import {
-  getDateStringFromTodo,
   getDateDateString,
   getDateMonthAndYearString,
-  getTodayWithStartOfDay,
   getDateString,
+  getDateStringFromTodo,
+  getTodayWithStartOfDay,
 } from '@utils/time'
-import { startConfetti } from '@components/Confetti'
+import { getTitle } from '@models/Todo'
+import { isTodoOld } from '@utils/isTodoOld'
 import { makeObservable, observable } from 'mobx'
 import { navigate } from '@utils/navigation'
-import { MelonTodo } from '@models/MelonTodo'
-import { database } from '@utils/watermelondb/wmdb'
-import { Q } from '@nozbe/watermelondb'
-import { TodoColumn } from '@utils/watermelondb/tables'
+import { playFrogComplete, playTaskComplete } from '@utils/sound'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSessionStore } from '@stores/SessionStore'
-import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
-import { sharedTagStore } from '@stores/TagStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
-import { Alert } from 'react-native'
+import { sharedTagStore } from '@stores/TagStore'
+import { sharedTodoStore } from '@stores/TodoStore'
+import { startConfetti } from '@components/Confetti'
+import { translate } from '@utils/i18n'
 
 export class TodoCardVM {
   @observable expanded = false

@@ -1,36 +1,30 @@
-import React, {
-  Component,
-  ForwardRefExoticComponent,
-  Ref,
-  RefAttributes,
-  useRef,
-} from 'react'
 import {
-  View,
-  ScrollView,
-  Text,
   Animated,
   Dimensions,
-  StyleProp,
-  ViewStyle,
-  NativeSyntheticEvent,
   NativeScrollEvent,
   NativeScrollPoint,
-  FlatListProps,
+  NativeSyntheticEvent,
+  FlatList as RNFLatList,
+  StyleProp,
+  Text,
+  View,
+  ViewStyle,
 } from 'react-native'
-import { ifIphoneX } from 'react-native-iphone-x-helper'
-import Fade from '@components/Fade'
-import { observer } from 'mobx-react'
-import { InfoButton } from '@components/InfoButton'
-import { HeroButton } from '@components/HeroButton'
-import { sharedColors } from '@utils/sharedColors'
-import { makeObservable, observable } from 'mobx'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import fonts from '@utils/fonts'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { Component } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
-import type {FlatList as FlatListType} from 'react-native-gesture-handler'
+import { HeroButton } from '@components/HeroButton'
+import { InfoButton } from '@components/InfoButton'
+import { Ref } from 'react'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
+import { makeObservable, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import Fade from '@components/Fade'
+import React from 'react'
+import fonts from '@utils/fonts'
 
 export let infoButtonNodeId: number
 
@@ -43,7 +37,7 @@ export class HeaderScrollView extends Component<{
   showsHeroButton?: boolean
   infoTitle: string
   contentContainerStyle?: StyleProp<ViewStyle>
-  onscrollViewRef?: (ref: ScrollView | null) => void
+  onscrollViewRef?: Ref<RNFLatList<unknown>> | undefined
   onScrollViewContentRef?: (event: View) => void
   onOffsetChange?: (offset: NativeScrollPoint) => void
 }> {
@@ -133,6 +127,7 @@ export class HeaderScrollView extends Component<{
           </Fade>
         </View>
         <FlatList
+          data={[]}
           ref={this.props.onscrollViewRef}
           onScroll={(event) => {
             Animated.event(

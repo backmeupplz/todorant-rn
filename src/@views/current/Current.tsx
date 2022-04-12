@@ -1,11 +1,11 @@
-import React from 'react'
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack'
+import { CurrentContent } from '@views/current/CurrentContent'
 import { Observer } from 'mobx-react'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import { CurrentContent } from '@views/current/CurrentContent'
+import React from 'react'
 
 const Stack = createStackNavigator()
 

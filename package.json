@@ -15,7 +15,9 @@
     "download-translations": "node scripts/download.js",
     "adb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:1337 tcp:1337 && adb reverse tcp:3000 tcp:3000",
     "upload-to-appgallery": "cd android && bundle exec fastlane release_appgallery",
-    "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release"
+    "release": "cd android && bundle exec fastlane release && bundle exec fastlane release_appgallery && cd ../ios && bundle exec fastlane release",
+    "pretty": "prettier --check src",
+    "lint": "yarn pretty && eslint --max-warnings 0 --ext ts,tsx src"
   },
   "dependencies": {
     "@codler/react-native-keyboard-aware-scroll-view": "^2.0.1",
@@ -105,7 +107,6 @@
     "react-native-shared-preferences": "^1.0.2",
     "react-native-sound": "0.11.0",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-store-rating": "backmeupplz/react-native-store-rating#803b83b701a4f926fcacfe5e775d57cf69c72088",
     "react-native-svg": "^12.1.0",
     "react-native-svg-uri": "^1.2.3",
     "react-native-swipe-list-view": "^3.2.9",
@@ -127,9 +128,18 @@
     "@types/dotenv": "^8.2.0",
     "@types/react-native": "^0.66.6",
     "@types/react-test-renderer": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/typescript-estree": "^5.17.0",
     "babel-jest": "^27.4.2",
     "dotenv": "^10.0.0",
-    "eslint": "^8.3.0",
+    "eslint": "^7.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-no-relative-import-paths": "^1.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "flat": "^5.0.2",
     "i18n-strings-files": "^1.0.9",
     "jest": "^27.4.2",
@@ -148,5 +158,6 @@
       "json",
       "node"
     ]
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

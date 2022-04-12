@@ -1,29 +1,30 @@
-import { sharedTagStore } from '@stores/TagStore'
-import { sharedSettingsStore } from '@stores/SettingsStore'
+import * as Animatable from 'react-native-animatable'
+import { InteractionManager, Keyboard, TextInput } from 'react-native'
+import { computed, makeObservable, observable } from 'mobx'
 import {
-  getDateString,
+  getDateDateString,
   getDateFromString,
   getDateMonthAndYearString,
-  getDateDateString,
+  getDateString,
   getTodayWithStartOfDay,
 } from '@utils/time'
-import { observable, computed, makeObservable } from 'mobx'
-import moment from 'moment'
-import * as Animatable from 'react-native-animatable'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { sharedTagStore } from '@stores/TagStore'
 import React from 'react'
-import { InteractionManager, Keyboard, TextInput } from 'react-native'
+import moment from 'moment'
 const {
   focusTextInput,
   blurInput,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('react-native/Libraries/Components/TextInput/TextInputState')
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { translate } from '@utils/i18n'
+import { MelonTag } from '@models/MelonTag'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { Q } from '@nozbe/watermelondb'
 import { TagColumn } from '@utils/watermelondb/tables'
-import { MelonTag } from '@models/MelonTag'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { sanitizeLikeString } from '@utils/textSanitizer'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { translate } from '@utils/i18n'
 
 export class TodoVM {
   @observable text =

@@ -1,25 +1,26 @@
-import React, { Component } from 'react'
-import Animated, { Easing } from 'react-native-reanimated'
-import { MessageBox } from '@views/onboarding/MessageBox'
-import {
-  ERNHoleViewTimingFunction,
-  RNHole,
-  RNHoleView,
-} from '@upacyxou/react-native-hole-view'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { measurePosition } from '@stores/OnboardingStore/measurePosition'
-import { makeObservable, observable, reaction } from 'mobx'
-import { observer } from 'mobx-react'
+import { Component } from 'react'
 import {
   Dimensions,
   InteractionManager,
   Keyboard,
   Platform,
 } from 'react-native'
-import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
-import { navigate, RootStackParamList } from '@utils/navigation'
+import {
+  ERNHoleViewTimingFunction,
+  RNHole,
+  RNHoleView,
+} from '@upacyxou/react-native-hole-view'
 import { EasingNode } from 'react-native-reanimated'
+import { MessageBox } from '@views/onboarding/MessageBox'
+import { RootStackParamList, navigate } from '@utils/navigation'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { isDeviceSmall, isLandscapeAndNotAPad } from '@utils/deviceInfo'
+import { makeObservable, observable, reaction } from 'mobx'
+import { measurePosition } from '@stores/OnboardingStore/measurePosition'
+import { observer } from 'mobx-react'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import Animated from 'react-native-reanimated'
+import React from 'react'
 
 @observer
 export class Overlay extends Component {
@@ -75,7 +76,7 @@ export class Overlay extends Component {
     )
     reaction(
       () => sharedOnboardingStore.step,
-      (step) => {
+      () => {
         this.setState(
           {
             holes: [sharedOnboardingStore.currentHole],

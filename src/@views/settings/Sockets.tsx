@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
-import { Container, Content, Text } from 'native-base'
 import { CheckOrCross } from '@components/CheckOrCross'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
+import { Component } from 'react'
+import { Container, Content, Text } from 'native-base'
 import { TableItem } from '@components/TableItem'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
 import { sharedSync } from '@sync/Sync'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 class Row extends Component<{ title: string; ok: boolean }> {

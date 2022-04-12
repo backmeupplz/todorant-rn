@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import fonts from '@utils/fonts'
-import { ProgressView } from '@components/ProgressView'
+import { Component } from 'react'
 import { IconButton } from '@components/IconButton'
-import { sharedTagStore } from '@stores/TagStore'
-import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import { navigate } from '@utils/navigation'
 import { MelonTag } from '@models/MelonTag'
+import { ProgressView } from '@components/ProgressView'
+import { Text, View } from 'native-base'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedAppStateStore } from '@stores/AppStateStore'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedTagStore } from '@stores/TagStore'
+import React from 'react'
+import fonts from '@utils/fonts'
 
 @observer
 export class EpicText extends Component<{
@@ -79,7 +80,10 @@ export class EpicProgress extends Component<{
             }}
           />
           <ProgressView
-            progress={this.props.epic.epicPoints! / this.props.epic.epicGoal!}
+            progress={
+              (this.props.epic.epicPoints || 1) /
+              (this.props.epic.epicGoal || 1)
+            }
             tintColor={this.props.epic.color || sharedColors.primaryColor}
             trackColor={sharedColors.progressBarBackground}
           />

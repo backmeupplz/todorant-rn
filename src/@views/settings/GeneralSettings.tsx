@@ -1,30 +1,29 @@
-import React, { Component } from 'react'
-import { Text, ActionSheet } from 'native-base'
-import { sharedSettingsStore, ColorMode } from '@stores/SettingsStore'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
-import { computed, makeObservable } from 'mobx'
-import RNRestart from 'react-native-restart'
+import { ActionSheet, Text } from 'native-base'
+import { ColorMode, sharedSettingsStore } from '@stores/SettingsStore'
+import { Component } from 'react'
+import { Language } from '@models/Language'
+import { MMKV } from '@stores/hydration/hydrate'
 import { Platform } from 'react-native'
-import { navigate } from '@utils/navigation'
-import { sharedSessionStore } from '@stores/SessionStore'
+import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TableItem } from '@components/TableItem'
-import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
-import PushNotification from 'react-native-push-notification'
+import { TextAndSwitch } from '@views/settings/TextAndSwitch'
+import { View } from 'react-native'
+import { computed, makeObservable } from 'mobx'
+import { configCalendar } from '@utils/configCalendar'
 import {
   getNotificationPermissions,
-  updateBadgeNumber,
   resetBadgeNumber,
+  updateBadgeNumber,
 } from '@utils/notifications'
-import { TextAndSwitch } from '@views/settings/TextAndSwitch'
-import { Language } from '@models/Language'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { View } from 'react-native'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { configCalendar } from '@utils/configCalendar'
-import { MMKV } from '@stores/hydration/hydrate'
+import { translate } from '@utils/i18n'
+import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
+import PushNotification from 'react-native-push-notification'
+import React from 'react'
 
 const codeToName = {
   en: 'English',
@@ -142,13 +141,13 @@ export class GeneralSettings extends Component {
             {this.colorModeLabel}
           </Text>
         </TableItem>
-        <View onLayout={({ nativeEvent: { target } }: any) => {}}>
+        <View>
           <TableItem
             onLayout={({ nativeEvent: { target } }: any) => {
               integrationButtonsNodeId = target
             }}
             onPress={() => {
-              !!sharedSessionStore.user
+              sharedSessionStore.user
                 ? navigate('Integrations')
                 : navigate('Login')
             }}

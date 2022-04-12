@@ -1,8 +1,8 @@
+import { MelonTodo } from '@models/MelonTodo'
 import { Platform } from 'react-native'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { navigate } from '@utils/navigation'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { MelonTodo } from '@models/MelonTodo'
+import { sharedSessionStore } from '@stores/SessionStore'
 
 export function checkSubscriptionAndNavigate(
   screen: 'AddTodo' | 'EditTodo' | 'BreakdownTodo',

@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { Text, View } from 'native-base'
-import { navigate } from '@utils/navigation'
-import { alertConfirm } from '@utils/alert'
-import { observer } from 'mobx-react'
-import { translate } from '@utils/i18n'
-import { sharedColors } from '@utils/sharedColors'
 import { Button } from '@components/Button'
+import { Component } from 'react'
+import { Text, View } from 'native-base'
+import { alertConfirm } from '@utils/alert'
+import { navigate } from '@utils/navigation'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class LoginLogoutButtons extends Component {
@@ -20,7 +21,7 @@ export class LoginLogoutButtons extends Component {
           marginVertical: 16,
         }}
       >
-        {!!sharedSessionStore.user ? (
+        {sharedSessionStore.user ? (
           <Button
             style={{ flex: 1, borderRadius: 10 }}
             block

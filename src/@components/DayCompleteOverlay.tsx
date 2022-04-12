@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
-import { Text } from 'native-base'
-import Animated, { Easing } from 'react-native-reanimated'
+import { Component } from 'react'
 import { EasingNode } from 'react-native-reanimated'
+import { Text } from 'native-base'
 import { translate } from '@utils/i18n'
+import Animated from 'react-native-reanimated'
+import React from 'react'
 
 export let dayCompleteOverlayRef: any
 
 export class DayCompleteOverlay extends Component {
   componentDidMount() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     dayCompleteOverlayRef = this
   }
 

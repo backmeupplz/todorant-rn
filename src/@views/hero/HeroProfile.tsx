@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Container, Content } from 'native-base'
-import { observer } from 'mobx-react'
-import { sharedHeroStore, ranks } from '@stores/HeroStore'
-import { computed, makeObservable } from 'mobx'
-import { sharedColors } from '@utils/sharedColors'
-import { RankCard } from '@views/hero/RankCard'
 import { Divider } from '@components/Divider'
+import { RankCard } from '@views/hero/RankCard'
+import { computed, makeObservable } from 'mobx'
+import { observer } from 'mobx-react'
+import { ranks, sharedHeroStore } from '@stores/HeroStore'
+import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
+import React from 'react'
 
 @observer
 export class HeroProfile extends Component {

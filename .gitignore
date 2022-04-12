@@ -74,5 +74,11 @@ ios/fastlane/screenshots/screenshots.html
 
 android/*.hprof
 
-todo.txt
-.yarn
+# yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

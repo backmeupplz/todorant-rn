@@ -1,12 +1,14 @@
-import { SocketConnection } from '@sync/sockets/SocketConnection'
-import {
-  checkPromiseMapForTimeout,
-  PromiseMapType,
-} from '@sync/sockets/checkPromiseMapForTimeout'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/ban-types */
 import { PromiseMap } from '@sync/sockets/PromiseMap'
+import {
+  PromiseMapType,
+  checkPromiseMapForTimeout,
+} from '@sync/sockets/checkPromiseMapForTimeout'
+import { SocketConnection } from '@sync/sockets/SocketConnection'
 import { SyncStage } from '@sync/sockets/SyncStage'
-import { v4 } from 'uuid'
 import { makeObservable, observable } from 'mobx'
+import { v4 } from 'uuid'
 
 export class SyncManager<T> {
   @observable isSyncing = false

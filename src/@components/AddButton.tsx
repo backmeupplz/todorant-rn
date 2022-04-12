@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Icon } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import { observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View } from 'react-native'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
 
 export const addButtonStore = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   add: () => {},
 }
 

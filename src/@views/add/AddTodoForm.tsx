@@ -1,54 +1,37 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { TodoVM } from '@views/add/TodoVM'
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import {
-  View,
-  Text,
-  Input,
-  Icon,
-  List,
-  ListItem,
-  ActionSheet,
-} from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import { translate } from '@utils/i18n'
-import { CollapseButton } from './CollapseButton'
-import {
-  Platform,
-  ViewStyle,
-  StyleProp,
-  InteractionManager,
-  StyleSheet,
-  ScrollView,
-} from 'react-native'
-import { Calendar } from 'react-native-calendars'
-import { getDateString, getDateMonthAndYearString } from '@utils/time'
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import moment, { Moment } from 'moment'
-import MonthPicker from 'react-native-month-picker'
-import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
-import {
-  Switch,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native-gesture-handler'
-import { sharedSessionStore } from '@stores/SessionStore'
-import { IconButton } from '@components/IconButton'
-import CustomIcon from '@components/CustomIcon'
-import fonts from '@utils/fonts'
-import { computed, makeObservable, observable } from 'mobx'
 import * as Animatable from 'react-native-animatable'
-import { sharedOnboardingStore } from '@stores/OnboardingStore'
-import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { Divider } from '@components/Divider'
-import { sharedTodoStore } from '@stores/TodoStore'
-import { sharedDelegateStateStore } from '@stores/DelegateScreenStateStore'
-import { sharedDelegationStore } from '@stores/DelegationStore'
-import withObservables from '@nozbe/with-observables'
+import { ActionSheet, Icon, Input, Text, View } from 'native-base'
+import { Calendar } from 'react-native-calendars'
+import { CollapseButton } from '@views/add/CollapseButton'
+import { Component } from 'react'
+import { IconButton } from '@components/IconButton'
+import {
+  InteractionManager,
+  Platform,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import { MelonTag } from '@models/MelonTag'
+import { Switch, TouchableOpacity } from 'react-native-gesture-handler'
+import { TodoVM } from '@views/add/TodoVM'
+import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
+import { computed, makeObservable, observable } from 'mobx'
+import { getDateMonthAndYearString, getDateString } from '@utils/time'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import { sharedDelegationStore } from '@stores/DelegationStore'
+import { sharedOnboardingStore } from '@stores/OnboardingStore'
+import { sharedSessionStore } from '@stores/SessionStore'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import { translate } from '@utils/i18n'
 import Clipboard from '@react-native-community/clipboard'
+import CustomIcon from '@components/CustomIcon'
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
+import MonthPicker from 'react-native-month-picker'
+import React from 'react'
 import XDate from 'xdate'
+import fonts from '@utils/fonts'
+import moment, { Moment } from 'moment'
+import withObservables from '@nozbe/with-observables'
 
 const fontSize = 18
 const verticalSpacing = 8
@@ -407,7 +390,7 @@ class MonthRow extends Component<{
           }
           this.props.vm.showMonthAndYearPicker =
             !this.props.vm.showMonthAndYearPicker
-          if (!!this.props.vm.date) {
+          if (this.props.vm.date) {
             this.props.vm.monthAndYear = undefined
             this.props.vm.date = undefined
           }

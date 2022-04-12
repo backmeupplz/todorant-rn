@@ -1,9 +1,10 @@
-import { sharedSettingsStore } from '@stores/SettingsStore'
-import { computed, makeObservable } from 'mobx'
-import { StyleProp, ViewStyle } from 'react-native'
 import { Platform } from 'react-native'
-import { isDeviceSmall } from './deviceInfo'
-import fonts from './fonts'
+import { StyleProp, ViewStyle } from 'react-native'
+import { computed, makeObservable } from 'mobx'
+import { isDeviceSmall } from '@utils/deviceInfo'
+import { sharedSettingsStore } from '@stores/SettingsStore'
+import fonts from '@utils/fonts'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ColorScheme = require('color-scheme')
 
 export class ColorModeManager {

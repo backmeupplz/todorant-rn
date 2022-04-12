@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
-import { Text } from 'native-base'
-import { sharedColors } from '@utils/sharedColors'
-import moment from 'moment'
+import { Component } from 'react'
 import { MelonTodo } from '@models/MelonTodo'
+import { Text } from 'native-base'
+import { observer } from 'mobx-react'
+import { sharedColors } from '@utils/sharedColors'
+import React from 'react'
+import moment from 'moment'
 
 @observer
 export class DebugTodoInfo extends Component<{ todo: MelonTodo }> {

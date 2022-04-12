@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
-import { observer, Observer } from 'mobx-react'
-import { View } from 'native-base'
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack'
-import { headerBackButtonProps } from '@utils/headerBackButton'
+import { Component } from 'react'
+import { DelegateContent } from '@views/delegation/DelegateContent'
+import { DelegationHeader } from '@views/delegation/DelegationHeader'
 import { InfoButton } from '@components/InfoButton'
+import { Observer, observer } from 'mobx-react'
+import { View } from 'native-base'
+import { headerBackButtonProps } from '@utils/headerBackButton'
 import { sharedColors } from '@utils/sharedColors'
-import { DelegateContent } from './DelegateContent'
-import { DelegationHeader } from './DelegationHeader'
+import React from 'react'
 
 const Stack = createStackNavigator()
 

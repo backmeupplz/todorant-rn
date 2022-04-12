@@ -1,8 +1,8 @@
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
-import { User } from '@models/User'
-import axios, { AxiosResponse } from 'axios'
-import { sharedSessionStore } from '@stores/SessionStore'
 import { Platform } from 'react-native'
+import { User } from '@models/User'
+import { sharedSessionStore } from '@stores/SessionStore'
+import axios, { AxiosResponse } from 'axios'
 
 const base = __DEV__ ? 'http://localhost:1337' : 'https://backend.todorant.com'
 

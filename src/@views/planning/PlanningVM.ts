@@ -1,25 +1,13 @@
-import { sharedAppStateStore } from '@stores/AppStateStore'
-import { SyncRequestEvent } from '@sync/SyncRequestEvent'
-import { EventEmitter } from 'events'
-import { isTodoOld } from '@utils/isTodoOld'
-import { debounce } from 'lodash'
-import { todosCollection } from '@utils/watermelondb/wmdb'
 import { Q } from '@nozbe/watermelondb'
 import { TodoColumn } from '@utils/watermelondb/tables'
-import { sharedTodoStore } from '@stores/TodoStore'
+import { debounce } from 'lodash'
+import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedSessionStore } from '@stores/SessionStore'
-
-export const planningEventEmitter = new EventEmitter()
-
-export enum PlanningEventEmitter {
-  ResolveHoverState = 'ResolveHoverState',
-}
+import { sharedTodoStore } from '@stores/TodoStore'
 
 export class PlanningVM {
   uncompletedTodosData = this.getTodos(false)
   completedTodosData = this.getTodos(true)
-
-  resetHoverState = () => {}
 
   draggingEdit = false
 
@@ -52,11 +40,4 @@ export class PlanningVM {
     1000,
     { maxWait: 250 }
   )
-
-  constructor() {
-    planningEventEmitter.on(PlanningEventEmitter.ResolveHoverState, () => {
-      this.resetHoverState()
-      this.resetHoverState = () => {}
-    })
-  }
 }
