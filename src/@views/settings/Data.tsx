@@ -1,5 +1,5 @@
 import { Divider } from '@components/Divider'
-import SectionHeader from '@components/SectionHeader'
+import { SectionHeader } from '@components/SectionHeader'
 import { TableItem } from '@components/TableItem'
 import { Q } from '@nozbe/watermelondb'
 import { sharedDelegationStore } from '@stores/DelegationStore'
