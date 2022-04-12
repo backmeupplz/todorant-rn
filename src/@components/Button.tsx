@@ -1,6 +1,6 @@
 import { NativeBase, Button as NativeBaseButton, View } from 'native-base'
 import { Platform } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 
 const fixStyle = (style: any) => {
   if (style.backgroundColor) return style
@@ -8,7 +8,9 @@ const fixStyle = (style: any) => {
   return style
 }
 
-export const Button: FC<NativeBase.Button> = (props) => {
+// TODO: Upgrade memo check for native.base button props
+
+export const Button: FC<NativeBase.Button> = memo((props) => {
   return Platform.OS === 'android' ? (
     <View
       style={{
@@ -22,4 +24,4 @@ export const Button: FC<NativeBase.Button> = (props) => {
   ) : (
     <NativeBaseButton {...props} {...{ style: fixStyle(props.style) }} />
   )
-}
+})
