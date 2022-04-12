@@ -1,10 +1,10 @@
 import { Observer } from 'mobx-react'
 import { Text, View } from 'native-base'
 import { sharedColors } from '@utils/sharedColors'
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import fonts from '@utils/fonts'
 
-export const SectionHeader: FC<{ title?: string }> = ({ title }) => {
+export const SectionHeader: FC<{ title: string }> = memo(({ title }) => {
   return (
     <Observer>
       {() => {
@@ -26,4 +26,4 @@ export const SectionHeader: FC<{ title?: string }> = ({ title }) => {
       }}
     </Observer>
   )
-}
+})
