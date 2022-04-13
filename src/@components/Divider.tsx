@@ -1,31 +1,31 @@
-import { Component } from 'react'
+import { Observer } from 'mobx-react'
 import { View } from 'native-base'
-import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React from 'react'
+import React, { FC, memo } from 'react'
 
-@observer
-export class Divider extends Component<{
+export const Divider: FC<{
   color?: string
   marginVertical?: number
   marginHorizontal?: number
-}> {
-  render() {
-    return (
-      <View
-        style={{
-          backgroundColor: this.props.color || sharedColors.borderColor,
-          height: 1,
-          marginHorizontal:
-            this.props.marginHorizontal === undefined
-              ? 16
-              : this.props.marginHorizontal,
-          marginVertical:
-            this.props.marginVertical === undefined
-              ? 6
-              : this.props.marginVertical,
-        }}
-      />
-    )
-  }
-}
+}> = memo((props) => {
+  return (
+    <Observer>
+      {() => {
+        return (
+          <View
+            style={{
+              backgroundColor: props.color || sharedColors.borderColor,
+              height: 1,
+              marginHorizontal:
+                props.marginHorizontal === undefined
+                  ? 16
+                  : props.marginHorizontal,
+              marginVertical:
+                props.marginVertical === undefined ? 6 : props.marginVertical,
+            }}
+          />
+        )
+      }}
+    </Observer>
+  )
+})
