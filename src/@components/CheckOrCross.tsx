@@ -1,22 +1,24 @@
-import { Component } from 'react'
 import { Icon } from 'native-base'
-import { observer } from 'mobx-react'
+import { Observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
-import React from 'react'
+import React, { FC, memo } from 'react'
 
-@observer
-export class CheckOrCross extends Component<{ ok: boolean }> {
-  render() {
-    return (
-      <Icon
-        type="MaterialIcons"
-        name={this.props.ok ? 'check' : 'close'}
-        style={{
-          color: this.props.ok
-            ? sharedColors.successIconColor
-            : sharedColors.destructIconColor,
-        }}
-      />
-    )
-  }
-}
+export const CheckOrCross: FC<{ ok: boolean }> = memo(({ ok }) => {
+  return (
+    <Observer>
+      {() => {
+        return (
+          <Icon
+            type="MaterialIcons"
+            name={ok ? 'check' : 'close'}
+            style={{
+              color: ok
+                ? sharedColors.successIconColor
+                : sharedColors.destructIconColor,
+            }}
+          />
+        )
+      }}
+    </Observer>
+  )
+})
