@@ -22,6 +22,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedSessionStore } from '@stores/SessionStore'
+import { startConfetti } from '@components/Confetti'
 import { updateAndroidNavigationBarColor } from '@utils/androidNavigationBar'
 
 @observer
@@ -166,6 +167,13 @@ export class DebugButtons extends Component {
           }}
           text="check app version"
           testId="check_version"
+        />
+        <DebugButton
+          onPress={() => {
+            startConfetti(true)
+          }}
+          text="start confetti"
+          testId="start_confetti"
         />
       </>
     ) : null
