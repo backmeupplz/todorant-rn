@@ -4,6 +4,8 @@ import { sharedColors } from '@utils/sharedColors'
 import CustomIcon from '@components/CustomIcon'
 import React, { FC, memo } from 'react'
 
+// TODO: figure out how callbacks affect on memo
+
 export const IconButton: FC<{
   onPress: () => void
   name: string
