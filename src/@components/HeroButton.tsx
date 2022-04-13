@@ -12,14 +12,13 @@ import fonts from '@utils/fonts'
 const shortNum = require('number-shortener')
 
 export const HeroButton = memo(() => {
-  const tintColor =
-    sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 2 : 3]
-  const trackColor =
-    sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 3 : 2]
-
   return (
     <Observer>
       {() => {
+        const tintColor =
+          sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 2 : 3]
+        const trackColor =
+          sharedHeroStore.rankColor[sharedSettingsStore.isDark ? 3 : 2]
         return (
           <TouchableOpacity
             onPress={() => {
