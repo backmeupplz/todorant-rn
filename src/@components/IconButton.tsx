@@ -1,37 +1,36 @@
-import { Component } from 'react'
+import { Observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import CustomIcon from '@components/CustomIcon'
-import React from 'react'
+import React, { FC, memo } from 'react'
 
-@observer
-export class IconButton extends Component<{
+export const IconButton: FC<{
   onPress: () => void
   name: string
   color?: string
   fullColor?: boolean
   size?: number
   disabled?: boolean
-}> {
-  render() {
-    return (
-      <TouchableOpacity
-        onPress={this.props.onPress}
-        disabled={this.props.disabled}
-      >
-        <CustomIcon
-          name={this.props.name}
-          size={this.props.size || 28}
-          style={{
-            color: !this.props.disabled
-              ? this.props.color || sharedColors.defaultIconColor
-              : 'gray',
-            opacity: this.props.fullColor ? 1.0 : 0.8,
-            marginHorizontal: 6,
-          }}
-        />
-      </TouchableOpacity>
-    )
-  }
-}
+}> = memo((props) => {
+  return (
+    <Observer>
+      {() => {
+        return (
+          <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
+            <CustomIcon
+              name={props.name}
+              size={props.size || 28}
+              style={{
+                color: !props.disabled
+                  ? props.color || sharedColors.defaultIconColor
+                  : 'gray',
+                opacity: props.fullColor ? 1.0 : 0.8,
+                marginHorizontal: 6,
+              }}
+            />
+          </TouchableOpacity>
+        )
+      }}
+    </Observer>
+  )
+})
