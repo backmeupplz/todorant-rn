@@ -1,23 +1,25 @@
-import { Component } from 'react'
+import { Observer } from 'mobx-react'
 import { View } from 'native-base'
-import { observer } from 'mobx-react'
-import React from 'react'
+import React, { FC, memo } from 'react'
 
-@observer
-export class Circle extends Component<{
+export const Circle: FC<{
   backgroundColor: string
-}> {
-  render() {
-    return (
-      <View
-        style={{
-          width: 20,
-          height: 20,
-          borderColor: this.props.backgroundColor,
-          borderWidth: 6,
-          borderRadius: 10,
-        }}
-      ></View>
-    )
-  }
-}
+}> = memo(({ backgroundColor }) => {
+  return (
+    <Observer>
+      {() => {
+        return (
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              borderColor: backgroundColor,
+              borderWidth: 6,
+              borderRadius: 10,
+            }}
+          ></View>
+        )
+      }}
+    </Observer>
+  )
+})
