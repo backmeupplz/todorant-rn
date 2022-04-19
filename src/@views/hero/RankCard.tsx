@@ -1,44 +1,47 @@
 import { Circle } from '@views/hero/Circle'
 import { Component } from 'react'
+import { Observer, observer } from 'mobx-react'
 import { Rank } from '@models/Rank'
 import { Text, View } from 'native-base'
-import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedHeroStore } from '@stores/HeroStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
 import { translate } from '@utils/i18n'
-import React from 'react'
+import React, { FC, memo } from 'react'
 import fonts from '@utils/fonts'
 
-@observer
-class CircleWithText extends Component<{
+const CircleWithText: FC<{
   color: string
   count: number
-}> {
-  render() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-        }}
-      >
-        <Circle backgroundColor={this.props.color} />
-        <Text
-          style={{
-            color: this.props.color,
-            fontFamily: fonts.SFProRoundedBold,
-            fontSize: 22,
-            marginLeft: 16,
-          }}
-        >
-          {this.props.count} {translate('points')}
-        </Text>
-      </View>
-    )
-  }
-}
+}> = memo((props) => {
+  return (
+    <Observer>
+      {() => {
+        return (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}
+          >
+            <Circle backgroundColor={props.color} />
+            <Text
+              style={{
+                color: props.color,
+                fontFamily: fonts.SFProRoundedBold,
+                fontSize: 22,
+                marginLeft: 16,
+              }}
+            >
+              {props.count} {translate('points')}
+            </Text>
+          </View>
+        )
+      }}
+    </Observer>
+  )
+})
 
 @observer
 export class RankCard extends Component<{
