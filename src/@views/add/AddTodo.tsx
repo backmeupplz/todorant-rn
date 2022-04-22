@@ -389,7 +389,11 @@ export const AddTodoContent = memo<AddTodoContentProps>(
         trySaveTodo()
       })
       return backHandler.remove()
-    }, [props.route.params?.breakdownTodo, props.route.params?.editedTodo])
+    }, [
+      props.route.params?.breakdownTodo,
+      props.route.params?.editedTodo,
+      props.route.params?.text,
+    ])
 
     const flatlistref = useRef<FlatList>()
 
