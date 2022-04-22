@@ -62,10 +62,6 @@ export class Overlay extends Component {
       }
     )
     if (sharedOnboardingStore.hydrated) {
-      if (sharedOnboardingStore.savedStep) {
-        sharedOnboardingStore.tutorialIsShown = true
-        return
-      }
       this.trigger(!sharedOnboardingStore.tutorialIsShown)
     }
     reaction(
@@ -235,6 +231,9 @@ export class Overlay extends Component {
 }
 
 export function checkOnboardingStep() {
+  console.log('checking...')
+  console.log(sharedOnboardingStore.savedStep)
+  console.log(sharedOnboardingStore.tutorialIsShown)
   InteractionManager.runAfterInteractions(async () => {
     setTimeout(() => {
       if (
