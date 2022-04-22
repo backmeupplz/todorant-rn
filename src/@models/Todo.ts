@@ -9,6 +9,46 @@ export function isTodoToday(todo: MelonTodo) {
   return getDateString(getTodayWithStartOfDay()) === getDateStringFromTodo(todo)
 }
 
+export function compareDelegates(
+  delegateA?: MelonUser | null,
+  delegateB?: MelonUser | null
+) {
+  return !!(
+    delegateA?._id === delegateB?._id &&
+    delegateA?.name === delegateB?.name &&
+    delegateA?.isDelegator === delegateB?.isDelegator &&
+    delegateA?.deleted === delegateB?.deleted &&
+    delegateA?.createdAt === delegateB?.createdAt &&
+    delegateA?.updatedAt === delegateB?.updatedAt &&
+    delegateA?.delegateInviteToken === delegateB?.delegateInviteToken
+  )
+}
+
+export function compareTodosProps(todoA?: MelonTodo, todoB?: MelonTodo) {
+  return !!(
+    todoA?._tempSyncId === todoB?._tempSyncId &&
+    todoA?._exactDate === todoB?._exactDate &&
+    todoA?._id === todoB?._id &&
+    todoA?.createdAt === todoB?.createdAt &&
+    todoA?.updatedAt === todoB?.updatedAt &&
+    todoA?.text === todoB?.text &&
+    todoA?.completed === todoB?.completed &&
+    todoA?.frog === todoB?.frog &&
+    todoA?.frogFails === todoB?.frogFails &&
+    todoA?.skipped === todoB?.skipped &&
+    todoA?.order === todoB?.order &&
+    todoA?.monthAndYear === todoB?.monthAndYear &&
+    todoA?.deleted === todoB?.deleted &&
+    todoA?.encrypted === todoB?.encrypted &&
+    todoA?.date === todoB?.date &&
+    todoA?.time === todoB?.time &&
+    todoA?.delegateAccepted === todoB?.delegateAccepted &&
+    todoA?.repetitive === todoB?.repetitive &&
+    compareDelegates(todoA?.user, todoB?.user) &&
+    compareDelegates(todoA?.delegator, todoB?.delegator)
+  )
+}
+
 export function compareTodos(completed: boolean) {
   return (a: MelonTodo, b: MelonTodo) => {
     if (a.date === b.date && a.monthAndYear === b.monthAndYear) {
