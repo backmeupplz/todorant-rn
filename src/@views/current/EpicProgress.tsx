@@ -76,7 +76,7 @@ export class EpicProgress extends Component<{
               ) {
                 sharedAppStateStore.hash.push(`#${this.props.epic.tag}`)
               }
-              navigate('Planning')
+              navigate('BottomPlanning')
             }}
           />
           <ProgressView

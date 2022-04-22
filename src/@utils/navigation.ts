@@ -9,7 +9,7 @@ type DelegationsScreen = { delegationType: DelegationUserType }
 
 export type RootStackParamList = {
   AddTodo: undefined | Record<string, unknown>
-  Planning: undefined
+  BottomPlanning: undefined
   HeroProfile: undefined
   EditTodo: undefined
   GoogleCalendar: undefined

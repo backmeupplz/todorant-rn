@@ -72,7 +72,7 @@ function handleUrl(url: string) {
       )
     }
   } else if (params.url === 'todorant://search' && params.query.query) {
-    navigate('Planning')
+    navigate('BottomPlanning')
     sharedAppStateStore.searchEnabled = true
     sharedAppStateStore.searchQuery = [params.query.query as string]
   } else if (params.url.match(/https:\/\/todorant.com\/invite\/*/g)) {
