@@ -4,7 +4,6 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { Toast } from 'native-base'
 import { alertConfirm, alertError } from '@utils/alert'
 import { database, todosCollection } from '@utils/watermelondb/wmdb'
-import { daysAgo } from '@utils/checkSubscriptionAndNavigate'
 import { fixOrder } from '@utils/fixOrder'
 import { getDateDateString, getDateMonthAndYearString } from '@utils/time'
 import { getLocalDelegation } from '@utils/delegations'
@@ -32,45 +31,9 @@ export async function setupLinking() {
 function handleUrl(url: string) {
   const params = QueryString.parseUrl(url)
   if (params.url === 'todorant://create-todo' && params.query.articleBody) {
-    if (
-      !sharedSessionStore.user?.token &&
-      sharedSessionStore.appInstalledMonthAgo
-    ) {
-      navigate('Login', { loginWall: true })
-    } else if (
-      !sharedSessionStore.user?.token ||
-      sharedSessionStore.isSubscriptionActive
-    ) {
-      addTodo(params.query.articleBody as string)
-    } else {
-      navigate(
-        'Paywall',
-        sharedSessionStore.user.createdOnApple &&
-          sharedSessionStore.user.createdAt >= daysAgo(14)
-          ? { type: 'appleUnauthorized' }
-          : undefined
-      )
-    }
+    addTodo(params.query.articleBody as string)
   } else if (params.url === 'todorant://create-todo') {
-    if (
-      !sharedSessionStore.user?.token &&
-      sharedSessionStore.appInstalledMonthAgo
-    ) {
-      navigate('Login', { loginWall: true })
-    } else if (
-      !sharedSessionStore.user?.token ||
-      sharedSessionStore.isSubscriptionActive
-    ) {
-      navigate('AddTodo')
-    } else {
-      navigate(
-        'Paywall',
-        sharedSessionStore.user.createdOnApple &&
-          sharedSessionStore.user.createdAt >= daysAgo(14)
-          ? { type: 'appleUnauthorized' }
-          : undefined
-      )
-    }
+    navigate('AddTodo')
   } else if (params.url === 'todorant://search' && params.query.query) {
     navigate('Planning')
     sharedAppStateStore.searchEnabled = true

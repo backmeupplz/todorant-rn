@@ -8,7 +8,6 @@ import {
 import BottomTabNavigator from '@views/BottomTabNavigator'
 import { navigate, navigationRef } from '@utils/navigation'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import '@utils/purchases'
 import { Icon, Root, StyleProvider, Text, View } from 'native-base'
 import React from 'react'
 import getTheme from './native-base-theme/components'
@@ -33,7 +32,6 @@ import { AddTodo } from '@views/add/AddTodo'
 import { AddButton } from '@components/AddButton'
 import { InfoButton } from '@components/InfoButton'
 import { Login } from '@views/settings/Login/Login'
-import { Paywall } from '@views/settings/Paywall'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
@@ -239,16 +237,6 @@ class App extends Component {
                   component={Login}
                   options={{
                     title: translate('pleaseLogin'),
-                    headerTitleAlign: 'center',
-                    ...sharedColors.headerExtraStyle,
-                    ...headerBackButtonProps(),
-                  }}
-                />
-                <Stack.Screen
-                  name="Paywall"
-                  component={Paywall}
-                  options={{
-                    title: translate('subscription'),
                     headerTitleAlign: 'center',
                     ...sharedColors.headerExtraStyle,
                     ...headerBackButtonProps(),

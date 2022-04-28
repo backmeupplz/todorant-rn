@@ -17,7 +17,6 @@ export type RootStackParamList = {
   ChangeText: { tag: MelonTag }
   AddEpic: { tag: MelonTag }
   ColorPicker: { tag: MelonTag }
-  Paywall: undefined
   Privacy: undefined
   Terms: undefined
   Sockets: undefined

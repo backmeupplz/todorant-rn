@@ -2,9 +2,8 @@ import { Observer } from 'mobx-react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
 import { View } from 'native-base'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import { memo } from 'react'
-import { navigationRef } from '@utils/navigation'
+import { navigate, navigationRef } from '@utils/navigation'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import CustomIcon from '@components/CustomIcon'
 import LinearGradient from 'react-native-linear-gradient'
@@ -32,7 +31,7 @@ export const PlusButton = memo(() => {
         >
           <TouchableOpacity
             onPress={() => {
-              checkSubscriptionAndNavigate('AddTodo')
+              navigate('AddTodo')
             }}
             disabled={
               !sharedOnboardingStore.tutorialIsShown &&

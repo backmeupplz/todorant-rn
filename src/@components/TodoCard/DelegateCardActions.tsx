@@ -8,7 +8,7 @@ import { MelonTodo } from '@models/MelonTodo'
 import { Text, View } from 'native-base'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
@@ -64,7 +64,7 @@ export class DelegateCardActions extends Component<{
               />
               <IconButton
                 onPress={() => {
-                  checkSubscriptionAndNavigate('EditTodo', {
+                  navigate('EditTodo', {
                     editedTodo: this.props.todo,
                   })
                 }}
