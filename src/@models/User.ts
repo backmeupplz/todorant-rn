@@ -13,13 +13,6 @@ enum TelegramLanguage {
   ru = 'ru',
 }
 
-export enum SubscriptionStatus {
-  earlyAdopter = 'earlyAdopter',
-  active = 'active',
-  trial = 'trial',
-  inactive = 'inactive',
-}
-
 export class User {
   constructor() {
     makeObservable(this)
@@ -42,14 +35,6 @@ export class User {
   @persist @observable telegramZen!: boolean
   @persist @observable telegramLanguage?: TelegramLanguage
 
-  @persist @observable subscriptionStatus!: SubscriptionStatus
-  @persist @observable subscriptionId?: string
-  @persist @observable appleReceipt?: string
-  @persist @observable googleReceipt?: string
-  @persist @observable isPerpetualLicense?: boolean
-
-  @persist @observable createdOnApple?: boolean
-
   @persist @observable delegateInviteToken?: string
 }
 
@@ -60,9 +45,6 @@ export function areUsersPartiallyEqual(user: User, anotherUser: User) {
     user.facebookId === anotherUser.facebookId &&
     user.telegramId === anotherUser.telegramId &&
     user.name === anotherUser.name &&
-    user.timezone === anotherUser.timezone &&
-    user.subscriptionStatus === anotherUser.subscriptionStatus &&
-    user.subscriptionId === anotherUser.subscriptionId &&
-    user.isPerpetualLicense === anotherUser.isPerpetualLicense
+    user.timezone === anotherUser.timezone
   )
 }

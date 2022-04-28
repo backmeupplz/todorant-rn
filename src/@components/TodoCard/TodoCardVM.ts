@@ -6,7 +6,6 @@ import { SyncRequestEvent } from '@sync/SyncRequestEvent'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { alertConfirm, alertMessage } from '@utils/alert'
 import { checkDayCompletionRoutine } from '@utils/dayCompleteRoutine'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import { database } from '@utils/watermelondb/wmdb'
 import { fixOrder } from '@utils/fixOrder'
 import {
@@ -177,7 +176,7 @@ export class TodoCardVM {
             {
               text: translate('breakdownButton'),
               onPress: () => {
-                checkSubscriptionAndNavigate('BreakdownTodo', {
+                navigate('BreakdownTodo', {
                   breakdownTodo: todo,
                 })
               },

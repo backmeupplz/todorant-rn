@@ -3,7 +3,6 @@ import { Icon, Input, Text, Toast } from 'native-base'
 import { Platform } from 'react-native'
 import { SectionHeader } from '@components/SectionHeader'
 import { Spinner } from '@components/Spinner'
-import { SubscriptionSection } from '@views/settings/SubscriptionSection'
 import { TableItem } from '@components/TableItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { alertError } from '@utils/alert'
@@ -194,7 +193,6 @@ export class AccountInfo extends Component {
             value={sharedSessionStore.user.appleSubId}
           />
         )}
-        <SubscriptionSection />
         {sharedSessionStore.user && (
           <TableItem
             {...sharedColors.listItemExtraStyle}

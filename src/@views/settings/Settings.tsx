@@ -29,7 +29,6 @@ import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
 import { LoginQR } from '@views/settings/Login/LoginQR'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
 import { Observer, observer } from 'mobx-react'
-import { Paywall } from '@views/settings/Paywall'
 import { PrivacyPolicy } from '@views/settings/PrivacyPolicy'
 import { Rules } from '@views/settings/Rules'
 import { SectionHeader } from '@components/SectionHeader'
@@ -331,16 +330,6 @@ export function Settings() {
               title: translate('howTo'),
               ...sharedColors.headerExtraStyle,
               headerRight: InfoButton('infoRules'),
-              ...headerBackButtonProps(),
-            }}
-          />
-          <Stack.Screen
-            name="Paywall"
-            component={Paywall}
-            options={{
-              title: translate('subscription'),
-              headerTitleAlign: 'center',
-              ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),
             }}
           />

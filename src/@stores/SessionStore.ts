@@ -3,10 +3,9 @@ import {
   ObservableNowEventEmitterEvent,
   observableNowEventEmitter,
 } from '@utils/ObservableNow'
-import { SubscriptionStatus, User, areUsersPartiallyEqual } from '@models/User'
+import { User, areUsersPartiallyEqual } from '@models/User'
 import { computed, makeObservable, observable } from 'mobx'
 import { database } from '@utils/watermelondb/wmdb'
-import { daysBetween } from '@utils/daysBetween'
 import { hydrate } from '@stores/hydration/hydrate'
 import { hydrateStore } from '@stores/hydration/hydrateStore'
 import { logEvent } from '@utils/logEvent'
@@ -46,46 +45,6 @@ class SessionStore {
 
   @computed get needsToRequestRate() {
     return !this.askedToRate && this.numberOfTodosCompleted > 101
-  }
-
-  @computed get appInstalledMonthAgo() {
-    const monthAgo = new Date()
-    monthAgo.setMonth(monthAgo.getMonth() - 1)
-    return !this.appInstalled || this.appInstalled < monthAgo
-  }
-
-  @computed get shouldShowPaywalSubscription() {
-    return !(
-      (this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter &&
-        this.hasPurchased) ||
-      this.user?.subscriptionStatus == SubscriptionStatus.active
-    )
-  }
-
-  @computed get isSubscriptionActive() {
-    return (
-      this.user?.subscriptionStatus === SubscriptionStatus.earlyAdopter ||
-      this.user?.subscriptionStatus === SubscriptionStatus.active ||
-      (this.user?.subscriptionStatus === SubscriptionStatus.trial &&
-        !this.user?.createdOnApple &&
-        !this.isTrialOver)
-    )
-  }
-
-  @computed get isTrialOver() {
-    return this.daysLeftOfTrial < 0
-  }
-
-  @computed get daysLeftOfTrial() {
-    return 30 - daysBetween(this.user?.createdAt || new Date(), new Date())
-  }
-
-  @computed get hasPurchased() {
-    return (
-      !!this.user?.subscriptionId ||
-      !!this.user?.appleReceipt ||
-      !!this.user?.googleReceipt
-    )
   }
 
   @computed get delegateInviteLink() {

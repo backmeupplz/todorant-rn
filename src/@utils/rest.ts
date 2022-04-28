@@ -83,33 +83,6 @@ export async function setQrToken(uuid: string, token: string) {
   ).data as string
 }
 
-export function verifyPurchaseGoogle(
-  payload: {
-    packageName: string
-    productId: string
-    purchaseToken: string
-  },
-  token: string
-) {
-  return axios.post<void>(`${base}/google/subscription`, payload, {
-    headers: {
-      token,
-    },
-  })
-}
-
-export function verifyPurchaseApple(receipt: string, token: string) {
-  return axios.post<void>(
-    `${base}/apple/subscription`,
-    { receipt },
-    {
-      headers: {
-        token,
-      },
-    }
-  )
-}
-
 export function sendFeedback(state: object, token: string) {
   return axios.post<void>(
     `${base}/feedback`,

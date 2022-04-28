@@ -5,7 +5,7 @@ import { Text, View } from 'native-base'
 import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { capitalizeSentence } from '@utils/capitalizeSentence'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
+import { navigate } from '@utils/navigation'
 import { sharedColors } from '@utils/sharedColors'
 import { sharedOnboardingStore } from '@stores/OnboardingStore'
 import { sharedSettingsStore } from '@stores/SettingsStore'
@@ -86,7 +86,7 @@ export const TodoHeader: FC<{
                   onPress={() => {
                     props.onPlusPress
                       ? props.onPlusPress()
-                      : checkSubscriptionAndNavigate('AddTodo', {
+                      : navigate('AddTodo', {
                           date: props.item,
                         })
                   }}

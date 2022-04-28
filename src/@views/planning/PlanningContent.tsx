@@ -13,7 +13,6 @@ import { TodoCard } from '@components/TodoCard'
 import { TodoColumn } from '@utils/watermelondb/tables'
 import { TodoHeader } from '@components/TodoHeader'
 import { TodoSectionType, sharedAppStateStore } from '@stores/AppStateStore'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import { computed, makeObservable, observable, runInAction, when } from 'mobx'
 import { database } from '@utils/watermelondb/wmdb'
 import {
@@ -194,7 +193,7 @@ export class PlanningContent extends Component {
               }}
               dark={sharedSettingsStore.isDark}
               onPress={(day: Date) => {
-                checkSubscriptionAndNavigate('AddTodo', {
+                navigate('AddTodo', {
                   date: getDateString(day),
                 })
               }}

@@ -5,10 +5,10 @@ import { IconButton } from '@components/IconButton'
 import { MelonTodo } from '@models/MelonTodo'
 import { TodoCardVM } from '@components/TodoCard/TodoCardVM'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { checkSubscriptionAndNavigate } from '@utils/checkSubscriptionAndNavigate'
 import { isTodoOld } from '@utils/isTodoOld'
 import { isTodoToday } from '@models/Todo'
 import { makeObservable, observable } from 'mobx'
+import { navigate } from '@utils/navigation'
 import { observer } from 'mobx-react'
 import { sharedAppStateStore } from '@stores/AppStateStore'
 import { sharedColors } from '@utils/sharedColors'
@@ -104,7 +104,7 @@ export class TodoCardActions extends Component<{
             <IconButton
               disabled={!sharedOnboardingStore.tutorialIsShown}
               onPress={() => {
-                checkSubscriptionAndNavigate('EditTodo', {
+                navigate('EditTodo', {
                   editedTodo: this.props.todo,
                 })
               }}
@@ -133,7 +133,7 @@ export class TodoCardActions extends Component<{
                     sharedOnboardingStore.step !== TutorialStep.Breakdown
                   }
                   onPress={() => {
-                    checkSubscriptionAndNavigate('BreakdownTodo', {
+                    navigate('BreakdownTodo', {
                       breakdownTodo: this.props.todo,
                     })
                   }}
