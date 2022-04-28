@@ -380,7 +380,7 @@ PODS:
     - React-Core
   - RNHoleView (3.0.1):
     - React
-  - RNIap (7.5.1):
+  - RNIap (8.0.8):
     - React-Core
   - RNLocalize (2.1.5):
     - React-Core
@@ -739,7 +739,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: a51c9c7419262c75748ddcee3f735bb42da5def1
   RNHoleView: 78fe2ca0ed1be643c0d245fea09e582cc8ee0d51
-  RNIap: 5a03bf7852ba58a939051077c0e138caf301d22f
+  RNIap: bb56165cc68bfa269e2effd407d6ec0af63e796f
   RNLocalize: 74b82db20cc3895ccc25af992c644879bcec2815
   RNPermissions: 4b54095940aea8c03fa3e6c92d4ac3647b31ed4e
   RNReanimated: 65583befd5706cc9c86ae9a081786181ced37b93
