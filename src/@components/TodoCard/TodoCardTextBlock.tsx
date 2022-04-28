@@ -91,7 +91,7 @@ export class TodoCardTextBlock extends Component<{
                   setTimeout(() => {
                     if (sharedAppStateStore.hash.indexOf(p.value) < 0) {
                       sharedAppStateStore.hash.push(p.value)
-                      navigate('Planning')
+                      navigate('BottomPlanning')
                     }
                   })
                 }
