@@ -209,27 +209,6 @@ export class LoginContent extends Component<{
                 {translate('loginGoogle')}
               </Text>
             </Button>
-            <Button
-              style={{
-                justifyContent: 'center',
-                backgroundColor: 'cornflowerblue',
-                marginBottom: 10,
-                borderRadius: 10,
-              }}
-              onPress={() => {
-                navigate('LoginFacebook', {
-                  setLoadingToTrue: () => {
-                    this.vm.syncLoading = true
-                  },
-                })
-              }}
-              disabled={this.vm.loading}
-              textStyle={textStyle}
-            >
-              <Text style={textStyle} uppercase={false}>
-                {translate('loginFacebook')}
-              </Text>
-            </Button>
             {(Platform.OS === 'ios' || appleAuthAndroid.isSupported) && (
               <View
                 style={{
