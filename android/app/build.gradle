@@ -150,13 +150,11 @@ android {
         applicationId "com.todorant"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 168
-        versionName "1.0.168"
+        versionCode 169
+        versionName "1.0.169"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         missingDimensionStrategy 'react-native-camera', 'general'
-        // react-native-iap: we only use the Google Play flavor
-        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {
