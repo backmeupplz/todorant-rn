@@ -26,7 +26,6 @@ export type RootStackParamList = {
   LoginQR: { getToken: (token: string) => void }
   Security: undefined
   LoginTelegram: { setLoadingToTrue: (user: User) => void }
-  LoginFacebook: { setLoadingToTrue: (user: User) => void }
   Integrations: undefined
   BreakdownTodo: { todo: MelonTodo }
   Delegates: DelegationsScreen

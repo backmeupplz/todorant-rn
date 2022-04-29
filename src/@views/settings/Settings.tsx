@@ -24,7 +24,6 @@ import { InfoButton } from '@components/InfoButton'
 import { Integrations } from '@views/settings/integrations/Integrations'
 import { InteractionManager, FlatList as RNFlatList } from 'react-native'
 import { Login } from '@views/settings/Login/Login'
-import { LoginFacebook } from '@views/settings/Login/LoginFacebook'
 import { LoginLogoutButtons } from '@views/settings/Login/LoginLogoutButtons'
 import { LoginQR } from '@views/settings/Login/LoginQR'
 import { LoginTelegram } from '@views/settings/Login/LoginTelegram'
@@ -338,16 +337,6 @@ export function Settings() {
             component={LoginTelegram}
             options={{
               title: translate('loginTelegram'),
-              headerTitleAlign: 'center',
-              ...sharedColors.headerExtraStyle,
-              ...headerBackButtonProps(),
-            }}
-          />
-          <Stack.Screen
-            name="LoginFacebook"
-            component={LoginFacebook}
-            options={{
-              title: translate('loginFacebook'),
               headerTitleAlign: 'center',
               ...sharedColors.headerExtraStyle,
               ...headerBackButtonProps(),

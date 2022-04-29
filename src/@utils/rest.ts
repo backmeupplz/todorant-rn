@@ -28,15 +28,6 @@ export function loginGoogle(accessToken: string) {
     .then(cleanLocalAppleReceipt)
 }
 
-export function loginFacebook(accessToken: string) {
-  return axios
-    .post<User>(`${base}/login/facebook`, {
-      accessToken,
-      ...extraParams(),
-    })
-    .then(cleanLocalAppleReceipt)
-}
-
 export function loginApple(code: string, user?: any) {
   return axios
     .post<User>(`${base}/login/apple`, {
