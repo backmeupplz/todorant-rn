@@ -23,8 +23,8 @@ android.enableJetifier=true
 MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
 #MYAPP_UPLOAD_STORE_FILE=appgallery/keystore.jks
 MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
-MYAPP_UPLOAD_STORE_PASSWORD=rJQQ4yNNGufbDZrLdhGtkVMeP
-MYAPP_UPLOAD_KEY_PASSWORD=rJQQ4yNNGufbDZrLdhGtkVMeP
+MYAPP_UPLOAD_STORE_PASSWORD=your-password
+MYAPP_UPLOAD_KEY_PASSWORD=your-password
 
 org.gradle.daemon=true
 org.gradle.configureondemand=true

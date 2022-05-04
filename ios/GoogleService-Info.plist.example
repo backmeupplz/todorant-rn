@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>989382323327-nqfooll87gngh616aoq6cf0k6sna9v0l.apps.googleusercontent.com</string>
+	<string>your-client-id</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.989382323327-nqfooll87gngh616aoq6cf0k6sna9v0l</string>
+	<string>your-client-id</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAnfsUQhkioKrUOe16Pb3UXVy5ipHNseuo</string>
+	<string>your-key</string>
 	<key>GCM_SENDER_ID</key>
-	<string>989382323327</string>
+	<string>your-sender-id</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:989382323327:ios:3631727de1ab90e0eae34a</string>
+	<string>your-app-id</string>
 	<key>DATABASE_URL</key>
-	<string>https://todorant-e99c2.firebaseio.com</string>
+	<string>your-database-id</string>
 </dict>
 </plist>

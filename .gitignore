@@ -71,8 +71,21 @@ android/fastlane/metadata/android/*/images/phoneScreenshots/*.png
 android/fastlane/metadata/android/screenshots.html
 
 ios/fastlane/screenshots/screenshots.html
+ios/Todorant/Info.plist
+ios/GoogleService-Info.plist
+ios/fastlane/Appfile
+ios/fastlane/Matchfile
 
 android/*.hprof
+android/app/appgallery/
+android/src/main/assets/appcenter-config.json
+android/app/google-services.json
+android/app/debug.keystore
+android/app/my-upload-key.keystore
+android/fastlane/api-*.json
+android/gradle.properties
+anroid/fastlane/Apppfile
+android/fastlane/Fastfile
 
 # yarn
 .pnp.*

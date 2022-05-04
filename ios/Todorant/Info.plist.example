@@ -28,7 +28,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>todorant</string>
-				<string>com.googleusercontent.apps.989382323327-nqfooll87gngh616aoq6cf0k6sna9v0l</string>
+				<string>yourkey</string>
 				<string>ShareMedia</string>
 			</array>
 		</dict>
@@ -48,9 +48,9 @@
 	<key>CFBundleVersion</key>
 	<string>179</string>
 	<key>CodePushDeploymentKey</key>
-	<string>iPXp3IyEom4BmcXeLW4eej0B8cAq7UMqQZyrT</string>
+	<string>yourkey</string>
 	<key>FacebookAppID</key>
-	<string>640750769753434</string>
+	<string>yourid</string>
 	<key>FacebookDisplayName</key>
 	<string>Todorant</string>
 	<key>INAlternativeAppNames</key>
