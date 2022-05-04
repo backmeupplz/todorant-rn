@@ -1,0 +1,4 @@
+sdk.dir=/home/profilename/Android/Sdk
+ndk.dir=/home/profilename/Android/Sdk/ndk/21.4.7075529
+# 3.9 >= is required
+cmake.dir=/home/profilename/Android/Sdk/cmake/3.10.2.4988404

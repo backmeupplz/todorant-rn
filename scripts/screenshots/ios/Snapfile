@@ -1,0 +1,27 @@
+#!/usr/bin/ruby
+
+devices([
+  "iPhone Xs Max",
+])
+
+languages([
+  "pt-br",
+  "es-ES",
+  "uk",
+  "en-US",
+  "ru",
+  "it",
+])
+
+launch_arguments(["FASTLANE_SNAPSHOT"])
+
+scheme "TodorantUITests"
+output_directory "./fastlane/screenshots"
+clear_previous_screenshots true
+workspace "./Todorant.xcworkspace"
+ios_version "13.3"
+launch_arguments 
+reinstall_app true
+stop_after_first_error true
+concurrent_simulators false
+derived_data_path "./derived"

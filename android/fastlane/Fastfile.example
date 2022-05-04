@@ -1,0 +1,143 @@
+#!/usr/bin/ruby
+
+default_platform(:android)
+
+platform :android do
+  desc "Build debug and test APK for screenshots"
+  lane :build_for_screengrab do
+    gradle(
+      task: 'clean'
+    )
+    build_android_app(
+      task: 'app:assembleDebug',
+    )
+    build_android_app(
+      task: 'app:assembleAndroidTest',
+      flags: '-DtestBuildType=debug'
+    )
+  end
+
+  lane :take_screenshots do
+    capture_android_screenshots
+  end
+
+  lane :copy_es_screenshots do
+    sh("rm", "-rf", "./metadata/android/es-US/images/phoneScreenshots/*.png")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-US")
+    sh("rm", "-rf", "./metadata/android/es-ES/images/phoneScreenshots/*.png")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-ES")
+    sh("rm", "-rf", "./metadata/android/es-419/images/phoneScreenshots/*.png")
+    sh("cp", "-r", "./metadata/android/es/images", "./metadata/android/es-419")
+    sh("rm", "-rf", "./metadata/android/es")
+  end
+
+  lane :remove_unframed_screenshots do
+    sh "find ./metadata/android/*/images/phoneScreenshots/ -type f ! -name '*_framed.png' ! -name '*.strings' -delete"
+  end
+
+  lane :frame do
+    frameit(
+      path: './fastlane/metadata/android'
+    )
+  end
+
+  lane :upload_screenshots do
+    supply(
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true
+    )
+  end
+
+  lane :screenshots do
+    build_for_screengrab
+    take_screenshots
+    copy_es_screenshots
+    frame
+    remove_unframed_screenshots
+    upload_screenshots
+  end
+
+  lane :increment_android_versions do
+    increment_version_code
+    version = android_get_version_name()
+    components = version.split('.')
+    android_set_version_name(
+      version_name: "#{components[0].to_s}.#{components[1].to_s}.#{(components[2].to_i + 1).to_s}",
+    )
+  end
+
+  lane :commit_and_push_android_release do
+    git_add
+    git_commit(
+      message: "android release",
+      path: "."
+    )
+    push_to_git_remote
+  end
+
+  lane :commit_and_push_android_release_beta do
+    git_add
+    git_commit(
+      message: "android beta release",
+      path: "."
+    )
+    push_to_git_remote
+  end
+
+  lane :release do
+    increment_android_versions
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    supply(
+      skip_upload_apk: true,
+      aab: './app/build/outputs/bundle/release/app.aab',
+      skip_upload_screenshots: true
+    )
+    commit_and_push_android_release
+  end
+
+  lane :release_beta do
+    increment_android_versions
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    supply(
+      skip_upload_apk: true,
+      aab: './app/build/outputs/bundle/release/app.aab',
+      skip_upload_screenshots: true,
+      track: 'beta',
+    )
+    commit_and_push_android_release_beta
+  end
+
+  lane :release_appgallery do
+    sh("./replace-keystore.sh")
+    gradle(
+      task: 'assemble',
+      build_type: 'Release'
+    )
+    huawei_appgallery(
+      client_id: "your-client-id",
+      client_secret: "your-secret",
+      app_id: "your-appid",
+      release_notes: {
+        "en-US" => "Bug fixes",
+      },
+      apk_path: "./app/build/outputs/apk/release/app-release.apk"
+    )
+    print "Waiting for processing\n"
+    sleep(150)
+    huawei_appgallery_connect_submit_for_review(
+      client_id: "your-client-id",
+      client_secret: "your-secret",
+      app_id: "your-appid"
+    )
+    sh("./replace-keystore-back.sh")
+  end
+end

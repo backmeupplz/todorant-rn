@@ -1,0 +1,81 @@
+platform :ios, '13.0'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+inhibit_all_warnings!
+
+target 'Todorant' do
+  # React native
+  config = use_native_modules!
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => true
+  )
+  
+  # The rest
+  use_native_modules!
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-Siri', :path => "#{permissions_path}/Siri"
+  
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  # NOTE: Do not remove, needed to keep WatermelonDB compiling:
+  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
+
+  # NOTE: This is required as of v0.23
+  pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
+end
+
+target 'TodorantToday' do
+  pod 'Alamofire', '~> 5.0'
+  pod 'SwiftKeychainWrapper'
+end
+
+target 'TodorantHomescreen' do
+  pod 'Alamofire', '~> 5.0'
+  pod 'SwiftKeychainWrapper'
+end
+
+target 'TodorantIntents' do
+  pod 'Alamofire', '~> 5.0'
+  pod 'SwiftKeychainWrapper'
+end
+
+target 'Todorant-watchOS Extension' do
+  platform :watchos, '7.0'
+  pod 'Alamofire', '~> 5.0'
+  pod 'KeychainAccess'
+end
+
+# # you should disable the next line.
+# use_flipper!()
+
+post_install do |pi|
+  react_native_post_install(pi)
+
+  pi.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      config.build_settings["ONLY_ACTIVE_ARCH"] = "YES"
+    end
+
+    case target.name
+    when 'RCT-Folly'
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+      end
+    end
+  end
+
+  # We need to make one crude patch to RCT-Folly - set `__IPHONE_10_0` to our iOS target + 1
+  # https://github.com/facebook/flipper/issues/834 - 84 comments and still going...
+  `sed -i -e  $'s/__IPHONE_10_0/__IPHONE_12_0/' Pods/RCT-Folly/folly/portability/Time.h`
+end

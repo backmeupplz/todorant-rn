@@ -1,0 +1,32 @@
+{
+  "images" : [
+    {
+      "filename" : "todorant-40.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : "<=145"
+    },
+    {
+      "filename" : "todorant-44.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">161"
+    },
+    {
+      "filename" : "todorant-45.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">145"
+    },
+    {
+      "filename" : "todorant-50.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">183"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

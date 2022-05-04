@@ -1,0 +1,72 @@
+{
+  "project_info": {
+    "project_number": "989382323327",
+    "firebase_url": "your-firebase-url",
+    "project_id": "your-firebase-project-id",
+    "storage_bucket": "your-firebase-storage"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "your-app-id",
+        "android_client_info": {
+          "package_name": "com.todorant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "your-client-id",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todorant",
+            "certificate_hash": "your-hash"
+          }
+        },
+        {
+          "client_id": "your-client-id",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todorant",
+            "certificate_hash": "your-hash"
+          }
+        },
+        {
+          "client_id": "your-cliet-id",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todorant",
+            "certificate_hash": "your-hash"
+          }
+        },
+        {
+          "client_id": "your-client-id",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "your-key"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "your-client-id",
+              "client_type": 3
+            },
+            {
+              "client_id": "your-client-id",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.todorant.app",
+                "app_store_id": "your-store-id"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

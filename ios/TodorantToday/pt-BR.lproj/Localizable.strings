@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  Todorant
+
+  Created by Nikita Kolmogorov on 2019-10-09.
+  Copyright © 2019 Todorant. All rights reserved.
+*/
+
+"clear.subtitle" = "Todas as tarefas de hoje estão feitas";
+"empty.subtitle" = "Você não tem todos por hoje";
+"empty.button" = "Crie um!";
+"authenticate" = "Por favor, faça o login em Todorant";
+"authenticate.button" = "Login";
+"loading" = "Carregando...";
+"error" = "Erro de conexão";
+"retry" = "Tente novamente";
+"snapshot" = "Comprar leite de aveia";
+"title" = "Widget Todorant";
+"description" = "Exibe sua tarefa atual e seu progresso em tempo real";
+"timesStamp" = "Atualizado";

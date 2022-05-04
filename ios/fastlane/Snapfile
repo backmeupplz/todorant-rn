@@ -1,0 +1,38 @@
+#!/usr/bin/ruby
+
+devices([
+  "iPhone SE (1st generation)",
+  "iPhone 8",
+  "iPhone 8 Plus",
+  "iPhone 11",
+  "iPhone 11 Pro",
+  "iPhone 11 Pro Max",
+  "iPad Pro (9.7-inch)",
+  "iPad Pro (10.5-inch)",
+  "iPad Pro (12.9-inch) (2nd generation)",
+  "iPad Pro (12.9-inch) (3rd generation)",
+  "iPad Pro (11-inch) (2nd generation)",
+])
+
+languages([
+  "pt-br",
+  "es-ES",
+  "es-MX",
+  "uk",
+  "en-US",
+  "ru",
+  "it",
+])
+
+launch_arguments(["FASTLANE_SNAPSHOT"])
+
+scheme "TodorantUITests"
+output_directory "./fastlane/screenshots"
+clear_previous_screenshots true
+workspace "./Todorant.xcworkspace"
+ios_version "13.3"
+launch_arguments 
+reinstall_app true
+stop_after_first_error true
+concurrent_simulators false
+derived_data_path "./derived"

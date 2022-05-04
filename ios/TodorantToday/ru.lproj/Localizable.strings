@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  Todorant
+
+  Created by Nikita Kolmogorov on 2019-10-09.
+  Copyright © 2019 Todorant. All rights reserved.
+*/
+
+"clear.subtitle" = "Все задачи на сегодня выполнены";
+"empty.subtitle" = "У вас нет задач на сегодня";
+"empty.button" = "Создайте!";
+"authenticate" = "Пожалуйста, войдите в Тудурант";
+"authenticate.button" = "Войти";
+"loading" = "Загрузка...";
+"error" = "Ошибка получения данных";
+"retry" = "Попробовать снова";
+"snapshot" = "Купить овсяного молока";
+"title" = "Виджет Тудуранта";
+"description" = "Показывает вашу текущую задачу в реальном времени";
+"timesStamp" = "Обновлено";

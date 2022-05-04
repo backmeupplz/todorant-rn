@@ -1,0 +1,6 @@
+#!/usr/bin/ruby
+
+gem 'fastlane-plugin-increment_version_code'
+gem 'fastlane-plugin-versioning_android'
+gem 'fastlane-plugin-huawei_appgallery', git: "https://github.com/backmeupplz/fastlane-plugin-huawei_appgallery"
+gem 'fastlane-plugin-huawei_appgallery_connect', git: "https://github.com/backmeupplz/fastlane-plugin-huawei_appgallery_connect"

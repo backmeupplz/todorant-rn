@@ -1,0 +1,2 @@
+replace '#MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore' 'MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore' ../gradle.properties
+replace 'MYAPP_UPLOAD_STORE_FILE=appgallery/keystore.jks' '#MYAPP_UPLOAD_STORE_FILE=appgallery/keystore.jks' ../gradle.properties
