@@ -234,7 +234,9 @@ export class WMDBSync {
         } as SyncType)
       } catch (err) {
         console.error(err)
-        alertError(err as string)
+        if (sharedSessionStore.user?.token) {
+          alertError(err as string)
+        }
       } finally {
         if (__DEV__) {
           console.log(logger.formattedLogs)

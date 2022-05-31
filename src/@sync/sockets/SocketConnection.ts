@@ -1,3 +1,4 @@
+import { alertError } from '@utils/alert'
 import { makeObservable, observable } from 'mobx'
 import { sharedSessionStore } from '@stores/SessionStore'
 import { sharedSync } from '@sync/Sync'
@@ -66,6 +67,7 @@ export class SocketConnection {
     this.socketIO.on('error', this.onError)
 
     this.socketIO.on('authorized', this.onAuthorized)
+    this.socketIO.on('user_deleted', this.onUserDeleted)
   }
 
   private startAuthorizationTimeoutChecker() {
@@ -141,6 +143,14 @@ export class SocketConnection {
     this.pendingAuthorization = undefined
     if (!sharedSessionStore.migrationCompleted) {
       sharedSessionStore.migrationCompleted = true
+    }
+  }
+
+  private onUserDeleted = async () => {
+    try {
+      await sharedSessionStore.logout()
+    } catch (err) {
+      alertError(err as string)
     }
   }
 }
