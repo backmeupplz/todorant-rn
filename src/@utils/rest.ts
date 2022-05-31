@@ -98,6 +98,14 @@ export function sendData(data: any, token: string) {
   )
 }
 
+export function deleteAccount(id: string, token: string) {
+  return axios.delete(`${base}/data/account/${id}`, {
+    headers: {
+      token,
+    },
+  })
+}
+
 export function calendarAuthenticationURL(token: string) {
   return axios.get<string>(`${base}/google/calendarAuthenticationURL`, {
     headers: {

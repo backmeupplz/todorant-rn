@@ -39,7 +39,8 @@ import { Tags } from '@views/settings/Tags'
 import { TermsOfUse } from '@views/settings/TermsOfUse'
 import { TodoSettings } from '@views/settings/TodoSettings'
 import { TutorialStep } from '@stores/OnboardingStore/TutorialStep'
-import { alertError, alertSupport } from '@utils/alert'
+import { alertConfirm, alertError, alertSupport } from '@utils/alert'
+import { deleteAccount } from '@utils/rest'
 import { headerBackButtonProps } from '@utils/headerBackButton'
 import { navigate } from '@utils/navigation'
 import { setSettingsScrollOffset } from '@utils/settingsScrollOffset'
@@ -212,6 +213,36 @@ export class SettingsContent extends Component {
             </Text>
           </TableItem>
           <Divider />
+          {!!sharedSessionStore.user && (
+            <TableItem
+              onPress={() => {
+                alertConfirm(
+                  translate('deleteAccountText'),
+                  translate('deleteAccount'),
+                  async () => {
+                    const user = sharedSessionStore.user
+                    if (user && user._id) {
+                      try {
+                        await deleteAccount(user._id, user.token)
+                        sharedSessionStore.logout()
+                      } catch (err) {
+                        alertError(err as string)
+                      }
+                    }
+                  }
+                )
+              }}
+            >
+              <Text
+                style={{
+                  color: sharedColors.textColor,
+                  fontFamily: fonts.SFProTextRegular,
+                }}
+              >
+                {translate('deleteAccount')}
+              </Text>
+            </TableItem>
+          )}
           <TableItem>
             <Text
               style={{

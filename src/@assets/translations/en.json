@@ -496,5 +496,7 @@
     "text": "This is a repetitive task, do you want to break down it or complete it?",
     "complete": "Complete"
   },
-  "syncError": "An error occurred during data synchronization"
+  "syncError": "An error occurred during data synchronization",
+  "deleteAccount": "Delete account",
+  "deleteAccountText": "Are you sure you want to delete your account?"
 }
