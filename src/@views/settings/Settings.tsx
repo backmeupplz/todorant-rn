@@ -221,9 +221,9 @@ export class SettingsContent extends Component {
                   translate('deleteAccount'),
                   async () => {
                     const user = sharedSessionStore.user
-                    if (user && user._id) {
+                    if (user) {
                       try {
-                        await deleteAccount(user._id, user.token)
+                        await deleteAccount(user.token)
                         sharedSessionStore.logout()
                       } catch (err) {
                         alertError(err as string)

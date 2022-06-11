@@ -98,8 +98,8 @@ export function sendData(data: any, token: string) {
   )
 }
 
-export function deleteAccount(id: string, token: string) {
-  return axios.delete(`${base}/data/account/${id}`, {
+export function deleteAccount(token: string) {
+  return axios.delete(`${base}/data/account`, {
     headers: {
       token,
     },
