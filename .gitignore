@@ -77,6 +77,7 @@ ios/fastlane/Matchfile
 
 android/*.hprof
 android/app/appgallery/
+android/app/src/main/assets/appcenter-config.json
 android/src/main/assets/appcenter-config.json
 android/app/google-services.json
 android/app/debug.keystore

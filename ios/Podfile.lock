@@ -380,8 +380,6 @@ PODS:
     - React-Core
   - RNHoleView (3.0.1):
     - React
-  - RNIap (8.0.8):
-    - React-Core
   - RNLocalize (2.1.5):
     - React-Core
   - RNPermissions (3.1.0):
@@ -499,7 +497,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - "RNHoleView (from `../node_modules/@upacyxou/react-native-hole-view`)"
-  - RNIap (from `../node_modules/react-native-iap`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -644,8 +641,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNHoleView:
     :path: "../node_modules/@upacyxou/react-native-hole-view"
-  RNIap:
-    :path: "../node_modules/react-native-iap"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNPermissions:
@@ -677,11 +672,11 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CodePush: b51b7ac64c07d4eacfc8cc5750a1dd28adbf2528
   CountlyReactNative: 3d1a485e3dc2aaa1c045402272b41c669410f896
-  DoubleConversion: cde416483dac037923206447da6e1454df403714
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: de148e8310b8b878db304ceea2fec13f2c02e3a0
   FBReactNativeSpec: 6192956c9e346013d5f1809ba049af720b11c6a4
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
+  glog: 5337263514dd6f09803962437687240c5dc39aa4
   GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
@@ -739,7 +734,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: a51c9c7419262c75748ddcee3f735bb42da5def1
   RNHoleView: 78fe2ca0ed1be643c0d245fea09e582cc8ee0d51
-  RNIap: bb56165cc68bfa269e2effd407d6ec0af63e796f
   RNLocalize: 74b82db20cc3895ccc25af992c644879bcec2815
   RNPermissions: 4b54095940aea8c03fa3e6c92d4ac3647b31ed4e
   RNReanimated: 65583befd5706cc9c86ae9a081786181ced37b93
@@ -756,4 +750,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d1ae95d9a0d51e565e98a9c6f92ab60c5ffd375a
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
