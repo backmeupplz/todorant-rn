@@ -13695,6 +13695,7 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
     url: ^0.11.0
     util: ^0.12.4
     uuid: ^8.3.2
+    versiony: ^2.0.1
   languageName: unknown
   linkType: soft
 
@@ -14133,6 +14134,13 @@ react-native-receive-sharing-intent@backmeupplz/react-native-receive-sharing-int
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b
+  languageName: node
+  linkType: hard
+
+"versiony@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "versiony@npm:2.0.1"
+  checksum: 6164809fc67606c28993bd590ba6fe037fb67ee74d82b99af479103326ab31383a988d04ac170e450657c1be17911371fc85ae39becee1c3335de22d5c0af1b1
   languageName: node
   linkType: hard
 

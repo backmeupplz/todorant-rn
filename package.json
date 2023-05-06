@@ -10,7 +10,7 @@
     "code-push": "yarn git-pre-code-push && yarn code-push-ios && yarn code-push-android",
     "code-push-ios": "appcenter codepush patch -a borodutch/Todorant --disabled Production && appcenter codepush release-react -a borodutch/Todorant -d Production -m",
     "code-push-android": "appcenter codepush patch -a borodutch/Todorant-1 --disabled Production && appcenter codepush release-react -a borodutch/Todorant-1 -d Production -m",
-    "git-pre-code-push": "versiony src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
+    "git-pre-code-push": "yarn dlx versiony-cli src/@utils/version.json --newmajor && git add . && git commit -m 'codepush' && git push",
     "upload-translations": "node scripts/upload.js",
     "download-translations": "node scripts/download.js",
     "adb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:1337 tcp:1337 && adb reverse tcp:3000 tcp:3000",

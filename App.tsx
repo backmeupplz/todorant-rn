@@ -110,9 +110,6 @@ class App extends Component {
     setupLinking()
     checkAndroidLaunchArgs()
     setupAnalytics()
-    if (!__DEV__) {
-      checkAppVersion()
-    }
     await when(() => hydration.isHydrated)
     if (!sharedSessionStore.localMigrationCompleted) {
       try {
