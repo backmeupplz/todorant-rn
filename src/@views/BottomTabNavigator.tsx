@@ -1,5 +1,4 @@
 import { Animated, Easing } from 'react-native'
-import { Component } from 'react'
 import { Current } from '@views/current/Current'
 import { Delegation } from '@views/delegation/Delegation'
 import { Planning } from '@views/planning/Planning'
@@ -13,6 +12,7 @@ import { sharedSettingsStore } from '@stores/SettingsStore'
 import { sharedSync } from '@sync/Sync'
 import { sharedTodoStore } from '@stores/TodoStore'
 import { translate } from '@utils/i18n'
+import { useCallback, useEffect, useRef } from 'react'
 import CurrentActiveIcon from '@assets/images/current-active'
 import CurrentIcon from '@assets/images/current'
 import DelegationActiveIcon from '@assets/images/delegation-active'
@@ -25,55 +25,46 @@ import fonts from '@utils/fonts'
 
 const Tab = createBottomTabNavigator()
 
-@observer
-class SettingsRotatingIcon extends Component<{
-  focused: boolean
-  size: number
-}> {
-  spinAnimation = new Animated.Value(0)
+const SettingsRotatingIcon = observer(
+  ({ focused, size }: { focused: boolean; size: number }) => {
+    const spinAnimation = useRef(new Animated.Value(0)).current
 
-  private startSpinningAnimation() {
-    Animated.loop(
-      Animated.timing(this.spinAnimation, {
-        toValue: 1,
-        duration: 3000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
-    ).start()
-  }
+    const startSpinningAnimation = useCallback(() => {
+      Animated.loop(
+        Animated.timing(spinAnimation, {
+          toValue: 1,
+          duration: 3000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start()
+    }, [spinAnimation])
 
-  componentDidMount() {
-    this.startSpinningAnimation()
-  }
+    useEffect(() => {
+      startSpinningAnimation()
+    }, [startSpinningAnimation])
 
-  render() {
-    const spin = this.spinAnimation.interpolate({
+    const spin = spinAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     })
+
     if (sharedSync.isSyncing) {
-      this.startSpinningAnimation()
+      startSpinningAnimation()
       return (
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
-          {this.props.focused
-            ? SettingsActiveIcon({
-                width: this.props.size,
-                height: this.props.size,
-              })
-            : SettingsIcon({ width: this.props.size, height: this.props.size })}
+          {focused
+            ? SettingsActiveIcon({ width: size, height: size })
+            : SettingsIcon({ width: size, height: size })}
         </Animated.View>
       )
     } else {
-      return this.props.focused
-        ? SettingsActiveIcon({
-            width: this.props.size,
-            height: this.props.size,
-          })
-        : SettingsIcon({ width: this.props.size, height: this.props.size })
+      return focused
+        ? SettingsActiveIcon({ width: size, height: size })
+        : SettingsIcon({ width: size, height: size })
     }
   }
-}
+)
 
 export default observer(() => {
   return (
@@ -113,7 +104,6 @@ export default observer(() => {
               name = 'settings'
               icon = <SettingsRotatingIcon focused={focused} size={size} />
             }
-            1
             return (
               <View accessibilityLabel={name} testID={name} accessible>
                 <View accessible={false}>
@@ -150,17 +140,16 @@ export default observer(() => {
                   options={{ title: translate('current') }}
                 />
               )}
-              {/* <Tab.Screen
+              <Tab.Screen
                 name="BottomPlanning"
                 component={Planning}
                 options={{ title: translate('planning') }}
               />
-
               <Tab.Screen
                 name="BottomDelegation"
                 component={Delegation}
                 options={{ title: translate('delegate.title') }}
-              /> */}
+              />
             </>
           )}
         <Tab.Screen
