@@ -2,31 +2,44 @@ platform :ios, '13.0'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-inhibit_all_warnings!
+prepare_react_native_project!
+
+# flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  # use_frameworks! :linkage => linkage.to_sym
+end
 
 target 'Todorant' do
-  # React native
   config = use_native_modules!
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+
   use_react_native!(
     :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => true
+    :hermes_enabled => flags[:hermes_enabled],
+    :fabric_enabled => flags[:fabric_enabled],
+    # :flipper_configuration => flipper_config,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  
-  # The rest
-  use_native_modules!
-  
+
   permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Alamofire'
 
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-Siri', :path => "#{permissions_path}/Siri"
   
-  # NOTE: Do not remove, needed to keep WatermelonDB compiling:
-  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
-
-  # NOTE: This is required as of v0.23
-  pod 'simdjson', path: '../node_modules/@nozbe/simdjson'
+  pod 'simdjson', path: '../node_modules/@nozbe/simdjson', modular_headers: true
+  
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      :mac_catalyst_enabled => false
+    )
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
 end
 
 target 'TodorantToday' do
@@ -48,15 +61,4 @@ target 'Todorant-watchOS Extension' do
   platform :watchos, '7.0'
   pod 'Alamofire'
   pod 'KeychainAccess'
-end
-
-# # you should disable the next line.
-# use_flipper!()
-
-post_install do |pi|
-  react_native_post_install(pi)
-
-  # We need to make one crude patch to RCT-Folly - set `__IPHONE_10_0` to our iOS target + 1
-  # https://github.com/facebook/flipper/issues/834 - 84 comments and still going...
-  `sed -i -e  $'s/__IPHONE_10_0/__IPHONE_12_0/' Pods/RCT-Folly/folly/portability/Time.h`
 end

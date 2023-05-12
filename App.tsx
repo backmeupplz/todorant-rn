@@ -98,6 +98,7 @@ LogBox.ignoreAllLogs()
 
 const Stack = createStackNavigator()
 
+
 @codePush(CodePushOptions)
 @observer
 class App extends Component {
@@ -134,7 +135,6 @@ class App extends Component {
         checkAndroidLaunchArgs()
       }
     })
-    SplashScreen.hide()
     checkOnboardingStep()
     refreshWidgetAndBadgeAndWatch()
   }
