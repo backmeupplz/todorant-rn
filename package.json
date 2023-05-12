@@ -63,6 +63,7 @@
     "countly-sdk-react-native-bridge": "^20.11.12",
     "crypto-js": "^4.1.1",
     "i18n-js": "^3.5.1",
+    "iconv": "^3.0.1",
     "linkify-it": "^3.0.3",
     "lodash": "^4.17.21",
     "mobx": "^6.3.8",
