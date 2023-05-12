@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import {
   DelegateSectionType,
   sharedDelegateStateStore,
@@ -14,12 +13,8 @@ import { sharedColors } from '@utils/sharedColors'
 import { translate } from '@utils/i18n'
 import React from 'react'
 
-@observer
-export class DelegateCardActions extends Component<{
-  vm: TodoCardVM
-  todo: MelonTodo
-}> {
-  render() {
+const DelegateCardActions = observer(
+  ({ vm, todo }: { vm: TodoCardVM; todo: MelonTodo }) => {
     return (
       <View
         style={{
@@ -35,9 +30,7 @@ export class DelegateCardActions extends Component<{
             color: sharedColors.borderColor,
           }}
         >
-          {`${this.props.todo.monthAndYear || ''}${
-            this.props.todo.date ? `-${this.props.todo.date}` : ''
-          }`}
+          {`${todo.monthAndYear || ''}${todo.date ? `-${todo.date}` : ''}`}{' '}
         </Text>
         <View
           style={{
@@ -47,7 +40,7 @@ export class DelegateCardActions extends Component<{
             alignItems: 'center',
           }}
         >
-          {!this.props.todo.delegateAccepted && (
+          {!todo.delegateAccepted && (
             <View
               style={{
                 flexDirection: 'row',
@@ -56,8 +49,8 @@ export class DelegateCardActions extends Component<{
               }}
             >
               <IconButton
-                onPress={() => {
-                  this.props.vm.delete(this.props.todo)
+                onPress={async () => {
+                  await vm.delete(todo)
                 }}
                 color={sharedColors.destructIconColor}
                 name="delete_outline_28-iOS"
@@ -65,7 +58,7 @@ export class DelegateCardActions extends Component<{
               <IconButton
                 onPress={() => {
                   navigate('EditTodo', {
-                    editedTodo: this.props.todo,
+                    editedTodo: todo,
                   })
                 }}
                 name="edit_outline_28"
@@ -76,8 +69,8 @@ export class DelegateCardActions extends Component<{
         {sharedDelegateStateStore.todoSection === DelegateSectionType.ToMe ? (
           <>
             <TouchableOpacity
-              onPress={() => {
-                this.props.vm.accept(this.props.todo)
+              onPress={async () => {
+                await vm.accept(todo)
               }}
             >
               <Text
@@ -96,4 +89,6 @@ export class DelegateCardActions extends Component<{
       </View>
     )
   }
-}
+)
+
+export default DelegateCardActions
