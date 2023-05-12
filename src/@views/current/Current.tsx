@@ -5,7 +5,6 @@ import {
 import { CurrentContent } from '@views/current/CurrentContent'
 import { Observer } from 'mobx-react'
 import { sharedSettingsStore } from '@stores/SettingsStore'
-import React from 'react'
 
 const Stack = createStackNavigator()
 

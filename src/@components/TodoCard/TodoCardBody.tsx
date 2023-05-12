@@ -1,6 +1,5 @@
 import { Body, Text, View } from 'native-base'
 import { CardType } from '@components/TodoCard/CardType'
-import { Component } from 'react'
 import { DebugTodoInfo } from '@components/TodoCard/DebugInfoTodo'
 import { MelonTodo, MelonUser } from '@models/MelonTodo'
 import { TodoCardTextBlock } from '@components/TodoCard/TodoCardTextBlock'
@@ -13,16 +12,22 @@ import React from 'react'
 
 const showDebugInfo = false
 
-@observer
-export class TodoCardBody extends Component<{
-  vm: TodoCardVM
-  type: CardType
-  todo: MelonTodo
-  delegator?: MelonUser
-  drag?: () => void
-}> {
-  render() {
-    const isOld = this.props.vm.isOld(this.props.type, this.props.todo)
+export const TodoCardBody = observer(
+  ({
+    vm,
+    type,
+    todo,
+    delegator,
+    drag,
+  }: {
+    vm: TodoCardVM
+    type: CardType
+    todo: MelonTodo
+    delegator?: MelonUser
+    drag?: () => void
+  }) => {
+    const isOld = vm.isOld(type, todo)
+
     return (
       <View
         style={{
@@ -31,7 +36,7 @@ export class TodoCardBody extends Component<{
         }}
       >
         <Body>
-          {__DEV__ && showDebugInfo && <DebugTodoInfo todo={this.props.todo} />}
+          {__DEV__ && showDebugInfo && <DebugTodoInfo todo={todo} />}
           <View
             style={{
               flexDirection: 'row',
@@ -46,30 +51,29 @@ export class TodoCardBody extends Component<{
                 justifyContent: 'space-between',
               }}
             >
-              {!!this.props.delegator?.name &&
-                this.props.type !== CardType.delegation && (
-                  <Text>
-                    <Text
-                      onPress={() => {
-                        this.props.vm.expanded = !this.props.vm.expanded
-                      }}
-                      {...sharedColors.regularTextExtraStyle}
-                    >
-                      {translate('delegate.from')}: {this.props.delegator?.name}
-                    </Text>
-                    {this.props.todo.delegateAccepted === false && (
-                      <Text {...sharedColors.regularTextExtraStyle}>
-                        {` ${getTitle(this.props.todo)}`}
-                      </Text>
-                    )}
+              {!!delegator?.name && type !== CardType.delegation && (
+                <Text>
+                  <Text
+                    onPress={() => {
+                      vm.expanded = !vm.expanded
+                    }}
+                    {...sharedColors.regularTextExtraStyle}
+                  >
+                    {translate('delegate.from')}: {delegator?.name}
                   </Text>
-                )}
+                  {todo.delegateAccepted === false && (
+                    <Text {...sharedColors.regularTextExtraStyle}>
+                      {`${getTitle(todo)}`}
+                    </Text>
+                  )}
+                </Text>
+              )}
               <TodoCardTextBlock
-                todo={this.props.todo}
+                todo={todo}
                 isOld={isOld}
-                drag={this.props.drag}
-                type={this.props.type}
-                vm={this.props.vm}
+                drag={drag}
+                type={type}
+                vm={vm}
               />
             </View>
           </View>
@@ -77,4 +81,4 @@ export class TodoCardBody extends Component<{
       </View>
     )
   }
-}
+)

@@ -759,7 +759,7 @@ class AddTodoContent extends Component<{
   }
 }
 
-export const AddTodo = () => {
+export default function AddTodo() {
   const route = useRoute<
     RouteProp<
       Record<
