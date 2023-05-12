@@ -52,6 +52,7 @@ export class HeaderScrollView extends Component<{
   }
 
   render() {
+    return null
     const fontSize = 34
     const titleStyles = {
       fontSize,

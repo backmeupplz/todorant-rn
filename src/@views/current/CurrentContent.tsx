@@ -39,12 +39,7 @@ export const CurrentContent = memo(() => {
     <Observer>
       {() => (
         <Container {...({ language: sharedSettingsStore.language } as any)}>
-          <HeaderScrollView
-            title={translate('current')}
-            showsHeroButton
-            infoTitle="infoCurrent"
-            contentContainerStyle={{ paddingBottom: 100 }}
-          >
+          <>
             {!!epicsAmount && <EnhancedEpics epics={sharedTagStore.epics} />}
             {!!sharedTodoStore.progress.count && (
               <SegmentedProgressView
@@ -67,8 +62,7 @@ export const CurrentContent = memo(() => {
               sharedTodoStore.progress.count ===
                 sharedTodoStore.progress.completed && <AllDonePlaceholder />}
             {!sharedTodoStore.progress.count && <NoTodosPlaceholder />}
-          </HeaderScrollView>
-          <PlusButton />
+          </>
         </Container>
       )}
     </Observer>
@@ -94,7 +88,7 @@ const enhanceEpics = withObservables(['epics'], ({ epics }) => {
 const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
   return (
     <View style={{ marginTop: 16 }}>
-      <DraggableFlatList
+      {/* <DraggableFlatList
         data={epics}
         renderItem={({ item, drag }) => {
           return (
@@ -115,7 +109,7 @@ const EnhancedEpics = enhanceEpics(({ epics }: { epics: MelonTag[] }) => {
           await sharedTagStore.refreshTags()
           sharedSync.sync(SyncRequestEvent.Tag)
         }}
-      />
+      /> */}
     </View>
   )
 })

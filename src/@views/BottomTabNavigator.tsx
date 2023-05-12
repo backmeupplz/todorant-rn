@@ -19,7 +19,6 @@ import DelegationActiveIcon from '@assets/images/delegation-active'
 import DelegationIcon from '@assets/images/delegation'
 import PlanningActiveIcon from '@assets/images/planning-active'
 import PlanningIcon from '@assets/images/planning'
-import React from 'react'
 import SettingsActiveIcon from '@assets/images/settings-active'
 import SettingsIcon from '@assets/images/settings'
 import fonts from '@utils/fonts'
@@ -80,7 +79,7 @@ export default observer(() => {
   return (
     <>
       <Tab.Navigator
-        {...({ language: sharedSettingsStore.language } as any)}
+        {...{ language: sharedSettingsStore.language }}
         backBehavior="none"
         screenOptions={({ route }) => ({
           detachPreviousScreen: false,
@@ -141,28 +140,29 @@ export default observer(() => {
           },
         })}
       >
-        {!sharedSessionStore.loggingOut && !sharedSessionStore.isInitialSync && (
-          <>
-            {!sharedTodoStore.isPlanningRequired && (
-              <Tab.Screen
-                name="BottomCurrent"
-                component={Current}
-                options={{ title: translate('current') }}
+        {!sharedSessionStore.loggingOut &&
+          !sharedSessionStore.isInitialSync && (
+            <>
+              {!sharedTodoStore.isPlanningRequired && (
+                <Tab.Screen
+                  name="BottomCurrent"
+                  component={Current}
+                  options={{ title: translate('current') }}
+                />
+              )}
+              {/* <Tab.Screen
+                name="BottomPlanning"
+                component={Planning}
+                options={{ title: translate('planning') }}
               />
-            )}
-            <Tab.Screen
-              name="BottomPlanning"
-              component={Planning}
-              options={{ title: translate('planning') }}
-            />
 
-            <Tab.Screen
-              name="BottomDelegation"
-              component={Delegation}
-              options={{ title: translate('delegate.title') }}
-            />
-          </>
-        )}
+              <Tab.Screen
+                name="BottomDelegation"
+                component={Delegation}
+                options={{ title: translate('delegate.title') }}
+              /> */}
+            </>
+          )}
         <Tab.Screen
           name="BottomSettings"
           component={Settings}

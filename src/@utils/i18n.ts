@@ -31,7 +31,7 @@ export async function getLanguageTag() {
   }
   const fallback = { languageTag: 'en' }
   const { languageTag } =
-    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    RNLocalize.findBestLanguageTag(Object.keys(translationGetters)) ||
     fallback
   return languageTag
 }
