@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { Icon } from 'native-base'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View } from 'react-native'
@@ -13,31 +12,28 @@ export const addButtonStore = {
 
 export let addButonNodeId: number
 
-@observer
-export class AddButton extends Component {
-  render() {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          addButtonStore.add()
+export const AddButton = observer(() => {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        addButtonStore.add()
+      }}
+    >
+      <View
+        style={{
+          opacity: 0.5,
+          marginHorizontal: 12,
+        }}
+        onLayout={({ nativeEvent: { target } }) => {
+          addButonNodeId = target
         }}
       >
-        <View
-          style={{
-            opacity: 0.5,
-            marginHorizontal: 12,
-          }}
-          onLayout={({ nativeEvent: { target } }: any) => {
-            addButonNodeId = target
-          }}
-        >
-          <Icon
-            type="MaterialIcons"
-            name="add"
-            style={{ color: sharedColors.textColor }}
-          />
-        </View>
-      </TouchableOpacity>
-    )
-  }
-}
+        <Icon
+          type="MaterialIcons"
+          name="add"
+          style={{ color: sharedColors.textColor }}
+        />
+      </View>
+    </TouchableOpacity>
+  )
+})

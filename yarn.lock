@@ -3237,16 +3237,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^3.0.2":
-  version: 3.5.2
-  resolution: "@react-native-community/datetimepicker@npm:3.5.2"
-  dependencies:
-    invariant: ^2.2.4
-  checksum: 8f0d3bc7014b17c696a415565c6fc591591b29ba5a438f2c1692a96ffc185693266eb950229ed3e9bf6b035d61a720ee402cbe9750d5bef81fd19e7647a24229
-  languageName: node
-  linkType: hard
-
-"@react-native-community/datetimepicker@npm:^7.1.0":
+"@react-native-community/datetimepicker@npm:7.1.0":
   version: 7.1.0
   resolution: "@react-native-community/datetimepicker@npm:7.1.0"
   dependencies:
@@ -10201,12 +10192,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx-persist@npm:^0.4.1":
+mobx-persist@backmeupplz/mobx-persist:
   version: 0.4.1
-  resolution: "mobx-persist@npm:0.4.1"
+  resolution: "mobx-persist@https://github.com/backmeupplz/mobx-persist.git#commit=17c00be2b88882c27fe9bfd386121ca3845ec28d"
   dependencies:
-    serializr: ^1.1.11
-  checksum: 254188031a404cbf7dd89e82a9bc6c116685efa7bcb55663a8271d8627290cd586078950da61a11c8f844e88722762c0b072e31e880a9992820e411cfd842577
+    serializr: ^1.0.0
+  checksum: f9ec254f7877106880facad36e16a987800833a343d4307e12ac53253a32a7cb10d7463e02ebf9808eaccd374d2b7a1748dcc2b36f96eb62746ba2820e535d23
   languageName: node
   linkType: hard
 
@@ -10225,7 +10216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx-react@npm:^7.6.0":
+"mobx-react@npm:^7.2.1":
   version: 7.6.0
   resolution: "mobx-react@npm:7.6.0"
   dependencies:
@@ -10242,7 +10233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:^6.9.0":
+"mobx@npm:^6.3.8":
   version: 6.9.0
   resolution: "mobx@npm:6.9.0"
   checksum: ae03e95334887305c49d3e63e54f5e5e571b21f6a649fc0b7f6f1afd83470db63d8ab3e7c4b9e6ace2aaf6eded5255878c5f69d293efa9fd35af3d640b4a4756
@@ -12656,7 +12647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serializr@npm:^1.1.11":
+"serializr@npm:^1.0.0":
   version: 1.5.4
   resolution: "serializr@npm:1.5.4"
   checksum: 57499fe15559a4072e88090a6f0040868f2d98fbf21b36a6f9771d8e78d6941added70393e7d5c2c331e834142d9faf5970346dec8f933a6705be845ca89ce3f
@@ -13744,9 +13735,9 @@ __metadata:
     linkify-it: ^4.0.1
     lodash: ^4.17.21
     metro-react-native-babel-preset: ^0.76.4
-    mobx: ^6.9.0
-    mobx-persist: ^0.4.1
-    mobx-react: ^7.6.0
+    mobx: ^6.3.8
+    mobx-persist: backmeupplz/mobx-persist
+    mobx-react: ^7.2.1
     moment: ^2.29.4
     native-base: ^2.13.14
     number-shortener: ^1.0.1

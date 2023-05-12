@@ -1,10 +1,8 @@
-import { EasingNode } from 'react-native-reanimated'
+import { EasingNode, Value, timing } from 'react-native-reanimated'
 import { ViewStyle } from 'react-native'
 import { useEffect, useState } from 'react'
 import Animated from 'react-native-reanimated'
 import React from 'react'
-
-const { Value, timing } = Animated
 
 type FadeProps = {
   visible?: boolean

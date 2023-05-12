@@ -56,7 +56,6 @@ export class DayCompleteOverlay extends Component {
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           opacity,
         }}
-        pointerEvents="none"
       >
         <Text
           style={{
