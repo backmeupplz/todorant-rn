@@ -137,6 +137,7 @@ const App = observer(() => {
       checkOnboardingStep()
       refreshWidgetAndBadgeAndWatch()
     }
+    init()
   })
 
   return (

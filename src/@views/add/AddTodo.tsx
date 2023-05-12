@@ -551,7 +551,7 @@ class AddTodoContent extends Component<{
               : undefined
           }
         >
-          {/* <DraggableFlatList
+          <DraggableFlatList
             ref={this.flatlistref}
             contentContainerStyle={{
               paddingBottom: 10,
@@ -752,14 +752,14 @@ class AddTodoContent extends Component<{
                 </TouchableOpacity>
               </View>
             )}
-          </View> */}
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     )
   }
 }
 
-export default function AddTodo()  {
+export default function AddTodo() {
   const route = useRoute<
     RouteProp<
       Record<
