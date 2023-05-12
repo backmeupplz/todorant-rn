@@ -1,4 +1,3 @@
-import { AsyncStorage } from 'react-native'
 import { GoogleCalendarCredentials } from '@models/GoogleCalendarCredentials'
 import { MMKV, hydrate } from '@stores/hydration/hydrate'
 import { Settings } from '@models/Settings'
@@ -231,48 +230,4 @@ hydrate('SettingsStore', sharedSettingsStore).then(async () => {
   updateAndroidNavigationBarColor(sharedSettingsStore.isDark)
 })
 
-export async function fixDuplicatedTasks() {
-  const newAsyncStorage = AsyncStorage
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const oldAsyncStorage = require('@react-native-async-storage/async-storage')
-    .default as typeof AsyncStorage
-  const mmkvStorage = MMKV
-
-  const userInMMKVStorage = JSON.parse(
-    (await mmkvStorage.getItem('SessionStore')) || '{}'
-  ).user
-
-  if (userInMMKVStorage) {
-    return
-  }
-
-  const userInOldAsyncStorage = JSON.parse(
-    (await oldAsyncStorage.getItem('SessionStore')) || '{}'
-  ).user
-
-  const userInNewAsyncStorage = JSON.parse(
-    (await newAsyncStorage.getItem('SessionStore')) || '{}'
-  ).user
-
-  if (!userInMMKVStorage && !userInNewAsyncStorage && !userInOldAsyncStorage) {
-    return
-  }
-
-  async function moveStorage(from: AsyncStorage) {
-    const allOldKeys = await from.getAllKeys()
-    await Promise.all(
-      allOldKeys.map(async (key) => {
-        const oldItem = (await from.getItem(key)) as string
-        return await mmkvStorage.setItem(key, oldItem)
-      })
-    )
-  }
-
-  if (userInNewAsyncStorage) {
-    await moveStorage(newAsyncStorage)
-  } else if (userInOldAsyncStorage) {
-    await moveStorage(oldAsyncStorage)
-  }
-
-  ReactNativeRestart.Restart()
-}
+export async function fixDuplicatedTasks() {}

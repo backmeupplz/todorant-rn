@@ -293,7 +293,6 @@ const App = observer(() => {
               />
             </Stack.Navigator>
           </StyleProvider>
-          <DayCompleteOverlay />
           <ConfettiView />
         </NavigationContainer>
         <Overlay />

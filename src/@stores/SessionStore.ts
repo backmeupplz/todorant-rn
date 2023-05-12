@@ -1,4 +1,3 @@
-import { AsyncStorage } from 'react-native'
 import {
   ObservableNowEventEmitterEvent,
   observableNowEventEmitter,
@@ -70,13 +69,6 @@ class SessionStore {
       this.encryptionKey = undefined
       observableNowEventEmitter.emit(ObservableNowEventEmitterEvent.Logout)
       await database.write(async () => await database.unsafeResetDatabase())
-      const newAsyncStorage = AsyncStorage
-      const oldAsyncStorage =
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        require('@react-native-async-storage/async-storage')
-          .default as typeof AsyncStorage
-      await newAsyncStorage.clear()
-      await oldAsyncStorage.clear()
       sharedSync.logout()
       sharedSettingsStore.logout()
       sharedTodoStore.logout()
