@@ -54,6 +54,7 @@ import { checkSharedContent } from '@utils/sharing'
 import { checkSiriPermission } from '@utils/permissions'
 import { checkTokenAndPassword } from '@utils/checkTokenAndPassword'
 import { hydration } from '@stores/hydration/hydratedStores'
+import { navigationRef } from '@utils/navigation'
 import { refreshWidgetAndBadgeAndWatch } from '@utils/refreshWidgetAndBadgeAndWatch'
 import { setupAnalytics } from '@utils/logEvent'
 import { setupLinking } from '@utils/linking'
@@ -98,8 +99,6 @@ LogBox.ignoreAllLogs()
 const Stack = createStackNavigator()
 
 const App = observer(() => {
-  const navigationRef = useRef()
-
   useEffect(() => {
     async function init() {
       await fixDuplicatedTasks()
